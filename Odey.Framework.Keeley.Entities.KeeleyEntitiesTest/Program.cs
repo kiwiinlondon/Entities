@@ -1,0 +1,110 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.Entity;
+using Odey.Framework.Keeley.Entities;
+using Odey.Framework.Keeley;
+
+namespace Odey.Framework.KeeleyEntitiesTest
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Update();
+
+        }
+
+        static void CreateUser()
+        {
+            using (var context = new KeeleyModel())
+            {
+                ApplicationUser user = new ApplicationUser();
+                user.Email = "John.Doe@odey.com";
+                user.Name = "John Doe";
+                user.WindowsLogin = @"OAM\DoeJ";
+                //user.UpdateUserID = 1;
+                context.ApplicationUsers.AddObject(user);
+                context.SaveChanges();
+            }
+
+        }
+
+        static void CreateRegion()
+        {
+            using (var context = new KeeleyModel())
+            {
+                Region region = new Region();
+                region.IsoCode = "AX";
+                region.Name = "Asia Excl Japan";
+                //region.UpdateUserID = 1;
+                context.Regions.AddObject(region);
+                context.SaveChanges();
+            }
+
+        }
+
+        static void CreateCountry()
+        {
+            using (var context = new KeeleyModel())
+            {
+                Country country = new Country();
+                country.IsoCode = "BD";
+                country.Name = "Bangladesh";
+                //country.UpdateUserID = 1;
+                context.Countries.AddObject(country);
+                context.SaveChanges();
+            }
+
+        }
+
+        static void CreateIssuer()
+        {
+            using (var context = new KeeleyModel())
+            {
+                LegalEntity legalEntity = new LegalEntity();
+                legalEntity.Name = "NISHAT MILLS LIMITED";
+                legalEntity.LongName = "NISHAT MILLS LIMITED";
+                legalEntity.FMOrgId = 46096;
+                //legalEntity.UpdateUserID = 1;
+                legalEntity.CountryID = 5;
+                Issuer issuer = new Issuer(legalEntity);
+                context.Issuers.AddObject(issuer);
+                context.SaveChanges();
+            }
+
+        }
+
+        static void Update()
+        {
+            using (var context = new KeeleyModel())
+            {
+
+                ApplicationUser user = context.ApplicationUsers.Where(a => a.UserID == 23).FirstOrDefault();
+                user.Email = "Joe.Bl54oys5@odey.com";
+                context.ApplicationUsers.ApplyChanges(user);
+                //context.ApplicationUsers.AddObject(user);
+                context.SaveChanges();
+
+            }
+        }
+
+        static void Delete()
+        {
+            using (var context = new KeeleyModel())
+            {
+
+                ApplicationUser user = context.ApplicationUsers.Where(a => a.UserID == 20).FirstOrDefault();
+                //user.UpdateUserID = 20;
+                context.AcceptAllChanges();
+                context.DeleteObject(user);
+                //context.ApplicationUsers.DeleteObject(user);
+                //context.ApplicationUsers.AddObject(user);
+                context.SaveChanges();
+
+            }
+        }
+
+    }
+}
