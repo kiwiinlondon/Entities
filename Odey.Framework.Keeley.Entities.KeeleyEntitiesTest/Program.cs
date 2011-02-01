@@ -12,7 +12,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            Update();
+            CreateIssuer();
 
         }
 

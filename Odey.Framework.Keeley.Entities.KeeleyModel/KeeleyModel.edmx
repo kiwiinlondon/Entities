@@ -11,11 +11,13 @@
           <EntitySet Name="Country" EntityType="KeeleyModel.Store.Country" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Currency" EntityType="KeeleyModel.Store.Currency" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Fund" EntityType="KeeleyModel.Store.Fund" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="IdentifierType" EntityType="KeeleyModel.Store.IdentifierType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Instrument" EntityType="KeeleyModel.Store.Instrument" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="InstrumentClass" EntityType="KeeleyModel.Store.InstrumentClass" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="InstrumentMarket" EntityType="KeeleyModel.Store.InstrumentMarket" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="InstrumentRelationship" EntityType="KeeleyModel.Store.InstrumentRelationship" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Issuer" EntityType="KeeleyModel.Store.Issuer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="KeeleyType" EntityType="KeeleyModel.Store.KeeleyType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="LegalEntity" EntityType="KeeleyModel.Store.LegalEntity" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Market" EntityType="KeeleyModel.Store.Market" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Portfolio" EntityType="KeeleyModel.Store.Portfolio" store:Type="Tables" Schema="dbo" />
@@ -70,6 +72,14 @@
           <AssociationSet Name="FundUpdateUserIDFK" Association="KeeleyModel.Store.FundUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Fund" EntitySet="Fund" />
+          </AssociationSet>
+          <AssociationSet Name="IdentifierTypeKeeleyTypeIDFK" Association="KeeleyModel.Store.IdentifierTypeKeeleyTypeIDFK">
+            <End Role="KeeleyType" EntitySet="KeeleyType" />
+            <End Role="IdentifierType" EntitySet="IdentifierType" />
+          </AssociationSet>
+          <AssociationSet Name="IdentifierTypeUpdateUserIDFK" Association="KeeleyModel.Store.IdentifierTypeUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="IdentifierType" EntitySet="IdentifierType" />
           </AssociationSet>
           <AssociationSet Name="InstrumentClassParentInstrumentClassIDFK" Association="KeeleyModel.Store.InstrumentClassParentInstrumentClassIDFK">
             <End Role="InstrumentClass" EntitySet="InstrumentClass" />
@@ -130,6 +140,10 @@
           <AssociationSet Name="IssuerUpdateUserIDFK" Association="KeeleyModel.Store.IssuerUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Issuer" EntitySet="Issuer" />
+          </AssociationSet>
+          <AssociationSet Name="KeeleyTypeUpdateUserIDFK" Association="KeeleyModel.Store.KeeleyTypeUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="KeeleyType" EntitySet="KeeleyType" />
           </AssociationSet>
           <AssociationSet Name="LegalEntityCountryIDFK" Association="KeeleyModel.Store.LegalEntityCountryIDFK">
             <End Role="Country" EntitySet="Country" />
@@ -250,6 +264,18 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="IdentifierType">
+          <Key>
+            <PropertyRef Name="IdentifierTypeID" />
+          </Key>
+          <Property Name="IdentifierTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FMIdentTypeId" Type="varchar" MaxLength="20" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="KeeleyTypeId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="Instrument">
           <Key>
             <PropertyRef Name="InstrumentID" />
@@ -311,6 +337,18 @@
             <PropertyRef Name="LegalEntityID" />
           </Key>
           <Property Name="LegalEntityID" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="KeeleyType">
+          <Key>
+            <PropertyRef Name="KeeleyTypeID" />
+          </Key>
+          <Property Name="KeeleyTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="AssemblyName" Type="varchar" Nullable="false" MaxLength="400" />
+          <Property Name="TypeName" Type="varchar" Nullable="false" MaxLength="400" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
@@ -554,6 +592,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="IdentifierTypeKeeleyTypeIDFK">
+          <End Role="KeeleyType" Type="KeeleyModel.Store.KeeleyType" Multiplicity="1" />
+          <End Role="IdentifierType" Type="KeeleyModel.Store.IdentifierType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KeeleyType">
+              <PropertyRef Name="KeeleyTypeID" />
+            </Principal>
+            <Dependent Role="IdentifierType">
+              <PropertyRef Name="KeeleyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdentifierTypeUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="IdentifierType" Type="KeeleyModel.Store.IdentifierType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="IdentifierType">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="InstrumentClassParentInstrumentClassIDFK">
           <End Role="InstrumentClass" Type="KeeleyModel.Store.InstrumentClass" Multiplicity="0..1" />
           <End Role="InstrumentClass1" Type="KeeleyModel.Store.InstrumentClass" Multiplicity="*" />
@@ -730,6 +792,18 @@
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="Issuer">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="KeeleyTypeUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="KeeleyType" Type="KeeleyModel.Store.KeeleyType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="KeeleyType">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1007,6 +1081,25 @@
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="IdentifierType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdentifierTypeID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="IdentifierType_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FMIdentTypeId" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="KeeleyTypeId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="IdentifierType_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdentifierTypeID" Type="int" Mode="In" />
+          <Parameter Name="FMIdentTypeId" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="KeeleyTypeId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="Instrument_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -1111,6 +1204,25 @@
         </Function>
         <Function Name="Issuer_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
+        <Function Name="KeeleyType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KeeleyTypeID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="KeeleyType_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="AssemblyName" Type="varchar" Mode="In" />
+          <Parameter Name="TypeName" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="KeeleyType_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KeeleyTypeID" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="AssemblyName" Type="varchar" Mode="In" />
+          <Parameter Name="TypeName" Type="varchar" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
@@ -1459,6 +1571,20 @@
           <AssociationSet Name="IssuerLegalEntiyFK" Association="Odey.Framework.Keeley.Entities.IssuerLegalEntiyFK">
             <End Role="LegalEntity" EntitySet="LegalEntities" />
             <End Role="Issuer" EntitySet="Issuers" />
+          </AssociationSet>
+          <EntitySet Name="IdentifierTypes" EntityType="Odey.Framework.Keeley.Entities.IdentifierType" />
+          <EntitySet Name="KeeleyTypes" EntityType="Odey.Framework.Keeley.Entities.KeeleyType" />
+          <AssociationSet Name="IdentifierTypeUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.IdentifierTypeUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="IdentifierType" EntitySet="IdentifierTypes" />
+          </AssociationSet>
+          <AssociationSet Name="KeeleyTypeUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.KeeleyTypeUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="KeeleyType" EntitySet="KeeleyTypes" />
+          </AssociationSet>
+          <AssociationSet Name="IdentifierTypeKeeleyTypeIDFK" Association="Odey.Framework.Keeley.Entities.IdentifierTypeKeeleyTypeIDFK">
+            <End Role="KeeleyType" EntitySet="KeeleyTypes" />
+            <End Role="IdentifierType" EntitySet="IdentifierTypes" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -2188,6 +2314,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="IdentifierType">
+          <Key>
+            <PropertyRef Name="IdentifierTypeID" />
+          </Key>
+          <Property Type="Int32" Name="IdentifierTypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="FMIdentTypeId" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="KeeleyTypeId" Nullable="false" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="KeeleyType">
+          <Key>
+            <PropertyRef Name="KeeleyTypeID" />
+          </Key>
+          <Property Type="Int32" Name="KeeleyTypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AssemblyName" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TypeName" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Association Name="IdentifierTypeUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.IdentifierType" Role="IdentifierType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="IdentifierType">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="KeeleyTypeUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.KeeleyType" Role="KeeleyType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="KeeleyType">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdentifierTypeKeeleyTypeIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.KeeleyType" Role="KeeleyType" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.IdentifierType" Role="IdentifierType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KeeleyType">
+              <PropertyRef Name="KeeleyTypeID" />
+            </Principal>
+            <Dependent Role="IdentifierType">
+              <PropertyRef Name="KeeleyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2863,6 +3049,88 @@
                 </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="IdentifierTypes">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IdentifierType">
+              <MappingFragment StoreEntitySet="IdentifierType">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="KeeleyTypeId" ColumnName="KeeleyTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FMIdentTypeId" ColumnName="FMIdentTypeId" />
+                <ScalarProperty Name="IdentifierTypeID" ColumnName="IdentifierTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IdentifierType">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.IdentifierType_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="KeeleyTypeId" ParameterName="KeeleyTypeId" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ScalarProperty Name="FMIdentTypeId" ParameterName="FMIdentTypeId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="IdentifierTypeID" ColumnName="IdentifierTypeId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.IdentifierType_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="KeeleyTypeId" ParameterName="KeeleyTypeId" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="FMIdentTypeId" ParameterName="FMIdentTypeId" Version="Current" />
+                  <ScalarProperty Name="IdentifierTypeID" ParameterName="IdentifierTypeID" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.IdentifierType_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="IdentifierTypeID" ParameterName="IdentifierTypeID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KeeleyTypes">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.KeeleyType">
+              <MappingFragment StoreEntitySet="KeeleyType">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="AssemblyName" ColumnName="AssemblyName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="KeeleyTypeID" ColumnName="KeeleyTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.KeeleyType">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.KeeleyType_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="TypeName" ParameterName="TypeName" />
+                  <ScalarProperty Name="AssemblyName" ParameterName="AssemblyName" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ResultBinding Name="KeeleyTypeID" ColumnName="KeeleyTypeId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.KeeleyType_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="TypeName" ParameterName="TypeName" Version="Current" />
+                  <ScalarProperty Name="AssemblyName" ParameterName="AssemblyName" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="KeeleyTypeID" ParameterName="KeeleyTypeID" Version="Original" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.KeeleyType_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="KeeleyTypeID" ParameterName="KeeleyTypeID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -2903,24 +3171,24 @@
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Strategy" Width="1.5" PointX="3" PointY="31.125" Height="1.9210009765625031" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.TradeType" Width="1.5" PointX="3" PointY="34.125" Height="1.9210009765625031" IsExpanded="true" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ApplicationUserUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.2819230769230767" PointY="16.5" />
-          <ConnectorPoint PointX="1.2819230769230767" PointY="16.25" />
-          <ConnectorPoint PointX="1.7284615384615383" PointY="16.25" />
-          <ConnectorPoint PointX="1.7284615384615383" PointY="16.5" />
+          <ConnectorPoint PointX="0.75" PointY="17.285666215945515" />
+          <ConnectorPoint PointX="0.5" PointY="17.285666215945515" />
+          <ConnectorPoint PointX="0.5" PointY="17.980180926983177" />
+          <ConnectorPoint PointX="0.75" PointY="17.980180926983177" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.BookUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="18.312347819010419" />
-          <ConnectorPoint PointX="3" PointY="18.312347819010419" />
+          <ConnectorPoint PointX="2.25" PointY="18.412768567207536" />
+          <ConnectorPoint PointX="3" PointY="18.412768567207536" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.3160143835339682" PointY="18.749695638020835" />
-          <ConnectorPoint PointX="1.3160143835339682" PointY="24.116598307291667" />
-          <ConnectorPoint PointX="1.4104178191664805" PointY="24.116598307291667" />
-          <ConnectorPoint PointX="1.577084485833147" PointY="24.116598307291667" />
-          <ConnectorPoint PointX="1.7994247787386668" PointY="24.116598307291667" />
-          <ConnectorPoint PointX="1.9660914454053333" PointY="24.116598307291667" />
-          <ConnectorPoint PointX="2.0106949693450078" PointY="24.116598307291667" />
-          <ConnectorPoint PointX="2.1773616360116748" PointY="24.116598307291667" />
+          <ConnectorPoint PointX="1.366282682925708" PointY="18.749695638020835" />
+          <ConnectorPoint PointX="1.366282682925708" PointY="24.116598307291667" />
+          <ConnectorPoint PointX="1.462859037243915" PointY="24.116598307291667" />
+          <ConnectorPoint PointX="1.6295257039105815" PointY="24.116598307291667" />
+          <ConnectorPoint PointX="1.8357521217671151" PointY="24.116598307291667" />
+          <ConnectorPoint PointX="2.0024187884337818" PointY="24.116598307291667" />
+          <ConnectorPoint PointX="2.0287355186387752" PointY="24.116598307291667" />
+          <ConnectorPoint PointX="2.1954021853054422" PointY="24.116598307291667" />
           <ConnectorPoint PointX="3.4485897435897432" PointY="24.116598307291667" />
           <ConnectorPoint PointX="3.61525641025641" PointY="24.116598307291667" />
           <ConnectorPoint PointX="3.8951282051282048" PointY="24.116598307291667" />
@@ -2930,18 +3198,18 @@
           <ConnectorPoint PointX="5.25" PointY="24.116598307291667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CurrencyUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.648873910921139" />
-          <ConnectorPoint PointX="3.6666666666666665" PointY="17.648873910921139" />
-          <ConnectorPoint PointX="3.8333333333333335" PointY="17.648873910921139" />
-          <ConnectorPoint PointX="6.75" PointY="17.648873910921139" />
+          <ConnectorPoint PointX="2.25" PointY="17.389369495558121" />
+          <ConnectorPoint PointX="6.75" PointY="17.389369495558121" />
           <ConnectorPoint PointX="6.75" PointY="17.875" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FundUpdateUserIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="2.25" PointY="17.78125" />
           <ConnectorPoint PointX="3.6666666666666665" PointY="17.78125" />
           <ConnectorPoint PointX="3.8333333333333335" PointY="17.78125" />
-          <ConnectorPoint PointX="8.5881791764322912" PointY="17.78125" />
-          <ConnectorPoint PointX="8.7548458430989591" PointY="17.78125" />
+          <ConnectorPoint PointX="6.666666666666667" PointY="17.78125" />
+          <ConnectorPoint PointX="6.833333333333333" PointY="17.78125" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="17.78125" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="17.78125" />
           <ConnectorPoint PointX="8.9685505806509642" PointY="17.78125" />
           <ConnectorPoint PointX="9.1352172473176321" PointY="17.78125" />
           <ConnectorPoint PointX="9.3488611236588159" PointY="17.78125" />
@@ -2953,47 +3221,51 @@
           <ConnectorPoint PointX="12.75" PointY="17.78125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentClassUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.6714879214656593" PointY="18.749695638020835" />
-          <ConnectorPoint PointX="1.6714879214656593" PointY="22.917674153645834" />
-          <ConnectorPoint PointX="1.7994247787386668" PointY="22.917674153645834" />
-          <ConnectorPoint PointX="1.9660914454053333" PointY="22.917674153645834" />
-          <ConnectorPoint PointX="2.0106949693450078" PointY="22.917674153645834" />
-          <ConnectorPoint PointX="2.1773616360116748" PointY="22.917674153645834" />
+          <ConnectorPoint PointX="1.7261020582287885" PointY="18.749695638020835" />
+          <ConnectorPoint PointX="1.7261020582287885" PointY="22.917674153645834" />
+          <ConnectorPoint PointX="1.8357521217671151" PointY="22.917674153645834" />
+          <ConnectorPoint PointX="2.0024187884337818" PointY="22.917674153645834" />
+          <ConnectorPoint PointX="2.0287355186387752" PointY="22.917674153645834" />
+          <ConnectorPoint PointX="2.1954021853054422" PointY="22.917674153645834" />
           <ConnectorPoint PointX="3" PointY="22.917674153645834" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.53493494374182" />
-          <ConnectorPoint PointX="8.5881791764322912" PointY="17.53493494374182" />
-          <ConnectorPoint PointX="8.7548458430989591" PointY="17.53493494374182" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="17.53493494374182" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="17.53493494374182" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="17.53493494374182" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="17.53493494374182" />
-          <ConnectorPoint PointX="18.75" PointY="17.53493494374182" />
-          <ConnectorPoint PointX="18.75" PointY="17.75" />
+          <ConnectorPoint PointX="2.25" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="6.666666666666667" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="6.833333333333333" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="8.9685505806509642" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="9.1352172473176321" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="9.3488611236588159" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="9.5155277903254838" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="18.343747999999998" PointY="17.573188811035156" />
+          <ConnectorPoint PointX="18.343747999999998" PointY="17.75" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentRelationshipUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="16.731967219319159" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="16.731967219319159" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="16.731967219319159" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="16.731967219319159" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="16.731967219319159" />
-          <ConnectorPoint PointX="10.5" PointY="16.731967219319159" />
+          <ConnectorPoint PointX="2.25" PointY="16.644263264365854" />
+          <ConnectorPoint PointX="5.510416666666667" PointY="16.644263264365854" />
+          <ConnectorPoint PointX="5.677083333333333" PointY="16.644263264365854" />
+          <ConnectorPoint PointX="8.9685505806509642" PointY="16.644263264365854" />
+          <ConnectorPoint PointX="9.1352172473176321" PointY="16.644263264365854" />
+          <ConnectorPoint PointX="9.3488611236588159" PointY="16.644263264365854" />
+          <ConnectorPoint PointX="9.5155277903254838" PointY="16.644263264365854" />
+          <ConnectorPoint PointX="10.5" PointY="16.644263264365854" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.088934438638319" />
-          <ConnectorPoint PointX="8.6715125097656252" PointY="17.088934438638319" />
-          <ConnectorPoint PointX="8.6715125097656252" PointY="18.875" />
+          <ConnectorPoint PointX="2.25" PointY="17.178458462993387" />
+          <ConnectorPoint PointX="8.6196894569921483" PointY="17.178458462993387" />
+          <ConnectorPoint PointX="8.6196894569921483" PointY="18.875" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.IssuerUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.0940283026783413" PointY="18.749695638020835" />
-          <ConnectorPoint PointX="2.0940283026783413" PointY="26.253326822916669" />
+          <ConnectorPoint PointX="2.1120688519721087" PointY="18.749695638020835" />
+          <ConnectorPoint PointX="2.1120688519721087" PointY="26.253326822916669" />
           <ConnectorPoint PointX="3" PointY="26.253326822916669" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.LegalEntityUpdateUserIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="2.25" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="8.5881791764322912" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="8.7548458430989591" PointY="17.99633243189103" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="17.99633243189103" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="17.99633243189103" />
           <ConnectorPoint PointX="8.9685505806509642" PointY="17.99633243189103" />
           <ConnectorPoint PointX="9.1352172473176321" PointY="17.99633243189103" />
           <ConnectorPoint PointX="9.3488611236588159" PointY="17.99633243189103" />
@@ -3004,33 +3276,35 @@
           <ConnectorPoint PointX="11.25" PointY="19.125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="3.6666666666666665" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="3.8333333333333335" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="8.5881791764322912" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="8.7548458430989591" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="9.9166666666666661" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="10.083333333333334" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="12.416666666666666" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="12.583333333333334" PointY="17.623156927331479" />
-          <ConnectorPoint PointX="16.5" PointY="17.623156927331479" />
+          <ConnectorPoint PointX="2.25" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="3.6666666666666665" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="3.8333333333333335" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="6.666666666666667" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="6.833333333333333" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="8.9685505806509642" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="9.1352172473176321" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="9.3488611236588159" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="9.5155277903254838" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="9.9166666666666661" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="10.083333333333334" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="12.416666666666666" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="12.583333333333334" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="16.5" PointY="17.604441311035153" />
           <ConnectorPoint PointX="16.5" PointY="18.25" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.0486969088154421" PointY="18.749695638020835" />
-          <ConnectorPoint PointX="1.0486969088154421" PointY="24.417674153645834" />
-          <ConnectorPoint PointX="1.0990223128413719" PointY="24.417674153645834" />
-          <ConnectorPoint PointX="1.2656889795080384" PointY="24.417674153645834" />
-          <ConnectorPoint PointX="1.4104178191664805" PointY="24.417674153645834" />
-          <ConnectorPoint PointX="1.577084485833147" PointY="24.417674153645834" />
-          <ConnectorPoint PointX="1.7994247787386668" PointY="24.417674153645834" />
-          <ConnectorPoint PointX="1.9660914454053333" PointY="24.417674153645834" />
-          <ConnectorPoint PointX="2.0106949693450078" PointY="24.417674153645834" />
-          <ConnectorPoint PointX="2.1773616360116748" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="1.0230786712436286" PointY="18.749695638020835" />
+          <ConnectorPoint PointX="1.0230786712436286" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="1.111347343751335" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="1.2780140104180016" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="1.462859037243915" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="1.6295257039105815" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="1.8357521217671151" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="2.0024187884337818" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="2.0287355186387752" PointY="24.417674153645834" />
+          <ConnectorPoint PointX="2.1954021853054422" PointY="24.417674153645834" />
           <ConnectorPoint PointX="3.1826287051282049" PointY="24.417674153645834" />
           <ConnectorPoint PointX="3.3492953717948719" PointY="24.417674153645834" />
           <ConnectorPoint PointX="4.791666666666667" PointY="24.417674153645834" />
@@ -3044,12 +3318,12 @@
           <ConnectorPoint PointX="10.5" PointY="24.417674153645834" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.4937511524998137" PointY="18.749695638020835" />
-          <ConnectorPoint PointX="1.4937511524998137" PointY="24.96875" />
-          <ConnectorPoint PointX="1.7994247787386668" PointY="24.96875" />
-          <ConnectorPoint PointX="1.9660914454053333" PointY="24.96875" />
-          <ConnectorPoint PointX="2.0106949693450078" PointY="24.96875" />
-          <ConnectorPoint PointX="2.1773616360116748" PointY="24.96875" />
+          <ConnectorPoint PointX="1.5461923705772482" PointY="18.749695638020835" />
+          <ConnectorPoint PointX="1.5461923705772482" PointY="24.96875" />
+          <ConnectorPoint PointX="1.8357521217671151" PointY="24.96875" />
+          <ConnectorPoint PointX="2.0024187884337818" PointY="24.96875" />
+          <ConnectorPoint PointX="2.0287355186387752" PointY="24.96875" />
+          <ConnectorPoint PointX="2.1954021853054422" PointY="24.96875" />
           <ConnectorPoint PointX="3.1826287051282049" PointY="24.96875" />
           <ConnectorPoint PointX="3.3492953717948719" PointY="24.96875" />
           <ConnectorPoint PointX="4.791666666666667" PointY="24.96875" />
@@ -3061,22 +3335,22 @@
           <ConnectorPoint PointX="8.25" PointY="24.96875" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.RegionUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.1823556461747051" PointY="18.749695638020835" />
-          <ConnectorPoint PointX="1.1823556461747051" PointY="29.085500488281252" />
-          <ConnectorPoint PointX="1.7994247787386668" PointY="29.085500488281252" />
-          <ConnectorPoint PointX="1.9660914454053333" PointY="29.085500488281252" />
+          <ConnectorPoint PointX="1.1946806770846683" PointY="18.749695638020835" />
+          <ConnectorPoint PointX="1.1946806770846683" PointY="29.085500488281252" />
+          <ConnectorPoint PointX="1.8357521217671151" PointY="29.085500488281252" />
+          <ConnectorPoint PointX="2.0024187884337818" PointY="29.085500488281252" />
           <ConnectorPoint PointX="3" PointY="29.085500488281252" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.StrategyUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="0.86809595440772114" PointY="18.749695638020835" />
-          <ConnectorPoint PointX="0.86809595440772114" PointY="32.085500488281255" />
-          <ConnectorPoint PointX="1.7994247787386668" PointY="32.085500488281255" />
-          <ConnectorPoint PointX="1.9660914454053333" PointY="32.085500488281255" />
+          <ConnectorPoint PointX="0.85528683562181429" PointY="18.749695638020835" />
+          <ConnectorPoint PointX="0.85528683562181429" PointY="32.085500488281255" />
+          <ConnectorPoint PointX="1.8357521217671151" PointY="32.085500488281255" />
+          <ConnectorPoint PointX="2.0024187884337818" PointY="32.085500488281255" />
           <ConnectorPoint PointX="3" PointY="32.085500488281255" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.TradeTypeUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.882758112072" PointY="18.749695638020835" />
-          <ConnectorPoint PointX="1.882758112072" PointY="35.085500488281255" />
+          <ConnectorPoint PointX="1.9190854551004484" PointY="18.749695638020835" />
+          <ConnectorPoint PointX="1.9190854551004484" PointY="35.085500488281255" />
           <ConnectorPoint PointX="3" PointY="35.085500488281255" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.BookFundIDFK" ManuallyRouted="false">
@@ -3089,8 +3363,10 @@
           <ConnectorPoint PointX="9.3488611236588159" PointY="17.5" />
           <ConnectorPoint PointX="9.1352172473176321" PointY="17.5" />
           <ConnectorPoint PointX="8.9685505806509642" PointY="17.5" />
-          <ConnectorPoint PointX="8.7548458430989591" PointY="17.5" />
-          <ConnectorPoint PointX="8.5881791764322912" PointY="17.5" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="17.5" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="17.5" />
+          <ConnectorPoint PointX="6.833333333333333" PointY="17.5" />
+          <ConnectorPoint PointX="6.666666666666667" PointY="17.5" />
           <ConnectorPoint PointX="3.75" PointY="17.5" />
           <ConnectorPoint PointX="3.75" PointY="17.875" />
         </AssociationConnector>
@@ -3124,8 +3400,8 @@
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FundCurrencyIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="7.5" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="8.5881791764322912" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="8.7548458430989591" PointY="18.379727130241783" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="18.379727130241783" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="18.379727130241783" />
           <ConnectorPoint PointX="8.9685505806509642" PointY="18.379727130241783" />
           <ConnectorPoint PointX="9.1352172473176321" PointY="18.379727130241783" />
           <ConnectorPoint PointX="9.3488611236588159" PointY="18.379727130241783" />
@@ -3146,8 +3422,8 @@
           <ConnectorPoint PointX="7.5" PointY="18.732639306530828" />
           <ConnectorPoint PointX="8" PointY="18.732639306530828" />
           <ConnectorPoint PointX="8" PointY="18.625" />
-          <ConnectorPoint PointX="8.5881791764322912" PointY="18.625" />
-          <ConnectorPoint PointX="8.7548458430989591" PointY="18.625" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="18.625" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="18.625" />
           <ConnectorPoint PointX="8.9685505806509642" PointY="18.625" />
           <ConnectorPoint PointX="9.1352172473176321" PointY="18.625" />
           <ConnectorPoint PointX="9.3488611236588159" PointY="18.625" />
@@ -3158,8 +3434,8 @@
           <ConnectorPoint PointX="11.333333333333334" PointY="18.625" />
           <ConnectorPoint PointX="12.5" PointY="18.625" />
           <ConnectorPoint PointX="12.5" PointY="17.5" />
-          <ConnectorPoint PointX="18.343747999999998" PointY="17.5" />
-          <ConnectorPoint PointX="18.343747999999998" PointY="17.75" />
+          <ConnectorPoint PointX="18.75" PointY="17.5" />
+          <ConnectorPoint PointX="18.75" PointY="17.75" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionCurrencyIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="7.1249974999999983" PointY="19.631653645833335" />
@@ -3252,15 +3528,15 @@
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionStrategyIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="32.085500488281255" />
-          <ConnectorPoint PointX="8.6458296003596" PointY="32.085500488281255" />
-          <ConnectorPoint PointX="8.8124962670262672" PointY="32.085500488281255" />
-          <ConnectorPoint PointX="9.2708308673858646" PointY="32.085500488281255" />
-          <ConnectorPoint PointX="9.2708308673858646" PointY="27.039042968750003" />
+          <ConnectorPoint PointX="8.5104141666666653" PointY="32.085500488281255" />
+          <ConnectorPoint PointX="8.6770808333333331" PointY="32.085500488281255" />
+          <ConnectorPoint PointX="9" PointY="32.085500488281255" />
+          <ConnectorPoint PointX="9" PointY="27.039042968750003" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionTradeTypeIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="35.085500488281255" />
-          <ConnectorPoint PointX="8.7291629336929333" PointY="35.085500488281255" />
-          <ConnectorPoint PointX="8.7291629336929333" PointY="27.039042968750003" />
+          <ConnectorPoint PointX="8.5937475" PointY="35.085500488281255" />
+          <ConnectorPoint PointX="8.5937475" PointY="27.039042968750003" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.IssuerLegalEntiyFK" >
           <ConnectorPoint PointX="10.5" PointY="20.249847819010419" />
@@ -3276,6 +3552,22 @@
           <ConnectorPoint PointX="4.75" PointY="24.241598307291667" />
           <ConnectorPoint PointX="3.2659620384615384" PointY="24.241598307291667" />
           <ConnectorPoint PointX="3.2659620384615384" PointY="25.375" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.IdentifierType" Width="1.5" PointX="5.25" PointY="14.25" Height="2.0853483072916674" />
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.KeeleyType" Width="1.5" PointX="3" PointY="13.75" Height="2.0853483072916656" />
+        <AssociationConnector Association="Odey.Framework.Keeley.Entities.IdentifierTypeUpdateUserIDFK" >
+          <ConnectorPoint PointX="2.25" PointY="16.911360863679619" />
+          <ConnectorPoint PointX="5.59375" PointY="16.911360863679619" />
+          <ConnectorPoint PointX="5.59375" PointY="16.335348307291667" />
+        </AssociationConnector>
+        <AssociationConnector Association="Odey.Framework.Keeley.Entities.KeeleyTypeUpdateUserIDFK" >
+          <ConnectorPoint PointX="1.5" PointY="16.5" />
+          <ConnectorPoint PointX="1.5" PointY="14.792674153645834" />
+          <ConnectorPoint PointX="3" PointY="14.792674153645834" />
+        </AssociationConnector>
+        <AssociationConnector Association="Odey.Framework.Keeley.Entities.IdentifierTypeKeeleyTypeIDFK" >
+          <ConnectorPoint PointX="4.5" PointY="15.042674153645834" />
+          <ConnectorPoint PointX="5.25" PointY="15.042674153645834" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

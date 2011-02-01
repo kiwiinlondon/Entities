@@ -18,43 +18,43 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class Strategy: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class IdentifierType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int StrategyID
+        public int IdentifierTypeID
         {	
     		
-            get { return _strategyID; }
+            get { return _identifierTypeID; }
             set
             {
-                if (_strategyID != value)
+                if (_identifierTypeID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'StrategyID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'IdentifierTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _strategyID = value;
-                    OnPropertyChanged("StrategyID");
+                    _identifierTypeID = value;
+                    OnPropertyChanged("IdentifierTypeID");
                 }
             }
         }
-        private int _strategyID;
+        private int _identifierTypeID;
         [DataMember]
-        public string FMStrategy
+        public string FMIdentTypeId
         {	
     		
-            get { return _fMStrategy; }
+            get { return _fMIdentTypeId; }
             set
             {
-                if (_fMStrategy != value)
+                if (_fMIdentTypeId != value)
                 {
-                    _fMStrategy = value;
-                    OnPropertyChanged("FMStrategy");
+                    _fMIdentTypeId = value;
+                    OnPropertyChanged("FMIdentTypeId");
                 }
             }
         }
-        private string _fMStrategy;
+        private string _fMIdentTypeId;
         [DataMember]
         public string Name
         {	
@@ -70,6 +70,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private string _name;
+        [DataMember]
+        public int KeeleyTypeId
+        {	
+    		
+            get { return _keeleyTypeId; }
+            set
+            {
+                if (_keeleyTypeId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("KeeleyTypeId", _keeleyTypeId);
+                    _keeleyTypeId = value;
+                    OnPropertyChanged("KeeleyTypeId");
+                }
+            }
+        }
+        private int _keeleyTypeId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -110,7 +126,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

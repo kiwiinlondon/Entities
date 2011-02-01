@@ -21,11 +21,29 @@ namespace Odey.Framework.Keeley.Entities
                 ObjectStateManager.GetObjectStateEntries(
                 EntityState.Added | EntityState.Modified))
             {
-                PropertyInfo propInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
-                if (propInfo != null)
+                PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
+
+                if (updateUserIdPropInfo != null)
                 {
-                    ApplicationUser user = ApplicationUserCache.GetApplicationUserForWindowsLogin(WindowsIdentity.GetCurrent().Name); 
-                    propInfo.SetValue(entry.Entity,user.UserID,null);
+                    ApplicationUser user = null;
+                    PropertyInfo updateUserNamePropInfo = entry.Entity.GetType().GetProperty("UserThatCausedChange");
+                    string updateUserName = null;
+                    if (updateUserNamePropInfo != null)
+                    {
+                        updateUserName = (string)updateUserNamePropInfo.GetValue(entry.Entity, null);
+                        if (updateUserName != null)
+                        {                           
+                            user = ApplicationUserCache.Get(updateUserName);
+                        }
+                    }
+                    if (user == null)
+                    {
+                        throw new ApplicationException(String.Format("User {0} is not authorised to make changes to entity type {1}", updateUserName, entry.Entity.GetType().ToString()));
+                    }
+                    else
+                    {
+                        updateUserIdPropInfo.SetValue(entry.Entity, user.UserID, null);
+                    }
                 }
             }
             return base.SaveChanges(options);

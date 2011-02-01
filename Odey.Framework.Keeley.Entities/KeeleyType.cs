@@ -18,43 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class Strategy: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class KeeleyType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int StrategyID
+        public int KeeleyTypeID
         {	
     		
-            get { return _strategyID; }
+            get { return _keeleyTypeID; }
             set
             {
-                if (_strategyID != value)
+                if (_keeleyTypeID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'StrategyID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'KeeleyTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _strategyID = value;
-                    OnPropertyChanged("StrategyID");
+                    _keeleyTypeID = value;
+                    OnPropertyChanged("KeeleyTypeID");
                 }
             }
         }
-        private int _strategyID;
-        [DataMember]
-        public string FMStrategy
-        {	
-    		
-            get { return _fMStrategy; }
-            set
-            {
-                if (_fMStrategy != value)
-                {
-                    _fMStrategy = value;
-                    OnPropertyChanged("FMStrategy");
-                }
-            }
-        }
-        private string _fMStrategy;
+        private int _keeleyTypeID;
         [DataMember]
         public string Name
         {	
@@ -70,6 +55,36 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private string _name;
+        [DataMember]
+        public string AssemblyName
+        {	
+    		
+            get { return _assemblyName; }
+            set
+            {
+                if (_assemblyName != value)
+                {
+                    _assemblyName = value;
+                    OnPropertyChanged("AssemblyName");
+                }
+            }
+        }
+        private string _assemblyName;
+        [DataMember]
+        public string TypeName
+        {	
+    		
+            get { return _typeName; }
+            set
+            {
+                if (_typeName != value)
+                {
+                    _typeName = value;
+                    OnPropertyChanged("TypeName");
+                }
+            }
+        }
+        private string _typeName;
         [DataMember]
         public System.DateTime StartDt
         {	

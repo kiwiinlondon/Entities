@@ -7,8 +7,8 @@ CodeGenerationTools code = new CodeGenerationTools(this);
 MetadataLoader loader = new MetadataLoader(this);
 CodeRegion region = new CodeRegion(this, 1);
 MetadataTools ef = new MetadataTools(this);
-
-string inputFile = @"../KeeleyModel/KeeleyModel.edmx";
+  
+string inputFile = @"../Odey.Framework.Keeley.Entities.KeeleyModel/KeeleyModel.edmx";
 MetadataWorkspace metadataWorkspace = null;
 bool allMetadataLoaded =loader.TryLoadAllMetadata(inputFile, out metadataWorkspace);
 EdmItemCollection ItemCollection = (EdmItemCollection)metadataWorkspace.GetItemCollection(DataSpace.CSpace);
@@ -363,6 +363,21 @@ foreach (EntityType entity in ItemCollection.GetItems<EntityType>().OrderBy(e =>
     {
 #>
 
+	[DataMember]
+	public string UserThatCausedChange
+	{
+		get
+		{
+			return _userThatCausedChange;
+		}
+		private set
+		{
+			_userThatCausedChange = value;
+		}
+		
+	}
+	private string _userThatCausedChange;
+
     protected virtual void OnPropertyChanged(String propertyName)
     {
         if (ChangeTracker.State != ObjectState.Added && ChangeTracker.State != ObjectState.Deleted)
@@ -373,6 +388,7 @@ foreach (EntityType entity in ItemCollection.GetItems<EntityType>().OrderBy(e =>
         {
             _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+		UserThatCausedChange = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
     }
 
     protected virtual void OnNavigationPropertyChanged(String propertyName)
@@ -381,6 +397,7 @@ foreach (EntityType entity in ItemCollection.GetItems<EntityType>().OrderBy(e =>
         {
             _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+		UserThatCausedChange = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
     }
 
     event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged{ add { _propertyChanged += value; } remove { _propertyChanged -= value; } }

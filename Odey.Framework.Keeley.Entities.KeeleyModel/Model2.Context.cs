@@ -178,6 +178,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _tradeTypes  ?? (_tradeTypes = CreateObjectSet<TradeType>("TradeTypes")); }
         }
         private ObjectSet<TradeType> _tradeTypes;
+    
+        public ObjectSet<IdentifierType> IdentifierTypes
+        {
+            get { return _identifierTypes  ?? (_identifierTypes = CreateObjectSet<IdentifierType>("IdentifierTypes")); }
+        }
+        private ObjectSet<IdentifierType> _identifierTypes;
+    
+        public ObjectSet<KeeleyType> KeeleyTypes
+        {
+            get { return _keeleyTypes  ?? (_keeleyTypes = CreateObjectSet<KeeleyType>("KeeleyTypes")); }
+        }
+        private ObjectSet<KeeleyType> _keeleyTypes;
 
         #endregion
     }
