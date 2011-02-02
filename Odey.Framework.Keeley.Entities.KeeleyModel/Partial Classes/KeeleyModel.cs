@@ -32,8 +32,9 @@ namespace Odey.Framework.Keeley.Entities
                     {
                         updateUserName = (string)updateUserNamePropInfo.GetValue(entry.Entity, null);
                         if (updateUserName != null)
-                        {                           
-                            user = ApplicationUserCache.Get(updateUserName);
+                        {
+                            ApplicationUserCache cache = new ApplicationUserCache();
+                            user = cache.Get(updateUserName);
                         }
                     }
                     if (user == null)

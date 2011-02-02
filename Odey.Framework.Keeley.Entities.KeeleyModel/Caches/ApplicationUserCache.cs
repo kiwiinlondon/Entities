@@ -1,47 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Odey.Framework.Keeley.Entities;
-using System.Threading;
+using Odey.Framework.Infrastructure;
+using System.Linq;
 
 namespace Odey.Framework.Keeley.Entities.Caches
 {
-    internal static class ApplicationUserCache
+    internal class ApplicationUserCache : OdeyCache<string, ApplicationUser>
     {
-        private static ReaderWriterLock rwl = new ReaderWriterLock();
-
-        private static Dictionary<string, ApplicationUser> _map = null;
-        
-        private static void Refresh()
+        protected override Dictionary<string, ApplicationUser> GetAll()
         {
             using (KeeleyModel context = new KeeleyModel())
             {
-                LockCookie cookie = rwl.UpgradeToWriterLock(3000);
-                _map = context.ApplicationUsers.ToDictionary(a => a.WindowsLogin, a => a);
-                rwl.DowngradeFromWriterLock(ref cookie);
-            }
-        }
-        public static ApplicationUser Get(string key)
-        {
-            try
-            {
-                rwl.AcquireReaderLock(3000);
-
-                if (_map == null)
-                {
-                    Refresh();
-                }
-                ApplicationUser value = null;
-                if (!_map.TryGetValue(key, out value))
-                {
-                    Refresh();//just in case this key has been setup in the meantime
-                    _map.TryGetValue(key, out value);
-                }
-                return value;
-            }
-            finally
-            {
-                rwl.ReleaseLock();
+                return context.ApplicationUsers.ToDictionary(a => a.WindowsLogin, a => a);
             }
         }
     }
