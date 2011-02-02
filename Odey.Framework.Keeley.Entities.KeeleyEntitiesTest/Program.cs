@@ -5,6 +5,8 @@ using System.Text;
 using System.Data.Entity;
 using Odey.Framework.Keeley.Entities;
 using Odey.Framework.Keeley;
+using Odey.Framework.Keeley.Entities.Caches;
+using Odey.Framework.Keeley.Entities.Enums;
 
 namespace Odey.Framework.KeeleyEntitiesTest
 {
@@ -12,10 +14,25 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            CreateIssuer();
+            TestCache();
 
         }
 
+        static void TestCache()
+        {
+            IdentifierTypeCache cache = new IdentifierTypeCache();
+            IdentifierType id = cache.Get(IdentifierTypeIds.RegionIso);
+
+        }
+
+        static void TestGetByIso()
+        {
+            using (var context = new KeeleyModel())
+            {
+                Region region = context.Regions.Where(a => a.IsoCode == "GX").FirstOrDefault();
+                int i = 1;
+            }
+        }
         static void CreateUser()
         {
             using (var context = new KeeleyModel())

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Odey.Framework.Keeley.Entities;
-using Odey.Framework.Infrastructure;
+using Odey.Framework.Infrastructure.Caches;
 using System.Linq;
 
 namespace Odey.Framework.Keeley.Entities.Caches
