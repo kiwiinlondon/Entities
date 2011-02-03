@@ -10,5 +10,10 @@ namespace Odey.Framework.Keeley.Entities.Caches
         {
             return context.ApplicationUsers.ToDictionary(a => a.UserID, a => a);
         }
+
+        protected override KeyNotFoundBehaviourIds KeyNotFoundBehaviour
+        {
+            get { return KeyNotFoundBehaviourIds.All; }
+        }
     }
 }

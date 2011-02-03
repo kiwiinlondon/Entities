@@ -14,5 +14,10 @@ namespace Odey.Framework.Keeley.Entities.Caches
                 return context.ApplicationUsers.ToDictionary(a => a.WindowsLogin, a => a);
             }
         }
+
+        protected override KeyNotFoundBehaviourIds KeyNotFoundBehaviour
+        {
+            get { return KeyNotFoundBehaviourIds.All; }
+        }
     }
 }

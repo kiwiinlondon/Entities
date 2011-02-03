@@ -11,5 +11,10 @@ namespace Odey.Framework.Keeley.Entities.Caches
         {
             return context.IdentifierTypes.ToDictionary(a => a.IdentifierTypeIDAsEnum, a => a);
         }
+
+        protected override KeyNotFoundBehaviourIds KeyNotFoundBehaviour
+        {
+            get { return KeyNotFoundBehaviourIds.All; }
+        }
     }
 }
