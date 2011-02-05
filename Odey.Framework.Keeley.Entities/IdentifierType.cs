@@ -136,21 +136,6 @@ namespace Odey.Framework.Keeley.Entities
         #endregion
         #region ChangeTracking
     
-    	[DataMember]
-    	public string UserThatCausedChange
-    	{
-    		get
-    		{
-    			return _userThatCausedChange;
-    		}
-    		private set
-    		{
-    			_userThatCausedChange = value;
-    		}
-    		
-    	}
-    	private string _userThatCausedChange;
-    
         protected virtual void OnPropertyChanged(String propertyName)
         {
             if (ChangeTracker.State != ObjectState.Added && ChangeTracker.State != ObjectState.Deleted)
@@ -161,7 +146,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-    		UserThatCausedChange = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
         }
     
         protected virtual void OnNavigationPropertyChanged(String propertyName)
@@ -170,7 +154,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-    		UserThatCausedChange = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
         }
     
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged{ add { _propertyChanged += value; } remove { _propertyChanged -= value; } }
