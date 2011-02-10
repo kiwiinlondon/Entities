@@ -14,14 +14,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 return (IdentifierTypeIds)IdentifierTypeID;
             }
-        }
-
-        public KeeleyTypeIds KeeleyTypeIDAsEnum
-        {
-            get
-            {
-                return (KeeleyTypeIds)KeeleyTypeId;
-            }
-        }
+        }        
     }
 }

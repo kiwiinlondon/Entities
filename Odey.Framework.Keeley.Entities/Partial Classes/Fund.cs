@@ -5,7 +5,7 @@ namespace Odey.Framework.Keeley.Entities
     partial class Fund
     {
 
-        protected Fund()
+        public Fund()
         {
         }
 

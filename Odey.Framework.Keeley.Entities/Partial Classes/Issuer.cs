@@ -5,7 +5,7 @@ namespace Odey.Framework.Keeley.Entities
     partial class Issuer
     {
 
-        protected Issuer()
+        public Issuer()
         {
         }   
 
@@ -19,6 +19,22 @@ namespace Odey.Framework.Keeley.Entities
             get
             {
                 return LegalEntity.CountryID;
+            }
+        }
+
+        public int? FMOrgID
+        {
+            get
+            {
+                return LegalEntity.FMOrgId;
+            }
+        }
+
+        public int? BBCompany
+        {
+            get
+            {
+                return LegalEntity.BBCompany;
             }
         }
 

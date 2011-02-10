@@ -5,7 +5,7 @@ namespace Odey.Framework.Keeley.Entities
     partial class Market
     {
 
-        protected Market()
+        public Market()
         {
         }
 

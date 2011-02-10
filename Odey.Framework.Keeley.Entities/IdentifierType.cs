@@ -41,21 +41,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _identifierTypeID;
         [DataMember]
-        public string FMIdentTypeId
-        {	
-    		
-            get { return _fMIdentTypeId; }
-            set
-            {
-                if (_fMIdentTypeId != value)
-                {
-                    _fMIdentTypeId = value;
-                    OnPropertyChanged("FMIdentTypeId");
-                }
-            }
-        }
-        private string _fMIdentTypeId;
-        [DataMember]
         public string Name
         {	
     		
@@ -70,22 +55,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private string _name;
-        [DataMember]
-        public int KeeleyTypeId
-        {	
-    		
-            get { return _keeleyTypeId; }
-            set
-            {
-                if (_keeleyTypeId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("KeeleyTypeId", _keeleyTypeId);
-                    _keeleyTypeId = value;
-                    OnPropertyChanged("KeeleyTypeId");
-                }
-            }
-        }
-        private int _keeleyTypeId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -132,6 +101,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public string FMIdentType
+        {	
+    		
+            get { return _fMIdentType; }
+            set
+            {
+                if (_fMIdentType != value)
+                {
+                    _fMIdentType = value;
+                    OnPropertyChanged("FMIdentType");
+                }
+            }
+        }
+        private string _fMIdentType;
 
         #endregion
         #region ChangeTracking

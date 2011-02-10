@@ -18,7 +18,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Issuer = 3,
         [EnumMember]
-        Exchange = 4,
+        Market = 4,
         [EnumMember]
         LegalEntity = 5
     }

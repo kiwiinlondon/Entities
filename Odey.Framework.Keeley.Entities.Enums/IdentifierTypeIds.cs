@@ -11,8 +11,22 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        RegionIso = 1,
+        IsoCode = 1,
         [EnumMember]
-        CountryIso = 2
+        FMOrgId = 2,
+        [EnumMember]
+        BBCompanyCode=3,
+        [EnumMember]
+        FMInstClass=4,
+        [EnumMember]
+        FMInstId=5,
+        [EnumMember]
+        FMSecId=6,
+        [EnumMember]
+        Isin=7,
+        [EnumMember]
+        Sedol=8,
+        [EnumMember]
+        BBTicker=9
     }
 }

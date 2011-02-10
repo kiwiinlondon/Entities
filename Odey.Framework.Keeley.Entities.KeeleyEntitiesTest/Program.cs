@@ -14,14 +14,14 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            TestCache();
+            CreateRegion();
 
         }
 
         static void TestCache()
         {
             IdentifierTypeCache cache = new IdentifierTypeCache();
-            IdentifierType id = cache.Get(IdentifierTypeIds.RegionIso);
+            IdentifierType id = cache.Get(IdentifierTypeIds.IsoCode);
 
         }
 

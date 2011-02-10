@@ -148,6 +148,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<int> BBCompany
+        {	
+    		
+            get { return _bBCompany; }
+            set
+            {
+                if (_bBCompany != value)
+                {
+                    _bBCompany = value;
+                    OnPropertyChanged("BBCompany");
+                }
+            }
+        }
+        private Nullable<int> _bBCompany;
 
         #endregion
         #region ChangeTracking

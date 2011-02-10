@@ -8,11 +8,20 @@ using System.Reflection;
 using Odey.Framework.Keeley.Entities.Caches;
 using Odey.Framework.Keeley.Entities;
 using System.Security.Principal;
+using ServiceModelEx;
 
 namespace Odey.Framework.Keeley.Entities
 {
     partial class KeeleyModel
     {
+
+        private SecurityCallStack _securityCallStack = null;
+
+        public KeeleyModel(SecurityCallStack securityCallStack) : this()
+        {
+            _securityCallStack = securityCallStack;
+        }
+
         public override int SaveChanges(SaveOptions options)
         {
             //needed to bring context back in line with entity
@@ -20,22 +29,27 @@ namespace Odey.Framework.Keeley.Entities
             foreach (ObjectStateEntry entry in
                 ObjectStateManager.GetObjectStateEntries(
                 EntityState.Added | EntityState.Modified))
-            {
+            {               
                 PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
 
                 if (updateUserIdPropInfo != null)
                 {
-                    ApplicationUser user = null;
-                    PropertyInfo updateUserNamePropInfo = entry.Entity.GetType().GetProperty("UserThatCausedChange");
-                    string updateUserName = null;
-                    if (updateUserNamePropInfo != null)
+                    if (_securityCallStack == null)
                     {
-                        updateUserName = (string)updateUserNamePropInfo.GetValue(entry.Entity, null);
-                        if (updateUserName != null)
-                        {
-                            ApplicationUserCache cache = new ApplicationUserCache();
-                            user = cache.Get(updateUserName);
-                        }
+                        throw new ApplicationException("No Security call stack was provided in constructor so user cannot be authenticated");
+                    }
+                    ApplicationUser user = null;                    
+                    SecurityCallFrame callFrame = _securityCallStack.OriginalCall;
+                    if (callFrame==null)
+                    {
+                        throw new ApplicationException("Original Call frame was not supplied so user cannot be authenticated");
+                    }
+                    string updateUserName = callFrame.IdentityName;
+
+                    if (updateUserName != null)
+                    {
+                        ApplicationUserCache cache = new ApplicationUserCache();
+                        user = cache.Get(updateUserName);
                     }
                     if (user == null)
                     {
@@ -49,7 +63,5 @@ namespace Odey.Framework.Keeley.Entities
             }
             return base.SaveChanges(options);
         }
-
-
     }
 }
