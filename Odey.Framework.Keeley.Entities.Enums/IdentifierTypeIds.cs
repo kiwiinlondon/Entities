@@ -27,6 +27,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Sedol=8,
         [EnumMember]
-        BBTicker=9
+        BBTicker=9,
+        [EnumMember]
+        FMStrategy=10,
+        [EnumMember]
+        FMTradType=11
     }
 }

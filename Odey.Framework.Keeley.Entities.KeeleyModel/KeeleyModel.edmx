@@ -57,17 +57,9 @@
             <End Role="Currency" EntitySet="Currency" />
             <End Role="Fund" EntitySet="Fund" />
           </AssociationSet>
-          <AssociationSet Name="FundInstrumentMarketIDFK" Association="KeeleyModel.Store.FundInstrumentMarketIDFK">
-            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
-            <End Role="Fund" EntitySet="Fund" />
-          </AssociationSet>
           <AssociationSet Name="FundLegalEntiyFK" Association="KeeleyModel.Store.FundLegalEntiyFK">
             <End Role="LegalEntity" EntitySet="LegalEntity" />
             <End Role="Fund" EntitySet="Fund" />
-          </AssociationSet>
-          <AssociationSet Name="FundParentFundIDFK" Association="KeeleyModel.Store.FundParentFundIDFK">
-            <End Role="Fund" EntitySet="Fund" />
-            <End Role="Fund1" EntitySet="Fund" />
           </AssociationSet>
           <AssociationSet Name="FundUpdateUserIDFK" Association="KeeleyModel.Store.FundUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -96,10 +88,6 @@
           <AssociationSet Name="InstrumentIssuerIDFK" Association="KeeleyModel.Store.InstrumentIssuerIDFK">
             <End Role="Issuer" EntitySet="Issuer" />
             <End Role="Instrument" EntitySet="Instrument" />
-          </AssociationSet>
-          <AssociationSet Name="InstrumentMarketBenefitCurrencyIDFK" Association="KeeleyModel.Store.InstrumentMarketBenefitCurrencyIDFK">
-            <End Role="Currency" EntitySet="Currency" />
-            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
           </AssociationSet>
           <AssociationSet Name="InstrumentMarketInstrumentIDFK" Association="KeeleyModel.Store.InstrumentMarketInstrumentIDFK">
             <End Role="Instrument" EntitySet="Instrument" />
@@ -253,8 +241,6 @@
             <PropertyRef Name="LegalEntityID" />
           </Key>
           <Property Name="LegalEntityID" Type="int" Nullable="false" />
-          <Property Name="InstrumentMarketID" Type="int" />
-          <Property Name="ParentFundID" Type="int" />
           <Property Name="CurrencyID" Type="int" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
@@ -306,7 +292,6 @@
           <Property Name="InstrumentMarketID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="InstrumentID" Type="int" Nullable="false" />
           <Property Name="MarketID" Type="int" Nullable="false" />
-          <Property Name="BenefitCurrencyID" Type="int" Nullable="false" />
           <Property Name="FMSecId" Type="int" />
           <Property Name="PriceDivisor" Type="numeric" Nullable="false" Precision="33" Scale="18" />
           <Property Name="BloombergTicker" Type="varchar" MaxLength="150" />
@@ -353,7 +338,7 @@
             <PropertyRef Name="LegalEntityID" />
           </Key>
           <Property Name="LegalEntityID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="FMOrgId" Type="int" Nullable="false" />
+          <Property Name="FMOrgId" Type="int" />
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="70" />
           <Property Name="LongName" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="CountryID" Type="int" />
@@ -540,18 +525,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FundInstrumentMarketIDFK">
-          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="0..1" />
-          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstrumentMarket">
-              <PropertyRef Name="InstrumentMarketID" />
-            </Principal>
-            <Dependent Role="Fund">
-              <PropertyRef Name="InstrumentMarketID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FundLegalEntiyFK">
           <End Role="LegalEntity" Type="KeeleyModel.Store.LegalEntity" Multiplicity="1" />
           <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="0..1" />
@@ -561,18 +534,6 @@
             </Principal>
             <Dependent Role="Fund">
               <PropertyRef Name="LegalEntityID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FundParentFundIDFK">
-          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="0..1" />
-          <End Role="Fund1" Type="KeeleyModel.Store.Fund" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Fund">
-              <PropertyRef Name="LegalEntityID" />
-            </Principal>
-            <Dependent Role="Fund1">
-              <PropertyRef Name="ParentFundID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -657,18 +618,6 @@
             </Principal>
             <Dependent Role="Instrument">
               <PropertyRef Name="IssuerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="InstrumentMarketBenefitCurrencyIDFK">
-          <End Role="Currency" Type="KeeleyModel.Store.Currency" Multiplicity="1" />
-          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Currency">
-              <PropertyRef Name="InstrumentID" />
-            </Principal>
-            <Dependent Role="InstrumentMarket">
-              <PropertyRef Name="BenefitCurrencyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1052,15 +1001,11 @@
         </Function>
         <Function Name="Fund_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
-          <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
-          <Parameter Name="ParentFundID" Type="int" Mode="In" />
           <Parameter Name="CurrencyID" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="Fund_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
-          <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
-          <Parameter Name="ParentFundID" Type="int" Mode="In" />
           <Parameter Name="CurrencyID" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -1136,7 +1081,6 @@
         <Function Name="InstrumentMarket_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentID" Type="int" Mode="In" />
           <Parameter Name="MarketID" Type="int" Mode="In" />
-          <Parameter Name="BenefitCurrencyID" Type="int" Mode="In" />
           <Parameter Name="FMSecId" Type="int" Mode="In" />
           <Parameter Name="PriceDivisor" Type="numeric" Mode="In" />
           <Parameter Name="BloombergTicker" Type="varchar" Mode="In" />
@@ -1148,7 +1092,6 @@
           <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
           <Parameter Name="InstrumentID" Type="int" Mode="In" />
           <Parameter Name="MarketID" Type="int" Mode="In" />
-          <Parameter Name="BenefitCurrencyID" Type="int" Mode="In" />
           <Parameter Name="FMSecId" Type="int" Mode="In" />
           <Parameter Name="PriceDivisor" Type="numeric" Mode="In" />
           <Parameter Name="BloombergTicker" Type="varchar" Mode="In" />
@@ -1484,25 +1427,13 @@
             <End Role="Currency" EntitySet="Currencies" />
             <End Role="Instrument" EntitySet="Instruments" />
           </AssociationSet>
-          <AssociationSet Name="InstrumentMarketBenefitCurrencyIDFK" Association="Odey.Framework.Keeley.Entities.InstrumentMarketBenefitCurrencyIDFK">
-            <End Role="Currency" EntitySet="Currencies" />
-            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
-          </AssociationSet>
           <AssociationSet Name="PositionCurrencyIDFK" Association="Odey.Framework.Keeley.Entities.PositionCurrencyIDFK">
             <End Role="Currency" EntitySet="Currencies" />
             <End Role="Position" EntitySet="Positions" />
           </AssociationSet>
-          <AssociationSet Name="FundInstrumentMarketIDFK" Association="Odey.Framework.Keeley.Entities.FundInstrumentMarketIDFK">
-            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
-            <End Role="Fund" EntitySet="Funds" />
-          </AssociationSet>
           <AssociationSet Name="FundLegalEntiyFK" Association="Odey.Framework.Keeley.Entities.FundLegalEntiyFK">
             <End Role="LegalEntity" EntitySet="LegalEntities" />
             <End Role="Fund" EntitySet="Funds" />
-          </AssociationSet>
-          <AssociationSet Name="FundParentFundIDFK" Association="Odey.Framework.Keeley.Entities.FundParentFundIDFK">
-            <End Role="Fund" EntitySet="Funds" />
-            <End Role="Fund1" EntitySet="Funds" />
           </AssociationSet>
           <AssociationSet Name="InstrumentInstrumentClassIDFK" Association="Odey.Framework.Keeley.Entities.InstrumentInstrumentClassIDFK">
             <End Role="InstrumentClass" EntitySet="InstrumentClasses" />
@@ -1619,8 +1550,6 @@
             <PropertyRef Name="LegalEntityID" />
           </Key>
           <Property Name="LegalEntityID" Type="Int32" Nullable="false" />
-          <Property Name="InstrumentMarketID" Type="Int32" />
-          <Property Name="ParentFundID" Type="Int32" />
           <Property Name="CurrencyID" Type="Int32" Nullable="false" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
@@ -1662,7 +1591,6 @@
           <Property Name="InstrumentMarketID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InstrumentID" Type="Int32" Nullable="false" />
           <Property Name="MarketID" Type="Int32" Nullable="false" />
-          <Property Name="BenefitCurrencyID" Type="Int32" Nullable="false" />
           <Property Name="FMSecId" Type="Int32" />
           <Property Name="PriceDivisor" Type="Decimal" Nullable="false" Precision="33" Scale="18" />
           <Property Name="BloombergTicker" Type="String" MaxLength="150" Unicode="false" FixedLength="false" />
@@ -2079,18 +2007,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="InstrumentMarketBenefitCurrencyIDFK">
-          <End Role="Currency" Type="Odey.Framework.Keeley.Entities.Currency" Multiplicity="1" />
-          <End Role="InstrumentMarket" Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Currency">
-              <PropertyRef Name="InstrumentID" />
-            </Principal>
-            <Dependent Role="InstrumentMarket">
-              <PropertyRef Name="BenefitCurrencyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="PositionCurrencyIDFK">
           <End Role="Currency" Type="Odey.Framework.Keeley.Entities.Currency" Multiplicity="1" />
           <End Role="Position" Type="Odey.Framework.Keeley.Entities.Position" Multiplicity="*" />
@@ -2103,18 +2019,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FundInstrumentMarketIDFK">
-          <End Role="InstrumentMarket" Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Multiplicity="0..1" />
-          <End Role="Fund" Type="Odey.Framework.Keeley.Entities.Fund" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstrumentMarket">
-              <PropertyRef Name="InstrumentMarketID" />
-            </Principal>
-            <Dependent Role="Fund">
-              <PropertyRef Name="InstrumentMarketID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FundLegalEntiyFK">
           <End Role="LegalEntity" Type="Odey.Framework.Keeley.Entities.LegalEntity" Multiplicity="1" />
           <End Role="Fund" Type="Odey.Framework.Keeley.Entities.Fund" Multiplicity="0..1" />
@@ -2124,18 +2028,6 @@
             </Principal>
             <Dependent Role="Fund">
               <PropertyRef Name="LegalEntityID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FundParentFundIDFK">
-          <End Role="Fund" Type="Odey.Framework.Keeley.Entities.Fund" Multiplicity="0..1" />
-          <End Role="Fund1" Type="Odey.Framework.Keeley.Entities.Fund" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Fund">
-              <PropertyRef Name="LegalEntityID" />
-            </Principal>
-            <Dependent Role="Fund1">
-              <PropertyRef Name="ParentFundID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2476,7 +2368,6 @@
                   <ScalarProperty Name="InstrumentID" ParameterName="InstrumentID" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                  <ResultBinding Name="InstrumentID" ColumnName="InstrumentID" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Currency_Update">
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
@@ -2489,8 +2380,6 @@
             </EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Funds"><EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund"><MappingFragment StoreEntitySet="Fund">
             <ScalarProperty Name="LegalEntityID" ColumnName="LegalEntityID" />
-            <ScalarProperty Name="InstrumentMarketID" ColumnName="InstrumentMarketID" />
-            <ScalarProperty Name="ParentFundID" ColumnName="ParentFundID" />
             <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
             <ScalarProperty Name="StartDt" ColumnName="StartDt" />
             <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -2501,8 +2390,6 @@
                 <InsertFunction FunctionName="KeeleyModel.Store.Fund_Insert">
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="CurrencyID" ParameterName="CurrencyID" />
-                  <ScalarProperty Name="ParentFundID" ParameterName="ParentFundID" />
-                  <ScalarProperty Name="InstrumentMarketID" ParameterName="InstrumentMarketID" />
                   <ScalarProperty Name="LegalEntityID" ParameterName="LegalEntityID" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
@@ -2511,8 +2398,6 @@
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="CurrencyID" ParameterName="CurrencyID" Version="Current" />
-                  <ScalarProperty Name="ParentFundID" ParameterName="ParentFundID" Version="Current" />
-                  <ScalarProperty Name="InstrumentMarketID" ParameterName="InstrumentMarketID" Version="Current" />
                   <ScalarProperty Name="LegalEntityID" ParameterName="LegalEntityID" Version="Current" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
@@ -2614,7 +2499,6 @@
             <ScalarProperty Name="InstrumentMarketID" ColumnName="InstrumentMarketID" />
             <ScalarProperty Name="InstrumentID" ColumnName="InstrumentID" />
             <ScalarProperty Name="MarketID" ColumnName="MarketID" />
-            <ScalarProperty Name="BenefitCurrencyID" ColumnName="BenefitCurrencyID" />
             <ScalarProperty Name="FMSecId" ColumnName="FMSecId" />
             <ScalarProperty Name="PriceDivisor" ColumnName="PriceDivisor" />
             <ScalarProperty Name="BloombergTicker" ColumnName="BloombergTicker" />
@@ -2633,7 +2517,6 @@
                   <ScalarProperty Name="BloombergTicker" ParameterName="BloombergTicker" />
                   <ScalarProperty Name="PriceDivisor" ParameterName="PriceDivisor" />
                   <ScalarProperty Name="FMSecId" ParameterName="FMSecId" />
-                  <ScalarProperty Name="BenefitCurrencyID" ParameterName="BenefitCurrencyID" />
                   <ScalarProperty Name="MarketID" ParameterName="MarketID" />
                   <ScalarProperty Name="InstrumentID" ParameterName="InstrumentID" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
@@ -2648,7 +2531,6 @@
                   <ScalarProperty Name="BloombergTicker" ParameterName="BloombergTicker" Version="Current" />
                   <ScalarProperty Name="PriceDivisor" ParameterName="PriceDivisor" Version="Current" />
                   <ScalarProperty Name="FMSecId" ParameterName="FMSecId" Version="Current" />
-                  <ScalarProperty Name="BenefitCurrencyID" ParameterName="BenefitCurrencyID" Version="Current" />
                   <ScalarProperty Name="MarketID" ParameterName="MarketID" Version="Current" />
                   <ScalarProperty Name="InstrumentID" ParameterName="InstrumentID" Version="Current" />
                   <ScalarProperty Name="InstrumentMarketID" ParameterName="InstrumentMarketID" Version="Current" />
@@ -2895,9 +2777,9 @@
                   <ScalarProperty Name="InstrumentMarketID" ParameterName="InstrumentMarketID" />
                   <ScalarProperty Name="StrategyID" ParameterName="StrategyID" />
                   <ScalarProperty Name="BookID" ParameterName="BookID" />
-                  <ResultBinding Name="PositionID" ColumnName="StartDt" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                  <ResultBinding Name="StartDt" ColumnName="PositionID" />
+                  <ResultBinding Name="PositionID" ColumnName="PositionID" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Position_Update">
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
@@ -3125,10 +3007,10 @@
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.0853483072916674" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.25" PointY="22.125" Height="2.0853483072916674" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Currency" Width="1.5" PointX="6" PointY="17.875" Height="1.7566536458333353" IsExpanded="true" />
-        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Fund" Width="1.5" PointX="12.75" PointY="17.75" Height="2.2496956380208353" IsExpanded="true" />
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Fund" Width="1.5" PointX="12.75" PointY="17.75" Height="1.9210009765625031" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.5" PointX="8.25" PointY="18.875" Height="2.7427376302083353" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentClass" Width="1.5" PointX="3" PointY="21.875" Height="2.0853483072916674" IsExpanded="true" />
-        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentMarket" Width="1.5" PointX="18" PointY="17.75" Height="3.071432291666671" IsExpanded="true" />
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentMarket" Width="1.5" PointX="18" PointY="17.75" Height="2.9070849609375031" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentRelationship" Width="1.5" PointX="10.5" PointY="15.5" Height="1.9210009765625031" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Issuer" Width="1.5" PointX="3" PointY="25.375" Height="1.7566536458333353" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.LegalEntity" Width="1.5" PointX="10.5" PointY="19.125" Height="2.2496956380208353" IsExpanded="true" />
@@ -3166,8 +3048,8 @@
           <ConnectorPoint PointX="5.25" PointY="24.116598307291667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CurrencyUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.389369495558121" />
-          <ConnectorPoint PointX="6.75" PointY="17.389369495558121" />
+          <ConnectorPoint PointX="2.25" PointY="17.0625005" />
+          <ConnectorPoint PointX="6.75" PointY="17.0625005" />
           <ConnectorPoint PointX="6.75" PointY="17.875" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FundUpdateUserIDFK" ManuallyRouted="false">
@@ -3176,16 +3058,14 @@
           <ConnectorPoint PointX="3.8333333333333335" PointY="17.78125" />
           <ConnectorPoint PointX="6.666666666666667" PointY="17.78125" />
           <ConnectorPoint PointX="6.833333333333333" PointY="17.78125" />
+          <ConnectorPoint PointX="7.666666666666667" PointY="17.78125" />
+          <ConnectorPoint PointX="7.833333333333333" PointY="17.78125" />
           <ConnectorPoint PointX="8.5363561236588144" PointY="17.78125" />
           <ConnectorPoint PointX="8.7030227903254822" PointY="17.78125" />
           <ConnectorPoint PointX="8.9685505806509642" PointY="17.78125" />
           <ConnectorPoint PointX="9.1352172473176321" PointY="17.78125" />
           <ConnectorPoint PointX="9.3488611236588159" PointY="17.78125" />
           <ConnectorPoint PointX="9.5155277903254838" PointY="17.78125" />
-          <ConnectorPoint PointX="9.9166666666666661" PointY="17.78125" />
-          <ConnectorPoint PointX="10.083333333333334" PointY="17.78125" />
-          <ConnectorPoint PointX="12.416666666666666" PointY="17.78125" />
-          <ConnectorPoint PointX="12.583333333333334" PointY="17.78125" />
           <ConnectorPoint PointX="12.75" PointY="17.78125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentClassUpdateUserIDFK" ManuallyRouted="false">
@@ -3198,17 +3078,17 @@
           <ConnectorPoint PointX="3" PointY="22.917674153645834" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="6.666666666666667" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="6.833333333333333" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="8.5363561236588144" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="8.7030227903254822" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="18.343747999999998" PointY="17.573188811035156" />
-          <ConnectorPoint PointX="18.343747999999998" PointY="17.75" />
+          <ConnectorPoint PointX="2.25" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="6.666666666666667" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="6.833333333333333" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="8.9685505806509642" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="9.1352172473176321" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="9.3488611236588159" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="9.5155277903254838" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="18.75" PointY="17.554250488281252" />
+          <ConnectorPoint PointX="18.75" PointY="17.75" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentRelationshipUpdateUserIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="2.25" PointY="16.6429097237083" />
@@ -3221,8 +3101,10 @@
           <ConnectorPoint PointX="10.5" PointY="16.6429097237083" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.178458462993387" />
-          <ConnectorPoint PointX="8.6196894569921483" PointY="17.178458462993387" />
+          <ConnectorPoint PointX="2.25" PointY="17.308375494140627" />
+          <ConnectorPoint PointX="6.666666666666667" PointY="17.308375494140627" />
+          <ConnectorPoint PointX="6.833333333333333" PointY="17.308375494140627" />
+          <ConnectorPoint PointX="8.6196894569921483" PointY="17.308375494140627" />
           <ConnectorPoint PointX="8.6196894569921483" PointY="18.875" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.IssuerUpdateUserIDFK" ManuallyRouted="false">
@@ -3231,35 +3113,29 @@
           <ConnectorPoint PointX="3" PointY="26.253326822916669" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.LegalEntityUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="8.5363561236588144" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="8.7030227903254822" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="9.9166666666666661" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="10.083333333333334" PointY="17.99633243189103" />
-          <ConnectorPoint PointX="11.25" PointY="17.99633243189103" />
+          <ConnectorPoint PointX="2.25" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="7.666666666666667" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="7.833333333333333" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="8.9685505806509642" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="9.1352172473176321" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="9.3488611236588159" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="9.5155277903254838" PointY="18.222453500600967" />
+          <ConnectorPoint PointX="11.25" PointY="18.222453500600967" />
           <ConnectorPoint PointX="11.25" PointY="19.125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="3.6666666666666665" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="3.8333333333333335" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="6.666666666666667" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="6.833333333333333" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="8.5363561236588144" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="8.7030227903254822" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="9.9166666666666661" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="10.083333333333334" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="12.416666666666666" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="12.583333333333334" PointY="17.604441311035153" />
-          <ConnectorPoint PointX="16.5" PointY="17.604441311035153" />
+          <ConnectorPoint PointX="2.25" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="6.666666666666667" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="6.833333333333333" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="8.9685505806509642" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="9.1352172473176321" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="9.3488611236588159" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="9.5155277903254838" PointY="17.585502988281249" />
+          <ConnectorPoint PointX="16.5" PointY="17.585502988281249" />
           <ConnectorPoint PointX="16.5" PointY="18.25" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioUpdateUserIDFK" ManuallyRouted="false">
@@ -3322,20 +3198,20 @@
           <ConnectorPoint PointX="3" PointY="35.085500488281255" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.BookFundIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="12.75" PointY="18.752366065120892" />
-          <ConnectorPoint PointX="11.333333333333334" PointY="18.752366065120892" />
-          <ConnectorPoint PointX="11.166666666666666" PointY="18.752366065120892" />
-          <ConnectorPoint PointX="10" PointY="18.752366065120892" />
-          <ConnectorPoint PointX="10" PointY="17.5" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="17.5" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="17.5" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="17.5" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="17.5" />
-          <ConnectorPoint PointX="8.7030227903254822" PointY="17.5" />
-          <ConnectorPoint PointX="8.5363561236588144" PointY="17.5" />
-          <ConnectorPoint PointX="6.833333333333333" PointY="17.5" />
-          <ConnectorPoint PointX="6.666666666666667" PointY="17.5" />
-          <ConnectorPoint PointX="3.75" PointY="17.5" />
+          <ConnectorPoint PointX="12.75" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="11.333333333333334" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="11.166666666666666" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="9.5155277903254838" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="9.3488611236588159" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="9.1352172473176321" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="8.9685505806509642" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="7.75" PointY="18.517476750300482" />
+          <ConnectorPoint PointX="7.75" PointY="17.625" />
+          <ConnectorPoint PointX="6.833333333333333" PointY="17.625" />
+          <ConnectorPoint PointX="6.666666666666667" PointY="17.625" />
+          <ConnectorPoint PointX="3.75" PointY="17.625" />
           <ConnectorPoint PointX="3.75" PointY="17.875" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionBookIDFK" ManuallyRouted="false">
@@ -3352,79 +3228,44 @@
           <ConnectorPoint PointX="6" PointY="24.210348307291667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.LegalEntityCountryIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="23.167674153645834" />
-          <ConnectorPoint PointX="7.0416641666666653" PointY="23.167674153645834" />
-          <ConnectorPoint PointX="7.2083308333333314" PointY="23.167674153645834" />
-          <ConnectorPoint PointX="9.2916661666666673" PointY="23.167674153645834" />
-          <ConnectorPoint PointX="9.4583328333333352" PointY="23.167674153645834" />
-          <ConnectorPoint PointX="10.25" PointY="23.167674153645834" />
-          <ConnectorPoint PointX="10.25" PointY="22.75" />
-          <ConnectorPoint PointX="11.25" PointY="22.75" />
-          <ConnectorPoint PointX="11.25" PointY="21.374695638020835" />
+          <ConnectorPoint PointX="6.75" PointY="22.188460538461534" />
+          <ConnectorPoint PointX="7.0660719349011192" PointY="21.872388603560413" />
+          <ConnectorPoint PointX="7.1839230650988775" PointY="21.754537473362657" />
+          <ConnectorPoint PointX="7.4375" PointY="21.500960538461534" />
+          <ConnectorPoint PointX="7.4375" PointY="22.039042968750003" />
+          <ConnectorPoint PointX="9.2916661666666673" PointY="22.039042968750003" />
+          <ConnectorPoint PointX="9.4583328333333352" PointY="22.039042968750003" />
+          <ConnectorPoint PointX="10" PointY="22.039042968750003" />
+          <ConnectorPoint PointX="10.5" PointY="21.539042968750003" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CurrencyInstrumentIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="8.25" PointY="19.421102965639754" />
           <ConnectorPoint PointX="7.5" PointY="19.421102965639754" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FundCurrencyIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="7.5" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="8.5363561236588144" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="8.7030227903254822" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="9.9166666666666661" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="10.083333333333334" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="11.166666666666666" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="11.333333333333334" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="12.416666666666666" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="12.583333333333334" PointY="18.379727130241783" />
-          <ConnectorPoint PointX="12.75" PointY="18.379727130241783" />
+          <ConnectorPoint PointX="7.5" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="7.666666666666667" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="7.833333333333333" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="8.5363561236588144" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="8.7030227903254822" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="8.9685505806509642" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="9.1352172473176321" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="9.3488611236588159" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="9.5155277903254838" PointY="17.986226750300482" />
+          <ConnectorPoint PointX="12.75" PointY="17.986226750300482" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentIssueCurrencyIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="7.5" PointY="19.085551482819877" />
           <ConnectorPoint PointX="8.25" PointY="19.085551482819877" />
-        </AssociationConnector>
-        <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketBenefitCurrencyIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="7.5" PointY="18.732639306530828" />
-          <ConnectorPoint PointX="8" PointY="18.732639306530828" />
-          <ConnectorPoint PointX="8" PointY="18.625" />
-          <ConnectorPoint PointX="8.5363561236588144" PointY="18.625" />
-          <ConnectorPoint PointX="8.7030227903254822" PointY="18.625" />
-          <ConnectorPoint PointX="8.9685505806509642" PointY="18.625" />
-          <ConnectorPoint PointX="9.1352172473176321" PointY="18.625" />
-          <ConnectorPoint PointX="9.3488611236588159" PointY="18.625" />
-          <ConnectorPoint PointX="9.5155277903254838" PointY="18.625" />
-          <ConnectorPoint PointX="9.9166666666666661" PointY="18.625" />
-          <ConnectorPoint PointX="10.083333333333334" PointY="18.625" />
-          <ConnectorPoint PointX="11.166666666666666" PointY="18.625" />
-          <ConnectorPoint PointX="11.333333333333334" PointY="18.625" />
-          <ConnectorPoint PointX="12.5" PointY="18.625" />
-          <ConnectorPoint PointX="12.5" PointY="17.5" />
-          <ConnectorPoint PointX="18.75" PointY="17.5" />
-          <ConnectorPoint PointX="18.75" PointY="17.75" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionCurrencyIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="7.1249974999999983" PointY="19.631653645833335" />
           <ConnectorPoint PointX="7.1249974999999983" PointY="25.701315614153248" />
           <ConnectorPoint PointX="8.25" PointY="25.701315614153248" />
         </AssociationConnector>
-        <AssociationConnector Association="Odey.Framework.Keeley.Entities.FundInstrumentMarketIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="18" PointY="17.96875" />
-          <ConnectorPoint PointX="16.583333333333332" PointY="17.96875" />
-          <ConnectorPoint PointX="16.416666666666668" PointY="17.96875" />
-          <ConnectorPoint PointX="14.25" PointY="17.96875" />
-        </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FundLegalEntiyFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="12" PointY="19.562347819010419" />
-          <ConnectorPoint PointX="12.75" PointY="19.562347819010419" />
-        </AssociationConnector>
-        <AssociationConnector Association="Odey.Framework.Keeley.Entities.FundParentFundIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="13.281923076923077" PointY="19.999695638020835" />
-          <ConnectorPoint PointX="13.281923076923077" PointY="20.249695638020839" />
-          <ConnectorPoint PointX="13.728461538461538" PointY="20.249695638020839" />
-          <ConnectorPoint PointX="13.728461538461538" PointY="19.999695638020835" />
+          <ConnectorPoint PointX="12" PointY="19.398000488281252" />
+          <ConnectorPoint PointX="12.75" PointY="19.398000488281252" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentInstrumentClassIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="21.96875" />
@@ -3446,15 +3287,13 @@
           <ConnectorPoint PointX="8.25" PointY="20.65594513802084" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketInstrumentIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="9.75" PointY="21.527466634114589" />
-          <ConnectorPoint PointX="9.9166666666666661" PointY="21.527466634114589" />
-          <ConnectorPoint PointX="10.083333333333334" PointY="21.527466634114589" />
-          <ConnectorPoint PointX="11.166666666666666" PointY="21.527466634114589" />
-          <ConnectorPoint PointX="11.333333333333334" PointY="21.527466634114589" />
-          <ConnectorPoint PointX="17.416666666666668" PointY="21.527466634114589" />
-          <ConnectorPoint PointX="17.583333333333332" PointY="21.527466634114589" />
-          <ConnectorPoint PointX="18.75" PointY="21.527466634114589" />
-          <ConnectorPoint PointX="18.75" PointY="20.821432291666671" />
+          <ConnectorPoint PointX="9.75" PointY="19.697241094563804" />
+          <ConnectorPoint PointX="10.25" PointY="19.697241094563804" />
+          <ConnectorPoint PointX="10.25" PointY="21.789042968750003" />
+          <ConnectorPoint PointX="17.416666666666668" PointY="21.789042968750003" />
+          <ConnectorPoint PointX="17.583333333333332" PointY="21.789042968750003" />
+          <ConnectorPoint PointX="18.75" PointY="21.789042968750003" />
+          <ConnectorPoint PointX="18.75" PointY="20.657084960937503" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentRelationshipOverlyingInstrumentIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="9.0518839139842981" PointY="18.875" />
@@ -3473,15 +3312,15 @@
           <ConnectorPoint PointX="3.9784615384615383" PointY="23.960348307291667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketMarketIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="17.25" PointY="19.128326822916669" />
-          <ConnectorPoint PointX="18" PointY="19.128326822916669" />
+          <ConnectorPoint PointX="17.25" PointY="18.705358072916667" />
+          <ConnectorPoint PointX="18" PointY="18.705358072916667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionInstrumentMarketIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="18" PointY="20.006131557291667" />
-          <ConnectorPoint PointX="17.5" PointY="20.006131557291667" />
+          <ConnectorPoint PointX="18" PointY="19.712473516927083" />
+          <ConnectorPoint PointX="17.5" PointY="19.712473516927083" />
           <ConnectorPoint PointX="17.5" PointY="21.898987630208339" />
-          <ConnectorPoint PointX="11.333333333333334" PointY="21.898987630208339" />
-          <ConnectorPoint PointX="11.166666666666666" PointY="21.898987630208339" />
+          <ConnectorPoint PointX="10.223388671874998" PointY="21.898987630208339" />
+          <ConnectorPoint PointX="10.05672200520833" PointY="21.898987630208339" />
           <ConnectorPoint PointX="9.3749995000000013" PointY="21.898987630208339" />
           <ConnectorPoint PointX="9.3749995000000013" PointY="24.625" />
         </AssociationConnector>
@@ -3507,13 +3346,17 @@
           <ConnectorPoint PointX="8.5937475" PointY="27.039042968750003" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.IssuerLegalEntiyFK" >
-          <ConnectorPoint PointX="10.5" PointY="20.249847819010419" />
-          <ConnectorPoint PointX="10" PointY="20.249847819010419" />
+          <ConnectorPoint PointX="10.5" PointY="20.519481189127607" />
+          <ConnectorPoint PointX="10.333333333333334" PointY="20.519481189127607" />
+          <ConnectorPoint PointX="10.166666666666666" PointY="20.519481189127607" />
+          <ConnectorPoint PointX="10" PointY="20.519481189127607" />
           <ConnectorPoint PointX="10" PointY="21.867737630208339" />
           <ConnectorPoint PointX="9.0833333333333339" PointY="21.867737630208339" />
           <ConnectorPoint PointX="8.9166666666666661" PointY="21.867737630208339" />
+          <ConnectorPoint PointX="7.520833333333333" PointY="21.867737630208339" />
+          <ConnectorPoint PointX="7.354166666666667" PointY="21.867737630208339" />
           <ConnectorPoint PointX="7.2083308333333314" PointY="21.867737630208339" />
-          <ConnectorPoint PointX="7.0416641666666653" PointY="21.867737630208339" />
+          <ConnectorPoint PointX="6.9873895749198631" PointY="21.867737630208339" />
           <ConnectorPoint PointX="5.020833333333333" PointY="21.867737630208339" />
           <ConnectorPoint PointX="4.791666666666667" PointY="21.867737630208339" />
           <ConnectorPoint PointX="4.75" PointY="21.867737630208339" />
@@ -3524,8 +3367,8 @@
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.IdentifierType" Width="1.5" PointX="5.25" PointY="14.25" Height="1.9210009765625031" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.KeeleyType" Width="1.5" PointX="3" PointY="13.75" Height="2.0853483072916656" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.IdentifierTypeUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="16.910684093350845" />
-          <ConnectorPoint PointX="5.59375" PointY="16.910684093350845" />
+          <ConnectorPoint PointX="2.25" PointY="16.749998249999997" />
+          <ConnectorPoint PointX="5.59375" PointY="16.749998249999997" />
           <ConnectorPoint PointX="5.59375" PointY="16.171000976562503" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.KeeleyTypeUpdateUserIDFK" >

@@ -81,22 +81,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _marketID;
         [DataMember]
-        public int BenefitCurrencyID
-        {	
-    		
-            get { return _benefitCurrencyID; }
-            set
-            {
-                if (_benefitCurrencyID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("BenefitCurrencyID", _benefitCurrencyID);
-                    _benefitCurrencyID = value;
-                    OnPropertyChanged("BenefitCurrencyID");
-                }
-            }
-        }
-        private int _benefitCurrencyID;
-        [DataMember]
         public Nullable<int> FMSecId
         {	
     		

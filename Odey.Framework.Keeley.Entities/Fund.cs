@@ -49,38 +49,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _legalEntityID;
         [DataMember]
-        public Nullable<int> InstrumentMarketID
-        {	
-    		
-            get { return _instrumentMarketID; }
-            set
-            {
-                if (_instrumentMarketID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("InstrumentMarketID", _instrumentMarketID);
-                    _instrumentMarketID = value;
-                    OnPropertyChanged("InstrumentMarketID");
-                }
-            }
-        }
-        private Nullable<int> _instrumentMarketID;
-        [DataMember]
-        public Nullable<int> ParentFundID
-        {	
-    		
-            get { return _parentFundID; }
-            set
-            {
-                if (_parentFundID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ParentFundID", _parentFundID);
-                    _parentFundID = value;
-                    OnPropertyChanged("ParentFundID");
-                }
-            }
-        }
-        private Nullable<int> _parentFundID;
-        [DataMember]
         public int CurrencyID
         {	
     		

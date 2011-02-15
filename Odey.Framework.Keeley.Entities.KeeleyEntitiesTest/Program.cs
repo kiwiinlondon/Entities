@@ -98,9 +98,9 @@ namespace Odey.Framework.KeeleyEntitiesTest
             using (var context = new KeeleyModel())
             {
 
-                ApplicationUser user = context.ApplicationUsers.Where(a => a.UserID == 23).FirstOrDefault();
-                user.Email = "Joe.Bl54oys5@odey.com";
-                context.ApplicationUsers.ApplyChanges(user);
+                InstrumentClass c = context.InstrumentClasses.Where(a => a.InstrumentClassID == 1).FirstOrDefault();
+                c.Name = "All";
+                context.InstrumentClasses.ApplyChanges(c);
                 //context.ApplicationUsers.AddObject(user);
                 context.SaveChanges();
 

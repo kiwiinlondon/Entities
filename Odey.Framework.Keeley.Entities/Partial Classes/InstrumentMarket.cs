@@ -5,7 +5,7 @@ namespace Odey.Framework.Keeley.Entities
     partial class InstrumentMarket
     {
 
-        protected InstrumentMarket()
+        public InstrumentMarket()
         {
         }
 
