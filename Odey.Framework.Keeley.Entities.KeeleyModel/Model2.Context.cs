@@ -125,12 +125,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<InstrumentMarket> _instrumentMarkets;
     
-        public ObjectSet<InstrumentRelationship> InstrumentRelationships
-        {
-            get { return _instrumentRelationships  ?? (_instrumentRelationships = CreateObjectSet<InstrumentRelationship>("InstrumentRelationships")); }
-        }
-        private ObjectSet<InstrumentRelationship> _instrumentRelationships;
-    
         public ObjectSet<Issuer> Issuers
         {
             get { return _issuers  ?? (_issuers = CreateObjectSet<Issuer>("Issuers")); }
@@ -190,6 +184,30 @@ namespace Odey.Framework.Keeley.Entities
             get { return _keeleyTypes  ?? (_keeleyTypes = CreateObjectSet<KeeleyType>("KeeleyTypes")); }
         }
         private ObjectSet<KeeleyType> _keeleyTypes;
+    
+        public ObjectSet<FX> FXes
+        {
+            get { return _fXes  ?? (_fXes = CreateObjectSet<FX>("FXes")); }
+        }
+        private ObjectSet<FX> _fXes;
+    
+        public ObjectSet<Counterparty> Counterparties
+        {
+            get { return _counterparties  ?? (_counterparties = CreateObjectSet<Counterparty>("Counterparties")); }
+        }
+        private ObjectSet<Counterparty> _counterparties;
+    
+        public ObjectSet<FMContractMapping> FMContractMappings
+        {
+            get { return _fMContractMappings  ?? (_fMContractMappings = CreateObjectSet<FMContractMapping>("FMContractMappings")); }
+        }
+        private ObjectSet<FMContractMapping> _fMContractMappings;
+    
+        public ObjectSet<InstrumentRelationship> InstrumentRelationships
+        {
+            get { return _instrumentRelationships  ?? (_instrumentRelationships = CreateObjectSet<InstrumentRelationship>("InstrumentRelationships")); }
+        }
+        private ObjectSet<InstrumentRelationship> _instrumentRelationships;
 
         #endregion
     }

@@ -31,6 +31,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FMStrategy=10,
         [EnumMember]
-        FMTradType=11
+        FMTradType=11,
+        [EnumMember]
+        FMContId=12
     }
 }

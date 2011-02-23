@@ -18,90 +18,143 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Counterparty))]
-    public partial class LegalEntity: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(Instrument))]
+    public partial class FX: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int LegalEntityID
+        public int InstrumentID
         {	
     		
-            get { return _legalEntityID; }
+            get { return _instrumentID; }
             set
             {
-                if (_legalEntityID != value)
+                if (_instrumentID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'LegalEntityID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'InstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _legalEntityID = value;
-                    OnPropertyChanged("LegalEntityID");
+                    if (!IsDeserializing)
+                    {
+                        if (Instrument != null && Instrument.InstrumentID != value)
+                        {
+                            Instrument = null;
+                        }
+                    }
+                    _instrumentID = value;
+                    OnPropertyChanged("InstrumentID");
                 }
             }
         }
-        private int _legalEntityID;
+        private int _instrumentID;
         [DataMember]
-        public int FMOrgId
+        public int ReceiveCurrencyId
         {	
     		
-            get { return _fMOrgId; }
+            get { return _receiveCurrencyId; }
             set
             {
-                if (_fMOrgId != value)
+                if (_receiveCurrencyId != value)
                 {
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
+                    ChangeTracker.RecordOriginalValue("ReceiveCurrencyId", _receiveCurrencyId);
+                    _receiveCurrencyId = value;
+                    OnPropertyChanged("ReceiveCurrencyId");
                 }
             }
         }
-        private int _fMOrgId;
+        private int _receiveCurrencyId;
         [DataMember]
-        public string Name
+        public int PayCurrencyId
         {	
     		
-            get { return _name; }
+            get { return _payCurrencyId; }
             set
             {
-                if (_name != value)
+                if (_payCurrencyId != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("PayCurrencyId", _payCurrencyId);
+                    _payCurrencyId = value;
+                    OnPropertyChanged("PayCurrencyId");
                 }
             }
         }
-        private string _name;
+        private int _payCurrencyId;
         [DataMember]
-        public string LongName
+        public decimal ReceiveAmount
         {	
     		
-            get { return _longName; }
+            get { return _receiveAmount; }
             set
             {
-                if (_longName != value)
+                if (_receiveAmount != value)
                 {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
+                    _receiveAmount = value;
+                    OnPropertyChanged("ReceiveAmount");
                 }
             }
         }
-        private string _longName;
+        private decimal _receiveAmount;
         [DataMember]
-        public Nullable<int> CountryID
+        public decimal PayAmount
         {	
     		
-            get { return _countryID; }
+            get { return _payAmount; }
             set
             {
-                if (_countryID != value)
+                if (_payAmount != value)
                 {
-                    ChangeTracker.RecordOriginalValue("CountryID", _countryID);
-                    _countryID = value;
-                    OnPropertyChanged("CountryID");
+                    _payAmount = value;
+                    OnPropertyChanged("PayAmount");
                 }
             }
         }
-        private Nullable<int> _countryID;
+        private decimal _payAmount;
+        [DataMember]
+        public bool IsProp
+        {	
+    		
+            get { return _isProp; }
+            set
+            {
+                if (_isProp != value)
+                {
+                    _isProp = value;
+                    OnPropertyChanged("IsProp");
+                }
+            }
+        }
+        private bool _isProp;
+        [DataMember]
+        public bool EnteredMultiply
+        {	
+    		
+            get { return _enteredMultiply; }
+            set
+            {
+                if (_enteredMultiply != value)
+                {
+                    _enteredMultiply = value;
+                    OnPropertyChanged("EnteredMultiply");
+                }
+            }
+        }
+        private bool _enteredMultiply;
+        [DataMember]
+        public System.DateTime MaturityDate
+        {	
+    		
+            get { return _maturityDate; }
+            set
+            {
+                if (_maturityDate != value)
+                {
+                    _maturityDate = value;
+                    OnPropertyChanged("MaturityDate");
+                }
+            }
+        }
+        private System.DateTime _maturityDate;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -150,40 +203,50 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public Nullable<int> BBCompany
+        public int CounterpartyId
         {	
     		
-            get { return _bBCompany; }
+            get { return _counterpartyId; }
             set
             {
-                if (_bBCompany != value)
+                if (_counterpartyId != value)
                 {
-                    _bBCompany = value;
-                    OnPropertyChanged("BBCompany");
+                    ChangeTracker.RecordOriginalValue("CounterpartyId", _counterpartyId);
+                    _counterpartyId = value;
+                    OnPropertyChanged("CounterpartyId");
                 }
             }
         }
-        private Nullable<int> _bBCompany;
+        private int _counterpartyId;
 
         #endregion
         #region Navigation Properties
     
         [DataMember]
-        public Counterparty Counterparty
+        private Instrument Instrument
         {
-            get { return _counterparty; }
+            get { return _instrument; }
             set
             {
-                if (!ReferenceEquals(_counterparty, value))
+                if (!ReferenceEquals(_instrument, value))
                 {
-                    var previousValue = _counterparty;
-                    _counterparty = value;
-                    FixupCounterparty(previousValue);
-                    OnNavigationPropertyChanged("Counterparty");
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
+                    {
+                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
+                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
+                        if (InstrumentID != value.InstrumentID)
+                        {
+                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
+                        }
+                    }
+                    var previousValue = _instrument;
+                    _instrument = value;
+                    FixupInstrument(previousValue);
+                    OnNavigationPropertyChanged("Instrument");
                 }
             }
         }
-        private Counterparty _counterparty;
+        private Instrument _instrument;
 
         #endregion
         #region ChangeTracking
@@ -246,6 +309,16 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
+            }
+        }
+    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -263,56 +336,44 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Counterparty = null;
+            Instrument = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupCounterparty(Counterparty previousValue)
+        private void FixupInstrument(Instrument previousValue)
         {
-            // This is the principal end in an association that performs cascade deletes.
-            // Update the event listener to refer to the new dependent.
-            if (previousValue != null)
-            {
-                ChangeTracker.ObjectStateChanging -= previousValue.HandleCascadeDelete;
-            }
-    
-            if (Counterparty != null)
-            {
-                ChangeTracker.ObjectStateChanging += Counterparty.HandleCascadeDelete;
-            }
-    
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (Counterparty != null)
+            if (previousValue != null && ReferenceEquals(previousValue.FX, this))
             {
-                Counterparty.LegalEntityID = LegalEntityID;
+                previousValue.FX = null;
+            }
+    
+            if (Instrument != null)
+            {
+                Instrument.FX = this;
+                InstrumentID = Instrument.InstrumentID;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
             {
-                if (ChangeTracker.OriginalValues.ContainsKey("Counterparty")
-                    && (ChangeTracker.OriginalValues["Counterparty"] == Counterparty))
+                if (ChangeTracker.OriginalValues.ContainsKey("Instrument")
+                    && (ChangeTracker.OriginalValues["Instrument"] == Instrument))
                 {
-                    ChangeTracker.OriginalValues.Remove("Counterparty");
+                    ChangeTracker.OriginalValues.Remove("Instrument");
                 }
                 else
                 {
-                    ChangeTracker.RecordOriginalValue("Counterparty", previousValue);
-                    // This is the principal end of an identifying association, so the dependent must be deleted when the relationship is removed.
-                    // If the current state of the dependent is Added, the relationship can be changed without causing the dependent to be deleted.
-                    if (previousValue != null && previousValue.ChangeTracker.State != ObjectState.Added)
-                    {
-                        previousValue.MarkAsDeleted();
-                    }
+                    ChangeTracker.RecordOriginalValue("Instrument", previousValue);
                 }
-                if (Counterparty != null && !Counterparty.ChangeTracker.ChangeTrackingEnabled)
+                if (Instrument != null && !Instrument.ChangeTracker.ChangeTrackingEnabled)
                 {
-                    Counterparty.StartTracking();
+                    Instrument.StartTracking();
                 }
             }
         }

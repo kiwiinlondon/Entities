@@ -18,28 +18,10 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(Instrument))]
     public partial class InstrumentRelationship: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
-        [DataMember]
-        public int UnderlyingInstrumentID
-        {	
-    		
-            get { return _underlyingInstrumentID; }
-            set
-            {
-                if (_underlyingInstrumentID != value)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
-                    {
-                        throw new InvalidOperationException("The property 'UnderlyingInstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
-                    }
-                    _underlyingInstrumentID = value;
-                    OnPropertyChanged("UnderlyingInstrumentID");
-                }
-            }
-        }
-        private int _underlyingInstrumentID;
         [DataMember]
         public int OverlyingInstrumentID
         {	
@@ -49,13 +31,39 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_overlyingInstrumentID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("OverlyingInstrumentID", _overlyingInstrumentID);
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
+                    {
+                        throw new InvalidOperationException("The property 'OverlyingInstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                    }
                     _overlyingInstrumentID = value;
                     OnPropertyChanged("OverlyingInstrumentID");
                 }
             }
         }
         private int _overlyingInstrumentID;
+        [DataMember]
+        public int UnderlyingInstrumentID
+        {	
+    		
+            get { return _underlyingInstrumentID; }
+            set
+            {
+                if (_underlyingInstrumentID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UnderlyingInstrumentID", _underlyingInstrumentID);
+                    if (!IsDeserializing)
+                    {
+                        if (Underlyer != null && Underlyer.InstrumentID != value)
+                        {
+                            Underlyer = null;
+                        }
+                    }
+                    _underlyingInstrumentID = value;
+                    OnPropertyChanged("UnderlyingInstrumentID");
+                }
+            }
+        }
+        private int _underlyingInstrumentID;
         [DataMember]
         public decimal UnderlyerPerOverlyer
         {	
@@ -111,13 +119,32 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public Instrument Underlyer
+        {
+            get { return _underlyer; }
+            set
+            {
+                if (!ReferenceEquals(_underlyer, value))
+                {
+                    var previousValue = _underlyer;
+                    _underlyer = value;
+                    FixupUnderlyer(previousValue);
+                    OnNavigationPropertyChanged("Underlyer");
+                }
+            }
+        }
+        private Instrument _underlyer;
 
         #endregion
         #region ChangeTracking
@@ -207,6 +234,40 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Underlyer = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupUnderlyer(Instrument previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (Underlyer != null)
+            {
+                UnderlyingInstrumentID = Underlyer.InstrumentID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Underlyer")
+                    && (ChangeTracker.OriginalValues["Underlyer"] == Underlyer))
+                {
+                    ChangeTracker.OriginalValues.Remove("Underlyer");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Underlyer", previousValue);
+                }
+                if (Underlyer != null && !Underlyer.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Underlyer.StartTracking();
+                }
+            }
         }
 
         #endregion

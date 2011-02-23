@@ -3,9 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Odey.Framework.Keeley.Entities.Partial_Classes
+namespace Odey.Framework.Keeley.Entities
 {
-    class Instrument
+    partial class Instrument
     {
+        public Instrument Underlyer
+        {
+            get
+            {
+                if (UnderlyingRelationship != null)
+                {
+                    return UnderlyingRelationship.Underlyer;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
     }
 }
