@@ -57,22 +57,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _bookID;
         [DataMember]
-        public int StrategyID
-        {	
-    		
-            get { return _strategyID; }
-            set
-            {
-                if (_strategyID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("StrategyID", _strategyID);
-                    _strategyID = value;
-                    OnPropertyChanged("StrategyID");
-                }
-            }
-        }
-        private int _strategyID;
-        [DataMember]
         public int InstrumentMarketID
         {	
     		
@@ -88,22 +72,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _instrumentMarketID;
-        [DataMember]
-        public int TradeTypeID
-        {	
-    		
-            get { return _tradeTypeID; }
-            set
-            {
-                if (_tradeTypeID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("TradeTypeID", _tradeTypeID);
-                    _tradeTypeID = value;
-                    OnPropertyChanged("TradeTypeID");
-                }
-            }
-        }
-        private int _tradeTypeID;
         [DataMember]
         public int CurrencyID
         {	

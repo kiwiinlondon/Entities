@@ -18,10 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(PortfolioNonAggregated))]
-    public partial class Portfolio: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class PortfolioNonAggregated: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
+        [DataMember]
+        public int PortfolioNonAggregatedID
+        {	
+    		
+            get { return _portfolioNonAggregatedID; }
+            set
+            {
+                if (_portfolioNonAggregatedID != value)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
+                    {
+                        throw new InvalidOperationException("The property 'PortfolioNonAggregatedID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                    }
+                    _portfolioNonAggregatedID = value;
+                    OnPropertyChanged("PortfolioNonAggregatedID");
+                }
+            }
+        }
+        private int _portfolioNonAggregatedID;
         [DataMember]
         public int PortfolioID
         {	
@@ -31,10 +49,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_portfolioID != value)
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
-                    {
-                        throw new InvalidOperationException("The property 'PortfolioID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
-                    }
+                    ChangeTracker.RecordOriginalValue("PortfolioID", _portfolioID);
                     _portfolioID = value;
                     OnPropertyChanged("PortfolioID");
                 }
@@ -42,36 +57,37 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _portfolioID;
         [DataMember]
-        public int PositionID
+        public int StrategyID
         {	
     		
-            get { return _positionID; }
+            get { return _strategyID; }
             set
             {
-                if (_positionID != value)
+                if (_strategyID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PositionID", _positionID);
-                    _positionID = value;
-                    OnPropertyChanged("PositionID");
+                    ChangeTracker.RecordOriginalValue("StrategyID", _strategyID);
+                    _strategyID = value;
+                    OnPropertyChanged("StrategyID");
                 }
             }
         }
-        private int _positionID;
+        private int _strategyID;
         [DataMember]
-        public System.DateTime ReferenceDate
+        public int TradeTypeID
         {	
     		
-            get { return _referenceDate; }
+            get { return _tradeTypeID; }
             set
             {
-                if (_referenceDate != value)
+                if (_tradeTypeID != value)
                 {
-                    _referenceDate = value;
-                    OnPropertyChanged("ReferenceDate");
+                    ChangeTracker.RecordOriginalValue("TradeTypeID", _tradeTypeID);
+                    _tradeTypeID = value;
+                    OnPropertyChanged("TradeTypeID");
                 }
             }
         }
-        private System.DateTime _referenceDate;
+        private int _tradeTypeID;
         [DataMember]
         public decimal NetPosition
         {	
@@ -292,7 +308,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
@@ -300,7 +315,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public Nullable<int> FMContViewLadderID
+        public int FMContViewLadderID
         {	
     		
             get { return _fMContViewLadderID; }
@@ -313,45 +328,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _fMContViewLadderID;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<PortfolioNonAggregated> PortfoliosNonAggregated
-        {
-            get
-            {
-                if (_portfoliosNonAggregated == null)
-                {
-                    _portfoliosNonAggregated = new TrackableCollection<PortfolioNonAggregated>();
-                    _portfoliosNonAggregated.CollectionChanged += FixupPortfoliosNonAggregated;
-                }
-                return _portfoliosNonAggregated;
-            }
-            set
-            {
-                if (!ReferenceEquals(_portfoliosNonAggregated, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_portfoliosNonAggregated != null)
-                    {
-                        _portfoliosNonAggregated.CollectionChanged -= FixupPortfoliosNonAggregated;
-                    }
-                    _portfoliosNonAggregated = value;
-                    if (_portfoliosNonAggregated != null)
-                    {
-                        _portfoliosNonAggregated.CollectionChanged += FixupPortfoliosNonAggregated;
-                    }
-                    OnNavigationPropertyChanged("PortfoliosNonAggregated");
-                }
-            }
-        }
-        private TrackableCollection<PortfolioNonAggregated> _portfoliosNonAggregated;
+        private int _fMContViewLadderID;
 
         #endregion
         #region ChangeTracking
@@ -431,45 +408,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            PortfoliosNonAggregated.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupPortfoliosNonAggregated(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (PortfolioNonAggregated item in e.NewItems)
-                {
-                    item.PortfolioID = PortfolioID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("PortfoliosNonAggregated", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (PortfolioNonAggregated item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("PortfoliosNonAggregated", item);
-                    }
-                }
-            }
         }
 
         #endregion

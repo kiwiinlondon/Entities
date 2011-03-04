@@ -37,6 +37,14 @@ namespace Odey.Framework.Keeley.Entities
                 return LegalEntity.LongName;
             }
         }
+
+        public int FMOrgId
+        {
+            get
+            {
+                return LegalEntity.FMOrgId;
+            }
+        }
     }
 }
 

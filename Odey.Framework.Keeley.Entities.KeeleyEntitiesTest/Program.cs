@@ -30,7 +30,6 @@ namespace Odey.Framework.KeeleyEntitiesTest
             using (var context = new KeeleyModel())
             {
                 Region region = context.Regions.Where(a => a.IsoCode == "GX").FirstOrDefault();
-                int i = 1;
             }
         }
         static void CreateUser()

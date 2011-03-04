@@ -18,67 +18,106 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Instrument))]
-    public partial class InstrumentRelationship: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class PortfolioChangeControl: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int OverlyingInstrumentID
+        public int PortfolioChangeControlId
         {	
     		
-            get { return _overlyingInstrumentID; }
+            get { return _portfolioChangeControlId; }
             set
             {
-                if (_overlyingInstrumentID != value)
+                if (_portfolioChangeControlId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'OverlyingInstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PortfolioChangeControlId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _overlyingInstrumentID = value;
-                    OnPropertyChanged("OverlyingInstrumentID");
+                    _portfolioChangeControlId = value;
+                    OnPropertyChanged("PortfolioChangeControlId");
                 }
             }
         }
-        private int _overlyingInstrumentID;
+        private int _portfolioChangeControlId;
         [DataMember]
-        public int UnderlyingInstrumentID
+        public int PositionID
         {	
     		
-            get { return _underlyingInstrumentID; }
+            get { return _positionID; }
             set
             {
-                if (_underlyingInstrumentID != value)
+                if (_positionID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("UnderlyingInstrumentID", _underlyingInstrumentID);
-                    if (!IsDeserializing)
-                    {
-                        if (Underlyer != null && Underlyer.InstrumentID != value)
-                        {
-                            Underlyer = null;
-                        }
-                    }
-                    _underlyingInstrumentID = value;
-                    OnPropertyChanged("UnderlyingInstrumentID");
+                    ChangeTracker.RecordOriginalValue("PositionID", _positionID);
+                    _positionID = value;
+                    OnPropertyChanged("PositionID");
                 }
             }
         }
-        private int _underlyingInstrumentID;
+        private int _positionID;
         [DataMember]
-        public decimal UnderlyerPerOverlyer
+        public int StrategyID
         {	
     		
-            get { return _underlyerPerOverlyer; }
+            get { return _strategyID; }
             set
             {
-                if (_underlyerPerOverlyer != value)
+                if (_strategyID != value)
                 {
-                    _underlyerPerOverlyer = value;
-                    OnPropertyChanged("UnderlyerPerOverlyer");
+                    ChangeTracker.RecordOriginalValue("StrategyID", _strategyID);
+                    _strategyID = value;
+                    OnPropertyChanged("StrategyID");
                 }
             }
         }
-        private decimal _underlyerPerOverlyer;
+        private int _strategyID;
+        [DataMember]
+        public int TradeTypeID
+        {	
+    		
+            get { return _tradeTypeID; }
+            set
+            {
+                if (_tradeTypeID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("TradeTypeID", _tradeTypeID);
+                    _tradeTypeID = value;
+                    OnPropertyChanged("TradeTypeID");
+                }
+            }
+        }
+        private int _tradeTypeID;
+        [DataMember]
+        public System.DateTime ReferenceDate
+        {	
+    		
+            get { return _referenceDate; }
+            set
+            {
+                if (_referenceDate != value)
+                {
+                    _referenceDate = value;
+                    OnPropertyChanged("ReferenceDate");
+                }
+            }
+        }
+        private System.DateTime _referenceDate;
+        [DataMember]
+        public int ChangeId
+        {	
+    		
+            get { return _changeId; }
+            set
+            {
+                if (_changeId != value)
+                {
+                    _changeId = value;
+                    OnPropertyChanged("ChangeId");
+                }
+            }
+        }
+        private int _changeId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -126,26 +165,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public Instrument Underlyer
-        {
-            get { return _underlyer; }
-            set
-            {
-                if (!ReferenceEquals(_underlyer, value))
-                {
-                    var previousValue = _underlyer;
-                    _underlyer = value;
-                    FixupUnderlyer(previousValue);
-                    OnNavigationPropertyChanged("Underlyer");
-                }
-            }
-        }
-        private Instrument _underlyer;
 
         #endregion
         #region ChangeTracking
@@ -208,16 +227,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
-        // This entity type is the dependent end in at least one association that performs cascade deletes.
-        // This event handler will process notifications that occur when the principal end is deleted.
-        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
-        {
-            if (e.NewState == ObjectState.Deleted)
-            {
-                this.MarkAsDeleted();
-            }
-        }
-    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -235,40 +244,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Underlyer = null;
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupUnderlyer(Instrument previousValue)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (Underlyer != null)
-            {
-                UnderlyingInstrumentID = Underlyer.InstrumentID;
-            }
-    
-            if (ChangeTracker.ChangeTrackingEnabled)
-            {
-                if (ChangeTracker.OriginalValues.ContainsKey("Underlyer")
-                    && (ChangeTracker.OriginalValues["Underlyer"] == Underlyer))
-                {
-                    ChangeTracker.OriginalValues.Remove("Underlyer");
-                }
-                else
-                {
-                    ChangeTracker.RecordOriginalValue("Underlyer", previousValue);
-                }
-                if (Underlyer != null && !Underlyer.ChangeTracker.ChangeTrackingEnabled)
-                {
-                    Underlyer.StartTracking();
-                }
-            }
         }
 
         #endregion

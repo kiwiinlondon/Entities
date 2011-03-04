@@ -208,6 +208,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _instrumentRelationships  ?? (_instrumentRelationships = CreateObjectSet<InstrumentRelationship>("InstrumentRelationships")); }
         }
         private ObjectSet<InstrumentRelationship> _instrumentRelationships;
+    
+        public ObjectSet<PortfolioNonAggregated> PortfoliosNonAggregated
+        {
+            get { return _portfoliosNonAggregated  ?? (_portfoliosNonAggregated = CreateObjectSet<PortfolioNonAggregated>("PortfoliosNonAggregated")); }
+        }
+        private ObjectSet<PortfolioNonAggregated> _portfoliosNonAggregated;
+    
+        public ObjectSet<PortfolioChangeControl> PortfolioChangeControls
+        {
+            get { return _portfolioChangeControls  ?? (_portfolioChangeControls = CreateObjectSet<PortfolioChangeControl>("PortfolioChangeControls")); }
+        }
+        private ObjectSet<PortfolioChangeControl> _portfolioChangeControls;
 
         #endregion
     }
