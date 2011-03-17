@@ -188,12 +188,28 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public int FMOriginalContEventId
+        {	
+    		
+            get { return _fMOriginalContEventId; }
+            set
+            {
+                if (_fMOriginalContEventId != value)
+                {
+                    _fMOriginalContEventId = value;
+                    OnPropertyChanged("FMOriginalContEventId");
+                }
+            }
+        }
+        private int _fMOriginalContEventId;
 
         #endregion
         #region ChangeTracking

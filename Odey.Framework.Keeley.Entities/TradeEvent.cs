@@ -18,7 +18,6 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Currency))]
     public partial class TradeEvent: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -158,13 +157,6 @@ namespace Odey.Framework.Keeley.Entities
                 if (_currencyId != value)
                 {
                     ChangeTracker.RecordOriginalValue("CurrencyId", _currencyId);
-                    if (!IsDeserializing)
-                    {
-                        if (Currency != null && Currency.InstrumentID != value)
-                        {
-                            Currency = null;
-                        }
-                    }
                     _currencyId = value;
                     OnPropertyChanged("CurrencyId");
                 }
@@ -227,32 +219,13 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public Currency Currency
-        {
-            get { return _currency; }
-            set
-            {
-                if (!ReferenceEquals(_currency, value))
-                {
-                    var previousValue = _currency;
-                    _currency = value;
-                    FixupCurrency(previousValue);
-                    OnNavigationPropertyChanged("Currency");
-                }
-            }
-        }
-        private Currency _currency;
 
         #endregion
         #region ChangeTracking
@@ -342,40 +315,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Currency = null;
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupCurrency(Currency previousValue)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (Currency != null)
-            {
-                CurrencyId = Currency.InstrumentID;
-            }
-    
-            if (ChangeTracker.ChangeTrackingEnabled)
-            {
-                if (ChangeTracker.OriginalValues.ContainsKey("Currency")
-                    && (ChangeTracker.OriginalValues["Currency"] == Currency))
-                {
-                    ChangeTracker.OriginalValues.Remove("Currency");
-                }
-                else
-                {
-                    ChangeTracker.RecordOriginalValue("Currency", previousValue);
-                }
-                if (Currency != null && !Currency.ChangeTracker.ChangeTrackingEnabled)
-                {
-                    Currency.StartTracking();
-                }
-            }
         }
 
         #endregion
