@@ -95,12 +95,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<Country> _countries;
     
-        public ObjectSet<Currency> Currencies
-        {
-            get { return _currencies  ?? (_currencies = CreateObjectSet<Currency>("Currencies")); }
-        }
-        private ObjectSet<Currency> _currencies;
-    
         public ObjectSet<Fund> Funds
         {
             get { return _funds  ?? (_funds = CreateObjectSet<Fund>("Funds")); }
@@ -131,12 +125,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<Issuer> _issuers;
     
-        public ObjectSet<LegalEntity> LegalEntities
-        {
-            get { return _legalEntities  ?? (_legalEntities = CreateObjectSet<LegalEntity>("LegalEntities")); }
-        }
-        private ObjectSet<LegalEntity> _legalEntities;
-    
         public ObjectSet<Market> Markets
         {
             get { return _markets  ?? (_markets = CreateObjectSet<Market>("Markets")); }
@@ -161,18 +149,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<Region> _regions;
     
-        public ObjectSet<Strategy> Strategies
-        {
-            get { return _strategies  ?? (_strategies = CreateObjectSet<Strategy>("Strategies")); }
-        }
-        private ObjectSet<Strategy> _strategies;
-    
-        public ObjectSet<TradeType> TradeTypes
-        {
-            get { return _tradeTypes  ?? (_tradeTypes = CreateObjectSet<TradeType>("TradeTypes")); }
-        }
-        private ObjectSet<TradeType> _tradeTypes;
-    
         public ObjectSet<IdentifierType> IdentifierTypes
         {
             get { return _identifierTypes  ?? (_identifierTypes = CreateObjectSet<IdentifierType>("IdentifierTypes")); }
@@ -191,12 +167,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<FX> _fXes;
     
-        public ObjectSet<Counterparty> Counterparties
-        {
-            get { return _counterparties  ?? (_counterparties = CreateObjectSet<Counterparty>("Counterparties")); }
-        }
-        private ObjectSet<Counterparty> _counterparties;
-    
         public ObjectSet<FMContractMapping> FMContractMappings
         {
             get { return _fMContractMappings  ?? (_fMContractMappings = CreateObjectSet<FMContractMapping>("FMContractMappings")); }
@@ -209,17 +179,107 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<InstrumentRelationship> _instrumentRelationships;
     
-        public ObjectSet<PortfolioNonAggregated> PortfoliosNonAggregated
-        {
-            get { return _portfoliosNonAggregated  ?? (_portfoliosNonAggregated = CreateObjectSet<PortfolioNonAggregated>("PortfoliosNonAggregated")); }
-        }
-        private ObjectSet<PortfolioNonAggregated> _portfoliosNonAggregated;
-    
         public ObjectSet<PortfolioChangeControl> PortfolioChangeControls
         {
             get { return _portfolioChangeControls  ?? (_portfolioChangeControls = CreateObjectSet<PortfolioChangeControl>("PortfolioChangeControls")); }
         }
         private ObjectSet<PortfolioChangeControl> _portfolioChangeControls;
+    
+        public ObjectSet<Account> Accounts
+        {
+            get { return _accounts  ?? (_accounts = CreateObjectSet<Account>("Accounts")); }
+        }
+        private ObjectSet<Account> _accounts;
+    
+        public ObjectSet<CapitalEvent> CapitalEvents
+        {
+            get { return _capitalEvents  ?? (_capitalEvents = CreateObjectSet<CapitalEvent>("CapitalEvents")); }
+        }
+        private ObjectSet<CapitalEvent> _capitalEvents;
+    
+        public ObjectSet<Custodian> Custodians
+        {
+            get { return _custodians  ?? (_custodians = CreateObjectSet<Custodian>("Custodians")); }
+        }
+        private ObjectSet<Custodian> _custodians;
+    
+        public ObjectSet<Event> Events
+        {
+            get { return _events  ?? (_events = CreateObjectSet<Event>("Events")); }
+        }
+        private ObjectSet<Event> _events;
+    
+        public ObjectSet<EventType> EventTypes
+        {
+            get { return _eventTypes  ?? (_eventTypes = CreateObjectSet<EventType>("EventTypes")); }
+        }
+        private ObjectSet<EventType> _eventTypes;
+    
+        public ObjectSet<InstrumentEvent> InstrumentEvents
+        {
+            get { return _instrumentEvents  ?? (_instrumentEvents = CreateObjectSet<InstrumentEvent>("InstrumentEvents")); }
+        }
+        private ObjectSet<InstrumentEvent> _instrumentEvents;
+    
+        public ObjectSet<InstrumentEventType> InstrumentEventTypes
+        {
+            get { return _instrumentEventTypes  ?? (_instrumentEventTypes = CreateObjectSet<InstrumentEventType>("InstrumentEventTypes")); }
+        }
+        private ObjectSet<InstrumentEventType> _instrumentEventTypes;
+    
+        public ObjectSet<PortfolioPositionAccountSettlementDate> PortfolioPositionAccountSettlementDates
+        {
+            get { return _portfolioPositionAccountSettlementDates  ?? (_portfolioPositionAccountSettlementDates = CreateObjectSet<PortfolioPositionAccountSettlementDate>("PortfolioPositionAccountSettlementDates")); }
+        }
+        private ObjectSet<PortfolioPositionAccountSettlementDate> _portfolioPositionAccountSettlementDates;
+    
+        public ObjectSet<PortfolioPositionAccountTradeDate> PortfolioPositionAccountTradeDates
+        {
+            get { return _portfolioPositionAccountTradeDates  ?? (_portfolioPositionAccountTradeDates = CreateObjectSet<PortfolioPositionAccountTradeDate>("PortfolioPositionAccountTradeDates")); }
+        }
+        private ObjectSet<PortfolioPositionAccountTradeDate> _portfolioPositionAccountTradeDates;
+    
+        public ObjectSet<PositionAccount> PositionAccounts
+        {
+            get { return _positionAccounts  ?? (_positionAccounts = CreateObjectSet<PositionAccount>("PositionAccounts")); }
+        }
+        private ObjectSet<PositionAccount> _positionAccounts;
+    
+        public ObjectSet<PositionAccountMovement> PositionAccountMovements
+        {
+            get { return _positionAccountMovements  ?? (_positionAccountMovements = CreateObjectSet<PositionAccountMovement>("PositionAccountMovements")); }
+        }
+        private ObjectSet<PositionAccountMovement> _positionAccountMovements;
+    
+        public ObjectSet<TradeEvent> TradeEvents
+        {
+            get { return _tradeEvents  ?? (_tradeEvents = CreateObjectSet<TradeEvent>("TradeEvents")); }
+        }
+        private ObjectSet<TradeEvent> _tradeEvents;
+    
+        public ObjectSet<InternalAllocation> InternalAllocations
+        {
+            get { return _internalAllocations  ?? (_internalAllocations = CreateObjectSet<InternalAllocation>("InternalAllocations")); }
+        }
+        private ObjectSet<InternalAllocation> _internalAllocations;
+    
+        public ObjectSet<Currency> Currencies
+        {
+            get { return _currencies  ?? (_currencies = CreateObjectSet<Currency>("Currencies")); }
+        }
+        private ObjectSet<Currency> _currencies;
+    
+        public ObjectSet<Counterparty> Counterparties
+        {
+            get { return _counterparties  ?? (_counterparties = CreateObjectSet<Counterparty>("Counterparties")); }
+        }
+        private ObjectSet<Counterparty> _counterparties;
+    
+        public ObjectSet<LegalEntity> LegalEntities
+        {
+            get { return _legalEntities  ?? (_legalEntities = CreateObjectSet<LegalEntity>("LegalEntities")); }
+        }
+        private ObjectSet<LegalEntity> _legalEntities;
 
         #endregion
     }

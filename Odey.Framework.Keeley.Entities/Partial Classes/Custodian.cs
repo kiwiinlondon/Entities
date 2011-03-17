@@ -2,14 +2,14 @@
 
 namespace Odey.Framework.Keeley.Entities
 {
-    partial class Fund
+    partial class Custodian
     {
 
-        public Fund()
+        public Custodian()
         {
         }
 
-        public Fund(LegalEntity legalEntity)
+        public Custodian(LegalEntity legalEntity)
         {
             LegalEntity = legalEntity;
         }
@@ -19,6 +19,22 @@ namespace Odey.Framework.Keeley.Entities
             get
             {
                 return LegalEntity.CountryID;
+            }
+        }
+
+        public int? FMOrgID
+        {
+            get
+            {
+                return LegalEntity.FMOrgId;
+            }
+        }
+
+        public int? BBCompany
+        {
+            get
+            {
+                return LegalEntity.BBCompany;
             }
         }
 
@@ -37,14 +53,5 @@ namespace Odey.Framework.Keeley.Entities
                 return LegalEntity.LongName;
             }
         }
-
-        public int FMOrgId
-        {
-            get
-            {
-                return LegalEntity.FMOrgId.Value;
-            }
-        }
     }
 }
-

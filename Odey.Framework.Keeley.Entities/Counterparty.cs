@@ -221,19 +221,27 @@ namespace Odey.Framework.Keeley.Entities
     
         private void FixupLegalEntity(LegalEntity previousValue)
         {
+            // This is the dependent end in an association that performs cascade deletes.
+            // Update the principal's event listener to refer to the new dependent.
+            // This is a unidirectional relationship from the dependent to the principal, so the dependent end is
+            // responsible for managing the cascade delete event handler. In all other cases the principal end will manage it.
+            if (previousValue != null)
+            {
+                previousValue.ChangeTracker.ObjectStateChanging -= HandleCascadeDelete;
+            }
+    
+            if (LegalEntity != null)
+            {
+                LegalEntity.ChangeTracker.ObjectStateChanging += HandleCascadeDelete;
+            }
+    
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (previousValue != null && ReferenceEquals(previousValue.Counterparty, this))
-            {
-                previousValue.Counterparty = null;
-            }
-    
             if (LegalEntity != null)
             {
-                LegalEntity.Counterparty = this;
                 LegalEntityID = LegalEntity.LegalEntityID;
             }
     
@@ -247,6 +255,14 @@ namespace Odey.Framework.Keeley.Entities
                 else
                 {
                     ChangeTracker.RecordOriginalValue("LegalEntity", previousValue);
+                    // This is the dependent end of an identifying association, so it must be deleted when the relationship is
+                    // removed. If the current state is Added, the relationship can be changed without causing the dependent to be deleted.
+                    // This is a unidirectional relationship from the dependent to the principal, so the dependent end is
+                    // responsible for cascading the delete. In all other cases the principal end will manage it.
+                    if (previousValue != null && ChangeTracker.State != ObjectState.Added)
+                    {
+                        this.MarkAsDeleted();
+                    }
                 }
                 if (LegalEntity != null && !LegalEntity.ChangeTracker.ChangeTrackingEnabled)
                 {

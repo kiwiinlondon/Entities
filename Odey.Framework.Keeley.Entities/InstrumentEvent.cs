@@ -18,89 +18,151 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class LegalEntity: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class InstrumentEvent: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int LegalEntityID
+        public int EventID
         {	
     		
-            get { return _legalEntityID; }
+            get { return _eventID; }
             set
             {
-                if (_legalEntityID != value)
+                if (_eventID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'LegalEntityID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _legalEntityID = value;
-                    OnPropertyChanged("LegalEntityID");
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
                 }
             }
         }
-        private int _legalEntityID;
+        private int _eventID;
         [DataMember]
-        public Nullable<int> FMOrgId
+        public int InstrumentMarketID
         {	
     		
-            get { return _fMOrgId; }
+            get { return _instrumentMarketID; }
             set
             {
-                if (_fMOrgId != value)
+                if (_instrumentMarketID != value)
                 {
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
+                    ChangeTracker.RecordOriginalValue("InstrumentMarketID", _instrumentMarketID);
+                    _instrumentMarketID = value;
+                    OnPropertyChanged("InstrumentMarketID");
                 }
             }
         }
-        private Nullable<int> _fMOrgId;
+        private int _instrumentMarketID;
         [DataMember]
-        public string Name
+        public int InstrumentEventTypeID
         {	
     		
-            get { return _name; }
+            get { return _instrumentEventTypeID; }
             set
             {
-                if (_name != value)
+                if (_instrumentEventTypeID != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("InstrumentEventTypeID", _instrumentEventTypeID);
+                    _instrumentEventTypeID = value;
+                    OnPropertyChanged("InstrumentEventTypeID");
                 }
             }
         }
-        private string _name;
+        private int _instrumentEventTypeID;
         [DataMember]
-        public string LongName
+        public System.DateTime EventDate
         {	
     		
-            get { return _longName; }
+            get { return _eventDate; }
             set
             {
-                if (_longName != value)
+                if (_eventDate != value)
                 {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
+                    _eventDate = value;
+                    OnPropertyChanged("EventDate");
                 }
             }
         }
-        private string _longName;
+        private System.DateTime _eventDate;
         [DataMember]
-        public Nullable<int> CountryID
+        public System.DateTime ValueDate
         {	
     		
-            get { return _countryID; }
+            get { return _valueDate; }
             set
             {
-                if (_countryID != value)
+                if (_valueDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("CountryID", _countryID);
-                    _countryID = value;
-                    OnPropertyChanged("CountryID");
+                    _valueDate = value;
+                    OnPropertyChanged("ValueDate");
                 }
             }
         }
-        private Nullable<int> _countryID;
+        private System.DateTime _valueDate;
+        [DataMember]
+        public decimal Quantity
+        {	
+    		
+            get { return _quantity; }
+            set
+            {
+                if (_quantity != value)
+                {
+                    _quantity = value;
+                    OnPropertyChanged("Quantity");
+                }
+            }
+        }
+        private decimal _quantity;
+        [DataMember]
+        public decimal Price
+        {	
+    		
+            get { return _price; }
+            set
+            {
+                if (_price != value)
+                {
+                    _price = value;
+                    OnPropertyChanged("Price");
+                }
+            }
+        }
+        private decimal _price;
+        [DataMember]
+        public decimal FXRate
+        {	
+    		
+            get { return _fXRate; }
+            set
+            {
+                if (_fXRate != value)
+                {
+                    _fXRate = value;
+                    OnPropertyChanged("FXRate");
+                }
+            }
+        }
+        private decimal _fXRate;
+        [DataMember]
+        public int CurrencyId
+        {	
+    		
+            get { return _currencyId; }
+            set
+            {
+                if (_currencyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CurrencyId", _currencyId);
+                    _currencyId = value;
+                    OnPropertyChanged("CurrencyId");
+                }
+            }
+        }
+        private int _currencyId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,28 +203,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public Nullable<int> BBCompany
-        {	
-    		
-            get { return _bBCompany; }
-            set
-            {
-                if (_bBCompany != value)
-                {
-                    _bBCompany = value;
-                    OnPropertyChanged("BBCompany");
-                }
-            }
-        }
-        private Nullable<int> _bBCompany;
 
         #endregion
         #region ChangeTracking
@@ -222,6 +268,16 @@ namespace Odey.Framework.Keeley.Entities
             if (e.NewState == ObjectState.Deleted)
             {
                 ClearNavigationProperties();
+            }
+        }
+    
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
             }
         }
     

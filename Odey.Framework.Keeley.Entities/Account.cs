@@ -18,43 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class LegalEntity: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class Account: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int LegalEntityID
+        public int AccountID
         {	
     		
-            get { return _legalEntityID; }
+            get { return _accountID; }
             set
             {
-                if (_legalEntityID != value)
+                if (_accountID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'LegalEntityID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'AccountID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _legalEntityID = value;
-                    OnPropertyChanged("LegalEntityID");
+                    _accountID = value;
+                    OnPropertyChanged("AccountID");
                 }
             }
         }
-        private int _legalEntityID;
-        [DataMember]
-        public Nullable<int> FMOrgId
-        {	
-    		
-            get { return _fMOrgId; }
-            set
-            {
-                if (_fMOrgId != value)
-                {
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
-                }
-            }
-        }
-        private Nullable<int> _fMOrgId;
+        private int _accountID;
         [DataMember]
         public string Name
         {	
@@ -71,36 +56,36 @@ namespace Odey.Framework.Keeley.Entities
         }
         private string _name;
         [DataMember]
-        public string LongName
+        public string ExternalId
         {	
     		
-            get { return _longName; }
+            get { return _externalId; }
             set
             {
-                if (_longName != value)
+                if (_externalId != value)
                 {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
+                    _externalId = value;
+                    OnPropertyChanged("ExternalId");
                 }
             }
         }
-        private string _longName;
+        private string _externalId;
         [DataMember]
-        public Nullable<int> CountryID
+        public int CustodianId
         {	
     		
-            get { return _countryID; }
+            get { return _custodianId; }
             set
             {
-                if (_countryID != value)
+                if (_custodianId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("CountryID", _countryID);
-                    _countryID = value;
-                    OnPropertyChanged("CountryID");
+                    ChangeTracker.RecordOriginalValue("CustodianId", _custodianId);
+                    _custodianId = value;
+                    OnPropertyChanged("CustodianId");
                 }
             }
         }
-        private Nullable<int> _countryID;
+        private int _custodianId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,28 +126,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public Nullable<int> BBCompany
-        {	
-    		
-            get { return _bBCompany; }
-            set
-            {
-                if (_bBCompany != value)
-                {
-                    _bBCompany = value;
-                    OnPropertyChanged("BBCompany");
-                }
-            }
-        }
-        private Nullable<int> _bBCompany;
 
         #endregion
         #region ChangeTracking

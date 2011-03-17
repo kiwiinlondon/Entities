@@ -18,89 +18,112 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class LegalEntity: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(Currency))]
+    public partial class CapitalEvent: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int LegalEntityID
+        public int EventID
         {	
     		
-            get { return _legalEntityID; }
+            get { return _eventID; }
             set
             {
-                if (_legalEntityID != value)
+                if (_eventID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'LegalEntityID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _legalEntityID = value;
-                    OnPropertyChanged("LegalEntityID");
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
                 }
             }
         }
-        private int _legalEntityID;
+        private int _eventID;
         [DataMember]
-        public Nullable<int> FMOrgId
+        public System.DateTime TradeDate
         {	
     		
-            get { return _fMOrgId; }
+            get { return _tradeDate; }
             set
             {
-                if (_fMOrgId != value)
+                if (_tradeDate != value)
                 {
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
+                    _tradeDate = value;
+                    OnPropertyChanged("TradeDate");
                 }
             }
         }
-        private Nullable<int> _fMOrgId;
+        private System.DateTime _tradeDate;
         [DataMember]
-        public string Name
+        public System.DateTime SettlementDate
         {	
     		
-            get { return _name; }
+            get { return _settlementDate; }
             set
             {
-                if (_name != value)
+                if (_settlementDate != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    _settlementDate = value;
+                    OnPropertyChanged("SettlementDate");
                 }
             }
         }
-        private string _name;
+        private System.DateTime _settlementDate;
         [DataMember]
-        public string LongName
+        public decimal Quantity
         {	
     		
-            get { return _longName; }
+            get { return _quantity; }
             set
             {
-                if (_longName != value)
+                if (_quantity != value)
                 {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
+                    _quantity = value;
+                    OnPropertyChanged("Quantity");
                 }
             }
         }
-        private string _longName;
+        private decimal _quantity;
         [DataMember]
-        public Nullable<int> CountryID
+        public decimal FXRate
         {	
     		
-            get { return _countryID; }
+            get { return _fXRate; }
             set
             {
-                if (_countryID != value)
+                if (_fXRate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("CountryID", _countryID);
-                    _countryID = value;
-                    OnPropertyChanged("CountryID");
+                    _fXRate = value;
+                    OnPropertyChanged("FXRate");
                 }
             }
         }
-        private Nullable<int> _countryID;
+        private decimal _fXRate;
+        [DataMember]
+        public int CurrencyId
+        {	
+    		
+            get { return _currencyId; }
+            set
+            {
+                if (_currencyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CurrencyId", _currencyId);
+                    if (!IsDeserializing)
+                    {
+                        if (Currency != null && Currency.InstrumentID != value)
+                        {
+                            Currency = null;
+                        }
+                    }
+                    _currencyId = value;
+                    OnPropertyChanged("CurrencyId");
+                }
+            }
+        }
+        private int _currencyId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,28 +164,32 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
         [DataMember]
-        public Nullable<int> BBCompany
-        {	
-    		
-            get { return _bBCompany; }
+        public Currency Currency
+        {
+            get { return _currency; }
             set
             {
-                if (_bBCompany != value)
+                if (!ReferenceEquals(_currency, value))
                 {
-                    _bBCompany = value;
-                    OnPropertyChanged("BBCompany");
+                    var previousValue = _currency;
+                    _currency = value;
+                    FixupCurrency(previousValue);
+                    OnNavigationPropertyChanged("Currency");
                 }
             }
         }
-        private Nullable<int> _bBCompany;
+        private Currency _currency;
 
         #endregion
         #region ChangeTracking
@@ -225,6 +252,16 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
+            }
+        }
+    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -242,6 +279,40 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Currency = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupCurrency(Currency previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (Currency != null)
+            {
+                CurrencyId = Currency.InstrumentID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Currency")
+                    && (ChangeTracker.OriginalValues["Currency"] == Currency))
+                {
+                    ChangeTracker.OriginalValues.Remove("Currency");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Currency", previousValue);
+                }
+                if (Currency != null && !Currency.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Currency.StartTracking();
+                }
+            }
         }
 
         #endregion

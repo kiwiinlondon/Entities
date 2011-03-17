@@ -18,43 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class Strategy: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class EventType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int StrategyID
+        public int EventTypeID
         {	
     		
-            get { return _strategyID; }
+            get { return _eventTypeID; }
             set
             {
-                if (_strategyID != value)
+                if (_eventTypeID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'StrategyID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EventTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _strategyID = value;
-                    OnPropertyChanged("StrategyID");
+                    _eventTypeID = value;
+                    OnPropertyChanged("EventTypeID");
                 }
             }
         }
-        private int _strategyID;
-        [DataMember]
-        public string FMStrategy
-        {	
-    		
-            get { return _fMStrategy; }
-            set
-            {
-                if (_fMStrategy != value)
-                {
-                    _fMStrategy = value;
-                    OnPropertyChanged("FMStrategy");
-                }
-            }
-        }
-        private string _fMStrategy;
+        private int _eventTypeID;
         [DataMember]
         public string Name
         {	
@@ -110,7 +95,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

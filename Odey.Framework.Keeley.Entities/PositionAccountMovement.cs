@@ -18,89 +18,105 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class LegalEntity: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class PositionAccountMovement: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int LegalEntityID
+        public int PositionAccountMovementID
         {	
     		
-            get { return _legalEntityID; }
+            get { return _positionAccountMovementID; }
             set
             {
-                if (_legalEntityID != value)
+                if (_positionAccountMovementID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'LegalEntityID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PositionAccountMovementID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _legalEntityID = value;
-                    OnPropertyChanged("LegalEntityID");
+                    _positionAccountMovementID = value;
+                    OnPropertyChanged("PositionAccountMovementID");
                 }
             }
         }
-        private int _legalEntityID;
+        private int _positionAccountMovementID;
         [DataMember]
-        public Nullable<int> FMOrgId
+        public int InternalAllocationID
         {	
     		
-            get { return _fMOrgId; }
+            get { return _internalAllocationID; }
             set
             {
-                if (_fMOrgId != value)
+                if (_internalAllocationID != value)
                 {
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
+                    ChangeTracker.RecordOriginalValue("InternalAllocationID", _internalAllocationID);
+                    _internalAllocationID = value;
+                    OnPropertyChanged("InternalAllocationID");
                 }
             }
         }
-        private Nullable<int> _fMOrgId;
+        private int _internalAllocationID;
         [DataMember]
-        public string Name
+        public int PositionAccountID
         {	
     		
-            get { return _name; }
+            get { return _positionAccountID; }
             set
             {
-                if (_name != value)
+                if (_positionAccountID != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("PositionAccountID", _positionAccountID);
+                    _positionAccountID = value;
+                    OnPropertyChanged("PositionAccountID");
                 }
             }
         }
-        private string _name;
+        private int _positionAccountID;
         [DataMember]
-        public string LongName
+        public decimal Quantity
         {	
     		
-            get { return _longName; }
+            get { return _quantity; }
             set
             {
-                if (_longName != value)
+                if (_quantity != value)
                 {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
+                    _quantity = value;
+                    OnPropertyChanged("Quantity");
                 }
             }
         }
-        private string _longName;
+        private decimal _quantity;
         [DataMember]
-        public Nullable<int> CountryID
+        public decimal Price
         {	
     		
-            get { return _countryID; }
+            get { return _price; }
             set
             {
-                if (_countryID != value)
+                if (_price != value)
                 {
-                    ChangeTracker.RecordOriginalValue("CountryID", _countryID);
-                    _countryID = value;
-                    OnPropertyChanged("CountryID");
+                    _price = value;
+                    OnPropertyChanged("Price");
                 }
             }
         }
-        private Nullable<int> _countryID;
+        private decimal _price;
+        [DataMember]
+        public decimal FXRate
+        {	
+    		
+            get { return _fXRate; }
+            set
+            {
+                if (_fXRate != value)
+                {
+                    _fXRate = value;
+                    OnPropertyChanged("FXRate");
+                }
+            }
+        }
+        private decimal _fXRate;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,28 +157,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public Nullable<int> BBCompany
-        {	
-    		
-            get { return _bBCompany; }
-            set
-            {
-                if (_bBCompany != value)
-                {
-                    _bBCompany = value;
-                    OnPropertyChanged("BBCompany");
-                }
-            }
-        }
-        private Nullable<int> _bBCompany;
 
         #endregion
         #region ChangeTracking

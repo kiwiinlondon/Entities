@@ -18,7 +18,8 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class LegalEntity: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(LegalEntity))]
+    public partial class Custodian: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
@@ -34,73 +35,19 @@ namespace Odey.Framework.Keeley.Entities
                     {
                         throw new InvalidOperationException("The property 'LegalEntityID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
+                    if (!IsDeserializing)
+                    {
+                        if (LegalEntity != null && LegalEntity.LegalEntityID != value)
+                        {
+                            LegalEntity = null;
+                        }
+                    }
                     _legalEntityID = value;
                     OnPropertyChanged("LegalEntityID");
                 }
             }
         }
         private int _legalEntityID;
-        [DataMember]
-        public Nullable<int> FMOrgId
-        {	
-    		
-            get { return _fMOrgId; }
-            set
-            {
-                if (_fMOrgId != value)
-                {
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
-                }
-            }
-        }
-        private Nullable<int> _fMOrgId;
-        [DataMember]
-        public string Name
-        {	
-    		
-            get { return _name; }
-            set
-            {
-                if (_name != value)
-                {
-                    _name = value;
-                    OnPropertyChanged("Name");
-                }
-            }
-        }
-        private string _name;
-        [DataMember]
-        public string LongName
-        {	
-    		
-            get { return _longName; }
-            set
-            {
-                if (_longName != value)
-                {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
-                }
-            }
-        }
-        private string _longName;
-        [DataMember]
-        public Nullable<int> CountryID
-        {	
-    		
-            get { return _countryID; }
-            set
-            {
-                if (_countryID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("CountryID", _countryID);
-                    _countryID = value;
-                    OnPropertyChanged("CountryID");
-                }
-            }
-        }
-        private Nullable<int> _countryID;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,28 +88,41 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
         [DataMember]
-        public Nullable<int> BBCompany
-        {	
-    		
-            get { return _bBCompany; }
+        private LegalEntity LegalEntity
+        {
+            get { return _legalEntity; }
             set
             {
-                if (_bBCompany != value)
+                if (!ReferenceEquals(_legalEntity, value))
                 {
-                    _bBCompany = value;
-                    OnPropertyChanged("BBCompany");
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
+                    {
+                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
+                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
+                        if (LegalEntityID != value.LegalEntityID)
+                        {
+                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
+                        }
+                    }
+                    var previousValue = _legalEntity;
+                    _legalEntity = value;
+                    FixupLegalEntity(previousValue);
+                    OnNavigationPropertyChanged("LegalEntity");
                 }
             }
         }
-        private Nullable<int> _bBCompany;
+        private LegalEntity _legalEntity;
 
         #endregion
         #region ChangeTracking
@@ -225,6 +185,16 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
+            }
+        }
+    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -242,6 +212,62 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            LegalEntity = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupLegalEntity(LegalEntity previousValue)
+        {
+            // This is the dependent end in an association that performs cascade deletes.
+            // Update the principal's event listener to refer to the new dependent.
+            // This is a unidirectional relationship from the dependent to the principal, so the dependent end is
+            // responsible for managing the cascade delete event handler. In all other cases the principal end will manage it.
+            if (previousValue != null)
+            {
+                previousValue.ChangeTracker.ObjectStateChanging -= HandleCascadeDelete;
+            }
+    
+            if (LegalEntity != null)
+            {
+                LegalEntity.ChangeTracker.ObjectStateChanging += HandleCascadeDelete;
+            }
+    
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (LegalEntity != null)
+            {
+                LegalEntityID = LegalEntity.LegalEntityID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("LegalEntity")
+                    && (ChangeTracker.OriginalValues["LegalEntity"] == LegalEntity))
+                {
+                    ChangeTracker.OriginalValues.Remove("LegalEntity");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("LegalEntity", previousValue);
+                    // This is the dependent end of an identifying association, so it must be deleted when the relationship is
+                    // removed. If the current state is Added, the relationship can be changed without causing the dependent to be deleted.
+                    // This is a unidirectional relationship from the dependent to the principal, so the dependent end is
+                    // responsible for cascading the delete. In all other cases the principal end will manage it.
+                    if (previousValue != null && ChangeTracker.State != ObjectState.Added)
+                    {
+                        this.MarkAsDeleted();
+                    }
+                }
+                if (LegalEntity != null && !LegalEntity.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    LegalEntity.StartTracking();
+                }
+            }
         }
 
         #endregion

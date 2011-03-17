@@ -18,58 +18,136 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class TradeType: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class InternalAllocation: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int TradeTypeID
+        public int InternalAllocationID
         {	
     		
-            get { return _tradeTypeID; }
+            get { return _internalAllocationID; }
             set
             {
-                if (_tradeTypeID != value)
+                if (_internalAllocationID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'TradeTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'InternalAllocationID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _tradeTypeID = value;
-                    OnPropertyChanged("TradeTypeID");
+                    _internalAllocationID = value;
+                    OnPropertyChanged("InternalAllocationID");
                 }
             }
         }
-        private int _tradeTypeID;
+        private int _internalAllocationID;
         [DataMember]
-        public string FMTradType
+        public int EventID
         {	
     		
-            get { return _fMTradType; }
+            get { return _eventID; }
             set
             {
-                if (_fMTradType != value)
+                if (_eventID != value)
                 {
-                    _fMTradType = value;
-                    OnPropertyChanged("FMTradType");
+                    ChangeTracker.RecordOriginalValue("EventID", _eventID);
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
                 }
             }
         }
-        private string _fMTradType;
+        private int _eventID;
         [DataMember]
-        public string Name
+        public string FMContEventInd
         {	
     		
-            get { return _name; }
+            get { return _fMContEventInd; }
             set
             {
-                if (_name != value)
+                if (_fMContEventInd != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    _fMContEventInd = value;
+                    OnPropertyChanged("FMContEventInd");
                 }
             }
         }
-        private string _name;
+        private string _fMContEventInd;
+        [DataMember]
+        public int FMContEventId
+        {	
+    		
+            get { return _fMContEventId; }
+            set
+            {
+                if (_fMContEventId != value)
+                {
+                    _fMContEventId = value;
+                    OnPropertyChanged("FMContEventId");
+                }
+            }
+        }
+        private int _fMContEventId;
+        [DataMember]
+        public bool IsMatched
+        {	
+    		
+            get { return _isMatched; }
+            set
+            {
+                if (_isMatched != value)
+                {
+                    _isMatched = value;
+                    OnPropertyChanged("IsMatched");
+                }
+            }
+        }
+        private bool _isMatched;
+        [DataMember]
+        public int AccountID
+        {	
+    		
+            get { return _accountID; }
+            set
+            {
+                if (_accountID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("AccountID", _accountID);
+                    _accountID = value;
+                    OnPropertyChanged("AccountID");
+                }
+            }
+        }
+        private int _accountID;
+        [DataMember]
+        public int BookID
+        {	
+    		
+            get { return _bookID; }
+            set
+            {
+                if (_bookID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BookID", _bookID);
+                    _bookID = value;
+                    OnPropertyChanged("BookID");
+                }
+            }
+        }
+        private int _bookID;
+        [DataMember]
+        public decimal Quantity
+        {	
+    		
+            get { return _quantity; }
+            set
+            {
+                if (_quantity != value)
+                {
+                    _quantity = value;
+                    OnPropertyChanged("Quantity");
+                }
+            }
+        }
+        private decimal _quantity;
         [DataMember]
         public System.DateTime StartDt
         {	

@@ -18,89 +18,60 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class LegalEntity: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(InternalAllocation))]
+    public partial class Event: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int LegalEntityID
+        public int EventID
         {	
     		
-            get { return _legalEntityID; }
+            get { return _eventID; }
             set
             {
-                if (_legalEntityID != value)
+                if (_eventID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'LegalEntityID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _legalEntityID = value;
-                    OnPropertyChanged("LegalEntityID");
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
                 }
             }
         }
-        private int _legalEntityID;
+        private int _eventID;
         [DataMember]
-        public Nullable<int> FMOrgId
+        public int EventTypeID
         {	
     		
-            get { return _fMOrgId; }
+            get { return _eventTypeID; }
             set
             {
-                if (_fMOrgId != value)
+                if (_eventTypeID != value)
                 {
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
+                    ChangeTracker.RecordOriginalValue("EventTypeID", _eventTypeID);
+                    _eventTypeID = value;
+                    OnPropertyChanged("EventTypeID");
                 }
             }
         }
-        private Nullable<int> _fMOrgId;
+        private int _eventTypeID;
         [DataMember]
-        public string Name
+        public bool IsCancelled
         {	
     		
-            get { return _name; }
+            get { return _isCancelled; }
             set
             {
-                if (_name != value)
+                if (_isCancelled != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    _isCancelled = value;
+                    OnPropertyChanged("IsCancelled");
                 }
             }
         }
-        private string _name;
-        [DataMember]
-        public string LongName
-        {	
-    		
-            get { return _longName; }
-            set
-            {
-                if (_longName != value)
-                {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
-                }
-            }
-        }
-        private string _longName;
-        [DataMember]
-        public Nullable<int> CountryID
-        {	
-    		
-            get { return _countryID; }
-            set
-            {
-                if (_countryID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("CountryID", _countryID);
-                    _countryID = value;
-                    OnPropertyChanged("CountryID");
-                }
-            }
-        }
-        private Nullable<int> _countryID;
+        private bool _isCancelled;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,28 +112,50 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
         [DataMember]
-        public Nullable<int> BBCompany
-        {	
-    		
-            get { return _bBCompany; }
+        public TrackableCollection<InternalAllocation> InternalAllocations
+        {
+            get
+            {
+                if (_internalAllocations == null)
+                {
+                    _internalAllocations = new TrackableCollection<InternalAllocation>();
+                    _internalAllocations.CollectionChanged += FixupInternalAllocations;
+                }
+                return _internalAllocations;
+            }
             set
             {
-                if (_bBCompany != value)
+                if (!ReferenceEquals(_internalAllocations, value))
                 {
-                    _bBCompany = value;
-                    OnPropertyChanged("BBCompany");
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_internalAllocations != null)
+                    {
+                        _internalAllocations.CollectionChanged -= FixupInternalAllocations;
+                    }
+                    _internalAllocations = value;
+                    if (_internalAllocations != null)
+                    {
+                        _internalAllocations.CollectionChanged += FixupInternalAllocations;
+                    }
+                    OnNavigationPropertyChanged("InternalAllocations");
                 }
             }
         }
-        private Nullable<int> _bBCompany;
+        private TrackableCollection<InternalAllocation> _internalAllocations;
 
         #endregion
         #region ChangeTracking
@@ -242,6 +235,45 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            InternalAllocations.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupInternalAllocations(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (InternalAllocation item in e.NewItems)
+                {
+                    item.EventID = EventID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("InternalAllocations", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (InternalAllocation item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("InternalAllocations", item);
+                    }
+                }
+            }
         }
 
         #endregion

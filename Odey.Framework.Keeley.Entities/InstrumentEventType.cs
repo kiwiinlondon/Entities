@@ -18,43 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class LegalEntity: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class InstrumentEventType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int LegalEntityID
+        public int InstrumentEventTypeID
         {	
     		
-            get { return _legalEntityID; }
+            get { return _instrumentEventTypeID; }
             set
             {
-                if (_legalEntityID != value)
+                if (_instrumentEventTypeID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'LegalEntityID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'InstrumentEventTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _legalEntityID = value;
-                    OnPropertyChanged("LegalEntityID");
+                    _instrumentEventTypeID = value;
+                    OnPropertyChanged("InstrumentEventTypeID");
                 }
             }
         }
-        private int _legalEntityID;
-        [DataMember]
-        public Nullable<int> FMOrgId
-        {	
-    		
-            get { return _fMOrgId; }
-            set
-            {
-                if (_fMOrgId != value)
-                {
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
-                }
-            }
-        }
-        private Nullable<int> _fMOrgId;
+        private int _instrumentEventTypeID;
         [DataMember]
         public string Name
         {	
@@ -71,36 +56,20 @@ namespace Odey.Framework.Keeley.Entities
         }
         private string _name;
         [DataMember]
-        public string LongName
+        public string FmContClass
         {	
     		
-            get { return _longName; }
+            get { return _fmContClass; }
             set
             {
-                if (_longName != value)
+                if (_fmContClass != value)
                 {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
+                    _fmContClass = value;
+                    OnPropertyChanged("FmContClass");
                 }
             }
         }
-        private string _longName;
-        [DataMember]
-        public Nullable<int> CountryID
-        {	
-    		
-            get { return _countryID; }
-            set
-            {
-                if (_countryID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("CountryID", _countryID);
-                    _countryID = value;
-                    OnPropertyChanged("CountryID");
-                }
-            }
-        }
-        private Nullable<int> _countryID;
+        private string _fmContClass;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,28 +110,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public Nullable<int> BBCompany
-        {	
-    		
-            get { return _bBCompany; }
-            set
-            {
-                if (_bBCompany != value)
-                {
-                    _bBCompany = value;
-                    OnPropertyChanged("BBCompany");
-                }
-            }
-        }
-        private Nullable<int> _bBCompany;
 
         #endregion
         #region ChangeTracking

@@ -18,121 +18,121 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PortfolioNonAggregated: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(Currency))]
+    public partial class TradeEvent: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PortfolioNonAggregatedID
+        public int EventID
         {	
     		
-            get { return _portfolioNonAggregatedID; }
+            get { return _eventID; }
             set
             {
-                if (_portfolioNonAggregatedID != value)
+                if (_eventID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PortfolioNonAggregatedID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _portfolioNonAggregatedID = value;
-                    OnPropertyChanged("PortfolioNonAggregatedID");
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
                 }
             }
         }
-        private int _portfolioNonAggregatedID;
+        private int _eventID;
         [DataMember]
-        public int PortfolioID
+        public int InstrumentMarketID
         {	
     		
-            get { return _portfolioID; }
+            get { return _instrumentMarketID; }
             set
             {
-                if (_portfolioID != value)
+                if (_instrumentMarketID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PortfolioID", _portfolioID);
-                    _portfolioID = value;
-                    OnPropertyChanged("PortfolioID");
+                    ChangeTracker.RecordOriginalValue("InstrumentMarketID", _instrumentMarketID);
+                    _instrumentMarketID = value;
+                    OnPropertyChanged("InstrumentMarketID");
                 }
             }
         }
-        private int _portfolioID;
+        private int _instrumentMarketID;
         [DataMember]
-        public int StrategyID
+        public System.DateTime TradeDate
         {	
     		
-            get { return _strategyID; }
+            get { return _tradeDate; }
             set
             {
-                if (_strategyID != value)
+                if (_tradeDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StrategyID", _strategyID);
-                    _strategyID = value;
-                    OnPropertyChanged("StrategyID");
+                    _tradeDate = value;
+                    OnPropertyChanged("TradeDate");
                 }
             }
         }
-        private int _strategyID;
+        private System.DateTime _tradeDate;
         [DataMember]
-        public int TradeTypeID
+        public System.DateTime SettlementDate
         {	
     		
-            get { return _tradeTypeID; }
+            get { return _settlementDate; }
             set
             {
-                if (_tradeTypeID != value)
+                if (_settlementDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("TradeTypeID", _tradeTypeID);
-                    _tradeTypeID = value;
-                    OnPropertyChanged("TradeTypeID");
+                    _settlementDate = value;
+                    OnPropertyChanged("SettlementDate");
                 }
             }
         }
-        private int _tradeTypeID;
+        private System.DateTime _settlementDate;
         [DataMember]
-        public decimal NetPosition
+        public int TraderId
         {	
     		
-            get { return _netPosition; }
+            get { return _traderId; }
             set
             {
-                if (_netPosition != value)
+                if (_traderId != value)
                 {
-                    _netPosition = value;
-                    OnPropertyChanged("NetPosition");
+                    ChangeTracker.RecordOriginalValue("TraderId", _traderId);
+                    _traderId = value;
+                    OnPropertyChanged("TraderId");
                 }
             }
         }
-        private decimal _netPosition;
+        private int _traderId;
         [DataMember]
-        public decimal UnitCost
+        public decimal Quantity
         {	
     		
-            get { return _unitCost; }
+            get { return _quantity; }
             set
             {
-                if (_unitCost != value)
+                if (_quantity != value)
                 {
-                    _unitCost = value;
-                    OnPropertyChanged("UnitCost");
+                    _quantity = value;
+                    OnPropertyChanged("Quantity");
                 }
             }
         }
-        private decimal _unitCost;
+        private decimal _quantity;
         [DataMember]
-        public decimal MarkPrice
+        public decimal Price
         {	
     		
-            get { return _markPrice; }
+            get { return _price; }
             set
             {
-                if (_markPrice != value)
+                if (_price != value)
                 {
-                    _markPrice = value;
-                    OnPropertyChanged("MarkPrice");
+                    _price = value;
+                    OnPropertyChanged("Price");
                 }
             }
         }
-        private decimal _markPrice;
+        private decimal _price;
         [DataMember]
         public decimal FXRate
         {	
@@ -149,125 +149,44 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _fXRate;
         [DataMember]
-        public decimal MarketValue
+        public int CurrencyId
         {	
     		
-            get { return _marketValue; }
+            get { return _currencyId; }
             set
             {
-                if (_marketValue != value)
+                if (_currencyId != value)
                 {
-                    _marketValue = value;
-                    OnPropertyChanged("MarketValue");
+                    ChangeTracker.RecordOriginalValue("CurrencyId", _currencyId);
+                    if (!IsDeserializing)
+                    {
+                        if (Currency != null && Currency.InstrumentID != value)
+                        {
+                            Currency = null;
+                        }
+                    }
+                    _currencyId = value;
+                    OnPropertyChanged("CurrencyId");
                 }
             }
         }
-        private decimal _marketValue;
+        private int _currencyId;
         [DataMember]
-        public decimal DeltaEquityPosition
+        public int CounterpartyId
         {	
     		
-            get { return _deltaEquityPosition; }
+            get { return _counterpartyId; }
             set
             {
-                if (_deltaEquityPosition != value)
+                if (_counterpartyId != value)
                 {
-                    _deltaEquityPosition = value;
-                    OnPropertyChanged("DeltaEquityPosition");
+                    ChangeTracker.RecordOriginalValue("CounterpartyId", _counterpartyId);
+                    _counterpartyId = value;
+                    OnPropertyChanged("CounterpartyId");
                 }
             }
         }
-        private decimal _deltaEquityPosition;
-        [DataMember]
-        public decimal RealisedFXPNL
-        {	
-    		
-            get { return _realisedFXPNL; }
-            set
-            {
-                if (_realisedFXPNL != value)
-                {
-                    _realisedFXPNL = value;
-                    OnPropertyChanged("RealisedFXPNL");
-                }
-            }
-        }
-        private decimal _realisedFXPNL;
-        [DataMember]
-        public decimal UnRealisedFXPNL
-        {	
-    		
-            get { return _unRealisedFXPNL; }
-            set
-            {
-                if (_unRealisedFXPNL != value)
-                {
-                    _unRealisedFXPNL = value;
-                    OnPropertyChanged("UnRealisedFXPNL");
-                }
-            }
-        }
-        private decimal _unRealisedFXPNL;
-        [DataMember]
-        public decimal RealisedPricePNL
-        {	
-    		
-            get { return _realisedPricePNL; }
-            set
-            {
-                if (_realisedPricePNL != value)
-                {
-                    _realisedPricePNL = value;
-                    OnPropertyChanged("RealisedPricePNL");
-                }
-            }
-        }
-        private decimal _realisedPricePNL;
-        [DataMember]
-        public decimal UnRealisedPricePNL
-        {	
-    		
-            get { return _unRealisedPricePNL; }
-            set
-            {
-                if (_unRealisedPricePNL != value)
-                {
-                    _unRealisedPricePNL = value;
-                    OnPropertyChanged("UnRealisedPricePNL");
-                }
-            }
-        }
-        private decimal _unRealisedPricePNL;
-        [DataMember]
-        public decimal Accrual
-        {	
-    		
-            get { return _accrual; }
-            set
-            {
-                if (_accrual != value)
-                {
-                    _accrual = value;
-                    OnPropertyChanged("Accrual");
-                }
-            }
-        }
-        private decimal _accrual;
-        [DataMember]
-        public decimal CashIncome
-        {	
-    		
-            get { return _cashIncome; }
-            set
-            {
-                if (_cashIncome != value)
-                {
-                    _cashIncome = value;
-                    OnPropertyChanged("CashIncome");
-                }
-            }
-        }
-        private decimal _cashIncome;
+        private int _counterpartyId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -314,21 +233,26 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
         [DataMember]
-        public int FMContViewLadderID
-        {	
-    		
-            get { return _fMContViewLadderID; }
+        public Currency Currency
+        {
+            get { return _currency; }
             set
             {
-                if (_fMContViewLadderID != value)
+                if (!ReferenceEquals(_currency, value))
                 {
-                    _fMContViewLadderID = value;
-                    OnPropertyChanged("FMContViewLadderID");
+                    var previousValue = _currency;
+                    _currency = value;
+                    FixupCurrency(previousValue);
+                    OnNavigationPropertyChanged("Currency");
                 }
             }
         }
-        private int _fMContViewLadderID;
+        private Currency _currency;
 
         #endregion
         #region ChangeTracking
@@ -391,6 +315,16 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
+            }
+        }
+    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -408,6 +342,40 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Currency = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupCurrency(Currency previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (Currency != null)
+            {
+                CurrencyId = Currency.InstrumentID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Currency")
+                    && (ChangeTracker.OriginalValues["Currency"] == Currency))
+                {
+                    ChangeTracker.OriginalValues.Remove("Currency");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Currency", previousValue);
+                }
+                if (Currency != null && !Currency.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Currency.StartTracking();
+                }
+            }
         }
 
         #endregion
