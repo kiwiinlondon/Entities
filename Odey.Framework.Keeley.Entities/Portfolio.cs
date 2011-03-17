@@ -18,7 +18,6 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(PortfolioNonAggregated))]
     public partial class Portfolio: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -316,44 +315,6 @@ namespace Odey.Framework.Keeley.Entities
         private Nullable<int> _fMContViewLadderID;
 
         #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<PortfolioNonAggregated> PortfoliosNonAggregated
-        {
-            get
-            {
-                if (_portfoliosNonAggregated == null)
-                {
-                    _portfoliosNonAggregated = new TrackableCollection<PortfolioNonAggregated>();
-                    _portfoliosNonAggregated.CollectionChanged += FixupPortfoliosNonAggregated;
-                }
-                return _portfoliosNonAggregated;
-            }
-            set
-            {
-                if (!ReferenceEquals(_portfoliosNonAggregated, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_portfoliosNonAggregated != null)
-                    {
-                        _portfoliosNonAggregated.CollectionChanged -= FixupPortfoliosNonAggregated;
-                    }
-                    _portfoliosNonAggregated = value;
-                    if (_portfoliosNonAggregated != null)
-                    {
-                        _portfoliosNonAggregated.CollectionChanged += FixupPortfoliosNonAggregated;
-                    }
-                    OnNavigationPropertyChanged("PortfoliosNonAggregated");
-                }
-            }
-        }
-        private TrackableCollection<PortfolioNonAggregated> _portfoliosNonAggregated;
-
-        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -431,45 +392,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            PortfoliosNonAggregated.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupPortfoliosNonAggregated(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (PortfolioNonAggregated item in e.NewItems)
-                {
-                    item.PortfolioID = PortfolioID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("PortfoliosNonAggregated", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (PortfolioNonAggregated item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("PortfoliosNonAggregated", item);
-                    }
-                }
-            }
         }
 
         #endregion
