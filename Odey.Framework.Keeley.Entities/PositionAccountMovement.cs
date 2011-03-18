@@ -88,36 +88,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _quantity;
         [DataMember]
-        public decimal Price
-        {	
-    		
-            get { return _price; }
-            set
-            {
-                if (_price != value)
-                {
-                    _price = value;
-                    OnPropertyChanged("Price");
-                }
-            }
-        }
-        private decimal _price;
-        [DataMember]
-        public decimal FXRate
-        {	
-    		
-            get { return _fXRate; }
-            set
-            {
-                if (_fXRate != value)
-                {
-                    _fXRate = value;
-                    OnPropertyChanged("FXRate");
-                }
-            }
-        }
-        private decimal _fXRate;
-        [DataMember]
         public System.DateTime StartDt
         {	
     		

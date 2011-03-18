@@ -33,6 +33,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FMTradType=11,
         [EnumMember]
-        FMContId=12
+        FMContId=12,
+        [EnumMember]
+        ExternalAccountId = 14
     }
 }

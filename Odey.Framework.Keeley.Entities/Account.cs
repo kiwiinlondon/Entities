@@ -133,6 +133,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public int FundId
+        {	
+    		
+            get { return _fundId; }
+            set
+            {
+                if (_fundId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("FundId", _fundId);
+                    _fundId = value;
+                    OnPropertyChanged("FundId");
+                }
+            }
+        }
+        private int _fundId;
 
         #endregion
         #region ChangeTracking
