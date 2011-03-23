@@ -18,29 +18,43 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Event))]
-    public partial class IdentifierType: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class MatchedStatu: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int IdentifierTypeID
+        public int MatchedStatusID
         {	
     		
-            get { return _identifierTypeID; }
+            get { return _matchedStatusID; }
             set
             {
-                if (_identifierTypeID != value)
+                if (_matchedStatusID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'IdentifierTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'MatchedStatusID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _identifierTypeID = value;
-                    OnPropertyChanged("IdentifierTypeID");
+                    _matchedStatusID = value;
+                    OnPropertyChanged("MatchedStatusID");
                 }
             }
         }
-        private int _identifierTypeID;
+        private int _matchedStatusID;
+        [DataMember]
+        public string Code
+        {	
+    		
+            get { return _code; }
+            set
+            {
+                if (_code != value)
+                {
+                    _code = value;
+                    OnPropertyChanged("Code");
+                }
+            }
+        }
+        private string _code;
         [DataMember]
         public string Name
         {	
@@ -96,65 +110,13 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public string FMIdentType
-        {	
-    		
-            get { return _fMIdentType; }
-            set
-            {
-                if (_fMIdentType != value)
-                {
-                    _fMIdentType = value;
-                    OnPropertyChanged("FMIdentType");
-                }
-            }
-        }
-        private string _fMIdentType;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<Event> Events
-        {
-            get
-            {
-                if (_events == null)
-                {
-                    _events = new TrackableCollection<Event>();
-                    _events.CollectionChanged += FixupEvents;
-                }
-                return _events;
-            }
-            set
-            {
-                if (!ReferenceEquals(_events, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_events != null)
-                    {
-                        _events.CollectionChanged -= FixupEvents;
-                    }
-                    _events = value;
-                    if (_events != null)
-                    {
-                        _events.CollectionChanged += FixupEvents;
-                    }
-                    OnNavigationPropertyChanged("Events");
-                }
-            }
-        }
-        private TrackableCollection<Event> _events;
 
         #endregion
         #region ChangeTracking
@@ -234,45 +196,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Events.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupEvents(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (Event item in e.NewItems)
-                {
-                    item.IdentifierTypeId = IdentifierTypeID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("Events", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (Event item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("Events", item);
-                    }
-                }
-            }
         }
 
         #endregion

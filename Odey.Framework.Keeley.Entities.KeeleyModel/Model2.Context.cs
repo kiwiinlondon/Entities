@@ -251,12 +251,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<PositionAccountMovement> _positionAccountMovements;
     
-        public ObjectSet<TradeEvent> TradeEvents
-        {
-            get { return _tradeEvents  ?? (_tradeEvents = CreateObjectSet<TradeEvent>("TradeEvents")); }
-        }
-        private ObjectSet<TradeEvent> _tradeEvents;
-    
         public ObjectSet<InternalAllocation> InternalAllocations
         {
             get { return _internalAllocations  ?? (_internalAllocations = CreateObjectSet<InternalAllocation>("InternalAllocations")); }
@@ -280,6 +274,24 @@ namespace Odey.Framework.Keeley.Entities
             get { return _legalEntities  ?? (_legalEntities = CreateObjectSet<LegalEntity>("LegalEntities")); }
         }
         private ObjectSet<LegalEntity> _legalEntities;
+    
+        public ObjectSet<BuySellReason> BuySellReasons
+        {
+            get { return _buySellReasons  ?? (_buySellReasons = CreateObjectSet<BuySellReason>("BuySellReasons")); }
+        }
+        private ObjectSet<BuySellReason> _buySellReasons;
+    
+        public ObjectSet<TradeEvent> TradeEvents
+        {
+            get { return _tradeEvents  ?? (_tradeEvents = CreateObjectSet<TradeEvent>("TradeEvents")); }
+        }
+        private ObjectSet<TradeEvent> _tradeEvents;
+    
+        public ObjectSet<MatchedStatu> MatchedStatus
+        {
+            get { return _matchedStatus  ?? (_matchedStatus = CreateObjectSet<MatchedStatu>("MatchedStatus")); }
+        }
+        private ObjectSet<MatchedStatu> _matchedStatus;
 
         #endregion
     }

@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(PositionAccountMovement))]
     public partial class InternalAllocation: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -86,21 +87,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _fMContEventId;
-        [DataMember]
-        public bool IsMatched
-        {	
-    		
-            get { return _isMatched; }
-            set
-            {
-                if (_isMatched != value)
-                {
-                    _isMatched = value;
-                    OnPropertyChanged("IsMatched");
-                }
-            }
-        }
-        private bool _isMatched;
         [DataMember]
         public int AccountID
         {	
@@ -210,6 +196,75 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _fMOriginalContEventId;
+        [DataMember]
+        public bool IsCancelled
+        {	
+    		
+            get { return _isCancelled; }
+            set
+            {
+                if (_isCancelled != value)
+                {
+                    _isCancelled = value;
+                    OnPropertyChanged("IsCancelled");
+                }
+            }
+        }
+        private bool _isCancelled;
+        [DataMember]
+        public int MatchedStatusId
+        {	
+    		
+            get { return _matchedStatusId; }
+            set
+            {
+                if (_matchedStatusId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("MatchedStatusId", _matchedStatusId);
+                    _matchedStatusId = value;
+                    OnPropertyChanged("MatchedStatusId");
+                }
+            }
+        }
+        private int _matchedStatusId;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<PositionAccountMovement> PositionAccountMovements
+        {
+            get
+            {
+                if (_positionAccountMovements == null)
+                {
+                    _positionAccountMovements = new TrackableCollection<PositionAccountMovement>();
+                    _positionAccountMovements.CollectionChanged += FixupPositionAccountMovements;
+                }
+                return _positionAccountMovements;
+            }
+            set
+            {
+                if (!ReferenceEquals(_positionAccountMovements, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_positionAccountMovements != null)
+                    {
+                        _positionAccountMovements.CollectionChanged -= FixupPositionAccountMovements;
+                    }
+                    _positionAccountMovements = value;
+                    if (_positionAccountMovements != null)
+                    {
+                        _positionAccountMovements.CollectionChanged += FixupPositionAccountMovements;
+                    }
+                    OnNavigationPropertyChanged("PositionAccountMovements");
+                }
+            }
+        }
+        private TrackableCollection<PositionAccountMovement> _positionAccountMovements;
 
         #endregion
         #region ChangeTracking
@@ -289,6 +344,45 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            PositionAccountMovements.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupPositionAccountMovements(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (PositionAccountMovement item in e.NewItems)
+                {
+                    item.InternalAllocationID = InternalAllocationID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("PositionAccountMovements", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (PositionAccountMovement item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("PositionAccountMovements", item);
+                    }
+                }
+            }
         }
 
         #endregion

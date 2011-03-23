@@ -18,7 +18,6 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(InternalAllocation))]
     public partial class Event: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -57,21 +56,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _eventTypeID;
-        [DataMember]
-        public bool IsCancelled
-        {	
-    		
-            get { return _isCancelled; }
-            set
-            {
-                if (_isCancelled != value)
-                {
-                    _isCancelled = value;
-                    OnPropertyChanged("IsCancelled");
-                }
-            }
-        }
-        private bool _isCancelled;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -118,44 +102,37 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
         [DataMember]
-        public TrackableCollection<InternalAllocation> InternalAllocations
-        {
-            get
-            {
-                if (_internalAllocations == null)
-                {
-                    _internalAllocations = new TrackableCollection<InternalAllocation>();
-                    _internalAllocations.CollectionChanged += FixupInternalAllocations;
-                }
-                return _internalAllocations;
-            }
+        public int IdentifierTypeId
+        {	
+    		
+            get { return _identifierTypeId; }
             set
             {
-                if (!ReferenceEquals(_internalAllocations, value))
+                if (_identifierTypeId != value)
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_internalAllocations != null)
-                    {
-                        _internalAllocations.CollectionChanged -= FixupInternalAllocations;
-                    }
-                    _internalAllocations = value;
-                    if (_internalAllocations != null)
-                    {
-                        _internalAllocations.CollectionChanged += FixupInternalAllocations;
-                    }
-                    OnNavigationPropertyChanged("InternalAllocations");
+                    ChangeTracker.RecordOriginalValue("IdentifierTypeId", _identifierTypeId);
+                    _identifierTypeId = value;
+                    OnPropertyChanged("IdentifierTypeId");
                 }
             }
         }
-        private TrackableCollection<InternalAllocation> _internalAllocations;
+        private int _identifierTypeId;
+        [DataMember]
+        public string Identifier
+        {	
+    		
+            get { return _identifier; }
+            set
+            {
+                if (_identifier != value)
+                {
+                    _identifier = value;
+                    OnPropertyChanged("Identifier");
+                }
+            }
+        }
+        private string _identifier;
 
         #endregion
         #region ChangeTracking
@@ -235,45 +212,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            InternalAllocations.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupInternalAllocations(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (InternalAllocation item in e.NewItems)
-                {
-                    item.EventID = EventID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("InternalAllocations", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (InternalAllocation item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("InternalAllocations", item);
-                    }
-                }
-            }
         }
 
         #endregion

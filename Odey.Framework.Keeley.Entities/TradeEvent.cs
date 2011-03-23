@@ -103,6 +103,36 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _traderId;
         [DataMember]
+        public decimal GrossPrice
+        {	
+    		
+            get { return _grossPrice; }
+            set
+            {
+                if (_grossPrice != value)
+                {
+                    _grossPrice = value;
+                    OnPropertyChanged("GrossPrice");
+                }
+            }
+        }
+        private decimal _grossPrice;
+        [DataMember]
+        public decimal NetPrice
+        {	
+    		
+            get { return _netPrice; }
+            set
+            {
+                if (_netPrice != value)
+                {
+                    _netPrice = value;
+                    OnPropertyChanged("NetPrice");
+                }
+            }
+        }
+        private decimal _netPrice;
+        [DataMember]
         public decimal Quantity
         {	
     		
@@ -118,51 +148,113 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _quantity;
         [DataMember]
-        public decimal Price
+        public int BuySellReasonId
         {	
     		
-            get { return _price; }
+            get { return _buySellReasonId; }
             set
             {
-                if (_price != value)
+                if (_buySellReasonId != value)
                 {
-                    _price = value;
-                    OnPropertyChanged("Price");
+                    ChangeTracker.RecordOriginalValue("BuySellReasonId", _buySellReasonId);
+                    _buySellReasonId = value;
+                    OnPropertyChanged("BuySellReasonId");
                 }
             }
         }
-        private decimal _price;
+        private int _buySellReasonId;
         [DataMember]
-        public decimal FXRate
+        public bool TradedNet
         {	
     		
-            get { return _fXRate; }
+            get { return _tradedNet; }
             set
             {
-                if (_fXRate != value)
+                if (_tradedNet != value)
                 {
-                    _fXRate = value;
-                    OnPropertyChanged("FXRate");
+                    _tradedNet = value;
+                    OnPropertyChanged("TradedNet");
                 }
             }
         }
-        private decimal _fXRate;
+        private bool _tradedNet;
         [DataMember]
-        public int CurrencyId
+        public bool PriceIsClean
         {	
     		
-            get { return _currencyId; }
+            get { return _priceIsClean; }
             set
             {
-                if (_currencyId != value)
+                if (_priceIsClean != value)
                 {
-                    ChangeTracker.RecordOriginalValue("CurrencyId", _currencyId);
-                    _currencyId = value;
-                    OnPropertyChanged("CurrencyId");
+                    _priceIsClean = value;
+                    OnPropertyChanged("PriceIsClean");
                 }
             }
         }
-        private int _currencyId;
+        private bool _priceIsClean;
+        [DataMember]
+        public int TradeCurrencyId
+        {	
+    		
+            get { return _tradeCurrencyId; }
+            set
+            {
+                if (_tradeCurrencyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("TradeCurrencyId", _tradeCurrencyId);
+                    _tradeCurrencyId = value;
+                    OnPropertyChanged("TradeCurrencyId");
+                }
+            }
+        }
+        private int _tradeCurrencyId;
+        [DataMember]
+        public int SettlementCurrencyId
+        {	
+    		
+            get { return _settlementCurrencyId; }
+            set
+            {
+                if (_settlementCurrencyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("SettlementCurrencyId", _settlementCurrencyId);
+                    _settlementCurrencyId = value;
+                    OnPropertyChanged("SettlementCurrencyId");
+                }
+            }
+        }
+        private int _settlementCurrencyId;
+        [DataMember]
+        public decimal NetConsideration
+        {	
+    		
+            get { return _netConsideration; }
+            set
+            {
+                if (_netConsideration != value)
+                {
+                    _netConsideration = value;
+                    OnPropertyChanged("NetConsideration");
+                }
+            }
+        }
+        private decimal _netConsideration;
+        [DataMember]
+        public decimal GrossConsideration
+        {	
+    		
+            get { return _grossConsideration; }
+            set
+            {
+                if (_grossConsideration != value)
+                {
+                    _grossConsideration = value;
+                    OnPropertyChanged("GrossConsideration");
+                }
+            }
+        }
+        private decimal _grossConsideration;
         [DataMember]
         public int CounterpartyId
         {	
@@ -179,6 +271,126 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _counterpartyId;
+        [DataMember]
+        public decimal TradeSettlementFXRate
+        {	
+    		
+            get { return _tradeSettlementFXRate; }
+            set
+            {
+                if (_tradeSettlementFXRate != value)
+                {
+                    _tradeSettlementFXRate = value;
+                    OnPropertyChanged("TradeSettlementFXRate");
+                }
+            }
+        }
+        private decimal _tradeSettlementFXRate;
+        [DataMember]
+        public bool TradeSettlementFXRateMultiply
+        {	
+    		
+            get { return _tradeSettlementFXRateMultiply; }
+            set
+            {
+                if (_tradeSettlementFXRateMultiply != value)
+                {
+                    _tradeSettlementFXRateMultiply = value;
+                    OnPropertyChanged("TradeSettlementFXRateMultiply");
+                }
+            }
+        }
+        private bool _tradeSettlementFXRateMultiply;
+        [DataMember]
+        public decimal TradeInstrumentFXRate
+        {	
+    		
+            get { return _tradeInstrumentFXRate; }
+            set
+            {
+                if (_tradeInstrumentFXRate != value)
+                {
+                    _tradeInstrumentFXRate = value;
+                    OnPropertyChanged("TradeInstrumentFXRate");
+                }
+            }
+        }
+        private decimal _tradeInstrumentFXRate;
+        [DataMember]
+        public bool TradeInstrumentFXRateMultiply
+        {	
+    		
+            get { return _tradeInstrumentFXRateMultiply; }
+            set
+            {
+                if (_tradeInstrumentFXRateMultiply != value)
+                {
+                    _tradeInstrumentFXRateMultiply = value;
+                    OnPropertyChanged("TradeInstrumentFXRateMultiply");
+                }
+            }
+        }
+        private bool _tradeInstrumentFXRateMultiply;
+        [DataMember]
+        public decimal InstrumentBookFXRate
+        {	
+    		
+            get { return _instrumentBookFXRate; }
+            set
+            {
+                if (_instrumentBookFXRate != value)
+                {
+                    _instrumentBookFXRate = value;
+                    OnPropertyChanged("InstrumentBookFXRate");
+                }
+            }
+        }
+        private decimal _instrumentBookFXRate;
+        [DataMember]
+        public string Ticket
+        {	
+    		
+            get { return _ticket; }
+            set
+            {
+                if (_ticket != value)
+                {
+                    _ticket = value;
+                    OnPropertyChanged("Ticket");
+                }
+            }
+        }
+        private string _ticket;
+        [DataMember]
+        public bool IsCancelled
+        {	
+    		
+            get { return _isCancelled; }
+            set
+            {
+                if (_isCancelled != value)
+                {
+                    _isCancelled = value;
+                    OnPropertyChanged("IsCancelled");
+                }
+            }
+        }
+        private bool _isCancelled;
+        [DataMember]
+        public int AmendmentNumber
+        {	
+    		
+            get { return _amendmentNumber; }
+            set
+            {
+                if (_amendmentNumber != value)
+                {
+                    _amendmentNumber = value;
+                    OnPropertyChanged("AmendmentNumber");
+                }
+            }
+        }
+        private int _amendmentNumber;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -219,7 +431,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

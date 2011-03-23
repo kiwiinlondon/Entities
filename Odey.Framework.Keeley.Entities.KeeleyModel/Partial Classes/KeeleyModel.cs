@@ -48,7 +48,7 @@ namespace Odey.Framework.Keeley.Entities
 
                     if (updateUserName != null)
                     {
-                        ApplicationUserCache cache = new ApplicationUserCache();
+                        ApplicationUserByLoginCache cache = new ApplicationUserByLoginCache();
                         user = cache.Get(updateUserName);
                     }
                     if (user == null)

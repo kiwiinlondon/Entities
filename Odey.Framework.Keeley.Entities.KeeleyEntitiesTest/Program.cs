@@ -14,7 +14,8 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            CreateRegion();
+            Odey.Framework.Keeley.Entities.Caches.ApplicationUserByLoginCache cache = new Odey.Framework.Keeley.Entities.Caches.ApplicationUserByLoginCache();
+            cache.Get("ian");
 
         }
 

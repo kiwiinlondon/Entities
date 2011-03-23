@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace Odey.Framework.Keeley.Entities.Caches
 {
-    internal class ApplicationUserCache : OdeyCache<string, ApplicationUser>
+    public class ApplicationUserByLoginCache : OdeyCache<string, ApplicationUser>
     {
         protected override Dictionary<string, ApplicationUser> GetAll()
         {
             using (KeeleyModel context = new KeeleyModel())
             {
-                return context.ApplicationUsers.ToDictionary(a => a.WindowsLogin, a => a);
+                return context.ApplicationUsers.Where(a=> a.WindowsLogin != null).ToDictionary(a => a.WindowsLogin, a => a);
             }
         }
 

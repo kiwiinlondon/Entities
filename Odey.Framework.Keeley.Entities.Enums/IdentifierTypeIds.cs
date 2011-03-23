@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
@@ -35,6 +33,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FMContId=12,
         [EnumMember]
-        ExternalAccountId = 14
+        ExternalAccountId = 14,
+        [EnumMember]
+        FMOriginalContId = 15,
+        [EnumMember]
+        BuySellReasonCode = 16,
+        [EnumMember]
+        FMPersonId = 17
     }
 }
