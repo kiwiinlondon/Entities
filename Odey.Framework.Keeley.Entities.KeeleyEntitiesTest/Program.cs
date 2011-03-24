@@ -14,8 +14,8 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            Odey.Framework.Keeley.Entities.Caches.ApplicationUserByLoginCache cache = new Odey.Framework.Keeley.Entities.Caches.ApplicationUserByLoginCache();
-            cache.Get("ian");
+            FundByBookIdCache fundCache = new FundByBookIdCache();
+            fundCache.Get(5);
 
         }
 

@@ -18,10 +18,37 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(FXTradeEvent))]
     [KnownType(typeof(Instrument))]
     public partial class FX: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
+        [DataMember]
+        public int EventID
+        {	
+    		
+            get { return _eventID; }
+            set
+            {
+                if (_eventID != value)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
+                    {
+                        throw new InvalidOperationException("The property 'EventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                    }
+                    if (!IsDeserializing)
+                    {
+                        if (FXTradeEvent != null && FXTradeEvent.EventID != value)
+                        {
+                            FXTradeEvent = null;
+                        }
+                    }
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
+                }
+            }
+        }
+        private int _eventID;
         [DataMember]
         public int InstrumentID
         {	
@@ -31,10 +58,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_instrumentID != value)
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
-                    {
-                        throw new InvalidOperationException("The property 'InstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
-                    }
+                    ChangeTracker.RecordOriginalValue("InstrumentID", _instrumentID);
                     if (!IsDeserializing)
                     {
                         if (Instrument != null && Instrument.InstrumentID != value)
@@ -48,113 +72,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _instrumentID;
-        [DataMember]
-        public int ReceiveCurrencyId
-        {	
-    		
-            get { return _receiveCurrencyId; }
-            set
-            {
-                if (_receiveCurrencyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ReceiveCurrencyId", _receiveCurrencyId);
-                    _receiveCurrencyId = value;
-                    OnPropertyChanged("ReceiveCurrencyId");
-                }
-            }
-        }
-        private int _receiveCurrencyId;
-        [DataMember]
-        public int PayCurrencyId
-        {	
-    		
-            get { return _payCurrencyId; }
-            set
-            {
-                if (_payCurrencyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PayCurrencyId", _payCurrencyId);
-                    _payCurrencyId = value;
-                    OnPropertyChanged("PayCurrencyId");
-                }
-            }
-        }
-        private int _payCurrencyId;
-        [DataMember]
-        public decimal ReceiveAmount
-        {	
-    		
-            get { return _receiveAmount; }
-            set
-            {
-                if (_receiveAmount != value)
-                {
-                    _receiveAmount = value;
-                    OnPropertyChanged("ReceiveAmount");
-                }
-            }
-        }
-        private decimal _receiveAmount;
-        [DataMember]
-        public decimal PayAmount
-        {	
-    		
-            get { return _payAmount; }
-            set
-            {
-                if (_payAmount != value)
-                {
-                    _payAmount = value;
-                    OnPropertyChanged("PayAmount");
-                }
-            }
-        }
-        private decimal _payAmount;
-        [DataMember]
-        public bool IsProp
-        {	
-    		
-            get { return _isProp; }
-            set
-            {
-                if (_isProp != value)
-                {
-                    _isProp = value;
-                    OnPropertyChanged("IsProp");
-                }
-            }
-        }
-        private bool _isProp;
-        [DataMember]
-        public bool EnteredMultiply
-        {	
-    		
-            get { return _enteredMultiply; }
-            set
-            {
-                if (_enteredMultiply != value)
-                {
-                    _enteredMultiply = value;
-                    OnPropertyChanged("EnteredMultiply");
-                }
-            }
-        }
-        private bool _enteredMultiply;
-        [DataMember]
-        public System.DateTime MaturityDate
-        {	
-    		
-            get { return _maturityDate; }
-            set
-            {
-                if (_maturityDate != value)
-                {
-                    _maturityDate = value;
-                    OnPropertyChanged("MaturityDate");
-                }
-            }
-        }
-        private System.DateTime _maturityDate;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -202,43 +119,44 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public int CounterpartyId
-        {	
-    		
-            get { return _counterpartyId; }
-            set
-            {
-                if (_counterpartyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("CounterpartyId", _counterpartyId);
-                    _counterpartyId = value;
-                    OnPropertyChanged("CounterpartyId");
-                }
-            }
-        }
-        private int _counterpartyId;
 
         #endregion
         #region Navigation Properties
     
         [DataMember]
-        private Instrument Instrument
+        private FXTradeEvent FXTradeEvent
+        {
+            get { return _fXTradeEvent; }
+            set
+            {
+                if (!ReferenceEquals(_fXTradeEvent, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
+                    {
+                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
+                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
+                        if (EventID != value.EventID)
+                        {
+                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
+                        }
+                    }
+                    var previousValue = _fXTradeEvent;
+                    _fXTradeEvent = value;
+                    FixupFXTradeEvent(previousValue);
+                    OnNavigationPropertyChanged("FXTradeEvent");
+                }
+            }
+        }
+        private FXTradeEvent _fXTradeEvent;
+    
+        [DataMember]
+        public Instrument Instrument
         {
             get { return _instrument; }
             set
             {
                 if (!ReferenceEquals(_instrument, value))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
-                    {
-                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
-                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
-                        if (InstrumentID != value.InstrumentID)
-                        {
-                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
-                        }
-                    }
                     var previousValue = _instrument;
                     _instrument = value;
                     FixupInstrument(previousValue);
@@ -336,13 +254,14 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            FXTradeEvent = null;
             Instrument = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupInstrument(Instrument previousValue)
+        private void FixupFXTradeEvent(FXTradeEvent previousValue)
         {
             if (IsDeserializing)
             {
@@ -354,9 +273,39 @@ namespace Odey.Framework.Keeley.Entities
                 previousValue.FX = null;
             }
     
+            if (FXTradeEvent != null)
+            {
+                FXTradeEvent.FX = this;
+                EventID = FXTradeEvent.EventID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("FXTradeEvent")
+                    && (ChangeTracker.OriginalValues["FXTradeEvent"] == FXTradeEvent))
+                {
+                    ChangeTracker.OriginalValues.Remove("FXTradeEvent");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("FXTradeEvent", previousValue);
+                }
+                if (FXTradeEvent != null && !FXTradeEvent.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    FXTradeEvent.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupInstrument(Instrument previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
             if (Instrument != null)
             {
-                Instrument.FX = this;
                 InstrumentID = Instrument.InstrumentID;
             }
     

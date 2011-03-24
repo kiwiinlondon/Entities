@@ -12,6 +12,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Equity = 2,
         [EnumMember]
-        Currency = 3
+        Currency = 3,
+        [EnumMember]
+        Ord = 4,
+        [EnumMember]
+        ForwardFx = 26,
     }
 }

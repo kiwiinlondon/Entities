@@ -12,6 +12,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         InstrumentEvent = 2,
         [EnumMember]
-        CapitalEvent = 3
+        CapitalEvent = 3,
+        [EnumMember]
+        FXTradeEvent = 4
     }
 }

@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(Fund))]
     public partial class Book: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -80,6 +81,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_fundID != value)
                 {
                     ChangeTracker.RecordOriginalValue("FundID", _fundID);
+                    if (!IsDeserializing)
+                    {
+                        if (Fund != null && Fund.LegalEntityID != value)
+                        {
+                            Fund = null;
+                        }
+                    }
                     _fundID = value;
                     OnPropertyChanged("FundID");
                 }
@@ -133,6 +141,26 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public Fund Fund
+        {
+            get { return _fund; }
+            set
+            {
+                if (!ReferenceEquals(_fund, value))
+                {
+                    var previousValue = _fund;
+                    _fund = value;
+                    FixupFund(previousValue);
+                    OnNavigationPropertyChanged("Fund");
+                }
+            }
+        }
+        private Fund _fund;
 
         #endregion
         #region ChangeTracking
@@ -212,6 +240,40 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Fund = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupFund(Fund previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (Fund != null)
+            {
+                FundID = Fund.LegalEntityID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Fund")
+                    && (ChangeTracker.OriginalValues["Fund"] == Fund))
+                {
+                    ChangeTracker.OriginalValues.Remove("Fund");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Fund", previousValue);
+                }
+                if (Fund != null && !Fund.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Fund.StartTracking();
+                }
+            }
         }
 
         #endregion

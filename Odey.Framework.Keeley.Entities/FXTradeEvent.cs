@@ -18,138 +18,213 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(FMContractMapping))]
-    [KnownType(typeof(InstrumentRelationship))]
-    public partial class Instrument: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(FX))]
+    public partial class FXTradeEvent: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int InstrumentID
+        public int EventID
         {	
     		
-            get { return _instrumentID; }
+            get { return _eventID; }
             set
             {
-                if (_instrumentID != value)
+                if (_eventID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'InstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _instrumentID = value;
-                    OnPropertyChanged("InstrumentID");
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
                 }
             }
         }
-        private int _instrumentID;
+        private int _eventID;
         [DataMember]
-        public int IssuerID
+        public int ReceiveCurrencyId
         {	
     		
-            get { return _issuerID; }
+            get { return _receiveCurrencyId; }
             set
             {
-                if (_issuerID != value)
+                if (_receiveCurrencyId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("IssuerID", _issuerID);
-                    _issuerID = value;
-                    OnPropertyChanged("IssuerID");
+                    ChangeTracker.RecordOriginalValue("ReceiveCurrencyId", _receiveCurrencyId);
+                    _receiveCurrencyId = value;
+                    OnPropertyChanged("ReceiveCurrencyId");
                 }
             }
         }
-        private int _issuerID;
+        private int _receiveCurrencyId;
         [DataMember]
-        public int InstrumentClassID
+        public int PayCurrencyId
         {	
     		
-            get { return _instrumentClassID; }
+            get { return _payCurrencyId; }
             set
             {
-                if (_instrumentClassID != value)
+                if (_payCurrencyId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InstrumentClassID", _instrumentClassID);
-                    _instrumentClassID = value;
-                    OnPropertyChanged("InstrumentClassID");
+                    ChangeTracker.RecordOriginalValue("PayCurrencyId", _payCurrencyId);
+                    _payCurrencyId = value;
+                    OnPropertyChanged("PayCurrencyId");
                 }
             }
         }
-        private int _instrumentClassID;
+        private int _payCurrencyId;
         [DataMember]
-        public int IssueCurrencyID
+        public decimal ReceiveAmount
         {	
     		
-            get { return _issueCurrencyID; }
+            get { return _receiveAmount; }
             set
             {
-                if (_issueCurrencyID != value)
+                if (_receiveAmount != value)
                 {
-                    ChangeTracker.RecordOriginalValue("IssueCurrencyID", _issueCurrencyID);
-                    _issueCurrencyID = value;
-                    OnPropertyChanged("IssueCurrencyID");
+                    _receiveAmount = value;
+                    OnPropertyChanged("ReceiveAmount");
                 }
             }
         }
-        private int _issueCurrencyID;
+        private decimal _receiveAmount;
         [DataMember]
-        public Nullable<int> FMInstId
+        public decimal PayAmount
         {	
     		
-            get { return _fMInstId; }
+            get { return _payAmount; }
             set
             {
-                if (_fMInstId != value)
+                if (_payAmount != value)
                 {
-                    _fMInstId = value;
-                    OnPropertyChanged("FMInstId");
+                    _payAmount = value;
+                    OnPropertyChanged("PayAmount");
                 }
             }
         }
-        private Nullable<int> _fMInstId;
+        private decimal _payAmount;
         [DataMember]
-        public string Name
+        public bool IsProp
         {	
     		
-            get { return _name; }
+            get { return _isProp; }
             set
             {
-                if (_name != value)
+                if (_isProp != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    _isProp = value;
+                    OnPropertyChanged("IsProp");
                 }
             }
         }
-        private string _name;
+        private bool _isProp;
         [DataMember]
-        public string LongName
+        public bool EnteredMultiply
         {	
     		
-            get { return _longName; }
+            get { return _enteredMultiply; }
             set
             {
-                if (_longName != value)
+                if (_enteredMultiply != value)
                 {
-                    _longName = value;
-                    OnPropertyChanged("LongName");
+                    _enteredMultiply = value;
+                    OnPropertyChanged("EnteredMultiply");
                 }
             }
         }
-        private string _longName;
+        private bool _enteredMultiply;
         [DataMember]
-        public string Isin
+        public string Ticket
         {	
     		
-            get { return _isin; }
+            get { return _ticket; }
             set
             {
-                if (_isin != value)
+                if (_ticket != value)
                 {
-                    _isin = value;
-                    OnPropertyChanged("Isin");
+                    _ticket = value;
+                    OnPropertyChanged("Ticket");
                 }
             }
         }
-        private string _isin;
+        private string _ticket;
+        [DataMember]
+        public bool IsCancelled
+        {	
+    		
+            get { return _isCancelled; }
+            set
+            {
+                if (_isCancelled != value)
+                {
+                    _isCancelled = value;
+                    OnPropertyChanged("IsCancelled");
+                }
+            }
+        }
+        private bool _isCancelled;
+        [DataMember]
+        public int CounterpartyId
+        {	
+    		
+            get { return _counterpartyId; }
+            set
+            {
+                if (_counterpartyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CounterpartyId", _counterpartyId);
+                    _counterpartyId = value;
+                    OnPropertyChanged("CounterpartyId");
+                }
+            }
+        }
+        private int _counterpartyId;
+        [DataMember]
+        public int AmendmentNumber
+        {	
+    		
+            get { return _amendmentNumber; }
+            set
+            {
+                if (_amendmentNumber != value)
+                {
+                    _amendmentNumber = value;
+                    OnPropertyChanged("AmendmentNumber");
+                }
+            }
+        }
+        private int _amendmentNumber;
+        [DataMember]
+        public System.DateTime MaturityDate
+        {	
+    		
+            get { return _maturityDate; }
+            set
+            {
+                if (_maturityDate != value)
+                {
+                    _maturityDate = value;
+                    OnPropertyChanged("MaturityDate");
+                }
+            }
+        }
+        private System.DateTime _maturityDate;
+        [DataMember]
+        public int TraderId
+        {	
+    		
+            get { return _traderId; }
+            set
+            {
+                if (_traderId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("TraderId", _traderId);
+                    _traderId = value;
+                    OnPropertyChanged("TraderId");
+                }
+            }
+        }
+        private int _traderId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -197,61 +272,56 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public System.DateTime TradeDate
+        {	
+    		
+            get { return _tradeDate; }
+            set
+            {
+                if (_tradeDate != value)
+                {
+                    _tradeDate = value;
+                    OnPropertyChanged("TradeDate");
+                }
+            }
+        }
+        private System.DateTime _tradeDate;
+        [DataMember]
+        public bool IsForward
+        {	
+    		
+            get { return _isForward; }
+            set
+            {
+                if (_isForward != value)
+                {
+                    _isForward = value;
+                    OnPropertyChanged("IsForward");
+                }
+            }
+        }
+        private bool _isForward;
 
         #endregion
         #region Navigation Properties
     
         [DataMember]
-        public TrackableCollection<FMContractMapping> FMContractMappings
+        public FX FX
         {
-            get
-            {
-                if (_fMContractMappings == null)
-                {
-                    _fMContractMappings = new TrackableCollection<FMContractMapping>();
-                    _fMContractMappings.CollectionChanged += FixupFMContractMappings;
-                }
-                return _fMContractMappings;
-            }
+            get { return _fX; }
             set
             {
-                if (!ReferenceEquals(_fMContractMappings, value))
+                if (!ReferenceEquals(_fX, value))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_fMContractMappings != null)
-                    {
-                        _fMContractMappings.CollectionChanged -= FixupFMContractMappings;
-                    }
-                    _fMContractMappings = value;
-                    if (_fMContractMappings != null)
-                    {
-                        _fMContractMappings.CollectionChanged += FixupFMContractMappings;
-                    }
-                    OnNavigationPropertyChanged("FMContractMappings");
+                    var previousValue = _fX;
+                    _fX = value;
+                    FixupFX(previousValue);
+                    OnNavigationPropertyChanged("FX");
                 }
             }
         }
-        private TrackableCollection<FMContractMapping> _fMContractMappings;
-    
-        [DataMember]
-        public InstrumentRelationship UnderlyingRelationship
-        {
-            get { return _underlyingRelationship; }
-            set
-            {
-                if (!ReferenceEquals(_underlyingRelationship, value))
-                {
-                    var previousValue = _underlyingRelationship;
-                    _underlyingRelationship = value;
-                    FixupUnderlyingRelationship(previousValue);
-                    OnNavigationPropertyChanged("UnderlyingRelationship");
-                }
-            }
-        }
-        private InstrumentRelationship _underlyingRelationship;
+        private FX _fX;
 
         #endregion
         #region ChangeTracking
@@ -314,6 +384,16 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
+            }
+        }
+    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -331,14 +411,13 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            FMContractMappings.Clear();
-            UnderlyingRelationship = null;
+            FX = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupUnderlyingRelationship(InstrumentRelationship previousValue)
+        private void FixupFX(FX previousValue)
         {
             // This is the principal end in an association that performs cascade deletes.
             // Update the event listener to refer to the new dependent.
@@ -347,9 +426,9 @@ namespace Odey.Framework.Keeley.Entities
                 ChangeTracker.ObjectStateChanging -= previousValue.HandleCascadeDelete;
             }
     
-            if (UnderlyingRelationship != null)
+            if (FX != null)
             {
-                ChangeTracker.ObjectStateChanging += UnderlyingRelationship.HandleCascadeDelete;
+                ChangeTracker.ObjectStateChanging += FX.HandleCascadeDelete;
             }
     
             if (IsDeserializing)
@@ -357,21 +436,21 @@ namespace Odey.Framework.Keeley.Entities
                 return;
             }
     
-            if (UnderlyingRelationship != null)
+            if (FX != null)
             {
-                UnderlyingRelationship.OverlyingInstrumentID = InstrumentID;
+                FX.EventID = EventID;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
             {
-                if (ChangeTracker.OriginalValues.ContainsKey("UnderlyingRelationship")
-                    && (ChangeTracker.OriginalValues["UnderlyingRelationship"] == UnderlyingRelationship))
+                if (ChangeTracker.OriginalValues.ContainsKey("FX")
+                    && (ChangeTracker.OriginalValues["FX"] == FX))
                 {
-                    ChangeTracker.OriginalValues.Remove("UnderlyingRelationship");
+                    ChangeTracker.OriginalValues.Remove("FX");
                 }
                 else
                 {
-                    ChangeTracker.RecordOriginalValue("UnderlyingRelationship", previousValue);
+                    ChangeTracker.RecordOriginalValue("FX", previousValue);
                     // This is the principal end of an identifying association, so the dependent must be deleted when the relationship is removed.
                     // If the current state of the dependent is Added, the relationship can be changed without causing the dependent to be deleted.
                     if (previousValue != null && previousValue.ChangeTracker.State != ObjectState.Added)
@@ -379,48 +458,9 @@ namespace Odey.Framework.Keeley.Entities
                         previousValue.MarkAsDeleted();
                     }
                 }
-                if (UnderlyingRelationship != null && !UnderlyingRelationship.ChangeTracker.ChangeTrackingEnabled)
+                if (FX != null && !FX.ChangeTracker.ChangeTrackingEnabled)
                 {
-                    UnderlyingRelationship.StartTracking();
-                }
-            }
-        }
-    
-        private void FixupFMContractMappings(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (FMContractMapping item in e.NewItems)
-                {
-                    item.Instrument = this;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("FMContractMappings", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (FMContractMapping item in e.OldItems)
-                {
-                    if (ReferenceEquals(item.Instrument, this))
-                    {
-                        item.Instrument = null;
-                    }
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("FMContractMappings", item);
-                    }
+                    FX.StartTracking();
                 }
             }
         }

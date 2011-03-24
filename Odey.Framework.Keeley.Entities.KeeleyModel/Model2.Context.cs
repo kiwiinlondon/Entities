@@ -161,12 +161,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<KeeleyType> _keeleyTypes;
     
-        public ObjectSet<FX> FXes
-        {
-            get { return _fXes  ?? (_fXes = CreateObjectSet<FX>("FXes")); }
-        }
-        private ObjectSet<FX> _fXes;
-    
         public ObjectSet<FMContractMapping> FMContractMappings
         {
             get { return _fMContractMappings  ?? (_fMContractMappings = CreateObjectSet<FMContractMapping>("FMContractMappings")); }
@@ -292,6 +286,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _matchedStatus  ?? (_matchedStatus = CreateObjectSet<MatchedStatu>("MatchedStatus")); }
         }
         private ObjectSet<MatchedStatu> _matchedStatus;
+    
+        public ObjectSet<FXTradeEvent> FXTradeEvents
+        {
+            get { return _fXTradeEvents  ?? (_fXTradeEvents = CreateObjectSet<FXTradeEvent>("FXTradeEvents")); }
+        }
+        private ObjectSet<FXTradeEvent> _fXTradeEvents;
+    
+        public ObjectSet<FX> FXes
+        {
+            get { return _fXes  ?? (_fXes = CreateObjectSet<FX>("FXes")); }
+        }
+        private ObjectSet<FX> _fXes;
 
         #endregion
     }
