@@ -163,6 +163,51 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public bool FXRateMultiply
+        {	
+    		
+            get { return _fXRateMultiply; }
+            set
+            {
+                if (_fXRateMultiply != value)
+                {
+                    _fXRateMultiply = value;
+                    OnPropertyChanged("FXRateMultiply");
+                }
+            }
+        }
+        private bool _fXRateMultiply;
+        [DataMember]
+        public int AmendmentNumber
+        {	
+    		
+            get { return _amendmentNumber; }
+            set
+            {
+                if (_amendmentNumber != value)
+                {
+                    _amendmentNumber = value;
+                    OnPropertyChanged("AmendmentNumber");
+                }
+            }
+        }
+        private int _amendmentNumber;
+        [DataMember]
+        public bool IsCancelled
+        {	
+    		
+            get { return _isCancelled; }
+            set
+            {
+                if (_isCancelled != value)
+                {
+                    _isCancelled = value;
+                    OnPropertyChanged("IsCancelled");
+                }
+            }
+        }
+        private bool _isCancelled;
 
         #endregion
         #region ChangeTracking

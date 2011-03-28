@@ -150,7 +150,7 @@ namespace Odey.Framework.Keeley.Entities
         private FXTradeEvent _fXTradeEvent;
     
         [DataMember]
-        public Instrument Instrument
+        private Instrument Instrument
         {
             get { return _instrument; }
             set

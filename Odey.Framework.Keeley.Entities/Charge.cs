@@ -18,43 +18,121 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class InstrumentEventType: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class Charge: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int InstrumentEventTypeID
+        public int ChargeId
         {	
     		
-            get { return _instrumentEventTypeID; }
+            get { return _chargeId; }
             set
             {
-                if (_instrumentEventTypeID != value)
+                if (_chargeId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'InstrumentEventTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ChargeId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _instrumentEventTypeID = value;
-                    OnPropertyChanged("InstrumentEventTypeID");
+                    _chargeId = value;
+                    OnPropertyChanged("ChargeId");
                 }
             }
         }
-        private int _instrumentEventTypeID;
+        private int _chargeId;
         [DataMember]
-        public string Name
+        public int InternalAllocationID
         {	
     		
-            get { return _name; }
+            get { return _internalAllocationID; }
             set
             {
-                if (_name != value)
+                if (_internalAllocationID != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("InternalAllocationID", _internalAllocationID);
+                    _internalAllocationID = value;
+                    OnPropertyChanged("InternalAllocationID");
                 }
             }
         }
-        private string _name;
+        private int _internalAllocationID;
+        [DataMember]
+        public int ChargeTypeId
+        {	
+    		
+            get { return _chargeTypeId; }
+            set
+            {
+                if (_chargeTypeId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ChargeTypeId", _chargeTypeId);
+                    _chargeTypeId = value;
+                    OnPropertyChanged("ChargeTypeId");
+                }
+            }
+        }
+        private int _chargeTypeId;
+        [DataMember]
+        public int CurrencyId
+        {	
+    		
+            get { return _currencyId; }
+            set
+            {
+                if (_currencyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CurrencyId", _currencyId);
+                    _currencyId = value;
+                    OnPropertyChanged("CurrencyId");
+                }
+            }
+        }
+        private int _currencyId;
+        [DataMember]
+        public decimal Quantity
+        {	
+    		
+            get { return _quantity; }
+            set
+            {
+                if (_quantity != value)
+                {
+                    _quantity = value;
+                    OnPropertyChanged("Quantity");
+                }
+            }
+        }
+        private decimal _quantity;
+        [DataMember]
+        public decimal FXRate
+        {	
+    		
+            get { return _fXRate; }
+            set
+            {
+                if (_fXRate != value)
+                {
+                    _fXRate = value;
+                    OnPropertyChanged("FXRate");
+                }
+            }
+        }
+        private decimal _fXRate;
+        [DataMember]
+        public bool FXRateMultiply
+        {	
+    		
+            get { return _fXRateMultiply; }
+            set
+            {
+                if (_fXRateMultiply != value)
+                {
+                    _fXRateMultiply = value;
+                    OnPropertyChanged("FXRateMultiply");
+                }
+            }
+        }
+        private bool _fXRateMultiply;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -102,21 +180,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public string FmCnevSubType
-        {	
-    		
-            get { return _fmCnevSubType; }
-            set
-            {
-                if (_fmCnevSubType != value)
-                {
-                    _fmCnevSubType = value;
-                    OnPropertyChanged("FmCnevSubType");
-                }
-            }
-        }
-        private string _fmCnevSubType;
 
         #endregion
         #region ChangeTracking

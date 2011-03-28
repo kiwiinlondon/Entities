@@ -298,6 +298,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _fXes  ?? (_fXes = CreateObjectSet<FX>("FXes")); }
         }
         private ObjectSet<FX> _fXes;
+    
+        public ObjectSet<Charge> Charges
+        {
+            get { return _charges  ?? (_charges = CreateObjectSet<Charge>("Charges")); }
+        }
+        private ObjectSet<Charge> _charges;
+    
+        public ObjectSet<ChargeType> ChargeTypes
+        {
+            get { return _chargeTypes  ?? (_chargeTypes = CreateObjectSet<ChargeType>("ChargeTypes")); }
+        }
+        private ObjectSet<ChargeType> _chargeTypes;
 
         #endregion
     }

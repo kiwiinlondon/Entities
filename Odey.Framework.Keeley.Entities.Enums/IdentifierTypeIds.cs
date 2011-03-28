@@ -39,6 +39,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BuySellReasonCode = 16,
         [EnumMember]
-        FMPersonId = 17
+        FMPersonId = 17,
+        [EnumMember]
+        FMOriginalCnevId = 18,
+        [EnumMember]
+        FMCnevId = 19,
+        [EnumMember]
+        FMCnevSubType = 20,
+        [EnumMember]
+        FMChargeTypeCode = 21,
     }
 }

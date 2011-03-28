@@ -18,28 +18,43 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class InstrumentEventType: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class ChargeType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int InstrumentEventTypeID
+        public int ChargeTypeId
         {	
     		
-            get { return _instrumentEventTypeID; }
+            get { return _chargeTypeId; }
             set
             {
-                if (_instrumentEventTypeID != value)
+                if (_chargeTypeId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'InstrumentEventTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ChargeTypeId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _instrumentEventTypeID = value;
-                    OnPropertyChanged("InstrumentEventTypeID");
+                    _chargeTypeId = value;
+                    OnPropertyChanged("ChargeTypeId");
                 }
             }
         }
-        private int _instrumentEventTypeID;
+        private int _chargeTypeId;
+        [DataMember]
+        public string Code
+        {	
+    		
+            get { return _code; }
+            set
+            {
+                if (_code != value)
+                {
+                    _code = value;
+                    OnPropertyChanged("Code");
+                }
+            }
+        }
+        private string _code;
         [DataMember]
         public string Name
         {	
@@ -102,21 +117,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public string FmCnevSubType
-        {	
-    		
-            get { return _fmCnevSubType; }
-            set
-            {
-                if (_fmCnevSubType != value)
-                {
-                    _fmCnevSubType = value;
-                    OnPropertyChanged("FmCnevSubType");
-                }
-            }
-        }
-        private string _fmCnevSubType;
 
         #endregion
         #region ChangeTracking

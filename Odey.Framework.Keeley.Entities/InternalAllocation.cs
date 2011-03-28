@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(PositionAccountMovement))]
+    [KnownType(typeof(Charge))]
     public partial class InternalAllocation: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -265,6 +266,41 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private TrackableCollection<PositionAccountMovement> _positionAccountMovements;
+    
+        [DataMember]
+        public TrackableCollection<Charge> Charges
+        {
+            get
+            {
+                if (_charges == null)
+                {
+                    _charges = new TrackableCollection<Charge>();
+                    _charges.CollectionChanged += FixupCharges;
+                }
+                return _charges;
+            }
+            set
+            {
+                if (!ReferenceEquals(_charges, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_charges != null)
+                    {
+                        _charges.CollectionChanged -= FixupCharges;
+                    }
+                    _charges = value;
+                    if (_charges != null)
+                    {
+                        _charges.CollectionChanged += FixupCharges;
+                    }
+                    OnNavigationPropertyChanged("Charges");
+                }
+            }
+        }
+        private TrackableCollection<Charge> _charges;
 
         #endregion
         #region ChangeTracking
@@ -345,6 +381,7 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             PositionAccountMovements.Clear();
+            Charges.Clear();
         }
 
         #endregion
@@ -380,6 +417,41 @@ namespace Odey.Framework.Keeley.Entities
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("PositionAccountMovements", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupCharges(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (Charge item in e.NewItems)
+                {
+                    item.InternalAllocationID = InternalAllocationID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("Charges", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (Charge item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("Charges", item);
                     }
                 }
             }
