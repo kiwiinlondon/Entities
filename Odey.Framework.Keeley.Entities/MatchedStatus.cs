@@ -18,76 +18,58 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(PortfolioPositionAccountMovement))]
-    public partial class PositionAccountMovement: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class MatchedStatus: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PositionAccountMovementID
+        public int MatchedStatusID
         {	
     		
-            get { return _positionAccountMovementID; }
+            get { return _matchedStatusID; }
             set
             {
-                if (_positionAccountMovementID != value)
+                if (_matchedStatusID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PositionAccountMovementID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'MatchedStatusID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _positionAccountMovementID = value;
-                    OnPropertyChanged("PositionAccountMovementID");
+                    _matchedStatusID = value;
+                    OnPropertyChanged("MatchedStatusID");
                 }
             }
         }
-        private int _positionAccountMovementID;
+        private int _matchedStatusID;
         [DataMember]
-        public int InternalAllocationID
+        public string Code
         {	
     		
-            get { return _internalAllocationID; }
+            get { return _code; }
             set
             {
-                if (_internalAllocationID != value)
+                if (_code != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InternalAllocationID", _internalAllocationID);
-                    _internalAllocationID = value;
-                    OnPropertyChanged("InternalAllocationID");
+                    _code = value;
+                    OnPropertyChanged("Code");
                 }
             }
         }
-        private int _internalAllocationID;
+        private string _code;
         [DataMember]
-        public int PositionAccountID
+        public string Name
         {	
     		
-            get { return _positionAccountID; }
+            get { return _name; }
             set
             {
-                if (_positionAccountID != value)
+                if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PositionAccountID", _positionAccountID);
-                    _positionAccountID = value;
-                    OnPropertyChanged("PositionAccountID");
+                    _name = value;
+                    OnPropertyChanged("Name");
                 }
             }
         }
-        private int _positionAccountID;
-        [DataMember]
-        public decimal Quantity
-        {	
-    		
-            get { return _quantity; }
-            set
-            {
-                if (_quantity != value)
-                {
-                    _quantity = value;
-                    OnPropertyChanged("Quantity");
-                }
-            }
-        }
-        private decimal _quantity;
+        private string _name;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -135,44 +117,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<PortfolioPositionAccountMovement> PortfolioPositionAccountMovements
-        {
-            get
-            {
-                if (_portfolioPositionAccountMovements == null)
-                {
-                    _portfolioPositionAccountMovements = new TrackableCollection<PortfolioPositionAccountMovement>();
-                    _portfolioPositionAccountMovements.CollectionChanged += FixupPortfolioPositionAccountMovements;
-                }
-                return _portfolioPositionAccountMovements;
-            }
-            set
-            {
-                if (!ReferenceEquals(_portfolioPositionAccountMovements, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_portfolioPositionAccountMovements != null)
-                    {
-                        _portfolioPositionAccountMovements.CollectionChanged -= FixupPortfolioPositionAccountMovements;
-                    }
-                    _portfolioPositionAccountMovements = value;
-                    if (_portfolioPositionAccountMovements != null)
-                    {
-                        _portfolioPositionAccountMovements.CollectionChanged += FixupPortfolioPositionAccountMovements;
-                    }
-                    OnNavigationPropertyChanged("PortfolioPositionAccountMovements");
-                }
-            }
-        }
-        private TrackableCollection<PortfolioPositionAccountMovement> _portfolioPositionAccountMovements;
 
         #endregion
         #region ChangeTracking
@@ -252,45 +196,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            PortfolioPositionAccountMovements.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupPortfolioPositionAccountMovements(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (PortfolioPositionAccountMovement item in e.NewItems)
-                {
-                    item.PositionAccountMovementId = PositionAccountMovementID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("PortfolioPositionAccountMovements", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (PortfolioPositionAccountMovement item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("PortfolioPositionAccountMovements", item);
-                    }
-                }
-            }
         }
 
         #endregion

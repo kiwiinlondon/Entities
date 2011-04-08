@@ -17,5 +17,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Ord = 4,
         [EnumMember]
         ForwardFx = 26,
+        [EnumMember]
+        CFD = 27,        
+        [EnumMember]
+        Future = 35
     }
 }

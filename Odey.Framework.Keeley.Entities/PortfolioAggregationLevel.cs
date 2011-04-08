@@ -18,43 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class MatchedStatu: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class PortfolioAggregationLevel: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int MatchedStatusID
+        public int PortfolioAggregationLevelId
         {	
     		
-            get { return _matchedStatusID; }
+            get { return _portfolioAggregationLevelId; }
             set
             {
-                if (_matchedStatusID != value)
+                if (_portfolioAggregationLevelId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'MatchedStatusID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PortfolioAggregationLevelId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _matchedStatusID = value;
-                    OnPropertyChanged("MatchedStatusID");
+                    _portfolioAggregationLevelId = value;
+                    OnPropertyChanged("PortfolioAggregationLevelId");
                 }
             }
         }
-        private int _matchedStatusID;
-        [DataMember]
-        public string Code
-        {	
-    		
-            get { return _code; }
-            set
-            {
-                if (_code != value)
-                {
-                    _code = value;
-                    OnPropertyChanged("Code");
-                }
-            }
-        }
-        private string _code;
+        private int _portfolioAggregationLevelId;
         [DataMember]
         public string Name
         {	
@@ -110,7 +95,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

@@ -281,11 +281,11 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<TradeEvent> _tradeEvents;
     
-        public ObjectSet<MatchedStatu> MatchedStatus
+        public ObjectSet<MatchedStatus> MatchedStatuses
         {
-            get { return _matchedStatus  ?? (_matchedStatus = CreateObjectSet<MatchedStatu>("MatchedStatus")); }
+            get { return _matchedStatuses  ?? (_matchedStatuses = CreateObjectSet<MatchedStatus>("MatchedStatuses")); }
         }
-        private ObjectSet<MatchedStatu> _matchedStatus;
+        private ObjectSet<MatchedStatus> _matchedStatuses;
     
         public ObjectSet<FXTradeEvent> FXTradeEvents
         {
@@ -310,6 +310,150 @@ namespace Odey.Framework.Keeley.Entities
             get { return _chargeTypes  ?? (_chargeTypes = CreateObjectSet<ChargeType>("ChargeTypes")); }
         }
         private ObjectSet<ChargeType> _chargeTypes;
+    
+        public ObjectSet<PortfolioPositionAccountMovement> PortfolioPositionAccountMovements
+        {
+            get { return _portfolioPositionAccountMovements  ?? (_portfolioPositionAccountMovements = CreateObjectSet<PortfolioPositionAccountMovement>("PortfolioPositionAccountMovements")); }
+        }
+        private ObjectSet<PortfolioPositionAccountMovement> _portfolioPositionAccountMovements;
+    
+        public ObjectSet<PortfolioAggregationLevel> PortfolioAggregationLevels
+        {
+            get { return _portfolioAggregationLevels  ?? (_portfolioAggregationLevels = CreateObjectSet<PortfolioAggregationLevel>("PortfolioAggregationLevels")); }
+        }
+        private ObjectSet<PortfolioAggregationLevel> _portfolioAggregationLevels;
+
+        #endregion
+        #region Function Imports
+        public virtual ObjectResult<PortfolioPositionAccountMovement> PortfolioPositionAccountMovementGetPrevious(Nullable<int> positionAccountID, Nullable<System.DateTime> referenceDate, Nullable<int> portfolioAggregationLevelId, Nullable<int> positionAccountMovementId)
+        {
+    
+            ObjectParameter positionAccountIDParameter;
+    
+            if (positionAccountID.HasValue)
+            {
+                positionAccountIDParameter = new ObjectParameter("PositionAccountID", positionAccountID);
+            }
+            else
+            {
+                positionAccountIDParameter = new ObjectParameter("PositionAccountID", typeof(int));
+            }
+    
+            ObjectParameter referenceDateParameter;
+    
+            if (referenceDate.HasValue)
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", referenceDate);
+            }
+            else
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+            }
+    
+            ObjectParameter portfolioAggregationLevelIdParameter;
+    
+            if (portfolioAggregationLevelId.HasValue)
+            {
+                portfolioAggregationLevelIdParameter = new ObjectParameter("PortfolioAggregationLevelId", portfolioAggregationLevelId);
+            }
+            else
+            {
+                portfolioAggregationLevelIdParameter = new ObjectParameter("PortfolioAggregationLevelId", typeof(int));
+            }
+    
+            ObjectParameter positionAccountMovementIdParameter;
+    
+            if (positionAccountMovementId.HasValue)
+            {
+                positionAccountMovementIdParameter = new ObjectParameter("PositionAccountMovementId", positionAccountMovementId);
+            }
+            else
+            {
+                positionAccountMovementIdParameter = new ObjectParameter("PositionAccountMovementId", typeof(int));
+            }
+            return base.ExecuteFunction<PortfolioPositionAccountMovement>("PortfolioPositionAccountMovementGetPrevious", positionAccountIDParameter, referenceDateParameter, portfolioAggregationLevelIdParameter, positionAccountMovementIdParameter);
+        }
+        public virtual ObjectResult<Nullable<int>> PortfolioPositionAccountMovementRollForward(Nullable<int> positionAccountID, Nullable<int> changeNumber, Nullable<int> portfolioAggregationLevelId, Nullable<int> changeNumberDelta, Nullable<decimal> netCostInstrumentCurrencyDelta, Nullable<decimal> netCostBookCurrencyDelta, Nullable<decimal> netPositionDelta)
+        {
+    
+            ObjectParameter positionAccountIDParameter;
+    
+            if (positionAccountID.HasValue)
+            {
+                positionAccountIDParameter = new ObjectParameter("PositionAccountID", positionAccountID);
+            }
+            else
+            {
+                positionAccountIDParameter = new ObjectParameter("PositionAccountID", typeof(int));
+            }
+    
+            ObjectParameter changeNumberParameter;
+    
+            if (changeNumber.HasValue)
+            {
+                changeNumberParameter = new ObjectParameter("ChangeNumber", changeNumber);
+            }
+            else
+            {
+                changeNumberParameter = new ObjectParameter("ChangeNumber", typeof(int));
+            }
+    
+            ObjectParameter portfolioAggregationLevelIdParameter;
+    
+            if (portfolioAggregationLevelId.HasValue)
+            {
+                portfolioAggregationLevelIdParameter = new ObjectParameter("PortfolioAggregationLevelId", portfolioAggregationLevelId);
+            }
+            else
+            {
+                portfolioAggregationLevelIdParameter = new ObjectParameter("PortfolioAggregationLevelId", typeof(int));
+            }
+    
+            ObjectParameter changeNumberDeltaParameter;
+    
+            if (changeNumberDelta.HasValue)
+            {
+                changeNumberDeltaParameter = new ObjectParameter("ChangeNumberDelta", changeNumberDelta);
+            }
+            else
+            {
+                changeNumberDeltaParameter = new ObjectParameter("ChangeNumberDelta", typeof(int));
+            }
+    
+            ObjectParameter netCostInstrumentCurrencyDeltaParameter;
+    
+            if (netCostInstrumentCurrencyDelta.HasValue)
+            {
+                netCostInstrumentCurrencyDeltaParameter = new ObjectParameter("NetCostInstrumentCurrencyDelta", netCostInstrumentCurrencyDelta);
+            }
+            else
+            {
+                netCostInstrumentCurrencyDeltaParameter = new ObjectParameter("NetCostInstrumentCurrencyDelta", typeof(decimal));
+            }
+    
+            ObjectParameter netCostBookCurrencyDeltaParameter;
+    
+            if (netCostBookCurrencyDelta.HasValue)
+            {
+                netCostBookCurrencyDeltaParameter = new ObjectParameter("NetCostBookCurrencyDelta", netCostBookCurrencyDelta);
+            }
+            else
+            {
+                netCostBookCurrencyDeltaParameter = new ObjectParameter("NetCostBookCurrencyDelta", typeof(decimal));
+            }
+    
+            ObjectParameter netPositionDeltaParameter;
+    
+            if (netPositionDelta.HasValue)
+            {
+                netPositionDeltaParameter = new ObjectParameter("NetPositionDelta", netPositionDelta);
+            }
+            else
+            {
+                netPositionDeltaParameter = new ObjectParameter("NetPositionDelta", typeof(decimal));
+            }
+            return base.ExecuteFunction<Nullable<int>>("PortfolioPositionAccountMovementRollForward", positionAccountIDParameter, changeNumberParameter, portfolioAggregationLevelIdParameter, changeNumberDeltaParameter, netCostInstrumentCurrencyDeltaParameter, netCostBookCurrencyDeltaParameter, netPositionDeltaParameter);
+        }
 
         #endregion
     }
