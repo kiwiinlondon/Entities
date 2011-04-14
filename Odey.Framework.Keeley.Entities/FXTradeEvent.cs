@@ -302,6 +302,36 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _isForward;
+        [DataMember]
+        public decimal PayBookXrate
+        {	
+    		
+            get { return _payBookXrate; }
+            set
+            {
+                if (_payBookXrate != value)
+                {
+                    _payBookXrate = value;
+                    OnPropertyChanged("PayBookXrate");
+                }
+            }
+        }
+        private decimal _payBookXrate;
+        [DataMember]
+        public decimal ReceiveBookXrate
+        {	
+    		
+            get { return _receiveBookXrate; }
+            set
+            {
+                if (_receiveBookXrate != value)
+                {
+                    _receiveBookXrate = value;
+                    OnPropertyChanged("ReceiveBookXrate");
+                }
+            }
+        }
+        private decimal _receiveBookXrate;
 
         #endregion
         #region Navigation Properties

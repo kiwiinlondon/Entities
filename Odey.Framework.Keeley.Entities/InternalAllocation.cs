@@ -19,29 +19,9 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(PositionAccountMovement))]
-    [KnownType(typeof(Charge))]
     public partial class InternalAllocation: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
-        [DataMember]
-        public int InternalAllocationID
-        {	
-    		
-            get { return _internalAllocationID; }
-            set
-            {
-                if (_internalAllocationID != value)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
-                    {
-                        throw new InvalidOperationException("The property 'InternalAllocationID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
-                    }
-                    _internalAllocationID = value;
-                    OnPropertyChanged("InternalAllocationID");
-                }
-            }
-        }
-        private int _internalAllocationID;
         [DataMember]
         public int EventID
         {	
@@ -51,7 +31,10 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_eventID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EventID", _eventID);
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
+                    {
+                        throw new InvalidOperationException("The property 'EventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                    }
                     _eventID = value;
                     OnPropertyChanged("EventID");
                 }
@@ -88,6 +71,37 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _fMContEventId;
+        [DataMember]
+        public int FMOriginalContEventId
+        {	
+    		
+            get { return _fMOriginalContEventId; }
+            set
+            {
+                if (_fMOriginalContEventId != value)
+                {
+                    _fMOriginalContEventId = value;
+                    OnPropertyChanged("FMOriginalContEventId");
+                }
+            }
+        }
+        private int _fMOriginalContEventId;
+        [DataMember]
+        public int MatchedStatusId
+        {	
+    		
+            get { return _matchedStatusId; }
+            set
+            {
+                if (_matchedStatusId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("MatchedStatusId", _matchedStatusId);
+                    _matchedStatusId = value;
+                    OnPropertyChanged("MatchedStatusId");
+                }
+            }
+        }
+        private int _matchedStatusId;
         [DataMember]
         public int AccountID
         {	
@@ -136,6 +150,21 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _quantity;
         [DataMember]
+        public bool IsCancelled
+        {	
+    		
+            get { return _isCancelled; }
+            set
+            {
+                if (_isCancelled != value)
+                {
+                    _isCancelled = value;
+                    OnPropertyChanged("IsCancelled");
+                }
+            }
+        }
+        private bool _isCancelled;
+        [DataMember]
         public System.DateTime StartDt
         {	
     		
@@ -183,51 +212,21 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public int FMOriginalContEventId
+        public int ParentEventId
         {	
     		
-            get { return _fMOriginalContEventId; }
+            get { return _parentEventId; }
             set
             {
-                if (_fMOriginalContEventId != value)
+                if (_parentEventId != value)
                 {
-                    _fMOriginalContEventId = value;
-                    OnPropertyChanged("FMOriginalContEventId");
+                    ChangeTracker.RecordOriginalValue("ParentEventId", _parentEventId);
+                    _parentEventId = value;
+                    OnPropertyChanged("ParentEventId");
                 }
             }
         }
-        private int _fMOriginalContEventId;
-        [DataMember]
-        public bool IsCancelled
-        {	
-    		
-            get { return _isCancelled; }
-            set
-            {
-                if (_isCancelled != value)
-                {
-                    _isCancelled = value;
-                    OnPropertyChanged("IsCancelled");
-                }
-            }
-        }
-        private bool _isCancelled;
-        [DataMember]
-        public int MatchedStatusId
-        {	
-    		
-            get { return _matchedStatusId; }
-            set
-            {
-                if (_matchedStatusId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("MatchedStatusId", _matchedStatusId);
-                    _matchedStatusId = value;
-                    OnPropertyChanged("MatchedStatusId");
-                }
-            }
-        }
-        private int _matchedStatusId;
+        private int _parentEventId;
 
         #endregion
         #region Navigation Properties
@@ -266,41 +265,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private TrackableCollection<PositionAccountMovement> _positionAccountMovements;
-    
-        [DataMember]
-        public TrackableCollection<Charge> Charges
-        {
-            get
-            {
-                if (_charges == null)
-                {
-                    _charges = new TrackableCollection<Charge>();
-                    _charges.CollectionChanged += FixupCharges;
-                }
-                return _charges;
-            }
-            set
-            {
-                if (!ReferenceEquals(_charges, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_charges != null)
-                    {
-                        _charges.CollectionChanged -= FixupCharges;
-                    }
-                    _charges = value;
-                    if (_charges != null)
-                    {
-                        _charges.CollectionChanged += FixupCharges;
-                    }
-                    OnNavigationPropertyChanged("Charges");
-                }
-            }
-        }
-        private TrackableCollection<Charge> _charges;
 
         #endregion
         #region ChangeTracking
@@ -363,6 +327,16 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
+            }
+        }
+    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -381,7 +355,6 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             PositionAccountMovements.Clear();
-            Charges.Clear();
         }
 
         #endregion
@@ -398,7 +371,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach (PositionAccountMovement item in e.NewItems)
                 {
-                    item.InternalAllocationID = InternalAllocationID;
+                    item.InternalAllocationId = EventID;
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         if (!item.ChangeTracker.ChangeTrackingEnabled)
@@ -417,41 +390,6 @@ namespace Odey.Framework.Keeley.Entities
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("PositionAccountMovements", item);
-                    }
-                }
-            }
-        }
-    
-        private void FixupCharges(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (Charge item in e.NewItems)
-                {
-                    item.InternalAllocationID = InternalAllocationID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("Charges", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (Charge item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("Charges", item);
                     }
                 }
             }

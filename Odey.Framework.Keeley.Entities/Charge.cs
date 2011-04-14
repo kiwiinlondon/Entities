@@ -41,21 +41,36 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _chargeId;
         [DataMember]
-        public int InternalAllocationID
+        public int EventID
         {	
     		
-            get { return _internalAllocationID; }
+            get { return _eventID; }
             set
             {
-                if (_internalAllocationID != value)
+                if (_eventID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InternalAllocationID", _internalAllocationID);
-                    _internalAllocationID = value;
-                    OnPropertyChanged("InternalAllocationID");
+                    ChangeTracker.RecordOriginalValue("EventID", _eventID);
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
                 }
             }
         }
-        private int _internalAllocationID;
+        private int _eventID;
+        [DataMember]
+        public System.DateTime ReferenceDate
+        {	
+    		
+            get { return _referenceDate; }
+            set
+            {
+                if (_referenceDate != value)
+                {
+                    _referenceDate = value;
+                    OnPropertyChanged("ReferenceDate");
+                }
+            }
+        }
+        private System.DateTime _referenceDate;
         [DataMember]
         public int ChargeTypeId
         {	

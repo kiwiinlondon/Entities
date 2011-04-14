@@ -18,7 +18,6 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(PortfolioPositionAccountMovement))]
     public partial class PositionAccountMovement: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -42,37 +41,83 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _positionAccountMovementID;
         [DataMember]
-        public int InternalAllocationID
+        public int InternalAllocationId
         {	
     		
-            get { return _internalAllocationID; }
+            get { return _internalAllocationId; }
             set
             {
-                if (_internalAllocationID != value)
+                if (_internalAllocationId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InternalAllocationID", _internalAllocationID);
-                    _internalAllocationID = value;
-                    OnPropertyChanged("InternalAllocationID");
+                    ChangeTracker.RecordOriginalValue("InternalAllocationId", _internalAllocationId);
+                    _internalAllocationId = value;
+                    OnPropertyChanged("InternalAllocationId");
                 }
             }
         }
-        private int _internalAllocationID;
+        private int _internalAllocationId;
         [DataMember]
-        public int PositionAccountID
+        public int PositionAccountId
         {	
     		
-            get { return _positionAccountID; }
+            get { return _positionAccountId; }
             set
             {
-                if (_positionAccountID != value)
+                if (_positionAccountId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PositionAccountID", _positionAccountID);
-                    _positionAccountID = value;
-                    OnPropertyChanged("PositionAccountID");
+                    ChangeTracker.RecordOriginalValue("PositionAccountId", _positionAccountId);
+                    _positionAccountId = value;
+                    OnPropertyChanged("PositionAccountId");
                 }
             }
         }
-        private int _positionAccountID;
+        private int _positionAccountId;
+        [DataMember]
+        public System.DateTime ReferenceDate
+        {	
+    		
+            get { return _referenceDate; }
+            set
+            {
+                if (_referenceDate != value)
+                {
+                    _referenceDate = value;
+                    OnPropertyChanged("ReferenceDate");
+                }
+            }
+        }
+        private System.DateTime _referenceDate;
+        [DataMember]
+        public int PortfolioAggregationLevelId
+        {	
+    		
+            get { return _portfolioAggregationLevelId; }
+            set
+            {
+                if (_portfolioAggregationLevelId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PortfolioAggregationLevelId", _portfolioAggregationLevelId);
+                    _portfolioAggregationLevelId = value;
+                    OnPropertyChanged("PortfolioAggregationLevelId");
+                }
+            }
+        }
+        private int _portfolioAggregationLevelId;
+        [DataMember]
+        public int ChangeNumber
+        {	
+    		
+            get { return _changeNumber; }
+            set
+            {
+                if (_changeNumber != value)
+                {
+                    _changeNumber = value;
+                    OnPropertyChanged("ChangeNumber");
+                }
+            }
+        }
+        private int _changeNumber;
         [DataMember]
         public decimal Quantity
         {	
@@ -88,6 +133,171 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private decimal _quantity;
+        [DataMember]
+        public decimal FXRate
+        {	
+    		
+            get { return _fXRate; }
+            set
+            {
+                if (_fXRate != value)
+                {
+                    _fXRate = value;
+                    OnPropertyChanged("FXRate");
+                }
+            }
+        }
+        private decimal _fXRate;
+        [DataMember]
+        public decimal Price
+        {	
+    		
+            get { return _price; }
+            set
+            {
+                if (_price != value)
+                {
+                    _price = value;
+                    OnPropertyChanged("Price");
+                }
+            }
+        }
+        private decimal _price;
+        [DataMember]
+        public decimal NetCostChangeInstrumentCurrency
+        {	
+    		
+            get { return _netCostChangeInstrumentCurrency; }
+            set
+            {
+                if (_netCostChangeInstrumentCurrency != value)
+                {
+                    _netCostChangeInstrumentCurrency = value;
+                    OnPropertyChanged("NetCostChangeInstrumentCurrency");
+                }
+            }
+        }
+        private decimal _netCostChangeInstrumentCurrency;
+        [DataMember]
+        public decimal NetCostChangeBookCurrency
+        {	
+    		
+            get { return _netCostChangeBookCurrency; }
+            set
+            {
+                if (_netCostChangeBookCurrency != value)
+                {
+                    _netCostChangeBookCurrency = value;
+                    OnPropertyChanged("NetCostChangeBookCurrency");
+                }
+            }
+        }
+        private decimal _netCostChangeBookCurrency;
+        [DataMember]
+        public decimal NetCostInstrumentCurrency
+        {	
+    		
+            get { return _netCostInstrumentCurrency; }
+            set
+            {
+                if (_netCostInstrumentCurrency != value)
+                {
+                    _netCostInstrumentCurrency = value;
+                    OnPropertyChanged("NetCostInstrumentCurrency");
+                }
+            }
+        }
+        private decimal _netCostInstrumentCurrency;
+        [DataMember]
+        public decimal NetCostBookCurrency
+        {	
+    		
+            get { return _netCostBookCurrency; }
+            set
+            {
+                if (_netCostBookCurrency != value)
+                {
+                    _netCostBookCurrency = value;
+                    OnPropertyChanged("NetCostBookCurrency");
+                }
+            }
+        }
+        private decimal _netCostBookCurrency;
+        [DataMember]
+        public decimal DeltaNetCostChangeInstrumentCurrency
+        {	
+    		
+            get { return _deltaNetCostChangeInstrumentCurrency; }
+            set
+            {
+                if (_deltaNetCostChangeInstrumentCurrency != value)
+                {
+                    _deltaNetCostChangeInstrumentCurrency = value;
+                    OnPropertyChanged("DeltaNetCostChangeInstrumentCurrency");
+                }
+            }
+        }
+        private decimal _deltaNetCostChangeInstrumentCurrency;
+        [DataMember]
+        public decimal DeltaNetCostChangeBookCurrency
+        {	
+    		
+            get { return _deltaNetCostChangeBookCurrency; }
+            set
+            {
+                if (_deltaNetCostChangeBookCurrency != value)
+                {
+                    _deltaNetCostChangeBookCurrency = value;
+                    OnPropertyChanged("DeltaNetCostChangeBookCurrency");
+                }
+            }
+        }
+        private decimal _deltaNetCostChangeBookCurrency;
+        [DataMember]
+        public decimal DeltaNetCostInstrumentCurrency
+        {	
+    		
+            get { return _deltaNetCostInstrumentCurrency; }
+            set
+            {
+                if (_deltaNetCostInstrumentCurrency != value)
+                {
+                    _deltaNetCostInstrumentCurrency = value;
+                    OnPropertyChanged("DeltaNetCostInstrumentCurrency");
+                }
+            }
+        }
+        private decimal _deltaNetCostInstrumentCurrency;
+        [DataMember]
+        public decimal DeltaNetCostBookCurrency
+        {	
+    		
+            get { return _deltaNetCostBookCurrency; }
+            set
+            {
+                if (_deltaNetCostBookCurrency != value)
+                {
+                    _deltaNetCostBookCurrency = value;
+                    OnPropertyChanged("DeltaNetCostBookCurrency");
+                }
+            }
+        }
+        private decimal _deltaNetCostBookCurrency;
+        [DataMember]
+        public decimal NetPosition
+        {	
+    		
+            get { return _netPosition; }
+            set
+            {
+                if (_netPosition != value)
+                {
+                    _netPosition = value;
+                    OnPropertyChanged("NetPosition");
+                }
+            }
+        }
+        private decimal _netPosition;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -128,51 +338,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<PortfolioPositionAccountMovement> PortfolioPositionAccountMovements
-        {
-            get
-            {
-                if (_portfolioPositionAccountMovements == null)
-                {
-                    _portfolioPositionAccountMovements = new TrackableCollection<PortfolioPositionAccountMovement>();
-                    _portfolioPositionAccountMovements.CollectionChanged += FixupPortfolioPositionAccountMovements;
-                }
-                return _portfolioPositionAccountMovements;
-            }
-            set
-            {
-                if (!ReferenceEquals(_portfolioPositionAccountMovements, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_portfolioPositionAccountMovements != null)
-                    {
-                        _portfolioPositionAccountMovements.CollectionChanged -= FixupPortfolioPositionAccountMovements;
-                    }
-                    _portfolioPositionAccountMovements = value;
-                    if (_portfolioPositionAccountMovements != null)
-                    {
-                        _portfolioPositionAccountMovements.CollectionChanged += FixupPortfolioPositionAccountMovements;
-                    }
-                    OnNavigationPropertyChanged("PortfolioPositionAccountMovements");
-                }
-            }
-        }
-        private TrackableCollection<PortfolioPositionAccountMovement> _portfolioPositionAccountMovements;
 
         #endregion
         #region ChangeTracking
@@ -252,45 +423,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            PortfolioPositionAccountMovements.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupPortfolioPositionAccountMovements(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (PortfolioPositionAccountMovement item in e.NewItems)
-                {
-                    item.PositionAccountMovementId = PositionAccountMovementID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("PortfolioPositionAccountMovements", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (PortfolioPositionAccountMovement item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("PortfolioPositionAccountMovements", item);
-                    }
-                }
-            }
         }
 
         #endregion

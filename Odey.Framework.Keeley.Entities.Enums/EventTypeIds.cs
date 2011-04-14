@@ -14,6 +14,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitalEvent = 3,
         [EnumMember]
-        FXTradeEvent = 4
+        FXTradeEvent = 4,
+        [EnumMember]
+        InternalAllocation = 5
     }
 }

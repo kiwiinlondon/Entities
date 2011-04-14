@@ -29,6 +29,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public decimal ReceiveBookXrate
+        {
+            get
+            {
+                return FXTradeEvent.ReceiveBookXrate;
+            }
+        }
+
+        public decimal PayBookXrate
+        {
+            get
+            {
+                return FXTradeEvent.PayBookXrate;
+            }
+        }
         public int PayCurrencyId
         {
             get

@@ -18,7 +18,6 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Event))]
     public partial class IdentifierType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -119,44 +118,6 @@ namespace Odey.Framework.Keeley.Entities
         private string _fMIdentType;
 
         #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<Event> Events
-        {
-            get
-            {
-                if (_events == null)
-                {
-                    _events = new TrackableCollection<Event>();
-                    _events.CollectionChanged += FixupEvents;
-                }
-                return _events;
-            }
-            set
-            {
-                if (!ReferenceEquals(_events, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_events != null)
-                    {
-                        _events.CollectionChanged -= FixupEvents;
-                    }
-                    _events = value;
-                    if (_events != null)
-                    {
-                        _events.CollectionChanged += FixupEvents;
-                    }
-                    OnNavigationPropertyChanged("Events");
-                }
-            }
-        }
-        private TrackableCollection<Event> _events;
-
-        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -234,45 +195,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Events.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupEvents(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (Event item in e.NewItems)
-                {
-                    item.IdentifierTypeId = IdentifierTypeID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("Events", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (Event item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("Events", item);
-                    }
-                }
-            }
         }
 
         #endregion
