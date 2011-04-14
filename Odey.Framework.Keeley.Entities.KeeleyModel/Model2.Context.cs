@@ -316,6 +316,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _positionAccountMovements  ?? (_positionAccountMovements = CreateObjectSet<PositionAccountMovement>("PositionAccountMovements")); }
         }
         private ObjectSet<PositionAccountMovement> _positionAccountMovements;
+    
+        public ObjectSet<InternalAccountingEvent> InternalAccountingEvents
+        {
+            get { return _internalAccountingEvents  ?? (_internalAccountingEvents = CreateObjectSet<InternalAccountingEvent>("InternalAccountingEvents")); }
+        }
+        private ObjectSet<InternalAccountingEvent> _internalAccountingEvents;
+    
+        public ObjectSet<InternalAccountingEventType> InternalAccountingEventTypes
+        {
+            get { return _internalAccountingEventTypes  ?? (_internalAccountingEventTypes = CreateObjectSet<InternalAccountingEventType>("InternalAccountingEventTypes")); }
+        }
+        private ObjectSet<InternalAccountingEventType> _internalAccountingEventTypes;
 
         #endregion
         #region Function Imports
