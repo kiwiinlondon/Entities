@@ -123,7 +123,7 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        public TrackableCollection<InstrumentClassRelationship> ParentInstrumentClassRelationships
+        private TrackableCollection<InstrumentClassRelationship> ParentInstrumentClassRelationships
         {
             get
             {

@@ -14,9 +14,11 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            FundByBookIdCache fundCache = new FundByBookIdCache();
-            fundCache.Get(5);
-
+            using (var context = new KeeleyModel())
+            {
+                InstrumentClass i = context.InstrumentClasses.Where(a => a.InstrumentClassID == 1).FirstOrDefault();
+                int? b = i.ParentInstrumentClassId;
+            }
         }
 
         static void TestCache()
