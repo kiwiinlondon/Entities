@@ -3,7 +3,7 @@
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum EventTypeIds
+    public enum PositionAccountMovementTypeIds
     {
         [EnumMember]
         None = 0,
@@ -21,3 +21,4 @@ namespace Odey.Framework.Keeley.Entities.Enums
         InternalAccountingEvent = 6
     }
 }
+

@@ -328,6 +328,24 @@ namespace Odey.Framework.Keeley.Entities
             get { return _internalAccountingEventTypes  ?? (_internalAccountingEventTypes = CreateObjectSet<InternalAccountingEventType>("InternalAccountingEventTypes")); }
         }
         private ObjectSet<InternalAccountingEventType> _internalAccountingEventTypes;
+    
+        public ObjectSet<PositionAccountMovementType> PositionAccountMovementTypes
+        {
+            get { return _positionAccountMovementTypes  ?? (_positionAccountMovementTypes = CreateObjectSet<PositionAccountMovementType>("PositionAccountMovementTypes")); }
+        }
+        private ObjectSet<PositionAccountMovementType> _positionAccountMovementTypes;
+    
+        public ObjectSet<InstrumentClassHierarchy> InstrumentClassHierarchies
+        {
+            get { return _instrumentClassHierarchies  ?? (_instrumentClassHierarchies = CreateObjectSet<InstrumentClassHierarchy>("InstrumentClassHierarchies")); }
+        }
+        private ObjectSet<InstrumentClassHierarchy> _instrumentClassHierarchies;
+    
+        public ObjectSet<InstrumentClassRelationship> InstrumentClassRelationships
+        {
+            get { return _instrumentClassRelationships  ?? (_instrumentClassRelationships = CreateObjectSet<InstrumentClassRelationship>("InstrumentClassRelationships")); }
+        }
+        private ObjectSet<InstrumentClassRelationship> _instrumentClassRelationships;
 
         #endregion
         #region Function Imports

@@ -344,6 +344,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public int PositionAccountMovementTypeId
+        {	
+    		
+            get { return _positionAccountMovementTypeId; }
+            set
+            {
+                if (_positionAccountMovementTypeId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PositionAccountMovementTypeId", _positionAccountMovementTypeId);
+                    _positionAccountMovementTypeId = value;
+                    OnPropertyChanged("PositionAccountMovementTypeId");
+                }
+            }
+        }
+        private int _positionAccountMovementTypeId;
 
         #endregion
         #region ChangeTracking

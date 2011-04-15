@@ -18,10 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(InstrumentClassRelationship))]
-    public partial class InstrumentClass: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class InstrumentClassRelationship: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
+        [DataMember]
+        public int InstrumentClassRelationshipID
+        {	
+    		
+            get { return _instrumentClassRelationshipID; }
+            set
+            {
+                if (_instrumentClassRelationshipID != value)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
+                    {
+                        throw new InvalidOperationException("The property 'InstrumentClassRelationshipID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                    }
+                    _instrumentClassRelationshipID = value;
+                    OnPropertyChanged("InstrumentClassRelationshipID");
+                }
+            }
+        }
+        private int _instrumentClassRelationshipID;
         [DataMember]
         public int InstrumentClassID
         {	
@@ -31,10 +49,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_instrumentClassID != value)
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
-                    {
-                        throw new InvalidOperationException("The property 'InstrumentClassID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
-                    }
+                    ChangeTracker.RecordOriginalValue("InstrumentClassID", _instrumentClassID);
                     _instrumentClassID = value;
                     OnPropertyChanged("InstrumentClassID");
                 }
@@ -42,35 +57,37 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _instrumentClassID;
         [DataMember]
-        public string FMInstClass
+        public int ParentInstrumentClassID
         {	
     		
-            get { return _fMInstClass; }
+            get { return _parentInstrumentClassID; }
             set
             {
-                if (_fMInstClass != value)
+                if (_parentInstrumentClassID != value)
                 {
-                    _fMInstClass = value;
-                    OnPropertyChanged("FMInstClass");
+                    ChangeTracker.RecordOriginalValue("ParentInstrumentClassID", _parentInstrumentClassID);
+                    _parentInstrumentClassID = value;
+                    OnPropertyChanged("ParentInstrumentClassID");
                 }
             }
         }
-        private string _fMInstClass;
+        private int _parentInstrumentClassID;
         [DataMember]
-        public string Name
+        public int InstrumentClassHierarchyId
         {	
     		
-            get { return _name; }
+            get { return _instrumentClassHierarchyId; }
             set
             {
-                if (_name != value)
+                if (_instrumentClassHierarchyId != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("InstrumentClassHierarchyId", _instrumentClassHierarchyId);
+                    _instrumentClassHierarchyId = value;
+                    OnPropertyChanged("InstrumentClassHierarchyId");
                 }
             }
         }
-        private string _name;
+        private int _instrumentClassHierarchyId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -111,51 +128,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<InstrumentClassRelationship> ParentInstrumentClassRelationships
-        {
-            get
-            {
-                if (_parentInstrumentClassRelationships == null)
-                {
-                    _parentInstrumentClassRelationships = new TrackableCollection<InstrumentClassRelationship>();
-                    _parentInstrumentClassRelationships.CollectionChanged += FixupParentInstrumentClassRelationships;
-                }
-                return _parentInstrumentClassRelationships;
-            }
-            set
-            {
-                if (!ReferenceEquals(_parentInstrumentClassRelationships, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_parentInstrumentClassRelationships != null)
-                    {
-                        _parentInstrumentClassRelationships.CollectionChanged -= FixupParentInstrumentClassRelationships;
-                    }
-                    _parentInstrumentClassRelationships = value;
-                    if (_parentInstrumentClassRelationships != null)
-                    {
-                        _parentInstrumentClassRelationships.CollectionChanged += FixupParentInstrumentClassRelationships;
-                    }
-                    OnNavigationPropertyChanged("ParentInstrumentClassRelationships");
-                }
-            }
-        }
-        private TrackableCollection<InstrumentClassRelationship> _parentInstrumentClassRelationships;
 
         #endregion
         #region ChangeTracking
@@ -235,45 +213,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            ParentInstrumentClassRelationships.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupParentInstrumentClassRelationships(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (InstrumentClassRelationship item in e.NewItems)
-                {
-                    item.InstrumentClassID = InstrumentClassID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("ParentInstrumentClassRelationships", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (InstrumentClassRelationship item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("ParentInstrumentClassRelationships", item);
-                    }
-                }
-            }
         }
 
         #endregion
