@@ -8,17 +8,29 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        TradeEvent = 1,
+        EquityTrade = 1,
         [EnumMember]
-        InstrumentEvent = 2,
+        FixedIncomeTrade = 2,
         [EnumMember]
-        CapitalEvent = 3,
+        ProprietaryFXTrade = 3,
         [EnumMember]
-        FXTradeEvent = 4,
+        HedgingFXTrade = 4,
         [EnumMember]
-        InternalAllocation = 5,
+        Subscription = 5,
         [EnumMember]
-        InternalAccountingEvent = 6
+        Redemption = 6,
+        [EnumMember]
+        InternalAccounting = 7,
+        [EnumMember]
+        InstrumentEvent = 8,
+        [EnumMember]
+        CashFromTrading = 9,
+        [EnumMember]
+        FutureTrade = 10,
+        [EnumMember]
+        CashEquivalentTrade = 11,
+        [EnumMember]
+        OptionTrade = 12
     }
 }
 

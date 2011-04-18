@@ -133,6 +133,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private string _identifier;
+        [DataMember]
+        public bool IsTopLevel
+        {	
+    		
+            get { return _isTopLevel; }
+            set
+            {
+                if (_isTopLevel != value)
+                {
+                    _isTopLevel = value;
+                    OnPropertyChanged("IsTopLevel");
+                }
+            }
+        }
+        private bool _isTopLevel;
 
         #endregion
         #region ChangeTracking

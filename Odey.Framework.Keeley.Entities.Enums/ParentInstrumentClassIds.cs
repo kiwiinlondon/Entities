@@ -3,21 +3,19 @@
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum InstrumentClassIds
+    public enum ParentInstrumentClassIds
     {
-        [EnumMember]
+         [EnumMember]
         None = 0,
         [EnumMember]
-        All=1,
+        Equity =	2,
         [EnumMember]
-        Equity = 2,
+        FixedIncome =30,
         [EnumMember]
-        Currency = 3,
+        Future = 35,
         [EnumMember]
-        Ord = 4,
+        Option = 44,
         [EnumMember]
-        ForwardFx = 26,
-        [EnumMember]
-        CFD = 27,        
+        CashEquivalent= 53
     }
 }
