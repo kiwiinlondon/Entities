@@ -18,44 +18,59 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(EventField))]
-    public partial class EventType: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class ExtractRun: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int EventTypeID
+        public int ExtractRunId
         {	
     		
-            get { return _eventTypeID; }
+            get { return _extractRunId; }
             set
             {
-                if (_eventTypeID != value)
+                if (_extractRunId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'EventTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ExtractRunId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _eventTypeID = value;
-                    OnPropertyChanged("EventTypeID");
+                    _extractRunId = value;
+                    OnPropertyChanged("ExtractRunId");
                 }
             }
         }
-        private int _eventTypeID;
+        private int _extractRunId;
         [DataMember]
-        public string Name
+        public int ExtractId
         {	
     		
-            get { return _name; }
+            get { return _extractId; }
             set
             {
-                if (_name != value)
+                if (_extractId != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("ExtractId", _extractId);
+                    _extractId = value;
+                    OnPropertyChanged("ExtractId");
                 }
             }
         }
-        private string _name;
+        private int _extractId;
+        [DataMember]
+        public System.DateTime RunTime
+        {	
+    		
+            get { return _runTime; }
+            set
+            {
+                if (_runTime != value)
+                {
+                    _runTime = value;
+                    OnPropertyChanged("RunTime");
+                }
+            }
+        }
+        private System.DateTime _runTime;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -96,51 +111,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<EventField> EventFields
-        {
-            get
-            {
-                if (_eventFields == null)
-                {
-                    _eventFields = new TrackableCollection<EventField>();
-                    _eventFields.CollectionChanged += FixupEventFields;
-                }
-                return _eventFields;
-            }
-            set
-            {
-                if (!ReferenceEquals(_eventFields, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_eventFields != null)
-                    {
-                        _eventFields.CollectionChanged -= FixupEventFields;
-                    }
-                    _eventFields = value;
-                    if (_eventFields != null)
-                    {
-                        _eventFields.CollectionChanged += FixupEventFields;
-                    }
-                    OnNavigationPropertyChanged("EventFields");
-                }
-            }
-        }
-        private TrackableCollection<EventField> _eventFields;
 
         #endregion
         #region ChangeTracking
@@ -220,45 +196,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            EventFields.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupEventFields(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (EventField item in e.NewItems)
-                {
-                    item.EventTypeId = EventTypeID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("EventFields", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (EventField item in e.OldItems)
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("EventFields", item);
-                    }
-                }
-            }
         }
 
         #endregion

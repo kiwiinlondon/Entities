@@ -62,6 +62,36 @@ namespace Odey.Framework.Keeley.Entities
                 return Instrument.LongName;
             }
         }
+
+
+
+
+        public InstrumentMarket UnderlyingInstrumentMarket
+        {
+            get
+            {
+                if (Instrument.Underlyer != null)
+                {
+                    if (Instrument.Underlyer.InstrumentMarkets.Count == 0)
+                    {
+                        return null;
+                    }
+                    else if (Instrument.Underlyer.InstrumentMarkets.Count == 1)
+                    {
+                        return Instrument.Underlyer.InstrumentMarkets[0];
+                    }
+                    else
+                    {
+                        throw new ApplicationException(String.Format("Unable to establish underlying instrument market {0}", Instrument.InstrumentID));
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+      
     }
 }
 

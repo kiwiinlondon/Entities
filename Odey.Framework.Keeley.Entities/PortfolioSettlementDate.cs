@@ -18,60 +18,44 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PositionAccountMovement: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class PortfolioSettlementDate: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PositionAccountMovementID
+        public int PortfolioSettlementDateId
         {	
     		
-            get { return _positionAccountMovementID; }
+            get { return _portfolioSettlementDateId; }
             set
             {
-                if (_positionAccountMovementID != value)
+                if (_portfolioSettlementDateId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PositionAccountMovementID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PortfolioSettlementDateId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _positionAccountMovementID = value;
-                    OnPropertyChanged("PositionAccountMovementID");
+                    _portfolioSettlementDateId = value;
+                    OnPropertyChanged("PortfolioSettlementDateId");
                 }
             }
         }
-        private int _positionAccountMovementID;
+        private int _portfolioSettlementDateId;
         [DataMember]
-        public int InternalAllocationId
+        public int PositionAccountID
         {	
     		
-            get { return _internalAllocationId; }
+            get { return _positionAccountID; }
             set
             {
-                if (_internalAllocationId != value)
+                if (_positionAccountID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InternalAllocationId", _internalAllocationId);
-                    _internalAllocationId = value;
-                    OnPropertyChanged("InternalAllocationId");
+                    ChangeTracker.RecordOriginalValue("PositionAccountID", _positionAccountID);
+                    _positionAccountID = value;
+                    OnPropertyChanged("PositionAccountID");
                 }
             }
         }
-        private int _internalAllocationId;
-        [DataMember]
-        public int PositionAccountId
-        {	
-    		
-            get { return _positionAccountId; }
-            set
-            {
-                if (_positionAccountId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PositionAccountId", _positionAccountId);
-                    _positionAccountId = value;
-                    OnPropertyChanged("PositionAccountId");
-                }
-            }
-        }
-        private int _positionAccountId;
+        private int _positionAccountID;
         [DataMember]
         public System.DateTime ReferenceDate
         {	
@@ -88,111 +72,20 @@ namespace Odey.Framework.Keeley.Entities
         }
         private System.DateTime _referenceDate;
         [DataMember]
-        public int PortfolioAggregationLevelId
+        public decimal NetPosition
         {	
     		
-            get { return _portfolioAggregationLevelId; }
+            get { return _netPosition; }
             set
             {
-                if (_portfolioAggregationLevelId != value)
+                if (_netPosition != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PortfolioAggregationLevelId", _portfolioAggregationLevelId);
-                    _portfolioAggregationLevelId = value;
-                    OnPropertyChanged("PortfolioAggregationLevelId");
+                    _netPosition = value;
+                    OnPropertyChanged("NetPosition");
                 }
             }
         }
-        private int _portfolioAggregationLevelId;
-        [DataMember]
-        public int ChangeNumber
-        {	
-    		
-            get { return _changeNumber; }
-            set
-            {
-                if (_changeNumber != value)
-                {
-                    _changeNumber = value;
-                    OnPropertyChanged("ChangeNumber");
-                }
-            }
-        }
-        private int _changeNumber;
-        [DataMember]
-        public decimal Quantity
-        {	
-    		
-            get { return _quantity; }
-            set
-            {
-                if (_quantity != value)
-                {
-                    _quantity = value;
-                    OnPropertyChanged("Quantity");
-                }
-            }
-        }
-        private decimal _quantity;
-        [DataMember]
-        public decimal FXRate
-        {	
-    		
-            get { return _fXRate; }
-            set
-            {
-                if (_fXRate != value)
-                {
-                    _fXRate = value;
-                    OnPropertyChanged("FXRate");
-                }
-            }
-        }
-        private decimal _fXRate;
-        [DataMember]
-        public decimal Price
-        {	
-    		
-            get { return _price; }
-            set
-            {
-                if (_price != value)
-                {
-                    _price = value;
-                    OnPropertyChanged("Price");
-                }
-            }
-        }
-        private decimal _price;
-        [DataMember]
-        public decimal NetCostChangeInstrumentCurrency
-        {	
-    		
-            get { return _netCostChangeInstrumentCurrency; }
-            set
-            {
-                if (_netCostChangeInstrumentCurrency != value)
-                {
-                    _netCostChangeInstrumentCurrency = value;
-                    OnPropertyChanged("NetCostChangeInstrumentCurrency");
-                }
-            }
-        }
-        private decimal _netCostChangeInstrumentCurrency;
-        [DataMember]
-        public decimal NetCostChangeBookCurrency
-        {	
-    		
-            get { return _netCostChangeBookCurrency; }
-            set
-            {
-                if (_netCostChangeBookCurrency != value)
-                {
-                    _netCostChangeBookCurrency = value;
-                    OnPropertyChanged("NetCostChangeBookCurrency");
-                }
-            }
-        }
-        private decimal _netCostChangeBookCurrency;
+        private decimal _netPosition;
         [DataMember]
         public decimal NetCostInstrumentCurrency
         {	
@@ -224,36 +117,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _netCostBookCurrency;
         [DataMember]
-        public decimal DeltaNetCostChangeInstrumentCurrency
-        {	
-    		
-            get { return _deltaNetCostChangeInstrumentCurrency; }
-            set
-            {
-                if (_deltaNetCostChangeInstrumentCurrency != value)
-                {
-                    _deltaNetCostChangeInstrumentCurrency = value;
-                    OnPropertyChanged("DeltaNetCostChangeInstrumentCurrency");
-                }
-            }
-        }
-        private decimal _deltaNetCostChangeInstrumentCurrency;
-        [DataMember]
-        public decimal DeltaNetCostChangeBookCurrency
-        {	
-    		
-            get { return _deltaNetCostChangeBookCurrency; }
-            set
-            {
-                if (_deltaNetCostChangeBookCurrency != value)
-                {
-                    _deltaNetCostChangeBookCurrency = value;
-                    OnPropertyChanged("DeltaNetCostChangeBookCurrency");
-                }
-            }
-        }
-        private decimal _deltaNetCostChangeBookCurrency;
-        [DataMember]
         public decimal DeltaNetCostInstrumentCurrency
         {	
     		
@@ -284,82 +147,20 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _deltaNetCostBookCurrency;
         [DataMember]
-        public decimal NetPosition
+        public decimal TodayNetPostionChange
         {	
     		
-            get { return _netPosition; }
+            get { return _todayNetPostionChange; }
             set
             {
-                if (_netPosition != value)
+                if (_todayNetPostionChange != value)
                 {
-                    _netPosition = value;
-                    OnPropertyChanged("NetPosition");
+                    _todayNetPostionChange = value;
+                    OnPropertyChanged("TodayNetPostionChange");
                 }
             }
         }
-        private decimal _netPosition;
-        [DataMember]
-        public System.DateTime StartDt
-        {	
-    		
-            get { return _startDt; }
-            private set
-            {
-                if (_startDt != value)
-                {
-                    _startDt = value;
-                    OnPropertyChanged("StartDt");
-                }
-            }
-        }
-        private System.DateTime _startDt;
-        [DataMember]
-        public int UpdateUserID
-        {	
-    		
-            get { return _updateUserID; }
-            private set
-            {
-                if (_updateUserID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("UpdateUserID", _updateUserID);
-                    _updateUserID = value;
-                    OnPropertyChanged("UpdateUserID");
-                }
-            }
-        }
-        private int _updateUserID;
-        [DataMember]
-        private byte[] DataVersion
-        {	
-    		
-            get { return _dataVersion; }
-            set
-            {
-                if (_dataVersion != value)
-                {
-                    _dataVersion = value;
-                    OnPropertyChanged("DataVersion");
-                }
-            }
-        }
-        private byte[] _dataVersion;
-        [DataMember]
-        public int PositionAccountMovementTypeId
-        {	
-    		
-            get { return _positionAccountMovementTypeId; }
-            set
-            {
-                if (_positionAccountMovementTypeId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PositionAccountMovementTypeId", _positionAccountMovementTypeId);
-                    _positionAccountMovementTypeId = value;
-                    OnPropertyChanged("PositionAccountMovementTypeId");
-                }
-            }
-        }
-        private int _positionAccountMovementTypeId;
+        private decimal _todayNetPostionChange;
         [DataMember]
         public decimal TodayDeltaNetCostChangeInstrumentCurrency
         {	
@@ -421,20 +222,51 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _todayNetCostChangeBookCurrency;
         [DataMember]
-        public decimal TodayNetPositionChange
+        public System.DateTime StartDt
         {	
     		
-            get { return _todayNetPositionChange; }
-            set
+            get { return _startDt; }
+            private set
             {
-                if (_todayNetPositionChange != value)
+                if (_startDt != value)
                 {
-                    _todayNetPositionChange = value;
-                    OnPropertyChanged("TodayNetPositionChange");
+                    _startDt = value;
+                    OnPropertyChanged("StartDt");
                 }
             }
         }
-        private decimal _todayNetPositionChange;
+        private System.DateTime _startDt;
+        [DataMember]
+        public int UpdateUserID
+        {	
+    		
+            get { return _updateUserID; }
+            private set
+            {
+                if (_updateUserID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UpdateUserID", _updateUserID);
+                    _updateUserID = value;
+                    OnPropertyChanged("UpdateUserID");
+                }
+            }
+        }
+        private int _updateUserID;
+        [DataMember]
+        private byte[] DataVersion
+        {	
+    		
+            get { return _dataVersion; }
+            set
+            {
+                if (_dataVersion != value)
+                {
+                    _dataVersion = value;
+                    OnPropertyChanged("DataVersion");
+                }
+            }
+        }
+        private byte[] _dataVersion;
 
         #endregion
         #region ChangeTracking

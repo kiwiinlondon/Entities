@@ -18,89 +18,59 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PortfolioPositionAccountTradeDate: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class ExtractEventConfiguration: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PortfolioPositionAccountTradeDateId
+        public int ExtractEventConfigurationID
         {	
     		
-            get { return _portfolioPositionAccountTradeDateId; }
+            get { return _extractEventConfigurationID; }
             set
             {
-                if (_portfolioPositionAccountTradeDateId != value)
+                if (_extractEventConfigurationID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PortfolioPositionAccountTradeDateId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ExtractEventConfigurationID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _portfolioPositionAccountTradeDateId = value;
-                    OnPropertyChanged("PortfolioPositionAccountTradeDateId");
+                    _extractEventConfigurationID = value;
+                    OnPropertyChanged("ExtractEventConfigurationID");
                 }
             }
         }
-        private int _portfolioPositionAccountTradeDateId;
+        private int _extractEventConfigurationID;
         [DataMember]
-        public int PositionAccountID
+        public int ExtractId
         {	
     		
-            get { return _positionAccountID; }
+            get { return _extractId; }
             set
             {
-                if (_positionAccountID != value)
+                if (_extractId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PositionAccountID", _positionAccountID);
-                    _positionAccountID = value;
-                    OnPropertyChanged("PositionAccountID");
+                    ChangeTracker.RecordOriginalValue("ExtractId", _extractId);
+                    _extractId = value;
+                    OnPropertyChanged("ExtractId");
                 }
             }
         }
-        private int _positionAccountID;
+        private int _extractId;
         [DataMember]
-        public System.DateTime ReferenceDate
+        public bool BuildForInternalAllocationOnly
         {	
     		
-            get { return _referenceDate; }
+            get { return _buildForInternalAllocationOnly; }
             set
             {
-                if (_referenceDate != value)
+                if (_buildForInternalAllocationOnly != value)
                 {
-                    _referenceDate = value;
-                    OnPropertyChanged("ReferenceDate");
+                    _buildForInternalAllocationOnly = value;
+                    OnPropertyChanged("BuildForInternalAllocationOnly");
                 }
             }
         }
-        private System.DateTime _referenceDate;
-        [DataMember]
-        public decimal Quantity
-        {	
-    		
-            get { return _quantity; }
-            set
-            {
-                if (_quantity != value)
-                {
-                    _quantity = value;
-                    OnPropertyChanged("Quantity");
-                }
-            }
-        }
-        private decimal _quantity;
-        [DataMember]
-        public decimal TotalCost
-        {	
-    		
-            get { return _totalCost; }
-            set
-            {
-                if (_totalCost != value)
-                {
-                    _totalCost = value;
-                    OnPropertyChanged("TotalCost");
-                }
-            }
-        }
-        private decimal _totalCost;
+        private bool _buildForInternalAllocationOnly;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,7 +111,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

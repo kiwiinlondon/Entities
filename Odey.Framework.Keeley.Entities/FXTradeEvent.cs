@@ -332,6 +332,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private decimal _receiveBookXrate;
+        [DataMember]
+        public System.DateTime InputDate
+        {	
+    		
+            get { return _inputDate; }
+            set
+            {
+                if (_inputDate != value)
+                {
+                    _inputDate = value;
+                    OnPropertyChanged("InputDate");
+                }
+            }
+        }
+        private System.DateTime _inputDate;
 
         #endregion
         #region Navigation Properties

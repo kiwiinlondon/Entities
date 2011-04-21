@@ -18,89 +18,74 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PortfolioPositionAccountSettlementDate: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class EventField: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PortfolioPositionAccountSettlementDateId
+        public int EventFieldID
         {	
     		
-            get { return _portfolioPositionAccountSettlementDateId; }
+            get { return _eventFieldID; }
             set
             {
-                if (_portfolioPositionAccountSettlementDateId != value)
+                if (_eventFieldID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PortfolioPositionAccountSettlementDateId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EventFieldID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _portfolioPositionAccountSettlementDateId = value;
-                    OnPropertyChanged("PortfolioPositionAccountSettlementDateId");
+                    _eventFieldID = value;
+                    OnPropertyChanged("EventFieldID");
                 }
             }
         }
-        private int _portfolioPositionAccountSettlementDateId;
+        private int _eventFieldID;
         [DataMember]
-        public int PositionAccountID
+        public int EventTypeId
         {	
     		
-            get { return _positionAccountID; }
+            get { return _eventTypeId; }
             set
             {
-                if (_positionAccountID != value)
+                if (_eventTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PositionAccountID", _positionAccountID);
-                    _positionAccountID = value;
-                    OnPropertyChanged("PositionAccountID");
+                    ChangeTracker.RecordOriginalValue("EventTypeId", _eventTypeId);
+                    _eventTypeId = value;
+                    OnPropertyChanged("EventTypeId");
                 }
             }
         }
-        private int _positionAccountID;
+        private int _eventTypeId;
         [DataMember]
-        public System.DateTime ReferenceDate
+        public bool FieldOnInternalAllocaion
         {	
     		
-            get { return _referenceDate; }
+            get { return _fieldOnInternalAllocaion; }
             set
             {
-                if (_referenceDate != value)
+                if (_fieldOnInternalAllocaion != value)
                 {
-                    _referenceDate = value;
-                    OnPropertyChanged("ReferenceDate");
+                    _fieldOnInternalAllocaion = value;
+                    OnPropertyChanged("FieldOnInternalAllocaion");
                 }
             }
         }
-        private System.DateTime _referenceDate;
+        private bool _fieldOnInternalAllocaion;
         [DataMember]
-        public decimal Quantity
+        public string Name
         {	
     		
-            get { return _quantity; }
+            get { return _name; }
             set
             {
-                if (_quantity != value)
+                if (_name != value)
                 {
-                    _quantity = value;
-                    OnPropertyChanged("Quantity");
+                    _name = value;
+                    OnPropertyChanged("Name");
                 }
             }
         }
-        private decimal _quantity;
-        [DataMember]
-        public decimal TotalCost
-        {	
-    		
-            get { return _totalCost; }
-            set
-            {
-                if (_totalCost != value)
-                {
-                    _totalCost = value;
-                    OnPropertyChanged("TotalCost");
-                }
-            }
-        }
-        private decimal _totalCost;
+        private string _name;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -141,7 +126,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

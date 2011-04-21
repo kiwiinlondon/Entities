@@ -221,18 +221,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<InstrumentEventType> _instrumentEventTypes;
     
-        public ObjectSet<PortfolioPositionAccountSettlementDate> PortfolioPositionAccountSettlementDates
-        {
-            get { return _portfolioPositionAccountSettlementDates  ?? (_portfolioPositionAccountSettlementDates = CreateObjectSet<PortfolioPositionAccountSettlementDate>("PortfolioPositionAccountSettlementDates")); }
-        }
-        private ObjectSet<PortfolioPositionAccountSettlementDate> _portfolioPositionAccountSettlementDates;
-    
-        public ObjectSet<PortfolioPositionAccountTradeDate> PortfolioPositionAccountTradeDates
-        {
-            get { return _portfolioPositionAccountTradeDates  ?? (_portfolioPositionAccountTradeDates = CreateObjectSet<PortfolioPositionAccountTradeDate>("PortfolioPositionAccountTradeDates")); }
-        }
-        private ObjectSet<PortfolioPositionAccountTradeDate> _portfolioPositionAccountTradeDates;
-    
         public ObjectSet<PositionAccount> PositionAccounts
         {
             get { return _positionAccounts  ?? (_positionAccounts = CreateObjectSet<PositionAccount>("PositionAccounts")); }
@@ -346,6 +334,72 @@ namespace Odey.Framework.Keeley.Entities
             get { return _instrumentClassRelationships  ?? (_instrumentClassRelationships = CreateObjectSet<InstrumentClassRelationship>("InstrumentClassRelationships")); }
         }
         private ObjectSet<InstrumentClassRelationship> _instrumentClassRelationships;
+    
+        public ObjectSet<PortfolioSettlementDate> PortfolioSettlementDates
+        {
+            get { return _portfolioSettlementDates  ?? (_portfolioSettlementDates = CreateObjectSet<PortfolioSettlementDate>("PortfolioSettlementDates")); }
+        }
+        private ObjectSet<PortfolioSettlementDate> _portfolioSettlementDates;
+    
+        public ObjectSet<PortfolioTradeDate> PortfolioTradeDates
+        {
+            get { return _portfolioTradeDates  ?? (_portfolioTradeDates = CreateObjectSet<PortfolioTradeDate>("PortfolioTradeDates")); }
+        }
+        private ObjectSet<PortfolioTradeDate> _portfolioTradeDates;
+    
+        public ObjectSet<EventField> EventFields
+        {
+            get { return _eventFields  ?? (_eventFields = CreateObjectSet<EventField>("EventFields")); }
+        }
+        private ObjectSet<EventField> _eventFields;
+    
+        public ObjectSet<Extract> Extracts
+        {
+            get { return _extracts  ?? (_extracts = CreateObjectSet<Extract>("Extracts")); }
+        }
+        private ObjectSet<Extract> _extracts;
+    
+        public ObjectSet<ExtractEventConfiguration> ExtractEventConfigurations
+        {
+            get { return _extractEventConfigurations  ?? (_extractEventConfigurations = CreateObjectSet<ExtractEventConfiguration>("ExtractEventConfigurations")); }
+        }
+        private ObjectSet<ExtractEventConfiguration> _extractEventConfigurations;
+    
+        public ObjectSet<ExtractType> ExtractTypes
+        {
+            get { return _extractTypes  ?? (_extractTypes = CreateObjectSet<ExtractType>("ExtractTypes")); }
+        }
+        private ObjectSet<ExtractType> _extractTypes;
+    
+        public ObjectSet<ExtractEventFieldConfiguration> ExtractEventFieldConfigurations
+        {
+            get { return _extractEventFieldConfigurations  ?? (_extractEventFieldConfigurations = CreateObjectSet<ExtractEventFieldConfiguration>("ExtractEventFieldConfigurations")); }
+        }
+        private ObjectSet<ExtractEventFieldConfiguration> _extractEventFieldConfigurations;
+    
+        public ObjectSet<ExtractEventFieldOutputConfiguration> ExtractEventFieldOutputConfigurations
+        {
+            get { return _extractEventFieldOutputConfigurations  ?? (_extractEventFieldOutputConfigurations = CreateObjectSet<ExtractEventFieldOutputConfiguration>("ExtractEventFieldOutputConfigurations")); }
+        }
+        private ObjectSet<ExtractEventFieldOutputConfiguration> _extractEventFieldOutputConfigurations;
+    
+        public ObjectSet<ExtractEvent> ExtractEvents
+        {
+            get { return _extractEvents  ?? (_extractEvents = CreateObjectSet<ExtractEvent>("ExtractEvents")); }
+        }
+        private ObjectSet<ExtractEvent> _extractEvents;
+    
+        public ObjectSet<ExtractEventFieldValue> ExtractEventFieldValues
+        {
+            get { return _extractEventFieldValues  ?? (_extractEventFieldValues = CreateObjectSet<ExtractEventFieldValue>("ExtractEventFieldValues")); }
+        }
+        private ObjectSet<ExtractEventFieldValue> _extractEventFieldValues;
+    
+        public ObjectSet<ExtractRun> ExtractRuns
+        {
+            get { return _extractRuns  ?? (_extractRuns = CreateObjectSet<ExtractRun>("ExtractRuns")); }
+        }
+        private ObjectSet<ExtractRun> _extractRuns;
 
         #endregion
         #region Function Imports

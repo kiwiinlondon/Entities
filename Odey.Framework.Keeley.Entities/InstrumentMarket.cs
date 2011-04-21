@@ -314,11 +314,20 @@ namespace Odey.Framework.Keeley.Entities
                 return;
             }
     
-            if (Instrument != null)
+            if (previousValue != null && previousValue.InstrumentMarkets.Contains(this))
             {
-                InstrumentID = Instrument.InstrumentID;
+                previousValue.InstrumentMarkets.Remove(this);
             }
     
+            if (Instrument != null)
+            {
+                if (!Instrument.InstrumentMarkets.Contains(this))
+                {
+                    Instrument.InstrumentMarkets.Add(this);
+                }
+    
+                InstrumentID = Instrument.InstrumentID;
+            }
             if (ChangeTracker.ChangeTrackingEnabled)
             {
                 if (ChangeTracker.OriginalValues.ContainsKey("Instrument")

@@ -20,6 +20,7 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     [KnownType(typeof(FMContractMapping))]
     [KnownType(typeof(InstrumentRelationship))]
+    [KnownType(typeof(InstrumentMarket))]
     public partial class Instrument: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -252,6 +253,41 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private InstrumentRelationship _underlyingRelationship;
+    
+        [DataMember]
+        public TrackableCollection<InstrumentMarket> InstrumentMarkets
+        {
+            get
+            {
+                if (_instrumentMarkets == null)
+                {
+                    _instrumentMarkets = new TrackableCollection<InstrumentMarket>();
+                    _instrumentMarkets.CollectionChanged += FixupInstrumentMarkets;
+                }
+                return _instrumentMarkets;
+            }
+            set
+            {
+                if (!ReferenceEquals(_instrumentMarkets, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_instrumentMarkets != null)
+                    {
+                        _instrumentMarkets.CollectionChanged -= FixupInstrumentMarkets;
+                    }
+                    _instrumentMarkets = value;
+                    if (_instrumentMarkets != null)
+                    {
+                        _instrumentMarkets.CollectionChanged += FixupInstrumentMarkets;
+                    }
+                    OnNavigationPropertyChanged("InstrumentMarkets");
+                }
+            }
+        }
+        private TrackableCollection<InstrumentMarket> _instrumentMarkets;
 
         #endregion
         #region ChangeTracking
@@ -333,6 +369,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             FMContractMappings.Clear();
             UnderlyingRelationship = null;
+            InstrumentMarkets.Clear();
         }
 
         #endregion
@@ -420,6 +457,41 @@ namespace Odey.Framework.Keeley.Entities
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("FMContractMappings", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupInstrumentMarkets(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (InstrumentMarket item in e.NewItems)
+                {
+                    item.InstrumentID = InstrumentID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("InstrumentMarkets", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (InstrumentMarket item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("InstrumentMarkets", item);
                     }
                 }
             }
