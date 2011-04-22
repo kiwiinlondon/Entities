@@ -18,59 +18,58 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class EventField: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class EntityProperty: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int EventFieldID
+        public int EntityPropertyID
         {	
     		
-            get { return _eventFieldID; }
+            get { return _entityPropertyID; }
             set
             {
-                if (_eventFieldID != value)
+                if (_entityPropertyID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'EventFieldID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EntityPropertyID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _eventFieldID = value;
-                    OnPropertyChanged("EventFieldID");
+                    _entityPropertyID = value;
+                    OnPropertyChanged("EntityPropertyID");
                 }
             }
         }
-        private int _eventFieldID;
+        private int _entityPropertyID;
         [DataMember]
-        public int EventTypeId
+        public int EntityTypeId
         {	
     		
-            get { return _eventTypeId; }
+            get { return _entityTypeId; }
             set
             {
-                if (_eventTypeId != value)
+                if (_entityTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EventTypeId", _eventTypeId);
-                    _eventTypeId = value;
-                    OnPropertyChanged("EventTypeId");
+                    _entityTypeId = value;
+                    OnPropertyChanged("EntityTypeId");
                 }
             }
         }
-        private int _eventTypeId;
+        private int _entityTypeId;
         [DataMember]
-        public bool FieldOnInternalAllocaion
+        public bool NeedsToBeCalculated
         {	
     		
-            get { return _fieldOnInternalAllocaion; }
+            get { return _needsToBeCalculated; }
             set
             {
-                if (_fieldOnInternalAllocaion != value)
+                if (_needsToBeCalculated != value)
                 {
-                    _fieldOnInternalAllocaion = value;
-                    OnPropertyChanged("FieldOnInternalAllocaion");
+                    _needsToBeCalculated = value;
+                    OnPropertyChanged("NeedsToBeCalculated");
                 }
             }
         }
-        private bool _fieldOnInternalAllocaion;
+        private bool _needsToBeCalculated;
         [DataMember]
         public string Name
         {	
@@ -132,6 +131,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public bool PropertyOnChildEntity
+        {	
+    		
+            get { return _propertyOnChildEntity; }
+            set
+            {
+                if (_propertyOnChildEntity != value)
+                {
+                    _propertyOnChildEntity = value;
+                    OnPropertyChanged("PropertyOnChildEntity");
+                }
+            }
+        }
+        private bool _propertyOnChildEntity;
 
         #endregion
         #region ChangeTracking

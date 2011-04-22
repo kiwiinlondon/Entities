@@ -155,12 +155,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<IdentifierType> _identifierTypes;
     
-        public ObjectSet<KeeleyType> KeeleyTypes
-        {
-            get { return _keeleyTypes  ?? (_keeleyTypes = CreateObjectSet<KeeleyType>("KeeleyTypes")); }
-        }
-        private ObjectSet<KeeleyType> _keeleyTypes;
-    
         public ObjectSet<FMContractMapping> FMContractMappings
         {
             get { return _fMContractMappings  ?? (_fMContractMappings = CreateObjectSet<FMContractMapping>("FMContractMappings")); }
@@ -347,11 +341,11 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<PortfolioTradeDate> _portfolioTradeDates;
     
-        public ObjectSet<EventField> EventFields
+        public ObjectSet<EntityProperty> EntityProperties
         {
-            get { return _eventFields  ?? (_eventFields = CreateObjectSet<EventField>("EventFields")); }
+            get { return _entityProperties  ?? (_entityProperties = CreateObjectSet<EntityProperty>("EntityProperties")); }
         }
-        private ObjectSet<EventField> _eventFields;
+        private ObjectSet<EntityProperty> _entityProperties;
     
         public ObjectSet<Extract> Extracts
         {
@@ -359,47 +353,47 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<Extract> _extracts;
     
-        public ObjectSet<ExtractEventConfiguration> ExtractEventConfigurations
+        public ObjectSet<ExtractConfiguration> ExtractConfigurations
         {
-            get { return _extractEventConfigurations  ?? (_extractEventConfigurations = CreateObjectSet<ExtractEventConfiguration>("ExtractEventConfigurations")); }
+            get { return _extractConfigurations  ?? (_extractConfigurations = CreateObjectSet<ExtractConfiguration>("ExtractConfigurations")); }
         }
-        private ObjectSet<ExtractEventConfiguration> _extractEventConfigurations;
+        private ObjectSet<ExtractConfiguration> _extractConfigurations;
     
-        public ObjectSet<ExtractType> ExtractTypes
+        public ObjectSet<ExtractEntity> ExtractEntities
         {
-            get { return _extractTypes  ?? (_extractTypes = CreateObjectSet<ExtractType>("ExtractTypes")); }
+            get { return _extractEntities  ?? (_extractEntities = CreateObjectSet<ExtractEntity>("ExtractEntities")); }
         }
-        private ObjectSet<ExtractType> _extractTypes;
+        private ObjectSet<ExtractEntity> _extractEntities;
     
-        public ObjectSet<ExtractEventFieldConfiguration> ExtractEventFieldConfigurations
+        public ObjectSet<ExtractEntityPropertyValue> ExtractEntityPropertyValues
         {
-            get { return _extractEventFieldConfigurations  ?? (_extractEventFieldConfigurations = CreateObjectSet<ExtractEventFieldConfiguration>("ExtractEventFieldConfigurations")); }
+            get { return _extractEntityPropertyValues  ?? (_extractEntityPropertyValues = CreateObjectSet<ExtractEntityPropertyValue>("ExtractEntityPropertyValues")); }
         }
-        private ObjectSet<ExtractEventFieldConfiguration> _extractEventFieldConfigurations;
+        private ObjectSet<ExtractEntityPropertyValue> _extractEntityPropertyValues;
     
-        public ObjectSet<ExtractEventFieldOutputConfiguration> ExtractEventFieldOutputConfigurations
+        public ObjectSet<ExtractInputConfiguration> ExtractInputConfigurations
         {
-            get { return _extractEventFieldOutputConfigurations  ?? (_extractEventFieldOutputConfigurations = CreateObjectSet<ExtractEventFieldOutputConfiguration>("ExtractEventFieldOutputConfigurations")); }
+            get { return _extractInputConfigurations  ?? (_extractInputConfigurations = CreateObjectSet<ExtractInputConfiguration>("ExtractInputConfigurations")); }
         }
-        private ObjectSet<ExtractEventFieldOutputConfiguration> _extractEventFieldOutputConfigurations;
+        private ObjectSet<ExtractInputConfiguration> _extractInputConfigurations;
     
-        public ObjectSet<ExtractEvent> ExtractEvents
+        public ObjectSet<ExtractOutputConfiguration> ExtractOutputConfigurations
         {
-            get { return _extractEvents  ?? (_extractEvents = CreateObjectSet<ExtractEvent>("ExtractEvents")); }
+            get { return _extractOutputConfigurations  ?? (_extractOutputConfigurations = CreateObjectSet<ExtractOutputConfiguration>("ExtractOutputConfigurations")); }
         }
-        private ObjectSet<ExtractEvent> _extractEvents;
-    
-        public ObjectSet<ExtractEventFieldValue> ExtractEventFieldValues
-        {
-            get { return _extractEventFieldValues  ?? (_extractEventFieldValues = CreateObjectSet<ExtractEventFieldValue>("ExtractEventFieldValues")); }
-        }
-        private ObjectSet<ExtractEventFieldValue> _extractEventFieldValues;
+        private ObjectSet<ExtractOutputConfiguration> _extractOutputConfigurations;
     
         public ObjectSet<ExtractRun> ExtractRuns
         {
             get { return _extractRuns  ?? (_extractRuns = CreateObjectSet<ExtractRun>("ExtractRuns")); }
         }
         private ObjectSet<ExtractRun> _extractRuns;
+    
+        public ObjectSet<ExtractType> ExtractTypes
+        {
+            get { return _extractTypes  ?? (_extractTypes = CreateObjectSet<ExtractType>("ExtractTypes")); }
+        }
+        private ObjectSet<ExtractType> _extractTypes;
 
         #endregion
         #region Function Imports

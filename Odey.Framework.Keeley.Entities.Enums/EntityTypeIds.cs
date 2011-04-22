@@ -1,0 +1,22 @@
+﻿using System.Runtime.Serialization;
+
+namespace Odey.Framework.Keeley.Entities.Enums
+{
+    [DataContract]
+    public enum EntityTypeIds
+    {
+        [EnumMember]
+        None = 0,
+        [EnumMember]
+        TradeEvent = 1,
+        [EnumMember]
+        InstrumentEvent = 2,
+        [EnumMember]
+        CapitalEvent = 3,
+        [EnumMember]
+        FXTradeEvent = 4,
+        [EnumMember]
+        InternalAccountingEvent = 5
+    }
+}
+

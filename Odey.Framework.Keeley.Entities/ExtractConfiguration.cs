@@ -18,28 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class ExtractEventConfiguration: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class ExtractConfiguration: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractEventConfigurationID
+        public int ExtracttConfigurationID
         {	
     		
-            get { return _extractEventConfigurationID; }
+            get { return _extracttConfigurationID; }
             set
             {
-                if (_extractEventConfigurationID != value)
+                if (_extracttConfigurationID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractEventConfigurationID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ExtracttConfigurationID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractEventConfigurationID = value;
-                    OnPropertyChanged("ExtractEventConfigurationID");
+                    _extracttConfigurationID = value;
+                    OnPropertyChanged("ExtracttConfigurationID");
                 }
             }
         }
-        private int _extractEventConfigurationID;
+        private int _extracttConfigurationID;
         [DataMember]
         public int ExtractId
         {	
@@ -57,20 +57,35 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _extractId;
         [DataMember]
-        public bool BuildForInternalAllocationOnly
+        public string ConfigurationKey
         {	
     		
-            get { return _buildForInternalAllocationOnly; }
+            get { return _configurationKey; }
             set
             {
-                if (_buildForInternalAllocationOnly != value)
+                if (_configurationKey != value)
                 {
-                    _buildForInternalAllocationOnly = value;
-                    OnPropertyChanged("BuildForInternalAllocationOnly");
+                    _configurationKey = value;
+                    OnPropertyChanged("ConfigurationKey");
                 }
             }
         }
-        private bool _buildForInternalAllocationOnly;
+        private string _configurationKey;
+        [DataMember]
+        public string ConfigurationValue
+        {	
+    		
+            get { return _configurationValue; }
+            set
+            {
+                if (_configurationValue != value)
+                {
+                    _configurationValue = value;
+                    OnPropertyChanged("ConfigurationValue");
+                }
+            }
+        }
+        private string _configurationValue;
         [DataMember]
         public System.DateTime StartDt
         {	

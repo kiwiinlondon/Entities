@@ -18,29 +18,29 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(ExtractEventFieldValue))]
-    public partial class ExtractEvent: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(EntityProperty))]
+    public partial class ExtractInputConfiguration: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractEventID
+        public int ExtractFieldConfigurationID
         {	
     		
-            get { return _extractEventID; }
+            get { return _extractFieldConfigurationID; }
             set
             {
-                if (_extractEventID != value)
+                if (_extractFieldConfigurationID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractEventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ExtractFieldConfigurationID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractEventID = value;
-                    OnPropertyChanged("ExtractEventID");
+                    _extractFieldConfigurationID = value;
+                    OnPropertyChanged("ExtractFieldConfigurationID");
                 }
             }
         }
-        private int _extractEventID;
+        private int _extractFieldConfigurationID;
         [DataMember]
         public int ExtractId
         {	
@@ -58,52 +58,103 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _extractId;
         [DataMember]
-        public int EventId
+        public int EntityPropertyId
         {	
     		
-            get { return _eventId; }
+            get { return _entityPropertyId; }
             set
             {
-                if (_eventId != value)
+                if (_entityPropertyId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EventId", _eventId);
-                    _eventId = value;
-                    OnPropertyChanged("EventId");
+                    ChangeTracker.RecordOriginalValue("EntityPropertyId", _entityPropertyId);
+                    if (!IsDeserializing)
+                    {
+                        if (EntityProperty != null && EntityProperty.EntityPropertyID != value)
+                        {
+                            EntityProperty = null;
+                        }
+                    }
+                    _entityPropertyId = value;
+                    OnPropertyChanged("EntityPropertyId");
                 }
             }
         }
-        private int _eventId;
+        private int _entityPropertyId;
         [DataMember]
-        public Nullable<int> LastSentInExtractRunId
+        public Nullable<int> IntValue
         {	
     		
-            get { return _lastSentInExtractRunId; }
+            get { return _intValue; }
             set
             {
-                if (_lastSentInExtractRunId != value)
+                if (_intValue != value)
                 {
-                    ChangeTracker.RecordOriginalValue("LastSentInExtractRunId", _lastSentInExtractRunId);
-                    _lastSentInExtractRunId = value;
-                    OnPropertyChanged("LastSentInExtractRunId");
+                    _intValue = value;
+                    OnPropertyChanged("IntValue");
                 }
             }
         }
-        private Nullable<int> _lastSentInExtractRunId;
+        private Nullable<int> _intValue;
         [DataMember]
-        public bool SendInNextRun
+        public string StringValue
         {	
     		
-            get { return _sendInNextRun; }
+            get { return _stringValue; }
             set
             {
-                if (_sendInNextRun != value)
+                if (_stringValue != value)
                 {
-                    _sendInNextRun = value;
-                    OnPropertyChanged("SendInNextRun");
+                    _stringValue = value;
+                    OnPropertyChanged("StringValue");
                 }
             }
         }
-        private bool _sendInNextRun;
+        private string _stringValue;
+        [DataMember]
+        public Nullable<decimal> DecimalValue
+        {	
+    		
+            get { return _decimalValue; }
+            set
+            {
+                if (_decimalValue != value)
+                {
+                    _decimalValue = value;
+                    OnPropertyChanged("DecimalValue");
+                }
+            }
+        }
+        private Nullable<decimal> _decimalValue;
+        [DataMember]
+        public Nullable<System.DateTime> DateTimeValue
+        {	
+    		
+            get { return _dateTimeValue; }
+            set
+            {
+                if (_dateTimeValue != value)
+                {
+                    _dateTimeValue = value;
+                    OnPropertyChanged("DateTimeValue");
+                }
+            }
+        }
+        private Nullable<System.DateTime> _dateTimeValue;
+        [DataMember]
+        public Nullable<bool> BitValue
+        {	
+    		
+            get { return _bitValue; }
+            set
+            {
+                if (_bitValue != value)
+                {
+                    _bitValue = value;
+                    OnPropertyChanged("BitValue");
+                }
+            }
+        }
+        private Nullable<bool> _bitValue;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -155,39 +206,21 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        public TrackableCollection<ExtractEventFieldValue> ExtractEventFieldValues
+        public EntityProperty EntityProperty
         {
-            get
-            {
-                if (_extractEventFieldValues == null)
-                {
-                    _extractEventFieldValues = new TrackableCollection<ExtractEventFieldValue>();
-                    _extractEventFieldValues.CollectionChanged += FixupExtractEventFieldValues;
-                }
-                return _extractEventFieldValues;
-            }
+            get { return _entityProperty; }
             set
             {
-                if (!ReferenceEquals(_extractEventFieldValues, value))
+                if (!ReferenceEquals(_entityProperty, value))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_extractEventFieldValues != null)
-                    {
-                        _extractEventFieldValues.CollectionChanged -= FixupExtractEventFieldValues;
-                    }
-                    _extractEventFieldValues = value;
-                    if (_extractEventFieldValues != null)
-                    {
-                        _extractEventFieldValues.CollectionChanged += FixupExtractEventFieldValues;
-                    }
-                    OnNavigationPropertyChanged("ExtractEventFieldValues");
+                    var previousValue = _entityProperty;
+                    _entityProperty = value;
+                    FixupEntityProperty(previousValue);
+                    OnNavigationPropertyChanged("EntityProperty");
                 }
             }
         }
-        private TrackableCollection<ExtractEventFieldValue> _extractEventFieldValues;
+        private EntityProperty _entityProperty;
 
         #endregion
         #region ChangeTracking
@@ -267,43 +300,38 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            ExtractEventFieldValues.Clear();
+            EntityProperty = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupExtractEventFieldValues(object sender, NotifyCollectionChangedEventArgs e)
+        private void FixupEntityProperty(EntityProperty previousValue)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (e.NewItems != null)
+            if (EntityProperty != null)
             {
-                foreach (ExtractEventFieldValue item in e.NewItems)
-                {
-                    item.ExtractEventID = ExtractEventID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("ExtractEventFieldValues", item);
-                    }
-                }
+                EntityPropertyId = EntityProperty.EntityPropertyID;
             }
     
-            if (e.OldItems != null)
+            if (ChangeTracker.ChangeTrackingEnabled)
             {
-                foreach (ExtractEventFieldValue item in e.OldItems)
+                if (ChangeTracker.OriginalValues.ContainsKey("EntityProperty")
+                    && (ChangeTracker.OriginalValues["EntityProperty"] == EntityProperty))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("ExtractEventFieldValues", item);
-                    }
+                    ChangeTracker.OriginalValues.Remove("EntityProperty");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("EntityProperty", previousValue);
+                }
+                if (EntityProperty != null && !EntityProperty.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    EntityProperty.StartTracking();
                 }
             }
         }

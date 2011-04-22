@@ -18,120 +18,210 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class ExtractEventFieldValue: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class ExtractEntityPropertyValue: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractEventFieldValueID
+        public int ExtractEntityPropertyValueID
         {	
     		
-            get { return _extractEventFieldValueID; }
+            get { return _extractEntityPropertyValueID; }
             set
             {
-                if (_extractEventFieldValueID != value)
+                if (_extractEntityPropertyValueID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractEventFieldValueID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ExtractEntityPropertyValueID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractEventFieldValueID = value;
-                    OnPropertyChanged("ExtractEventFieldValueID");
+                    _extractEntityPropertyValueID = value;
+                    OnPropertyChanged("ExtractEntityPropertyValueID");
                 }
             }
         }
-        private int _extractEventFieldValueID;
+        private int _extractEntityPropertyValueID;
         [DataMember]
-        public int ExtractEventID
+        public int ExtractEntityID
         {	
     		
-            get { return _extractEventID; }
+            get { return _extractEntityID; }
             set
             {
-                if (_extractEventID != value)
+                if (_extractEntityID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ExtractEventID", _extractEventID);
-                    _extractEventID = value;
-                    OnPropertyChanged("ExtractEventID");
+                    ChangeTracker.RecordOriginalValue("ExtractEntityID", _extractEntityID);
+                    _extractEntityID = value;
+                    OnPropertyChanged("ExtractEntityID");
                 }
             }
         }
-        private int _extractEventID;
+        private int _extractEntityID;
         [DataMember]
-        public int EventFieldId
+        public int EntityPropertyId
         {	
     		
-            get { return _eventFieldId; }
+            get { return _entityPropertyId; }
             set
             {
-                if (_eventFieldId != value)
+                if (_entityPropertyId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EventFieldId", _eventFieldId);
-                    _eventFieldId = value;
-                    OnPropertyChanged("EventFieldId");
+                    ChangeTracker.RecordOriginalValue("EntityPropertyId", _entityPropertyId);
+                    _entityPropertyId = value;
+                    OnPropertyChanged("EntityPropertyId");
                 }
             }
         }
-        private int _eventFieldId;
+        private int _entityPropertyId;
         [DataMember]
-        public Nullable<int> EventFieldIntValue
+        public Nullable<int> PreviousIntValue
         {	
     		
-            get { return _eventFieldIntValue; }
+            get { return _previousIntValue; }
             set
             {
-                if (_eventFieldIntValue != value)
+                if (_previousIntValue != value)
                 {
-                    _eventFieldIntValue = value;
-                    OnPropertyChanged("EventFieldIntValue");
+                    _previousIntValue = value;
+                    OnPropertyChanged("PreviousIntValue");
                 }
             }
         }
-        private Nullable<int> _eventFieldIntValue;
+        private Nullable<int> _previousIntValue;
         [DataMember]
-        public Nullable<decimal> EventFieldDecimalValue
+        public Nullable<int> IntValue
         {	
     		
-            get { return _eventFieldDecimalValue; }
+            get { return _intValue; }
             set
             {
-                if (_eventFieldDecimalValue != value)
+                if (_intValue != value)
                 {
-                    _eventFieldDecimalValue = value;
-                    OnPropertyChanged("EventFieldDecimalValue");
+                    _intValue = value;
+                    OnPropertyChanged("IntValue");
                 }
             }
         }
-        private Nullable<decimal> _eventFieldDecimalValue;
+        private Nullable<int> _intValue;
         [DataMember]
-        public Nullable<System.DateTime> EventFieldDateTimeValue
+        public string StringValue
         {	
     		
-            get { return _eventFieldDateTimeValue; }
+            get { return _stringValue; }
             set
             {
-                if (_eventFieldDateTimeValue != value)
+                if (_stringValue != value)
                 {
-                    _eventFieldDateTimeValue = value;
-                    OnPropertyChanged("EventFieldDateTimeValue");
+                    _stringValue = value;
+                    OnPropertyChanged("StringValue");
                 }
             }
         }
-        private Nullable<System.DateTime> _eventFieldDateTimeValue;
+        private string _stringValue;
         [DataMember]
-        public Nullable<bool> EventFieldBitValue
+        public string PreviousStringValue
         {	
     		
-            get { return _eventFieldBitValue; }
+            get { return _previousStringValue; }
             set
             {
-                if (_eventFieldBitValue != value)
+                if (_previousStringValue != value)
                 {
-                    _eventFieldBitValue = value;
-                    OnPropertyChanged("EventFieldBitValue");
+                    _previousStringValue = value;
+                    OnPropertyChanged("PreviousStringValue");
                 }
             }
         }
-        private Nullable<bool> _eventFieldBitValue;
+        private string _previousStringValue;
+        [DataMember]
+        public Nullable<decimal> DecimalValue
+        {	
+    		
+            get { return _decimalValue; }
+            set
+            {
+                if (_decimalValue != value)
+                {
+                    _decimalValue = value;
+                    OnPropertyChanged("DecimalValue");
+                }
+            }
+        }
+        private Nullable<decimal> _decimalValue;
+        [DataMember]
+        public Nullable<decimal> PreviousDecimalValue
+        {	
+    		
+            get { return _previousDecimalValue; }
+            set
+            {
+                if (_previousDecimalValue != value)
+                {
+                    _previousDecimalValue = value;
+                    OnPropertyChanged("PreviousDecimalValue");
+                }
+            }
+        }
+        private Nullable<decimal> _previousDecimalValue;
+        [DataMember]
+        public Nullable<System.DateTime> DateTimeValue
+        {	
+    		
+            get { return _dateTimeValue; }
+            set
+            {
+                if (_dateTimeValue != value)
+                {
+                    _dateTimeValue = value;
+                    OnPropertyChanged("DateTimeValue");
+                }
+            }
+        }
+        private Nullable<System.DateTime> _dateTimeValue;
+        [DataMember]
+        public Nullable<System.DateTime> PreviousDateTimeValue
+        {	
+    		
+            get { return _previousDateTimeValue; }
+            set
+            {
+                if (_previousDateTimeValue != value)
+                {
+                    _previousDateTimeValue = value;
+                    OnPropertyChanged("PreviousDateTimeValue");
+                }
+            }
+        }
+        private Nullable<System.DateTime> _previousDateTimeValue;
+        [DataMember]
+        public Nullable<bool> BitValue
+        {	
+    		
+            get { return _bitValue; }
+            set
+            {
+                if (_bitValue != value)
+                {
+                    _bitValue = value;
+                    OnPropertyChanged("BitValue");
+                }
+            }
+        }
+        private Nullable<bool> _bitValue;
+        [DataMember]
+        public Nullable<bool> PreviousBitValue
+        {	
+    		
+            get { return _previousBitValue; }
+            set
+            {
+                if (_previousBitValue != value)
+                {
+                    _previousBitValue = value;
+                    OnPropertyChanged("PreviousBitValue");
+                }
+            }
+        }
+        private Nullable<bool> _previousBitValue;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -178,21 +268,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public string EventFieldStringValue
-        {	
-    		
-            get { return _eventFieldStringValue; }
-            set
-            {
-                if (_eventFieldStringValue != value)
-                {
-                    _eventFieldStringValue = value;
-                    OnPropertyChanged("EventFieldStringValue");
-                }
-            }
-        }
-        private string _eventFieldStringValue;
 
         #endregion
         #region ChangeTracking
