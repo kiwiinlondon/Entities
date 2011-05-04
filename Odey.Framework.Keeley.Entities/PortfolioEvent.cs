@@ -18,28 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PositionAccountMovement: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class PortfolioEvent: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PositionAccountMovementID
+        public int PortfolioEventID
         {	
     		
-            get { return _positionAccountMovementID; }
+            get { return _portfolioEventID; }
             set
             {
-                if (_positionAccountMovementID != value)
+                if (_portfolioEventID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PositionAccountMovementID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PortfolioEventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _positionAccountMovementID = value;
-                    OnPropertyChanged("PositionAccountMovementID");
+                    _portfolioEventID = value;
+                    OnPropertyChanged("PortfolioEventID");
                 }
             }
         }
-        private int _positionAccountMovementID;
+        private int _portfolioEventID;
         [DataMember]
         public int InternalAllocationId
         {	
@@ -103,6 +103,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _portfolioAggregationLevelId;
+        [DataMember]
+        public int PortfolioEventTypeId
+        {	
+    		
+            get { return _portfolioEventTypeId; }
+            set
+            {
+                if (_portfolioEventTypeId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PortfolioEventTypeId", _portfolioEventTypeId);
+                    _portfolioEventTypeId = value;
+                    OnPropertyChanged("PortfolioEventTypeId");
+                }
+            }
+        }
+        private int _portfolioEventTypeId;
         [DataMember]
         public int ChangeNumber
         {	
@@ -284,82 +300,20 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _deltaNetCostBookCurrency;
         [DataMember]
-        public decimal NetPosition
+        public decimal TodayNetPositionChange
         {	
     		
-            get { return _netPosition; }
+            get { return _todayNetPositionChange; }
             set
             {
-                if (_netPosition != value)
+                if (_todayNetPositionChange != value)
                 {
-                    _netPosition = value;
-                    OnPropertyChanged("NetPosition");
+                    _todayNetPositionChange = value;
+                    OnPropertyChanged("TodayNetPositionChange");
                 }
             }
         }
-        private decimal _netPosition;
-        [DataMember]
-        public System.DateTime StartDt
-        {	
-    		
-            get { return _startDt; }
-            private set
-            {
-                if (_startDt != value)
-                {
-                    _startDt = value;
-                    OnPropertyChanged("StartDt");
-                }
-            }
-        }
-        private System.DateTime _startDt;
-        [DataMember]
-        public int UpdateUserID
-        {	
-    		
-            get { return _updateUserID; }
-            private set
-            {
-                if (_updateUserID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("UpdateUserID", _updateUserID);
-                    _updateUserID = value;
-                    OnPropertyChanged("UpdateUserID");
-                }
-            }
-        }
-        private int _updateUserID;
-        [DataMember]
-        private byte[] DataVersion
-        {	
-    		
-            get { return _dataVersion; }
-            set
-            {
-                if (_dataVersion != value)
-                {
-                    _dataVersion = value;
-                    OnPropertyChanged("DataVersion");
-                }
-            }
-        }
-        private byte[] _dataVersion;
-        [DataMember]
-        public int PositionAccountMovementTypeId
-        {	
-    		
-            get { return _positionAccountMovementTypeId; }
-            set
-            {
-                if (_positionAccountMovementTypeId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PositionAccountMovementTypeId", _positionAccountMovementTypeId);
-                    _positionAccountMovementTypeId = value;
-                    OnPropertyChanged("PositionAccountMovementTypeId");
-                }
-            }
-        }
-        private int _positionAccountMovementTypeId;
+        private decimal _todayNetPositionChange;
         [DataMember]
         public decimal TodayDeltaNetCostChangeInstrumentCurrency
         {	
@@ -421,20 +375,66 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _todayNetCostChangeBookCurrency;
         [DataMember]
-        public decimal TodayNetPositionChange
+        public decimal NetPosition
         {	
     		
-            get { return _todayNetPositionChange; }
+            get { return _netPosition; }
             set
             {
-                if (_todayNetPositionChange != value)
+                if (_netPosition != value)
                 {
-                    _todayNetPositionChange = value;
-                    OnPropertyChanged("TodayNetPositionChange");
+                    _netPosition = value;
+                    OnPropertyChanged("NetPosition");
                 }
             }
         }
-        private decimal _todayNetPositionChange;
+        private decimal _netPosition;
+        [DataMember]
+        public System.DateTime StartDt
+        {	
+    		
+            get { return _startDt; }
+            private set
+            {
+                if (_startDt != value)
+                {
+                    _startDt = value;
+                    OnPropertyChanged("StartDt");
+                }
+            }
+        }
+        private System.DateTime _startDt;
+        [DataMember]
+        public int UpdateUserID
+        {	
+    		
+            get { return _updateUserID; }
+            private set
+            {
+                if (_updateUserID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UpdateUserID", _updateUserID);
+                    _updateUserID = value;
+                    OnPropertyChanged("UpdateUserID");
+                }
+            }
+        }
+        private int _updateUserID;
+        [DataMember]
+        private byte[] DataVersion
+        {	
+    		
+            get { return _dataVersion; }
+            set
+            {
+                if (_dataVersion != value)
+                {
+                    _dataVersion = value;
+                    OnPropertyChanged("DataVersion");
+                }
+            }
+        }
+        private byte[] _dataVersion;
 
         #endregion
         #region ChangeTracking

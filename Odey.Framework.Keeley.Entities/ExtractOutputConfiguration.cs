@@ -58,29 +58,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _extractId;
         [DataMember]
-        public int EntityPropertyId
-        {	
-    		
-            get { return _entityPropertyId; }
-            set
-            {
-                if (_entityPropertyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("EntityPropertyId", _entityPropertyId);
-                    if (!IsDeserializing)
-                    {
-                        if (EntityProperty != null && EntityProperty.EntityPropertyID != value)
-                        {
-                            EntityProperty = null;
-                        }
-                    }
-                    _entityPropertyId = value;
-                    OnPropertyChanged("EntityPropertyId");
-                }
-            }
-        }
-        private int _entityPropertyId;
-        [DataMember]
         public string Label
         {	
     		
@@ -156,26 +133,104 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _changesCanBeIgnored;
+        [DataMember]
+        public int PrincipalEntityPropertyId
+        {	
+    		
+            get { return _principalEntityPropertyId; }
+            set
+            {
+                if (_principalEntityPropertyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PrincipalEntityPropertyId", _principalEntityPropertyId);
+                    if (!IsDeserializing)
+                    {
+                        if (PrincipalEntityProperty != null && PrincipalEntityProperty.EntityPropertyID != value)
+                        {
+                            PrincipalEntityProperty = null;
+                        }
+                    }
+                    _principalEntityPropertyId = value;
+                    OnPropertyChanged("PrincipalEntityPropertyId");
+                }
+            }
+        }
+        private int _principalEntityPropertyId;
+        [DataMember]
+        public Nullable<int> DependantEntityPropertyId
+        {	
+    		
+            get { return _dependantEntityPropertyId; }
+            set
+            {
+                if (_dependantEntityPropertyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("DependantEntityPropertyId", _dependantEntityPropertyId);
+                    if (!IsDeserializing)
+                    {
+                        if (DependantEntityProperty != null && DependantEntityProperty.EntityPropertyID != value)
+                        {
+                            DependantEntityProperty = null;
+                        }
+                    }
+                    _dependantEntityPropertyId = value;
+                    OnPropertyChanged("DependantEntityPropertyId");
+                }
+            }
+        }
+        private Nullable<int> _dependantEntityPropertyId;
+        [DataMember]
+        public int OrderBy
+        {	
+    		
+            get { return _orderBy; }
+            set
+            {
+                if (_orderBy != value)
+                {
+                    _orderBy = value;
+                    OnPropertyChanged("OrderBy");
+                }
+            }
+        }
+        private int _orderBy;
 
         #endregion
         #region Navigation Properties
     
         [DataMember]
-        public EntityProperty EntityProperty
+        public EntityProperty DependantEntityProperty
         {
-            get { return _entityProperty; }
+            get { return _dependantEntityProperty; }
             set
             {
-                if (!ReferenceEquals(_entityProperty, value))
+                if (!ReferenceEquals(_dependantEntityProperty, value))
                 {
-                    var previousValue = _entityProperty;
-                    _entityProperty = value;
-                    FixupEntityProperty(previousValue);
-                    OnNavigationPropertyChanged("EntityProperty");
+                    var previousValue = _dependantEntityProperty;
+                    _dependantEntityProperty = value;
+                    FixupDependantEntityProperty(previousValue);
+                    OnNavigationPropertyChanged("DependantEntityProperty");
                 }
             }
         }
-        private EntityProperty _entityProperty;
+        private EntityProperty _dependantEntityProperty;
+    
+        [DataMember]
+        public EntityProperty PrincipalEntityProperty
+        {
+            get { return _principalEntityProperty; }
+            set
+            {
+                if (!ReferenceEquals(_principalEntityProperty, value))
+                {
+                    var previousValue = _principalEntityProperty;
+                    _principalEntityProperty = value;
+                    FixupPrincipalEntityProperty(previousValue);
+                    OnNavigationPropertyChanged("PrincipalEntityProperty");
+                }
+            }
+        }
+        private EntityProperty _principalEntityProperty;
 
         #endregion
         #region ChangeTracking
@@ -255,38 +310,74 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            EntityProperty = null;
+            DependantEntityProperty = null;
+            PrincipalEntityProperty = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupEntityProperty(EntityProperty previousValue)
+        private void FixupDependantEntityProperty(EntityProperty previousValue, bool skipKeys = false)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (EntityProperty != null)
+            if (DependantEntityProperty != null)
             {
-                EntityPropertyId = EntityProperty.EntityPropertyID;
+                DependantEntityPropertyId = DependantEntityProperty.EntityPropertyID;
+            }
+    
+            else if (!skipKeys)
+            {
+                DependantEntityPropertyId = null;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
             {
-                if (ChangeTracker.OriginalValues.ContainsKey("EntityProperty")
-                    && (ChangeTracker.OriginalValues["EntityProperty"] == EntityProperty))
+                if (ChangeTracker.OriginalValues.ContainsKey("DependantEntityProperty")
+                    && (ChangeTracker.OriginalValues["DependantEntityProperty"] == DependantEntityProperty))
                 {
-                    ChangeTracker.OriginalValues.Remove("EntityProperty");
+                    ChangeTracker.OriginalValues.Remove("DependantEntityProperty");
                 }
                 else
                 {
-                    ChangeTracker.RecordOriginalValue("EntityProperty", previousValue);
+                    ChangeTracker.RecordOriginalValue("DependantEntityProperty", previousValue);
                 }
-                if (EntityProperty != null && !EntityProperty.ChangeTracker.ChangeTrackingEnabled)
+                if (DependantEntityProperty != null && !DependantEntityProperty.ChangeTracker.ChangeTrackingEnabled)
                 {
-                    EntityProperty.StartTracking();
+                    DependantEntityProperty.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupPrincipalEntityProperty(EntityProperty previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (PrincipalEntityProperty != null)
+            {
+                PrincipalEntityPropertyId = PrincipalEntityProperty.EntityPropertyID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("PrincipalEntityProperty")
+                    && (ChangeTracker.OriginalValues["PrincipalEntityProperty"] == PrincipalEntityProperty))
+                {
+                    ChangeTracker.OriginalValues.Remove("PrincipalEntityProperty");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("PrincipalEntityProperty", previousValue);
+                }
+                if (PrincipalEntityProperty != null && !PrincipalEntityProperty.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    PrincipalEntityProperty.StartTracking();
                 }
             }
         }

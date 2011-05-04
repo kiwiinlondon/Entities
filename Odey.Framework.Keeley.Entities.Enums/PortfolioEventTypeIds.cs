@@ -3,7 +3,7 @@
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum PositionAccountMovementTypeIds
+    public enum PortfolioEventTypeIds
     {
         [EnumMember]
         None = 0,

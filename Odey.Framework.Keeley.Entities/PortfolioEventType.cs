@@ -18,28 +18,28 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PositionAccountMovementType: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class PortfolioEventType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PositionAccountMovementTypeId
+        public int PortfolioEventTypeId
         {	
     		
-            get { return _positionAccountMovementTypeId; }
+            get { return _portfolioEventTypeId; }
             set
             {
-                if (_positionAccountMovementTypeId != value)
+                if (_portfolioEventTypeId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PositionAccountMovementTypeId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PortfolioEventTypeId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _positionAccountMovementTypeId = value;
-                    OnPropertyChanged("PositionAccountMovementTypeId");
+                    _portfolioEventTypeId = value;
+                    OnPropertyChanged("PortfolioEventTypeId");
                 }
             }
         }
-        private int _positionAccountMovementTypeId;
+        private int _portfolioEventTypeId;
         [DataMember]
         public string Name
         {	
@@ -95,7 +95,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

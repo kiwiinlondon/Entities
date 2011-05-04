@@ -18,7 +18,8 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(PositionAccountMovement))]
+    [KnownType(typeof(PortfolioEvent))]
+    [KnownType(typeof(Charge))]
     public partial class InternalAllocation: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -232,39 +233,74 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        public TrackableCollection<PositionAccountMovement> PositionAccountMovements
+        public TrackableCollection<PortfolioEvent> PortfolioEvents
         {
             get
             {
-                if (_positionAccountMovements == null)
+                if (_portfolioEvents == null)
                 {
-                    _positionAccountMovements = new TrackableCollection<PositionAccountMovement>();
-                    _positionAccountMovements.CollectionChanged += FixupPositionAccountMovements;
+                    _portfolioEvents = new TrackableCollection<PortfolioEvent>();
+                    _portfolioEvents.CollectionChanged += FixupPortfolioEvents;
                 }
-                return _positionAccountMovements;
+                return _portfolioEvents;
             }
             set
             {
-                if (!ReferenceEquals(_positionAccountMovements, value))
+                if (!ReferenceEquals(_portfolioEvents, value))
                 {
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
                     }
-                    if (_positionAccountMovements != null)
+                    if (_portfolioEvents != null)
                     {
-                        _positionAccountMovements.CollectionChanged -= FixupPositionAccountMovements;
+                        _portfolioEvents.CollectionChanged -= FixupPortfolioEvents;
                     }
-                    _positionAccountMovements = value;
-                    if (_positionAccountMovements != null)
+                    _portfolioEvents = value;
+                    if (_portfolioEvents != null)
                     {
-                        _positionAccountMovements.CollectionChanged += FixupPositionAccountMovements;
+                        _portfolioEvents.CollectionChanged += FixupPortfolioEvents;
                     }
-                    OnNavigationPropertyChanged("PositionAccountMovements");
+                    OnNavigationPropertyChanged("PortfolioEvents");
                 }
             }
         }
-        private TrackableCollection<PositionAccountMovement> _positionAccountMovements;
+        private TrackableCollection<PortfolioEvent> _portfolioEvents;
+    
+        [DataMember]
+        public TrackableCollection<Charge> Charges
+        {
+            get
+            {
+                if (_charges == null)
+                {
+                    _charges = new TrackableCollection<Charge>();
+                    _charges.CollectionChanged += FixupCharges;
+                }
+                return _charges;
+            }
+            set
+            {
+                if (!ReferenceEquals(_charges, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_charges != null)
+                    {
+                        _charges.CollectionChanged -= FixupCharges;
+                    }
+                    _charges = value;
+                    if (_charges != null)
+                    {
+                        _charges.CollectionChanged += FixupCharges;
+                    }
+                    OnNavigationPropertyChanged("Charges");
+                }
+            }
+        }
+        private TrackableCollection<Charge> _charges;
 
         #endregion
         #region ChangeTracking
@@ -354,13 +390,14 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            PositionAccountMovements.Clear();
+            PortfolioEvents.Clear();
+            Charges.Clear();
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupPositionAccountMovements(object sender, NotifyCollectionChangedEventArgs e)
+        private void FixupPortfolioEvents(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (IsDeserializing)
             {
@@ -369,7 +406,7 @@ namespace Odey.Framework.Keeley.Entities
     
             if (e.NewItems != null)
             {
-                foreach (PositionAccountMovement item in e.NewItems)
+                foreach (PortfolioEvent item in e.NewItems)
                 {
                     item.InternalAllocationId = EventID;
                     if (ChangeTracker.ChangeTrackingEnabled)
@@ -378,18 +415,53 @@ namespace Odey.Framework.Keeley.Entities
                         {
                             item.StartTracking();
                         }
-                        ChangeTracker.RecordAdditionToCollectionProperties("PositionAccountMovements", item);
+                        ChangeTracker.RecordAdditionToCollectionProperties("PortfolioEvents", item);
                     }
                 }
             }
     
             if (e.OldItems != null)
             {
-                foreach (PositionAccountMovement item in e.OldItems)
+                foreach (PortfolioEvent item in e.OldItems)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("PositionAccountMovements", item);
+                        ChangeTracker.RecordRemovalFromCollectionProperties("PortfolioEvents", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupCharges(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (Charge item in e.NewItems)
+                {
+                    item.EventID = EventID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("Charges", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (Charge item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("Charges", item);
                     }
                 }
             }

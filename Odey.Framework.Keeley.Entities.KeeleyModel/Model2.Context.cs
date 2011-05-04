@@ -293,12 +293,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<InternalAllocation> _internalAllocations;
     
-        public ObjectSet<PositionAccountMovement> PositionAccountMovements
-        {
-            get { return _positionAccountMovements  ?? (_positionAccountMovements = CreateObjectSet<PositionAccountMovement>("PositionAccountMovements")); }
-        }
-        private ObjectSet<PositionAccountMovement> _positionAccountMovements;
-    
         public ObjectSet<InternalAccountingEvent> InternalAccountingEvents
         {
             get { return _internalAccountingEvents  ?? (_internalAccountingEvents = CreateObjectSet<InternalAccountingEvent>("InternalAccountingEvents")); }
@@ -310,12 +304,6 @@ namespace Odey.Framework.Keeley.Entities
             get { return _internalAccountingEventTypes  ?? (_internalAccountingEventTypes = CreateObjectSet<InternalAccountingEventType>("InternalAccountingEventTypes")); }
         }
         private ObjectSet<InternalAccountingEventType> _internalAccountingEventTypes;
-    
-        public ObjectSet<PositionAccountMovementType> PositionAccountMovementTypes
-        {
-            get { return _positionAccountMovementTypes  ?? (_positionAccountMovementTypes = CreateObjectSet<PositionAccountMovementType>("PositionAccountMovementTypes")); }
-        }
-        private ObjectSet<PositionAccountMovementType> _positionAccountMovementTypes;
     
         public ObjectSet<InstrumentClassHierarchy> InstrumentClassHierarchies
         {
@@ -365,12 +353,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<ExtractEntity> _extractEntities;
     
-        public ObjectSet<ExtractEntityPropertyValue> ExtractEntityPropertyValues
-        {
-            get { return _extractEntityPropertyValues  ?? (_extractEntityPropertyValues = CreateObjectSet<ExtractEntityPropertyValue>("ExtractEntityPropertyValues")); }
-        }
-        private ObjectSet<ExtractEntityPropertyValue> _extractEntityPropertyValues;
-    
         public ObjectSet<ExtractInputConfiguration> ExtractInputConfigurations
         {
             get { return _extractInputConfigurations  ?? (_extractInputConfigurations = CreateObjectSet<ExtractInputConfiguration>("ExtractInputConfigurations")); }
@@ -394,10 +376,28 @@ namespace Odey.Framework.Keeley.Entities
             get { return _extractTypes  ?? (_extractTypes = CreateObjectSet<ExtractType>("ExtractTypes")); }
         }
         private ObjectSet<ExtractType> _extractTypes;
+    
+        public ObjectSet<PortfolioEvent> PortfolioEvents
+        {
+            get { return _portfolioEvents  ?? (_portfolioEvents = CreateObjectSet<PortfolioEvent>("PortfolioEvents")); }
+        }
+        private ObjectSet<PortfolioEvent> _portfolioEvents;
+    
+        public ObjectSet<PortfolioEventType> PortfolioEventTypes
+        {
+            get { return _portfolioEventTypes  ?? (_portfolioEventTypes = CreateObjectSet<PortfolioEventType>("PortfolioEventTypes")); }
+        }
+        private ObjectSet<PortfolioEventType> _portfolioEventTypes;
+    
+        public ObjectSet<ExtractEntityPropertyValue> ExtractEntityPropertyValues
+        {
+            get { return _extractEntityPropertyValues  ?? (_extractEntityPropertyValues = CreateObjectSet<ExtractEntityPropertyValue>("ExtractEntityPropertyValues")); }
+        }
+        private ObjectSet<ExtractEntityPropertyValue> _extractEntityPropertyValues;
 
         #endregion
         #region Function Imports
-        public virtual ObjectResult<PositionAccountMovement> PositionAccountMovementGetPrevious(Nullable<int> positionAccountID, Nullable<System.DateTime> referenceDate, Nullable<int> portfolioAggregationLevelId, Nullable<int> positionAccountMovementId)
+        public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionAccountID, Nullable<System.DateTime> referenceDate, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
     
             ObjectParameter positionAccountIDParameter;
@@ -433,17 +433,17 @@ namespace Odey.Framework.Keeley.Entities
                 portfolioAggregationLevelIdParameter = new ObjectParameter("PortfolioAggregationLevelId", typeof(int));
             }
     
-            ObjectParameter positionAccountMovementIdParameter;
+            ObjectParameter portfolioEventIdParameter;
     
-            if (positionAccountMovementId.HasValue)
+            if (portfolioEventId.HasValue)
             {
-                positionAccountMovementIdParameter = new ObjectParameter("PositionAccountMovementId", positionAccountMovementId);
+                portfolioEventIdParameter = new ObjectParameter("PortfolioEventId", portfolioEventId);
             }
             else
             {
-                positionAccountMovementIdParameter = new ObjectParameter("PositionAccountMovementId", typeof(int));
+                portfolioEventIdParameter = new ObjectParameter("PortfolioEventId", typeof(int));
             }
-            return base.ExecuteFunction<PositionAccountMovement>("PositionAccountMovementGetPrevious", positionAccountIDParameter, referenceDateParameter, portfolioAggregationLevelIdParameter, positionAccountMovementIdParameter);
+            return base.ExecuteFunction<PortfolioEvent>("PortfolioEventGetPrevious", positionAccountIDParameter, referenceDateParameter, portfolioAggregationLevelIdParameter, portfolioEventIdParameter);
         }
 
         #endregion

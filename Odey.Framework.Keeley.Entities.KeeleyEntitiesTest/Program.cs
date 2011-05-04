@@ -14,21 +14,21 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            using (var context = new KeeleyModel())
-            {
-                List<InternalAllocation> ias = context.InternalAllocations.Where(a => a.ParentEventId == 434).ToList();
-                foreach (InternalAllocation i in ias)
-                {
-                    List<PositionAccountMovement> movements = context.PositionAccountMovements.Where(a => a.InternalAllocationId == i.EventID).ToList();
-                    for (int c = movements.Count - 1; c >= 0; c--)
-                    {
-                        PositionAccountMovement a = i.PositionAccountMovements[c];
-                        context.PositionAccountMovements.DeleteObject(a);
-                    }
-                   // context.InternalAllocations.DeleteObject(i);
-                }
-                context.SaveChanges();
-            }
+            //using (var context = new KeeleyModel())
+            //{
+            //    List<InternalAllocation> ias = context.InternalAllocations.Where(a => a.ParentEventId == 434).ToList();
+            //    foreach (InternalAllocation i in ias)
+            //    {
+            //        List<PositionAccountMovement> movements = context.PositionAccountMovements.Where(a => a.InternalAllocationId == i.EventID).ToList();
+            //        for (int c = movements.Count - 1; c >= 0; c--)
+            //        {
+            //            PositionAccountMovement a = i.PositionAccountMovements[c];
+            //            context.PositionAccountMovements.DeleteObject(a);
+            //        }
+            //       // context.InternalAllocations.DeleteObject(i);
+            //    }
+            //    context.SaveChanges();
+            //}
         }
 
         static void TestCache()

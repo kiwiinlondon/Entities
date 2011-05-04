@@ -29,7 +29,7 @@ namespace Odey.Framework.Keeley.Entities
             foreach (ObjectStateEntry entry in
                 ObjectStateManager.GetObjectStateEntries(
                 EntityState.Added | EntityState.Modified))
-            {               
+            {
                 PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
 
                 if (updateUserIdPropInfo != null)
@@ -38,9 +38,9 @@ namespace Odey.Framework.Keeley.Entities
                     {
                         throw new ApplicationException("No Security call stack was provided in constructor so user cannot be authenticated");
                     }
-                    ApplicationUser user = null;                    
+                    ApplicationUser user = null;
                     SecurityCallFrame callFrame = _securityCallStack.OriginalCall;
-                    if (callFrame==null)
+                    if (callFrame == null)
                     {
                         throw new ApplicationException("Original Call frame was not supplied so user cannot be authenticated");
                     }
@@ -61,7 +61,7 @@ namespace Odey.Framework.Keeley.Entities
                     }
                 }
             }
-            return base.SaveChanges(options);            
+            return base.SaveChanges(options);
         }
     }
 }
