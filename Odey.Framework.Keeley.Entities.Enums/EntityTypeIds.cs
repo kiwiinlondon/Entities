@@ -10,13 +10,27 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         TradeEvent = 1,
         [EnumMember]
-        InstrumentEvent = 2,
+        Fund = 7,
         [EnumMember]
-        CapitalEvent = 3,
+        Counterparty = 8,
         [EnumMember]
-        FXTradeEvent = 4,
+        Currency = 9,
         [EnumMember]
-        InternalAccountingEvent = 5
+        InstrumentMarket = 10,
+        [EnumMember]
+        InstrumentClass = 11,
+        [EnumMember]
+        ExtractEntity = 12,
+        [EnumMember]
+        MatchedStatus = 13,
+        [EnumMember]
+        InstrumentEvent = 14,
+        [EnumMember]
+        CapitalEvent = 15,
+        [EnumMember]
+        FXTradeEvent = 16,
+        [EnumMember]
+        InternalAccountingEvent = 17       
     }
 }
 

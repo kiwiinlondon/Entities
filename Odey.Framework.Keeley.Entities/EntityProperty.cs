@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(ExtractOutputConfiguration))]
     public partial class EntityProperty: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -163,6 +164,79 @@ namespace Odey.Framework.Keeley.Entities
         private int _typeCode;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<ExtractOutputConfiguration> ExtractOutputConfigurations
+        {
+            get
+            {
+                if (_extractOutputConfigurations == null)
+                {
+                    _extractOutputConfigurations = new TrackableCollection<ExtractOutputConfiguration>();
+                    _extractOutputConfigurations.CollectionChanged += FixupExtractOutputConfigurations;
+                }
+                return _extractOutputConfigurations;
+            }
+            set
+            {
+                if (!ReferenceEquals(_extractOutputConfigurations, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_extractOutputConfigurations != null)
+                    {
+                        _extractOutputConfigurations.CollectionChanged -= FixupExtractOutputConfigurations;
+                    }
+                    _extractOutputConfigurations = value;
+                    if (_extractOutputConfigurations != null)
+                    {
+                        _extractOutputConfigurations.CollectionChanged += FixupExtractOutputConfigurations;
+                    }
+                    OnNavigationPropertyChanged("ExtractOutputConfigurations");
+                }
+            }
+        }
+        private TrackableCollection<ExtractOutputConfiguration> _extractOutputConfigurations;
+    
+        [DataMember]
+        public TrackableCollection<ExtractOutputConfiguration> ExtractOutputConfigurations1
+        {
+            get
+            {
+                if (_extractOutputConfigurations1 == null)
+                {
+                    _extractOutputConfigurations1 = new TrackableCollection<ExtractOutputConfiguration>();
+                    _extractOutputConfigurations1.CollectionChanged += FixupExtractOutputConfigurations1;
+                }
+                return _extractOutputConfigurations1;
+            }
+            set
+            {
+                if (!ReferenceEquals(_extractOutputConfigurations1, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_extractOutputConfigurations1 != null)
+                    {
+                        _extractOutputConfigurations1.CollectionChanged -= FixupExtractOutputConfigurations1;
+                    }
+                    _extractOutputConfigurations1 = value;
+                    if (_extractOutputConfigurations1 != null)
+                    {
+                        _extractOutputConfigurations1.CollectionChanged += FixupExtractOutputConfigurations1;
+                    }
+                    OnNavigationPropertyChanged("ExtractOutputConfigurations1");
+                }
+            }
+        }
+        private TrackableCollection<ExtractOutputConfiguration> _extractOutputConfigurations1;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -240,6 +314,89 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            ExtractOutputConfigurations.Clear();
+            ExtractOutputConfigurations1.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupExtractOutputConfigurations(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (ExtractOutputConfiguration item in e.NewItems)
+                {
+                    item.EntityProperty = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("ExtractOutputConfigurations", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (ExtractOutputConfiguration item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.EntityProperty, this))
+                    {
+                        item.EntityProperty = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("ExtractOutputConfigurations", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupExtractOutputConfigurations1(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (ExtractOutputConfiguration item in e.NewItems)
+                {
+                    item.EntityPropertyToWrite = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("ExtractOutputConfigurations1", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (ExtractOutputConfiguration item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.EntityPropertyToWrite, this))
+                    {
+                        item.EntityPropertyToWrite = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("ExtractOutputConfigurations1", item);
+                    }
+                }
+            }
         }
 
         #endregion

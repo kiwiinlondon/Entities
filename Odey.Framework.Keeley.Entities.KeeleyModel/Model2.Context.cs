@@ -359,12 +359,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<ExtractInputConfiguration> _extractInputConfigurations;
     
-        public ObjectSet<ExtractOutputConfiguration> ExtractOutputConfigurations
-        {
-            get { return _extractOutputConfigurations  ?? (_extractOutputConfigurations = CreateObjectSet<ExtractOutputConfiguration>("ExtractOutputConfigurations")); }
-        }
-        private ObjectSet<ExtractOutputConfiguration> _extractOutputConfigurations;
-    
         public ObjectSet<ExtractRun> ExtractRuns
         {
             get { return _extractRuns  ?? (_extractRuns = CreateObjectSet<ExtractRun>("ExtractRuns")); }
@@ -400,6 +394,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _extractOutputTypes  ?? (_extractOutputTypes = CreateObjectSet<ExtractOutputType>("ExtractOutputTypes")); }
         }
         private ObjectSet<ExtractOutputType> _extractOutputTypes;
+    
+        public ObjectSet<ExtractOutputConfiguration> ExtractOutputConfigurations
+        {
+            get { return _extractOutputConfigurations  ?? (_extractOutputConfigurations = CreateObjectSet<ExtractOutputConfiguration>("ExtractOutputConfigurations")); }
+        }
+        private ObjectSet<ExtractOutputConfiguration> _extractOutputConfigurations;
 
         #endregion
         #region Function Imports

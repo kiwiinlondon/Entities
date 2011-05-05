@@ -8,6 +8,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        CSV = 1
+        EmailWithGenericCSVFile = 1
     }
 }
