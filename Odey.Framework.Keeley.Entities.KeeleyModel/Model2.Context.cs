@@ -394,6 +394,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _extractEntityPropertyValues  ?? (_extractEntityPropertyValues = CreateObjectSet<ExtractEntityPropertyValue>("ExtractEntityPropertyValues")); }
         }
         private ObjectSet<ExtractEntityPropertyValue> _extractEntityPropertyValues;
+    
+        public ObjectSet<ExtractOutputType> ExtractOutputTypes
+        {
+            get { return _extractOutputTypes  ?? (_extractOutputTypes = CreateObjectSet<ExtractOutputType>("ExtractOutputTypes")); }
+        }
+        private ObjectSet<ExtractOutputType> _extractOutputTypes;
 
         #endregion
         #region Function Imports

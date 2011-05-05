@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(ExtractOutputType))]
     public partial class Extract: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -117,6 +118,49 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public int ExtractOutputTypeID
+        {	
+    		
+            get { return _extractOutputTypeID; }
+            set
+            {
+                if (_extractOutputTypeID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ExtractOutputTypeID", _extractOutputTypeID);
+                    if (!IsDeserializing)
+                    {
+                        if (ExtractOutputType != null && ExtractOutputType.ExtractOutputTypeID != value)
+                        {
+                            ExtractOutputType = null;
+                        }
+                    }
+                    _extractOutputTypeID = value;
+                    OnPropertyChanged("ExtractOutputTypeID");
+                }
+            }
+        }
+        private int _extractOutputTypeID;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public ExtractOutputType ExtractOutputType
+        {
+            get { return _extractOutputType; }
+            set
+            {
+                if (!ReferenceEquals(_extractOutputType, value))
+                {
+                    var previousValue = _extractOutputType;
+                    _extractOutputType = value;
+                    FixupExtractOutputType(previousValue);
+                    OnNavigationPropertyChanged("ExtractOutputType");
+                }
+            }
+        }
+        private ExtractOutputType _extractOutputType;
 
         #endregion
         #region ChangeTracking
@@ -196,6 +240,40 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            ExtractOutputType = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupExtractOutputType(ExtractOutputType previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (ExtractOutputType != null)
+            {
+                ExtractOutputTypeID = ExtractOutputType.ExtractOutputTypeID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("ExtractOutputType")
+                    && (ChangeTracker.OriginalValues["ExtractOutputType"] == ExtractOutputType))
+                {
+                    ChangeTracker.OriginalValues.Remove("ExtractOutputType");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("ExtractOutputType", previousValue);
+                }
+                if (ExtractOutputType != null && !ExtractOutputType.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    ExtractOutputType.StartTracking();
+                }
+            }
         }
 
         #endregion

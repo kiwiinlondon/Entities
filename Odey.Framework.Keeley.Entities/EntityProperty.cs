@@ -146,6 +146,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _propertyOnChildEntity;
+        [DataMember]
+        public int TypeCode
+        {	
+    		
+            get { return _typeCode; }
+            set
+            {
+                if (_typeCode != value)
+                {
+                    _typeCode = value;
+                    OnPropertyChanged("TypeCode");
+                }
+            }
+        }
+        private int _typeCode;
 
         #endregion
         #region ChangeTracking

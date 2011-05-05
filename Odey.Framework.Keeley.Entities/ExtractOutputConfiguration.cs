@@ -134,52 +134,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private bool _changesCanBeIgnored;
         [DataMember]
-        public int PrincipalEntityPropertyId
-        {	
-    		
-            get { return _principalEntityPropertyId; }
-            set
-            {
-                if (_principalEntityPropertyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PrincipalEntityPropertyId", _principalEntityPropertyId);
-                    if (!IsDeserializing)
-                    {
-                        if (PrincipalEntityProperty != null && PrincipalEntityProperty.EntityPropertyID != value)
-                        {
-                            PrincipalEntityProperty = null;
-                        }
-                    }
-                    _principalEntityPropertyId = value;
-                    OnPropertyChanged("PrincipalEntityPropertyId");
-                }
-            }
-        }
-        private int _principalEntityPropertyId;
-        [DataMember]
-        public Nullable<int> DependantEntityPropertyId
-        {	
-    		
-            get { return _dependantEntityPropertyId; }
-            set
-            {
-                if (_dependantEntityPropertyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("DependantEntityPropertyId", _dependantEntityPropertyId);
-                    if (!IsDeserializing)
-                    {
-                        if (DependantEntityProperty != null && DependantEntityProperty.EntityPropertyID != value)
-                        {
-                            DependantEntityProperty = null;
-                        }
-                    }
-                    _dependantEntityPropertyId = value;
-                    OnPropertyChanged("DependantEntityPropertyId");
-                }
-            }
-        }
-        private Nullable<int> _dependantEntityPropertyId;
-        [DataMember]
         public int OrderBy
         {	
     		
@@ -194,43 +148,49 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _orderBy;
+        [DataMember]
+        public int EntityPropertyId
+        {	
+    		
+            get { return _entityPropertyId; }
+            set
+            {
+                if (_entityPropertyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("EntityPropertyId", _entityPropertyId);
+                    if (!IsDeserializing)
+                    {
+                        if (EntityProperty != null && EntityProperty.EntityPropertyID != value)
+                        {
+                            EntityProperty = null;
+                        }
+                    }
+                    _entityPropertyId = value;
+                    OnPropertyChanged("EntityPropertyId");
+                }
+            }
+        }
+        private int _entityPropertyId;
 
         #endregion
         #region Navigation Properties
     
         [DataMember]
-        public EntityProperty DependantEntityProperty
+        public EntityProperty EntityProperty
         {
-            get { return _dependantEntityProperty; }
+            get { return _entityProperty; }
             set
             {
-                if (!ReferenceEquals(_dependantEntityProperty, value))
+                if (!ReferenceEquals(_entityProperty, value))
                 {
-                    var previousValue = _dependantEntityProperty;
-                    _dependantEntityProperty = value;
-                    FixupDependantEntityProperty(previousValue);
-                    OnNavigationPropertyChanged("DependantEntityProperty");
+                    var previousValue = _entityProperty;
+                    _entityProperty = value;
+                    FixupEntityProperty(previousValue);
+                    OnNavigationPropertyChanged("EntityProperty");
                 }
             }
         }
-        private EntityProperty _dependantEntityProperty;
-    
-        [DataMember]
-        public EntityProperty PrincipalEntityProperty
-        {
-            get { return _principalEntityProperty; }
-            set
-            {
-                if (!ReferenceEquals(_principalEntityProperty, value))
-                {
-                    var previousValue = _principalEntityProperty;
-                    _principalEntityProperty = value;
-                    FixupPrincipalEntityProperty(previousValue);
-                    OnNavigationPropertyChanged("PrincipalEntityProperty");
-                }
-            }
-        }
-        private EntityProperty _principalEntityProperty;
+        private EntityProperty _entityProperty;
 
         #endregion
         #region ChangeTracking
@@ -310,74 +270,38 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            DependantEntityProperty = null;
-            PrincipalEntityProperty = null;
+            EntityProperty = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupDependantEntityProperty(EntityProperty previousValue, bool skipKeys = false)
+        private void FixupEntityProperty(EntityProperty previousValue)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (DependantEntityProperty != null)
+            if (EntityProperty != null)
             {
-                DependantEntityPropertyId = DependantEntityProperty.EntityPropertyID;
-            }
-    
-            else if (!skipKeys)
-            {
-                DependantEntityPropertyId = null;
+                EntityPropertyId = EntityProperty.EntityPropertyID;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
             {
-                if (ChangeTracker.OriginalValues.ContainsKey("DependantEntityProperty")
-                    && (ChangeTracker.OriginalValues["DependantEntityProperty"] == DependantEntityProperty))
+                if (ChangeTracker.OriginalValues.ContainsKey("EntityProperty")
+                    && (ChangeTracker.OriginalValues["EntityProperty"] == EntityProperty))
                 {
-                    ChangeTracker.OriginalValues.Remove("DependantEntityProperty");
+                    ChangeTracker.OriginalValues.Remove("EntityProperty");
                 }
                 else
                 {
-                    ChangeTracker.RecordOriginalValue("DependantEntityProperty", previousValue);
+                    ChangeTracker.RecordOriginalValue("EntityProperty", previousValue);
                 }
-                if (DependantEntityProperty != null && !DependantEntityProperty.ChangeTracker.ChangeTrackingEnabled)
+                if (EntityProperty != null && !EntityProperty.ChangeTracker.ChangeTrackingEnabled)
                 {
-                    DependantEntityProperty.StartTracking();
-                }
-            }
-        }
-    
-        private void FixupPrincipalEntityProperty(EntityProperty previousValue)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (PrincipalEntityProperty != null)
-            {
-                PrincipalEntityPropertyId = PrincipalEntityProperty.EntityPropertyID;
-            }
-    
-            if (ChangeTracker.ChangeTrackingEnabled)
-            {
-                if (ChangeTracker.OriginalValues.ContainsKey("PrincipalEntityProperty")
-                    && (ChangeTracker.OriginalValues["PrincipalEntityProperty"] == PrincipalEntityProperty))
-                {
-                    ChangeTracker.OriginalValues.Remove("PrincipalEntityProperty");
-                }
-                else
-                {
-                    ChangeTracker.RecordOriginalValue("PrincipalEntityProperty", previousValue);
-                }
-                if (PrincipalEntityProperty != null && !PrincipalEntityProperty.ChangeTracker.ChangeTrackingEnabled)
-                {
-                    PrincipalEntityProperty.StartTracking();
+                    EntityProperty.StartTracking();
                 }
             }
         }

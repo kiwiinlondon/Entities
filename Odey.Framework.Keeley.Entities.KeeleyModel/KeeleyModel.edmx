@@ -26,6 +26,7 @@
           <EntitySet Name="ExtractEntityPropertyValue" EntityType="KeeleyModel.Store.ExtractEntityPropertyValue" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ExtractInputConfiguration" EntityType="KeeleyModel.Store.ExtractInputConfiguration" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ExtractOutputConfiguration" EntityType="KeeleyModel.Store.ExtractOutputConfiguration" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ExtractOutputType" EntityType="KeeleyModel.Store.ExtractOutputType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ExtractRun" EntityType="KeeleyModel.Store.ExtractRun" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ExtractType" EntityType="KeeleyModel.Store.ExtractType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FMContractMapping" EntityType="KeeleyModel.Store.FMContractMapping" store:Type="Tables" Schema="dbo" />
@@ -207,6 +208,10 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ExtractConfiguration" EntitySet="ExtractConfiguration" />
           </AssociationSet>
+          <AssociationSet Name="ExtractExtractOutputTypeIDFK" Association="KeeleyModel.Store.ExtractExtractOutputTypeIDFK">
+            <End Role="ExtractOutputType" EntitySet="ExtractOutputType" />
+            <End Role="Extract" EntitySet="Extract" />
+          </AssociationSet>
           <AssociationSet Name="ExtractExtractTypeIdFK" Association="KeeleyModel.Store.ExtractExtractTypeIdFK">
             <End Role="ExtractType" EntitySet="ExtractType" />
             <End Role="Extract" EntitySet="Extract" />
@@ -231,13 +236,17 @@
             <End Role="Extract" EntitySet="Extract" />
             <End Role="ExtractInputConfiguration" EntitySet="ExtractInputConfiguration" />
           </AssociationSet>
-          <AssociationSet Name="ExtractOutputConfigurationDependantEntityPropertyIdFK" Association="KeeleyModel.Store.ExtractOutputConfigurationDependantEntityPropertyIdFK">
+          <AssociationSet Name="ExtractOutputConfigurationEntityPropertyIdFK" Association="KeeleyModel.Store.ExtractOutputConfigurationEntityPropertyIdFK">
             <End Role="EntityProperty" EntitySet="EntityProperty" />
             <End Role="ExtractOutputConfiguration" EntitySet="ExtractOutputConfiguration" />
           </AssociationSet>
-          <AssociationSet Name="ExtractOutputConfigurationPrincipalEntityPropertyIdFK" Association="KeeleyModel.Store.ExtractOutputConfigurationPrincipalEntityPropertyIdFK">
+          <AssociationSet Name="ExtractOutputConfigurationEntityPropertyIdToWriteFK" Association="KeeleyModel.Store.ExtractOutputConfigurationEntityPropertyIdToWriteFK">
             <End Role="EntityProperty" EntitySet="EntityProperty" />
             <End Role="ExtractOutputConfiguration" EntitySet="ExtractOutputConfiguration" />
+          </AssociationSet>
+          <AssociationSet Name="ExtractOutputTypeUserIDFK" Association="KeeleyModel.Store.ExtractOutputTypeUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ExtractOutputType" EntitySet="ExtractOutputType" />
           </AssociationSet>
           <AssociationSet Name="ExtractRunExtractIdFK" Association="KeeleyModel.Store.ExtractRunExtractIdFK">
             <End Role="Extract" EntitySet="Extract" />
@@ -760,6 +769,7 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="PropertyOnChildEntity" Type="bit" Nullable="false" />
+          <Property Name="TypeCode" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -794,6 +804,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="ExtractOutputTypeID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ExtractConfiguration">
           <Key>
@@ -820,6 +831,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="EntityTypeId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ExtractEntityPropertyValue">
           <Key>
@@ -864,11 +876,21 @@
           </Key>
           <Property Name="ExtractOutputConfigurationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ExtractId" Type="int" Nullable="false" />
-          <Property Name="PrincipalEntityPropertyId" Type="int" Nullable="false" />
-          <Property Name="DependantEntityPropertyId" Type="int" />
           <Property Name="Label" Type="varchar" MaxLength="1000" />
           <Property Name="ChangesCanBeIgnored" Type="bit" Nullable="false" />
           <Property Name="OrderBy" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="EntityPropertyId" Type="int" Nullable="false" />
+          <Property Name="EntityPropertyToWriteId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ExtractOutputType">
+          <Key>
+            <PropertyRef Name="ExtractOutputTypeID" />
+          </Key>
+          <Property Name="ExtractOutputTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="70" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
@@ -883,6 +905,9 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="InProgress" Type="bit" Nullable="false" />
+          <Property Name="NumberRecords" Type="int" Nullable="false" />
+          <Property Name="FilePath" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="ExtractType">
           <Key>
@@ -1805,6 +1830,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ExtractExtractOutputTypeIDFK">
+          <End Role="ExtractOutputType" Type="KeeleyModel.Store.ExtractOutputType" Multiplicity="1" />
+          <End Role="Extract" Type="KeeleyModel.Store.Extract" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExtractOutputType">
+              <PropertyRef Name="ExtractOutputTypeID" />
+            </Principal>
+            <Dependent Role="Extract">
+              <PropertyRef Name="ExtractOutputTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ExtractExtractTypeIdFK">
           <End Role="ExtractType" Type="KeeleyModel.Store.ExtractType" Multiplicity="1" />
           <End Role="Extract" Type="KeeleyModel.Store.Extract" Multiplicity="*" />
@@ -1877,19 +1914,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ExtractOutputConfigurationDependantEntityPropertyIdFK">
-          <End Role="EntityProperty" Type="KeeleyModel.Store.EntityProperty" Multiplicity="0..1" />
-          <End Role="ExtractOutputConfiguration" Type="KeeleyModel.Store.ExtractOutputConfiguration" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EntityProperty">
-              <PropertyRef Name="EntityPropertyID" />
-            </Principal>
-            <Dependent Role="ExtractOutputConfiguration">
-              <PropertyRef Name="DependantEntityPropertyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ExtractOutputConfigurationPrincipalEntityPropertyIdFK">
+        <Association Name="ExtractOutputConfigurationEntityPropertyIdFK">
           <End Role="EntityProperty" Type="KeeleyModel.Store.EntityProperty" Multiplicity="1" />
           <End Role="ExtractOutputConfiguration" Type="KeeleyModel.Store.ExtractOutputConfiguration" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1897,7 +1922,31 @@
               <PropertyRef Name="EntityPropertyID" />
             </Principal>
             <Dependent Role="ExtractOutputConfiguration">
-              <PropertyRef Name="PrincipalEntityPropertyId" />
+              <PropertyRef Name="EntityPropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExtractOutputConfigurationEntityPropertyIdToWriteFK">
+          <End Role="EntityProperty" Type="KeeleyModel.Store.EntityProperty" Multiplicity="1" />
+          <End Role="ExtractOutputConfiguration" Type="KeeleyModel.Store.ExtractOutputConfiguration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityProperty">
+              <PropertyRef Name="EntityPropertyID" />
+            </Principal>
+            <Dependent Role="ExtractOutputConfiguration">
+              <PropertyRef Name="EntityPropertyToWriteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExtractOutputTypeUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="ExtractOutputType" Type="KeeleyModel.Store.ExtractOutputType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ExtractOutputType">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3290,6 +3339,7 @@
           <Parameter Name="IsCancelled" Type="bit" Mode="In" />
           <Parameter Name="SendInNextRun" Type="bit" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
         </Function>
         <Function Name="ExtractEntity_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractEntityID" Type="int" Mode="In" />
@@ -3300,6 +3350,7 @@
           <Parameter Name="SendInNextRun" Type="bit" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
         </Function>
         <Function Name="ExtractEntityPropertyValue_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractEntityPropertyValueID" Type="int" Mode="In" />
@@ -3347,6 +3398,9 @@
           <Parameter Name="ExtractId" Type="int" Mode="In" />
           <Parameter Name="RunTime" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="InProgress" Type="bit" Mode="In" />
+          <Parameter Name="NumberRecords" Type="int" Mode="In" />
+          <Parameter Name="FilePath" Type="varchar" Mode="In" />
         </Function>
         <Function Name="ExtractRun_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractRunId" Type="int" Mode="In" />
@@ -3354,6 +3408,9 @@
           <Parameter Name="RunTime" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="InProgress" Type="bit" Mode="In" />
+          <Parameter Name="NumberRecords" Type="int" Mode="In" />
+          <Parameter Name="FilePath" Type="varchar" Mode="In" />
         </Function>
         <Function Name="FMContractMapping_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FMContId" Type="int" Mode="In" />
@@ -4828,13 +4885,18 @@
             <End Role="ExtractEntity" EntitySet="ExtractEntities" />
             <End Role="ExtractEntityPropertyValue" EntitySet="ExtractEntityPropertyValues" />
           </AssociationSet>
-          <AssociationSet Name="ExtractOutputConfigurationDependantEntityPropertyIdFK" Association="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationDependantEntityPropertyIdFK">
+          <EntitySet Name="ExtractOutputTypes" EntityType="Odey.Framework.Keeley.Entities.ExtractOutputType" />
+          <AssociationSet Name="ExtractOutputTypeUserIDFK" Association="Odey.Framework.Keeley.Entities.ExtractOutputTypeUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ExtractOutputType" EntitySet="ExtractOutputTypes" />
+          </AssociationSet>
+          <AssociationSet Name="ExtractOutputConfigurationEntityPropertyIdFK" Association="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationEntityPropertyIdFK">
             <End Role="EntityProperty" EntitySet="EntityProperties" />
             <End Role="ExtractOutputConfiguration" EntitySet="ExtractOutputConfigurations" />
           </AssociationSet>
-          <AssociationSet Name="ExtractOutputConfigurationPrincipalEntityPropertyIdFK" Association="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationPrincipalEntityPropertyIdFK">
-            <End Role="EntityProperty" EntitySet="EntityProperties" />
-            <End Role="ExtractOutputConfiguration" EntitySet="ExtractOutputConfigurations" />
+          <AssociationSet Name="ExtractExtractOutputTypeIDFK" Association="Odey.Framework.Keeley.Entities.ExtractExtractOutputTypeIDFK">
+            <End Role="ExtractOutputType" EntitySet="ExtractOutputTypes" />
+            <End Role="Extract" EntitySet="Extracts" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -6795,6 +6857,7 @@
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="PropertyOnChildEntity" Nullable="false" />
+          <Property Type="Int32" Name="TypeCode" Nullable="false" />
         </EntityType>
         <EntityType Name="Extract">
           <Key>
@@ -6806,6 +6869,8 @@
           <Property Type="DateTime" Name="StartDt" Nullable="false" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Int32" Name="ExtractOutputTypeID" Nullable="false" />
+          <NavigationProperty Name="ExtractOutputType" Relationship="Odey.Framework.Keeley.Entities.ExtractExtractOutputTypeIDFK" FromRole="Extract" ToRole="ExtractOutputType" />
         </EntityType>
         <EntityType Name="ExtractConfiguration">
           <Key>
@@ -6833,6 +6898,7 @@
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="ExtractEntityPropertyValues" Relationship="Odey.Framework.Keeley.Entities.ExtractEntityPropertyValueExtractEntityIDFK" FromRole="ExtractEntity" ToRole="ExtractEntityPropertyValue" />
+          <Property Type="Int32" Name="EntityTypeId" Nullable="false" />
         </EntityType>
         <EntityType Name="ExtractInputConfiguration">
           <Key>
@@ -6862,11 +6928,9 @@
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="ChangesCanBeIgnored" Nullable="false" />
-          <Property Type="Int32" Name="PrincipalEntityPropertyId" Nullable="false" />
-          <Property Type="Int32" Name="DependantEntityPropertyId" />
           <Property Type="Int32" Name="OrderBy" Nullable="false" />
-          <NavigationProperty Name="DependantEntityProperty" Relationship="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationDependantEntityPropertyIdFK" FromRole="ExtractOutputConfiguration" ToRole="EntityProperty" />
-          <NavigationProperty Name="PrincipalEntityProperty" Relationship="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationPrincipalEntityPropertyIdFK" FromRole="ExtractOutputConfiguration" ToRole="EntityProperty" />
+          <Property Type="Int32" Name="EntityPropertyId" Nullable="false" />
+          <NavigationProperty Name="EntityProperty" Relationship="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationEntityPropertyIdFK" FromRole="ExtractOutputConfiguration" ToRole="EntityProperty" />
         </EntityType>
         <EntityType Name="ExtractRun">
           <Key>
@@ -6878,6 +6942,9 @@
           <Property Type="DateTime" Name="StartDt" Nullable="false" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Boolean" Name="InProgress" Nullable="false" />
+          <Property Type="Int32" Name="NumberRecords" Nullable="false" />
+          <Property Type="String" Name="FilePath" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ExtractType">
           <Key>
@@ -7288,19 +7355,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ExtractOutputConfigurationDependantEntityPropertyIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.EntityProperty" Role="EntityProperty" Multiplicity="0..1" />
-          <End Type="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration" Role="ExtractOutputConfiguration" Multiplicity="*" />
+        <EntityType Name="ExtractOutputType">
+          <Key>
+            <PropertyRef Name="ExtractOutputTypeID" />
+          </Key>
+          <Property Type="Int32" Name="ExtractOutputTypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Association Name="ExtractOutputTypeUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ExtractOutputType" Role="ExtractOutputType" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="EntityProperty">
-              <PropertyRef Name="EntityPropertyID" />
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
             </Principal>
-            <Dependent Role="ExtractOutputConfiguration">
-              <PropertyRef Name="DependantEntityPropertyId" />
+            <Dependent Role="ExtractOutputType">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ExtractOutputConfigurationPrincipalEntityPropertyIdFK">
+        <Association Name="ExtractOutputConfigurationEntityPropertyIdFK">
           <End Type="Odey.Framework.Keeley.Entities.EntityProperty" Role="EntityProperty" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration" Role="ExtractOutputConfiguration" Multiplicity="*" />
           <ReferentialConstraint>
@@ -7308,7 +7385,19 @@
               <PropertyRef Name="EntityPropertyID" />
             </Principal>
             <Dependent Role="ExtractOutputConfiguration">
-              <PropertyRef Name="PrincipalEntityPropertyId" />
+              <PropertyRef Name="EntityPropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExtractExtractOutputTypeIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ExtractOutputType" Role="ExtractOutputType" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Extract" Role="Extract" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExtractOutputType">
+              <PropertyRef Name="ExtractOutputTypeID" />
+            </Principal>
+            <Dependent Role="Extract">
+              <PropertyRef Name="ExtractOutputTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9224,6 +9313,7 @@
           <EntitySetMapping Name="EntityProperties">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EntityProperty">
               <MappingFragment StoreEntitySet="EntityProperty">
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
                 <ScalarProperty Name="PropertyOnChildEntity" ColumnName="PropertyOnChildEntity" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -9238,6 +9328,7 @@
           <EntitySetMapping Name="Extracts">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Extract">
               <MappingFragment StoreEntitySet="Extract">
+                <ScalarProperty Name="ExtractOutputTypeID" ColumnName="ExtractOutputTypeID" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -9263,6 +9354,7 @@
           <EntitySetMapping Name="ExtractEntities">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractEntity">
               <MappingFragment StoreEntitySet="ExtractEntity">
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -9277,6 +9369,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractEntity">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ExtractEntity_Insert">
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="SendInNextRun" ParameterName="SendInNextRun" />
                   <ScalarProperty Name="IsCancelled" ParameterName="IsCancelled" />
@@ -9288,6 +9381,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ExtractEntity_Update">
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="SendInNextRun" ParameterName="SendInNextRun" Version="Current" />
@@ -9327,9 +9421,8 @@
           <EntitySetMapping Name="ExtractOutputConfigurations">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration">
               <MappingFragment StoreEntitySet="ExtractOutputConfiguration">
+                <ScalarProperty Name="EntityPropertyId" ColumnName="EntityPropertyId" />
                 <ScalarProperty Name="OrderBy" ColumnName="OrderBy" />
-                <ScalarProperty Name="DependantEntityPropertyId" ColumnName="DependantEntityPropertyId" />
-                <ScalarProperty Name="PrincipalEntityPropertyId" ColumnName="PrincipalEntityPropertyId" />
                 <ScalarProperty Name="ChangesCanBeIgnored" ColumnName="ChangesCanBeIgnored" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -9343,6 +9436,9 @@
           <EntitySetMapping Name="ExtractRuns">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractRun">
               <MappingFragment StoreEntitySet="ExtractRun">
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="NumberRecords" ColumnName="NumberRecords" />
+                <ScalarProperty Name="InProgress" ColumnName="InProgress" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -9350,6 +9446,38 @@
                 <ScalarProperty Name="ExtractId" ColumnName="ExtractId" />
                 <ScalarProperty Name="ExtractRunId" ColumnName="ExtractRunId" />
               </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractRun">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ExtractRun_Insert">
+                  <ScalarProperty Name="FilePath" ParameterName="FilePath" />
+                  <ScalarProperty Name="NumberRecords" ParameterName="NumberRecords" />
+                  <ScalarProperty Name="InProgress" ParameterName="InProgress" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="RunTime" ParameterName="RunTime" />
+                  <ScalarProperty Name="ExtractId" ParameterName="ExtractId" />
+                  <ResultBinding Name="ExtractRunId" ColumnName="ExtractRunId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ExtractRun_Update">
+                  <ScalarProperty Name="FilePath" ParameterName="FilePath" Version="Current" />
+                  <ScalarProperty Name="NumberRecords" ParameterName="NumberRecords" Version="Current" />
+                  <ScalarProperty Name="InProgress" ParameterName="InProgress" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="RunTime" ParameterName="RunTime" Version="Current" />
+                  <ScalarProperty Name="ExtractId" ParameterName="ExtractId" Version="Current" />
+                  <ScalarProperty Name="ExtractRunId" ParameterName="ExtractRunId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ExtractRun_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ExtractRunId" ParameterName="ExtractRunId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ExtractTypes">
@@ -9544,6 +9672,17 @@
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ExtractOutputTypes">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractOutputType">
+              <MappingFragment StoreEntitySet="ExtractOutputType">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ExtractOutputTypeID" ColumnName="ExtractOutputTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -9565,7 +9704,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="KeeleyEntities" ZoomLevel="65">
+      <Diagram Name="KeeleyEntities" ZoomLevel="59">
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="16.5" Height="2.5571907552083353" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.5571907552083353" IsExpanded="true" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.25" PointY="22.125" Height="2.3648893229166674" IsExpanded="true" />
@@ -9585,16 +9724,16 @@
           <ConnectorPoint PointX="0.75" PointY="18.185966120793275" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.BookUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="19.033350362265214" />
-          <ConnectorPoint PointX="2.4791666666666665" PointY="19.033350362265214" />
-          <ConnectorPoint PointX="2.8333333333333335" PointY="19.033350362265214" />
-          <ConnectorPoint PointX="3" PointY="19.033350362265214" />
+          <ConnectorPoint PointX="2.25" PointY="19.034236047733856" />
+          <ConnectorPoint PointX="2.4791666666666665" PointY="19.034236047733856" />
+          <ConnectorPoint PointX="2.8333333333333335" PointY="19.034236047733856" />
+          <ConnectorPoint PointX="3" PointY="19.034236047733856" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.6144895843634233" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.6144895843634233" PointY="24.396139322916667" />
-          <ConnectorPoint PointX="1.6473431640322793" PointY="24.396139322916664" />
-          <ConnectorPoint PointX="2.272748803996508" PointY="24.396139322916667" />
+          <ConnectorPoint PointX="1.6297102165832134" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.6297102165832134" PointY="24.396139322916667" />
+          <ConnectorPoint PointX="1.6429316205333742" PointY="24.396139322916664" />
+          <ConnectorPoint PointX="2.3033474285910773" PointY="24.396139322916667" />
           <ConnectorPoint PointX="2.6041666666666665" PointY="24.396139322916667" />
           <ConnectorPoint PointX="2.8333333333333335" PointY="24.396139322916667" />
           <ConnectorPoint PointX="4.548685897435897" PointY="24.396139322916667" />
@@ -9604,126 +9743,124 @@
           <ConnectorPoint PointX="5.25" PointY="24.396139322916667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FundUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="2.8958333333333335" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="7.0667431928845081" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="7.2334098595511742" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="8.0833333333333339" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="12.002642454427084" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="12.242230787760416" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="12.408897454427084" PointY="17.726076319936006" />
-          <ConnectorPoint PointX="14.1562525" PointY="17.726076319936006" />
+          <ConnectorPoint PointX="2.25" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="2.8958333333333335" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="5.041666666666667" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="5.208333333333333" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="7.0675981450608907" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="7.2342648117275568" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="10.646892955729166" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="10.813559622395834" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="11.835975787760416" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="12.002642454427084" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="12.242230787760416" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="12.408897454427084" PointY="17.725221367759623" />
+          <ConnectorPoint PointX="14.1562525" PointY="17.725221367759623" />
           <ConnectorPoint PointX="14.1562525" PointY="18" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentClassUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.9093684103678017" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.9093684103678017" PointY="23.057444661458334" />
-          <ConnectorPoint PointX="1.9197925770344682" PointY="23.057444661458334" />
-          <ConnectorPoint PointX="2.272748803996508" PointY="23.057444661458334" />
+          <ConnectorPoint PointX="0.89952857630620742" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="0.89952857630620742" PointY="23.057444661458334" />
+          <ConnectorPoint PointX="0.92921068937194151" PointY="23.05744466145833" />
+          <ConnectorPoint PointX="2.3033474285910773" PointY="23.057444661458334" />
           <ConnectorPoint PointX="2.6041666666666665" PointY="23.057444661458334" />
           <ConnectorPoint PointX="2.8333333333333335" PointY="23.057444661458334" />
           <ConnectorPoint PointX="3" PointY="23.057444661458334" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="2.7083333333333335" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="4.916666666666667" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="5.083333333333333" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="7.166666666666667" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="7.333333333333333" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="12.136740393880208" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="12.242230787760416" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="12.408897454427084" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="14.869791666666666" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="15.059895833333334" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="15.160562994791667" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="15.327229661458334" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="17.437296549479168" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="17.603963216145832" PointY="17.43254262878418" />
-          <ConnectorPoint PointX="18.3481420625" PointY="17.43254262878418" />
+          <ConnectorPoint PointX="2.25" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="2.7083333333333335" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="4.916666666666667" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="5.083333333333333" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="7.333333333333333" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="10.646892955729166" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="10.813559622395834" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="11.835975787760416" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="12.136740393880208" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="12.242230787760416" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="12.408897454427084" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="14.869791666666666" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="15.059895833333334" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="15.160562994791667" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="15.327229661458334" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="17.437487284342449" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="17.604153951009113" PointY="17.432307351799011" />
+          <ConnectorPoint PointX="18.3481420625" PointY="17.432307351799011" />
           <ConnectorPoint PointX="18.3481420625" PointY="17.75" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="2.8958333333333335" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="7.09683255981363" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="7.2634992264802962" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="8.0833333333333339" PointY="17.695986953006884" />
-          <ConnectorPoint PointX="8.28125" PointY="17.695986953006884" />
+          <ConnectorPoint PointX="2.25" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="2.8958333333333335" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="5.041666666666667" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="5.208333333333333" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="7.0972551913830122" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="7.2639218580496783" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="17.6955643214375" />
+          <ConnectorPoint PointX="8.28125" PointY="17.6955643214375" />
           <ConnectorPoint PointX="8.28125" PointY="18.875" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.IssuerUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.2411877531076587" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.2411877531076587" PointY="26.365143229166669" />
-          <ConnectorPoint PointX="1.270918113192707" PointY="26.365143229166669" />
-          <ConnectorPoint PointX="1.6131534732777546" PointY="26.365143229166669" />
-          <ConnectorPoint PointX="1.6473431640322793" PointY="26.365143229166666" />
-          <ConnectorPoint PointX="2.272748803996508" PointY="26.365143229166669" />
+          <ConnectorPoint PointX="1.2422202766801451" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.2422202766801451" PointY="26.365143229166669" />
+          <ConnectorPoint PointX="1.273102044656599" PointY="26.365143229166666" />
+          <ConnectorPoint PointX="2.3033474285910773" PointY="26.365143229166669" />
           <ConnectorPoint PointX="2.6041666666666665" PointY="26.365143229166669" />
           <ConnectorPoint PointX="2.8333333333333335" PointY="26.365143229166669" />
           <ConnectorPoint PointX="3" PointY="26.365143229166669" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="2.8958333333333335" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="8.0833333333333339" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="12.136740393880208" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="12.242230787760416" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="12.408897454427084" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="14.869791666666666" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="15.327229661458334" PointY="17.665955507098797" />
-          <ConnectorPoint PointX="16.5" PointY="17.665955507098797" />
+          <ConnectorPoint PointX="2.25" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="2.8958333333333335" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="5.041666666666667" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="5.208333333333333" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="10.646892955729166" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="10.813559622395834" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="11.835975787760416" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="12.136740393880208" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="12.242230787760416" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="12.408897454427084" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="14.869791666666666" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="15.327229661458334" PointY="17.665815776287076" />
+          <ConnectorPoint PointX="16.5" PointY="17.665815776287076" />
           <ConnectorPoint PointX="16.5" PointY="18.25" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.5298201399444213" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.5298201399444213" PointY="27.545146484375003" />
-          <ConnectorPoint PointX="1.6473431640322793" PointY="27.545146484375" />
-          <ConnectorPoint PointX="2.272748803996508" PointY="27.545146484375003" />
+          <ConnectorPoint PointX="1.6950124538667075" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.6950124538667075" PointY="27.545146484375003" />
+          <ConnectorPoint PointX="1.705436620533374" PointY="27.545146484375" />
+          <ConnectorPoint PointX="2.3033474285910769" PointY="27.545146484375003" />
           <ConnectorPoint PointX="2.6041666666666665" PointY="27.545146484375003" />
           <ConnectorPoint PointX="2.8333333333333335" PointY="27.545146484375003" />
           <ConnectorPoint PointX="4.822916666666667" PointY="27.545146484375003" />
@@ -9737,10 +9874,10 @@
           <ConnectorPoint PointX="10.5" PointY="27.545146484375003" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.0956579706631739" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="2.0956579706631739" PointY="25.026194661458334" />
-          <ConnectorPoint PointX="2.1060821373298411" PointY="25.026194661458334" />
-          <ConnectorPoint PointX="2.272748803996508" PointY="25.026194661458334" />
+          <ConnectorPoint PointX="2.0650181905154881" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="2.0650181905154881" PointY="25.026194661458334" />
+          <ConnectorPoint PointX="2.0754423571821543" PointY="25.026194661458334" />
+          <ConnectorPoint PointX="2.3033474285910773" PointY="25.026194661458334" />
           <ConnectorPoint PointX="2.6041666666666665" PointY="25.026194661458334" />
           <ConnectorPoint PointX="2.8333333333333335" PointY="25.026194661458334" />
           <ConnectorPoint PointX="3.6666666666666665" PointY="25.026194661458334" />
@@ -9756,10 +9893,10 @@
           <ConnectorPoint PointX="8.25" PointY="25.026194661458334" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.RegionUpdateUserIDFK" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.0031259103678014" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="2.0031259103678014" PointY="29.2112939453125" />
-          <ConnectorPoint PointX="2.0435771373298413" PointY="29.2112939453125" />
-          <ConnectorPoint PointX="2.2414963039965081" PointY="29.2112939453125" />
+          <ConnectorPoint PointX="1.8800153221910978" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.8800153221910978" PointY="29.2112939453125" />
+          <ConnectorPoint PointX="1.8891834230199598" PointY="29.2112939453125" />
+          <ConnectorPoint PointX="2.3033474285910778" PointY="29.2112939453125" />
           <ConnectorPoint PointX="3" PointY="29.2112939453125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.BookFundIDFK" ManuallyRouted="false">
@@ -9855,21 +9992,21 @@
           <ConnectorPoint PointX="15.496055325520834" PointY="21.497484149639426" />
           <ConnectorPoint PointX="16.885414666666666" PointY="21.497484149639426" />
           <ConnectorPoint PointX="17.05208133333333" PointY="21.497484149639426" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="21.497484149639426" />
-          <ConnectorPoint PointX="17.812093098958332" PointY="21.497484149639426" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="21.497484149639426" />
+          <ConnectorPoint PointX="17.812474568684895" PointY="21.497484149639426" />
           <ConnectorPoint PointX="18.242184375" PointY="21.497484149639426" />
           <ConnectorPoint PointX="18.242184375" PointY="21.076396484375003" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketMarketIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="17.25" PointY="19.240143229166669" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="19.240143229166669" />
-          <ConnectorPoint PointX="17.812093098958332" PointY="19.240143229166669" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="19.240143229166669" />
+          <ConnectorPoint PointX="17.812474568684895" PointY="19.240143229166669" />
           <ConnectorPoint PointX="18" PointY="19.240143229166669" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionInstrumentMarketIDFK" ManuallyRouted="false">
           <ConnectorPoint PointX="18" PointY="21.076396484375003" />
-          <ConnectorPoint PointX="17.787685330723878" PointY="21.288711153651125" />
-          <ConnectorPoint PointX="17.669834200526122" PointY="21.406562283848881" />
+          <ConnectorPoint PointX="17.788066800450441" PointY="21.288329683924562" />
+          <ConnectorPoint PointX="17.670215670252684" PointY="21.406180814122319" />
           <ConnectorPoint PointX="17.625" PointY="21.451396484375003" />
           <ConnectorPoint PointX="17.05208133333333" PointY="21.451396484375003" />
           <ConnectorPoint PointX="16.885414666666666" PointY="21.451396484375003" />
@@ -9899,36 +10036,36 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.IdentifierType" Width="1.5" PointX="5.25" PointY="14.25" Height="2.1725878906250031" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.IdentifierTypeUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.146418455676368" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.146418455676368" />
-          <ConnectorPoint PointX="2.8333333333333335" PointY="17.146418455676368" />
-          <ConnectorPoint PointX="4.916666666666667" PointY="17.146418455676368" />
-          <ConnectorPoint PointX="5.083333333333333" PointY="17.146418455676368" />
-          <ConnectorPoint PointX="5.28125" PointY="17.146418455676368" />
+          <ConnectorPoint PointX="2.25" PointY="17.155811230105847" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.155811230105847" />
+          <ConnectorPoint PointX="2.8333333333333335" PointY="17.155811230105847" />
+          <ConnectorPoint PointX="4.916666666666667" PointY="17.155811230105847" />
+          <ConnectorPoint PointX="5.083333333333333" PointY="17.155811230105847" />
+          <ConnectorPoint PointX="5.28125" PointY="17.155811230105847" />
           <ConnectorPoint PointX="5.28125" PointY="16.422587890625003" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FMContractMapping" Width="1.5" PointX="13.5" PointY="14.125" Height="1.9210009765624996" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FMContractMappingUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="2.8958333333333335" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="8.0833333333333339" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="12.136740393880208" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="12.242230787760416" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="12.408897454427084" PointY="17.63605788994083" />
-          <ConnectorPoint PointX="14.9765625" PointY="17.63605788994083" />
+          <ConnectorPoint PointX="2.25" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="2.8958333333333335" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="5.041666666666667" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="5.208333333333333" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="10.646892955729166" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="10.813559622395834" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="11.835975787760416" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="12.136740393880208" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="12.242230787760416" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="12.408897454427084" PointY="17.636023817021449" />
+          <ConnectorPoint PointX="14.9765625" PointY="17.636023817021449" />
           <ConnectorPoint PointX="14.9765625" PointY="16.297587890625003" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FMContractMappingInstrumentFK" >
@@ -9946,26 +10083,26 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentRelationship" Width="1.5" PointX="11" PointY="14.5" Height="2.364889322916671" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentRelationshipUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="2.8958333333333335" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="7.0376908388653083" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="7.2043575055319744" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="8.0833333333333339" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="12.002642454427084" PointY="17.755128673955205" />
-          <ConnectorPoint PointX="12.053407060546874" PointY="17.755128673955205" />
+          <ConnectorPoint PointX="2.25" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="2.8958333333333335" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="5.041666666666667" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="5.208333333333333" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="7.03841231013337" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="7.2050789768000358" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="10.646892955729166" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="10.813559622395834" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="11.835975787760416" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="12.002642454427084" PointY="17.754407202687144" />
+          <ConnectorPoint PointX="12.053407060546874" PointY="17.754407202687144" />
           <ConnectorPoint PointX="12.053407060546874" PointY="16.864889322916671" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentRelationshipOverlyingInstrumentIDFK" >
@@ -9990,10 +10127,10 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioChangeControl" Width="1.5" PointX="10.5" PointY="28.75" Height="2.3648893229166674" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioChangeControlUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="18.40127626575908" />
-          <ConnectorPoint PointX="2.4791666666666665" PointY="18.40127626575908" />
-          <ConnectorPoint PointX="2.7083333333333335" PointY="18.40127626575908" />
-          <ConnectorPoint PointX="2.75" PointY="18.40127626575908" />
+          <ConnectorPoint PointX="2.25" PointY="18.396232266611072" />
+          <ConnectorPoint PointX="2.4791666666666665" PointY="18.396232266611072" />
+          <ConnectorPoint PointX="2.7083333333333335" PointY="18.396232266611072" />
+          <ConnectorPoint PointX="2.75" PointY="18.396232266611072" />
           <ConnectorPoint PointX="2.75" PointY="27.922506510416667" />
           <ConnectorPoint PointX="4.822916666666667" PointY="27.922506510416667" />
           <ConnectorPoint PointX="5.098958333333333" PointY="27.922506510416667" />
@@ -10027,18 +10164,16 @@
           <ConnectorPoint PointX="18.782551770833333" PointY="22.8125" />
           <ConnectorPoint PointX="19.072919166666669" PointY="22.8125" />
           <ConnectorPoint PointX="19.239585833333333" PointY="22.8125" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="22.8125" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="22.8125" />
           <ConnectorPoint PointX="19.854166666666664" PointY="22.8125" />
           <ConnectorPoint PointX="20.020833333333329" PointY="22.8125" />
           <ConnectorPoint PointX="23.875" PointY="22.8125" />
           <ConnectorPoint PointX="23.875" PointY="19.182190755208335" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.AccountUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.0435628428528188" PointY="16.5" />
-          <ConnectorPoint PointX="2.0435628428528188" PointY="16.25" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="16.25" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="16.25" />
+          <ConnectorPoint PointX="2.0810981402832063" PointY="16.5" />
+          <ConnectorPoint PointX="2.0810981402832063" PointY="16.25" />
+          <ConnectorPoint PointX="2.12909448680827" PointY="16.25" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="16.25" />
           <ConnectorPoint PointX="2.75" PointY="16.25" />
           <ConnectorPoint PointX="2.75" PointY="17.390625" />
           <ConnectorPoint PointX="4.916666666666667" PointY="17.390625" />
@@ -10061,8 +10196,8 @@
           <ConnectorPoint PointX="15.059895833333334" PointY="17.390625" />
           <ConnectorPoint PointX="15.160562994791667" PointY="17.390625" />
           <ConnectorPoint PointX="15.327229661458334" PointY="17.390625" />
-          <ConnectorPoint PointX="17.437296549479168" PointY="17.390625" />
-          <ConnectorPoint PointX="17.603963216145832" PointY="17.390625" />
+          <ConnectorPoint PointX="17.437487284342449" PointY="17.390625" />
+          <ConnectorPoint PointX="17.604153951009113" PointY="17.390625" />
           <ConnectorPoint PointX="18.675455791666668" PointY="17.390625" />
           <ConnectorPoint PointX="18.842122458333332" PointY="17.390625" />
           <ConnectorPoint PointX="19.077313729166669" PointY="17.390625" />
@@ -10091,70 +10226,70 @@
           <ConnectorPoint PointX="19.077313729166669" PointY="17.21875" />
           <ConnectorPoint PointX="18.842122458333332" PointY="17.21875" />
           <ConnectorPoint PointX="18.675455791666668" PointY="17.21875" />
-          <ConnectorPoint PointX="17.603963216145832" PointY="17.21875" />
-          <ConnectorPoint PointX="17.437296549479168" PointY="17.21875" />
+          <ConnectorPoint PointX="17.604153951009113" PointY="17.21875" />
+          <ConnectorPoint PointX="17.437487284342449" PointY="17.21875" />
           <ConnectorPoint PointX="15.243896328125" PointY="17.21875" />
           <ConnectorPoint PointX="15.243896328125" PointY="23.5" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CapitalEventUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="2.6666666666666665" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="2.8333333333333335" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="4.916666666666667" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="5.083333333333333" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="5.197916666666667" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="5.364583333333333" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="7.166666666666667" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="7.333333333333333" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="7.541666666666667" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="7.708333333333333" PointY="16.558108760582179" />
-          <ConnectorPoint PointX="8.375" PointY="16.558108760582179" />
+          <ConnectorPoint PointX="2.25" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="2.6666666666666665" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="2.8333333333333335" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="4.916666666666667" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="5.083333333333333" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="5.197916666666667" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="5.364583333333333" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="7.333333333333333" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="7.541666666666667" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="7.708333333333333" PointY="16.560591051139181" />
+          <ConnectorPoint PointX="8.375" PointY="16.560591051139181" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CustodianUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="2.7083333333333335" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="7.166666666666667" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="7.333333333333333" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="12.136740393880208" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="12.242230787760416" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="12.408897454427084" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="14.869791666666666" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="15.327229661458334" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="17.728759765625" PointY="17.528648681640625" />
-          <ConnectorPoint PointX="17.728759765625" PointY="23.125" />
+          <ConnectorPoint PointX="2.25" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="2.7708333333333335" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="5.041666666666667" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="5.208333333333333" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="7.333333333333333" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="10.646892955729166" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="10.813559622395834" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="11.835975787760416" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="12.136740393880208" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="12.242230787760416" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="12.408897454427084" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="14.869791666666666" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="15.327229661458334" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="17.729141235351562" PointY="17.5381982421875" />
+          <ConnectorPoint PointX="17.729141235351562" PointY="23.125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.EventTypeUserIDFK">
-          <ConnectorPoint PointX="0.97457448250044032" PointY="16.5" />
-          <ConnectorPoint PointX="0.97457448250044032" PointY="11.240143229166666" />
-          <ConnectorPoint PointX="1.0346081108141008" PointY="11.240143229166664" />
-          <ConnectorPoint PointX="1.4475790879019284" PointY="11.240143229166666" />
-          <ConnectorPoint PointX="1.5584728956591518" PointY="11.240143229166666" />
-          <ConnectorPoint PointX="1.7251395623258183" PointY="11.240143229166666" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="11.240143229166666" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="11.240143229166666" />
+          <ConnectorPoint PointX="0.95928379297071054" PointY="16.5" />
+          <ConnectorPoint PointX="0.95928379297071054" PointY="11.240143229166666" />
+          <ConnectorPoint PointX="1.0137443727468949" PointY="11.240143229166664" />
+          <ConnectorPoint PointX="1.4516114769398636" PointY="11.240143229166666" />
+          <ConnectorPoint PointX="1.5300060940245266" PointY="11.240143229166666" />
+          <ConnectorPoint PointX="1.6966727606911931" PointY="11.240143229166666" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="11.240143229166664" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="11.240143229166666" />
           <ConnectorPoint PointX="3" PointY="11.240143229166666" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.EventUserIDFK" >
-          <ConnectorPoint PointX="1.5411629021261033" PointY="16.5" />
-          <ConnectorPoint PointX="1.5411629021261033" PointY="12.549988606770834" />
-          <ConnectorPoint PointX="1.5584728956591518" PointY="12.549988606770834" />
-          <ConnectorPoint PointX="1.7251395623258183" PointY="12.549988606770834" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="12.549988606770834" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="12.549988606770834" />
+          <ConnectorPoint PointX="1.5016846680233147" PointY="16.5" />
+          <ConnectorPoint PointX="1.5016846680233147" PointY="12.549988606770834" />
+          <ConnectorPoint PointX="1.5300060940245266" PointY="12.549988606770834" />
+          <ConnectorPoint PointX="1.6966727606911931" PointY="12.549988606770834" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="12.549988606770832" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="12.549988606770834" />
           <ConnectorPoint PointX="7.166666666666667" PointY="12.549988606770832" />
           <ConnectorPoint PointX="7.458333333333333" PointY="12.549988606770834" />
           <ConnectorPoint PointX="7.541666666666667" PointY="12.549988606770834" />
@@ -10162,17 +10297,15 @@
           <ConnectorPoint PointX="8.25" PointY="12.549988606770834" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentEventTypeUserIDFK" >
-          <ConnectorPoint PointX="1.3542514465260402" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.3542514465260402" PointY="32.461293945312505" />
-          <ConnectorPoint PointX="1.3839818066110883" PointY="32.461293945312505" />
-          <ConnectorPoint PointX="1.5819009732777547" PointY="32.461293945312505" />
-          <ConnectorPoint PointX="1.6473431640322793" PointY="32.461293945312505" />
-          <ConnectorPoint PointX="2.2102438039965082" PointY="32.461293945312505" />
+          <ConnectorPoint PointX="1.7887699538667072" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.7887699538667072" PointY="32.461293945312505" />
+          <ConnectorPoint PointX="1.8891834230199598" PointY="32.461293945312505" />
+          <ConnectorPoint PointX="2.3033474285910778" PointY="32.461293945312505" />
           <ConnectorPoint PointX="3" PointY="32.461293945312505" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentEventUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="18.00605795205103" />
-          <ConnectorPoint PointX="2.5625" PointY="18.00605795205103" />
+          <ConnectorPoint PointX="2.25" PointY="18.002230967666925" />
+          <ConnectorPoint PointX="2.5625" PointY="18.002230967666925" />
           <ConnectorPoint PointX="2.5625" PointY="20.682190755208335" />
           <ConnectorPoint PointX="2.6041666666666665" PointY="20.682190755208335" />
           <ConnectorPoint PointX="2.8333333333333335" PointY="20.682190755208335" />
@@ -10202,40 +10335,38 @@
           <ConnectorPoint PointX="15.496055325520834" PointY="22.75" />
           <ConnectorPoint PointX="16.885414666666666" PointY="22.75" />
           <ConnectorPoint PointX="17.05208133333333" PointY="22.75" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="22.75" />
-          <ConnectorPoint PointX="17.812093098958332" PointY="22.75" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="22.75" />
+          <ConnectorPoint PointX="17.812474568684895" PointY="22.75" />
           <ConnectorPoint PointX="18.615885104166669" PointY="22.75" />
           <ConnectorPoint PointX="18.782551770833333" PointY="22.75" />
           <ConnectorPoint PointX="19.072919166666669" PointY="22.75" />
           <ConnectorPoint PointX="19.239585833333333" PointY="22.75" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="22.75" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="22.75" />
           <ConnectorPoint PointX="20.828125999999997" PointY="22.75" />
           <ConnectorPoint PointX="20.828125999999997" PointY="23.125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionAccountUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="2.7083333333333335" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="4.916666666666667" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="5.083333333333333" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="7.166666666666667" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="7.333333333333333" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="12.136740393880208" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="12.242230787760416" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="12.408897454427084" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="14.869791666666666" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="15.059895833333334" PointY="17.411583814392088" />
-          <ConnectorPoint PointX="15.078976914062501" PointY="17.411583814392088" />
+          <ConnectorPoint PointX="2.25" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="2.7083333333333335" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="4.916666666666667" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="5.083333333333333" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="7.333333333333333" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="10.646892955729166" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="10.813559622395834" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="11.835975787760416" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="12.136740393880208" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="12.242230787760416" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="12.408897454427084" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="14.869791666666666" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="15.059895833333334" PointY="17.411466175899506" />
+          <ConnectorPoint PointX="15.078976914062501" PointY="17.411466175899506" />
           <ConnectorPoint PointX="15.078976914062501" PointY="23.5" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CapitalEventFK" >
@@ -10264,27 +10395,19 @@
           <ConnectorPoint PointX="20.249999999999996" PointY="23.125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentEventTypeIDFK" >
-          <ConnectorPoint PointX="4.75" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="7.958333333333333" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="13.166666666666666" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="13.333333333333334" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="14.166666666666666" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="14.333333333333334" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="15.541666666666666" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="15.708333333333334" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="18.375" PointY="32.810024096842454" />
-          <ConnectorPoint PointX="18.375" PointY="29.25" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="29.25" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="29.25" />
-          <ConnectorPoint PointX="21" PointY="29.25" />
+          <ConnectorPoint PointX="4.75" PointY="32.747091471354175" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="32.747091471354175" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="32.747091471354175" />
+          <ConnectorPoint PointX="14.166666666666666" PointY="32.747091471354175" />
+          <ConnectorPoint PointX="14.333333333333334" PointY="32.747091471354175" />
+          <ConnectorPoint PointX="15.166666666666666" PointY="32.747091471354175" />
+          <ConnectorPoint PointX="15.333333333333334" PointY="32.747091471354175" />
+          <ConnectorPoint PointX="21" PointY="32.747091471354175" />
           <ConnectorPoint PointX="21" PointY="26.835999348958335" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketIDFK" >
           <ConnectorPoint PointX="19.1562525" PointY="21.076396484375003" />
           <ConnectorPoint PointX="19.1562525" PointY="26.001892903645839" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="26.001892903645839" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="26.001892903645839" />
           <ConnectorPoint PointX="20.25" PointY="26.001892903645839" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionAccountPositionIDFK" >
@@ -10302,12 +10425,12 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Currency" Width="1.5" PointX="5.375" PointY="18" Height="1.9802864583333353" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CurrencyUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.291961727838185" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.291961727838185" />
-          <ConnectorPoint PointX="2.8333333333333335" PointY="17.291961727838185" />
-          <ConnectorPoint PointX="4.916666666666667" PointY="17.291961727838185" />
-          <ConnectorPoint PointX="5.083333333333333" PointY="17.291961727838185" />
-          <ConnectorPoint PointX="6.07031" PointY="17.291961727838185" />
+          <ConnectorPoint PointX="2.25" PointY="17.296658115052921" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.296658115052921" />
+          <ConnectorPoint PointX="2.8333333333333335" PointY="17.296658115052921" />
+          <ConnectorPoint PointX="4.916666666666667" PointY="17.296658115052921" />
+          <ConnectorPoint PointX="5.083333333333333" PointY="17.296658115052921" />
+          <ConnectorPoint PointX="6.07031" PointY="17.296658115052921" />
           <ConnectorPoint PointX="6.07031" PointY="18" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CapitalEventCurrencyIDFK" >
@@ -10365,14 +10488,12 @@
           <ConnectorPoint PointX="15.496055325520834" PointY="22.78125" />
           <ConnectorPoint PointX="16.885414666666666" PointY="22.78125" />
           <ConnectorPoint PointX="17.05208133333333" PointY="22.78125" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="22.78125" />
-          <ConnectorPoint PointX="17.812093098958332" PointY="22.78125" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="22.78125" />
+          <ConnectorPoint PointX="17.812474568684895" PointY="22.78125" />
           <ConnectorPoint PointX="18.615885104166669" PointY="22.78125" />
           <ConnectorPoint PointX="18.782551770833333" PointY="22.78125" />
           <ConnectorPoint PointX="19.072919166666669" PointY="22.78125" />
           <ConnectorPoint PointX="19.239585833333333" PointY="22.78125" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="22.78125" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="22.78125" />
           <ConnectorPoint PointX="21.406252000000002" PointY="22.78125" />
           <ConnectorPoint PointX="21.406252000000002" PointY="23.125" />
         </AssociationConnector>
@@ -10391,50 +10512,50 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Counterparty" Width="1.5" PointX="16.625" PointY="14" Height="1.9802864583333317" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CounterpartyUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="2.8958333333333335" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="8.0833333333333339" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="12.136740393880208" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="12.242230787760416" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="12.408897454427084" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="14.869791666666666" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="15.327229661458334" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="17.5206298828125" PointY="17.606227187157916" />
-          <ConnectorPoint PointX="17.5206298828125" PointY="15.980286458333332" />
+          <ConnectorPoint PointX="2.25" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="2.8958333333333335" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="5.041666666666667" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="5.208333333333333" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="10.646892955729166" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="10.813559622395834" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="11.835975787760416" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="12.136740393880208" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="12.242230787760416" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="12.408897454427084" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="14.869791666666666" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="15.327229661458334" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="17.520820617675781" PointY="17.606210150698224" />
+          <ConnectorPoint PointX="17.520820617675781" PointY="15.980286458333332" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.LegalEntity" Width="1.5" PointX="10.25" PointY="18.25" Height="2.7494921874999996" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.LegalEntityUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="2.8958333333333335" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="7.0090051758429075" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="7.1756718425095736" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="8.0833333333333339" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="8.1979166666666661" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="8.3645833333333339" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.783814336977606" />
-          <ConnectorPoint PointX="10.458860644531249" PointY="17.783814336977606" />
+          <ConnectorPoint PointX="2.25" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="2.8958333333333335" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="5.041666666666667" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="5.208333333333333" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="5.9869766666666671" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="6.1536433333333331" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="7.00936591147694" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="7.1760325781436061" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="8.1979166666666661" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="8.3645833333333339" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="10.041666666666666" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="10.208333333333334" PointY="17.783453601343574" />
+          <ConnectorPoint PointX="10.458860644531249" PointY="17.783453601343574" />
           <ConnectorPoint PointX="10.458860644531249" PointY="18.25" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.CounterpartyLegalEntiyFK" >
@@ -10526,14 +10647,12 @@
           <ConnectorPoint PointX="15.496055325520834" PointY="21.595602213541667" />
           <ConnectorPoint PointX="16.885414666666666" PointY="21.595602213541667" />
           <ConnectorPoint PointX="17.05208133333333" PointY="21.595602213541667" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="21.595602213541667" />
-          <ConnectorPoint PointX="17.812093098958332" PointY="21.595602213541667" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="21.595602213541667" />
+          <ConnectorPoint PointX="17.812474568684895" PointY="21.595602213541667" />
           <ConnectorPoint PointX="18.615885104166669" PointY="21.595602213541667" />
           <ConnectorPoint PointX="18.782551770833333" PointY="21.595602213541667" />
           <ConnectorPoint PointX="19.072919166666669" PointY="21.595602213541667" />
           <ConnectorPoint PointX="19.239585833333333" PointY="21.595602213541667" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="21.595602213541667" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="21.595602213541667" />
           <ConnectorPoint PointX="19.791666666666668" PointY="21.595602213541667" />
           <ConnectorPoint PointX="19.958333333333332" PointY="21.595602213541667" />
           <ConnectorPoint PointX="23.791666666666668" PointY="21.595602213541667" />
@@ -10555,66 +10674,66 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BuySellReason" Width="1.5" PointX="3" PointY="6.625" Height="2.1725878906249996" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.BuySellReasonUpdateUserIDFK" >
-          <ConnectorPoint PointX="1.2613084057944279" PointY="16.5" />
-          <ConnectorPoint PointX="1.2613084057944279" PointY="7.7112939453125" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="7.7112939453124989" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="7.7112939453125" />
+          <ConnectorPoint PointX="1.2348716191897458" PointY="16.5" />
+          <ConnectorPoint PointX="1.2348716191897458" PointY="7.7112939453125" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="7.7112939453124989" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="7.7112939453125" />
           <ConnectorPoint PointX="2.7604166666666665" PointY="7.7112939453124989" />
           <ConnectorPoint PointX="2.9270833333333335" PointY="7.7112939453125" />
           <ConnectorPoint PointX="3" PointY="7.7112939453125" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.TradeEvent" Width="1.5" PointX="20.25" PointY="10.125" Height="6.2109179687500031" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.TradeEventTraderIDFK" >
-          <ConnectorPoint PointX="1.872053265757712" PointY="16.5" />
-          <ConnectorPoint PointX="1.872053265757712" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="6.911458333333333" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="7.166666666666667" PointY="13.329960427990525" />
-          <ConnectorPoint PointX="7.458333333333333" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="7.541666666666667" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="7.708333333333333" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="8.6354166666666661" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="8.8020833333333339" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="8.8854146666666658" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="9.0520813333333336" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="17.291666666666668" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="17.458333333333332" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="18.675455791666668" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="18.842122458333332" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="19.077313729166669" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="19.243980395833333" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="19.791666666666668" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="19.958333333333332" PointY="13.329960427990526" />
-          <ConnectorPoint PointX="20.25" PointY="13.329960427990526" />
+          <ConnectorPoint PointX="1.8811838329074577" PointY="16.5" />
+          <ConnectorPoint PointX="1.8811838329074577" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="13.329802686254618" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="6.911458333333333" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="13.329802686254618" />
+          <ConnectorPoint PointX="7.458333333333333" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="7.541666666666667" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="7.708333333333333" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="8.6354166666666661" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="8.8020833333333339" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="8.8854146666666658" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="9.0520813333333336" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="17.291666666666668" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="17.458333333333332" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="18.675455791666668" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="18.842122458333332" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="19.077313729166669" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="19.243980395833333" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="19.791666666666668" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="19.958333333333332" PointY="13.32980268625462" />
+          <ConnectorPoint PointX="20.25" PointY="13.32980268625462" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.TradeEventUpdateUserIDFK" >
-          <ConnectorPoint PointX="1.7424495558588669" PointY="16.5" />
-          <ConnectorPoint PointX="1.7424495558588669" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="1.7887199324243788" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="1.9553865990910453" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="6.911458333333333" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="7.166666666666667" PointY="13.539982713995252" />
-          <ConnectorPoint PointX="7.458333333333333" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="7.541666666666667" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="7.708333333333333" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="8.6354166666666661" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="8.8020833333333339" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="8.8854146666666658" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="9.0520813333333336" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="17.291666666666668" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="17.458333333333332" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="18.675455791666668" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="18.842122458333332" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="19.077313729166669" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="19.243980395833333" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="19.791666666666668" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="19.958333333333332" PointY="13.539982713995254" />
-          <ConnectorPoint PointX="20.25" PointY="13.539982713995254" />
+          <ConnectorPoint PointX="1.724994186692405" PointY="16.5" />
+          <ConnectorPoint PointX="1.724994186692405" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="1.7978504995741245" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="1.964517166240791" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="13.5399038431273" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="6.911458333333333" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="13.5399038431273" />
+          <ConnectorPoint PointX="7.458333333333333" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="7.541666666666667" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="7.708333333333333" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="8.6354166666666661" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="8.8020833333333339" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="8.8854146666666658" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="9.0520813333333336" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="17.291666666666668" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="17.458333333333332" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="18.675455791666668" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="18.842122458333332" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="19.077313729166669" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="19.243980395833333" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="19.791666666666668" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="19.958333333333332" PointY="13.539903843127302" />
+          <ConnectorPoint PointX="20.25" PointY="13.539903843127302" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.TradeEventBuySellReasonIdFK" >
           <ConnectorPoint PointX="4.5" PointY="8.7326464843750014" />
@@ -10680,14 +10799,14 @@
           <ConnectorPoint PointX="20.25" PointY="13.025940755208334" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.TradeEventFK" >
-          <ConnectorPoint PointX="9.75" PointY="11.927621751505546" />
-          <ConnectorPoint PointX="17.291666666666668" PointY="11.927621751505546" />
-          <ConnectorPoint PointX="17.458333333333332" PointY="11.927621751505546" />
-          <ConnectorPoint PointX="18.678385666666667" PointY="11.927621751505546" />
-          <ConnectorPoint PointX="18.845052333333332" PointY="11.927621751505546" />
-          <ConnectorPoint PointX="19.084637916666669" PointY="11.927621751505546" />
-          <ConnectorPoint PointX="19.251304583333333" PointY="11.927621751505546" />
-          <ConnectorPoint PointX="20.25" PointY="11.927621751505546" />
+          <ConnectorPoint PointX="9.75" PointY="11.933559643974316" />
+          <ConnectorPoint PointX="17.291666666666668" PointY="11.933559643974316" />
+          <ConnectorPoint PointX="17.458333333333332" PointY="11.933559643974316" />
+          <ConnectorPoint PointX="18.675455791666668" PointY="11.933559643974316" />
+          <ConnectorPoint PointX="18.842122458333332" PointY="11.933559643974316" />
+          <ConnectorPoint PointX="19.077313729166669" PointY="11.933559643974316" />
+          <ConnectorPoint PointX="19.243980395833333" PointY="11.933559643974316" />
+          <ConnectorPoint PointX="20.25" PointY="11.933559643974316" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.TradeEventInstrumentMarketIDFK" >
           <ConnectorPoint PointX="18.758789125" PointY="17.75" />
@@ -10698,20 +10817,20 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.MatchedStatus" Width="1.5" PointX="2.75" PointY="4" Height="2.1725878906249996" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.MatchedStatusUpdateUserIDFK" >
-          <ConnectorPoint PointX="1.117941444147434" PointY="16.5" />
-          <ConnectorPoint PointX="1.117941444147434" PointY="5.0862939453125" />
+          <ConnectorPoint PointX="1.0970777060802281" PointY="16.5" />
+          <ConnectorPoint PointX="1.0970777060802281" PointY="5.0862939453125" />
           <ConnectorPoint PointX="2.75" PointY="5.0862939453125" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FXTradeEvent" Width="1.5" PointX="22.875" PointY="9.75" Height="4.480205078125" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FXTradeEventTraderIDFK" >
-          <ConnectorPoint PointX="0.79060512837739361" PointY="16.5" />
-          <ConnectorPoint PointX="0.79060512837739361" PointY="9.8945318749999984" />
-          <ConnectorPoint PointX="1.0346081108141008" PointY="9.8945318749999966" />
-          <ConnectorPoint PointX="1.3446417391277612" PointY="9.8945318749999984" />
-          <ConnectorPoint PointX="1.5584728956591518" PointY="9.8945318749999984" />
-          <ConnectorPoint PointX="1.7251395623258183" PointY="9.8945318749999984" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="9.8945318749999984" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="9.8945318749999984" />
+          <ConnectorPoint PointX="0.82338939648535525" PointY="16.5" />
+          <ConnectorPoint PointX="0.82338939648535525" PointY="9.8945318749999984" />
+          <ConnectorPoint PointX="1.0137443727468949" PointY="9.8945318749999966" />
+          <ConnectorPoint PointX="1.318204952523079" PointY="9.8945318749999984" />
+          <ConnectorPoint PointX="1.5300060940245266" PointY="9.8945318749999984" />
+          <ConnectorPoint PointX="1.6966727606911931" PointY="9.8945318749999984" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="9.8945318749999966" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="9.8945318749999984" />
           <ConnectorPoint PointX="7.166666666666667" PointY="9.8945318749999984" />
           <ConnectorPoint PointX="7.333333333333333" PointY="9.8945318749999984" />
           <ConnectorPoint PointX="7.541666666666667" PointY="9.8945318749999984" />
@@ -10731,12 +10850,12 @@
           <ConnectorPoint PointX="22.875" PointY="9.8945318749999984" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FXTradeUserIDFK" >
-          <ConnectorPoint PointX="1.3642457545685951" PointY="16.5" />
-          <ConnectorPoint PointX="1.3642457545685951" PointY="10.023443749999984" />
-          <ConnectorPoint PointX="1.5584728956591518" PointY="10.023443749999984" />
-          <ConnectorPoint PointX="1.7251395623258183" PointY="10.023443749999984" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="10.023443749999984" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="10.023443749999984" />
+          <ConnectorPoint PointX="1.3682781436065303" PointY="16.5" />
+          <ConnectorPoint PointX="1.3682781436065303" PointY="10.023443749999984" />
+          <ConnectorPoint PointX="1.5300060940245266" PointY="10.023443749999984" />
+          <ConnectorPoint PointX="1.6966727606911931" PointY="10.023443749999984" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="10.023443749999982" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="10.023443749999984" />
           <ConnectorPoint PointX="7.166666666666667" PointY="10.023443749999984" />
           <ConnectorPoint PointX="7.333333333333333" PointY="10.023443749999984" />
           <ConnectorPoint PointX="7.541666666666667" PointY="10.023443749999984" />
@@ -10782,8 +10901,8 @@
           <ConnectorPoint PointX="15.059895833333334" PointY="17.484375" />
           <ConnectorPoint PointX="15.160562994791667" PointY="17.484375" />
           <ConnectorPoint PointX="15.327229661458334" PointY="17.484375" />
-          <ConnectorPoint PointX="17.437296549479168" PointY="17.484375" />
-          <ConnectorPoint PointX="17.603963216145832" PointY="17.484375" />
+          <ConnectorPoint PointX="17.437487284342449" PointY="17.484375" />
+          <ConnectorPoint PointX="17.604153951009113" PointY="17.484375" />
           <ConnectorPoint PointX="18.675455791666668" PointY="17.484375" />
           <ConnectorPoint PointX="18.842122458333332" PointY="17.484375" />
           <ConnectorPoint PointX="19.077313729166669" PointY="17.484375" />
@@ -10817,8 +10936,8 @@
           <ConnectorPoint PointX="15.059895833333334" PointY="17.46875" />
           <ConnectorPoint PointX="15.160562994791667" PointY="17.46875" />
           <ConnectorPoint PointX="15.327229661458334" PointY="17.46875" />
-          <ConnectorPoint PointX="17.437296549479168" PointY="17.46875" />
-          <ConnectorPoint PointX="17.603963216145832" PointY="17.46875" />
+          <ConnectorPoint PointX="17.437487284342449" PointY="17.46875" />
+          <ConnectorPoint PointX="17.604153951009113" PointY="17.46875" />
           <ConnectorPoint PointX="18.675455791666668" PointY="17.46875" />
           <ConnectorPoint PointX="18.842122458333332" PointY="17.46875" />
           <ConnectorPoint PointX="19.077313729166669" PointY="17.46875" />
@@ -10836,25 +10955,25 @@
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FXTradeEventFK" >
           <ConnectorPoint PointX="8.8271883668870181" PointY="10.25" />
-          <ConnectorPoint PointX="8.8271883668870181" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="9.0637017169971941" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="9.2303683836638619" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="9.3835484004407039" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="9.5502150671073718" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="17.291666666666668" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="17.458333333333332" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="19.084637916666669" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="19.251304583333333" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="20.322916666666668" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="20.489583333333332" PointY="9.8878844836216437" />
-          <ConnectorPoint PointX="22.875" PointY="9.8878844836216437" />
+          <ConnectorPoint PointX="8.8271883668870181" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="9.0637017169971941" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="9.2303683836638619" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="9.39643669183193" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="9.5631033584985978" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="17.291666666666668" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="17.458333333333332" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="19.077313729166669" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="19.243980395833333" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="20.322916666666668" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="20.489583333333332" PointY="9.99219124999999" />
+          <ConnectorPoint PointX="22.875" PointY="9.99219124999999" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FX" Width="1.5" PointX="27.375" PointY="18.875" Height="2.3648893229166674" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.FXUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="18.822032203859742" />
-          <ConnectorPoint PointX="2.4791666666666665" PointY="18.822032203859742" />
-          <ConnectorPoint PointX="2.7708333333333335" PointY="18.822032203859742" />
-          <ConnectorPoint PointX="2.8125" PointY="18.822032203859742" />
+          <ConnectorPoint PointX="2.25" PointY="18.821159840455358" />
+          <ConnectorPoint PointX="2.4791666666666665" PointY="18.821159840455358" />
+          <ConnectorPoint PointX="2.7708333333333335" PointY="18.821159840455358" />
+          <ConnectorPoint PointX="2.8125" PointY="18.821159840455358" />
           <ConnectorPoint PointX="2.8125" PointY="17.5" />
           <ConnectorPoint PointX="5.041666666666667" PointY="17.5" />
           <ConnectorPoint PointX="5.208333333333333" PointY="17.5" />
@@ -10874,8 +10993,8 @@
           <ConnectorPoint PointX="12.408897454427084" PointY="17.5" />
           <ConnectorPoint PointX="14.869791666666666" PointY="17.5" />
           <ConnectorPoint PointX="15.327229661458334" PointY="17.5" />
-          <ConnectorPoint PointX="17.437296549479168" PointY="17.5" />
-          <ConnectorPoint PointX="17.603963216145832" PointY="17.5" />
+          <ConnectorPoint PointX="17.437487284342449" PointY="17.5" />
+          <ConnectorPoint PointX="17.604153951009113" PointY="17.5" />
           <ConnectorPoint PointX="18.675455791666668" PointY="17.5" />
           <ConnectorPoint PointX="18.842122458333332" PointY="17.5" />
           <ConnectorPoint PointX="19.077313729166669" PointY="17.5" />
@@ -10892,8 +11011,8 @@
           <ConnectorPoint PointX="23.958333333333332" PointY="19.432190755208339" />
           <ConnectorPoint PointX="24.19791866666667" PointY="19.432190755208339" />
           <ConnectorPoint PointX="24.364585333333334" PointY="19.432190755208339" />
-          <ConnectorPoint PointX="25.258460760416664" PointY="19.432190755208339" />
-          <ConnectorPoint PointX="25.425127427083329" PointY="19.432190755208339" />
+          <ConnectorPoint PointX="25.258460260416665" PointY="19.432190755208339" />
+          <ConnectorPoint PointX="25.42512692708333" PointY="19.432190755208339" />
           <ConnectorPoint PointX="26.23112307291667" PointY="19.432190755208339" />
           <ConnectorPoint PointX="26.397789739583335" PointY="19.432190755208339" />
           <ConnectorPoint PointX="27.125" PointY="19.432190755208339" />
@@ -10908,8 +11027,8 @@
           <ConnectorPoint PointX="23.958333333333332" PointY="20.336040039062503" />
           <ConnectorPoint PointX="24.19791866666667" PointY="20.336040039062503" />
           <ConnectorPoint PointX="24.364585333333334" PointY="20.336040039062503" />
-          <ConnectorPoint PointX="25.258460760416664" PointY="20.336040039062503" />
-          <ConnectorPoint PointX="25.425127427083329" PointY="20.336040039062503" />
+          <ConnectorPoint PointX="25.258460260416665" PointY="20.336040039062503" />
+          <ConnectorPoint PointX="25.42512692708333" PointY="20.336040039062503" />
           <ConnectorPoint PointX="26.23112307291667" PointY="20.336040039062503" />
           <ConnectorPoint PointX="26.397789739583335" PointY="20.336040039062503" />
           <ConnectorPoint PointX="27.375" PointY="20.336040039062503" />
@@ -10932,20 +11051,18 @@
           <ConnectorPoint PointX="15.496055325520834" PointY="21.720602213541667" />
           <ConnectorPoint PointX="16.885414666666666" PointY="21.720602213541667" />
           <ConnectorPoint PointX="17.05208133333333" PointY="21.720602213541667" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="21.720602213541667" />
-          <ConnectorPoint PointX="17.812093098958332" PointY="21.720602213541667" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="21.720602213541667" />
+          <ConnectorPoint PointX="17.812474568684895" PointY="21.720602213541667" />
           <ConnectorPoint PointX="18.615885104166669" PointY="21.720602213541667" />
           <ConnectorPoint PointX="18.782551770833333" PointY="21.720602213541667" />
           <ConnectorPoint PointX="19.072919166666669" PointY="21.720602213541667" />
           <ConnectorPoint PointX="19.239585833333333" PointY="21.720602213541667" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="21.720602213541667" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="21.720602213541667" />
           <ConnectorPoint PointX="19.791666666666668" PointY="21.720602213541667" />
           <ConnectorPoint PointX="19.958333333333332" PointY="21.720602213541667" />
           <ConnectorPoint PointX="23.791666666666668" PointY="21.720602213541667" />
           <ConnectorPoint PointX="23.958333333333332" PointY="21.720602213541667" />
-          <ConnectorPoint PointX="25.258460760416664" PointY="21.720602213541667" />
-          <ConnectorPoint PointX="25.425127427083329" PointY="21.720602213541667" />
+          <ConnectorPoint PointX="25.258460260416665" PointY="21.720602213541667" />
+          <ConnectorPoint PointX="25.42512692708333" PointY="21.720602213541667" />
           <ConnectorPoint PointX="26.23112307291667" PointY="21.720602213541667" />
           <ConnectorPoint PointX="26.397789739583335" PointY="21.720602213541667" />
           <ConnectorPoint PointX="27.947752112630209" PointY="21.720602213541667" />
@@ -10953,24 +11070,26 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ChargeType" Width="1.5" PointX="3" PointY="34.75" Height="2.1725878906250031" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeTypeUpdateUserIDFK" >
-          <ConnectorPoint PointX="1.9718734103678015" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.9718734103678015" PointY="35.836293945312505" />
-          <ConnectorPoint PointX="2.0435771373298413" PointY="35.836293945312505" />
-          <ConnectorPoint PointX="2.2102438039965082" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="0.79351178815310375" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="0.79351178815310375" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="0.92921068937194162" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="1.2088928024376755" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="1.2731020446565993" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="1.4397687113232658" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="1.4838718832498803" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="1.8408507872000406" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="1.8891834230199598" PointY="35.836293945312505" />
+          <ConnectorPoint PointX="2.3033474285910778" PointY="35.836293945312505" />
           <ConnectorPoint PointX="3" PointY="35.836293945312505" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioAggregationLevel" Width="2.75" PointX="3" PointY="37.75" Height="1.9802864583333317" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioAggregationLevelUpdateUserIDFK" >
-          <ConnectorPoint PointX="0.97313896433549985" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="0.97313896433549985" PointY="38.740143229166662" />
-          <ConnectorPoint PointX="1.023830025388246" PointY="38.740143229166662" />
-          <ConnectorPoint PointX="1.1904966920549125" PointY="38.740143229166662" />
-          <ConnectorPoint PointX="1.3839818066110883" PointY="38.740143229166662" />
-          <ConnectorPoint PointX="1.5819009732777547" PointY="38.740143229166662" />
-          <ConnectorPoint PointX="1.6473431640322793" PointY="38.740143229166662" />
-          <ConnectorPoint PointX="2.0239542437011351" PointY="38.740143229166662" />
-          <ConnectorPoint PointX="2.0435771373298413" PointY="38.740143229166662" />
-          <ConnectorPoint PointX="2.2102438039965082" PointY="38.740143229166662" />
+          <ConnectorPoint PointX="1.5984577165832135" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.5984577165832135" PointY="38.740143229166662" />
+          <ConnectorPoint PointX="1.6429316205333742" PointY="38.740143229166662" />
+          <ConnectorPoint PointX="1.8408507872000406" PointY="38.740143229166662" />
+          <ConnectorPoint PointX="1.8891834230199598" PointY="38.740143229166662" />
+          <ConnectorPoint PointX="2.3033474285910778" PointY="38.740143229166662" />
           <ConnectorPoint PointX="3" PointY="38.740143229166662" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Charge" Width="1.5" PointX="13.5" PointY="28.75" Height="3.1340950520833353" />
@@ -10981,10 +11100,10 @@
           <ConnectorPoint PointX="25.125" PointY="9.5418290953133216" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.AccountAllocationUpdateUserIDFK" >
-          <ConnectorPoint PointX="1.6418062289924851" PointY="16.5" />
-          <ConnectorPoint PointX="1.6418062289924851" PointY="9.5036313226343268" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="9.5036313226343268" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="9.5036313226343268" />
+          <ConnectorPoint PointX="1.6133394273578599" PointY="16.5" />
+          <ConnectorPoint PointX="1.6133394273578599" PointY="9.5036313226343268" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="9.503631322634325" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="9.5036313226343268" />
           <ConnectorPoint PointX="7.166666666666667" PointY="9.5036313226343268" />
           <ConnectorPoint PointX="7.333333333333333" PointY="9.5036313226343268" />
           <ConnectorPoint PointX="7.541666666666667" PointY="9.5036313226343268" />
@@ -11000,18 +11119,14 @@
           <ConnectorPoint PointX="25.125" PointY="9.5036313226343268" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeUpdateUserIDFK" >
-          <ConnectorPoint PointX="0.83031698216775007" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="0.83031698216775007" PointY="31.244944661458334" />
-          <ConnectorPoint PointX="0.88980563100216648" PointY="31.244944661458334" />
-          <ConnectorPoint PointX="1.1904966920549125" PointY="31.244944661458334" />
-          <ConnectorPoint PointX="1.270918113192707" PointY="31.244944661458334" />
-          <ConnectorPoint PointX="1.5819009732777547" PointY="31.244944661458334" />
-          <ConnectorPoint PointX="1.6473431640322793" PointY="31.24494466145833" />
-          <ConnectorPoint PointX="2.2102438039965082" PointY="31.244944661458334" />
+          <ConnectorPoint PointX="1.4706504792997195" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.4706504792997195" PointY="31.244944661458334" />
+          <ConnectorPoint PointX="1.4838718832498803" PointY="31.244944661458334" />
+          <ConnectorPoint PointX="1.8721032872000405" PointY="31.244944661458334" />
+          <ConnectorPoint PointX="1.8891834230199598" PointY="31.244944661458334" />
+          <ConnectorPoint PointX="2.3033474285910778" PointY="31.244944661458334" />
           <ConnectorPoint PointX="7.791666666666667" PointY="31.244944661458334" />
           <ConnectorPoint PointX="7.958333333333333" PointY="31.244944661458334" />
-          <ConnectorPoint PointX="13.166666666666666" PointY="31.244944661458334" />
-          <ConnectorPoint PointX="13.333333333333334" PointY="31.244944661458334" />
           <ConnectorPoint PointX="13.5" PointY="31.244944661458334" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InternalAllocationBookIDFK" >
@@ -11034,8 +11149,8 @@
           <ConnectorPoint PointX="15.059895833333334" PointY="17.375" />
           <ConnectorPoint PointX="15.160562994791667" PointY="17.375" />
           <ConnectorPoint PointX="15.327229661458334" PointY="17.375" />
-          <ConnectorPoint PointX="17.437296549479168" PointY="17.375" />
-          <ConnectorPoint PointX="17.603963216145832" PointY="17.375" />
+          <ConnectorPoint PointX="17.437487284342449" PointY="17.375" />
+          <ConnectorPoint PointX="17.604153951009113" PointY="17.375" />
           <ConnectorPoint PointX="18.675455791666668" PointY="17.375" />
           <ConnectorPoint PointX="18.842122458333332" PointY="17.375" />
           <ConnectorPoint PointX="19.077313729166669" PointY="17.375" />
@@ -11052,8 +11167,8 @@
           <ConnectorPoint PointX="23.536460833333333" PointY="16.359375" />
           <ConnectorPoint PointX="24.447916666666668" PointY="16.359375" />
           <ConnectorPoint PointX="24.614583333333332" PointY="16.359375" />
-          <ConnectorPoint PointX="25.258460760416664" PointY="16.359375" />
-          <ConnectorPoint PointX="25.425127427083329" PointY="16.359375" />
+          <ConnectorPoint PointX="25.258460260416665" PointY="16.359375" />
+          <ConnectorPoint PointX="25.42512692708333" PointY="16.359375" />
           <ConnectorPoint PointX="25.9414078125" PointY="16.359375" />
           <ConnectorPoint PointX="25.9414078125" PointY="13.27830078125" />
         </AssociationConnector>
@@ -11061,10 +11176,6 @@
           <ConnectorPoint PointX="4.5" PointY="36.237488606770839" />
           <ConnectorPoint PointX="7.791666666666667" PointY="36.237488606770839" />
           <ConnectorPoint PointX="7.958333333333333" PointY="36.237488606770839" />
-          <ConnectorPoint PointX="12.604166666666666" PointY="36.237488606770839" />
-          <ConnectorPoint PointX="12.770833333333334" PointY="36.237488606770839" />
-          <ConnectorPoint PointX="13.166666666666666" PointY="36.237488606770839" />
-          <ConnectorPoint PointX="13.333333333333334" PointY="36.237488606770839" />
           <ConnectorPoint PointX="14.25" PointY="36.237488606770839" />
           <ConnectorPoint PointX="14.25" PointY="31.884095052083335" />
         </AssociationConnector>
@@ -11079,8 +11190,6 @@
           <ConnectorPoint PointX="12.041666666666666" PointY="28.375000000000004" />
           <ConnectorPoint PointX="12.208333333333334" PointY="28.375000000000004" />
           <ConnectorPoint PointX="13.125" PointY="28.375000000000004" />
-          <ConnectorPoint PointX="13.191074434901122" PointY="28.441074434901125" />
-          <ConnectorPoint PointX="13.308925565098878" PointY="28.558925565098882" />
           <ConnectorPoint PointX="13.499999999999996" PointY="28.75" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeEventIDFK" >
@@ -11096,8 +11205,6 @@
           <ConnectorPoint PointX="12.002642454427084" PointY="17.999999999999996" />
           <ConnectorPoint PointX="12.125" PointY="17.999999999999996" />
           <ConnectorPoint PointX="12.125" PointY="30.348299526041661" />
-          <ConnectorPoint PointX="13.166666666666666" PointY="30.348299526041661" />
-          <ConnectorPoint PointX="13.333333333333334" PointY="30.348299526041661" />
           <ConnectorPoint PointX="13.5" PointY="30.348299526041661" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InternalAllocationEventFK" >
@@ -11195,41 +11302,41 @@
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InternalAccountingEvent" Width="1.5" PointX="20.625" PointY="4.125" Height="4.0956022135416656" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InternalAccountingEventType" Width="1.5" PointX="6.75" PointY="4.125" Height="1.9802864583333331" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InternalAccountingEventTraderIDFK" >
-          <ConnectorPoint PointX="2.1594217039256609" PointY="16.5" />
-          <ConnectorPoint PointX="2.1594217039256609" PointY="6.3235128248212824" />
-          <ConnectorPoint PointX="2.7604166666666665" PointY="6.3235128248212815" />
-          <ConnectorPoint PointX="2.9270833333333335" PointY="6.3235128248212824" />
-          <ConnectorPoint PointX="7.541666666666667" PointY="6.3235128248212815" />
-          <ConnectorPoint PointX="7.708333333333333" PointY="6.3235128248212824" />
-          <ConnectorPoint PointX="9.39643669183193" PointY="6.3235128248212815" />
-          <ConnectorPoint PointX="9.5631033584985978" PointY="6.3235128248212824" />
-          <ConnectorPoint PointX="20.625" PointY="6.3235128248212824" />
+          <ConnectorPoint PointX="2.1123506402832062" PointY="16.5" />
+          <ConnectorPoint PointX="2.1123506402832062" PointY="6.32339792069196" />
+          <ConnectorPoint PointX="2.7604166666666665" PointY="6.3233979206919591" />
+          <ConnectorPoint PointX="2.9270833333333335" PointY="6.32339792069196" />
+          <ConnectorPoint PointX="7.541666666666667" PointY="6.3233979206919591" />
+          <ConnectorPoint PointX="7.708333333333333" PointY="6.32339792069196" />
+          <ConnectorPoint PointX="9.39643669183193" PointY="6.3233979206919591" />
+          <ConnectorPoint PointX="9.5631033584985978" PointY="6.32339792069196" />
+          <ConnectorPoint PointX="20.625" PointY="6.32339792069196" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InternalAccountingEventTypeUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="2.8333333333333335" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="4.916666666666667" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="5.083333333333333" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="5.197916666666667" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="5.364583333333333" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="7.166666666666667" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="7.333333333333333" PointY="16.983457884296911" />
-          <ConnectorPoint PointX="7.625" PointY="16.983457884296911" />
+          <ConnectorPoint PointX="2.25" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="2.8333333333333335" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="4.916666666666667" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="5.083333333333333" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="5.197916666666667" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="5.364583333333333" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="6.744791666666667" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="6.942708333333333" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="7.333333333333333" PointY="16.990462948907776" />
+          <ConnectorPoint PointX="7.625" PointY="16.990462948907776" />
           <ConnectorPoint PointX="7.625" PointY="6.1052864583333335" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InternalAccountingEventUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.1906742039256608" PointY="16.5" />
-          <ConnectorPoint PointX="2.1906742039256608" PointY="6.474258912410634" />
-          <ConnectorPoint PointX="2.7604166666666665" PointY="6.4742589124106331" />
-          <ConnectorPoint PointX="2.9270833333333335" PointY="6.474258912410634" />
-          <ConnectorPoint PointX="7.541666666666667" PointY="6.4742589124106331" />
-          <ConnectorPoint PointX="7.708333333333333" PointY="6.474258912410634" />
-          <ConnectorPoint PointX="9.39643669183193" PointY="6.4742589124106331" />
-          <ConnectorPoint PointX="9.5631033584985978" PointY="6.474258912410634" />
-          <ConnectorPoint PointX="20.625" PointY="6.474258912410634" />
+          <ConnectorPoint PointX="2.2124278201416034" PointY="16.5" />
+          <ConnectorPoint PointX="2.2124278201416034" PointY="6.4742014603459728" />
+          <ConnectorPoint PointX="2.7604166666666665" PointY="6.4742014603459719" />
+          <ConnectorPoint PointX="2.9270833333333335" PointY="6.4742014603459728" />
+          <ConnectorPoint PointX="7.541666666666667" PointY="6.4742014603459719" />
+          <ConnectorPoint PointX="7.708333333333333" PointY="6.4742014603459728" />
+          <ConnectorPoint PointX="9.39643669183193" PointY="6.4742014603459719" />
+          <ConnectorPoint PointX="9.5631033584985978" PointY="6.4742014603459728" />
+          <ConnectorPoint PointX="20.625" PointY="6.4742014603459728" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InternalAccountingEventFK" >
           <ConnectorPoint PointX="9.4797700251652639" PointY="10.25" />
@@ -11242,19 +11349,21 @@
           <ConnectorPoint PointX="20.625" PointY="7.2627100857250451" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InternalAccountingEventInternalAccountingEventTypeIdFK" >
-          <ConnectorPoint PointX="8.25" PointY="4.8517927053197258" />
-          <ConnectorPoint PointX="20.625" PointY="4.8517927053197258" />
+          <ConnectorPoint PointX="8.25" PointY="4.8016398633292088" />
+          <ConnectorPoint PointX="20.625" PointY="4.8016398633292088" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentClassHierarchy" Width="2.75" PointX="3.25" PointY="43.75" Height="1.9802864583333317" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentClassRelationship" Width="2.75" PointX="6.5" PointY="28.75" Height="2.3648893229166674" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentClassHierarchyUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.1269104706631747" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="2.1269104706631747" PointY="44.740143229166662" />
+          <ConnectorPoint PointX="2.096270690515488" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="2.096270690515488" PointY="44.740143229166662" />
           <ConnectorPoint PointX="3.25" PointY="44.740143229166662" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentClassRelationshipUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.1581629706631746" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="2.1581629706631746" PointY="30.737488606770835" />
+          <ConnectorPoint PointX="2.1275231905154879" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="2.1275231905154879" PointY="30.737488606770835" />
+          <ConnectorPoint PointX="2.1366807619244104" PointY="30.737488606770835" />
+          <ConnectorPoint PointX="2.3033474285910773" PointY="30.737488606770835" />
           <ConnectorPoint PointX="6.5" PointY="30.737488606770835" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentClassRelationshipInstrumentClassIDFK" >
@@ -11291,10 +11400,10 @@
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioSettlementDate" Width="1.5" PointX="20.375" PointY="17.375" Height="4.0956022135416674" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioTradeDate" Width="1.5" PointX="16.375" PointY="26.375" Height="4.0956022135416674" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioSettlementDateUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="18.203667108905055" />
-          <ConnectorPoint PointX="2.4791666666666665" PointY="18.203667108905055" />
-          <ConnectorPoint PointX="2.6458333333333335" PointY="18.203667108905055" />
-          <ConnectorPoint PointX="2.6875" PointY="18.203667108905055" />
+          <ConnectorPoint PointX="2.25" PointY="18.199231617139" />
+          <ConnectorPoint PointX="2.4791666666666665" PointY="18.199231617139" />
+          <ConnectorPoint PointX="2.6458333333333335" PointY="18.199231617139" />
+          <ConnectorPoint PointX="2.6875" PointY="18.199231617139" />
           <ConnectorPoint PointX="2.6875" PointY="17.453125" />
           <ConnectorPoint PointX="4.916666666666667" PointY="17.453125" />
           <ConnectorPoint PointX="5.083333333333333" PointY="17.453125" />
@@ -11316,8 +11425,8 @@
           <ConnectorPoint PointX="15.059895833333334" PointY="17.453125" />
           <ConnectorPoint PointX="15.160562994791667" PointY="17.453125" />
           <ConnectorPoint PointX="15.327229661458334" PointY="17.453125" />
-          <ConnectorPoint PointX="17.437296549479168" PointY="17.453125" />
-          <ConnectorPoint PointX="17.603963216145832" PointY="17.453125" />
+          <ConnectorPoint PointX="17.437487284342449" PointY="17.453125" />
+          <ConnectorPoint PointX="17.604153951009113" PointY="17.453125" />
           <ConnectorPoint PointX="18.675455791666668" PointY="17.453125" />
           <ConnectorPoint PointX="18.842122458333332" PointY="17.453125" />
           <ConnectorPoint PointX="19.077313729166669" PointY="17.453125" />
@@ -11328,8 +11437,8 @@
           <ConnectorPoint PointX="21.125" PointY="17.375" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioTradeDateUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.1894154706631745" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="2.1894154706631745" PointY="27.828756510416667" />
+          <ConnectorPoint PointX="2.1587756905154878" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="2.1587756905154878" PointY="27.828756510416667" />
           <ConnectorPoint PointX="2.6041666666666665" PointY="27.828756510416667" />
           <ConnectorPoint PointX="2.8333333333333335" PointY="27.828756510416667" />
           <ConnectorPoint PointX="4.822916666666667" PointY="27.828756510416667" />
@@ -11355,7 +11464,7 @@
           <ConnectorPoint PointX="15.496055325520834" PointY="21.295146484375003" />
           <ConnectorPoint PointX="16.885414666666666" PointY="21.295146484375003" />
           <ConnectorPoint PointX="17.05208133333333" PointY="21.295146484375003" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="21.295146484375003" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="21.295146484375003" />
           <ConnectorPoint PointX="17.864583333333332" PointY="21.295146484375003" />
           <ConnectorPoint PointX="18.158851041666669" PointY="21.295146484375003" />
           <ConnectorPoint PointX="18.325517708333333" PointY="21.295146484375003" />
@@ -11363,7 +11472,7 @@
           <ConnectorPoint PointX="18.782551770833333" PointY="21.295146484375003" />
           <ConnectorPoint PointX="19.072919166666669" PointY="21.295146484375003" />
           <ConnectorPoint PointX="19.239585833333333" PointY="21.295146484375003" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="21.295146484375003" />
+          <ConnectorPoint PointX="19.729166666666668" PointY="21.295146484375003" />
           <ConnectorPoint PointX="19.958333333333332" PointY="21.295146484375003" />
           <ConnectorPoint PointX="20.375" PointY="21.295146484375003" />
         </AssociationConnector>
@@ -11372,104 +11481,112 @@
           <ConnectorPoint PointX="16.46875" PointY="25.918111543497382" />
           <ConnectorPoint PointX="16.46875" PointY="26.375" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.EntityProperty" Width="1.5" PointX="11.875" PointY="40" Height="2.5571907552083317" />
-        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Extract" Width="1.5" PointX="13.375" PointY="45.125" Height="2.1725878906250031" />
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.EntityProperty" Width="1.5" PointX="11.875" PointY="40" Height="2.7494921875000031" />
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Extract" Width="2.25" PointX="13.375" PointY="45.125" Height="2.5571907552083317" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractConfiguration" Width="1.5" PointX="16.875" PointY="40.375" Height="2.3648893229166674" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractEntity" Width="1.5" PointX="14.375" PointY="40.25" Height="2.9417936197916674" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractInputConfiguration" Width="1.5" PointX="9.625" PointY="45.125" Height="3.326396484374996" />
-        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration" Width="2.375" PointX="16.5" PointY="45.625" Height="3.3263964843750031" />
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration" Width="2.375" PointX="16.5" PointY="45.625" Height="2.9417936197916674" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractRun" Width="1.5" PointX="19.5" PointY="40.75" Height="2.1725878906250031" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractType" Width="1.5" PointX="11.75" PointY="48.625" Height="1.9802864583333317" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityPropertyUserIDFK" >
-          <ConnectorPoint PointX="1.9406209103678016" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.9406209103678016" PointY="41.278595377604162" />
-          <ConnectorPoint PointX="2.0435771373298413" PointY="41.278595377604162" />
-          <ConnectorPoint PointX="2.2102438039965082" PointY="41.278595377604162" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="41.278595377604162" />
-          <ConnectorPoint PointX="7.958333333333333" PointY="41.278595377604162" />
-          <ConnectorPoint PointX="11.875" PointY="41.278595377604162" />
+          <ConnectorPoint PointX="1.972516756353293" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.972516756353293" PointY="42.146139322916675" />
+          <ConnectorPoint PointX="2.0129373571821545" PointY="42.146139322916675" />
+          <ConnectorPoint PointX="2.2733615238488212" PointY="42.146139322916675" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="42.146139322916675" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="42.146139322916675" />
+          <ConnectorPoint PointX="11.875" PointY="42.146139322916675" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEntityUserIDFK" >
-          <ConnectorPoint PointX="1.8781159103678018" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.8781159103678018" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="2.0435771373298413" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="2.2102438039965082" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="7.958333333333333" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="12.658854166666666" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="12.825520833333334" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="13.697919166666667" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="13.864585833333335" PointY="42.953820045572911" />
-          <ConnectorPoint PointX="14.375" PointY="42.953820045572911" />
+          <ConnectorPoint PointX="2.1900281905154877" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="2.1900281905154877" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="12.268226666666665" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="12.434893333333333" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="12.510416666666666" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="12.677083333333334" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="12.932294166666667" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="13.098960833333335" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="13.666666666666666" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="13.833333333333334" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="13.979166666666666" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="14.145833333333334" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="14.375" PointY="43.191793619791667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEventConfigurationIDFK" >
-          <ConnectorPoint PointX="1.8468634103678019" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.8468634103678019" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="2.0435771373298413" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="2.2102438039965082" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="7.958333333333333" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="12.658854166666666" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="12.825520833333334" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="13.697919166666667" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="13.864585833333335" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="14.125" PointY="42.807190755208325" />
-          <ConnectorPoint PointX="14.125" PointY="40" />
-          <ConnectorPoint PointX="15.541666666666666" PointY="40" />
-          <ConnectorPoint PointX="15.708333333333334" PointY="40" />
-          <ConnectorPoint PointX="16.5" PointY="40" />
-          <ConnectorPoint PointX="16.5" PointY="41.557444661458334" />
-          <ConnectorPoint PointX="16.572916666666668" PointY="41.557444661458334" />
-          <ConnectorPoint PointX="16.739583333333332" PointY="41.557444661458334" />
+          <ConnectorPoint PointX="1.5672052165832136" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.5672052165832136" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="1.6429316205333742" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="1.8408507872000406" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="2.0129373571821545" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="2.2733615238488212" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="12.268226666666665" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="12.434893333333333" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="12.510416666666666" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="12.677083333333334" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="12.932294166666667" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="13.098960833333335" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="13.666666666666666" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="13.833333333333334" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="14.125" PointY="42.99949218750001" />
+          <ConnectorPoint PointX="14.125" PointY="39.75" />
+          <ConnectorPoint PointX="15.166666666666666" PointY="39.75" />
+          <ConnectorPoint PointX="15.333333333333334" PointY="39.75" />
+          <ConnectorPoint PointX="16.375" PointY="39.75" />
+          <ConnectorPoint PointX="16.375" PointY="41.557444661458334" />
           <ConnectorPoint PointX="16.875" PointY="41.557444661458334" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractFieldConfigurationUserIDFK" >
-          <ConnectorPoint PointX="1.7306764973656126" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.7306764973656126" PointY="47.12209147135416" />
+          <ConnectorPoint PointX="1.7575174538667073" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.7575174538667073" PointY="47.12209147135416" />
           <ConnectorPoint PointX="9.625" PointY="47.12209147135416" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractFieldOutputConfigurationUserIDFK" >
-          <ConnectorPoint PointX="1.4985676399444214" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.4985676399444214" PointY="48.5381982421875" />
-          <ConnectorPoint PointX="12.088541666666666" PointY="48.5381982421875" />
-          <ConnectorPoint PointX="12.255208333333334" PointY="48.5381982421875" />
-          <ConnectorPoint PointX="16.5" PointY="48.5381982421875" />
+          <ConnectorPoint PointX="1.7262649538667074" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.7262649538667074" PointY="48.540345052083332" />
+          <ConnectorPoint PointX="12.088541666666666" PointY="48.540345052083332" />
+          <ConnectorPoint PointX="12.255208333333334" PointY="48.540345052083332" />
+          <ConnectorPoint PointX="16.5" PointY="48.540345052083332" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractRunUserIDFK" >
-          <ConnectorPoint PointX="1.4673151399444215" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.4673151399444215" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="1.6473431640322793" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="1.8140098306989458" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="2.0435771373298413" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="2.2102438039965082" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="7.958333333333333" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="12.658854166666666" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="12.825520833333334" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="13.697919166666667" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="13.864585833333335" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="14.541666666666666" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="14.708333333333334" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="16.572916666666668" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="16.739583333333332" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="17.541666666666668" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="17.708333333333332" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="18.477761090494791" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="18.644427757161456" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="19.125" PointY="43.441793619791667" />
-          <ConnectorPoint PointX="19.125" PointY="41.774992303385432" />
-          <ConnectorPoint PointX="19.5" PointY="41.774992303385432" />
+          <ConnectorPoint PointX="1.3564353779899325" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.3564353779899325" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="1.6429316205333742" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="1.8408507872000406" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="2.0129373571821545" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="2.1796040238488215" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="12.268226666666665" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="12.434893333333333" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="12.510416666666666" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="12.677083333333334" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="12.932294166666667" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="13.098960833333335" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="13.666666666666666" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="13.833333333333334" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="13.979166666666666" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="14.145833333333334" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="14.985026041666666" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="15.151692708333334" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="17.541666666666668" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="17.708333333333332" PointY="43.473043619791667" />
+          <ConnectorPoint PointX="19.5" PointY="43.473043619791667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractTypeUserIDFK" >
-          <ConnectorPoint PointX="1.1071633587215792" PointY="19.057190755208335" />
-          <ConnectorPoint PointX="1.1071633587215792" PointY="49.65334147135416" />
-          <ConnectorPoint PointX="11.75" PointY="49.65334147135416" />
+          <ConnectorPoint PointX="1.1255594691043422" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.1255594691043422" PointY="49.615143229166662" />
+          <ConnectorPoint PointX="11.75" PointY="49.615143229166662" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="18.611654234809411" />
-          <ConnectorPoint PointX="2.4791666666666665" PointY="18.611654234809411" />
-          <ConnectorPoint PointX="2.6458333333333335" PointY="18.611654234809411" />
-          <ConnectorPoint PointX="2.6875" PointY="18.611654234809411" />
+          <ConnectorPoint PointX="2.25" PointY="18.608696053533215" />
+          <ConnectorPoint PointX="2.4791666666666665" PointY="18.608696053533215" />
+          <ConnectorPoint PointX="2.6458333333333335" PointY="18.608696053533215" />
+          <ConnectorPoint PointX="2.6875" PointY="18.608696053533215" />
           <ConnectorPoint PointX="2.6875" PointY="27.985006510416667" />
           <ConnectorPoint PointX="4.822916666666667" PointY="27.985006510416667" />
           <ConnectorPoint PointX="5.098958333333333" PointY="27.985006510416667" />
@@ -11481,80 +11598,78 @@
           <ConnectorPoint PointX="10.208333333333334" PointY="27.985006510416667" />
           <ConnectorPoint PointX="12.041666666666666" PointY="27.985006510416667" />
           <ConnectorPoint PointX="12.208333333333334" PointY="27.985006510416667" />
-          <ConnectorPoint PointX="13.25" PointY="27.985006510416667" />
-          <ConnectorPoint PointX="13.25" PointY="39.75" />
-          <ConnectorPoint PointX="13.7812525" PointY="39.75" />
-          <ConnectorPoint PointX="13.7812525" PointY="45.125" />
+          <ConnectorPoint PointX="15.25" PointY="27.985006510416667" />
+          <ConnectorPoint PointX="15.25" PointY="39.875" />
+          <ConnectorPoint PointX="14.0625" PointY="39.875" />
+          <ConnectorPoint PointX="14.0625" PointY="44.75" />
+          <ConnectorPoint PointX="14.38671875" PointY="44.75" />
+          <ConnectorPoint PointX="14.38671875" PointY="45.125" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractInputConfigurationEntityPropertyIdFK" >
-          <ConnectorPoint PointX="12.7421875" PointY="42.557190755208332" />
-          <ConnectorPoint PointX="12.7421875" PointY="47.509588024205421" />
-          <ConnectorPoint PointX="12.255208333333334" PointY="47.509588024205421" />
-          <ConnectorPoint PointX="12.088541666666666" PointY="47.509588024205421" />
-          <ConnectorPoint PointX="11.125" PointY="47.509588024205421" />
+          <ConnectorPoint PointX="12.59375" PointY="42.7494921875" />
+          <ConnectorPoint PointX="12.59375" PointY="47.160842149088452" />
+          <ConnectorPoint PointX="12.434893333333333" PointY="47.160842149088452" />
+          <ConnectorPoint PointX="12.268226666666665" PointY="47.160842149088452" />
+          <ConnectorPoint PointX="12.255208333333334" PointY="47.160842149088452" />
+          <ConnectorPoint PointX="12.088541666666666" PointY="47.160842149088452" />
+          <ConnectorPoint PointX="11.125" PointY="47.160842149088452" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEntityExtractIdFK" >
-          <ConnectorPoint PointX="14.625" PointY="45.125" />
-          <ConnectorPoint PointX="14.625" PointY="43.191793619791667" />
+          <ConnectorPoint PointX="15.068359375" PointY="45.125" />
+          <ConnectorPoint PointX="15.068359375" PointY="43.384095052083332" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEventConfigurationExtractIdFK" >
-          <ConnectorPoint PointX="14.875000000000009" PointY="45.125" />
-          <ConnectorPoint PointX="15.25" PointY="44.750000000000007" />
-          <ConnectorPoint PointX="16.572916666666668" PointY="44.750000000000007" />
-          <ConnectorPoint PointX="16.739583333333332" PointY="44.750000000000007" />
-          <ConnectorPoint PointX="17.625" PointY="44.750000000000007" />
+          <ConnectorPoint PointX="15.625" PointY="45.126729769230771" />
+          <ConnectorPoint PointX="16.001729769230771" PointY="44.75" />
+          <ConnectorPoint PointX="17.625" PointY="44.75" />
           <ConnectorPoint PointX="17.625" PointY="42.739889322916667" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractExtractTypeIdFK" >
           <ConnectorPoint PointX="12.171875" PointY="48.625" />
-          <ConnectorPoint PointX="12.171875" PointY="46.505274564035858" />
-          <ConnectorPoint PointX="12.658854166666666" PointY="46.505274564035858" />
-          <ConnectorPoint PointX="12.825520833333334" PointY="46.505274564035858" />
-          <ConnectorPoint PointX="13.375" PointY="46.505274564035858" />
+          <ConnectorPoint PointX="12.171875" PointY="45.757294734090138" />
+          <ConnectorPoint PointX="12.268226666666665" PointY="45.757294734090138" />
+          <ConnectorPoint PointX="12.434893333333333" PointY="45.757294734090138" />
+          <ConnectorPoint PointX="12.510416666666666" PointY="45.757294734090138" />
+          <ConnectorPoint PointX="12.677083333333334" PointY="45.757294734090138" />
+          <ConnectorPoint PointX="13.375" PointY="45.757294734090138" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractFieldOutputConfigurationExtractIdFK" >
-          <ConnectorPoint PointX="14.875" PointY="46.461293945312505" />
-          <ConnectorPoint PointX="16.5" PointY="46.461293945312505" />
+          <ConnectorPoint PointX="15.625" PointY="46.653595377604162" />
+          <ConnectorPoint PointX="16.5" PointY="46.653595377604162" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractInputConfigurationExtractIdFK" >
-          <ConnectorPoint PointX="13.375" PointY="45.764671924451257" />
-          <ConnectorPoint PointX="12.825520833333334" PointY="45.764671924451257" />
-          <ConnectorPoint PointX="12.658854166666666" PointY="45.764671924451257" />
-          <ConnectorPoint PointX="11.125" PointY="45.764671924451257" />
+          <ConnectorPoint PointX="13.375" PointY="46.459068441589295" />
+          <ConnectorPoint PointX="12.677083333333334" PointY="46.459068441589295" />
+          <ConnectorPoint PointX="12.510416666666666" PointY="46.459068441589295" />
+          <ConnectorPoint PointX="12.434893333333333" PointY="46.459068441589295" />
+          <ConnectorPoint PointX="12.268226666666665" PointY="46.459068441589295" />
+          <ConnectorPoint PointX="12.255208333333334" PointY="46.459068441589295" />
+          <ConnectorPoint PointX="12.088541666666666" PointY="46.459068441589295" />
+          <ConnectorPoint PointX="11.125" PointY="46.459068441589295" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractRunExtractIdFK" >
-          <ConnectorPoint PointX="14.875" PointY="45.375002499999994" />
-          <ConnectorPoint PointX="16.572916666666668" PointY="45.375002499999994" />
-          <ConnectorPoint PointX="16.739583333333332" PointY="45.375002499999994" />
-          <ConnectorPoint PointX="18.477761090494791" PointY="45.375002499999994" />
-          <ConnectorPoint PointX="18.644427757161456" PointY="45.375002499999994" />
-          <ConnectorPoint PointX="20.25" PointY="45.375002499999994" />
-          <ConnectorPoint PointX="20.25" PointY="42.922587890625" />
+          <ConnectorPoint PointX="15.625" PointY="45.375867384615376" />
+          <ConnectorPoint PointX="20.25" PointY="45.375867384615376" />
+          <ConnectorPoint PointX="20.25" PointY="43.4994921875" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEntityLastSentInExtractRunIdFK" >
-          <ConnectorPoint PointX="19.5" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="19.208333333333332" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="19.041666666666668" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="18.644427757161456" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="18.477761090494791" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="17.708333333333332" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="17.541666666666668" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="16.739583333333332" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="16.572916666666668" PointY="42.862488606770839" />
-          <ConnectorPoint PointX="15.875" PointY="42.862488606770839" />
+          <ConnectorPoint PointX="19.5" PointY="43.093242187499996" />
+          <ConnectorPoint PointX="17.708333333333332" PointY="43.093242187499996" />
+          <ConnectorPoint PointX="17.541666666666668" PointY="43.093242187499996" />
+          <ConnectorPoint PointX="15.875" PointY="43.093242187499996" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioEvent" Width="2.375" PointX="27.375" PointY="22.125" Height="6.2109179687500031" />
         <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioEventType" Width="1.5" PointX="3" PointY="13.75" Height="1.9802864583333335" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionAccountMovementTypeUpdateUserIDFK" >
-          <ConnectorPoint PointX="2.0123103428528188" PointY="16.5" />
-          <ConnectorPoint PointX="2.0123103428528188" PointY="14.740143229166666" />
-          <ConnectorPoint PointX="2.0760883705923274" PointY="14.740143229166666" />
-          <ConnectorPoint PointX="2.2740075372589943" PointY="14.740143229166666" />
+          <ConnectorPoint PointX="1.981140986595332" PointY="16.5" />
+          <ConnectorPoint PointX="1.981140986595332" PointY="14.740143229166666" />
+          <ConnectorPoint PointX="2.0290173069498727" PointY="14.740143229166664" />
+          <ConnectorPoint PointX="2.2957611534749369" PointY="14.740143229166666" />
           <ConnectorPoint PointX="3" PointY="14.740143229166666" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionAccountMovementUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="16.770783322439542" />
-          <ConnectorPoint PointX="2.625" PointY="16.770783322439542" />
+          <ConnectorPoint PointX="2.25" PointY="16.775527000023477" />
+          <ConnectorPoint PointX="2.625" PointY="16.775527000023477" />
           <ConnectorPoint PointX="2.625" PointY="20.697815755208335" />
           <ConnectorPoint PointX="2.6666666666666665" PointY="20.697815755208335" />
           <ConnectorPoint PointX="2.8333333333333335" PointY="20.697815755208335" />
@@ -11584,22 +11699,20 @@
           <ConnectorPoint PointX="15.496055325520834" PointY="22.65625" />
           <ConnectorPoint PointX="16.885414666666666" PointY="22.65625" />
           <ConnectorPoint PointX="17.05208133333333" PointY="22.65625" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="22.65625" />
-          <ConnectorPoint PointX="17.812093098958332" PointY="22.65625" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="22.65625" />
+          <ConnectorPoint PointX="17.812474568684895" PointY="22.65625" />
           <ConnectorPoint PointX="18.615885104166669" PointY="22.65625" />
           <ConnectorPoint PointX="18.782551770833333" PointY="22.65625" />
           <ConnectorPoint PointX="19.072919166666669" PointY="22.65625" />
           <ConnectorPoint PointX="19.239585833333333" PointY="22.65625" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="22.65625" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="22.65625" />
           <ConnectorPoint PointX="19.791666666666668" PointY="22.65625" />
           <ConnectorPoint PointX="19.958333333333332" PointY="22.65625" />
           <ConnectorPoint PointX="20.125" PointY="22.65625" />
           <ConnectorPoint PointX="20.125" PointY="21.783102213541667" />
           <ConnectorPoint PointX="23.791666666666668" PointY="21.783102213541667" />
           <ConnectorPoint PointX="23.958333333333332" PointY="21.783102213541667" />
-          <ConnectorPoint PointX="25.258460760416664" PointY="21.783102213541667" />
-          <ConnectorPoint PointX="25.425127427083329" PointY="21.783102213541667" />
+          <ConnectorPoint PointX="25.258460260416665" PointY="21.783102213541667" />
+          <ConnectorPoint PointX="25.42512692708333" PointY="21.783102213541667" />
           <ConnectorPoint PointX="26.23112307291667" PointY="21.783102213541667" />
           <ConnectorPoint PointX="26.397789739583335" PointY="21.783102213541667" />
           <ConnectorPoint PointX="28.283728001139323" PointY="21.783102213541667" />
@@ -11616,12 +11729,8 @@
           <ConnectorPoint PointX="5.75" PointY="38.625" />
           <ConnectorPoint PointX="7.791666666666667" PointY="38.625" />
           <ConnectorPoint PointX="7.958333333333333" PointY="38.625" />
-          <ConnectorPoint PointX="12.604166666666666" PointY="38.625" />
-          <ConnectorPoint PointX="12.770833333333334" PointY="38.625" />
-          <ConnectorPoint PointX="13.166666666666666" PointY="38.625" />
-          <ConnectorPoint PointX="13.333333333333334" PointY="38.625" />
-          <ConnectorPoint PointX="15.541666666666666" PointY="38.625" />
-          <ConnectorPoint PointX="15.708333333333334" PointY="38.625" />
+          <ConnectorPoint PointX="15.166666666666666" PointY="38.625" />
+          <ConnectorPoint PointX="15.333333333333334" PointY="38.625" />
           <ConnectorPoint PointX="28.5625" PointY="38.625" />
           <ConnectorPoint PointX="28.5625" PointY="28.335917968750003" />
         </AssociationConnector>
@@ -11657,8 +11766,8 @@
           <ConnectorPoint PointX="19.8125" PointY="21.658102213541667" />
           <ConnectorPoint PointX="23.791666666666668" PointY="21.658102213541667" />
           <ConnectorPoint PointX="23.958333333333332" PointY="21.658102213541667" />
-          <ConnectorPoint PointX="25.258460760416664" PointY="21.658102213541667" />
-          <ConnectorPoint PointX="25.425127427083329" PointY="21.658102213541667" />
+          <ConnectorPoint PointX="25.258460260416665" PointY="21.658102213541667" />
+          <ConnectorPoint PointX="25.42512692708333" PointY="21.658102213541667" />
           <ConnectorPoint PointX="26.23112307291667" PointY="21.658102213541667" />
           <ConnectorPoint PointX="26.397789739583335" PointY="21.658102213541667" />
           <ConnectorPoint PointX="28.367061334472655" PointY="21.658102213541667" />
@@ -11673,22 +11782,20 @@
           <ConnectorPoint PointX="15.496055325520834" PointY="22.499043100376326" />
           <ConnectorPoint PointX="16.885414666666666" PointY="22.499043100376326" />
           <ConnectorPoint PointX="17.05208133333333" PointY="22.499043100376326" />
-          <ConnectorPoint PointX="17.645426432291668" PointY="22.499043100376326" />
-          <ConnectorPoint PointX="17.812093098958332" PointY="22.499043100376326" />
+          <ConnectorPoint PointX="17.64580790201823" PointY="22.499043100376326" />
+          <ConnectorPoint PointX="17.812474568684895" PointY="22.499043100376326" />
           <ConnectorPoint PointX="18.615885104166669" PointY="22.499043100376326" />
           <ConnectorPoint PointX="18.782551770833333" PointY="22.499043100376326" />
           <ConnectorPoint PointX="19.072919166666669" PointY="22.499043100376326" />
           <ConnectorPoint PointX="19.239585833333333" PointY="22.499043100376326" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="22.499043100376326" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="22.499043100376326" />
           <ConnectorPoint PointX="19.791666666666668" PointY="22.499043100376326" />
           <ConnectorPoint PointX="19.958333333333332" PointY="22.499043100376326" />
           <ConnectorPoint PointX="20.041666666666668" PointY="22.499043100376326" />
           <ConnectorPoint PointX="20.208333333333332" PointY="22.499043100376326" />
           <ConnectorPoint PointX="23.791666666666668" PointY="22.499043100376326" />
           <ConnectorPoint PointX="23.958333333333332" PointY="22.499043100376326" />
-          <ConnectorPoint PointX="25.258460760416664" PointY="22.499043100376326" />
-          <ConnectorPoint PointX="25.425127427083329" PointY="22.499043100376326" />
+          <ConnectorPoint PointX="25.258460260416665" PointY="22.499043100376326" />
+          <ConnectorPoint PointX="25.42512692708333" PointY="22.499043100376326" />
           <ConnectorPoint PointX="26.23112307291667" PointY="22.499043100376326" />
           <ConnectorPoint PointX="26.397789739583335" PointY="22.499043100376326" />
           <ConnectorPoint PointX="27.375" PointY="22.499043100376326" />
@@ -11703,8 +11810,8 @@
           <ConnectorPoint PointX="24.208332833333333" PointY="15.689606119791666" />
           <ConnectorPoint PointX="24.447916666666668" PointY="15.689606119791666" />
           <ConnectorPoint PointX="24.614583333333332" PointY="15.689606119791666" />
-          <ConnectorPoint PointX="25.258460760416664" PointY="15.689606119791666" />
-          <ConnectorPoint PointX="25.425127427083329" PointY="15.689606119791666" />
+          <ConnectorPoint PointX="25.258460260416665" PointY="15.689606119791666" />
+          <ConnectorPoint PointX="25.42512692708333" PointY="15.689606119791666" />
           <ConnectorPoint PointX="25.621092187499997" PointY="15.689606119791666" />
           <ConnectorPoint PointX="25.621092187499997" PointY="13.27830078125" />
         </AssociationConnector>
@@ -11715,89 +11822,82 @@
           <ConnectorPoint PointX="25.125" PointY="11.417999674479166" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.InternalAllocationCharge">
-          <ConnectorPoint PointX="25.341794093749996" PointY="13.27830078125" />
-          <ConnectorPoint PointX="25.341794093749996" PointY="29" />
-          <ConnectorPoint PointX="21.083333333333332" PointY="29" />
-          <ConnectorPoint PointX="20.916666666666668" PointY="29" />
-          <ConnectorPoint PointX="19.739583333333332" PointY="29" />
-          <ConnectorPoint PointX="19.572916666666668" PointY="29" />
-          <ConnectorPoint PointX="18.125" PointY="29" />
-          <ConnectorPoint PointX="18.125" PointY="30.720602213541667" />
-          <ConnectorPoint PointX="15.375" PointY="30.720602213541667" />
-          <ConnectorPoint PointX="15.375" PointY="30.317047526041669" />
-          <ConnectorPoint PointX="15" PointY="30.317047526041669" />
+          <ConnectorPoint PointX="25.341793593749998" PointY="13.27830078125" />
+          <ConnectorPoint PointX="25.341793593749998" PointY="31.208598632812503" />
+          <ConnectorPoint PointX="21.083333333333332" PointY="31.208598632812503" />
+          <ConnectorPoint PointX="20.916666666666668" PointY="31.208598632812503" />
+          <ConnectorPoint PointX="15.333333333333334" PointY="31.208598632812503" />
+          <ConnectorPoint PointX="15.166666666666666" PointY="31.208598632812503" />
+          <ConnectorPoint PointX="15" PointY="31.208598632812503" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractEntityPropertyValue" Width="1.5" PointX="18.625" PointY="29.5" Height="4.0956022135416674" />
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractEntityPropertyValue" Width="2.5" PointX="21.875" PointY="40.25" Height="4.0956022135416674" />
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEntityPropertyValueUserIDFK" >
-          <ConnectorPoint PointX="2.25" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="2.7708333333333335" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="5.041666666666667" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="5.208333333333333" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="5.9869766666666671" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="6.1536433333333331" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="6.744791666666667" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="6.942708333333333" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="7.791666666666667" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="7.958333333333333" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="10.041666666666666" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="10.208333333333334" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="10.646892955729166" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="10.813559622395834" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="11.835975787760416" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="12.136740393880208" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="12.242230787760416" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="12.408897454427084" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="14.869791666666666" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="15.327229661458334" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="18.264808729166667" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="18.431475395833331" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="18.675455791666668" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="18.842122458333332" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="19.077313729166669" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="19.243980395833333" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="19.65625" PointY="17.552522583007814" />
-          <ConnectorPoint PointX="19.65625" PointY="29.5" />
+          <ConnectorPoint PointX="1.0125440227052749" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="1.0125440227052749" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="1.042226135771009" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="1.2088928024376755" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="1.6429316205333742" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="1.8408507872000406" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="2.0129373571821545" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="2.1796040238488215" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="12.268226666666665" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="12.434893333333333" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="12.510416666666666" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="12.677083333333334" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="12.932294166666667" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="13.098960833333335" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="13.666666666666666" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="13.833333333333334" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="13.979166666666666" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="14.145833333333334" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="14.985026041666666" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="15.151692708333334" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="17.541666666666668" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="17.708333333333332" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="20.166666666666668" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="20.333333333333332" PointY="43.624746093750005" />
+          <ConnectorPoint PointX="21.875" PointY="43.624746093750005" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEntityPropertyValueEntityPropertyIdFK" >
-          <ConnectorPoint PointX="12.6875" PointY="40" />
-          <ConnectorPoint PointX="12.6875" PointY="33.202813155192061" />
-          <ConnectorPoint PointX="13.166666666666666" PointY="33.202813155192061" />
-          <ConnectorPoint PointX="13.333333333333334" PointY="33.202813155192061" />
-          <ConnectorPoint PointX="14.166666666666666" PointY="33.202813155192061" />
-          <ConnectorPoint PointX="14.333333333333334" PointY="33.202813155192061" />
-          <ConnectorPoint PointX="15.541666666666666" PointY="33.202813155192061" />
-          <ConnectorPoint PointX="15.708333333333334" PointY="33.202813155192061" />
-          <ConnectorPoint PointX="18.625" PointY="33.202813155192061" />
+          <ConnectorPoint PointX="13.0156275" PointY="42.7494921875" />
+          <ConnectorPoint PointX="13.0156275" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="13.666666666666666" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="13.833333333333334" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="13.979166666666666" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="14.145833333333334" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="14.985026041666666" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="15.151692708333334" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="17.541666666666668" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="17.708333333333332" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="20.166666666666668" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="20.333333333333332" PointY="44.01642665364583" />
+          <ConnectorPoint PointX="21.875" PointY="44.01642665364583" />
         </AssociationConnector>
         <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEntityPropertyValueExtractEntityIDFK" >
-          <ConnectorPoint PointX="15.625" PointY="40.25" />
-          <ConnectorPoint PointX="15.625" PointY="32.3783095744629" />
-          <ConnectorPoint PointX="18.291666666666668" PointY="32.3783095744629" />
-          <ConnectorPoint PointX="18.458333333333332" PointY="32.3783095744629" />
-          <ConnectorPoint PointX="18.625" PointY="32.3783095744629" />
+          <ConnectorPoint PointX="15.875" PointY="40.28125" />
+          <ConnectorPoint PointX="16.291666666666668" PointY="40.28125" />
+          <ConnectorPoint PointX="16.458333333333332" PointY="40.28125" />
+          <ConnectorPoint PointX="21.875" PointY="40.28125" />
         </AssociationConnector>
-        <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationDependantEntityPropertyIdFK" >
-          <ConnectorPoint PointX="13.375" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="13.697919166666667" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="13.864585833333335" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="14.041666666666666" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="14.208333333333334" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="15.541666666666666" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="15.708333333333334" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="16.416666666666668" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="16.583333333333332" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="16.65625" PointY="40.125002499999994" />
-          <ConnectorPoint PointX="16.65625" PointY="45.625" />
+        <EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractOutputType" Width="1.5" PointX="10" PointY="39.5" Height="1.9802864583333331" />
+        <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractOutputTypeUserIDFK" >
+          <ConnectorPoint PointX="2.2200140952577438" PointY="19.057190755208335" />
+          <ConnectorPoint PointX="2.2200140952577438" PointY="40.636536458333332" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="40.636536458333332" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="40.636536458333332" />
+          <ConnectorPoint PointX="10" PointY="40.636536458333332" />
         </AssociationConnector>
-        <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationPrincipalEntityPropertyIdFK" >
-          <ConnectorPoint PointX="13.375" PointY="40.062497500000006" />
-          <ConnectorPoint PointX="13.697919166666667" PointY="40.062497500000006" />
-          <ConnectorPoint PointX="13.864585833333335" PointY="40.062497500000006" />
-          <ConnectorPoint PointX="15.541666666666666" PointY="40.062497500000006" />
-          <ConnectorPoint PointX="15.708333333333334" PointY="40.062497500000006" />
-          <ConnectorPoint PointX="18.561094423828123" PointY="40.062497500000006" />
-          <ConnectorPoint PointX="18.561094423828123" PointY="45.625" />
+        <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationEntityPropertyIdFK" >
+          <ConnectorPoint PointX="12.35156" PointY="42.7494921875" />
+          <ConnectorPoint PointX="12.35156" PointY="48.111265403645831" />
+          <ConnectorPoint PointX="16.5" PointY="48.111265403645831" />
+        </AssociationConnector>
+        <AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractExtractOutputTypeIDFK" >
+          <ConnectorPoint PointX="11.5" PointY="39.625" />
+          <ConnectorPoint PointX="13.75" PointY="39.625" />
+          <ConnectorPoint PointX="13.75" PointY="45.125" />
         </AssociationConnector>
         </Diagram>
     </Diagrams>

@@ -18,59 +18,43 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class ExtractRun: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class ExtractOutputType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractRunId
+        public int ExtractOutputTypeID
         {	
     		
-            get { return _extractRunId; }
+            get { return _extractOutputTypeID; }
             set
             {
-                if (_extractRunId != value)
+                if (_extractOutputTypeID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractRunId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ExtractOutputTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractRunId = value;
-                    OnPropertyChanged("ExtractRunId");
+                    _extractOutputTypeID = value;
+                    OnPropertyChanged("ExtractOutputTypeID");
                 }
             }
         }
-        private int _extractRunId;
+        private int _extractOutputTypeID;
         [DataMember]
-        public int ExtractId
+        public string Name
         {	
     		
-            get { return _extractId; }
+            get { return _name; }
             set
             {
-                if (_extractId != value)
+                if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ExtractId", _extractId);
-                    _extractId = value;
-                    OnPropertyChanged("ExtractId");
+                    _name = value;
+                    OnPropertyChanged("Name");
                 }
             }
         }
-        private int _extractId;
-        [DataMember]
-        public System.DateTime RunTime
-        {	
-    		
-            get { return _runTime; }
-            set
-            {
-                if (_runTime != value)
-                {
-                    _runTime = value;
-                    OnPropertyChanged("RunTime");
-                }
-            }
-        }
-        private System.DateTime _runTime;
+        private string _name;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -111,58 +95,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public bool InProgress
-        {	
-    		
-            get { return _inProgress; }
-            set
-            {
-                if (_inProgress != value)
-                {
-                    _inProgress = value;
-                    OnPropertyChanged("InProgress");
-                }
-            }
-        }
-        private bool _inProgress;
-        [DataMember]
-        public int NumberRecords
-        {	
-    		
-            get { return _numberRecords; }
-            set
-            {
-                if (_numberRecords != value)
-                {
-                    _numberRecords = value;
-                    OnPropertyChanged("NumberRecords");
-                }
-            }
-        }
-        private int _numberRecords;
-        [DataMember]
-        public string FilePath
-        {	
-    		
-            get { return _filePath; }
-            set
-            {
-                if (_filePath != value)
-                {
-                    _filePath = value;
-                    OnPropertyChanged("FilePath");
-                }
-            }
-        }
-        private string _filePath;
 
         #endregion
         #region ChangeTracking

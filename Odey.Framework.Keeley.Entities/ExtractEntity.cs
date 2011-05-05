@@ -164,6 +164,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public int EntityTypeId
+        {	
+    		
+            get { return _entityTypeId; }
+            set
+            {
+                if (_entityTypeId != value)
+                {
+                    _entityTypeId = value;
+                    OnPropertyChanged("EntityTypeId");
+                }
+            }
+        }
+        private int _entityTypeId;
 
         #endregion
         #region Navigation Properties
