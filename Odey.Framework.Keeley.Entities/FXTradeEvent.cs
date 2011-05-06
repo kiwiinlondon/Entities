@@ -348,6 +348,52 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private System.DateTime _inputDate;
+        [DataMember]
+        public int SettlementCurrencyId
+        {	
+    		
+            get { return _settlementCurrencyId; }
+            set
+            {
+                if (_settlementCurrencyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("SettlementCurrencyId", _settlementCurrencyId);
+                    _settlementCurrencyId = value;
+                    OnPropertyChanged("SettlementCurrencyId");
+                }
+            }
+        }
+        private int _settlementCurrencyId;
+        [DataMember]
+        public decimal SettlementBookXrate
+        {	
+    		
+            get { return _settlementBookXrate; }
+            set
+            {
+                if (_settlementBookXrate != value)
+                {
+                    _settlementBookXrate = value;
+                    OnPropertyChanged("SettlementBookXrate");
+                }
+            }
+        }
+        private decimal _settlementBookXrate;
+        [DataMember]
+        public bool SupressFromExtracts
+        {	
+    		
+            get { return _supressFromExtracts; }
+            set
+            {
+                if (_supressFromExtracts != value)
+                {
+                    _supressFromExtracts = value;
+                    OnPropertyChanged("SupressFromExtracts");
+                }
+            }
+        }
+        private bool _supressFromExtracts;
 
         #endregion
         #region Navigation Properties

@@ -324,20 +324,11 @@ namespace Odey.Framework.Keeley.Entities
                 return;
             }
     
-            if (previousValue != null && previousValue.ExtractOutputConfigurations.Contains(this))
-            {
-                previousValue.ExtractOutputConfigurations.Remove(this);
-            }
-    
             if (EntityProperty != null)
             {
-                if (!EntityProperty.ExtractOutputConfigurations.Contains(this))
-                {
-                    EntityProperty.ExtractOutputConfigurations.Add(this);
-                }
-    
                 EntityPropertyId = EntityProperty.EntityPropertyID;
             }
+    
             if (ChangeTracker.ChangeTrackingEnabled)
             {
                 if (ChangeTracker.OriginalValues.ContainsKey("EntityProperty")
@@ -363,20 +354,11 @@ namespace Odey.Framework.Keeley.Entities
                 return;
             }
     
-            if (previousValue != null && previousValue.ExtractOutputConfigurations1.Contains(this))
-            {
-                previousValue.ExtractOutputConfigurations1.Remove(this);
-            }
-    
             if (EntityPropertyToWrite != null)
             {
-                if (!EntityPropertyToWrite.ExtractOutputConfigurations1.Contains(this))
-                {
-                    EntityPropertyToWrite.ExtractOutputConfigurations1.Add(this);
-                }
-    
                 EntityPropertyToWriteId = EntityPropertyToWrite.EntityPropertyID;
             }
+    
             if (ChangeTracker.ChangeTrackingEnabled)
             {
                 if (ChangeTracker.OriginalValues.ContainsKey("EntityPropertyToWrite")

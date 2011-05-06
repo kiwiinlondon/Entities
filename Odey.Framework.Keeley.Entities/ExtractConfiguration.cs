@@ -22,24 +22,24 @@ namespace Odey.Framework.Keeley.Entities
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtracttConfigurationID
+        public int ExtractConfigurationId
         {	
     		
-            get { return _extracttConfigurationID; }
+            get { return _extractConfigurationId; }
             set
             {
-                if (_extracttConfigurationID != value)
+                if (_extractConfigurationId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtracttConfigurationID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ExtractConfigurationId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extracttConfigurationID = value;
-                    OnPropertyChanged("ExtracttConfigurationID");
+                    _extractConfigurationId = value;
+                    OnPropertyChanged("ExtractConfigurationId");
                 }
             }
         }
-        private int _extracttConfigurationID;
+        private int _extractConfigurationId;
         [DataMember]
         public int ExtractId
         {	
