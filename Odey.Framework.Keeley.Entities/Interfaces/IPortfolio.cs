@@ -7,7 +7,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     public interface IPortfolio
     {
-        int PositionAccountID { get; set; }
+        int PositionId { get; set; }
         DateTime ReferenceDate { get; set; }
         decimal NetPosition { get; set; }
 	    decimal NetCostInstrumentCurrency { get; set; }

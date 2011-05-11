@@ -65,6 +65,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_runTime != value)
                 {
+                    ChangeTracker.RecordOriginalValue("RunTime", _runTime);
                     _runTime = value;
                     OnPropertyChanged("RunTime");
                 }
@@ -80,6 +81,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -127,6 +129,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_inProgress != value)
                 {
+                    ChangeTracker.RecordOriginalValue("InProgress", _inProgress);
                     _inProgress = value;
                     OnPropertyChanged("InProgress");
                 }
@@ -142,6 +145,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_numberRecords != value)
                 {
+                    ChangeTracker.RecordOriginalValue("NumberRecords", _numberRecords);
                     _numberRecords = value;
                     OnPropertyChanged("NumberRecords");
                 }
@@ -157,6 +161,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_filePath != value)
                 {
+                    ChangeTracker.RecordOriginalValue("FilePath", _filePath);
                     _filePath = value;
                     OnPropertyChanged("FilePath");
                 }

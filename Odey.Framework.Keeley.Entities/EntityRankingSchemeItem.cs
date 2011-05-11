@@ -18,76 +18,76 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class ExtractConfiguration: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class EntityRankingSchemeItem: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractConfigurationId
+        public int EntityRankingSchemeItemId
         {	
     		
-            get { return _extractConfigurationId; }
+            get { return _entityRankingSchemeItemId; }
             set
             {
-                if (_extractConfigurationId != value)
+                if (_entityRankingSchemeItemId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractConfigurationId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EntityRankingSchemeItemId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractConfigurationId = value;
-                    OnPropertyChanged("ExtractConfigurationId");
+                    _entityRankingSchemeItemId = value;
+                    OnPropertyChanged("EntityRankingSchemeItemId");
                 }
             }
         }
-        private int _extractConfigurationId;
+        private int _entityRankingSchemeItemId;
         [DataMember]
-        public int ExtractId
+        public string Name
         {	
     		
-            get { return _extractId; }
+            get { return _name; }
             set
             {
-                if (_extractId != value)
+                if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ExtractId", _extractId);
-                    _extractId = value;
-                    OnPropertyChanged("ExtractId");
+                    ChangeTracker.RecordOriginalValue("Name", _name);
+                    _name = value;
+                    OnPropertyChanged("Name");
                 }
             }
         }
-        private int _extractId;
+        private string _name;
         [DataMember]
-        public string ConfigurationKey
+        public int EntityTypeId
         {	
     		
-            get { return _configurationKey; }
+            get { return _entityTypeId; }
             set
             {
-                if (_configurationKey != value)
+                if (_entityTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ConfigurationKey", _configurationKey);
-                    _configurationKey = value;
-                    OnPropertyChanged("ConfigurationKey");
+                    ChangeTracker.RecordOriginalValue("EntityTypeId", _entityTypeId);
+                    _entityTypeId = value;
+                    OnPropertyChanged("EntityTypeId");
                 }
             }
         }
-        private string _configurationKey;
+        private int _entityTypeId;
         [DataMember]
-        public string ConfigurationValue
+        public Nullable<int> FMValueSpecId
         {	
     		
-            get { return _configurationValue; }
+            get { return _fMValueSpecId; }
             set
             {
-                if (_configurationValue != value)
+                if (_fMValueSpecId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ConfigurationValue", _configurationValue);
-                    _configurationValue = value;
-                    OnPropertyChanged("ConfigurationValue");
+                    ChangeTracker.RecordOriginalValue("FMValueSpecId", _fMValueSpecId);
+                    _fMValueSpecId = value;
+                    OnPropertyChanged("FMValueSpecId");
                 }
             }
         }
-        private string _configurationValue;
+        private Nullable<int> _fMValueSpecId;
         [DataMember]
         public System.DateTime StartDt
         {	

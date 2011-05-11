@@ -49,6 +49,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_name != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Name", _name);
                     _name = value;
                     OnPropertyChanged("Name");
                 }
@@ -64,6 +65,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -111,6 +113,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fmCnevSubType != value)
                 {
+                    ChangeTracker.RecordOriginalValue("FmCnevSubType", _fmCnevSubType);
                     _fmCnevSubType = value;
                     OnPropertyChanged("FmCnevSubType");
                 }

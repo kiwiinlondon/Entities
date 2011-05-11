@@ -22,24 +22,88 @@ namespace Odey.Framework.Keeley.Entities
     {
         #region Primitive Properties
         [DataMember]
-        public int PositionID
+        public int PositionId
         {	
     		
-            get { return _positionID; }
+            get { return _positionId; }
             set
             {
-                if (_positionID != value)
+                if (_positionId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PositionID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PositionId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _positionID = value;
-                    OnPropertyChanged("PositionID");
+                    _positionId = value;
+                    OnPropertyChanged("PositionId");
                 }
             }
         }
-        private int _positionID;
+        private int _positionId;
+        [DataMember]
+        public int AccountID
+        {	
+    		
+            get { return _accountID; }
+            set
+            {
+                if (_accountID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("AccountID", _accountID);
+                    _accountID = value;
+                    OnPropertyChanged("AccountID");
+                }
+            }
+        }
+        private int _accountID;
+        [DataMember]
+        public System.DateTime StartDt
+        {	
+    		
+            get { return _startDt; }
+            private set
+            {
+                if (_startDt != value)
+                {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
+                    _startDt = value;
+                    OnPropertyChanged("StartDt");
+                }
+            }
+        }
+        private System.DateTime _startDt;
+        [DataMember]
+        public int UpdateUserID
+        {	
+    		
+            get { return _updateUserID; }
+            private set
+            {
+                if (_updateUserID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UpdateUserID", _updateUserID);
+                    _updateUserID = value;
+                    OnPropertyChanged("UpdateUserID");
+                }
+            }
+        }
+        private int _updateUserID;
+        [DataMember]
+        private byte[] DataVersion
+        {	
+    		
+            get { return _dataVersion; }
+            set
+            {
+                if (_dataVersion != value)
+                {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
+                    _dataVersion = value;
+                    OnPropertyChanged("DataVersion");
+                }
+            }
+        }
+        private byte[] _dataVersion;
         [DataMember]
         public int BookID
         {	
@@ -89,52 +153,21 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _currencyID;
         [DataMember]
-        public System.DateTime StartDt
+        public int EntityRankingSchemeId
         {	
     		
-            get { return _startDt; }
-            private set
-            {
-                if (_startDt != value)
-                {
-                    _startDt = value;
-                    OnPropertyChanged("StartDt");
-                }
-            }
-        }
-        private System.DateTime _startDt;
-        [DataMember]
-        public int UpdateUserID
-        {	
-    		
-            get { return _updateUserID; }
-            private set
-            {
-                if (_updateUserID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("UpdateUserID", _updateUserID);
-                    _updateUserID = value;
-                    OnPropertyChanged("UpdateUserID");
-                }
-            }
-        }
-        private int _updateUserID;
-        [DataMember]
-        private byte[] DataVersion
-        {	
-    		
-            get { return _dataVersion; }
+            get { return _entityRankingSchemeId; }
             set
             {
-                if (_dataVersion != value)
+                if (_entityRankingSchemeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
-                    _dataVersion = value;
-                    OnPropertyChanged("DataVersion");
+                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeId", _entityRankingSchemeId);
+                    _entityRankingSchemeId = value;
+                    OnPropertyChanged("EntityRankingSchemeId");
                 }
             }
         }
-        private byte[] _dataVersion;
+        private int _entityRankingSchemeId;
 
         #endregion
         #region ChangeTracking

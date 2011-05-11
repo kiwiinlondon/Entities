@@ -73,6 +73,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_underlyerPerOverlyer != value)
                 {
+                    ChangeTracker.RecordOriginalValue("UnderlyerPerOverlyer", _underlyerPerOverlyer);
                     _underlyerPerOverlyer = value;
                     OnPropertyChanged("UnderlyerPerOverlyer");
                 }
@@ -88,6 +89,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }

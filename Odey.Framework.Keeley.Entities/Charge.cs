@@ -65,6 +65,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_referenceDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ReferenceDate", _referenceDate);
                     _referenceDate = value;
                     OnPropertyChanged("ReferenceDate");
                 }
@@ -112,6 +113,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_quantity != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Quantity", _quantity);
                     _quantity = value;
                     OnPropertyChanged("Quantity");
                 }
@@ -127,6 +129,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fXRate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("FXRate", _fXRate);
                     _fXRate = value;
                     OnPropertyChanged("FXRate");
                 }
@@ -142,6 +145,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fXRateMultiply != value)
                 {
+                    ChangeTracker.RecordOriginalValue("FXRateMultiply", _fXRateMultiply);
                     _fXRateMultiply = value;
                     OnPropertyChanged("FXRateMultiply");
                 }
@@ -157,6 +161,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }

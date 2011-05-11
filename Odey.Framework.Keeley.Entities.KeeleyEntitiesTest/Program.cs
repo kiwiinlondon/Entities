@@ -42,6 +42,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
         {
             using (var context = new KeeleyModel())
             {
+                //context.RollPortfolioSettlementDate(
                // context.PortfolioPositionAccountMovementRollForward();
                 Region region = context.Regions.Where(a => a.IsoCode == "GX").FirstOrDefault();
             }

@@ -49,6 +49,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fMPersID != value)
                 {
+                    ChangeTracker.RecordOriginalValue("FMPersID", _fMPersID);
                     _fMPersID = value;
                     OnPropertyChanged("FMPersID");
                 }
@@ -64,6 +65,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_name != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Name", _name);
                     _name = value;
                     OnPropertyChanged("Name");
                 }
@@ -79,6 +81,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_email != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Email", _email);
                     _email = value;
                     OnPropertyChanged("Email");
                 }
@@ -94,6 +97,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_windowsLogin != value)
                 {
+                    ChangeTracker.RecordOriginalValue("WindowsLogin", _windowsLogin);
                     _windowsLogin = value;
                     OnPropertyChanged("WindowsLogin");
                 }
@@ -109,6 +113,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }

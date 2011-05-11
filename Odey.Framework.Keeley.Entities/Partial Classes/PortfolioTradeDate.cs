@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Odey.Framework.Keeley.Entities
 {
-    public partial class PortfolioTradeDate : IPortfolio
+    public partial class Portfolio : IPortfolio
     {
     }
 }

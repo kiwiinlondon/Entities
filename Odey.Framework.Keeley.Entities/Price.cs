@@ -18,76 +18,108 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class ExtractConfiguration: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class Price: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractConfigurationId
+        public int PriceId
         {	
     		
-            get { return _extractConfigurationId; }
+            get { return _priceId; }
             set
             {
-                if (_extractConfigurationId != value)
+                if (_priceId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractConfigurationId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PriceId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractConfigurationId = value;
-                    OnPropertyChanged("ExtractConfigurationId");
+                    _priceId = value;
+                    OnPropertyChanged("PriceId");
                 }
             }
         }
-        private int _extractConfigurationId;
+        private int _priceId;
         [DataMember]
-        public int ExtractId
+        public int InstrumentMarketId
         {	
     		
-            get { return _extractId; }
+            get { return _instrumentMarketId; }
             set
             {
-                if (_extractId != value)
+                if (_instrumentMarketId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ExtractId", _extractId);
-                    _extractId = value;
-                    OnPropertyChanged("ExtractId");
+                    ChangeTracker.RecordOriginalValue("InstrumentMarketId", _instrumentMarketId);
+                    _instrumentMarketId = value;
+                    OnPropertyChanged("InstrumentMarketId");
                 }
             }
         }
-        private int _extractId;
+        private int _instrumentMarketId;
         [DataMember]
-        public string ConfigurationKey
+        public System.DateTime ReferenceDate
         {	
     		
-            get { return _configurationKey; }
+            get { return _referenceDate; }
             set
             {
-                if (_configurationKey != value)
+                if (_referenceDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ConfigurationKey", _configurationKey);
-                    _configurationKey = value;
-                    OnPropertyChanged("ConfigurationKey");
+                    ChangeTracker.RecordOriginalValue("ReferenceDate", _referenceDate);
+                    _referenceDate = value;
+                    OnPropertyChanged("ReferenceDate");
                 }
             }
         }
-        private string _configurationKey;
+        private System.DateTime _referenceDate;
         [DataMember]
-        public string ConfigurationValue
+        public int EntityRankingSchemeId
         {	
     		
-            get { return _configurationValue; }
+            get { return _entityRankingSchemeId; }
             set
             {
-                if (_configurationValue != value)
+                if (_entityRankingSchemeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ConfigurationValue", _configurationValue);
-                    _configurationValue = value;
-                    OnPropertyChanged("ConfigurationValue");
+                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeId", _entityRankingSchemeId);
+                    _entityRankingSchemeId = value;
+                    OnPropertyChanged("EntityRankingSchemeId");
                 }
             }
         }
-        private string _configurationValue;
+        private int _entityRankingSchemeId;
+        [DataMember]
+        public int RawPriceId
+        {	
+    		
+            get { return _rawPriceId; }
+            set
+            {
+                if (_rawPriceId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("RawPriceId", _rawPriceId);
+                    _rawPriceId = value;
+                    OnPropertyChanged("RawPriceId");
+                }
+            }
+        }
+        private int _rawPriceId;
+        [DataMember]
+        public decimal Value
+        {	
+    		
+            get { return _value; }
+            set
+            {
+                if (_value != value)
+                {
+                    ChangeTracker.RecordOriginalValue("Value", _value);
+                    _value = value;
+                    OnPropertyChanged("Value");
+                }
+            }
+        }
+        private decimal _value;
         [DataMember]
         public System.DateTime StartDt
         {	

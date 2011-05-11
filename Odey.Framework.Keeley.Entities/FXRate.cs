@@ -18,44 +18,60 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PortfolioTradeDate: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class FXRate: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PortfolioTradeDateId
+        public int FXRateId
         {	
     		
-            get { return _portfolioTradeDateId; }
+            get { return _fXRateId; }
             set
             {
-                if (_portfolioTradeDateId != value)
+                if (_fXRateId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PortfolioTradeDateId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'FXRateId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _portfolioTradeDateId = value;
-                    OnPropertyChanged("PortfolioTradeDateId");
+                    _fXRateId = value;
+                    OnPropertyChanged("FXRateId");
                 }
             }
         }
-        private int _portfolioTradeDateId;
+        private int _fXRateId;
         [DataMember]
-        public int PositionAccountID
+        public int FromCurrencyId
         {	
     		
-            get { return _positionAccountID; }
+            get { return _fromCurrencyId; }
             set
             {
-                if (_positionAccountID != value)
+                if (_fromCurrencyId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PositionAccountID", _positionAccountID);
-                    _positionAccountID = value;
-                    OnPropertyChanged("PositionAccountID");
+                    ChangeTracker.RecordOriginalValue("FromCurrencyId", _fromCurrencyId);
+                    _fromCurrencyId = value;
+                    OnPropertyChanged("FromCurrencyId");
                 }
             }
         }
-        private int _positionAccountID;
+        private int _fromCurrencyId;
+        [DataMember]
+        public int ToCurrencyId
+        {	
+    		
+            get { return _toCurrencyId; }
+            set
+            {
+                if (_toCurrencyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ToCurrencyId", _toCurrencyId);
+                    _toCurrencyId = value;
+                    OnPropertyChanged("ToCurrencyId");
+                }
+            }
+        }
+        private int _toCurrencyId;
         [DataMember]
         public System.DateTime ReferenceDate
         {	
@@ -65,6 +81,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_referenceDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ReferenceDate", _referenceDate);
                     _referenceDate = value;
                     OnPropertyChanged("ReferenceDate");
                 }
@@ -72,155 +89,85 @@ namespace Odey.Framework.Keeley.Entities
         }
         private System.DateTime _referenceDate;
         [DataMember]
-        public decimal NetPosition
+        public int EntityRankingSchemeId
         {	
     		
-            get { return _netPosition; }
+            get { return _entityRankingSchemeId; }
             set
             {
-                if (_netPosition != value)
+                if (_entityRankingSchemeId != value)
                 {
-                    _netPosition = value;
-                    OnPropertyChanged("NetPosition");
+                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeId", _entityRankingSchemeId);
+                    _entityRankingSchemeId = value;
+                    OnPropertyChanged("EntityRankingSchemeId");
                 }
             }
         }
-        private decimal _netPosition;
+        private int _entityRankingSchemeId;
         [DataMember]
-        public decimal NetCostInstrumentCurrency
+        public System.DateTime ForwardDate
         {	
     		
-            get { return _netCostInstrumentCurrency; }
+            get { return _forwardDate; }
             set
             {
-                if (_netCostInstrumentCurrency != value)
+                if (_forwardDate != value)
                 {
-                    _netCostInstrumentCurrency = value;
-                    OnPropertyChanged("NetCostInstrumentCurrency");
+                    ChangeTracker.RecordOriginalValue("ForwardDate", _forwardDate);
+                    _forwardDate = value;
+                    OnPropertyChanged("ForwardDate");
                 }
             }
         }
-        private decimal _netCostInstrumentCurrency;
+        private System.DateTime _forwardDate;
         [DataMember]
-        public decimal NetCostBookCurrency
+        public int RawFXRateId
         {	
     		
-            get { return _netCostBookCurrency; }
+            get { return _rawFXRateId; }
             set
             {
-                if (_netCostBookCurrency != value)
+                if (_rawFXRateId != value)
                 {
-                    _netCostBookCurrency = value;
-                    OnPropertyChanged("NetCostBookCurrency");
+                    ChangeTracker.RecordOriginalValue("RawFXRateId", _rawFXRateId);
+                    _rawFXRateId = value;
+                    OnPropertyChanged("RawFXRateId");
                 }
             }
         }
-        private decimal _netCostBookCurrency;
+        private int _rawFXRateId;
         [DataMember]
-        public decimal DeltaNetCostInstrumentCurrency
+        public Nullable<int> RawFXRate2Id
         {	
     		
-            get { return _deltaNetCostInstrumentCurrency; }
+            get { return _rawFXRate2Id; }
             set
             {
-                if (_deltaNetCostInstrumentCurrency != value)
+                if (_rawFXRate2Id != value)
                 {
-                    _deltaNetCostInstrumentCurrency = value;
-                    OnPropertyChanged("DeltaNetCostInstrumentCurrency");
+                    ChangeTracker.RecordOriginalValue("RawFXRate2Id", _rawFXRate2Id);
+                    _rawFXRate2Id = value;
+                    OnPropertyChanged("RawFXRate2Id");
                 }
             }
         }
-        private decimal _deltaNetCostInstrumentCurrency;
+        private Nullable<int> _rawFXRate2Id;
         [DataMember]
-        public decimal DeltaNetCostBookCurrency
+        public decimal Value
         {	
     		
-            get { return _deltaNetCostBookCurrency; }
+            get { return _value; }
             set
             {
-                if (_deltaNetCostBookCurrency != value)
+                if (_value != value)
                 {
-                    _deltaNetCostBookCurrency = value;
-                    OnPropertyChanged("DeltaNetCostBookCurrency");
+                    ChangeTracker.RecordOriginalValue("Value", _value);
+                    _value = value;
+                    OnPropertyChanged("Value");
                 }
             }
         }
-        private decimal _deltaNetCostBookCurrency;
-        [DataMember]
-        public decimal TodayNetPostionChange
-        {	
-    		
-            get { return _todayNetPostionChange; }
-            set
-            {
-                if (_todayNetPostionChange != value)
-                {
-                    _todayNetPostionChange = value;
-                    OnPropertyChanged("TodayNetPostionChange");
-                }
-            }
-        }
-        private decimal _todayNetPostionChange;
-        [DataMember]
-        public decimal TodayDeltaNetCostChangeInstrumentCurrency
-        {	
-    		
-            get { return _todayDeltaNetCostChangeInstrumentCurrency; }
-            set
-            {
-                if (_todayDeltaNetCostChangeInstrumentCurrency != value)
-                {
-                    _todayDeltaNetCostChangeInstrumentCurrency = value;
-                    OnPropertyChanged("TodayDeltaNetCostChangeInstrumentCurrency");
-                }
-            }
-        }
-        private decimal _todayDeltaNetCostChangeInstrumentCurrency;
-        [DataMember]
-        public decimal TodayDeltaNetCostChangeBookCurrency
-        {	
-    		
-            get { return _todayDeltaNetCostChangeBookCurrency; }
-            set
-            {
-                if (_todayDeltaNetCostChangeBookCurrency != value)
-                {
-                    _todayDeltaNetCostChangeBookCurrency = value;
-                    OnPropertyChanged("TodayDeltaNetCostChangeBookCurrency");
-                }
-            }
-        }
-        private decimal _todayDeltaNetCostChangeBookCurrency;
-        [DataMember]
-        public decimal TodayNetCostChangeInstrumentCurrency
-        {	
-    		
-            get { return _todayNetCostChangeInstrumentCurrency; }
-            set
-            {
-                if (_todayNetCostChangeInstrumentCurrency != value)
-                {
-                    _todayNetCostChangeInstrumentCurrency = value;
-                    OnPropertyChanged("TodayNetCostChangeInstrumentCurrency");
-                }
-            }
-        }
-        private decimal _todayNetCostChangeInstrumentCurrency;
-        [DataMember]
-        public decimal TodayNetCostChangeBookCurrency
-        {	
-    		
-            get { return _todayNetCostChangeBookCurrency; }
-            set
-            {
-                if (_todayNetCostChangeBookCurrency != value)
-                {
-                    _todayNetCostChangeBookCurrency = value;
-                    OnPropertyChanged("TodayNetCostChangeBookCurrency");
-                }
-            }
-        }
-        private decimal _todayNetCostChangeBookCurrency;
+        private decimal _value;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -230,6 +177,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }

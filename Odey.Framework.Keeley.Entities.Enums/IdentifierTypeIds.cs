@@ -48,5 +48,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         FMCnevSubType = 20,
         [EnumMember]
         FMChargeTypeCode = 21,
+        [EnumMember]
+        FMValueSchemeId = 22,
+        [EnumMember]
+        FMValueSpecId = 23
     }
 }

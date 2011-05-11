@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(PortfolioEvent))]
     public partial class PortfolioAggregationLevel: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -49,6 +50,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_name != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Name", _name);
                     _name = value;
                     OnPropertyChanged("Name");
                 }
@@ -64,6 +66,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -95,12 +98,51 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<PortfolioEvent> PortfolioEvents
+        {
+            get
+            {
+                if (_portfolioEvents == null)
+                {
+                    _portfolioEvents = new TrackableCollection<PortfolioEvent>();
+                    _portfolioEvents.CollectionChanged += FixupPortfolioEvents;
+                }
+                return _portfolioEvents;
+            }
+            set
+            {
+                if (!ReferenceEquals(_portfolioEvents, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_portfolioEvents != null)
+                    {
+                        _portfolioEvents.CollectionChanged -= FixupPortfolioEvents;
+                    }
+                    _portfolioEvents = value;
+                    if (_portfolioEvents != null)
+                    {
+                        _portfolioEvents.CollectionChanged += FixupPortfolioEvents;
+                    }
+                    OnNavigationPropertyChanged("PortfolioEvents");
+                }
+            }
+        }
+        private TrackableCollection<PortfolioEvent> _portfolioEvents;
 
         #endregion
         #region ChangeTracking
@@ -180,6 +222,45 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            PortfolioEvents.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupPortfolioEvents(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (PortfolioEvent item in e.NewItems)
+                {
+                    item.PortfolioAggregationLevelId = PortfolioAggregationLevelId;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("PortfolioEvents", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (PortfolioEvent item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("PortfolioEvents", item);
+                    }
+                }
+            }
         }
 
         #endregion

@@ -18,44 +18,44 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PortfolioChangeControl: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class RawPrice: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PortfolioChangeControlId
+        public int RawPriceId
         {	
     		
-            get { return _portfolioChangeControlId; }
+            get { return _rawPriceId; }
             set
             {
-                if (_portfolioChangeControlId != value)
+                if (_rawPriceId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PortfolioChangeControlId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'RawPriceId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _portfolioChangeControlId = value;
-                    OnPropertyChanged("PortfolioChangeControlId");
+                    _rawPriceId = value;
+                    OnPropertyChanged("RawPriceId");
                 }
             }
         }
-        private int _portfolioChangeControlId;
+        private int _rawPriceId;
         [DataMember]
-        public int PositionID
+        public int InstrumentMarketId
         {	
     		
-            get { return _positionID; }
+            get { return _instrumentMarketId; }
             set
             {
-                if (_positionID != value)
+                if (_instrumentMarketId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PositionID", _positionID);
-                    _positionID = value;
-                    OnPropertyChanged("PositionID");
+                    ChangeTracker.RecordOriginalValue("InstrumentMarketId", _instrumentMarketId);
+                    _instrumentMarketId = value;
+                    OnPropertyChanged("InstrumentMarketId");
                 }
             }
         }
-        private int _positionID;
+        private int _instrumentMarketId;
         [DataMember]
         public System.DateTime ReferenceDate
         {	
@@ -65,6 +65,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_referenceDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ReferenceDate", _referenceDate);
                     _referenceDate = value;
                     OnPropertyChanged("ReferenceDate");
                 }
@@ -72,20 +73,85 @@ namespace Odey.Framework.Keeley.Entities
         }
         private System.DateTime _referenceDate;
         [DataMember]
-        public int ChangeId
+        public int EntityRankingSchemeItemId
         {	
     		
-            get { return _changeId; }
+            get { return _entityRankingSchemeItemId; }
             set
             {
-                if (_changeId != value)
+                if (_entityRankingSchemeItemId != value)
                 {
-                    _changeId = value;
-                    OnPropertyChanged("ChangeId");
+                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeItemId", _entityRankingSchemeItemId);
+                    _entityRankingSchemeItemId = value;
+                    OnPropertyChanged("EntityRankingSchemeItemId");
                 }
             }
         }
-        private int _changeId;
+        private int _entityRankingSchemeItemId;
+        [DataMember]
+        public decimal BidValue
+        {	
+    		
+            get { return _bidValue; }
+            set
+            {
+                if (_bidValue != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BidValue", _bidValue);
+                    _bidValue = value;
+                    OnPropertyChanged("BidValue");
+                }
+            }
+        }
+        private decimal _bidValue;
+        [DataMember]
+        public System.DateTime BidUpdateDate
+        {	
+    		
+            get { return _bidUpdateDate; }
+            set
+            {
+                if (_bidUpdateDate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BidUpdateDate", _bidUpdateDate);
+                    _bidUpdateDate = value;
+                    OnPropertyChanged("BidUpdateDate");
+                }
+            }
+        }
+        private System.DateTime _bidUpdateDate;
+        [DataMember]
+        public decimal AskValue
+        {	
+    		
+            get { return _askValue; }
+            set
+            {
+                if (_askValue != value)
+                {
+                    ChangeTracker.RecordOriginalValue("AskValue", _askValue);
+                    _askValue = value;
+                    OnPropertyChanged("AskValue");
+                }
+            }
+        }
+        private decimal _askValue;
+        [DataMember]
+        public System.DateTime AskUpdateDate
+        {	
+    		
+            get { return _askUpdateDate; }
+            set
+            {
+                if (_askUpdateDate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("AskUpdateDate", _askUpdateDate);
+                    _askUpdateDate = value;
+                    OnPropertyChanged("AskUpdateDate");
+                }
+            }
+        }
+        private System.DateTime _askUpdateDate;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -95,6 +161,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -133,6 +200,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<int> RawPriceUsedId
+        {	
+    		
+            get { return _rawPriceUsedId; }
+            set
+            {
+                if (_rawPriceUsedId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("RawPriceUsedId", _rawPriceUsedId);
+                    _rawPriceUsedId = value;
+                    OnPropertyChanged("RawPriceUsedId");
+                }
+            }
+        }
+        private Nullable<int> _rawPriceUsedId;
 
         #endregion
         #region ChangeTracking

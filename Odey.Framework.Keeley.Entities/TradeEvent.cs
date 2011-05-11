@@ -66,6 +66,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_tradeDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TradeDate", _tradeDate);
                     _tradeDate = value;
                     OnPropertyChanged("TradeDate");
                 }
@@ -81,6 +82,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_settlementDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("SettlementDate", _settlementDate);
                     _settlementDate = value;
                     OnPropertyChanged("SettlementDate");
                 }
@@ -112,6 +114,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_grossPrice != value)
                 {
+                    ChangeTracker.RecordOriginalValue("GrossPrice", _grossPrice);
                     _grossPrice = value;
                     OnPropertyChanged("GrossPrice");
                 }
@@ -127,6 +130,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_netPrice != value)
                 {
+                    ChangeTracker.RecordOriginalValue("NetPrice", _netPrice);
                     _netPrice = value;
                     OnPropertyChanged("NetPrice");
                 }
@@ -142,6 +146,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_quantity != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Quantity", _quantity);
                     _quantity = value;
                     OnPropertyChanged("Quantity");
                 }
@@ -173,6 +178,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_tradedNet != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TradedNet", _tradedNet);
                     _tradedNet = value;
                     OnPropertyChanged("TradedNet");
                 }
@@ -188,6 +194,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_priceIsClean != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PriceIsClean", _priceIsClean);
                     _priceIsClean = value;
                     OnPropertyChanged("PriceIsClean");
                 }
@@ -235,6 +242,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_netConsideration != value)
                 {
+                    ChangeTracker.RecordOriginalValue("NetConsideration", _netConsideration);
                     _netConsideration = value;
                     OnPropertyChanged("NetConsideration");
                 }
@@ -250,6 +258,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_grossConsideration != value)
                 {
+                    ChangeTracker.RecordOriginalValue("GrossConsideration", _grossConsideration);
                     _grossConsideration = value;
                     OnPropertyChanged("GrossConsideration");
                 }
@@ -281,6 +290,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_tradeSettlementFXRate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TradeSettlementFXRate", _tradeSettlementFXRate);
                     _tradeSettlementFXRate = value;
                     OnPropertyChanged("TradeSettlementFXRate");
                 }
@@ -296,6 +306,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_tradeSettlementFXRateMultiply != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TradeSettlementFXRateMultiply", _tradeSettlementFXRateMultiply);
                     _tradeSettlementFXRateMultiply = value;
                     OnPropertyChanged("TradeSettlementFXRateMultiply");
                 }
@@ -311,6 +322,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_tradeInstrumentFXRate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TradeInstrumentFXRate", _tradeInstrumentFXRate);
                     _tradeInstrumentFXRate = value;
                     OnPropertyChanged("TradeInstrumentFXRate");
                 }
@@ -326,6 +338,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_tradeInstrumentFXRateMultiply != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TradeInstrumentFXRateMultiply", _tradeInstrumentFXRateMultiply);
                     _tradeInstrumentFXRateMultiply = value;
                     OnPropertyChanged("TradeInstrumentFXRateMultiply");
                 }
@@ -341,6 +354,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_instrumentBookFXRate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("InstrumentBookFXRate", _instrumentBookFXRate);
                     _instrumentBookFXRate = value;
                     OnPropertyChanged("InstrumentBookFXRate");
                 }
@@ -356,6 +370,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_ticket != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Ticket", _ticket);
                     _ticket = value;
                     OnPropertyChanged("Ticket");
                 }
@@ -371,6 +386,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_isCancelled != value)
                 {
+                    ChangeTracker.RecordOriginalValue("IsCancelled", _isCancelled);
                     _isCancelled = value;
                     OnPropertyChanged("IsCancelled");
                 }
@@ -386,6 +402,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_amendmentNumber != value)
                 {
+                    ChangeTracker.RecordOriginalValue("AmendmentNumber", _amendmentNumber);
                     _amendmentNumber = value;
                     OnPropertyChanged("AmendmentNumber");
                 }
@@ -401,6 +418,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -448,6 +466,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_inputDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("InputDate", _inputDate);
                     _inputDate = value;
                     OnPropertyChanged("InputDate");
                 }
@@ -463,6 +482,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_supressFromExtracts != value)
                 {
+                    ChangeTracker.RecordOriginalValue("SupressFromExtracts", _supressFromExtracts);
                     _supressFromExtracts = value;
                     OnPropertyChanged("SupressFromExtracts");
                 }

@@ -81,6 +81,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_previousIntValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PreviousIntValue", _previousIntValue);
                     _previousIntValue = value;
                     OnPropertyChanged("PreviousIntValue");
                 }
@@ -96,6 +97,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_intValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("IntValue", _intValue);
                     _intValue = value;
                     OnPropertyChanged("IntValue");
                 }
@@ -111,6 +113,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_stringValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StringValue", _stringValue);
                     _stringValue = value;
                     OnPropertyChanged("StringValue");
                 }
@@ -126,6 +129,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_previousStringValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PreviousStringValue", _previousStringValue);
                     _previousStringValue = value;
                     OnPropertyChanged("PreviousStringValue");
                 }
@@ -141,6 +145,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_decimalValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DecimalValue", _decimalValue);
                     _decimalValue = value;
                     OnPropertyChanged("DecimalValue");
                 }
@@ -156,6 +161,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_previousDecimalValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PreviousDecimalValue", _previousDecimalValue);
                     _previousDecimalValue = value;
                     OnPropertyChanged("PreviousDecimalValue");
                 }
@@ -171,6 +177,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dateTimeValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DateTimeValue", _dateTimeValue);
                     _dateTimeValue = value;
                     OnPropertyChanged("DateTimeValue");
                 }
@@ -186,6 +193,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_previousDateTimeValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PreviousDateTimeValue", _previousDateTimeValue);
                     _previousDateTimeValue = value;
                     OnPropertyChanged("PreviousDateTimeValue");
                 }
@@ -201,6 +209,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_bitValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("BitValue", _bitValue);
                     _bitValue = value;
                     OnPropertyChanged("BitValue");
                 }
@@ -216,6 +225,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_previousBitValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PreviousBitValue", _previousBitValue);
                     _previousBitValue = value;
                     OnPropertyChanged("PreviousBitValue");
                 }
@@ -231,6 +241,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -262,6 +273,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

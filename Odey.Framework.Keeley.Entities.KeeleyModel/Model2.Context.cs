@@ -131,18 +131,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<Market> _markets;
     
-        public ObjectSet<Portfolio> Portfolios
-        {
-            get { return _portfolios  ?? (_portfolios = CreateObjectSet<Portfolio>("Portfolios")); }
-        }
-        private ObjectSet<Portfolio> _portfolios;
-    
-        public ObjectSet<Position> Positions
-        {
-            get { return _positions  ?? (_positions = CreateObjectSet<Position>("Positions")); }
-        }
-        private ObjectSet<Position> _positions;
-    
         public ObjectSet<Region> Regions
         {
             get { return _regions  ?? (_regions = CreateObjectSet<Region>("Regions")); }
@@ -166,12 +154,6 @@ namespace Odey.Framework.Keeley.Entities
             get { return _instrumentRelationships  ?? (_instrumentRelationships = CreateObjectSet<InstrumentRelationship>("InstrumentRelationships")); }
         }
         private ObjectSet<InstrumentRelationship> _instrumentRelationships;
-    
-        public ObjectSet<PortfolioChangeControl> PortfolioChangeControls
-        {
-            get { return _portfolioChangeControls  ?? (_portfolioChangeControls = CreateObjectSet<PortfolioChangeControl>("PortfolioChangeControls")); }
-        }
-        private ObjectSet<PortfolioChangeControl> _portfolioChangeControls;
     
         public ObjectSet<Account> Accounts
         {
@@ -214,12 +196,6 @@ namespace Odey.Framework.Keeley.Entities
             get { return _instrumentEventTypes  ?? (_instrumentEventTypes = CreateObjectSet<InstrumentEventType>("InstrumentEventTypes")); }
         }
         private ObjectSet<InstrumentEventType> _instrumentEventTypes;
-    
-        public ObjectSet<PositionAccount> PositionAccounts
-        {
-            get { return _positionAccounts  ?? (_positionAccounts = CreateObjectSet<PositionAccount>("PositionAccounts")); }
-        }
-        private ObjectSet<PositionAccount> _positionAccounts;
     
         public ObjectSet<Currency> Currencies
         {
@@ -317,18 +293,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<InstrumentClassRelationship> _instrumentClassRelationships;
     
-        public ObjectSet<PortfolioSettlementDate> PortfolioSettlementDates
-        {
-            get { return _portfolioSettlementDates  ?? (_portfolioSettlementDates = CreateObjectSet<PortfolioSettlementDate>("PortfolioSettlementDates")); }
-        }
-        private ObjectSet<PortfolioSettlementDate> _portfolioSettlementDates;
-    
-        public ObjectSet<PortfolioTradeDate> PortfolioTradeDates
-        {
-            get { return _portfolioTradeDates  ?? (_portfolioTradeDates = CreateObjectSet<PortfolioTradeDate>("PortfolioTradeDates")); }
-        }
-        private ObjectSet<PortfolioTradeDate> _portfolioTradeDates;
-    
         public ObjectSet<EntityProperty> EntityProperties
         {
             get { return _entityProperties  ?? (_entityProperties = CreateObjectSet<EntityProperty>("EntityProperties")); }
@@ -365,12 +329,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<ExtractType> _extractTypes;
     
-        public ObjectSet<PortfolioEvent> PortfolioEvents
-        {
-            get { return _portfolioEvents  ?? (_portfolioEvents = CreateObjectSet<PortfolioEvent>("PortfolioEvents")); }
-        }
-        private ObjectSet<PortfolioEvent> _portfolioEvents;
-    
         public ObjectSet<PortfolioEventType> PortfolioEventTypes
         {
             get { return _portfolioEventTypes  ?? (_portfolioEventTypes = CreateObjectSet<PortfolioEventType>("PortfolioEventTypes")); }
@@ -400,21 +358,87 @@ namespace Odey.Framework.Keeley.Entities
             get { return _extractConfigurations  ?? (_extractConfigurations = CreateObjectSet<ExtractConfiguration>("ExtractConfigurations")); }
         }
         private ObjectSet<ExtractConfiguration> _extractConfigurations;
+    
+        public ObjectSet<PortfolioEvent> PortfolioEvents
+        {
+            get { return _portfolioEvents  ?? (_portfolioEvents = CreateObjectSet<PortfolioEvent>("PortfolioEvents")); }
+        }
+        private ObjectSet<PortfolioEvent> _portfolioEvents;
+    
+        public ObjectSet<PortfolioSettlementDate> PortfolioSettlementDates
+        {
+            get { return _portfolioSettlementDates  ?? (_portfolioSettlementDates = CreateObjectSet<PortfolioSettlementDate>("PortfolioSettlementDates")); }
+        }
+        private ObjectSet<PortfolioSettlementDate> _portfolioSettlementDates;
+    
+        public ObjectSet<Position> Positions
+        {
+            get { return _positions  ?? (_positions = CreateObjectSet<Position>("Positions")); }
+        }
+        private ObjectSet<Position> _positions;
+    
+        public ObjectSet<Portfolio> Portfolios
+        {
+            get { return _portfolios  ?? (_portfolios = CreateObjectSet<Portfolio>("Portfolios")); }
+        }
+        private ObjectSet<Portfolio> _portfolios;
+    
+        public ObjectSet<EntityRankingScheme> EntityRankingSchemes
+        {
+            get { return _entityRankingSchemes  ?? (_entityRankingSchemes = CreateObjectSet<EntityRankingScheme>("EntityRankingSchemes")); }
+        }
+        private ObjectSet<EntityRankingScheme> _entityRankingSchemes;
+    
+        public ObjectSet<EntityRankingSchemeItem> EntityRankingSchemeItems
+        {
+            get { return _entityRankingSchemeItems  ?? (_entityRankingSchemeItems = CreateObjectSet<EntityRankingSchemeItem>("EntityRankingSchemeItems")); }
+        }
+        private ObjectSet<EntityRankingSchemeItem> _entityRankingSchemeItems;
+    
+        public ObjectSet<FXRate> FXRates
+        {
+            get { return _fXRates  ?? (_fXRates = CreateObjectSet<FXRate>("FXRates")); }
+        }
+        private ObjectSet<FXRate> _fXRates;
+    
+        public ObjectSet<Price> Prices
+        {
+            get { return _prices  ?? (_prices = CreateObjectSet<Price>("Prices")); }
+        }
+        private ObjectSet<Price> _prices;
+    
+        public ObjectSet<RawFXRate> RawFXRates
+        {
+            get { return _rawFXRates  ?? (_rawFXRates = CreateObjectSet<RawFXRate>("RawFXRates")); }
+        }
+        private ObjectSet<RawFXRate> _rawFXRates;
+    
+        public ObjectSet<RawPrice> RawPrices
+        {
+            get { return _rawPrices  ?? (_rawPrices = CreateObjectSet<RawPrice>("RawPrices")); }
+        }
+        private ObjectSet<RawPrice> _rawPrices;
+    
+        public ObjectSet<EntityRankingSchemeOrder> EntityRankingSchemeOrders
+        {
+            get { return _entityRankingSchemeOrders  ?? (_entityRankingSchemeOrders = CreateObjectSet<EntityRankingSchemeOrder>("EntityRankingSchemeOrders")); }
+        }
+        private ObjectSet<EntityRankingSchemeOrder> _entityRankingSchemeOrders;
 
         #endregion
         #region Function Imports
-        public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionAccountID, Nullable<System.DateTime> referenceDate, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
+        public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
     
-            ObjectParameter positionAccountIDParameter;
+            ObjectParameter positionIDParameter;
     
-            if (positionAccountID.HasValue)
+            if (positionID.HasValue)
             {
-                positionAccountIDParameter = new ObjectParameter("PositionAccountID", positionAccountID);
+                positionIDParameter = new ObjectParameter("PositionID", positionID);
             }
             else
             {
-                positionAccountIDParameter = new ObjectParameter("PositionAccountID", typeof(int));
+                positionIDParameter = new ObjectParameter("PositionID", typeof(int));
             }
     
             ObjectParameter referenceDateParameter;
@@ -449,7 +473,59 @@ namespace Odey.Framework.Keeley.Entities
             {
                 portfolioEventIdParameter = new ObjectParameter("PortfolioEventId", typeof(int));
             }
-            return base.ExecuteFunction<PortfolioEvent>("PortfolioEventGetPrevious", positionAccountIDParameter, referenceDateParameter, portfolioAggregationLevelIdParameter, portfolioEventIdParameter);
+            return base.ExecuteFunction<PortfolioEvent>("PortfolioEventGetPrevious", positionIDParameter, referenceDateParameter, portfolioAggregationLevelIdParameter, portfolioEventIdParameter);
+        }
+        public virtual ObjectResult<Nullable<int>> RollPortfolio(Nullable<System.DateTime> fromDt, Nullable<int> updateUserId)
+        {
+    
+            ObjectParameter fromDtParameter;
+    
+            if (fromDt.HasValue)
+            {
+                fromDtParameter = new ObjectParameter("fromDt", fromDt);
+            }
+            else
+            {
+                fromDtParameter = new ObjectParameter("fromDt", typeof(System.DateTime));
+            }
+    
+            ObjectParameter updateUserIdParameter;
+    
+            if (updateUserId.HasValue)
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", updateUserId);
+            }
+            else
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
+            }
+            return base.ExecuteFunction<Nullable<int>>("RollPortfolio", fromDtParameter, updateUserIdParameter);
+        }
+        public virtual ObjectResult<Nullable<int>> RollPortfolioSettlementDate(Nullable<System.DateTime> fromDt, Nullable<int> updateUserId)
+        {
+    
+            ObjectParameter fromDtParameter;
+    
+            if (fromDt.HasValue)
+            {
+                fromDtParameter = new ObjectParameter("fromDt", fromDt);
+            }
+            else
+            {
+                fromDtParameter = new ObjectParameter("fromDt", typeof(System.DateTime));
+            }
+    
+            ObjectParameter updateUserIdParameter;
+    
+            if (updateUserId.HasValue)
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", updateUserId);
+            }
+            else
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
+            }
+            return base.ExecuteFunction<Nullable<int>>("RollPortfolioSettlementDate", fromDtParameter, updateUserIdParameter);
         }
 
         #endregion

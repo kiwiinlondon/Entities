@@ -18,76 +18,60 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class ExtractConfiguration: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class EntityRankingScheme: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractConfigurationId
+        public int EntityRankingSchemeId
         {	
     		
-            get { return _extractConfigurationId; }
+            get { return _entityRankingSchemeId; }
             set
             {
-                if (_extractConfigurationId != value)
+                if (_entityRankingSchemeId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractConfigurationId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EntityRankingSchemeId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractConfigurationId = value;
-                    OnPropertyChanged("ExtractConfigurationId");
+                    _entityRankingSchemeId = value;
+                    OnPropertyChanged("EntityRankingSchemeId");
                 }
             }
         }
-        private int _extractConfigurationId;
+        private int _entityRankingSchemeId;
         [DataMember]
-        public int ExtractId
+        public string Name
         {	
     		
-            get { return _extractId; }
+            get { return _name; }
             set
             {
-                if (_extractId != value)
+                if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ExtractId", _extractId);
-                    _extractId = value;
-                    OnPropertyChanged("ExtractId");
+                    ChangeTracker.RecordOriginalValue("Name", _name);
+                    _name = value;
+                    OnPropertyChanged("Name");
                 }
             }
         }
-        private int _extractId;
+        private string _name;
         [DataMember]
-        public string ConfigurationKey
+        public Nullable<int> FMValueSchemeId
         {	
     		
-            get { return _configurationKey; }
+            get { return _fMValueSchemeId; }
             set
             {
-                if (_configurationKey != value)
+                if (_fMValueSchemeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ConfigurationKey", _configurationKey);
-                    _configurationKey = value;
-                    OnPropertyChanged("ConfigurationKey");
+                    ChangeTracker.RecordOriginalValue("FMValueSchemeId", _fMValueSchemeId);
+                    _fMValueSchemeId = value;
+                    OnPropertyChanged("FMValueSchemeId");
                 }
             }
         }
-        private string _configurationKey;
-        [DataMember]
-        public string ConfigurationValue
-        {	
-    		
-            get { return _configurationValue; }
-            set
-            {
-                if (_configurationValue != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ConfigurationValue", _configurationValue);
-                    _configurationValue = value;
-                    OnPropertyChanged("ConfigurationValue");
-                }
-            }
-        }
-        private string _configurationValue;
+        private Nullable<int> _fMValueSchemeId;
         [DataMember]
         public System.DateTime StartDt
         {	

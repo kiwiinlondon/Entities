@@ -18,6 +18,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ForwardFx = 26,
         [EnumMember]
-        CFD = 27,        
+        CFD = 27,
+        [EnumMember]
+        GovernmentBond = 34
     }
 }

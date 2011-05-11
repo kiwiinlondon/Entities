@@ -30,7 +30,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FXTradeEvent = 16,
         [EnumMember]
-        InternalAccountingEvent = 17       
+        InternalAccountingEvent = 17,       
+        [EnumMember]
+        Price = 18,
+        [EnumMember]
+        FXRate = 18
     }
 }
 

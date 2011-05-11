@@ -18,60 +18,92 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PositionAccount: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class EntityRankingSchemeOrder: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PositionAccountID
+        public int EntityRankingSchemeOrderId
         {	
     		
-            get { return _positionAccountID; }
+            get { return _entityRankingSchemeOrderId; }
             set
             {
-                if (_positionAccountID != value)
+                if (_entityRankingSchemeOrderId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PositionAccountID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'EntityRankingSchemeOrderId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _positionAccountID = value;
-                    OnPropertyChanged("PositionAccountID");
+                    _entityRankingSchemeOrderId = value;
+                    OnPropertyChanged("EntityRankingSchemeOrderId");
                 }
             }
         }
-        private int _positionAccountID;
+        private int _entityRankingSchemeOrderId;
         [DataMember]
-        public int AccountID
+        public int EntityRankingSchemeId
         {	
     		
-            get { return _accountID; }
+            get { return _entityRankingSchemeId; }
             set
             {
-                if (_accountID != value)
+                if (_entityRankingSchemeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("AccountID", _accountID);
-                    _accountID = value;
-                    OnPropertyChanged("AccountID");
+                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeId", _entityRankingSchemeId);
+                    _entityRankingSchemeId = value;
+                    OnPropertyChanged("EntityRankingSchemeId");
                 }
             }
         }
-        private int _accountID;
+        private int _entityRankingSchemeId;
         [DataMember]
-        public int PositionId
+        public int EntityTypeId
         {	
     		
-            get { return _positionId; }
+            get { return _entityTypeId; }
             set
             {
-                if (_positionId != value)
+                if (_entityTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PositionId", _positionId);
-                    _positionId = value;
-                    OnPropertyChanged("PositionId");
+                    ChangeTracker.RecordOriginalValue("EntityTypeId", _entityTypeId);
+                    _entityTypeId = value;
+                    OnPropertyChanged("EntityTypeId");
                 }
             }
         }
-        private int _positionId;
+        private int _entityTypeId;
+        [DataMember]
+        public int EntityRankingSchemeItemId
+        {	
+    		
+            get { return _entityRankingSchemeItemId; }
+            set
+            {
+                if (_entityRankingSchemeItemId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeItemId", _entityRankingSchemeItemId);
+                    _entityRankingSchemeItemId = value;
+                    OnPropertyChanged("EntityRankingSchemeItemId");
+                }
+            }
+        }
+        private int _entityRankingSchemeItemId;
+        [DataMember]
+        public int Ordering
+        {	
+    		
+            get { return _ordering; }
+            set
+            {
+                if (_ordering != value)
+                {
+                    ChangeTracker.RecordOriginalValue("Ordering", _ordering);
+                    _ordering = value;
+                    OnPropertyChanged("Ordering");
+                }
+            }
+        }
+        private int _ordering;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -81,6 +113,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -119,54 +152,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public int BookID
-        {	
-    		
-            get { return _bookID; }
-            set
-            {
-                if (_bookID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("BookID", _bookID);
-                    _bookID = value;
-                    OnPropertyChanged("BookID");
-                }
-            }
-        }
-        private int _bookID;
-        [DataMember]
-        public int InstrumentMarketID
-        {	
-    		
-            get { return _instrumentMarketID; }
-            set
-            {
-                if (_instrumentMarketID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("InstrumentMarketID", _instrumentMarketID);
-                    _instrumentMarketID = value;
-                    OnPropertyChanged("InstrumentMarketID");
-                }
-            }
-        }
-        private int _instrumentMarketID;
-        [DataMember]
-        public int CurrencyID
-        {	
-    		
-            get { return _currencyID; }
-            set
-            {
-                if (_currencyID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("CurrencyID", _currencyID);
-                    _currencyID = value;
-                    OnPropertyChanged("CurrencyID");
-                }
-            }
-        }
-        private int _currencyID;
 
         #endregion
         #region ChangeTracking
