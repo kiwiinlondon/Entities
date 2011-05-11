@@ -49,7 +49,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_entityTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityTypeId", _entityTypeId);
                     _entityTypeId = value;
                     OnPropertyChanged("EntityTypeId");
                 }
@@ -65,7 +64,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_needsToBeCalculated != value)
                 {
-                    ChangeTracker.RecordOriginalValue("NeedsToBeCalculated", _needsToBeCalculated);
                     _needsToBeCalculated = value;
                     OnPropertyChanged("NeedsToBeCalculated");
                 }
@@ -81,7 +79,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Name", _name);
                     _name = value;
                     OnPropertyChanged("Name");
                 }
@@ -97,7 +94,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -129,7 +125,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
@@ -145,7 +140,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_propertyOnChildEntity != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PropertyOnChildEntity", _propertyOnChildEntity);
                     _propertyOnChildEntity = value;
                     OnPropertyChanged("PropertyOnChildEntity");
                 }
@@ -161,7 +155,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_typeCode != value)
                 {
-                    ChangeTracker.RecordOriginalValue("TypeCode", _typeCode);
                     _typeCode = value;
                     OnPropertyChanged("TypeCode");
                 }

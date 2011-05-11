@@ -66,7 +66,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_entityId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityId", _entityId);
                     _entityId = value;
                     OnPropertyChanged("EntityId");
                 }
@@ -98,7 +97,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_isCancelled != value)
                 {
-                    ChangeTracker.RecordOriginalValue("IsCancelled", _isCancelled);
                     _isCancelled = value;
                     OnPropertyChanged("IsCancelled");
                 }
@@ -114,7 +112,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_sendInNextRun != value)
                 {
-                    ChangeTracker.RecordOriginalValue("SendInNextRun", _sendInNextRun);
                     _sendInNextRun = value;
                     OnPropertyChanged("SendInNextRun");
                 }
@@ -130,7 +127,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -162,7 +158,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
@@ -178,7 +173,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_entityTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityTypeId", _entityTypeId);
                     _entityTypeId = value;
                     OnPropertyChanged("EntityTypeId");
                 }

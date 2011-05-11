@@ -81,7 +81,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_eventDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EventDate", _eventDate);
                     _eventDate = value;
                     OnPropertyChanged("EventDate");
                 }
@@ -97,7 +96,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_valueDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ValueDate", _valueDate);
                     _valueDate = value;
                     OnPropertyChanged("ValueDate");
                 }
@@ -113,7 +111,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_quantity != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Quantity", _quantity);
                     _quantity = value;
                     OnPropertyChanged("Quantity");
                 }
@@ -129,7 +126,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fXRate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FXRate", _fXRate);
                     _fXRate = value;
                     OnPropertyChanged("FXRate");
                 }
@@ -161,7 +157,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -209,7 +204,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fXRateMultiply != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FXRateMultiply", _fXRateMultiply);
                     _fXRateMultiply = value;
                     OnPropertyChanged("FXRateMultiply");
                 }
@@ -225,7 +219,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_amendmentNumber != value)
                 {
-                    ChangeTracker.RecordOriginalValue("AmendmentNumber", _amendmentNumber);
                     _amendmentNumber = value;
                     OnPropertyChanged("AmendmentNumber");
                 }
@@ -241,7 +234,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_isCancelled != value)
                 {
-                    ChangeTracker.RecordOriginalValue("IsCancelled", _isCancelled);
                     _isCancelled = value;
                     OnPropertyChanged("IsCancelled");
                 }

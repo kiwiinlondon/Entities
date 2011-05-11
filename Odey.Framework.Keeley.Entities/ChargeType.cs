@@ -49,7 +49,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_code != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Code", _code);
                     _code = value;
                     OnPropertyChanged("Code");
                 }
@@ -65,7 +64,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Name", _name);
                     _name = value;
                     OnPropertyChanged("Name");
                 }
@@ -81,7 +79,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }

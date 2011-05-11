@@ -51,7 +51,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fMContEventInd != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FMContEventInd", _fMContEventInd);
                     _fMContEventInd = value;
                     OnPropertyChanged("FMContEventInd");
                 }
@@ -67,7 +66,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fMContEventId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FMContEventId", _fMContEventId);
                     _fMContEventId = value;
                     OnPropertyChanged("FMContEventId");
                 }
@@ -83,7 +81,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fMOriginalContEventId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FMOriginalContEventId", _fMOriginalContEventId);
                     _fMOriginalContEventId = value;
                     OnPropertyChanged("FMOriginalContEventId");
                 }
@@ -147,7 +144,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_quantity != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Quantity", _quantity);
                     _quantity = value;
                     OnPropertyChanged("Quantity");
                 }
@@ -163,7 +159,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_isCancelled != value)
                 {
-                    ChangeTracker.RecordOriginalValue("IsCancelled", _isCancelled);
                     _isCancelled = value;
                     OnPropertyChanged("IsCancelled");
                 }
@@ -179,7 +174,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }

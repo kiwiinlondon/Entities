@@ -50,7 +50,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fMOrgId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FMOrgId", _fMOrgId);
                     _fMOrgId = value;
                     OnPropertyChanged("FMOrgId");
                 }
@@ -66,7 +65,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Name", _name);
                     _name = value;
                     OnPropertyChanged("Name");
                 }
@@ -105,7 +103,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
