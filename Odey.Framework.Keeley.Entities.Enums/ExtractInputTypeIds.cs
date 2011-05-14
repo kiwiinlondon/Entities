@@ -3,13 +3,13 @@
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum ExtractTypeIds
+    public enum ExtractInputTypeIds
     {
         [EnumMember]
         None = 0,
         [EnumMember]
-        Event = 1,
+        ExtractEntity = 1,
         [EnumMember]
-        Reconciliation = 3
+        MatchingEngineOutput = 2       
     }
 }

@@ -34,7 +34,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Price = 18,
         [EnumMember]
-        FXRate = 18
+        FXRate = 19,
+        [EnumMember]
+        MatchingEngineOutput = 20,
+        [EnumMember]
+        Book = 22
     }
 }
 

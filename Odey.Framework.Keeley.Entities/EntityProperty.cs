@@ -161,6 +161,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _typeCode;
+        [DataMember]
+        public Nullable<int> IdentifierTypeId
+        {	
+    		
+            get { return _identifierTypeId; }
+            set
+            {
+                if (_identifierTypeId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IdentifierTypeId", _identifierTypeId);
+                    _identifierTypeId = value;
+                    OnPropertyChanged("IdentifierTypeId");
+                }
+            }
+        }
+        private Nullable<int> _identifierTypeId;
 
         #endregion
         #region ChangeTracking

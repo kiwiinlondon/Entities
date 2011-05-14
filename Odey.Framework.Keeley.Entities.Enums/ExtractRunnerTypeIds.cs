@@ -3,13 +3,13 @@
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum ExtractTypeIds
+    public enum ExtractRunnerTypeIds
     {
         [EnumMember]
         None = 0,
         [EnumMember]
-        Event = 1,
+        AllFunds = 1,
         [EnumMember]
-        Reconciliation = 3
+        Standard = 2
     }
 }

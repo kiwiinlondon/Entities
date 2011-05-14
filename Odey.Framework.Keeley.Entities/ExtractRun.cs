@@ -163,6 +163,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private string _filePath;
+        [DataMember]
+        public string RuntimeParameters
+        {	
+    		
+            get { return _runtimeParameters; }
+            set
+            {
+                if (_runtimeParameters != value)
+                {
+                    _runtimeParameters = value;
+                    OnPropertyChanged("RuntimeParameters");
+                }
+            }
+        }
+        private string _runtimeParameters;
 
         #endregion
         #region ChangeTracking

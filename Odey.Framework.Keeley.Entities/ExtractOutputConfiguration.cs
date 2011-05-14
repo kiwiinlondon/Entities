@@ -194,6 +194,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _entityPropertyToWriteId;
+        [DataMember]
+        public string Format
+        {	
+    		
+            get { return _format; }
+            set
+            {
+                if (_format != value)
+                {
+                    _format = value;
+                    OnPropertyChanged("Format");
+                }
+            }
+        }
+        private string _format;
 
         #endregion
         #region Navigation Properties

@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(EntityProperty))]
     public partial class IdentifierType: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -118,6 +119,44 @@ namespace Odey.Framework.Keeley.Entities
         private string _fMIdentType;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<EntityProperty> EntityProperties
+        {
+            get
+            {
+                if (_entityProperties == null)
+                {
+                    _entityProperties = new TrackableCollection<EntityProperty>();
+                    _entityProperties.CollectionChanged += FixupEntityProperties;
+                }
+                return _entityProperties;
+            }
+            set
+            {
+                if (!ReferenceEquals(_entityProperties, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_entityProperties != null)
+                    {
+                        _entityProperties.CollectionChanged -= FixupEntityProperties;
+                    }
+                    _entityProperties = value;
+                    if (_entityProperties != null)
+                    {
+                        _entityProperties.CollectionChanged += FixupEntityProperties;
+                    }
+                    OnNavigationPropertyChanged("EntityProperties");
+                }
+            }
+        }
+        private TrackableCollection<EntityProperty> _entityProperties;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -195,6 +234,46 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            EntityProperties.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupEntityProperties(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (EntityProperty item in e.NewItems)
+                {
+                    item.IdentifierTypeId = IdentifierTypeID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("EntityProperties", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (EntityProperty item in e.OldItems)
+                {
+                    item.IdentifierTypeId = null;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("EntityProperties", item);
+                    }
+                }
+            }
         }
 
         #endregion

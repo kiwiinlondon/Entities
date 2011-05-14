@@ -134,7 +134,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _extractOutputTypeID;
         [DataMember]
-        public Nullable<int> ExtractRunnerTypeID
+        public int ExtractRunnerTypeID
         {	
     		
             get { return _extractRunnerTypeID; }
@@ -147,7 +147,67 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _extractRunnerTypeID;
+        private int _extractRunnerTypeID;
+        [DataMember]
+        public int ExtractInputTypeID
+        {	
+    		
+            get { return _extractInputTypeID; }
+            set
+            {
+                if (_extractInputTypeID != value)
+                {
+                    _extractInputTypeID = value;
+                    OnPropertyChanged("ExtractInputTypeID");
+                }
+            }
+        }
+        private int _extractInputTypeID;
+        [DataMember]
+        public int ExtractDeliveryTypeID
+        {	
+    		
+            get { return _extractDeliveryTypeID; }
+            set
+            {
+                if (_extractDeliveryTypeID != value)
+                {
+                    _extractDeliveryTypeID = value;
+                    OnPropertyChanged("ExtractDeliveryTypeID");
+                }
+            }
+        }
+        private int _extractDeliveryTypeID;
+        [DataMember]
+        public bool SendIfEmpty
+        {	
+    		
+            get { return _sendIfEmpty; }
+            set
+            {
+                if (_sendIfEmpty != value)
+                {
+                    _sendIfEmpty = value;
+                    OnPropertyChanged("SendIfEmpty");
+                }
+            }
+        }
+        private bool _sendIfEmpty;
+        [DataMember]
+        public int ExtractOutputContainerTypeID
+        {	
+    		
+            get { return _extractOutputContainerTypeID; }
+            set
+            {
+                if (_extractOutputContainerTypeID != value)
+                {
+                    _extractOutputContainerTypeID = value;
+                    OnPropertyChanged("ExtractOutputContainerTypeID");
+                }
+            }
+        }
+        private int _extractOutputContainerTypeID;
 
         #endregion
         #region ChangeTracking
