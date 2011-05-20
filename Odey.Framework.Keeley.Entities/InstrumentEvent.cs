@@ -240,6 +240,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _isCancelled;
+        [DataMember]
+        public System.DateTime InputDate
+        {	
+    		
+            get { return _inputDate; }
+            set
+            {
+                if (_inputDate != value)
+                {
+                    _inputDate = value;
+                    OnPropertyChanged("InputDate");
+                }
+            }
+        }
+        private System.DateTime _inputDate;
 
         #endregion
         #region ChangeTracking

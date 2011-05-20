@@ -195,6 +195,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public int InternalAllocationEventID
+        {	
+    		
+            get { return _internalAllocationEventID; }
+            set
+            {
+                if (_internalAllocationEventID != value)
+                {
+                    _internalAllocationEventID = value;
+                    OnPropertyChanged("InternalAllocationEventID");
+                }
+            }
+        }
+        private int _internalAllocationEventID;
 
         #endregion
         #region ChangeTracking

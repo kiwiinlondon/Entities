@@ -10,6 +10,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ExtractEntity = 1,
         [EnumMember]
-        MatchingEngineOutput = 2       
+        MatchingEngineOutput = 2,       
+        [EnumMember]
+        StoredProcedure = 4   
     }
 }

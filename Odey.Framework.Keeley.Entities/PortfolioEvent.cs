@@ -435,6 +435,36 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public System.DateTime InputDate
+        {	
+    		
+            get { return _inputDate; }
+            set
+            {
+                if (_inputDate != value)
+                {
+                    _inputDate = value;
+                    OnPropertyChanged("InputDate");
+                }
+            }
+        }
+        private System.DateTime _inputDate;
+        [DataMember]
+        public int OrderingResolution
+        {	
+    		
+            get { return _orderingResolution; }
+            set
+            {
+                if (_orderingResolution != value)
+                {
+                    _orderingResolution = value;
+                    OnPropertyChanged("OrderingResolution");
+                }
+            }
+        }
+        private int _orderingResolution;
 
         #endregion
         #region ChangeTracking

@@ -18,29 +18,25 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Instrument))]
-    public partial class FMContractMapping: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class EventInstrumentMap: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int FMContId
+        public int EventID
         {	
     		
-            get { return _fMContId; }
+            get { return _eventID; }
             set
             {
-                if (_fMContId != value)
+                if (_eventID != value)
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
-                    {
-                        throw new InvalidOperationException("The property 'FMContId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
-                    }
-                    _fMContId = value;
-                    OnPropertyChanged("FMContId");
+                    ChangeTracker.RecordOriginalValue("EventID", _eventID);
+                    _eventID = value;
+                    OnPropertyChanged("EventID");
                 }
             }
         }
-        private int _fMContId;
+        private int _eventID;
         [DataMember]
         public int InstrumentID
         {	
@@ -50,13 +46,9 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_instrumentID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InstrumentID", _instrumentID);
-                    if (!IsDeserializing)
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        if (Instrument != null && Instrument.InstrumentID != value)
-                        {
-                            Instrument = null;
-                        }
+                        throw new InvalidOperationException("The property 'InstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
                     _instrumentID = value;
                     OnPropertyChanged("InstrumentID");
@@ -104,33 +96,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public Instrument Instrument
-        {
-            get { return _instrument; }
-            set
-            {
-                if (!ReferenceEquals(_instrument, value))
-                {
-                    var previousValue = _instrument;
-                    _instrument = value;
-                    FixupInstrument(previousValue);
-                    OnNavigationPropertyChanged("Instrument");
-                }
-            }
-        }
-        private Instrument _instrument;
 
         #endregion
         #region ChangeTracking
@@ -193,6 +164,16 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
+            }
+        }
+    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -210,49 +191,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Instrument = null;
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupInstrument(Instrument previousValue)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (previousValue != null && previousValue.FMContractMappings.Contains(this))
-            {
-                previousValue.FMContractMappings.Remove(this);
-            }
-    
-            if (Instrument != null)
-            {
-                if (!Instrument.FMContractMappings.Contains(this))
-                {
-                    Instrument.FMContractMappings.Add(this);
-                }
-    
-                InstrumentID = Instrument.InstrumentID;
-            }
-            if (ChangeTracker.ChangeTrackingEnabled)
-            {
-                if (ChangeTracker.OriginalValues.ContainsKey("Instrument")
-                    && (ChangeTracker.OriginalValues["Instrument"] == Instrument))
-                {
-                    ChangeTracker.OriginalValues.Remove("Instrument");
-                }
-                else
-                {
-                    ChangeTracker.RecordOriginalValue("Instrument", previousValue);
-                }
-                if (Instrument != null && !Instrument.ChangeTracker.ChangeTrackingEnabled)
-                {
-                    Instrument.StartTracking();
-                }
-            }
         }
 
         #endregion

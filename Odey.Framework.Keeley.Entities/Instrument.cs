@@ -18,8 +18,8 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(FMContractMapping))]
     [KnownType(typeof(InstrumentRelationship))]
+    [KnownType(typeof(EventInstrumentMap))]
     [KnownType(typeof(InstrumentMarket))]
     public partial class Instrument: IObjectWithChangeTracker, INotifyPropertyChanged
     {
@@ -203,41 +203,6 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        public TrackableCollection<FMContractMapping> FMContractMappings
-        {
-            get
-            {
-                if (_fMContractMappings == null)
-                {
-                    _fMContractMappings = new TrackableCollection<FMContractMapping>();
-                    _fMContractMappings.CollectionChanged += FixupFMContractMappings;
-                }
-                return _fMContractMappings;
-            }
-            set
-            {
-                if (!ReferenceEquals(_fMContractMappings, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_fMContractMappings != null)
-                    {
-                        _fMContractMappings.CollectionChanged -= FixupFMContractMappings;
-                    }
-                    _fMContractMappings = value;
-                    if (_fMContractMappings != null)
-                    {
-                        _fMContractMappings.CollectionChanged += FixupFMContractMappings;
-                    }
-                    OnNavigationPropertyChanged("FMContractMappings");
-                }
-            }
-        }
-        private TrackableCollection<FMContractMapping> _fMContractMappings;
-    
-        [DataMember]
         public InstrumentRelationship UnderlyingRelationship
         {
             get { return _underlyingRelationship; }
@@ -253,6 +218,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private InstrumentRelationship _underlyingRelationship;
+    
+        [DataMember]
+        public EventInstrumentMap EventInstrumentMap
+        {
+            get { return _eventInstrumentMap; }
+            set
+            {
+                if (!ReferenceEquals(_eventInstrumentMap, value))
+                {
+                    var previousValue = _eventInstrumentMap;
+                    _eventInstrumentMap = value;
+                    FixupEventInstrumentMap(previousValue);
+                    OnNavigationPropertyChanged("EventInstrumentMap");
+                }
+            }
+        }
+        private EventInstrumentMap _eventInstrumentMap;
     
         [DataMember]
         public TrackableCollection<InstrumentMarket> InstrumentMarkets
@@ -367,8 +349,8 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            FMContractMappings.Clear();
             UnderlyingRelationship = null;
+            EventInstrumentMap = null;
             InstrumentMarkets.Clear();
         }
 
@@ -423,41 +405,50 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
-        private void FixupFMContractMappings(object sender, NotifyCollectionChangedEventArgs e)
+        private void FixupEventInstrumentMap(EventInstrumentMap previousValue)
         {
+            // This is the principal end in an association that performs cascade deletes.
+            // Update the event listener to refer to the new dependent.
+            if (previousValue != null)
+            {
+                ChangeTracker.ObjectStateChanging -= previousValue.HandleCascadeDelete;
+            }
+    
+            if (EventInstrumentMap != null)
+            {
+                ChangeTracker.ObjectStateChanging += EventInstrumentMap.HandleCascadeDelete;
+            }
+    
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (e.NewItems != null)
+            if (EventInstrumentMap != null)
             {
-                foreach (FMContractMapping item in e.NewItems)
-                {
-                    item.Instrument = this;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("FMContractMappings", item);
-                    }
-                }
+                EventInstrumentMap.InstrumentID = InstrumentID;
             }
     
-            if (e.OldItems != null)
+            if (ChangeTracker.ChangeTrackingEnabled)
             {
-                foreach (FMContractMapping item in e.OldItems)
+                if (ChangeTracker.OriginalValues.ContainsKey("EventInstrumentMap")
+                    && (ChangeTracker.OriginalValues["EventInstrumentMap"] == EventInstrumentMap))
                 {
-                    if (ReferenceEquals(item.Instrument, this))
+                    ChangeTracker.OriginalValues.Remove("EventInstrumentMap");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("EventInstrumentMap", previousValue);
+                    // This is the principal end of an identifying association, so the dependent must be deleted when the relationship is removed.
+                    // If the current state of the dependent is Added, the relationship can be changed without causing the dependent to be deleted.
+                    if (previousValue != null && previousValue.ChangeTracker.State != ObjectState.Added)
                     {
-                        item.Instrument = null;
+                        previousValue.MarkAsDeleted();
                     }
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("FMContractMappings", item);
-                    }
+                }
+                if (EventInstrumentMap != null && !EventInstrumentMap.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    EventInstrumentMap.StartTracking();
                 }
             }
         }
@@ -473,7 +464,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach (InstrumentMarket item in e.NewItems)
                 {
-                    item.InstrumentID = InstrumentID;
+                    item.Instrument = this;
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         if (!item.ChangeTracker.ChangeTrackingEnabled)
@@ -489,6 +480,10 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach (InstrumentMarket item in e.OldItems)
                 {
+                    if (ReferenceEquals(item.Instrument, this))
+                    {
+                        item.Instrument = null;
+                    }
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("InstrumentMarkets", item);

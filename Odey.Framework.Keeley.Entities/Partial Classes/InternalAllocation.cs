@@ -16,7 +16,7 @@ namespace Odey.Framework.Keeley.Entities
                 if (!_totalOfCharges.HasValue)
                 {
                     _totalOfCharges = 0;
-                    foreach (Charge charge in Charges)
+                    foreach (Charge charge in Event.Charges)
                     {
                         _totalOfCharges = _totalOfCharges + charge.Quantity;
                     }

@@ -113,12 +113,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<InstrumentClass> _instrumentClasses;
     
-        public ObjectSet<InstrumentMarket> InstrumentMarkets
-        {
-            get { return _instrumentMarkets  ?? (_instrumentMarkets = CreateObjectSet<InstrumentMarket>("InstrumentMarkets")); }
-        }
-        private ObjectSet<InstrumentMarket> _instrumentMarkets;
-    
         public ObjectSet<Issuer> Issuers
         {
             get { return _issuers  ?? (_issuers = CreateObjectSet<Issuer>("Issuers")); }
@@ -142,12 +136,6 @@ namespace Odey.Framework.Keeley.Entities
             get { return _identifierTypes  ?? (_identifierTypes = CreateObjectSet<IdentifierType>("IdentifierTypes")); }
         }
         private ObjectSet<IdentifierType> _identifierTypes;
-    
-        public ObjectSet<FMContractMapping> FMContractMappings
-        {
-            get { return _fMContractMappings  ?? (_fMContractMappings = CreateObjectSet<FMContractMapping>("FMContractMappings")); }
-        }
-        private ObjectSet<FMContractMapping> _fMContractMappings;
     
         public ObjectSet<InstrumentRelationship> InstrumentRelationships
         {
@@ -239,12 +227,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<FXTradeEvent> _fXTradeEvents;
     
-        public ObjectSet<FX> FXes
-        {
-            get { return _fXes  ?? (_fXes = CreateObjectSet<FX>("FXes")); }
-        }
-        private ObjectSet<FX> _fXes;
-    
         public ObjectSet<ChargeType> ChargeTypes
         {
             get { return _chargeTypes  ?? (_chargeTypes = CreateObjectSet<ChargeType>("ChargeTypes")); }
@@ -256,12 +238,6 @@ namespace Odey.Framework.Keeley.Entities
             get { return _portfolioAggregationLevels  ?? (_portfolioAggregationLevels = CreateObjectSet<PortfolioAggregationLevel>("PortfolioAggregationLevels")); }
         }
         private ObjectSet<PortfolioAggregationLevel> _portfolioAggregationLevels;
-    
-        public ObjectSet<Charge> Charges
-        {
-            get { return _charges  ?? (_charges = CreateObjectSet<Charge>("Charges")); }
-        }
-        private ObjectSet<Charge> _charges;
     
         public ObjectSet<InternalAllocation> InternalAllocations
         {
@@ -424,10 +400,28 @@ namespace Odey.Framework.Keeley.Entities
             get { return _entityRankingSchemeOrders  ?? (_entityRankingSchemeOrders = CreateObjectSet<EntityRankingSchemeOrder>("EntityRankingSchemeOrders")); }
         }
         private ObjectSet<EntityRankingSchemeOrder> _entityRankingSchemeOrders;
+    
+        public ObjectSet<EventInstrumentMap> EventInstrumentMaps
+        {
+            get { return _eventInstrumentMaps  ?? (_eventInstrumentMaps = CreateObjectSet<EventInstrumentMap>("EventInstrumentMaps")); }
+        }
+        private ObjectSet<EventInstrumentMap> _eventInstrumentMaps;
+    
+        public ObjectSet<InstrumentMarket> InstrumentMarkets
+        {
+            get { return _instrumentMarkets  ?? (_instrumentMarkets = CreateObjectSet<InstrumentMarket>("InstrumentMarkets")); }
+        }
+        private ObjectSet<InstrumentMarket> _instrumentMarkets;
+    
+        public ObjectSet<Charge> Charges
+        {
+            get { return _charges  ?? (_charges = CreateObjectSet<Charge>("Charges")); }
+        }
+        private ObjectSet<Charge> _charges;
 
         #endregion
         #region Function Imports
-        public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
+        public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
     
             ObjectParameter positionIDParameter;
@@ -452,6 +446,28 @@ namespace Odey.Framework.Keeley.Entities
                 referenceDateParameter = new ObjectParameter("ReferenceDate", typeof(System.DateTime));
             }
     
+            ObjectParameter inputDateParameter;
+    
+            if (inputDate.HasValue)
+            {
+                inputDateParameter = new ObjectParameter("InputDate", inputDate);
+            }
+            else
+            {
+                inputDateParameter = new ObjectParameter("InputDate", typeof(System.DateTime));
+            }
+    
+            ObjectParameter orderingResolutionParameter;
+    
+            if (orderingResolution.HasValue)
+            {
+                orderingResolutionParameter = new ObjectParameter("OrderingResolution", orderingResolution);
+            }
+            else
+            {
+                orderingResolutionParameter = new ObjectParameter("OrderingResolution", typeof(int));
+            }
+    
             ObjectParameter portfolioAggregationLevelIdParameter;
     
             if (portfolioAggregationLevelId.HasValue)
@@ -473,7 +489,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 portfolioEventIdParameter = new ObjectParameter("PortfolioEventId", typeof(int));
             }
-            return base.ExecuteFunction<PortfolioEvent>("PortfolioEventGetPrevious", positionIDParameter, referenceDateParameter, portfolioAggregationLevelIdParameter, portfolioEventIdParameter);
+            return base.ExecuteFunction<PortfolioEvent>("PortfolioEventGetPrevious", positionIDParameter, referenceDateParameter, inputDateParameter, orderingResolutionParameter, portfolioAggregationLevelIdParameter, portfolioEventIdParameter);
         }
         public virtual ObjectResult<Nullable<int>> RollPortfolio(Nullable<System.DateTime> fromDt, Nullable<int> updateUserId)
         {
@@ -526,6 +542,25 @@ namespace Odey.Framework.Keeley.Entities
                 updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
             }
             return base.ExecuteFunction<Nullable<int>>("RollPortfolioSettlementDate", fromDtParameter, updateUserIdParameter);
+        }
+        public virtual ObjectResult<Position> PositionGetForFundIdExcludingCurrencies(Nullable<int> fundId)
+        {
+    
+            ObjectParameter fundIdParameter;
+    
+            if (fundId.HasValue)
+            {
+                fundIdParameter = new ObjectParameter("fundId", fundId);
+            }
+            else
+            {
+                fundIdParameter = new ObjectParameter("fundId", typeof(int));
+            }
+            return base.ExecuteFunction<Position>("PositionGetForFundIdExcludingCurrencies", fundIdParameter);
+        }
+        public virtual ObjectResult<Nullable<int>> GetPositionIdsWherePortfolioEventBreak()
+        {
+            return base.ExecuteFunction<Nullable<int>>("GetPositionIdsWherePortfolioEventBreak");
         }
 
         #endregion

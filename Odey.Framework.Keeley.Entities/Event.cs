@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(Charge))]
     public partial class Event: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -150,6 +151,44 @@ namespace Odey.Framework.Keeley.Entities
         private bool _isTopLevel;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<Charge> Charges
+        {
+            get
+            {
+                if (_charges == null)
+                {
+                    _charges = new TrackableCollection<Charge>();
+                    _charges.CollectionChanged += FixupCharges;
+                }
+                return _charges;
+            }
+            set
+            {
+                if (!ReferenceEquals(_charges, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_charges != null)
+                    {
+                        _charges.CollectionChanged -= FixupCharges;
+                    }
+                    _charges = value;
+                    if (_charges != null)
+                    {
+                        _charges.CollectionChanged += FixupCharges;
+                    }
+                    OnNavigationPropertyChanged("Charges");
+                }
+            }
+        }
+        private TrackableCollection<Charge> _charges;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -227,6 +266,45 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Charges.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupCharges(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (Charge item in e.NewItems)
+                {
+                    item.EventID = EventID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("Charges", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (Charge item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("Charges", item);
+                    }
+                }
+            }
         }
 
         #endregion
