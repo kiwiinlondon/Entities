@@ -188,28 +188,12 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public int InternalAllocationEventID
-        {	
-    		
-            get { return _internalAllocationEventID; }
-            set
-            {
-                if (_internalAllocationEventID != value)
-                {
-                    _internalAllocationEventID = value;
-                    OnPropertyChanged("InternalAllocationEventID");
-                }
-            }
-        }
-        private int _internalAllocationEventID;
 
         #endregion
         #region ChangeTracking

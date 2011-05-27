@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(RawPrice))]
     public partial class Price: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -97,6 +98,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_rawPriceId != value)
                 {
                     ChangeTracker.RecordOriginalValue("RawPriceId", _rawPriceId);
+                    if (!IsDeserializing)
+                    {
+                        if (RawPrice != null && RawPrice.RawPriceId != value)
+                        {
+                            RawPrice = null;
+                        }
+                    }
                     _rawPriceId = value;
                     OnPropertyChanged("RawPriceId");
                 }
@@ -165,6 +173,26 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public RawPrice RawPrice
+        {
+            get { return _rawPrice; }
+            set
+            {
+                if (!ReferenceEquals(_rawPrice, value))
+                {
+                    var previousValue = _rawPrice;
+                    _rawPrice = value;
+                    FixupRawPrice(previousValue);
+                    OnNavigationPropertyChanged("RawPrice");
+                }
+            }
+        }
+        private RawPrice _rawPrice;
 
         #endregion
         #region ChangeTracking
@@ -244,6 +272,49 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            RawPrice = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupRawPrice(RawPrice previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.Prices.Contains(this))
+            {
+                previousValue.Prices.Remove(this);
+            }
+    
+            if (RawPrice != null)
+            {
+                if (!RawPrice.Prices.Contains(this))
+                {
+                    RawPrice.Prices.Add(this);
+                }
+    
+                RawPriceId = RawPrice.RawPriceId;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("RawPrice")
+                    && (ChangeTracker.OriginalValues["RawPrice"] == RawPrice))
+                {
+                    ChangeTracker.OriginalValues.Remove("RawPrice");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("RawPrice", previousValue);
+                }
+                if (RawPrice != null && !RawPrice.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    RawPrice.StartTracking();
+                }
+            }
         }
 
         #endregion

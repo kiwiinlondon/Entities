@@ -418,6 +418,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _charges  ?? (_charges = CreateObjectSet<Charge>("Charges")); }
         }
         private ObjectSet<Charge> _charges;
+    
+        public ObjectSet<PortfolioRollDate> PortfolioRollDates
+        {
+            get { return _portfolioRollDates  ?? (_portfolioRollDates = CreateObjectSet<PortfolioRollDate>("PortfolioRollDates")); }
+        }
+        private ObjectSet<PortfolioRollDate> _portfolioRollDates;
 
         #endregion
         #region Function Imports
@@ -491,19 +497,8 @@ namespace Odey.Framework.Keeley.Entities
             }
             return base.ExecuteFunction<PortfolioEvent>("PortfolioEventGetPrevious", positionIDParameter, referenceDateParameter, inputDateParameter, orderingResolutionParameter, portfolioAggregationLevelIdParameter, portfolioEventIdParameter);
         }
-        public virtual ObjectResult<Nullable<int>> RollPortfolio(Nullable<System.DateTime> fromDt, Nullable<int> updateUserId)
+        public virtual ObjectResult<Nullable<System.DateTime>> RollPortfolio(Nullable<int> updateUserId)
         {
-    
-            ObjectParameter fromDtParameter;
-    
-            if (fromDt.HasValue)
-            {
-                fromDtParameter = new ObjectParameter("fromDt", fromDt);
-            }
-            else
-            {
-                fromDtParameter = new ObjectParameter("fromDt", typeof(System.DateTime));
-            }
     
             ObjectParameter updateUserIdParameter;
     
@@ -515,21 +510,10 @@ namespace Odey.Framework.Keeley.Entities
             {
                 updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
             }
-            return base.ExecuteFunction<Nullable<int>>("RollPortfolio", fromDtParameter, updateUserIdParameter);
+            return base.ExecuteFunction<Nullable<System.DateTime>>("RollPortfolio", updateUserIdParameter);
         }
-        public virtual ObjectResult<Nullable<int>> RollPortfolioSettlementDate(Nullable<System.DateTime> fromDt, Nullable<int> updateUserId)
+        public virtual ObjectResult<Nullable<System.DateTime>> RollPortfolioSettlementDate(Nullable<int> updateUserId)
         {
-    
-            ObjectParameter fromDtParameter;
-    
-            if (fromDt.HasValue)
-            {
-                fromDtParameter = new ObjectParameter("fromDt", fromDt);
-            }
-            else
-            {
-                fromDtParameter = new ObjectParameter("fromDt", typeof(System.DateTime));
-            }
     
             ObjectParameter updateUserIdParameter;
     
@@ -541,7 +525,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
             }
-            return base.ExecuteFunction<Nullable<int>>("RollPortfolioSettlementDate", fromDtParameter, updateUserIdParameter);
+            return base.ExecuteFunction<Nullable<System.DateTime>>("RollPortfolioSettlementDate", updateUserIdParameter);
         }
         public virtual ObjectResult<Position> PositionGetForFundIdExcludingCurrencies(Nullable<int> fundId)
         {

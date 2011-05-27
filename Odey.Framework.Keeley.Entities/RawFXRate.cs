@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(FXRate))]
     public partial class RawFXRate: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -40,38 +41,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _rawFXRateId;
-        [DataMember]
-        public int FromCurrencyId
-        {	
-    		
-            get { return _fromCurrencyId; }
-            set
-            {
-                if (_fromCurrencyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("FromCurrencyId", _fromCurrencyId);
-                    _fromCurrencyId = value;
-                    OnPropertyChanged("FromCurrencyId");
-                }
-            }
-        }
-        private int _fromCurrencyId;
-        [DataMember]
-        public int ToCurrencyId
-        {	
-    		
-            get { return _toCurrencyId; }
-            set
-            {
-                if (_toCurrencyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ToCurrencyId", _toCurrencyId);
-                    _toCurrencyId = value;
-                    OnPropertyChanged("ToCurrencyId");
-                }
-            }
-        }
-        private int _toCurrencyId;
         [DataMember]
         public System.DateTime ReferenceDate
         {	
@@ -225,21 +194,94 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public Nullable<int> RawFXRateUsedId
+        public int CurrencyId
         {	
     		
-            get { return _rawFXRateUsedId; }
+            get { return _currencyId; }
             set
             {
-                if (_rawFXRateUsedId != value)
+                if (_currencyId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("RawFXRateUsedId", _rawFXRateUsedId);
-                    _rawFXRateUsedId = value;
-                    OnPropertyChanged("RawFXRateUsedId");
+                    ChangeTracker.RecordOriginalValue("CurrencyId", _currencyId);
+                    _currencyId = value;
+                    OnPropertyChanged("CurrencyId");
                 }
             }
         }
-        private Nullable<int> _rawFXRateUsedId;
+        private int _currencyId;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<FXRate> FromFXRates
+        {
+            get
+            {
+                if (_fromFXRates == null)
+                {
+                    _fromFXRates = new TrackableCollection<FXRate>();
+                    _fromFXRates.CollectionChanged += FixupFromFXRates;
+                }
+                return _fromFXRates;
+            }
+            set
+            {
+                if (!ReferenceEquals(_fromFXRates, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_fromFXRates != null)
+                    {
+                        _fromFXRates.CollectionChanged -= FixupFromFXRates;
+                    }
+                    _fromFXRates = value;
+                    if (_fromFXRates != null)
+                    {
+                        _fromFXRates.CollectionChanged += FixupFromFXRates;
+                    }
+                    OnNavigationPropertyChanged("FromFXRates");
+                }
+            }
+        }
+        private TrackableCollection<FXRate> _fromFXRates;
+    
+        [DataMember]
+        public TrackableCollection<FXRate> ToFXRates
+        {
+            get
+            {
+                if (_toFXRates == null)
+                {
+                    _toFXRates = new TrackableCollection<FXRate>();
+                    _toFXRates.CollectionChanged += FixupToFXRates;
+                }
+                return _toFXRates;
+            }
+            set
+            {
+                if (!ReferenceEquals(_toFXRates, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_toFXRates != null)
+                    {
+                        _toFXRates.CollectionChanged -= FixupToFXRates;
+                    }
+                    _toFXRates = value;
+                    if (_toFXRates != null)
+                    {
+                        _toFXRates.CollectionChanged += FixupToFXRates;
+                    }
+                    OnNavigationPropertyChanged("ToFXRates");
+                }
+            }
+        }
+        private TrackableCollection<FXRate> _toFXRates;
 
         #endregion
         #region ChangeTracking
@@ -319,6 +361,89 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            FromFXRates.Clear();
+            ToFXRates.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupFromFXRates(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (FXRate item in e.NewItems)
+                {
+                    item.FromRawFXRate = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("FromFXRates", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (FXRate item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.FromRawFXRate, this))
+                    {
+                        item.FromRawFXRate = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("FromFXRates", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupToFXRates(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (FXRate item in e.NewItems)
+                {
+                    item.ToRawFXRate = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("ToFXRates", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (FXRate item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.ToRawFXRate, this))
+                    {
+                        item.ToRawFXRate = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("ToFXRates", item);
+                    }
+                }
+            }
         }
 
         #endregion

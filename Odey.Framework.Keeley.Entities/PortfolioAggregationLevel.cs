@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(PortfolioEvent))]
+    [KnownType(typeof(PortfolioRollDate))]
     public partial class PortfolioAggregationLevel: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -140,6 +141,41 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private TrackableCollection<PortfolioEvent> _portfolioEvents;
+    
+        [DataMember]
+        public TrackableCollection<PortfolioRollDate> PortfolioRollDates
+        {
+            get
+            {
+                if (_portfolioRollDates == null)
+                {
+                    _portfolioRollDates = new TrackableCollection<PortfolioRollDate>();
+                    _portfolioRollDates.CollectionChanged += FixupPortfolioRollDates;
+                }
+                return _portfolioRollDates;
+            }
+            set
+            {
+                if (!ReferenceEquals(_portfolioRollDates, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_portfolioRollDates != null)
+                    {
+                        _portfolioRollDates.CollectionChanged -= FixupPortfolioRollDates;
+                    }
+                    _portfolioRollDates = value;
+                    if (_portfolioRollDates != null)
+                    {
+                        _portfolioRollDates.CollectionChanged += FixupPortfolioRollDates;
+                    }
+                    OnNavigationPropertyChanged("PortfolioRollDates");
+                }
+            }
+        }
+        private TrackableCollection<PortfolioRollDate> _portfolioRollDates;
 
         #endregion
         #region ChangeTracking
@@ -220,6 +256,7 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             PortfolioEvents.Clear();
+            PortfolioRollDates.Clear();
         }
 
         #endregion
@@ -255,6 +292,45 @@ namespace Odey.Framework.Keeley.Entities
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("PortfolioEvents", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupPortfolioRollDates(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (PortfolioRollDate item in e.NewItems)
+                {
+                    item.PortfolioAggregationLevel = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("PortfolioRollDates", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (PortfolioRollDate item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.PortfolioAggregationLevel, this))
+                    {
+                        item.PortfolioAggregationLevel = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("PortfolioRollDates", item);
                     }
                 }
             }

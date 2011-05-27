@@ -18,136 +18,68 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Price))]
-    public partial class RawPrice: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(ApplicationUser))]
+    [KnownType(typeof(PortfolioAggregationLevel))]
+    public partial class PortfolioRollDate: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int RawPriceId
+        public int PortfolioRollDateId
         {	
     		
-            get { return _rawPriceId; }
+            get { return _portfolioRollDateId; }
             set
             {
-                if (_rawPriceId != value)
+                if (_portfolioRollDateId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'RawPriceId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PortfolioRollDateId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _rawPriceId = value;
-                    OnPropertyChanged("RawPriceId");
+                    _portfolioRollDateId = value;
+                    OnPropertyChanged("PortfolioRollDateId");
                 }
             }
         }
-        private int _rawPriceId;
+        private int _portfolioRollDateId;
         [DataMember]
-        public int InstrumentMarketId
+        public int PortfolioAggregationLevelId
         {	
     		
-            get { return _instrumentMarketId; }
+            get { return _portfolioAggregationLevelId; }
             set
             {
-                if (_instrumentMarketId != value)
+                if (_portfolioAggregationLevelId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InstrumentMarketId", _instrumentMarketId);
-                    _instrumentMarketId = value;
-                    OnPropertyChanged("InstrumentMarketId");
+                    ChangeTracker.RecordOriginalValue("PortfolioAggregationLevelId", _portfolioAggregationLevelId);
+                    if (!IsDeserializing)
+                    {
+                        if (PortfolioAggregationLevel != null && PortfolioAggregationLevel.PortfolioAggregationLevelId != value)
+                        {
+                            PortfolioAggregationLevel = null;
+                        }
+                    }
+                    _portfolioAggregationLevelId = value;
+                    OnPropertyChanged("PortfolioAggregationLevelId");
                 }
             }
         }
-        private int _instrumentMarketId;
+        private int _portfolioAggregationLevelId;
         [DataMember]
-        public System.DateTime ReferenceDate
+        public System.DateTime RollDate
         {	
     		
-            get { return _referenceDate; }
+            get { return _rollDate; }
             set
             {
-                if (_referenceDate != value)
+                if (_rollDate != value)
                 {
-                    _referenceDate = value;
-                    OnPropertyChanged("ReferenceDate");
+                    _rollDate = value;
+                    OnPropertyChanged("RollDate");
                 }
             }
         }
-        private System.DateTime _referenceDate;
-        [DataMember]
-        public int EntityRankingSchemeItemId
-        {	
-    		
-            get { return _entityRankingSchemeItemId; }
-            set
-            {
-                if (_entityRankingSchemeItemId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeItemId", _entityRankingSchemeItemId);
-                    _entityRankingSchemeItemId = value;
-                    OnPropertyChanged("EntityRankingSchemeItemId");
-                }
-            }
-        }
-        private int _entityRankingSchemeItemId;
-        [DataMember]
-        public decimal BidValue
-        {	
-    		
-            get { return _bidValue; }
-            set
-            {
-                if (_bidValue != value)
-                {
-                    _bidValue = value;
-                    OnPropertyChanged("BidValue");
-                }
-            }
-        }
-        private decimal _bidValue;
-        [DataMember]
-        public System.DateTime BidUpdateDate
-        {	
-    		
-            get { return _bidUpdateDate; }
-            set
-            {
-                if (_bidUpdateDate != value)
-                {
-                    _bidUpdateDate = value;
-                    OnPropertyChanged("BidUpdateDate");
-                }
-            }
-        }
-        private System.DateTime _bidUpdateDate;
-        [DataMember]
-        public decimal AskValue
-        {	
-    		
-            get { return _askValue; }
-            set
-            {
-                if (_askValue != value)
-                {
-                    _askValue = value;
-                    OnPropertyChanged("AskValue");
-                }
-            }
-        }
-        private decimal _askValue;
-        [DataMember]
-        public System.DateTime AskUpdateDate
-        {	
-    		
-            get { return _askUpdateDate; }
-            set
-            {
-                if (_askUpdateDate != value)
-                {
-                    _askUpdateDate = value;
-                    OnPropertyChanged("AskUpdateDate");
-                }
-            }
-        }
-        private System.DateTime _askUpdateDate;
+        private System.DateTime _rollDate;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -173,6 +105,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_updateUserID != value)
                 {
                     ChangeTracker.RecordOriginalValue("UpdateUserID", _updateUserID);
+                    if (!IsDeserializing)
+                    {
+                        if (ApplicationUser != null && ApplicationUser.UserID != value)
+                        {
+                            ApplicationUser = null;
+                        }
+                    }
                     _updateUserID = value;
                     OnPropertyChanged("UpdateUserID");
                 }
@@ -199,39 +138,38 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        public TrackableCollection<Price> Prices
+        public ApplicationUser ApplicationUser
         {
-            get
-            {
-                if (_prices == null)
-                {
-                    _prices = new TrackableCollection<Price>();
-                    _prices.CollectionChanged += FixupPrices;
-                }
-                return _prices;
-            }
+            get { return _applicationUser; }
             set
             {
-                if (!ReferenceEquals(_prices, value))
+                if (!ReferenceEquals(_applicationUser, value))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_prices != null)
-                    {
-                        _prices.CollectionChanged -= FixupPrices;
-                    }
-                    _prices = value;
-                    if (_prices != null)
-                    {
-                        _prices.CollectionChanged += FixupPrices;
-                    }
-                    OnNavigationPropertyChanged("Prices");
+                    var previousValue = _applicationUser;
+                    _applicationUser = value;
+                    FixupApplicationUser(previousValue);
+                    OnNavigationPropertyChanged("ApplicationUser");
                 }
             }
         }
-        private TrackableCollection<Price> _prices;
+        private ApplicationUser _applicationUser;
+    
+        [DataMember]
+        public PortfolioAggregationLevel PortfolioAggregationLevel
+        {
+            get { return _portfolioAggregationLevel; }
+            set
+            {
+                if (!ReferenceEquals(_portfolioAggregationLevel, value))
+                {
+                    var previousValue = _portfolioAggregationLevel;
+                    _portfolioAggregationLevel = value;
+                    FixupPortfolioAggregationLevel(previousValue);
+                    OnNavigationPropertyChanged("PortfolioAggregationLevel");
+                }
+            }
+        }
+        private PortfolioAggregationLevel _portfolioAggregationLevel;
 
         #endregion
         #region ChangeTracking
@@ -311,47 +249,78 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Prices.Clear();
+            ApplicationUser = null;
+            PortfolioAggregationLevel = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupPrices(object sender, NotifyCollectionChangedEventArgs e)
+        private void FixupApplicationUser(ApplicationUser previousValue)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (e.NewItems != null)
+            if (ApplicationUser != null)
             {
-                foreach (Price item in e.NewItems)
-                {
-                    item.RawPrice = this;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("Prices", item);
-                    }
-                }
+                UpdateUserID = ApplicationUser.UserID;
             }
     
-            if (e.OldItems != null)
+            if (ChangeTracker.ChangeTrackingEnabled)
             {
-                foreach (Price item in e.OldItems)
+                if (ChangeTracker.OriginalValues.ContainsKey("ApplicationUser")
+                    && (ChangeTracker.OriginalValues["ApplicationUser"] == ApplicationUser))
                 {
-                    if (ReferenceEquals(item.RawPrice, this))
-                    {
-                        item.RawPrice = null;
-                    }
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("Prices", item);
-                    }
+                    ChangeTracker.OriginalValues.Remove("ApplicationUser");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("ApplicationUser", previousValue);
+                }
+                if (ApplicationUser != null && !ApplicationUser.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    ApplicationUser.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupPortfolioAggregationLevel(PortfolioAggregationLevel previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.PortfolioRollDates.Contains(this))
+            {
+                previousValue.PortfolioRollDates.Remove(this);
+            }
+    
+            if (PortfolioAggregationLevel != null)
+            {
+                if (!PortfolioAggregationLevel.PortfolioRollDates.Contains(this))
+                {
+                    PortfolioAggregationLevel.PortfolioRollDates.Add(this);
+                }
+    
+                PortfolioAggregationLevelId = PortfolioAggregationLevel.PortfolioAggregationLevelId;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("PortfolioAggregationLevel")
+                    && (ChangeTracker.OriginalValues["PortfolioAggregationLevel"] == PortfolioAggregationLevel))
+                {
+                    ChangeTracker.OriginalValues.Remove("PortfolioAggregationLevel");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("PortfolioAggregationLevel", previousValue);
+                }
+                if (PortfolioAggregationLevel != null && !PortfolioAggregationLevel.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    PortfolioAggregationLevel.StartTracking();
                 }
             }
         }

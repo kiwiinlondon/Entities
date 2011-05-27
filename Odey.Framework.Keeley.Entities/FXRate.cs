@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(RawFXRate))]
     public partial class FXRate: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -119,38 +120,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private System.DateTime _forwardDate;
         [DataMember]
-        public int RawFXRateId
-        {	
-    		
-            get { return _rawFXRateId; }
-            set
-            {
-                if (_rawFXRateId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("RawFXRateId", _rawFXRateId);
-                    _rawFXRateId = value;
-                    OnPropertyChanged("RawFXRateId");
-                }
-            }
-        }
-        private int _rawFXRateId;
-        [DataMember]
-        public Nullable<int> RawFXRate2Id
-        {	
-    		
-            get { return _rawFXRate2Id; }
-            set
-            {
-                if (_rawFXRate2Id != value)
-                {
-                    ChangeTracker.RecordOriginalValue("RawFXRate2Id", _rawFXRate2Id);
-                    _rawFXRate2Id = value;
-                    OnPropertyChanged("RawFXRate2Id");
-                }
-            }
-        }
-        private Nullable<int> _rawFXRate2Id;
-        [DataMember]
         public decimal Value
         {	
     		
@@ -212,6 +181,89 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public int FromRawFXRateId
+        {	
+    		
+            get { return _fromRawFXRateId; }
+            set
+            {
+                if (_fromRawFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("FromRawFXRateId", _fromRawFXRateId);
+                    if (!IsDeserializing)
+                    {
+                        if (FromRawFXRate != null && FromRawFXRate.RawFXRateId != value)
+                        {
+                            FromRawFXRate = null;
+                        }
+                    }
+                    _fromRawFXRateId = value;
+                    OnPropertyChanged("FromRawFXRateId");
+                }
+            }
+        }
+        private int _fromRawFXRateId;
+        [DataMember]
+        public int ToRawFXRateId
+        {	
+    		
+            get { return _toRawFXRateId; }
+            set
+            {
+                if (_toRawFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ToRawFXRateId", _toRawFXRateId);
+                    if (!IsDeserializing)
+                    {
+                        if (ToRawFXRate != null && ToRawFXRate.RawFXRateId != value)
+                        {
+                            ToRawFXRate = null;
+                        }
+                    }
+                    _toRawFXRateId = value;
+                    OnPropertyChanged("ToRawFXRateId");
+                }
+            }
+        }
+        private int _toRawFXRateId;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public RawFXRate FromRawFXRate
+        {
+            get { return _fromRawFXRate; }
+            set
+            {
+                if (!ReferenceEquals(_fromRawFXRate, value))
+                {
+                    var previousValue = _fromRawFXRate;
+                    _fromRawFXRate = value;
+                    FixupFromRawFXRate(previousValue);
+                    OnNavigationPropertyChanged("FromRawFXRate");
+                }
+            }
+        }
+        private RawFXRate _fromRawFXRate;
+    
+        [DataMember]
+        public RawFXRate ToRawFXRate
+        {
+            get { return _toRawFXRate; }
+            set
+            {
+                if (!ReferenceEquals(_toRawFXRate, value))
+                {
+                    var previousValue = _toRawFXRate;
+                    _toRawFXRate = value;
+                    FixupToRawFXRate(previousValue);
+                    OnNavigationPropertyChanged("ToRawFXRate");
+                }
+            }
+        }
+        private RawFXRate _toRawFXRate;
 
         #endregion
         #region ChangeTracking
@@ -291,6 +343,89 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            FromRawFXRate = null;
+            ToRawFXRate = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupFromRawFXRate(RawFXRate previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.FromFXRates.Contains(this))
+            {
+                previousValue.FromFXRates.Remove(this);
+            }
+    
+            if (FromRawFXRate != null)
+            {
+                if (!FromRawFXRate.FromFXRates.Contains(this))
+                {
+                    FromRawFXRate.FromFXRates.Add(this);
+                }
+    
+                FromRawFXRateId = FromRawFXRate.RawFXRateId;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("FromRawFXRate")
+                    && (ChangeTracker.OriginalValues["FromRawFXRate"] == FromRawFXRate))
+                {
+                    ChangeTracker.OriginalValues.Remove("FromRawFXRate");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("FromRawFXRate", previousValue);
+                }
+                if (FromRawFXRate != null && !FromRawFXRate.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    FromRawFXRate.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupToRawFXRate(RawFXRate previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.ToFXRates.Contains(this))
+            {
+                previousValue.ToFXRates.Remove(this);
+            }
+    
+            if (ToRawFXRate != null)
+            {
+                if (!ToRawFXRate.ToFXRates.Contains(this))
+                {
+                    ToRawFXRate.ToFXRates.Add(this);
+                }
+    
+                ToRawFXRateId = ToRawFXRate.RawFXRateId;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("ToRawFXRate")
+                    && (ChangeTracker.OriginalValues["ToRawFXRate"] == ToRawFXRate))
+                {
+                    ChangeTracker.OriginalValues.Remove("ToRawFXRate");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("ToRawFXRate", previousValue);
+                }
+                if (ToRawFXRate != null && !ToRawFXRate.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    ToRawFXRate.StartTracking();
+                }
+            }
         }
 
         #endregion
