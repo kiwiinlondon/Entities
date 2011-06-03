@@ -8,6 +8,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        Unknown = 1        
+        Unknown = 1,
+        [EnumMember]
+        Euro = 2536
     }
 }

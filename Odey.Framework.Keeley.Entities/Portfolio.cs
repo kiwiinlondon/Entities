@@ -267,6 +267,83 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<decimal> CurrentPrice
+        {	
+    		
+            get { return _currentPrice; }
+            set
+            {
+                if (_currentPrice != value)
+                {
+                    _currentPrice = value;
+                    OnPropertyChanged("CurrentPrice");
+                }
+            }
+        }
+        private Nullable<decimal> _currentPrice;
+        [DataMember]
+        public Nullable<int> CurrentPriceId
+        {	
+    		
+            get { return _currentPriceId; }
+            set
+            {
+                if (_currentPriceId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CurrentPriceId", _currentPriceId);
+                    _currentPriceId = value;
+                    OnPropertyChanged("CurrentPriceId");
+                }
+            }
+        }
+        private Nullable<int> _currentPriceId;
+        [DataMember]
+        public Nullable<decimal> CurrentFXRate
+        {	
+    		
+            get { return _currentFXRate; }
+            set
+            {
+                if (_currentFXRate != value)
+                {
+                    _currentFXRate = value;
+                    OnPropertyChanged("CurrentFXRate");
+                }
+            }
+        }
+        private Nullable<decimal> _currentFXRate;
+        [DataMember]
+        public Nullable<int> CurrentFXRateId
+        {	
+    		
+            get { return _currentFXRateId; }
+            set
+            {
+                if (_currentFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CurrentFXRateId", _currentFXRateId);
+                    _currentFXRateId = value;
+                    OnPropertyChanged("CurrentFXRateId");
+                }
+            }
+        }
+        private Nullable<int> _currentFXRateId;
+        [DataMember]
+        public Nullable<decimal> NotionalMarketValue
+        {	
+    		
+            get { return _notionalMarketValue; }
+            set
+            {
+                if (_notionalMarketValue != value)
+                {
+                    _notionalMarketValue = value;
+                    OnPropertyChanged("NotionalMarketValue");
+                }
+            }
+        }
+        private Nullable<decimal> _notionalMarketValue;
 
         #endregion
         #region ChangeTracking

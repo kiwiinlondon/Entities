@@ -377,23 +377,11 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<FXRate> _fXRates;
     
-        public ObjectSet<Price> Prices
-        {
-            get { return _prices  ?? (_prices = CreateObjectSet<Price>("Prices")); }
-        }
-        private ObjectSet<Price> _prices;
-    
         public ObjectSet<RawFXRate> RawFXRates
         {
             get { return _rawFXRates  ?? (_rawFXRates = CreateObjectSet<RawFXRate>("RawFXRates")); }
         }
         private ObjectSet<RawFXRate> _rawFXRates;
-    
-        public ObjectSet<RawPrice> RawPrices
-        {
-            get { return _rawPrices  ?? (_rawPrices = CreateObjectSet<RawPrice>("RawPrices")); }
-        }
-        private ObjectSet<RawPrice> _rawPrices;
     
         public ObjectSet<EntityRankingSchemeOrder> EntityRankingSchemeOrders
         {
@@ -424,6 +412,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _portfolioRollDates  ?? (_portfolioRollDates = CreateObjectSet<PortfolioRollDate>("PortfolioRollDates")); }
         }
         private ObjectSet<PortfolioRollDate> _portfolioRollDates;
+    
+        public ObjectSet<Price> Prices
+        {
+            get { return _prices  ?? (_prices = CreateObjectSet<Price>("Prices")); }
+        }
+        private ObjectSet<Price> _prices;
+    
+        public ObjectSet<RawPrice> RawPrices
+        {
+            get { return _rawPrices  ?? (_rawPrices = CreateObjectSet<RawPrice>("RawPrices")); }
+        }
+        private ObjectSet<RawPrice> _rawPrices;
 
         #endregion
         #region Function Imports
@@ -545,6 +545,102 @@ namespace Odey.Framework.Keeley.Entities
         public virtual ObjectResult<Nullable<int>> GetPositionIdsWherePortfolioEventBreak()
         {
             return base.ExecuteFunction<Nullable<int>>("GetPositionIdsWherePortfolioEventBreak");
+        }
+        public virtual ObjectResult<RawFXRate> RawFXRate_GetLatest(Nullable<int> currencyID, Nullable<System.DateTime> referenceDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawFXRateIdToIgnore)
+        {
+    
+            ObjectParameter currencyIDParameter;
+    
+            if (currencyID.HasValue)
+            {
+                currencyIDParameter = new ObjectParameter("CurrencyID", currencyID);
+            }
+            else
+            {
+                currencyIDParameter = new ObjectParameter("CurrencyID", typeof(int));
+            }
+    
+            ObjectParameter referenceDateParameter;
+    
+            if (referenceDate.HasValue)
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", referenceDate);
+            }
+            else
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+            }
+    
+            ObjectParameter entityRankingSchemeIdParameter;
+    
+            if (entityRankingSchemeId.HasValue)
+            {
+                entityRankingSchemeIdParameter = new ObjectParameter("EntityRankingSchemeId", entityRankingSchemeId);
+            }
+            else
+            {
+                entityRankingSchemeIdParameter = new ObjectParameter("EntityRankingSchemeId", typeof(int));
+            }
+    
+            ObjectParameter rawFXRateIdToIgnoreParameter;
+    
+            if (rawFXRateIdToIgnore.HasValue)
+            {
+                rawFXRateIdToIgnoreParameter = new ObjectParameter("RawFXRateIdToIgnore", rawFXRateIdToIgnore);
+            }
+            else
+            {
+                rawFXRateIdToIgnoreParameter = new ObjectParameter("RawFXRateIdToIgnore", typeof(int));
+            }
+            return base.ExecuteFunction<RawFXRate>("RawFXRate_GetLatest", currencyIDParameter, referenceDateParameter, entityRankingSchemeIdParameter, rawFXRateIdToIgnoreParameter);
+        }
+        public virtual ObjectResult<RawPrice> RawPrices_GetLatest(Nullable<int> instrumentMarketID, Nullable<System.DateTime> referenceDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawPriceIdToIgnore)
+        {
+    
+            ObjectParameter instrumentMarketIDParameter;
+    
+            if (instrumentMarketID.HasValue)
+            {
+                instrumentMarketIDParameter = new ObjectParameter("InstrumentMarketID", instrumentMarketID);
+            }
+            else
+            {
+                instrumentMarketIDParameter = new ObjectParameter("InstrumentMarketID", typeof(int));
+            }
+    
+            ObjectParameter referenceDateParameter;
+    
+            if (referenceDate.HasValue)
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", referenceDate);
+            }
+            else
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+            }
+    
+            ObjectParameter entityRankingSchemeIdParameter;
+    
+            if (entityRankingSchemeId.HasValue)
+            {
+                entityRankingSchemeIdParameter = new ObjectParameter("EntityRankingSchemeId", entityRankingSchemeId);
+            }
+            else
+            {
+                entityRankingSchemeIdParameter = new ObjectParameter("EntityRankingSchemeId", typeof(int));
+            }
+    
+            ObjectParameter rawPriceIdToIgnoreParameter;
+    
+            if (rawPriceIdToIgnore.HasValue)
+            {
+                rawPriceIdToIgnoreParameter = new ObjectParameter("RawPriceIdToIgnore", rawPriceIdToIgnore);
+            }
+            else
+            {
+                rawPriceIdToIgnoreParameter = new ObjectParameter("RawPriceIdToIgnore", typeof(int));
+            }
+            return base.ExecuteFunction<RawPrice>("RawPrices_GetLatest", instrumentMarketIDParameter, referenceDateParameter, entityRankingSchemeIdParameter, rawPriceIdToIgnoreParameter);
         }
 
         #endregion
