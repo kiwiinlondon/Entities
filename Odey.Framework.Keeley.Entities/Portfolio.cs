@@ -268,82 +268,232 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public Nullable<decimal> CurrentPrice
+        public decimal TodayCashBenefit
         {	
     		
-            get { return _currentPrice; }
+            get { return _todayCashBenefit; }
             set
             {
-                if (_currentPrice != value)
+                if (_todayCashBenefit != value)
                 {
-                    _currentPrice = value;
-                    OnPropertyChanged("CurrentPrice");
+                    _todayCashBenefit = value;
+                    OnPropertyChanged("TodayCashBenefit");
                 }
             }
         }
-        private Nullable<decimal> _currentPrice;
+        private decimal _todayCashBenefit;
         [DataMember]
-        public Nullable<int> CurrentPriceId
+        public decimal TodayCashBenefitBookCurrency
         {	
     		
-            get { return _currentPriceId; }
+            get { return _todayCashBenefitBookCurrency; }
             set
             {
-                if (_currentPriceId != value)
+                if (_todayCashBenefitBookCurrency != value)
                 {
-                    ChangeTracker.RecordOriginalValue("CurrentPriceId", _currentPriceId);
-                    _currentPriceId = value;
-                    OnPropertyChanged("CurrentPriceId");
+                    _todayCashBenefitBookCurrency = value;
+                    OnPropertyChanged("TodayCashBenefitBookCurrency");
                 }
             }
         }
-        private Nullable<int> _currentPriceId;
+        private decimal _todayCashBenefitBookCurrency;
         [DataMember]
-        public Nullable<decimal> CurrentFXRate
+        public decimal TodayAccrual
         {	
     		
-            get { return _currentFXRate; }
+            get { return _todayAccrual; }
             set
             {
-                if (_currentFXRate != value)
+                if (_todayAccrual != value)
                 {
-                    _currentFXRate = value;
-                    OnPropertyChanged("CurrentFXRate");
+                    _todayAccrual = value;
+                    OnPropertyChanged("TodayAccrual");
                 }
             }
         }
-        private Nullable<decimal> _currentFXRate;
+        private decimal _todayAccrual;
         [DataMember]
-        public Nullable<int> CurrentFXRateId
+        public decimal TodayRealisedPricePnl
         {	
     		
-            get { return _currentFXRateId; }
+            get { return _todayRealisedPricePnl; }
             set
             {
-                if (_currentFXRateId != value)
+                if (_todayRealisedPricePnl != value)
                 {
-                    ChangeTracker.RecordOriginalValue("CurrentFXRateId", _currentFXRateId);
-                    _currentFXRateId = value;
-                    OnPropertyChanged("CurrentFXRateId");
+                    _todayRealisedPricePnl = value;
+                    OnPropertyChanged("TodayRealisedPricePnl");
                 }
             }
         }
-        private Nullable<int> _currentFXRateId;
+        private decimal _todayRealisedPricePnl;
         [DataMember]
-        public Nullable<decimal> NotionalMarketValue
+        public decimal TodayRealisedFxPnl
         {	
     		
-            get { return _notionalMarketValue; }
+            get { return _todayRealisedFxPnl; }
             set
             {
-                if (_notionalMarketValue != value)
+                if (_todayRealisedFxPnl != value)
                 {
-                    _notionalMarketValue = value;
-                    OnPropertyChanged("NotionalMarketValue");
+                    _todayRealisedFxPnl = value;
+                    OnPropertyChanged("TodayRealisedFxPnl");
                 }
             }
         }
-        private Nullable<decimal> _notionalMarketValue;
+        private decimal _todayRealisedFxPnl;
+        [DataMember]
+        public decimal TotalAccrual
+        {	
+    		
+            get { return _totalAccrual; }
+            set
+            {
+                if (_totalAccrual != value)
+                {
+                    _totalAccrual = value;
+                    OnPropertyChanged("TotalAccrual");
+                }
+            }
+        }
+        private decimal _totalAccrual;
+        [DataMember]
+        public decimal TodayRealisedPricePnlBookCurrency
+        {	
+    		
+            get { return _todayRealisedPricePnlBookCurrency; }
+            set
+            {
+                if (_todayRealisedPricePnlBookCurrency != value)
+                {
+                    _todayRealisedPricePnlBookCurrency = value;
+                    OnPropertyChanged("TodayRealisedPricePnlBookCurrency");
+                }
+            }
+        }
+        private decimal _todayRealisedPricePnlBookCurrency;
+        [DataMember]
+        public decimal MarketValue
+        {	
+    		
+            get { return _marketValue; }
+            set
+            {
+                if (_marketValue != value)
+                {
+                    _marketValue = value;
+                    OnPropertyChanged("MarketValue");
+                }
+            }
+        }
+        private decimal _marketValue;
+        [DataMember]
+        public decimal Price
+        {	
+    		
+            get { return _price; }
+            set
+            {
+                if (_price != value)
+                {
+                    _price = value;
+                    OnPropertyChanged("Price");
+                }
+            }
+        }
+        private decimal _price;
+        [DataMember]
+        public Nullable<int> PriceId
+        {	
+    		
+            get { return _priceId; }
+            set
+            {
+                if (_priceId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PriceId", _priceId);
+                    _priceId = value;
+                    OnPropertyChanged("PriceId");
+                }
+            }
+        }
+        private Nullable<int> _priceId;
+        [DataMember]
+        public decimal FXRate
+        {	
+    		
+            get { return _fXRate; }
+            set
+            {
+                if (_fXRate != value)
+                {
+                    _fXRate = value;
+                    OnPropertyChanged("FXRate");
+                }
+            }
+        }
+        private decimal _fXRate;
+        [DataMember]
+        public Nullable<int> FXRateId
+        {	
+    		
+            get { return _fXRateId; }
+            set
+            {
+                if (_fXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("FXRateId", _fXRateId);
+                    _fXRateId = value;
+                    OnPropertyChanged("FXRateId");
+                }
+            }
+        }
+        private Nullable<int> _fXRateId;
+        [DataMember]
+        public decimal DeltaMarketValue
+        {	
+    		
+            get { return _deltaMarketValue; }
+            set
+            {
+                if (_deltaMarketValue != value)
+                {
+                    _deltaMarketValue = value;
+                    OnPropertyChanged("DeltaMarketValue");
+                }
+            }
+        }
+        private decimal _deltaMarketValue;
+        [DataMember]
+        public decimal TodayUnrealisedFXPnl
+        {	
+    		
+            get { return _todayUnrealisedFXPnl; }
+            set
+            {
+                if (_todayUnrealisedFXPnl != value)
+                {
+                    _todayUnrealisedFXPnl = value;
+                    OnPropertyChanged("TodayUnrealisedFXPnl");
+                }
+            }
+        }
+        private decimal _todayUnrealisedFXPnl;
+        [DataMember]
+        public decimal TodayUnrealisedPricePnl
+        {	
+    		
+            get { return _todayUnrealisedPricePnl; }
+            set
+            {
+                if (_todayUnrealisedPricePnl != value)
+                {
+                    _todayUnrealisedPricePnl = value;
+                    OnPropertyChanged("TodayUnrealisedPricePnl");
+                }
+            }
+        }
+        private decimal _todayUnrealisedPricePnl;
 
         #endregion
         #region ChangeTracking

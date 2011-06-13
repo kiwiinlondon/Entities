@@ -255,6 +255,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private System.DateTime _inputDate;
+        [DataMember]
+        public bool IsPending
+        {	
+    		
+            get { return _isPending; }
+            set
+            {
+                if (_isPending != value)
+                {
+                    _isPending = value;
+                    OnPropertyChanged("IsPending");
+                }
+            }
+        }
+        private bool _isPending;
 
         #endregion
         #region ChangeTracking

@@ -51,6 +51,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FMValueSchemeId = 22,
         [EnumMember]
-        FMValueSpecId = 23
+        FMValueSpecId = 23,
+        [EnumMember]
+        FMSicCode = 24
     }
 }

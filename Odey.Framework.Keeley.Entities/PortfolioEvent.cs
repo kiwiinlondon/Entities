@@ -465,6 +465,186 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _orderingResolution;
+        [DataMember]
+        public decimal Accrual
+        {	
+    		
+            get { return _accrual; }
+            set
+            {
+                if (_accrual != value)
+                {
+                    _accrual = value;
+                    OnPropertyChanged("Accrual");
+                }
+            }
+        }
+        private decimal _accrual;
+        [DataMember]
+        public decimal TodayAccrual
+        {	
+    		
+            get { return _todayAccrual; }
+            set
+            {
+                if (_todayAccrual != value)
+                {
+                    _todayAccrual = value;
+                    OnPropertyChanged("TodayAccrual");
+                }
+            }
+        }
+        private decimal _todayAccrual;
+        [DataMember]
+        public decimal CashBenefit
+        {	
+    		
+            get { return _cashBenefit; }
+            set
+            {
+                if (_cashBenefit != value)
+                {
+                    _cashBenefit = value;
+                    OnPropertyChanged("CashBenefit");
+                }
+            }
+        }
+        private decimal _cashBenefit;
+        [DataMember]
+        public decimal TodayCashBenefit
+        {	
+    		
+            get { return _todayCashBenefit; }
+            set
+            {
+                if (_todayCashBenefit != value)
+                {
+                    _todayCashBenefit = value;
+                    OnPropertyChanged("TodayCashBenefit");
+                }
+            }
+        }
+        private decimal _todayCashBenefit;
+        [DataMember]
+        public decimal TodayCashBenefitBookCurrency
+        {	
+    		
+            get { return _todayCashBenefitBookCurrency; }
+            set
+            {
+                if (_todayCashBenefitBookCurrency != value)
+                {
+                    _todayCashBenefitBookCurrency = value;
+                    OnPropertyChanged("TodayCashBenefitBookCurrency");
+                }
+            }
+        }
+        private decimal _todayCashBenefitBookCurrency;
+        [DataMember]
+        public decimal RealisedPricePnl
+        {	
+    		
+            get { return _realisedPricePnl; }
+            set
+            {
+                if (_realisedPricePnl != value)
+                {
+                    _realisedPricePnl = value;
+                    OnPropertyChanged("RealisedPricePnl");
+                }
+            }
+        }
+        private decimal _realisedPricePnl;
+        [DataMember]
+        public decimal TodayRealisedPricePnl
+        {	
+    		
+            get { return _todayRealisedPricePnl; }
+            set
+            {
+                if (_todayRealisedPricePnl != value)
+                {
+                    _todayRealisedPricePnl = value;
+                    OnPropertyChanged("TodayRealisedPricePnl");
+                }
+            }
+        }
+        private decimal _todayRealisedPricePnl;
+        [DataMember]
+        public decimal RealisedFxPnl
+        {	
+    		
+            get { return _realisedFxPnl; }
+            set
+            {
+                if (_realisedFxPnl != value)
+                {
+                    _realisedFxPnl = value;
+                    OnPropertyChanged("RealisedFxPnl");
+                }
+            }
+        }
+        private decimal _realisedFxPnl;
+        [DataMember]
+        public decimal TodayRealisedFxPnl
+        {	
+    		
+            get { return _todayRealisedFxPnl; }
+            set
+            {
+                if (_todayRealisedFxPnl != value)
+                {
+                    _todayRealisedFxPnl = value;
+                    OnPropertyChanged("TodayRealisedFxPnl");
+                }
+            }
+        }
+        private decimal _todayRealisedFxPnl;
+        [DataMember]
+        public decimal TotalAccrual
+        {	
+    		
+            get { return _totalAccrual; }
+            set
+            {
+                if (_totalAccrual != value)
+                {
+                    _totalAccrual = value;
+                    OnPropertyChanged("TotalAccrual");
+                }
+            }
+        }
+        private decimal _totalAccrual;
+        [DataMember]
+        public decimal TodayRealisedPricePnlBookCurrency
+        {	
+    		
+            get { return _todayRealisedPricePnlBookCurrency; }
+            set
+            {
+                if (_todayRealisedPricePnlBookCurrency != value)
+                {
+                    _todayRealisedPricePnlBookCurrency = value;
+                    OnPropertyChanged("TodayRealisedPricePnlBookCurrency");
+                }
+            }
+        }
+        private decimal _todayRealisedPricePnlBookCurrency;
+        [DataMember]
+        public bool RealisePnl
+        {	
+    		
+            get { return _realisePnl; }
+            set
+            {
+                if (_realisePnl != value)
+                {
+                    _realisePnl = value;
+                    OnPropertyChanged("RealisePnl");
+                }
+            }
+        }
+        private bool _realisePnl;
 
         #endregion
         #region ChangeTracking

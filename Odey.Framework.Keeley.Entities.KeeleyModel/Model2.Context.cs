@@ -424,6 +424,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _rawPrices  ?? (_rawPrices = CreateObjectSet<RawPrice>("RawPrices")); }
         }
         private ObjectSet<RawPrice> _rawPrices;
+    
+        public ObjectSet<Industry> Industries
+        {
+            get { return _industries  ?? (_industries = CreateObjectSet<Industry>("Industries")); }
+        }
+        private ObjectSet<Industry> _industries;
+    
+        public ObjectSet<IssuerIndustry> IssuerIndustries
+        {
+            get { return _issuerIndustries  ?? (_issuerIndustries = CreateObjectSet<IssuerIndustry>("IssuerIndustries")); }
+        }
+        private ObjectSet<IssuerIndustry> _issuerIndustries;
 
         #endregion
         #region Function Imports
@@ -546,7 +558,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             return base.ExecuteFunction<Nullable<int>>("GetPositionIdsWherePortfolioEventBreak");
         }
-        public virtual ObjectResult<RawFXRate> RawFXRate_GetLatest(Nullable<int> currencyID, Nullable<System.DateTime> referenceDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawFXRateIdToIgnore)
+        public virtual ObjectResult<RawFXRate> RawFXRate_GetLatest(Nullable<int> currencyID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> forwardDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawFXRateIdToIgnore)
         {
     
             ObjectParameter currencyIDParameter;
@@ -571,6 +583,17 @@ namespace Odey.Framework.Keeley.Entities
                 referenceDateParameter = new ObjectParameter("ReferenceDate", typeof(System.DateTime));
             }
     
+            ObjectParameter forwardDateParameter;
+    
+            if (forwardDate.HasValue)
+            {
+                forwardDateParameter = new ObjectParameter("ForwardDate", forwardDate);
+            }
+            else
+            {
+                forwardDateParameter = new ObjectParameter("ForwardDate", typeof(System.DateTime));
+            }
+    
             ObjectParameter entityRankingSchemeIdParameter;
     
             if (entityRankingSchemeId.HasValue)
@@ -592,7 +615,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 rawFXRateIdToIgnoreParameter = new ObjectParameter("RawFXRateIdToIgnore", typeof(int));
             }
-            return base.ExecuteFunction<RawFXRate>("RawFXRate_GetLatest", currencyIDParameter, referenceDateParameter, entityRankingSchemeIdParameter, rawFXRateIdToIgnoreParameter);
+            return base.ExecuteFunction<RawFXRate>("RawFXRate_GetLatest", currencyIDParameter, referenceDateParameter, forwardDateParameter, entityRankingSchemeIdParameter, rawFXRateIdToIgnoreParameter);
         }
         public virtual ObjectResult<RawPrice> RawPrices_GetLatest(Nullable<int> instrumentMarketID, Nullable<System.DateTime> referenceDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawPriceIdToIgnore)
         {
@@ -641,6 +664,36 @@ namespace Odey.Framework.Keeley.Entities
                 rawPriceIdToIgnoreParameter = new ObjectParameter("RawPriceIdToIgnore", typeof(int));
             }
             return base.ExecuteFunction<RawPrice>("RawPrices_GetLatest", instrumentMarketIDParameter, referenceDateParameter, entityRankingSchemeIdParameter, rawPriceIdToIgnoreParameter);
+        }
+        public virtual ObjectResult<Nullable<System.DateTime>> FXRates_Roll(Nullable<int> updateUserId)
+        {
+    
+            ObjectParameter updateUserIdParameter;
+    
+            if (updateUserId.HasValue)
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", updateUserId);
+            }
+            else
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
+            }
+            return base.ExecuteFunction<Nullable<System.DateTime>>("FXRates_Roll", updateUserIdParameter);
+        }
+        public virtual ObjectResult<Nullable<System.DateTime>> Prices_Roll(Nullable<int> updateUserId)
+        {
+    
+            ObjectParameter updateUserIdParameter;
+    
+            if (updateUserId.HasValue)
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", updateUserId);
+            }
+            else
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
+            }
+            return base.ExecuteFunction<Nullable<System.DateTime>>("Prices_Roll", updateUserIdParameter);
         }
 
         #endregion

@@ -18,143 +18,83 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Instrument))]
-    public partial class InstrumentMarket: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(Industry))]
+    public partial class IssuerIndustry: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int InstrumentMarketID
+        public int IssuerIndustryID
         {	
     		
-            get { return _instrumentMarketID; }
+            get { return _issuerIndustryID; }
             set
             {
-                if (_instrumentMarketID != value)
+                if (_issuerIndustryID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'InstrumentMarketID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'IssuerIndustryID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _instrumentMarketID = value;
-                    OnPropertyChanged("InstrumentMarketID");
+                    _issuerIndustryID = value;
+                    OnPropertyChanged("IssuerIndustryID");
                 }
             }
         }
-        private int _instrumentMarketID;
+        private int _issuerIndustryID;
         [DataMember]
-        public int InstrumentID
+        public int IssuerID
         {	
     		
-            get { return _instrumentID; }
+            get { return _issuerID; }
             set
             {
-                if (_instrumentID != value)
+                if (_issuerID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InstrumentID", _instrumentID);
+                    ChangeTracker.RecordOriginalValue("IssuerID", _issuerID);
+                    _issuerID = value;
+                    OnPropertyChanged("IssuerID");
+                }
+            }
+        }
+        private int _issuerID;
+        [DataMember]
+        public int IndustryID
+        {	
+    		
+            get { return _industryID; }
+            set
+            {
+                if (_industryID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IndustryID", _industryID);
                     if (!IsDeserializing)
                     {
-                        if (Instrument != null && Instrument.InstrumentID != value)
+                        if (Industry != null && Industry.IndustryID != value)
                         {
-                            Instrument = null;
+                            Industry = null;
                         }
                     }
-                    _instrumentID = value;
-                    OnPropertyChanged("InstrumentID");
+                    _industryID = value;
+                    OnPropertyChanged("IndustryID");
                 }
             }
         }
-        private int _instrumentID;
+        private int _industryID;
         [DataMember]
-        public int MarketID
+        public int IndustryClassificationID
         {	
     		
-            get { return _marketID; }
+            get { return _industryClassificationID; }
             set
             {
-                if (_marketID != value)
+                if (_industryClassificationID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("MarketID", _marketID);
-                    _marketID = value;
-                    OnPropertyChanged("MarketID");
+                    _industryClassificationID = value;
+                    OnPropertyChanged("IndustryClassificationID");
                 }
             }
         }
-        private int _marketID;
-        [DataMember]
-        public Nullable<int> FMSecId
-        {	
-    		
-            get { return _fMSecId; }
-            set
-            {
-                if (_fMSecId != value)
-                {
-                    _fMSecId = value;
-                    OnPropertyChanged("FMSecId");
-                }
-            }
-        }
-        private Nullable<int> _fMSecId;
-        [DataMember]
-        public decimal PriceDivisor
-        {	
-    		
-            get { return _priceDivisor; }
-            set
-            {
-                if (_priceDivisor != value)
-                {
-                    _priceDivisor = value;
-                    OnPropertyChanged("PriceDivisor");
-                }
-            }
-        }
-        private decimal _priceDivisor;
-        [DataMember]
-        public string BloombergTicker
-        {	
-    		
-            get { return _bloombergTicker; }
-            set
-            {
-                if (_bloombergTicker != value)
-                {
-                    _bloombergTicker = value;
-                    OnPropertyChanged("BloombergTicker");
-                }
-            }
-        }
-        private string _bloombergTicker;
-        [DataMember]
-        public string Sedol
-        {	
-    		
-            get { return _sedol; }
-            set
-            {
-                if (_sedol != value)
-                {
-                    _sedol = value;
-                    OnPropertyChanged("Sedol");
-                }
-            }
-        }
-        private string _sedol;
-        [DataMember]
-        public bool IsPrimary
-        {	
-    		
-            get { return _isPrimary; }
-            set
-            {
-                if (_isPrimary != value)
-                {
-                    _isPrimary = value;
-                    OnPropertyChanged("IsPrimary");
-                }
-            }
-        }
-        private bool _isPrimary;
+        private int _industryClassificationID;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -201,42 +141,26 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public int PriceCurrencyId
-        {	
-    		
-            get { return _priceCurrencyId; }
-            set
-            {
-                if (_priceCurrencyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PriceCurrencyId", _priceCurrencyId);
-                    _priceCurrencyId = value;
-                    OnPropertyChanged("PriceCurrencyId");
-                }
-            }
-        }
-        private int _priceCurrencyId;
 
         #endregion
         #region Navigation Properties
     
         [DataMember]
-        public Instrument Instrument
+        public Industry Industry
         {
-            get { return _instrument; }
+            get { return _industry; }
             set
             {
-                if (!ReferenceEquals(_instrument, value))
+                if (!ReferenceEquals(_industry, value))
                 {
-                    var previousValue = _instrument;
-                    _instrument = value;
-                    FixupInstrument(previousValue);
-                    OnNavigationPropertyChanged("Instrument");
+                    var previousValue = _industry;
+                    _industry = value;
+                    FixupIndustry(previousValue);
+                    OnNavigationPropertyChanged("Industry");
                 }
             }
         }
-        private Instrument _instrument;
+        private Industry _industry;
 
         #endregion
         #region ChangeTracking
@@ -316,47 +240,38 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Instrument = null;
+            Industry = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupInstrument(Instrument previousValue)
+        private void FixupIndustry(Industry previousValue)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (previousValue != null && previousValue.InstrumentMarkets.Contains(this))
+            if (Industry != null)
             {
-                previousValue.InstrumentMarkets.Remove(this);
+                IndustryID = Industry.IndustryID;
             }
     
-            if (Instrument != null)
-            {
-                if (!Instrument.InstrumentMarkets.Contains(this))
-                {
-                    Instrument.InstrumentMarkets.Add(this);
-                }
-    
-                InstrumentID = Instrument.InstrumentID;
-            }
             if (ChangeTracker.ChangeTrackingEnabled)
             {
-                if (ChangeTracker.OriginalValues.ContainsKey("Instrument")
-                    && (ChangeTracker.OriginalValues["Instrument"] == Instrument))
+                if (ChangeTracker.OriginalValues.ContainsKey("Industry")
+                    && (ChangeTracker.OriginalValues["Industry"] == Industry))
                 {
-                    ChangeTracker.OriginalValues.Remove("Instrument");
+                    ChangeTracker.OriginalValues.Remove("Industry");
                 }
                 else
                 {
-                    ChangeTracker.RecordOriginalValue("Instrument", previousValue);
+                    ChangeTracker.RecordOriginalValue("Industry", previousValue);
                 }
-                if (Instrument != null && !Instrument.ChangeTracker.ChangeTrackingEnabled)
+                if (Industry != null && !Industry.ChangeTracker.ChangeTrackingEnabled)
                 {
-                    Instrument.StartTracking();
+                    Industry.StartTracking();
                 }
             }
         }
