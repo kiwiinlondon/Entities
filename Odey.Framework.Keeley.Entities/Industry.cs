@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(IssuerIndustry))]
     public partial class Industry: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -149,6 +150,44 @@ namespace Odey.Framework.Keeley.Entities
         private byte[] _dataVersion;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<IssuerIndustry> IssuerIndustries
+        {
+            get
+            {
+                if (_issuerIndustries == null)
+                {
+                    _issuerIndustries = new TrackableCollection<IssuerIndustry>();
+                    _issuerIndustries.CollectionChanged += FixupIssuerIndustries;
+                }
+                return _issuerIndustries;
+            }
+            set
+            {
+                if (!ReferenceEquals(_issuerIndustries, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_issuerIndustries != null)
+                    {
+                        _issuerIndustries.CollectionChanged -= FixupIssuerIndustries;
+                    }
+                    _issuerIndustries = value;
+                    if (_issuerIndustries != null)
+                    {
+                        _issuerIndustries.CollectionChanged += FixupIssuerIndustries;
+                    }
+                    OnNavigationPropertyChanged("IssuerIndustries");
+                }
+            }
+        }
+        private TrackableCollection<IssuerIndustry> _issuerIndustries;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -226,6 +265,45 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            IssuerIndustries.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupIssuerIndustries(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (IssuerIndustry item in e.NewItems)
+                {
+                    item.IndustryID = IndustryID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("IssuerIndustries", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (IssuerIndustry item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("IssuerIndustries", item);
+                    }
+                }
+            }
         }
 
         #endregion

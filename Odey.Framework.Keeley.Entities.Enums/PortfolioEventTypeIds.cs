@@ -30,7 +30,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         InstrumentEvent = 11,
         [EnumMember]
-        CashFromTrading = 12        
+        CashFromTrading = 12,
+        [EnumMember]
+        Accrual = 13,
+        [EnumMember]
+        CashBenefit = 14
     }
 }
 

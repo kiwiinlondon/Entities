@@ -494,6 +494,37 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private decimal _todayUnrealisedPricePnl;
+        [DataMember]
+        public decimal PriceToPositionFXRate
+        {	
+    		
+            get { return _priceToPositionFXRate; }
+            set
+            {
+                if (_priceToPositionFXRate != value)
+                {
+                    _priceToPositionFXRate = value;
+                    OnPropertyChanged("PriceToPositionFXRate");
+                }
+            }
+        }
+        private decimal _priceToPositionFXRate;
+        [DataMember]
+        public Nullable<int> PriceToPositionFXRateId
+        {	
+    		
+            get { return _priceToPositionFXRateId; }
+            set
+            {
+                if (_priceToPositionFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PriceToPositionFXRateId", _priceToPositionFXRateId);
+                    _priceToPositionFXRateId = value;
+                    OnPropertyChanged("PriceToPositionFXRateId");
+                }
+            }
+        }
+        private Nullable<int> _priceToPositionFXRateId;
 
         #endregion
         #region ChangeTracking

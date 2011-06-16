@@ -149,7 +149,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public int EntityPropertyId
+        public Nullable<int> EntityPropertyId
         {	
     		
             get { return _entityPropertyId; }
@@ -170,9 +170,9 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private int _entityPropertyId;
+        private Nullable<int> _entityPropertyId;
         [DataMember]
-        public int EntityPropertyToWriteId
+        public Nullable<int> EntityPropertyToWriteId
         {	
     		
             get { return _entityPropertyToWriteId; }
@@ -193,7 +193,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private int _entityPropertyToWriteId;
+        private Nullable<int> _entityPropertyToWriteId;
         [DataMember]
         public string Format
         {	
@@ -332,7 +332,7 @@ namespace Odey.Framework.Keeley.Entities
         #endregion
         #region Association Fixup
     
-        private void FixupEntityProperty(EntityProperty previousValue)
+        private void FixupEntityProperty(EntityProperty previousValue, bool skipKeys = false)
         {
             if (IsDeserializing)
             {
@@ -342,6 +342,11 @@ namespace Odey.Framework.Keeley.Entities
             if (EntityProperty != null)
             {
                 EntityPropertyId = EntityProperty.EntityPropertyID;
+            }
+    
+            else if (!skipKeys)
+            {
+                EntityPropertyId = null;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
@@ -362,7 +367,7 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
-        private void FixupEntityPropertyToWrite(EntityProperty previousValue)
+        private void FixupEntityPropertyToWrite(EntityProperty previousValue, bool skipKeys = false)
         {
             if (IsDeserializing)
             {
@@ -372,6 +377,11 @@ namespace Odey.Framework.Keeley.Entities
             if (EntityPropertyToWrite != null)
             {
                 EntityPropertyToWriteId = EntityPropertyToWrite.EntityPropertyID;
+            }
+    
+            else if (!skipKeys)
+            {
+                EntityPropertyToWriteId = null;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)

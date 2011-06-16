@@ -113,12 +113,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<InstrumentClass> _instrumentClasses;
     
-        public ObjectSet<Issuer> Issuers
-        {
-            get { return _issuers  ?? (_issuers = CreateObjectSet<Issuer>("Issuers")); }
-        }
-        private ObjectSet<Issuer> _issuers;
-    
         public ObjectSet<Market> Markets
         {
             get { return _markets  ?? (_markets = CreateObjectSet<Market>("Markets")); }
@@ -323,12 +317,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<ExtractOutputType> _extractOutputTypes;
     
-        public ObjectSet<ExtractOutputConfiguration> ExtractOutputConfigurations
-        {
-            get { return _extractOutputConfigurations  ?? (_extractOutputConfigurations = CreateObjectSet<ExtractOutputConfiguration>("ExtractOutputConfigurations")); }
-        }
-        private ObjectSet<ExtractOutputConfiguration> _extractOutputConfigurations;
-    
         public ObjectSet<ExtractConfiguration> ExtractConfigurations
         {
             get { return _extractConfigurations  ?? (_extractConfigurations = CreateObjectSet<ExtractConfiguration>("ExtractConfigurations")); }
@@ -430,6 +418,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _industries  ?? (_industries = CreateObjectSet<Industry>("Industries")); }
         }
         private ObjectSet<Industry> _industries;
+    
+        public ObjectSet<ExtractOutputConfiguration> ExtractOutputConfigurations
+        {
+            get { return _extractOutputConfigurations  ?? (_extractOutputConfigurations = CreateObjectSet<ExtractOutputConfiguration>("ExtractOutputConfigurations")); }
+        }
+        private ObjectSet<ExtractOutputConfiguration> _extractOutputConfigurations;
+    
+        public ObjectSet<Issuer> Issuers
+        {
+            get { return _issuers  ?? (_issuers = CreateObjectSet<Issuer>("Issuers")); }
+        }
+        private ObjectSet<Issuer> _issuers;
     
         public ObjectSet<IssuerIndustry> IssuerIndustries
         {

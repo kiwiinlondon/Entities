@@ -18,8 +18,8 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(LegalEntity))]
     [KnownType(typeof(IssuerIndustry))]
+    [KnownType(typeof(LegalEntity))]
     public partial class Issuer: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -101,32 +101,6 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        private LegalEntity LegalEntity
-        {
-            get { return _legalEntity; }
-            set
-            {
-                if (!ReferenceEquals(_legalEntity, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
-                    {
-                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
-                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
-                        if (LegalEntityID != value.LegalEntityID)
-                        {
-                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
-                        }
-                    }
-                    var previousValue = _legalEntity;
-                    _legalEntity = value;
-                    FixupLegalEntity(previousValue);
-                    OnNavigationPropertyChanged("LegalEntity");
-                }
-            }
-        }
-        private LegalEntity _legalEntity;
-    
-        [DataMember]
         public TrackableCollection<IssuerIndustry> IssuerIndustries
         {
             get
@@ -160,6 +134,32 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private TrackableCollection<IssuerIndustry> _issuerIndustries;
+    
+        [DataMember]
+        private LegalEntity LegalEntity
+        {
+            get { return _legalEntity; }
+            set
+            {
+                if (!ReferenceEquals(_legalEntity, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
+                    {
+                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
+                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
+                        if (LegalEntityID != value.LegalEntityID)
+                        {
+                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
+                        }
+                    }
+                    var previousValue = _legalEntity;
+                    _legalEntity = value;
+                    FixupLegalEntity(previousValue);
+                    OnNavigationPropertyChanged("LegalEntity");
+                }
+            }
+        }
+        private LegalEntity _legalEntity;
 
         #endregion
         #region ChangeTracking
@@ -249,8 +249,8 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            LegalEntity = null;
             IssuerIndustries.Clear();
+            LegalEntity = null;
         }
 
         #endregion

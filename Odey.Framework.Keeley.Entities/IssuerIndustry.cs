@@ -18,7 +18,6 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Industry))]
     public partial class IssuerIndustry: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -67,13 +66,6 @@ namespace Odey.Framework.Keeley.Entities
                 if (_industryID != value)
                 {
                     ChangeTracker.RecordOriginalValue("IndustryID", _industryID);
-                    if (!IsDeserializing)
-                    {
-                        if (Industry != null && Industry.IndustryID != value)
-                        {
-                            Industry = null;
-                        }
-                    }
                     _industryID = value;
                     OnPropertyChanged("IndustryID");
                 }
@@ -135,32 +127,13 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public Industry Industry
-        {
-            get { return _industry; }
-            set
-            {
-                if (!ReferenceEquals(_industry, value))
-                {
-                    var previousValue = _industry;
-                    _industry = value;
-                    FixupIndustry(previousValue);
-                    OnNavigationPropertyChanged("Industry");
-                }
-            }
-        }
-        private Industry _industry;
 
         #endregion
         #region ChangeTracking
@@ -240,40 +213,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Industry = null;
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupIndustry(Industry previousValue)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (Industry != null)
-            {
-                IndustryID = Industry.IndustryID;
-            }
-    
-            if (ChangeTracker.ChangeTrackingEnabled)
-            {
-                if (ChangeTracker.OriginalValues.ContainsKey("Industry")
-                    && (ChangeTracker.OriginalValues["Industry"] == Industry))
-                {
-                    ChangeTracker.OriginalValues.Remove("Industry");
-                }
-                else
-                {
-                    ChangeTracker.RecordOriginalValue("Industry", previousValue);
-                }
-                if (Industry != null && !Industry.ChangeTracker.ChangeTrackingEnabled)
-                {
-                    Industry.StartTracking();
-                }
-            }
         }
 
         #endregion

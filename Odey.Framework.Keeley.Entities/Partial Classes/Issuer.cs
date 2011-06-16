@@ -7,6 +7,11 @@ namespace Odey.Framework.Keeley.Entities
 
         public Issuer()
         {
+        }
+
+        public Issuer(int legalEntityId)
+        {
+            LegalEntityID = legalEntityId;
         }   
 
         public Issuer(LegalEntity legalEntity)
