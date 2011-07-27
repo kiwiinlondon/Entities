@@ -282,6 +282,76 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private TrackableCollection<FXRate> _toFXRates;
+    
+        [DataMember]
+        public TrackableCollection<FXRate> FromSecondFXRates
+        {
+            get
+            {
+                if (_fromSecondFXRates == null)
+                {
+                    _fromSecondFXRates = new TrackableCollection<FXRate>();
+                    _fromSecondFXRates.CollectionChanged += FixupFromSecondFXRates;
+                }
+                return _fromSecondFXRates;
+            }
+            set
+            {
+                if (!ReferenceEquals(_fromSecondFXRates, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_fromSecondFXRates != null)
+                    {
+                        _fromSecondFXRates.CollectionChanged -= FixupFromSecondFXRates;
+                    }
+                    _fromSecondFXRates = value;
+                    if (_fromSecondFXRates != null)
+                    {
+                        _fromSecondFXRates.CollectionChanged += FixupFromSecondFXRates;
+                    }
+                    OnNavigationPropertyChanged("FromSecondFXRates");
+                }
+            }
+        }
+        private TrackableCollection<FXRate> _fromSecondFXRates;
+    
+        [DataMember]
+        public TrackableCollection<FXRate> ToSecondFXRates
+        {
+            get
+            {
+                if (_toSecondFXRates == null)
+                {
+                    _toSecondFXRates = new TrackableCollection<FXRate>();
+                    _toSecondFXRates.CollectionChanged += FixupToSecondFXRates;
+                }
+                return _toSecondFXRates;
+            }
+            set
+            {
+                if (!ReferenceEquals(_toSecondFXRates, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_toSecondFXRates != null)
+                    {
+                        _toSecondFXRates.CollectionChanged -= FixupToSecondFXRates;
+                    }
+                    _toSecondFXRates = value;
+                    if (_toSecondFXRates != null)
+                    {
+                        _toSecondFXRates.CollectionChanged += FixupToSecondFXRates;
+                    }
+                    OnNavigationPropertyChanged("ToSecondFXRates");
+                }
+            }
+        }
+        private TrackableCollection<FXRate> _toSecondFXRates;
 
         #endregion
         #region ChangeTracking
@@ -363,6 +433,8 @@ namespace Odey.Framework.Keeley.Entities
         {
             FromFXRates.Clear();
             ToFXRates.Clear();
+            FromSecondFXRates.Clear();
+            ToSecondFXRates.Clear();
         }
 
         #endregion
@@ -441,6 +513,84 @@ namespace Odey.Framework.Keeley.Entities
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("ToFXRates", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupFromSecondFXRates(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (FXRate item in e.NewItems)
+                {
+                    item.FromSecondRawFXRate = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("FromSecondFXRates", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (FXRate item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.FromSecondRawFXRate, this))
+                    {
+                        item.FromSecondRawFXRate = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("FromSecondFXRates", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupToSecondFXRates(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (FXRate item in e.NewItems)
+                {
+                    item.ToSecondRawFXRate = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("ToSecondFXRates", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (FXRate item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.ToSecondRawFXRate, this))
+                    {
+                        item.ToSecondRawFXRate = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("ToSecondFXRates", item);
                     }
                 }
             }

@@ -7,6 +7,7 @@ using Odey.Framework.Keeley.Entities;
 using Odey.Framework.Keeley;
 using Odey.Framework.Keeley.Entities.Caches;
 using Odey.Framework.Keeley.Entities.Enums;
+using Odey.Framework.Keeley.Entities.Interfaces;
 
 namespace Odey.Framework.KeeleyEntitiesTest
 {
@@ -29,6 +30,13 @@ namespace Odey.Framework.KeeleyEntitiesTest
             //    }
             //    context.SaveChanges();
             //}
+            using (var context = new KeeleyModel())
+            {
+                FXRate fxRate = context.FXRates.Include("FromRawFXRate").Include("FromSecondRawFXRate").Include("ToRawFXRate").Include("ToSecondRawFXRate")
+                    .Where(a => a.FXRateId == 169339).FirstOrDefault();
+                List<IRawMarketDatum> m = fxRate.RawMarketData;
+            }
+            
         }
 
         static void TestCache()

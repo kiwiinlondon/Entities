@@ -111,6 +111,84 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public bool PositionsExist
+        {	
+    		
+            get { return _positionsExist; }
+            set
+            {
+                if (_positionsExist != value)
+                {
+                    _positionsExist = value;
+                    OnPropertyChanged("PositionsExist");
+                }
+            }
+        }
+        private bool _positionsExist;
+        [DataMember]
+        public string PerfFundName
+        {	
+    		
+            get { return _perfFundName; }
+            set
+            {
+                if (_perfFundName != value)
+                {
+                    _perfFundName = value;
+                    OnPropertyChanged("PerfFundName");
+                }
+            }
+        }
+        private string _perfFundName;
+        [DataMember]
+        public Nullable<int> InstrumentMarketId
+        {	
+    		
+            get { return _instrumentMarketId; }
+            set
+            {
+                if (_instrumentMarketId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("InstrumentMarketId", _instrumentMarketId);
+                    _instrumentMarketId = value;
+                    OnPropertyChanged("InstrumentMarketId");
+                }
+            }
+        }
+        private Nullable<int> _instrumentMarketId;
+        [DataMember]
+        public Nullable<int> BenchmarkInstrumentMarketId
+        {	
+    		
+            get { return _benchmarkInstrumentMarketId; }
+            set
+            {
+                if (_benchmarkInstrumentMarketId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BenchmarkInstrumentMarketId", _benchmarkInstrumentMarketId);
+                    _benchmarkInstrumentMarketId = value;
+                    OnPropertyChanged("BenchmarkInstrumentMarketId");
+                }
+            }
+        }
+        private Nullable<int> _benchmarkInstrumentMarketId;
+        [DataMember]
+        public Nullable<int> ParentFundId
+        {	
+    		
+            get { return _parentFundId; }
+            set
+            {
+                if (_parentFundId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ParentFundId", _parentFundId);
+                    _parentFundId = value;
+                    OnPropertyChanged("ParentFundId");
+                }
+            }
+        }
+        private Nullable<int> _parentFundId;
 
         #endregion
         #region Navigation Properties

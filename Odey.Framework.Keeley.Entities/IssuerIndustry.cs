@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(Issuer))]
     public partial class IssuerIndustry: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -50,6 +51,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_issuerID != value)
                 {
                     ChangeTracker.RecordOriginalValue("IssuerID", _issuerID);
+                    if (!IsDeserializing)
+                    {
+                        if (Issuer != null && Issuer.LegalEntityID != value)
+                        {
+                            Issuer = null;
+                        }
+                    }
                     _issuerID = value;
                     OnPropertyChanged("IssuerID");
                 }
@@ -136,6 +144,26 @@ namespace Odey.Framework.Keeley.Entities
         private byte[] _dataVersion;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public Issuer Issuer
+        {
+            get { return _issuer; }
+            set
+            {
+                if (!ReferenceEquals(_issuer, value))
+                {
+                    var previousValue = _issuer;
+                    _issuer = value;
+                    FixupIssuer(previousValue);
+                    OnNavigationPropertyChanged("Issuer");
+                }
+            }
+        }
+        private Issuer _issuer;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -213,6 +241,49 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Issuer = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupIssuer(Issuer previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.IssuerIndustries.Contains(this))
+            {
+                previousValue.IssuerIndustries.Remove(this);
+            }
+    
+            if (Issuer != null)
+            {
+                if (!Issuer.IssuerIndustries.Contains(this))
+                {
+                    Issuer.IssuerIndustries.Add(this);
+                }
+    
+                IssuerID = Issuer.LegalEntityID;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Issuer")
+                    && (ChangeTracker.OriginalValues["Issuer"] == Issuer))
+                {
+                    ChangeTracker.OriginalValues.Remove("Issuer");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Issuer", previousValue);
+                }
+                if (Issuer != null && !Issuer.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Issuer.StartTracking();
+                }
+            }
         }
 
         #endregion

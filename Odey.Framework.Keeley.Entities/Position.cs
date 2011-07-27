@@ -18,6 +18,8 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(InstrumentMarket))]
+    [KnownType(typeof(Book))]
     public partial class Position: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -112,6 +114,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_bookID != value)
                 {
                     ChangeTracker.RecordOriginalValue("BookID", _bookID);
+                    if (!IsDeserializing)
+                    {
+                        if (Book != null && Book.BookID != value)
+                        {
+                            Book = null;
+                        }
+                    }
                     _bookID = value;
                     OnPropertyChanged("BookID");
                 }
@@ -128,6 +137,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_instrumentMarketID != value)
                 {
                     ChangeTracker.RecordOriginalValue("InstrumentMarketID", _instrumentMarketID);
+                    if (!IsDeserializing)
+                    {
+                        if (InstrumentMarket != null && InstrumentMarket.InstrumentMarketID != value)
+                        {
+                            InstrumentMarket = null;
+                        }
+                    }
                     _instrumentMarketID = value;
                     OnPropertyChanged("InstrumentMarketID");
                 }
@@ -166,6 +182,43 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _entityRankingSchemeId;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public InstrumentMarket InstrumentMarket
+        {
+            get { return _instrumentMarket; }
+            set
+            {
+                if (!ReferenceEquals(_instrumentMarket, value))
+                {
+                    var previousValue = _instrumentMarket;
+                    _instrumentMarket = value;
+                    FixupInstrumentMarket(previousValue);
+                    OnNavigationPropertyChanged("InstrumentMarket");
+                }
+            }
+        }
+        private InstrumentMarket _instrumentMarket;
+    
+        [DataMember]
+        public Book Book
+        {
+            get { return _book; }
+            set
+            {
+                if (!ReferenceEquals(_book, value))
+                {
+                    var previousValue = _book;
+                    _book = value;
+                    FixupBook(previousValue);
+                    OnNavigationPropertyChanged("Book");
+                }
+            }
+        }
+        private Book _book;
 
         #endregion
         #region ChangeTracking
@@ -245,6 +298,71 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            InstrumentMarket = null;
+            Book = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupInstrumentMarket(InstrumentMarket previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (InstrumentMarket != null)
+            {
+                InstrumentMarketID = InstrumentMarket.InstrumentMarketID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("InstrumentMarket")
+                    && (ChangeTracker.OriginalValues["InstrumentMarket"] == InstrumentMarket))
+                {
+                    ChangeTracker.OriginalValues.Remove("InstrumentMarket");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("InstrumentMarket", previousValue);
+                }
+                if (InstrumentMarket != null && !InstrumentMarket.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    InstrumentMarket.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupBook(Book previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (Book != null)
+            {
+                BookID = Book.BookID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Book")
+                    && (ChangeTracker.OriginalValues["Book"] == Book))
+                {
+                    ChangeTracker.OriginalValues.Remove("Book");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Book", previousValue);
+                }
+                if (Book != null && !Book.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Book.StartTracking();
+                }
+            }
         }
 
         #endregion

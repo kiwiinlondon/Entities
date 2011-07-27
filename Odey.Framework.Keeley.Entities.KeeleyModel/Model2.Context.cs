@@ -413,17 +413,17 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<RawPrice> _rawPrices;
     
-        public ObjectSet<Industry> Industries
-        {
-            get { return _industries  ?? (_industries = CreateObjectSet<Industry>("Industries")); }
-        }
-        private ObjectSet<Industry> _industries;
-    
         public ObjectSet<ExtractOutputConfiguration> ExtractOutputConfigurations
         {
             get { return _extractOutputConfigurations  ?? (_extractOutputConfigurations = CreateObjectSet<ExtractOutputConfiguration>("ExtractOutputConfigurations")); }
         }
         private ObjectSet<ExtractOutputConfiguration> _extractOutputConfigurations;
+    
+        public ObjectSet<Industry> Industries
+        {
+            get { return _industries  ?? (_industries = CreateObjectSet<Industry>("Industries")); }
+        }
+        private ObjectSet<Industry> _industries;
     
         public ObjectSet<Issuer> Issuers
         {
@@ -558,7 +558,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             return base.ExecuteFunction<Nullable<int>>("GetPositionIdsWherePortfolioEventBreak");
         }
-        public virtual ObjectResult<RawFXRate> RawFXRate_GetLatest(Nullable<int> currencyID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> forwardDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawFXRateIdToIgnore)
+        public virtual ObjectResult<RawFXRate> RawFXRate_GetLatest(Nullable<int> currencyID, Nullable<System.DateTime> referenceDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawFXRateIdToIgnore)
         {
     
             ObjectParameter currencyIDParameter;
@@ -583,17 +583,6 @@ namespace Odey.Framework.Keeley.Entities
                 referenceDateParameter = new ObjectParameter("ReferenceDate", typeof(System.DateTime));
             }
     
-            ObjectParameter forwardDateParameter;
-    
-            if (forwardDate.HasValue)
-            {
-                forwardDateParameter = new ObjectParameter("ForwardDate", forwardDate);
-            }
-            else
-            {
-                forwardDateParameter = new ObjectParameter("ForwardDate", typeof(System.DateTime));
-            }
-    
             ObjectParameter entityRankingSchemeIdParameter;
     
             if (entityRankingSchemeId.HasValue)
@@ -615,7 +604,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 rawFXRateIdToIgnoreParameter = new ObjectParameter("RawFXRateIdToIgnore", typeof(int));
             }
-            return base.ExecuteFunction<RawFXRate>("RawFXRate_GetLatest", currencyIDParameter, referenceDateParameter, forwardDateParameter, entityRankingSchemeIdParameter, rawFXRateIdToIgnoreParameter);
+            return base.ExecuteFunction<RawFXRate>("RawFXRate_GetLatest", currencyIDParameter, referenceDateParameter, entityRankingSchemeIdParameter, rawFXRateIdToIgnoreParameter);
         }
         public virtual ObjectResult<RawPrice> RawPrices_GetLatest(Nullable<int> instrumentMarketID, Nullable<System.DateTime> referenceDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawPriceIdToIgnore)
         {
@@ -694,6 +683,65 @@ namespace Odey.Framework.Keeley.Entities
                 updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
             }
             return base.ExecuteFunction<Nullable<System.DateTime>>("Prices_Roll", updateUserIdParameter);
+        }
+        public virtual ObjectResult<RawFXRate> RawFXRate_GetlatestForForward(Nullable<int> currencyID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> forwardDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawFXRateIdToIgnore)
+        {
+    
+            ObjectParameter currencyIDParameter;
+    
+            if (currencyID.HasValue)
+            {
+                currencyIDParameter = new ObjectParameter("CurrencyID", currencyID);
+            }
+            else
+            {
+                currencyIDParameter = new ObjectParameter("CurrencyID", typeof(int));
+            }
+    
+            ObjectParameter referenceDateParameter;
+    
+            if (referenceDate.HasValue)
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", referenceDate);
+            }
+            else
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+            }
+    
+            ObjectParameter forwardDateParameter;
+    
+            if (forwardDate.HasValue)
+            {
+                forwardDateParameter = new ObjectParameter("ForwardDate", forwardDate);
+            }
+            else
+            {
+                forwardDateParameter = new ObjectParameter("ForwardDate", typeof(System.DateTime));
+            }
+    
+            ObjectParameter entityRankingSchemeIdParameter;
+    
+            if (entityRankingSchemeId.HasValue)
+            {
+                entityRankingSchemeIdParameter = new ObjectParameter("EntityRankingSchemeId", entityRankingSchemeId);
+            }
+            else
+            {
+                entityRankingSchemeIdParameter = new ObjectParameter("EntityRankingSchemeId", typeof(int));
+            }
+    
+            ObjectParameter rawFXRateIdToIgnoreParameter;
+    
+            if (rawFXRateIdToIgnore.HasValue)
+            {
+                rawFXRateIdToIgnoreParameter = new ObjectParameter("RawFXRateIdToIgnore", rawFXRateIdToIgnore);
+            }
+            else
+            {
+                rawFXRateIdToIgnoreParameter = new ObjectParameter("RawFXRateIdToIgnore", typeof(int));
+            }
+            return base.ExecuteFunction<RawFXRate>("RawFXRate_GetlatestForForward", currencyIDParameter, referenceDateParameter, forwardDateParameter, entityRankingSchemeIdParameter, rawFXRateIdToIgnoreParameter);
         }
 
         #endregion

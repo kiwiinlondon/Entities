@@ -300,6 +300,36 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private System.DateTime _inputDate;
+        [DataMember]
+        public decimal TradeInstrumentFXRate
+        {	
+    		
+            get { return _tradeInstrumentFXRate; }
+            set
+            {
+                if (_tradeInstrumentFXRate != value)
+                {
+                    _tradeInstrumentFXRate = value;
+                    OnPropertyChanged("TradeInstrumentFXRate");
+                }
+            }
+        }
+        private decimal _tradeInstrumentFXRate;
+        [DataMember]
+        public bool TradeInstrumentFXRateMultiply
+        {	
+    		
+            get { return _tradeInstrumentFXRateMultiply; }
+            set
+            {
+                if (_tradeInstrumentFXRateMultiply != value)
+                {
+                    _tradeInstrumentFXRateMultiply = value;
+                    OnPropertyChanged("TradeInstrumentFXRateMultiply");
+                }
+            }
+        }
+        private bool _tradeInstrumentFXRateMultiply;
 
         #endregion
         #region ChangeTracking

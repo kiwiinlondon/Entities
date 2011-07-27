@@ -182,7 +182,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public int FromRawFXRateId
+        public Nullable<int> FromRawFXRateId
         {	
     		
             get { return _fromRawFXRateId; }
@@ -203,7 +203,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private int _fromRawFXRateId;
+        private Nullable<int> _fromRawFXRateId;
         [DataMember]
         public int ToRawFXRateId
         {	
@@ -227,6 +227,52 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _toRawFXRateId;
+        [DataMember]
+        public Nullable<int> FromSecondRawFXRateId
+        {	
+    		
+            get { return _fromSecondRawFXRateId; }
+            set
+            {
+                if (_fromSecondRawFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("FromSecondRawFXRateId", _fromSecondRawFXRateId);
+                    if (!IsDeserializing)
+                    {
+                        if (FromSecondRawFXRate != null && FromSecondRawFXRate.RawFXRateId != value)
+                        {
+                            FromSecondRawFXRate = null;
+                        }
+                    }
+                    _fromSecondRawFXRateId = value;
+                    OnPropertyChanged("FromSecondRawFXRateId");
+                }
+            }
+        }
+        private Nullable<int> _fromSecondRawFXRateId;
+        [DataMember]
+        public Nullable<int> ToSecondRawFXRateId
+        {	
+    		
+            get { return _toSecondRawFXRateId; }
+            set
+            {
+                if (_toSecondRawFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ToSecondRawFXRateId", _toSecondRawFXRateId);
+                    if (!IsDeserializing)
+                    {
+                        if (ToSecondRawFXRate != null && ToSecondRawFXRate.RawFXRateId != value)
+                        {
+                            ToSecondRawFXRate = null;
+                        }
+                    }
+                    _toSecondRawFXRateId = value;
+                    OnPropertyChanged("ToSecondRawFXRateId");
+                }
+            }
+        }
+        private Nullable<int> _toSecondRawFXRateId;
 
         #endregion
         #region Navigation Properties
@@ -264,6 +310,40 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private RawFXRate _toRawFXRate;
+    
+        [DataMember]
+        public RawFXRate FromSecondRawFXRate
+        {
+            get { return _fromSecondRawFXRate; }
+            set
+            {
+                if (!ReferenceEquals(_fromSecondRawFXRate, value))
+                {
+                    var previousValue = _fromSecondRawFXRate;
+                    _fromSecondRawFXRate = value;
+                    FixupFromSecondRawFXRate(previousValue);
+                    OnNavigationPropertyChanged("FromSecondRawFXRate");
+                }
+            }
+        }
+        private RawFXRate _fromSecondRawFXRate;
+    
+        [DataMember]
+        public RawFXRate ToSecondRawFXRate
+        {
+            get { return _toSecondRawFXRate; }
+            set
+            {
+                if (!ReferenceEquals(_toSecondRawFXRate, value))
+                {
+                    var previousValue = _toSecondRawFXRate;
+                    _toSecondRawFXRate = value;
+                    FixupToSecondRawFXRate(previousValue);
+                    OnNavigationPropertyChanged("ToSecondRawFXRate");
+                }
+            }
+        }
+        private RawFXRate _toSecondRawFXRate;
 
         #endregion
         #region ChangeTracking
@@ -345,12 +425,14 @@ namespace Odey.Framework.Keeley.Entities
         {
             FromRawFXRate = null;
             ToRawFXRate = null;
+            FromSecondRawFXRate = null;
+            ToSecondRawFXRate = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupFromRawFXRate(RawFXRate previousValue)
+        private void FixupFromRawFXRate(RawFXRate previousValue, bool skipKeys = false)
         {
             if (IsDeserializing)
             {
@@ -371,6 +453,11 @@ namespace Odey.Framework.Keeley.Entities
     
                 FromRawFXRateId = FromRawFXRate.RawFXRateId;
             }
+            else if (!skipKeys)
+            {
+                FromRawFXRateId = null;
+            }
+    
             if (ChangeTracker.ChangeTrackingEnabled)
             {
                 if (ChangeTracker.OriginalValues.ContainsKey("FromRawFXRate")
@@ -424,6 +511,94 @@ namespace Odey.Framework.Keeley.Entities
                 if (ToRawFXRate != null && !ToRawFXRate.ChangeTracker.ChangeTrackingEnabled)
                 {
                     ToRawFXRate.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupFromSecondRawFXRate(RawFXRate previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.FromSecondFXRates.Contains(this))
+            {
+                previousValue.FromSecondFXRates.Remove(this);
+            }
+    
+            if (FromSecondRawFXRate != null)
+            {
+                if (!FromSecondRawFXRate.FromSecondFXRates.Contains(this))
+                {
+                    FromSecondRawFXRate.FromSecondFXRates.Add(this);
+                }
+    
+                FromSecondRawFXRateId = FromSecondRawFXRate.RawFXRateId;
+            }
+            else if (!skipKeys)
+            {
+                FromSecondRawFXRateId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("FromSecondRawFXRate")
+                    && (ChangeTracker.OriginalValues["FromSecondRawFXRate"] == FromSecondRawFXRate))
+                {
+                    ChangeTracker.OriginalValues.Remove("FromSecondRawFXRate");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("FromSecondRawFXRate", previousValue);
+                }
+                if (FromSecondRawFXRate != null && !FromSecondRawFXRate.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    FromSecondRawFXRate.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupToSecondRawFXRate(RawFXRate previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.ToSecondFXRates.Contains(this))
+            {
+                previousValue.ToSecondFXRates.Remove(this);
+            }
+    
+            if (ToSecondRawFXRate != null)
+            {
+                if (!ToSecondRawFXRate.ToSecondFXRates.Contains(this))
+                {
+                    ToSecondRawFXRate.ToSecondFXRates.Add(this);
+                }
+    
+                ToSecondRawFXRateId = ToSecondRawFXRate.RawFXRateId;
+            }
+            else if (!skipKeys)
+            {
+                ToSecondRawFXRateId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("ToSecondRawFXRate")
+                    && (ChangeTracker.OriginalValues["ToSecondRawFXRate"] == ToSecondRawFXRate))
+                {
+                    ChangeTracker.OriginalValues.Remove("ToSecondRawFXRate");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("ToSecondRawFXRate", previousValue);
+                }
+                if (ToSecondRawFXRate != null && !ToSecondRawFXRate.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    ToSecondRawFXRate.StartTracking();
                 }
             }
         }

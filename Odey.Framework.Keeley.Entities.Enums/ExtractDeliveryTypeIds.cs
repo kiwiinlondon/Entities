@@ -8,6 +8,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        Email = 1
+        Email = 1,
+        [EnumMember]
+        Sftp = 3,
+        [EnumMember]
+        SftpAndEmail = 4
     }
 }

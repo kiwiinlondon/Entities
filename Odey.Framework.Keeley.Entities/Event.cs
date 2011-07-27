@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(Charge))]
+    [KnownType(typeof(InternalAllocation))]
     public partial class Event: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -187,6 +188,41 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private TrackableCollection<Charge> _charges;
+    
+        [DataMember]
+        public TrackableCollection<InternalAllocation> ChildInternalAllocations
+        {
+            get
+            {
+                if (_childInternalAllocations == null)
+                {
+                    _childInternalAllocations = new TrackableCollection<InternalAllocation>();
+                    _childInternalAllocations.CollectionChanged += FixupChildInternalAllocations;
+                }
+                return _childInternalAllocations;
+            }
+            set
+            {
+                if (!ReferenceEquals(_childInternalAllocations, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_childInternalAllocations != null)
+                    {
+                        _childInternalAllocations.CollectionChanged -= FixupChildInternalAllocations;
+                    }
+                    _childInternalAllocations = value;
+                    if (_childInternalAllocations != null)
+                    {
+                        _childInternalAllocations.CollectionChanged += FixupChildInternalAllocations;
+                    }
+                    OnNavigationPropertyChanged("ChildInternalAllocations");
+                }
+            }
+        }
+        private TrackableCollection<InternalAllocation> _childInternalAllocations;
 
         #endregion
         #region ChangeTracking
@@ -267,6 +303,7 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             Charges.Clear();
+            ChildInternalAllocations.Clear();
         }
 
         #endregion
@@ -302,6 +339,41 @@ namespace Odey.Framework.Keeley.Entities
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("Charges", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupChildInternalAllocations(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (InternalAllocation item in e.NewItems)
+                {
+                    item.ParentEventId = EventID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("ChildInternalAllocations", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (InternalAllocation item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("ChildInternalAllocations", item);
                     }
                 }
             }

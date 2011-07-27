@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(Position))]
     public partial class Portfolio: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -50,6 +51,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_positionId != value)
                 {
                     ChangeTracker.RecordOriginalValue("PositionId", _positionId);
+                    if (!IsDeserializing)
+                    {
+                        if (Position != null && Position.PositionId != value)
+                        {
+                            Position = null;
+                        }
+                    }
                     _positionId = value;
                     OnPropertyChanged("PositionId");
                 }
@@ -525,6 +533,41 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<int> _priceToPositionFXRateId;
+        [DataMember]
+        public bool PriceIsLastTradePrice
+        {	
+    		
+            get { return _priceIsLastTradePrice; }
+            set
+            {
+                if (_priceIsLastTradePrice != value)
+                {
+                    _priceIsLastTradePrice = value;
+                    OnPropertyChanged("PriceIsLastTradePrice");
+                }
+            }
+        }
+        private bool _priceIsLastTradePrice;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public Position Position
+        {
+            get { return _position; }
+            set
+            {
+                if (!ReferenceEquals(_position, value))
+                {
+                    var previousValue = _position;
+                    _position = value;
+                    FixupPosition(previousValue);
+                    OnNavigationPropertyChanged("Position");
+                }
+            }
+        }
+        private Position _position;
 
         #endregion
         #region ChangeTracking
@@ -604,6 +647,40 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Position = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupPosition(Position previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (Position != null)
+            {
+                PositionId = Position.PositionId;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Position")
+                    && (ChangeTracker.OriginalValues["Position"] == Position))
+                {
+                    ChangeTracker.OriginalValues.Remove("Position");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Position", previousValue);
+                }
+                if (Position != null && !Position.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Position.StartTracking();
+                }
+            }
         }
 
         #endregion

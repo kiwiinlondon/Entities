@@ -89,7 +89,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
@@ -136,7 +135,7 @@ namespace Odey.Framework.Keeley.Entities
         private TrackableCollection<IssuerIndustry> _issuerIndustries;
     
         [DataMember]
-        private LegalEntity LegalEntity
+        public LegalEntity LegalEntity
         {
             get { return _legalEntity; }
             set
@@ -319,7 +318,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach (IssuerIndustry item in e.NewItems)
                 {
-                    item.IssuerID = LegalEntityID;
+                    item.Issuer = this;
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         if (!item.ChangeTracker.ChangeTrackingEnabled)
@@ -335,6 +334,10 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach (IssuerIndustry item in e.OldItems)
                 {
+                    if (ReferenceEquals(item.Issuer, this))
+                    {
+                        item.Issuer = null;
+                    }
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("IssuerIndustries", item);

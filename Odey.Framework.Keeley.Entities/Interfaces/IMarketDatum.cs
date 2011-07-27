@@ -10,5 +10,6 @@ namespace Odey.Framework.Keeley.Entities.Interfaces
         int EntityRankingSchemeId { get; }
         DateTime ReferenceDate { get; }
         decimal Value { get; }
+        List<IRawMarketDatum> RawMarketData { get; }
     }
 }

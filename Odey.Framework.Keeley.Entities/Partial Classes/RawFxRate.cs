@@ -21,7 +21,11 @@ namespace Odey.Framework.Keeley.Entities
 
         List<IMarketDatum> IRawMarketDatum.MarketData
         {
-            get { return FromFXRates.Where(a=>a.FromRawFXRateId != a.ToRawFXRateId).ToList<IMarketDatum>().Concat(ToFXRates.ToList<IMarketDatum>()).ToList(); }
+            get { 
+                return FromFXRates.ToList<IMarketDatum>()
+                        .Concat(ToFXRates.ToList<IMarketDatum>())
+                        .Concat(FromSecondFXRates.ToList<IMarketDatum>())
+                        .Concat(ToSecondFXRates.ToList<IMarketDatum>()).ToList(); }
         }
 
         #endregion

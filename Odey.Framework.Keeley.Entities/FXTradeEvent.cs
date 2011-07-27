@@ -18,7 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(InternalAllocation))]
+    [KnownType(typeof(Event))]
     public partial class FXTradeEvent: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -34,6 +34,13 @@ namespace Odey.Framework.Keeley.Entities
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
                         throw new InvalidOperationException("The property 'EventID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                    }
+                    if (!IsDeserializing)
+                    {
+                        if (Event != null && Event.EventID != value)
+                        {
+                            Event = null;
+                        }
                     }
                     _eventID = value;
                     OnPropertyChanged("EventID");
@@ -398,39 +405,30 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        public TrackableCollection<InternalAllocation> InternalAllocations
+        public Event Event
         {
-            get
-            {
-                if (_internalAllocations == null)
-                {
-                    _internalAllocations = new TrackableCollection<InternalAllocation>();
-                    _internalAllocations.CollectionChanged += FixupInternalAllocations;
-                }
-                return _internalAllocations;
-            }
+            get { return _event; }
             set
             {
-                if (!ReferenceEquals(_internalAllocations, value))
+                if (!ReferenceEquals(_event, value))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
                     {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
+                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
+                        if (EventID != value.EventID)
+                        {
+                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
+                        }
                     }
-                    if (_internalAllocations != null)
-                    {
-                        _internalAllocations.CollectionChanged -= FixupInternalAllocations;
-                    }
-                    _internalAllocations = value;
-                    if (_internalAllocations != null)
-                    {
-                        _internalAllocations.CollectionChanged += FixupInternalAllocations;
-                    }
-                    OnNavigationPropertyChanged("InternalAllocations");
+                    var previousValue = _event;
+                    _event = value;
+                    FixupEvent(previousValue);
+                    OnNavigationPropertyChanged("Event");
                 }
             }
         }
-        private TrackableCollection<InternalAllocation> _internalAllocations;
+        private Event _event;
 
         #endregion
         #region ChangeTracking
@@ -520,43 +518,60 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            InternalAllocations.Clear();
+            Event = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupInternalAllocations(object sender, NotifyCollectionChangedEventArgs e)
+        private void FixupEvent(Event previousValue)
         {
+            // This is the dependent end in an association that performs cascade deletes.
+            // Update the principal's event listener to refer to the new dependent.
+            // This is a unidirectional relationship from the dependent to the principal, so the dependent end is
+            // responsible for managing the cascade delete event handler. In all other cases the principal end will manage it.
+            if (previousValue != null)
+            {
+                previousValue.ChangeTracker.ObjectStateChanging -= HandleCascadeDelete;
+            }
+    
+            if (Event != null)
+            {
+                Event.ChangeTracker.ObjectStateChanging += HandleCascadeDelete;
+            }
+    
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (e.NewItems != null)
+            if (Event != null)
             {
-                foreach (InternalAllocation item in e.NewItems)
-                {
-                    item.ParentEventId = EventID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("InternalAllocations", item);
-                    }
-                }
+                EventID = Event.EventID;
             }
     
-            if (e.OldItems != null)
+            if (ChangeTracker.ChangeTrackingEnabled)
             {
-                foreach (InternalAllocation item in e.OldItems)
+                if (ChangeTracker.OriginalValues.ContainsKey("Event")
+                    && (ChangeTracker.OriginalValues["Event"] == Event))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
+                    ChangeTracker.OriginalValues.Remove("Event");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Event", previousValue);
+                    // This is the dependent end of an identifying association, so it must be deleted when the relationship is
+                    // removed. If the current state is Added, the relationship can be changed without causing the dependent to be deleted.
+                    // This is a unidirectional relationship from the dependent to the principal, so the dependent end is
+                    // responsible for cascading the delete. In all other cases the principal end will manage it.
+                    if (previousValue != null && ChangeTracker.State != ObjectState.Added)
                     {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("InternalAllocations", item);
+                        this.MarkAsDeleted();
                     }
+                }
+                if (Event != null && !Event.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Event.StartTracking();
                 }
             }
         }

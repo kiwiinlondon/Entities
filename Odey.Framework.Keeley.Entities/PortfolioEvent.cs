@@ -645,6 +645,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _realisePnl;
+        [DataMember]
+        public decimal TradeInstrumentFXRate
+        {	
+    		
+            get { return _tradeInstrumentFXRate; }
+            set
+            {
+                if (_tradeInstrumentFXRate != value)
+                {
+                    _tradeInstrumentFXRate = value;
+                    OnPropertyChanged("TradeInstrumentFXRate");
+                }
+            }
+        }
+        private decimal _tradeInstrumentFXRate;
 
         #endregion
         #region ChangeTracking
