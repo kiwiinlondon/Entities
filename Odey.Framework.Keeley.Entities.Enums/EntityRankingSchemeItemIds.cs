@@ -12,6 +12,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        DummyPrice = 14
+        DummyPrice = 14,
+        [EnumMember]
+        PerfDBNavPrice = 16
+
     }
 }
