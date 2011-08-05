@@ -95,6 +95,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public string BBExchangeCode
+        {	
+    		
+            get { return _bBExchangeCode; }
+            set
+            {
+                if (_bBExchangeCode != value)
+                {
+                    _bBExchangeCode = value;
+                    OnPropertyChanged("BBExchangeCode");
+                }
+            }
+        }
+        private string _bBExchangeCode;
 
         #endregion
         #region Navigation Properties

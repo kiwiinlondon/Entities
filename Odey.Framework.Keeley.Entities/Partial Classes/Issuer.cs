@@ -19,7 +19,7 @@ namespace Odey.Framework.Keeley.Entities
             LegalEntity = legalEntity;
         }        
 
-        public int? CountryID
+        public int CountryID
         {
             get
             {

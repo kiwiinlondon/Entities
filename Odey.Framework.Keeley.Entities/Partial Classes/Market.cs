@@ -14,7 +14,7 @@ namespace Odey.Framework.Keeley.Entities
             LegalEntity = legalEntity;
         }
 
-        public int? CountryID
+        public int CountryID
         {
             get
             {
@@ -27,6 +27,14 @@ namespace Odey.Framework.Keeley.Entities
             get
             {
                 return LegalEntity.Name;
+            }
+        }
+
+        public int? FMOrgID
+        {
+            get
+            {
+                return LegalEntity.FMOrgId;
             }
         }
 

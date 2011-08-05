@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(Book))]
     public partial class ApplicationUser: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -149,6 +150,44 @@ namespace Odey.Framework.Keeley.Entities
         private byte[] _dataVersion;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<Book> Books1
+        {
+            get
+            {
+                if (_books1 == null)
+                {
+                    _books1 = new TrackableCollection<Book>();
+                    _books1.CollectionChanged += FixupBooks1;
+                }
+                return _books1;
+            }
+            set
+            {
+                if (!ReferenceEquals(_books1, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_books1 != null)
+                    {
+                        _books1.CollectionChanged -= FixupBooks1;
+                    }
+                    _books1 = value;
+                    if (_books1 != null)
+                    {
+                        _books1.CollectionChanged += FixupBooks1;
+                    }
+                    OnNavigationPropertyChanged("Books1");
+                }
+            }
+        }
+        private TrackableCollection<Book> _books1;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -226,6 +265,46 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Books1.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupBooks1(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (Book item in e.NewItems)
+                {
+                    item.ManagerId = UserID;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("Books1", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (Book item in e.OldItems)
+                {
+                    item.ManagerId = null;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("Books1", item);
+                    }
+                }
+            }
         }
 
         #endregion

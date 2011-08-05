@@ -86,7 +86,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private string _longName;
         [DataMember]
-        public Nullable<int> CountryID
+        public int CountryID
         {	
     		
             get { return _countryID; }
@@ -100,7 +100,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _countryID;
+        private int _countryID;
         [DataMember]
         public System.DateTime StartDt
         {	

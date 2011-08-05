@@ -141,6 +141,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<int> ManagerId
+        {	
+    		
+            get { return _managerId; }
+            set
+            {
+                if (_managerId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ManagerId", _managerId);
+                    _managerId = value;
+                    OnPropertyChanged("ManagerId");
+                }
+            }
+        }
+        private Nullable<int> _managerId;
 
         #endregion
         #region Navigation Properties

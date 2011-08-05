@@ -12,6 +12,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Sftp = 3,
         [EnumMember]
-        SftpAndEmail = 4
+        SftpAndEmail = 4,
+        [EnumMember]
+        FTP = 5
     }
 }

@@ -12,6 +12,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Delimited = 2,
         [EnumMember]
-        HTML = 3
+        HTML = 3,
+        [EnumMember]
+        FixedWidth = 4
     }
 }

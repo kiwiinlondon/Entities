@@ -12,6 +12,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MatchingEngineOutput = 2,       
         [EnumMember]
-        StoredProcedure = 4   
+        StoredProcedure = 4,   
+        [EnumMember]
+        Portfolio = 5   
     }
 }
