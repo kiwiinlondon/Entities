@@ -65,6 +65,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_name != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Name", _name);
                     _name = value;
                     OnPropertyChanged("Name");
                 }
@@ -80,6 +81,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -111,6 +113,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
@@ -142,6 +145,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_extractRunnerTypeID != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ExtractRunnerTypeID", _extractRunnerTypeID);
                     _extractRunnerTypeID = value;
                     OnPropertyChanged("ExtractRunnerTypeID");
                 }
@@ -157,6 +161,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_extractInputTypeID != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ExtractInputTypeID", _extractInputTypeID);
                     _extractInputTypeID = value;
                     OnPropertyChanged("ExtractInputTypeID");
                 }
@@ -172,6 +177,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_extractDeliveryTypeID != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ExtractDeliveryTypeID", _extractDeliveryTypeID);
                     _extractDeliveryTypeID = value;
                     OnPropertyChanged("ExtractDeliveryTypeID");
                 }
@@ -187,6 +193,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_sendIfEmpty != value)
                 {
+                    ChangeTracker.RecordOriginalValue("SendIfEmpty", _sendIfEmpty);
                     _sendIfEmpty = value;
                     OnPropertyChanged("SendIfEmpty");
                 }
@@ -202,6 +209,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_extractOutputContainerTypeID != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ExtractOutputContainerTypeID", _extractOutputContainerTypeID);
                     _extractOutputContainerTypeID = value;
                     OnPropertyChanged("ExtractOutputContainerTypeID");
                 }
@@ -217,6 +225,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_extractResponseHandlerTypeId != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ExtractResponseHandlerTypeId", _extractResponseHandlerTypeId);
                     _extractResponseHandlerTypeId = value;
                     OnPropertyChanged("ExtractResponseHandlerTypeId");
                 }

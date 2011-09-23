@@ -10,6 +10,7 @@ using Odey.Framework.Keeley.Entities;
 using System.Security.Principal;
 using ServiceModelEx;
 using Odey.Framework.Keeley.Entities.Enums;
+using Odey.Framework.Infrastructure.Contracts;
 
 namespace Odey.Framework.Keeley.Entities
 {
@@ -62,27 +63,26 @@ namespace Odey.Framework.Keeley.Entities
 
         public List<ChangedEntity> ChangedEntities { get; set; }
 
-        private EntityTypeIds GetEntityType(Type type)
+        private void AddToChangedEntities(ObjectStateEntry entry, Dictionary<ObjectStateEntry, ChangedEntity> addedEntities)
         {
-            if (type == typeof(Portfolio))
+            ChangedEntity changedEntity = new ChangedEntity(entry.Entity.GetType(), entry.EntityKey.EntityKeyValues, entry.State);
+            if (entry.State == EntityState.Modified)
             {
-                return EntityTypeIds.Book;
-            }
-            else
-            {
-                return EntityTypeIds.None;
-            }
-        }
+                foreach (string modifiedPropertyName in entry.GetModifiedProperties())
+                {
+                    object originalValue = entry.OriginalValues[modifiedPropertyName];
+                    object currentValue = entry.CurrentValues[modifiedPropertyName];
 
-        private void AddToChangedEntities(ObjectStateEntry entry)
-        {
-            EntityTypeIds entityTypeId = GetEntityType(entry.Entity.GetType());
-            if (entityTypeId != EntityTypeIds.None)
+                    if (originalValue == null && currentValue != null || originalValue != null && currentValue == null || !originalValue.Equals(currentValue))
+                    {                        
+                        changedEntity.ChangedProperties.Add(modifiedPropertyName, new ChangedProperty(entry.OriginalValues.GetFieldType(entry.OriginalValues.GetOrdinal(modifiedPropertyName)), originalValue, currentValue));
+                    }
+                }
+            }
+            ChangedEntities.Add(changedEntity);
+            if (entry.State == EntityState.Added)
             {
-                ChangedEntity changedEntity = new ChangedEntity();
-                changedEntity.EntityState = entry.State;
-                changedEntity.EntityID = int.Parse(entry.EntityKey.EntityKeyValues[0].Value.ToString());
-                ChangedEntities.Add(changedEntity);
+                addedEntities.Add(entry, changedEntity);
             }
         }
 
@@ -90,17 +90,18 @@ namespace Odey.Framework.Keeley.Entities
         {
             //needed to bring context back in line with entity
             ChangedEntities = new List<ChangedEntity>();
+            Dictionary<ObjectStateEntry, ChangedEntity> addedEntities = new Dictionary<ObjectStateEntry, ChangedEntity>();
             DetectChanges();
             foreach (ObjectStateEntry entry in
                 ObjectStateManager.GetObjectStateEntries(EntityState.Added | EntityState.Modified))
             {
-                AddToChangedEntities(entry);
+                AddToChangedEntities(entry, addedEntities);
                 if (entry.State != EntityState.Deleted)
                 {
                     PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
 
                     if (updateUserIdPropInfo != null)
-                    {                    
+                    {
                         string updateUserName;
                         int? userId = GetApplicationUserId(out updateUserName);
                         if (userId == null)
@@ -114,7 +115,17 @@ namespace Odey.Framework.Keeley.Entities
                     }
                 }
             }
-            return base.SaveChanges(options);
+            int toReturn = base.SaveChanges(options);
+            EnhanceKeysForAdds(addedEntities);
+            return toReturn;
+        }
+
+        private void EnhanceKeysForAdds (Dictionary<ObjectStateEntry, ChangedEntity> addedEntities)
+        {
+            foreach (KeyValuePair<ObjectStateEntry, ChangedEntity> change in addedEntities)
+            {
+                change.Value.Key = change.Key.EntityKey.EntityKeyValues;
+            }
         }
     }
 }

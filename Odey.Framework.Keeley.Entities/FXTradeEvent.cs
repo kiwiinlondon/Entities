@@ -89,6 +89,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_receiveAmount != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ReceiveAmount", _receiveAmount);
                     _receiveAmount = value;
                     OnPropertyChanged("ReceiveAmount");
                 }
@@ -104,6 +105,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_payAmount != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PayAmount", _payAmount);
                     _payAmount = value;
                     OnPropertyChanged("PayAmount");
                 }
@@ -119,6 +121,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_isProp != value)
                 {
+                    ChangeTracker.RecordOriginalValue("IsProp", _isProp);
                     _isProp = value;
                     OnPropertyChanged("IsProp");
                 }
@@ -134,6 +137,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_enteredMultiply != value)
                 {
+                    ChangeTracker.RecordOriginalValue("EnteredMultiply", _enteredMultiply);
                     _enteredMultiply = value;
                     OnPropertyChanged("EnteredMultiply");
                 }
@@ -149,6 +153,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_ticket != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Ticket", _ticket);
                     _ticket = value;
                     OnPropertyChanged("Ticket");
                 }
@@ -164,6 +169,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_isCancelled != value)
                 {
+                    ChangeTracker.RecordOriginalValue("IsCancelled", _isCancelled);
                     _isCancelled = value;
                     OnPropertyChanged("IsCancelled");
                 }
@@ -195,6 +201,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_amendmentNumber != value)
                 {
+                    ChangeTracker.RecordOriginalValue("AmendmentNumber", _amendmentNumber);
                     _amendmentNumber = value;
                     OnPropertyChanged("AmendmentNumber");
                 }
@@ -210,6 +217,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_maturityDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("MaturityDate", _maturityDate);
                     _maturityDate = value;
                     OnPropertyChanged("MaturityDate");
                 }
@@ -241,6 +249,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -288,6 +297,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_tradeDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TradeDate", _tradeDate);
                     _tradeDate = value;
                     OnPropertyChanged("TradeDate");
                 }
@@ -303,6 +313,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_isForward != value)
                 {
+                    ChangeTracker.RecordOriginalValue("IsForward", _isForward);
                     _isForward = value;
                     OnPropertyChanged("IsForward");
                 }
@@ -318,6 +329,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_payBookXrate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PayBookXrate", _payBookXrate);
                     _payBookXrate = value;
                     OnPropertyChanged("PayBookXrate");
                 }
@@ -333,6 +345,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_receiveBookXrate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ReceiveBookXrate", _receiveBookXrate);
                     _receiveBookXrate = value;
                     OnPropertyChanged("ReceiveBookXrate");
                 }
@@ -348,6 +361,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_inputDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("InputDate", _inputDate);
                     _inputDate = value;
                     OnPropertyChanged("InputDate");
                 }
@@ -379,6 +393,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_settlementBookXrate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("SettlementBookXrate", _settlementBookXrate);
                     _settlementBookXrate = value;
                     OnPropertyChanged("SettlementBookXrate");
                 }
@@ -394,6 +409,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_supressFromExtracts != value)
                 {
+                    ChangeTracker.RecordOriginalValue("SupressFromExtracts", _supressFromExtracts);
                     _supressFromExtracts = value;
                     OnPropertyChanged("SupressFromExtracts");
                 }

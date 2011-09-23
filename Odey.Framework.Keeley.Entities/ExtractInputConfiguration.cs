@@ -89,6 +89,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_intValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("IntValue", _intValue);
                     _intValue = value;
                     OnPropertyChanged("IntValue");
                 }
@@ -104,6 +105,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_stringValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StringValue", _stringValue);
                     _stringValue = value;
                     OnPropertyChanged("StringValue");
                 }
@@ -119,6 +121,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_decimalValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DecimalValue", _decimalValue);
                     _decimalValue = value;
                     OnPropertyChanged("DecimalValue");
                 }
@@ -134,6 +137,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dateTimeValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DateTimeValue", _dateTimeValue);
                     _dateTimeValue = value;
                     OnPropertyChanged("DateTimeValue");
                 }
@@ -149,6 +153,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_bitValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("BitValue", _bitValue);
                     _bitValue = value;
                     OnPropertyChanged("BitValue");
                 }
@@ -164,6 +169,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -195,6 +201,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

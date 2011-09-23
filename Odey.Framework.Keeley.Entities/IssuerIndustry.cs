@@ -89,6 +89,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_industryClassificationID != value)
                 {
+                    ChangeTracker.RecordOriginalValue("IndustryClassificationID", _industryClassificationID);
                     _industryClassificationID = value;
                     OnPropertyChanged("IndustryClassificationID");
                 }
@@ -104,6 +105,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }

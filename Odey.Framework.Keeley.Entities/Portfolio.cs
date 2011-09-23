@@ -73,6 +73,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_referenceDate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("ReferenceDate", _referenceDate);
                     _referenceDate = value;
                     OnPropertyChanged("ReferenceDate");
                 }
@@ -88,6 +89,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_netPosition != value)
                 {
+                    ChangeTracker.RecordOriginalValue("NetPosition", _netPosition);
                     _netPosition = value;
                     OnPropertyChanged("NetPosition");
                 }
@@ -103,6 +105,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_netCostInstrumentCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("NetCostInstrumentCurrency", _netCostInstrumentCurrency);
                     _netCostInstrumentCurrency = value;
                     OnPropertyChanged("NetCostInstrumentCurrency");
                 }
@@ -118,6 +121,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_netCostBookCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("NetCostBookCurrency", _netCostBookCurrency);
                     _netCostBookCurrency = value;
                     OnPropertyChanged("NetCostBookCurrency");
                 }
@@ -133,6 +137,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_deltaNetCostInstrumentCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DeltaNetCostInstrumentCurrency", _deltaNetCostInstrumentCurrency);
                     _deltaNetCostInstrumentCurrency = value;
                     OnPropertyChanged("DeltaNetCostInstrumentCurrency");
                 }
@@ -148,6 +153,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_deltaNetCostBookCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DeltaNetCostBookCurrency", _deltaNetCostBookCurrency);
                     _deltaNetCostBookCurrency = value;
                     OnPropertyChanged("DeltaNetCostBookCurrency");
                 }
@@ -163,6 +169,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayNetPostionChange != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayNetPostionChange", _todayNetPostionChange);
                     _todayNetPostionChange = value;
                     OnPropertyChanged("TodayNetPostionChange");
                 }
@@ -178,6 +185,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayDeltaNetCostChangeInstrumentCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayDeltaNetCostChangeInstrumentCurrency", _todayDeltaNetCostChangeInstrumentCurrency);
                     _todayDeltaNetCostChangeInstrumentCurrency = value;
                     OnPropertyChanged("TodayDeltaNetCostChangeInstrumentCurrency");
                 }
@@ -193,6 +201,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayDeltaNetCostChangeBookCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayDeltaNetCostChangeBookCurrency", _todayDeltaNetCostChangeBookCurrency);
                     _todayDeltaNetCostChangeBookCurrency = value;
                     OnPropertyChanged("TodayDeltaNetCostChangeBookCurrency");
                 }
@@ -208,6 +217,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayNetCostChangeInstrumentCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayNetCostChangeInstrumentCurrency", _todayNetCostChangeInstrumentCurrency);
                     _todayNetCostChangeInstrumentCurrency = value;
                     OnPropertyChanged("TodayNetCostChangeInstrumentCurrency");
                 }
@@ -223,6 +233,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayNetCostChangeBookCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayNetCostChangeBookCurrency", _todayNetCostChangeBookCurrency);
                     _todayNetCostChangeBookCurrency = value;
                     OnPropertyChanged("TodayNetCostChangeBookCurrency");
                 }
@@ -238,6 +249,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -269,6 +281,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
@@ -284,6 +297,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayCashBenefit != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayCashBenefit", _todayCashBenefit);
                     _todayCashBenefit = value;
                     OnPropertyChanged("TodayCashBenefit");
                 }
@@ -299,6 +313,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayCashBenefitBookCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayCashBenefitBookCurrency", _todayCashBenefitBookCurrency);
                     _todayCashBenefitBookCurrency = value;
                     OnPropertyChanged("TodayCashBenefitBookCurrency");
                 }
@@ -314,6 +329,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayAccrual != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayAccrual", _todayAccrual);
                     _todayAccrual = value;
                     OnPropertyChanged("TodayAccrual");
                 }
@@ -329,6 +345,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayRealisedPricePnl != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayRealisedPricePnl", _todayRealisedPricePnl);
                     _todayRealisedPricePnl = value;
                     OnPropertyChanged("TodayRealisedPricePnl");
                 }
@@ -344,6 +361,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayRealisedFxPnl != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayRealisedFxPnl", _todayRealisedFxPnl);
                     _todayRealisedFxPnl = value;
                     OnPropertyChanged("TodayRealisedFxPnl");
                 }
@@ -359,6 +377,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_totalAccrual != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TotalAccrual", _totalAccrual);
                     _totalAccrual = value;
                     OnPropertyChanged("TotalAccrual");
                 }
@@ -374,6 +393,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayRealisedPricePnlBookCurrency != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayRealisedPricePnlBookCurrency", _todayRealisedPricePnlBookCurrency);
                     _todayRealisedPricePnlBookCurrency = value;
                     OnPropertyChanged("TodayRealisedPricePnlBookCurrency");
                 }
@@ -389,6 +409,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_marketValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("MarketValue", _marketValue);
                     _marketValue = value;
                     OnPropertyChanged("MarketValue");
                 }
@@ -404,6 +425,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_price != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Price", _price);
                     _price = value;
                     OnPropertyChanged("Price");
                 }
@@ -435,6 +457,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fXRate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("FXRate", _fXRate);
                     _fXRate = value;
                     OnPropertyChanged("FXRate");
                 }
@@ -466,6 +489,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_deltaMarketValue != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DeltaMarketValue", _deltaMarketValue);
                     _deltaMarketValue = value;
                     OnPropertyChanged("DeltaMarketValue");
                 }
@@ -481,6 +505,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayUnrealisedFXPnl != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayUnrealisedFXPnl", _todayUnrealisedFXPnl);
                     _todayUnrealisedFXPnl = value;
                     OnPropertyChanged("TodayUnrealisedFXPnl");
                 }
@@ -496,6 +521,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_todayUnrealisedPricePnl != value)
                 {
+                    ChangeTracker.RecordOriginalValue("TodayUnrealisedPricePnl", _todayUnrealisedPricePnl);
                     _todayUnrealisedPricePnl = value;
                     OnPropertyChanged("TodayUnrealisedPricePnl");
                 }
@@ -511,6 +537,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_priceToPositionFXRate != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PriceToPositionFXRate", _priceToPositionFXRate);
                     _priceToPositionFXRate = value;
                     OnPropertyChanged("PriceToPositionFXRate");
                 }
@@ -542,6 +569,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_priceIsLastTradePrice != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PriceIsLastTradePrice", _priceIsLastTradePrice);
                     _priceIsLastTradePrice = value;
                     OnPropertyChanged("PriceIsLastTradePrice");
                 }

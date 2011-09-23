@@ -65,6 +65,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_entityTypeId != value)
                 {
+                    ChangeTracker.RecordOriginalValue("EntityTypeId", _entityTypeId);
                     _entityTypeId = value;
                     OnPropertyChanged("EntityTypeId");
                 }
@@ -96,6 +97,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_ordering != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Ordering", _ordering);
                     _ordering = value;
                     OnPropertyChanged("Ordering");
                 }
@@ -111,6 +113,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -142,6 +145,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }

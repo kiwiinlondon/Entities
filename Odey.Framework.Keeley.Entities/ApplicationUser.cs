@@ -18,7 +18,6 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Book))]
     public partial class ApplicationUser: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -50,6 +49,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fMPersID != value)
                 {
+                    ChangeTracker.RecordOriginalValue("FMPersID", _fMPersID);
                     _fMPersID = value;
                     OnPropertyChanged("FMPersID");
                 }
@@ -65,6 +65,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_name != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Name", _name);
                     _name = value;
                     OnPropertyChanged("Name");
                 }
@@ -80,6 +81,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_email != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Email", _email);
                     _email = value;
                     OnPropertyChanged("Email");
                 }
@@ -95,6 +97,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_windowsLogin != value)
                 {
+                    ChangeTracker.RecordOriginalValue("WindowsLogin", _windowsLogin);
                     _windowsLogin = value;
                     OnPropertyChanged("WindowsLogin");
                 }
@@ -110,6 +113,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -148,44 +152,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public TrackableCollection<Book> Books1
-        {
-            get
-            {
-                if (_books1 == null)
-                {
-                    _books1 = new TrackableCollection<Book>();
-                    _books1.CollectionChanged += FixupBooks1;
-                }
-                return _books1;
-            }
-            set
-            {
-                if (!ReferenceEquals(_books1, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_books1 != null)
-                    {
-                        _books1.CollectionChanged -= FixupBooks1;
-                    }
-                    _books1 = value;
-                    if (_books1 != null)
-                    {
-                        _books1.CollectionChanged += FixupBooks1;
-                    }
-                    OnNavigationPropertyChanged("Books1");
-                }
-            }
-        }
-        private TrackableCollection<Book> _books1;
 
         #endregion
         #region ChangeTracking
@@ -265,46 +231,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Books1.Clear();
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupBooks1(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (Book item in e.NewItems)
-                {
-                    item.ManagerId = UserID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("Books1", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (Book item in e.OldItems)
-                {
-                    item.ManagerId = null;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("Books1", item);
-                    }
-                }
-            }
         }
 
         #endregion

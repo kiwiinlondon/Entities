@@ -8,6 +8,7 @@ using Odey.Framework.Keeley;
 using Odey.Framework.Keeley.Entities.Caches;
 using Odey.Framework.Keeley.Entities.Enums;
 using Odey.Framework.Keeley.Entities.Interfaces;
+using Odey.StaticServices.Clients;
 
 namespace Odey.Framework.KeeleyEntitiesTest
 {
@@ -30,18 +31,15 @@ namespace Odey.Framework.KeeleyEntitiesTest
             //    }
             //    context.SaveChanges();
             //}
-            Portfolio portfolio = null;
-            using (var context = new KeeleyModel())
-            {
-                portfolio = context.Portfolios.Where(a => a.PortfolioId == 1711).FirstOrDefault();
-                portfolio.NetPosition = 2;
-                context.SaveChanges();
-            }
+            RegionClient regionClient = new RegionClient();
+            Region region = regionClient.Get(36);
            // portfolio.ChangeTracker.ChangeTrackingEnabled = true;
-            portfolio.NetPosition = 2;
+            region.Name="Geoff2";
             using (var context = new KeeleyModel())
             {
-                context.Portfolios.ApplyChanges(portfolio);
+                region = context.Regions.Where(a => a.RegionID == 36).FirstOrDefault();
+                region.Name = "Geoff2";
+              //  context.Regions.ApplyChanges(region);
                 context.SaveChanges();
             }
         }

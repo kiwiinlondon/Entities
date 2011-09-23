@@ -73,6 +73,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -120,6 +121,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_positionsExist != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PositionsExist", _positionsExist);
                     _positionsExist = value;
                     OnPropertyChanged("PositionsExist");
                 }
@@ -135,6 +137,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_perfFundName != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PerfFundName", _perfFundName);
                     _perfFundName = value;
                     OnPropertyChanged("PerfFundName");
                 }

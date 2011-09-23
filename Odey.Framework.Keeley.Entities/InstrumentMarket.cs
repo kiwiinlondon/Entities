@@ -89,6 +89,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_fMSecId != value)
                 {
+                    ChangeTracker.RecordOriginalValue("FMSecId", _fMSecId);
                     _fMSecId = value;
                     OnPropertyChanged("FMSecId");
                 }
@@ -104,6 +105,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_priceDivisor != value)
                 {
+                    ChangeTracker.RecordOriginalValue("PriceDivisor", _priceDivisor);
                     _priceDivisor = value;
                     OnPropertyChanged("PriceDivisor");
                 }
@@ -119,6 +121,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_bloombergTicker != value)
                 {
+                    ChangeTracker.RecordOriginalValue("BloombergTicker", _bloombergTicker);
                     _bloombergTicker = value;
                     OnPropertyChanged("BloombergTicker");
                 }
@@ -134,6 +137,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_sedol != value)
                 {
+                    ChangeTracker.RecordOriginalValue("Sedol", _sedol);
                     _sedol = value;
                     OnPropertyChanged("Sedol");
                 }
@@ -149,6 +153,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_isPrimary != value)
                 {
+                    ChangeTracker.RecordOriginalValue("IsPrimary", _isPrimary);
                     _isPrimary = value;
                     OnPropertyChanged("IsPrimary");
                 }
@@ -164,6 +169,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_startDt != value)
                 {
+                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
                     _startDt = value;
                     OnPropertyChanged("StartDt");
                 }
@@ -195,6 +201,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (_dataVersion != value)
                 {
+                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
                     _dataVersion = value;
                     OnPropertyChanged("DataVersion");
                 }
