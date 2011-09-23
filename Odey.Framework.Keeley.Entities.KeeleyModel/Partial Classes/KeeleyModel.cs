@@ -9,6 +9,7 @@ using Odey.Framework.Keeley.Entities.Caches;
 using Odey.Framework.Keeley.Entities;
 using System.Security.Principal;
 using ServiceModelEx;
+using Odey.Framework.Keeley.Entities.Enums;
 
 namespace Odey.Framework.Keeley.Entities
 {
@@ -59,27 +60,57 @@ namespace Odey.Framework.Keeley.Entities
             _securityCallStack = securityCallStack;
         }
 
+        public List<ChangedEntity> ChangedEntities { get; set; }
+
+        private EntityTypeIds GetEntityType(Type type)
+        {
+            if (type == typeof(Portfolio))
+            {
+                return EntityTypeIds.Book;
+            }
+            else
+            {
+                return EntityTypeIds.None;
+            }
+        }
+
+        private void AddToChangedEntities(ObjectStateEntry entry)
+        {
+            EntityTypeIds entityTypeId = GetEntityType(entry.Entity.GetType());
+            if (entityTypeId != EntityTypeIds.None)
+            {
+                ChangedEntity changedEntity = new ChangedEntity();
+                changedEntity.EntityState = entry.State;
+                changedEntity.EntityID = int.Parse(entry.EntityKey.EntityKeyValues[0].Value.ToString());
+                ChangedEntities.Add(changedEntity);
+            }
+        }
+
         public override int SaveChanges(SaveOptions options)
         {
             //needed to bring context back in line with entity
+            ChangedEntities = new List<ChangedEntity>();
             DetectChanges();
             foreach (ObjectStateEntry entry in
-                ObjectStateManager.GetObjectStateEntries(
-                EntityState.Added | EntityState.Modified))
+                ObjectStateManager.GetObjectStateEntries(EntityState.Added | EntityState.Modified))
             {
-                PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
+                AddToChangedEntities(entry);
+                if (entry.State != EntityState.Deleted)
+                {
+                    PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
 
-                if (updateUserIdPropInfo != null)
-                {                    
-                    string updateUserName;
-                    int? userId = GetApplicationUserId(out updateUserName);
-                    if (userId == null)
-                    {
-                        throw new ApplicationException(String.Format("User {0} is not authorised to make changes to entity type {1}", updateUserName, entry.Entity.GetType().ToString()));
-                    }
-                    else
-                    {
-                        updateUserIdPropInfo.SetValue(entry.Entity, userId.Value, null);
+                    if (updateUserIdPropInfo != null)
+                    {                    
+                        string updateUserName;
+                        int? userId = GetApplicationUserId(out updateUserName);
+                        if (userId == null)
+                        {
+                            throw new ApplicationException(String.Format("User {0} is not authorised to make changes to entity type {1}", updateUserName, entry.Entity.GetType().ToString()));
+                        }
+                        else
+                        {
+                            updateUserIdPropInfo.SetValue(entry.Entity, userId.Value, null);
+                        }
                     }
                 }
             }

@@ -436,6 +436,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _issuerIndustries  ?? (_issuerIndustries = CreateObjectSet<IssuerIndustry>("IssuerIndustries")); }
         }
         private ObjectSet<IssuerIndustry> _issuerIndustries;
+    
+        public ObjectSet<Analytic> Analytics
+        {
+            get { return _analytics  ?? (_analytics = CreateObjectSet<Analytic>("Analytics")); }
+        }
+        private ObjectSet<Analytic> _analytics;
 
         #endregion
         #region Function Imports

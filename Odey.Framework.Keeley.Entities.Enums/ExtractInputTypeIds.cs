@@ -14,6 +14,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         StoredProcedure = 4,   
         [EnumMember]
-        Portfolio = 5   
+        Portfolio = 5 ,
+        [EnumMember]
+        FXPositions = 6
     }
 }

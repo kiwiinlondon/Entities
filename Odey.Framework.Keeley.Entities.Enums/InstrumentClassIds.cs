@@ -6,20 +6,54 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum InstrumentClassIds
     {
         [EnumMember]
-        None = 0,
-        [EnumMember]
-        All=1,
-        [EnumMember]
-        Equity = 2,
-        [EnumMember]
         Currency = 3,
         [EnumMember]
-        Ord = 4,
+        OrdinaryShare = 4,
         [EnumMember]
-        ForwardFx = 26,
+        ForwardFX = 26,
         [EnumMember]
-        CFD = 27,
+        ContractForDifference = 27,
         [EnumMember]
-        GovernmentBond = 34
+        DepositoryReceipt = 28,
+        [EnumMember]
+        CollectiveInvestmentScheme = 29,
+        [EnumMember]
+        Bond = 31,
+        [EnumMember]
+        ConvertibleBond = 32,
+        [EnumMember]
+        FloatingRateNote = 33,
+        [EnumMember]
+        GovernmentBond = 34,
+        [EnumMember]
+        EquityIndexFuture = 36,
+        [EnumMember]
+        CommodityFuture = 37,
+        [EnumMember]
+        ExchangeTradedFunds = 38,
+        [EnumMember]
+        PreferenceShare = 39,
+        [EnumMember]
+        Index = 41,
+        [EnumMember]
+        Warrant = 42,
+        [EnumMember]
+        BondFuture = 43,
+        [EnumMember]
+        EquityOption = 45,
+        [EnumMember]
+        InterestRateFuture = 46,
+        [EnumMember]
+        Miscellaneous = 48,
+        [EnumMember]
+        BankDeposits = 49,
+        [EnumMember]
+        EquityIndexOption = 50,
+        [EnumMember]
+        EquityFuture = 51,
+        [EnumMember]
+        FXFuture = 52,
+        [EnumMember]
+        Basket = 54
     }
 }

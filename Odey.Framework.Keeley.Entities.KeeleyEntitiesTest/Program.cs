@@ -30,13 +30,20 @@ namespace Odey.Framework.KeeleyEntitiesTest
             //    }
             //    context.SaveChanges();
             //}
+            Portfolio portfolio = null;
             using (var context = new KeeleyModel())
             {
-                FXRate fxRate = context.FXRates.Include("FromRawFXRate").Include("FromSecondRawFXRate").Include("ToRawFXRate").Include("ToSecondRawFXRate")
-                    .Where(a => a.FXRateId == 169339).FirstOrDefault();
-                List<IRawMarketDatum> m = fxRate.RawMarketData;
+                portfolio = context.Portfolios.Where(a => a.PortfolioId == 1711).FirstOrDefault();
+                portfolio.NetPosition = 2;
+                context.SaveChanges();
             }
-            
+           // portfolio.ChangeTracker.ChangeTrackingEnabled = true;
+            portfolio.NetPosition = 2;
+            using (var context = new KeeleyModel())
+            {
+                context.Portfolios.ApplyChanges(portfolio);
+                context.SaveChanges();
+            }
         }
 
         static void TestCache()

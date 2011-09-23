@@ -95,6 +95,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<int> Ordering
+        {	
+    		
+            get { return _ordering; }
+            set
+            {
+                if (_ordering != value)
+                {
+                    _ordering = value;
+                    OnPropertyChanged("Ordering");
+                }
+            }
+        }
+        private Nullable<int> _ordering;
 
         #endregion
         #region Navigation Properties

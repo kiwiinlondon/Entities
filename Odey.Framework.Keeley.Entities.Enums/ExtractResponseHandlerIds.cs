@@ -1,15 +1,14 @@
-﻿using System.Runtime.Serialization;
+﻿
+using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum MarketIds
+    public enum ExtractResponseHandlerIds
     {
         [EnumMember]
         None = 0,
         [EnumMember]
-        Unknown = 1,
-        [EnumMember]
-        LondonStockExchange = 3612
+        BloombergAlpha = 1
     }
 }

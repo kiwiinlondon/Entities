@@ -18,59 +18,89 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class Extract: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class Analytic: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractID
+        public int AnalyticId
         {	
     		
-            get { return _extractID; }
+            get { return _analyticId; }
             set
             {
-                if (_extractID != value)
+                if (_analyticId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'AnalyticId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractID = value;
-                    OnPropertyChanged("ExtractID");
+                    _analyticId = value;
+                    OnPropertyChanged("AnalyticId");
                 }
             }
         }
-        private int _extractID;
+        private int _analyticId;
         [DataMember]
-        public int ExtractTypeId
+        public int AnalyticTypeID
         {	
     		
-            get { return _extractTypeId; }
+            get { return _analyticTypeID; }
             set
             {
-                if (_extractTypeId != value)
+                if (_analyticTypeID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ExtractTypeId", _extractTypeId);
-                    _extractTypeId = value;
-                    OnPropertyChanged("ExtractTypeId");
+                    _analyticTypeID = value;
+                    OnPropertyChanged("AnalyticTypeID");
                 }
             }
         }
-        private int _extractTypeId;
+        private int _analyticTypeID;
         [DataMember]
-        public string Name
+        public int InstrumentMarketId
         {	
     		
-            get { return _name; }
+            get { return _instrumentMarketId; }
             set
             {
-                if (_name != value)
+                if (_instrumentMarketId != value)
                 {
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("InstrumentMarketId", _instrumentMarketId);
+                    _instrumentMarketId = value;
+                    OnPropertyChanged("InstrumentMarketId");
                 }
             }
         }
-        private string _name;
+        private int _instrumentMarketId;
+        [DataMember]
+        public System.DateTime ReferenceDate
+        {	
+    		
+            get { return _referenceDate; }
+            set
+            {
+                if (_referenceDate != value)
+                {
+                    _referenceDate = value;
+                    OnPropertyChanged("ReferenceDate");
+                }
+            }
+        }
+        private System.DateTime _referenceDate;
+        [DataMember]
+        public decimal Value
+        {	
+    		
+            get { return _value; }
+            set
+            {
+                if (_value != value)
+                {
+                    _value = value;
+                    OnPropertyChanged("Value");
+                }
+            }
+        }
+        private decimal _value;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -118,111 +148,20 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public int ExtractOutputTypeID
+        public System.DateTime UpdateDate
         {	
     		
-            get { return _extractOutputTypeID; }
+            get { return _updateDate; }
             set
             {
-                if (_extractOutputTypeID != value)
+                if (_updateDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ExtractOutputTypeID", _extractOutputTypeID);
-                    _extractOutputTypeID = value;
-                    OnPropertyChanged("ExtractOutputTypeID");
+                    _updateDate = value;
+                    OnPropertyChanged("UpdateDate");
                 }
             }
         }
-        private int _extractOutputTypeID;
-        [DataMember]
-        public int ExtractRunnerTypeID
-        {	
-    		
-            get { return _extractRunnerTypeID; }
-            set
-            {
-                if (_extractRunnerTypeID != value)
-                {
-                    _extractRunnerTypeID = value;
-                    OnPropertyChanged("ExtractRunnerTypeID");
-                }
-            }
-        }
-        private int _extractRunnerTypeID;
-        [DataMember]
-        public int ExtractInputTypeID
-        {	
-    		
-            get { return _extractInputTypeID; }
-            set
-            {
-                if (_extractInputTypeID != value)
-                {
-                    _extractInputTypeID = value;
-                    OnPropertyChanged("ExtractInputTypeID");
-                }
-            }
-        }
-        private int _extractInputTypeID;
-        [DataMember]
-        public int ExtractDeliveryTypeID
-        {	
-    		
-            get { return _extractDeliveryTypeID; }
-            set
-            {
-                if (_extractDeliveryTypeID != value)
-                {
-                    _extractDeliveryTypeID = value;
-                    OnPropertyChanged("ExtractDeliveryTypeID");
-                }
-            }
-        }
-        private int _extractDeliveryTypeID;
-        [DataMember]
-        public bool SendIfEmpty
-        {	
-    		
-            get { return _sendIfEmpty; }
-            set
-            {
-                if (_sendIfEmpty != value)
-                {
-                    _sendIfEmpty = value;
-                    OnPropertyChanged("SendIfEmpty");
-                }
-            }
-        }
-        private bool _sendIfEmpty;
-        [DataMember]
-        public int ExtractOutputContainerTypeID
-        {	
-    		
-            get { return _extractOutputContainerTypeID; }
-            set
-            {
-                if (_extractOutputContainerTypeID != value)
-                {
-                    _extractOutputContainerTypeID = value;
-                    OnPropertyChanged("ExtractOutputContainerTypeID");
-                }
-            }
-        }
-        private int _extractOutputContainerTypeID;
-        [DataMember]
-        public Nullable<int> ExtractResponseHandlerTypeId
-        {	
-    		
-            get { return _extractResponseHandlerTypeId; }
-            set
-            {
-                if (_extractResponseHandlerTypeId != value)
-                {
-                    _extractResponseHandlerTypeId = value;
-                    OnPropertyChanged("ExtractResponseHandlerTypeId");
-                }
-            }
-        }
-        private Nullable<int> _extractResponseHandlerTypeId;
+        private System.DateTime _updateDate;
 
         #endregion
         #region ChangeTracking
