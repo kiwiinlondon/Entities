@@ -7,20 +7,21 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum EntityRankingSchemeItemIds
+    public enum PeriodicityIds
     {
         [EnumMember]
         None = 0,
         [EnumMember]
-        DummyPrice = 14,
+        Daily = 1,
         [EnumMember]
-        PerfDBNavPrice = 16,
+        FirstAndFifteenthOfMonth = 2,
         [EnumMember]
-        ManualAnalytic = 17,
+        FirstOfMonth = 3,
         [EnumMember]
-        FMAnalytic = 18,
+        EveryWednesday = 4,
         [EnumMember]
-        DummyAnalytic = 19
-
+        LastDayOfQuarter = 5,
+        [EnumMember]
+        LastDayOfMonth = 6
     }
 }

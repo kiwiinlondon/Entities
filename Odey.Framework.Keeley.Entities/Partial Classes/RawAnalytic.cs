@@ -6,25 +6,22 @@ using Odey.Framework.Keeley.Entities.Interfaces;
 
 namespace Odey.Framework.Keeley.Entities
 {
-    partial class RawFXRate : IRawMarketDatum
+    partial class RawAnalytic : IRawMarketDatum
     {
         int IRawMarketDatum.RawMarketDatumId
         {
             get
             {
-                return RawFXRateId;
+                return RawAnalyticId;
             }
         }
-       
+
+
+
 
         List<IMarketDatum> IRawMarketDatum.MarketData
         {
-            get { 
-                return FromFXRates.ToList<IMarketDatum>()
-                        .Concat(ToFXRates.ToList<IMarketDatum>())
-                        .Concat(FromSecondFXRates.ToList<IMarketDatum>())
-                        .Concat(ToSecondFXRates.ToList<IMarketDatum>()).ToList(); }
+            get { return Analytics.ToList<IMarketDatum>(); }
         }
-
     }
 }

@@ -35,6 +35,13 @@ namespace Odey.Framework.Keeley.Entities
                     {
                         throw new InvalidOperationException("The property 'OverlyingInstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
+                    if (!IsDeserializing)
+                    {
+                        if (Overlyer != null && Overlyer.InstrumentID != value)
+                        {
+                            Overlyer = null;
+                        }
+                    }
                     _overlyingInstrumentID = value;
                     OnPropertyChanged("OverlyingInstrumentID");
                 }
@@ -148,6 +155,32 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Instrument _underlyer;
+    
+        [DataMember]
+        public Instrument Overlyer
+        {
+            get { return _overlyer; }
+            set
+            {
+                if (!ReferenceEquals(_overlyer, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
+                    {
+                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
+                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
+                        if (OverlyingInstrumentID != value.InstrumentID)
+                        {
+                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
+                        }
+                    }
+                    var previousValue = _overlyer;
+                    _overlyer = value;
+                    FixupOverlyer(previousValue);
+                    OnNavigationPropertyChanged("Overlyer");
+                }
+            }
+        }
+        private Instrument _overlyer;
 
         #endregion
         #region ChangeTracking
@@ -238,6 +271,7 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             Underlyer = null;
+            Overlyer = null;
         }
 
         #endregion
@@ -250,11 +284,20 @@ namespace Odey.Framework.Keeley.Entities
                 return;
             }
     
-            if (Underlyer != null)
+            if (previousValue != null && previousValue.OverlyingRelationships.Contains(this))
             {
-                UnderlyingInstrumentID = Underlyer.InstrumentID;
+                previousValue.OverlyingRelationships.Remove(this);
             }
     
+            if (Underlyer != null)
+            {
+                if (!Underlyer.OverlyingRelationships.Contains(this))
+                {
+                    Underlyer.OverlyingRelationships.Add(this);
+                }
+    
+                UnderlyingInstrumentID = Underlyer.InstrumentID;
+            }
             if (ChangeTracker.ChangeTrackingEnabled)
             {
                 if (ChangeTracker.OriginalValues.ContainsKey("Underlyer")
@@ -269,6 +312,42 @@ namespace Odey.Framework.Keeley.Entities
                 if (Underlyer != null && !Underlyer.ChangeTracker.ChangeTrackingEnabled)
                 {
                     Underlyer.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupOverlyer(Instrument previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && ReferenceEquals(previousValue.UnderlyingRelationship, this))
+            {
+                previousValue.UnderlyingRelationship = null;
+            }
+    
+            if (Overlyer != null)
+            {
+                Overlyer.UnderlyingRelationship = this;
+                OverlyingInstrumentID = Overlyer.InstrumentID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Overlyer")
+                    && (ChangeTracker.OriginalValues["Overlyer"] == Overlyer))
+                {
+                    ChangeTracker.OriginalValues.Remove("Overlyer");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Overlyer", previousValue);
+                }
+                if (Overlyer != null && !Overlyer.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Overlyer.StartTracking();
                 }
             }
         }

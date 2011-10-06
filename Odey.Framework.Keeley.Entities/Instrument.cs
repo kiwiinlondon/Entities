@@ -275,6 +275,41 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private TrackableCollection<InstrumentMarket> _instrumentMarkets;
+    
+        [DataMember]
+        public TrackableCollection<InstrumentRelationship> OverlyingRelationships
+        {
+            get
+            {
+                if (_overlyingRelationships == null)
+                {
+                    _overlyingRelationships = new TrackableCollection<InstrumentRelationship>();
+                    _overlyingRelationships.CollectionChanged += FixupOverlyingRelationships;
+                }
+                return _overlyingRelationships;
+            }
+            set
+            {
+                if (!ReferenceEquals(_overlyingRelationships, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_overlyingRelationships != null)
+                    {
+                        _overlyingRelationships.CollectionChanged -= FixupOverlyingRelationships;
+                    }
+                    _overlyingRelationships = value;
+                    if (_overlyingRelationships != null)
+                    {
+                        _overlyingRelationships.CollectionChanged += FixupOverlyingRelationships;
+                    }
+                    OnNavigationPropertyChanged("OverlyingRelationships");
+                }
+            }
+        }
+        private TrackableCollection<InstrumentRelationship> _overlyingRelationships;
 
         #endregion
         #region ChangeTracking
@@ -357,6 +392,7 @@ namespace Odey.Framework.Keeley.Entities
             UnderlyingRelationship = null;
             EventInstrumentMap = null;
             InstrumentMarkets.Clear();
+            OverlyingRelationships.Clear();
         }
 
         #endregion
@@ -381,9 +417,14 @@ namespace Odey.Framework.Keeley.Entities
                 return;
             }
     
+            if (previousValue != null && ReferenceEquals(previousValue.Overlyer, this))
+            {
+                previousValue.Overlyer = null;
+            }
+    
             if (UnderlyingRelationship != null)
             {
-                UnderlyingRelationship.OverlyingInstrumentID = InstrumentID;
+                UnderlyingRelationship.Overlyer = this;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
@@ -492,6 +533,45 @@ namespace Odey.Framework.Keeley.Entities
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("InstrumentMarkets", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupOverlyingRelationships(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (InstrumentRelationship item in e.NewItems)
+                {
+                    item.Underlyer = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("OverlyingRelationships", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (InstrumentRelationship item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.Underlyer, this))
+                    {
+                        item.Underlyer = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("OverlyingRelationships", item);
                     }
                 }
             }

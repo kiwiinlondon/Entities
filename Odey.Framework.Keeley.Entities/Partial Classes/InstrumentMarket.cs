@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Odey.Framework.Keeley.Entities
 {
@@ -82,6 +84,15 @@ namespace Odey.Framework.Keeley.Entities
                     }
                     else
                     {
+                        InstrumentMarket underlyer = Instrument.Underlyer.InstrumentMarkets.Where(a => a.MarketID == MarketID).FirstOrDefault();
+                        if (underlyer == null)
+                        {
+                            underlyer = Instrument.Underlyer.InstrumentMarkets.Where(a => a.IsPrimary == true).FirstOrDefault();
+                        }
+                        if (underlyer != null)
+                        {
+                            return underlyer;
+                        }
                         throw new ApplicationException(String.Format("Unable to establish underlying instrument market {0}", Instrument.InstrumentID));
                     }
                 }
@@ -89,6 +100,28 @@ namespace Odey.Framework.Keeley.Entities
                 {
                     return null;
                 }
+            }
+        }
+
+        public List<InstrumentMarket> OverlyingInstrumentMarkets
+        {
+            get
+            {
+                List<InstrumentMarket> instrumentMarkets = new List<InstrumentMarket>();
+                foreach (InstrumentRelationship instrumentRelationship in Instrument.OverlyingRelationships)
+                {
+                    if (instrumentRelationship.Overlyer != null)
+                    {
+                        foreach (InstrumentMarket instrumentMarket in instrumentRelationship.Overlyer.InstrumentMarkets)
+                        {
+                            if (instrumentMarket.UnderlyingInstrumentMarket.InstrumentMarketID == InstrumentMarketID)
+                            {
+                                instrumentMarkets.Add(instrumentMarket);
+                            }
+                        }
+                    }
+                }
+                return instrumentMarkets;
             }
         }
       

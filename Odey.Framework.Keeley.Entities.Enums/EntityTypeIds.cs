@@ -30,7 +30,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FXTradeEvent = 16,
         [EnumMember]
-        InternalAccountingEvent = 17,       
+        InternalAccountingEvent = 17,
         [EnumMember]
         Price = 18,
         [EnumMember]
@@ -38,7 +38,18 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MatchingEngineOutput = 20,
         [EnumMember]
-        Book = 22
+        Book = 22,
+        [EnumMember]
+        Industry = 23,
+        [EnumMember]
+        Sector = 24,
+        [EnumMember]
+        Country = 25,
+        [EnumMember]
+        Region = 26,
+        [EnumMember]
+        Analytic = 27
+
     }
 }
 

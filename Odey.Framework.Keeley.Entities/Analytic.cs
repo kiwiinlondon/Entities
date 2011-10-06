@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(RawAnalytic))]
     public partial class Analytic: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -153,21 +154,48 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public System.DateTime UpdateDate
+        public Nullable<int> RawAnalyticId
         {	
     		
-            get { return _updateDate; }
+            get { return _rawAnalyticId; }
             set
             {
-                if (_updateDate != value)
+                if (_rawAnalyticId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("UpdateDate", _updateDate);
-                    _updateDate = value;
-                    OnPropertyChanged("UpdateDate");
+                    ChangeTracker.RecordOriginalValue("RawAnalyticId", _rawAnalyticId);
+                    if (!IsDeserializing)
+                    {
+                        if (RawAnalytic != null && RawAnalytic.RawAnalyticId != value)
+                        {
+                            RawAnalytic = null;
+                        }
+                    }
+                    _rawAnalyticId = value;
+                    OnPropertyChanged("RawAnalyticId");
                 }
             }
         }
-        private System.DateTime _updateDate;
+        private Nullable<int> _rawAnalyticId;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public RawAnalytic RawAnalytic
+        {
+            get { return _rawAnalytic; }
+            set
+            {
+                if (!ReferenceEquals(_rawAnalytic, value))
+                {
+                    var previousValue = _rawAnalytic;
+                    _rawAnalytic = value;
+                    FixupRawAnalytic(previousValue);
+                    OnNavigationPropertyChanged("RawAnalytic");
+                }
+            }
+        }
+        private RawAnalytic _rawAnalytic;
 
         #endregion
         #region ChangeTracking
@@ -247,6 +275,54 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            RawAnalytic = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupRawAnalytic(RawAnalytic previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.Analytics.Contains(this))
+            {
+                previousValue.Analytics.Remove(this);
+            }
+    
+            if (RawAnalytic != null)
+            {
+                if (!RawAnalytic.Analytics.Contains(this))
+                {
+                    RawAnalytic.Analytics.Add(this);
+                }
+    
+                RawAnalyticId = RawAnalytic.RawAnalyticId;
+            }
+            else if (!skipKeys)
+            {
+                RawAnalyticId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("RawAnalytic")
+                    && (ChangeTracker.OriginalValues["RawAnalytic"] == RawAnalytic))
+                {
+                    ChangeTracker.OriginalValues.Remove("RawAnalytic");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("RawAnalytic", previousValue);
+                }
+                if (RawAnalytic != null && !RawAnalytic.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    RawAnalytic.StartTracking();
+                }
+            }
         }
 
         #endregion

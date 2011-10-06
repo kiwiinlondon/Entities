@@ -54,6 +54,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FXFuture = 52,
         [EnumMember]
-        Basket = 54
+        Basket = 54,
+        [EnumMember]
+        PubliclyTradedRoyaltyTrust=55,
+        [EnumMember]
+        EquityIndexSwap=57
     }
 }

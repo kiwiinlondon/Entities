@@ -31,14 +31,13 @@ namespace Odey.Framework.KeeleyEntitiesTest
             //    }
             //    context.SaveChanges();
             //}
-            RegionClient regionClient = new RegionClient();
-            Region region = regionClient.Get(36);
-           // portfolio.ChangeTracker.ChangeTrackingEnabled = true;
-            region.Name="Geoff2";
+
+            //InstrumentMarketClient c = new InstrumentMarketClient();
+           // InstrumentMarket abc = c.Get(6116);
             using (var context = new KeeleyModel())
             {
-                region = context.Regions.Where(a => a.RegionID == 36).FirstOrDefault();
-                region.Name = "Geoff2";
+                InstrumentMarket p = context.InstrumentMarkets.Include("Instrument.UnderlyingRelationship.Underlyer.InstrumentMarkets").Include("Instrument.OverlyingRelationships.Overlyer.InstrumentMarkets").Where(a => a.InstrumentMarketID == 399).FirstOrDefault();
+                InstrumentMarket z = p.UnderlyingInstrumentMarket;
               //  context.Regions.ApplyChanges(region);
                 context.SaveChanges();
             }

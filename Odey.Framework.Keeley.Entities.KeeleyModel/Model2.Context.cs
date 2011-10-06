@@ -442,6 +442,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _analytics  ?? (_analytics = CreateObjectSet<Analytic>("Analytics")); }
         }
         private ObjectSet<Analytic> _analytics;
+    
+        public ObjectSet<RawAnalytic> RawAnalytics
+        {
+            get { return _rawAnalytics  ?? (_rawAnalytics = CreateObjectSet<RawAnalytic>("RawAnalytics")); }
+        }
+        private ObjectSet<RawAnalytic> _rawAnalytics;
 
         #endregion
         #region Function Imports
@@ -748,6 +754,80 @@ namespace Odey.Framework.Keeley.Entities
                 rawFXRateIdToIgnoreParameter = new ObjectParameter("RawFXRateIdToIgnore", typeof(int));
             }
             return base.ExecuteFunction<RawFXRate>("RawFXRate_GetlatestForForward", currencyIDParameter, referenceDateParameter, forwardDateParameter, entityRankingSchemeIdParameter, rawFXRateIdToIgnoreParameter);
+        }
+        public virtual ObjectResult<RawAnalytic> RawAnalytic_GetLatest(Nullable<int> instrumentMarketID, Nullable<int> analyticTypeID, Nullable<System.DateTime> referenceDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawAnalyticIdToIgnore)
+        {
+    
+            ObjectParameter instrumentMarketIDParameter;
+    
+            if (instrumentMarketID.HasValue)
+            {
+                instrumentMarketIDParameter = new ObjectParameter("InstrumentMarketID", instrumentMarketID);
+            }
+            else
+            {
+                instrumentMarketIDParameter = new ObjectParameter("InstrumentMarketID", typeof(int));
+            }
+    
+            ObjectParameter analyticTypeIDParameter;
+    
+            if (analyticTypeID.HasValue)
+            {
+                analyticTypeIDParameter = new ObjectParameter("AnalyticTypeID", analyticTypeID);
+            }
+            else
+            {
+                analyticTypeIDParameter = new ObjectParameter("AnalyticTypeID", typeof(int));
+            }
+    
+            ObjectParameter referenceDateParameter;
+    
+            if (referenceDate.HasValue)
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", referenceDate);
+            }
+            else
+            {
+                referenceDateParameter = new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+            }
+    
+            ObjectParameter entityRankingSchemeIdParameter;
+    
+            if (entityRankingSchemeId.HasValue)
+            {
+                entityRankingSchemeIdParameter = new ObjectParameter("EntityRankingSchemeId", entityRankingSchemeId);
+            }
+            else
+            {
+                entityRankingSchemeIdParameter = new ObjectParameter("EntityRankingSchemeId", typeof(int));
+            }
+    
+            ObjectParameter rawAnalyticIdToIgnoreParameter;
+    
+            if (rawAnalyticIdToIgnore.HasValue)
+            {
+                rawAnalyticIdToIgnoreParameter = new ObjectParameter("RawAnalyticIdToIgnore", rawAnalyticIdToIgnore);
+            }
+            else
+            {
+                rawAnalyticIdToIgnoreParameter = new ObjectParameter("RawAnalyticIdToIgnore", typeof(int));
+            }
+            return base.ExecuteFunction<RawAnalytic>("RawAnalytic_GetLatest", instrumentMarketIDParameter, analyticTypeIDParameter, referenceDateParameter, entityRankingSchemeIdParameter, rawAnalyticIdToIgnoreParameter);
+        }
+        public virtual ObjectResult<Nullable<System.DateTime>> Analytic_Roll(Nullable<int> updateUserId)
+        {
+    
+            ObjectParameter updateUserIdParameter;
+    
+            if (updateUserId.HasValue)
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", updateUserId);
+            }
+            else
+            {
+                updateUserIdParameter = new ObjectParameter("UpdateUserId", typeof(int));
+            }
+            return base.ExecuteFunction<Nullable<System.DateTime>>("Analytic_Roll", updateUserIdParameter);
         }
 
         #endregion

@@ -18,148 +18,125 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Instrument))]
-    public partial class InstrumentMarket: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(Analytic))]
+    public partial class RawAnalytic: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int InstrumentMarketID
+        public int RawAnalyticId
         {	
     		
-            get { return _instrumentMarketID; }
+            get { return _rawAnalyticId; }
             set
             {
-                if (_instrumentMarketID != value)
+                if (_rawAnalyticId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'InstrumentMarketID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'RawAnalyticId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _instrumentMarketID = value;
-                    OnPropertyChanged("InstrumentMarketID");
+                    _rawAnalyticId = value;
+                    OnPropertyChanged("RawAnalyticId");
                 }
             }
         }
-        private int _instrumentMarketID;
+        private int _rawAnalyticId;
         [DataMember]
-        public int InstrumentID
+        public int InstrumentMarketId
         {	
     		
-            get { return _instrumentID; }
+            get { return _instrumentMarketId; }
             set
             {
-                if (_instrumentID != value)
+                if (_instrumentMarketId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("InstrumentID", _instrumentID);
-                    if (!IsDeserializing)
-                    {
-                        if (Instrument != null && Instrument.InstrumentID != value)
-                        {
-                            Instrument = null;
-                        }
-                    }
-                    _instrumentID = value;
-                    OnPropertyChanged("InstrumentID");
+                    ChangeTracker.RecordOriginalValue("InstrumentMarketId", _instrumentMarketId);
+                    _instrumentMarketId = value;
+                    OnPropertyChanged("InstrumentMarketId");
                 }
             }
         }
-        private int _instrumentID;
+        private int _instrumentMarketId;
         [DataMember]
-        public int MarketID
+        public int AnalyticTypeId
         {	
     		
-            get { return _marketID; }
+            get { return _analyticTypeId; }
             set
             {
-                if (_marketID != value)
+                if (_analyticTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("MarketID", _marketID);
-                    _marketID = value;
-                    OnPropertyChanged("MarketID");
+                    ChangeTracker.RecordOriginalValue("AnalyticTypeId", _analyticTypeId);
+                    _analyticTypeId = value;
+                    OnPropertyChanged("AnalyticTypeId");
                 }
             }
         }
-        private int _marketID;
+        private int _analyticTypeId;
         [DataMember]
-        public Nullable<int> FMSecId
+        public System.DateTime ReferenceDate
         {	
     		
-            get { return _fMSecId; }
+            get { return _referenceDate; }
             set
             {
-                if (_fMSecId != value)
+                if (_referenceDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FMSecId", _fMSecId);
-                    _fMSecId = value;
-                    OnPropertyChanged("FMSecId");
+                    ChangeTracker.RecordOriginalValue("ReferenceDate", _referenceDate);
+                    _referenceDate = value;
+                    OnPropertyChanged("ReferenceDate");
                 }
             }
         }
-        private Nullable<int> _fMSecId;
+        private System.DateTime _referenceDate;
         [DataMember]
-        public decimal PriceDivisor
+        public int EntityRankingSchemeItemId
         {	
     		
-            get { return _priceDivisor; }
+            get { return _entityRankingSchemeItemId; }
             set
             {
-                if (_priceDivisor != value)
+                if (_entityRankingSchemeItemId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PriceDivisor", _priceDivisor);
-                    _priceDivisor = value;
-                    OnPropertyChanged("PriceDivisor");
+                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeItemId", _entityRankingSchemeItemId);
+                    _entityRankingSchemeItemId = value;
+                    OnPropertyChanged("EntityRankingSchemeItemId");
                 }
             }
         }
-        private decimal _priceDivisor;
+        private int _entityRankingSchemeItemId;
         [DataMember]
-        public string BloombergTicker
+        public decimal Value
         {	
     		
-            get { return _bloombergTicker; }
+            get { return _value; }
             set
             {
-                if (_bloombergTicker != value)
+                if (_value != value)
                 {
-                    ChangeTracker.RecordOriginalValue("BloombergTicker", _bloombergTicker);
-                    _bloombergTicker = value;
-                    OnPropertyChanged("BloombergTicker");
+                    ChangeTracker.RecordOriginalValue("Value", _value);
+                    _value = value;
+                    OnPropertyChanged("Value");
                 }
             }
         }
-        private string _bloombergTicker;
+        private decimal _value;
         [DataMember]
-        public string Sedol
+        public System.DateTime UpdateDate
         {	
     		
-            get { return _sedol; }
+            get { return _updateDate; }
             set
             {
-                if (_sedol != value)
+                if (_updateDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Sedol", _sedol);
-                    _sedol = value;
-                    OnPropertyChanged("Sedol");
+                    ChangeTracker.RecordOriginalValue("UpdateDate", _updateDate);
+                    _updateDate = value;
+                    OnPropertyChanged("UpdateDate");
                 }
             }
         }
-        private string _sedol;
-        [DataMember]
-        public bool IsPrimary
-        {	
-    		
-            get { return _isPrimary; }
-            set
-            {
-                if (_isPrimary != value)
-                {
-                    ChangeTracker.RecordOriginalValue("IsPrimary", _isPrimary);
-                    _isPrimary = value;
-                    OnPropertyChanged("IsPrimary");
-                }
-            }
-        }
-        private bool _isPrimary;
+        private System.DateTime _updateDate;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -208,58 +185,44 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public int PriceCurrencyId
-        {	
-    		
-            get { return _priceCurrencyId; }
-            set
-            {
-                if (_priceCurrencyId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PriceCurrencyId", _priceCurrencyId);
-                    _priceCurrencyId = value;
-                    OnPropertyChanged("PriceCurrencyId");
-                }
-            }
-        }
-        private int _priceCurrencyId;
-        [DataMember]
-        public int ListingStatusId
-        {	
-    		
-            get { return _listingStatusId; }
-            set
-            {
-                if (_listingStatusId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ListingStatusId", _listingStatusId);
-                    _listingStatusId = value;
-                    OnPropertyChanged("ListingStatusId");
-                }
-            }
-        }
-        private int _listingStatusId;
 
         #endregion
         #region Navigation Properties
     
         [DataMember]
-        public Instrument Instrument
+        public TrackableCollection<Analytic> Analytics
         {
-            get { return _instrument; }
+            get
+            {
+                if (_analytics == null)
+                {
+                    _analytics = new TrackableCollection<Analytic>();
+                    _analytics.CollectionChanged += FixupAnalytics;
+                }
+                return _analytics;
+            }
             set
             {
-                if (!ReferenceEquals(_instrument, value))
+                if (!ReferenceEquals(_analytics, value))
                 {
-                    var previousValue = _instrument;
-                    _instrument = value;
-                    FixupInstrument(previousValue);
-                    OnNavigationPropertyChanged("Instrument");
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_analytics != null)
+                    {
+                        _analytics.CollectionChanged -= FixupAnalytics;
+                    }
+                    _analytics = value;
+                    if (_analytics != null)
+                    {
+                        _analytics.CollectionChanged += FixupAnalytics;
+                    }
+                    OnNavigationPropertyChanged("Analytics");
                 }
             }
         }
-        private Instrument _instrument;
+        private TrackableCollection<Analytic> _analytics;
 
         #endregion
         #region ChangeTracking
@@ -339,47 +302,47 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Instrument = null;
+            Analytics.Clear();
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupInstrument(Instrument previousValue)
+        private void FixupAnalytics(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (previousValue != null && previousValue.InstrumentMarkets.Contains(this))
+            if (e.NewItems != null)
             {
-                previousValue.InstrumentMarkets.Remove(this);
+                foreach (Analytic item in e.NewItems)
+                {
+                    item.RawAnalytic = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("Analytics", item);
+                    }
+                }
             }
     
-            if (Instrument != null)
+            if (e.OldItems != null)
             {
-                if (!Instrument.InstrumentMarkets.Contains(this))
+                foreach (Analytic item in e.OldItems)
                 {
-                    Instrument.InstrumentMarkets.Add(this);
-                }
-    
-                InstrumentID = Instrument.InstrumentID;
-            }
-            if (ChangeTracker.ChangeTrackingEnabled)
-            {
-                if (ChangeTracker.OriginalValues.ContainsKey("Instrument")
-                    && (ChangeTracker.OriginalValues["Instrument"] == Instrument))
-                {
-                    ChangeTracker.OriginalValues.Remove("Instrument");
-                }
-                else
-                {
-                    ChangeTracker.RecordOriginalValue("Instrument", previousValue);
-                }
-                if (Instrument != null && !Instrument.ChangeTracker.ChangeTrackingEnabled)
-                {
-                    Instrument.StartTracking();
+                    if (ReferenceEquals(item.RawAnalytic, this))
+                    {
+                        item.RawAnalytic = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("Analytics", item);
+                    }
                 }
             }
         }

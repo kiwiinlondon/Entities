@@ -7,20 +7,21 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum EntityRankingSchemeItemIds
+    public enum ListingStatusIds
     {
         [EnumMember]
         None = 0,
         [EnumMember]
-        DummyPrice = 14,
+        Active = 1,
         [EnumMember]
-        PerfDBNavPrice = 16,
+        Suspended = 2,
         [EnumMember]
-        ManualAnalytic = 17,
+        Acquired = 3,
         [EnumMember]
-        FMAnalytic = 18,
+        PrivatePlacement = 4,
         [EnumMember]
-        DummyAnalytic = 19
-
+        Delisted = 5,
+        [EnumMember]
+        Expired = 6
     }
 }

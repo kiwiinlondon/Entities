@@ -16,7 +16,7 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
-        #region IRawMarketDatum Members
+     
 
 
         List<IMarketDatum> IRawMarketDatum.MarketData
@@ -24,7 +24,8 @@ namespace Odey.Framework.Keeley.Entities
             get { return Prices.ToList<IMarketDatum>(); }
         }
 
-        #endregion
 
+
+        
     }
 }
