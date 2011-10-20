@@ -419,23 +419,11 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<ExtractOutputConfiguration> _extractOutputConfigurations;
     
-        public ObjectSet<Industry> Industries
-        {
-            get { return _industries  ?? (_industries = CreateObjectSet<Industry>("Industries")); }
-        }
-        private ObjectSet<Industry> _industries;
-    
         public ObjectSet<Issuer> Issuers
         {
             get { return _issuers  ?? (_issuers = CreateObjectSet<Issuer>("Issuers")); }
         }
         private ObjectSet<Issuer> _issuers;
-    
-        public ObjectSet<IssuerIndustry> IssuerIndustries
-        {
-            get { return _issuerIndustries  ?? (_issuerIndustries = CreateObjectSet<IssuerIndustry>("IssuerIndustries")); }
-        }
-        private ObjectSet<IssuerIndustry> _issuerIndustries;
     
         public ObjectSet<Analytic> Analytics
         {
@@ -448,6 +436,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _rawAnalytics  ?? (_rawAnalytics = CreateObjectSet<RawAnalytic>("RawAnalytics")); }
         }
         private ObjectSet<RawAnalytic> _rawAnalytics;
+    
+        public ObjectSet<Industry> Industries
+        {
+            get { return _industries  ?? (_industries = CreateObjectSet<Industry>("Industries")); }
+        }
+        private ObjectSet<Industry> _industries;
+    
+        public ObjectSet<IssuerIndustry> IssuerIndustries
+        {
+            get { return _issuerIndustries  ?? (_issuerIndustries = CreateObjectSet<IssuerIndustry>("IssuerIndustries")); }
+        }
+        private ObjectSet<IssuerIndustry> _issuerIndustries;
 
         #endregion
         #region Function Imports
