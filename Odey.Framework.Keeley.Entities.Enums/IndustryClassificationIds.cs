@@ -8,6 +8,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        FundManager = 1
+        FundManager = 1,
+        [EnumMember]
+        Odey = 2
     }
 }
