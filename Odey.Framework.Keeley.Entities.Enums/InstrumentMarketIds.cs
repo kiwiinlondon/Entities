@@ -6,17 +6,11 @@ using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
-    public enum InstrumentIds
+    public enum InstrumentMarketIds
     {
         [EnumMember]
         None = 0,
         [EnumMember]
-        Unknown = 1,
-        [EnumMember]
-        USWheat = 22500,
-        [EnumMember]
-        USCotton = 22501,
-        [EnumMember]
-        USTreasuryBond = 22510
+        Unknown = 11276
     }
 }

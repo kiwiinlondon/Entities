@@ -58,6 +58,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PubliclyTradedRoyaltyTrust=55,
         [EnumMember]
-        EquityIndexSwap=57
+        EquityIndexSwap=57,
+        [EnumMember]
+        Commodity = 58,
+        [EnumMember]
+        ProprietaryGovernmentBond = 59
     }
 }

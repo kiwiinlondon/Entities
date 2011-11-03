@@ -9,7 +9,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None=0,
         [EnumMember]
-        BBVolumeAverage30D=1
+        LiquidityWeightedAverageNumberOfDays=2,
+        [EnumMember]
+        LiquidityTotalHaircutPercentNAV=3,
+        [EnumMember]
+        LiquidityValueGreaterMaxDailyLimitPercentNAV=4
     }
 }
 

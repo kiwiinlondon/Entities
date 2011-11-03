@@ -16,6 +16,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Option = 44,
         [EnumMember]
-        CashEquivalent= 53        
+        CashEquivalent= 53,
+        [EnumMember]
+        Swap = 60,
+        [EnumMember]
+        Commodity = 61
     }
 }

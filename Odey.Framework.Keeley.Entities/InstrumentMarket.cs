@@ -240,6 +240,38 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _listingStatusId;
+        [DataMember]
+        public int UnderlyingInstrumentMarketId
+        {	
+    		
+            get { return _underlyingInstrumentMarketId; }
+            set
+            {
+                if (_underlyingInstrumentMarketId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UnderlyingInstrumentMarketId", _underlyingInstrumentMarketId);
+                    _underlyingInstrumentMarketId = value;
+                    OnPropertyChanged("UnderlyingInstrumentMarketId");
+                }
+            }
+        }
+        private int _underlyingInstrumentMarketId;
+        [DataMember]
+        public int UltimateUnderlyingInstrumentMarketId
+        {	
+    		
+            get { return _ultimateUnderlyingInstrumentMarketId; }
+            set
+            {
+                if (_ultimateUnderlyingInstrumentMarketId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UltimateUnderlyingInstrumentMarketId", _ultimateUnderlyingInstrumentMarketId);
+                    _ultimateUnderlyingInstrumentMarketId = value;
+                    OnPropertyChanged("UltimateUnderlyingInstrumentMarketId");
+                }
+            }
+        }
+        private int _ultimateUnderlyingInstrumentMarketId;
 
         #endregion
         #region Navigation Properties

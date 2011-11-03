@@ -6,17 +6,24 @@ using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
-    public enum InstrumentIds
+    [DataContract]
+    public enum FundTypeIds
     {
         [EnumMember]
         None = 0,
         [EnumMember]
-        Unknown = 1,
+        Hedge =	1,
         [EnumMember]
-        USWheat = 22500,
+        Retail = 4,
         [EnumMember]
-        USCotton = 22501,
+        Wealth = 5,
         [EnumMember]
-        USTreasuryBond = 22510
+        Segregated = 6,
+        [EnumMember]
+        ShareClass	= 7,
+        [EnumMember]
+        Institutional =	9,
+        [EnumMember]
+        UCITS =10
     }
 }
