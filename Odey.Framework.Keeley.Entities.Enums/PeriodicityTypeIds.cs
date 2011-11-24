@@ -7,23 +7,17 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum PeriodicityIds
+    public enum PeriodicityTypeIds
     {
         [EnumMember]
-        None = 0,
+        Daily =	1,
         [EnumMember]
-        Daily = 1,
+        DaysInMonth	= 2,
         [EnumMember]
-        FirstAndFifteenthOfMonth = 2,
+        DaysOfWeekInMonth =	3,
         [EnumMember]
-        FirstOfMonth = 3,
+        DaysOfWeek = 4,
         [EnumMember]
-        EveryWednesday = 4,
-        [EnumMember]
-        LastDayOfQuarter = 5,
-        [EnumMember]
-        LastDayOfMonth = 6,
-        [EnumMember]
-        FundValuationDate = 8
+        DaysInQuarter =5
     }
 }

@@ -203,6 +203,38 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<int> UnderlyingIssuerId
+        {	
+    		
+            get { return _underlyingIssuerId; }
+            set
+            {
+                if (_underlyingIssuerId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UnderlyingIssuerId", _underlyingIssuerId);
+                    _underlyingIssuerId = value;
+                    OnPropertyChanged("UnderlyingIssuerId");
+                }
+            }
+        }
+        private Nullable<int> _underlyingIssuerId;
+        [DataMember]
+        public Nullable<int> DerivedAssetClassId
+        {	
+    		
+            get { return _derivedAssetClassId; }
+            set
+            {
+                if (_derivedAssetClassId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("DerivedAssetClassId", _derivedAssetClassId);
+                    _derivedAssetClassId = value;
+                    OnPropertyChanged("DerivedAssetClassId");
+                }
+            }
+        }
+        private Nullable<int> _derivedAssetClassId;
 
         #endregion
         #region Navigation Properties

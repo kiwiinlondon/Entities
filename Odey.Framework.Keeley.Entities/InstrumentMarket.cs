@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(Instrument))]
+    [KnownType(typeof(InstrumentMarket))]
     public partial class InstrumentMarket: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -250,6 +251,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_underlyingInstrumentMarketId != value)
                 {
                     ChangeTracker.RecordOriginalValue("UnderlyingInstrumentMarketId", _underlyingInstrumentMarketId);
+                    if (!IsDeserializing)
+                    {
+                        if (InstrumentMarket3 != null && InstrumentMarket3.InstrumentMarketID != value)
+                        {
+                            InstrumentMarket3 = null;
+                        }
+                    }
                     _underlyingInstrumentMarketId = value;
                     OnPropertyChanged("UnderlyingInstrumentMarketId");
                 }
@@ -266,6 +274,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_ultimateUnderlyingInstrumentMarketId != value)
                 {
                     ChangeTracker.RecordOriginalValue("UltimateUnderlyingInstrumentMarketId", _ultimateUnderlyingInstrumentMarketId);
+                    if (!IsDeserializing)
+                    {
+                        if (InstrumentMarket2 != null && InstrumentMarket2.InstrumentMarketID != value)
+                        {
+                            InstrumentMarket2 = null;
+                        }
+                    }
                     _ultimateUnderlyingInstrumentMarketId = value;
                     OnPropertyChanged("UltimateUnderlyingInstrumentMarketId");
                 }
@@ -292,6 +307,110 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Instrument _instrument;
+    
+        [DataMember]
+        public TrackableCollection<InstrumentMarket> InstrumentMarket1
+        {
+            get
+            {
+                if (_instrumentMarket1 == null)
+                {
+                    _instrumentMarket1 = new TrackableCollection<InstrumentMarket>();
+                    _instrumentMarket1.CollectionChanged += FixupInstrumentMarket1;
+                }
+                return _instrumentMarket1;
+            }
+            set
+            {
+                if (!ReferenceEquals(_instrumentMarket1, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_instrumentMarket1 != null)
+                    {
+                        _instrumentMarket1.CollectionChanged -= FixupInstrumentMarket1;
+                    }
+                    _instrumentMarket1 = value;
+                    if (_instrumentMarket1 != null)
+                    {
+                        _instrumentMarket1.CollectionChanged += FixupInstrumentMarket1;
+                    }
+                    OnNavigationPropertyChanged("InstrumentMarket1");
+                }
+            }
+        }
+        private TrackableCollection<InstrumentMarket> _instrumentMarket1;
+    
+        [DataMember]
+        public InstrumentMarket InstrumentMarket2
+        {
+            get { return _instrumentMarket2; }
+            set
+            {
+                if (!ReferenceEquals(_instrumentMarket2, value))
+                {
+                    var previousValue = _instrumentMarket2;
+                    _instrumentMarket2 = value;
+                    FixupInstrumentMarket2(previousValue);
+                    OnNavigationPropertyChanged("InstrumentMarket2");
+                }
+            }
+        }
+        private InstrumentMarket _instrumentMarket2;
+    
+        [DataMember]
+        public TrackableCollection<InstrumentMarket> InstrumentMarket11
+        {
+            get
+            {
+                if (_instrumentMarket11 == null)
+                {
+                    _instrumentMarket11 = new TrackableCollection<InstrumentMarket>();
+                    _instrumentMarket11.CollectionChanged += FixupInstrumentMarket11;
+                }
+                return _instrumentMarket11;
+            }
+            set
+            {
+                if (!ReferenceEquals(_instrumentMarket11, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_instrumentMarket11 != null)
+                    {
+                        _instrumentMarket11.CollectionChanged -= FixupInstrumentMarket11;
+                    }
+                    _instrumentMarket11 = value;
+                    if (_instrumentMarket11 != null)
+                    {
+                        _instrumentMarket11.CollectionChanged += FixupInstrumentMarket11;
+                    }
+                    OnNavigationPropertyChanged("InstrumentMarket11");
+                }
+            }
+        }
+        private TrackableCollection<InstrumentMarket> _instrumentMarket11;
+    
+        [DataMember]
+        public InstrumentMarket InstrumentMarket3
+        {
+            get { return _instrumentMarket3; }
+            set
+            {
+                if (!ReferenceEquals(_instrumentMarket3, value))
+                {
+                    var previousValue = _instrumentMarket3;
+                    _instrumentMarket3 = value;
+                    FixupInstrumentMarket3(previousValue);
+                    OnNavigationPropertyChanged("InstrumentMarket3");
+                }
+            }
+        }
+        private InstrumentMarket _instrumentMarket3;
 
         #endregion
         #region ChangeTracking
@@ -372,6 +491,10 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             Instrument = null;
+            InstrumentMarket1.Clear();
+            InstrumentMarket2 = null;
+            InstrumentMarket11.Clear();
+            InstrumentMarket3 = null;
         }
 
         #endregion
@@ -412,6 +535,162 @@ namespace Odey.Framework.Keeley.Entities
                 if (Instrument != null && !Instrument.ChangeTracker.ChangeTrackingEnabled)
                 {
                     Instrument.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupInstrumentMarket2(InstrumentMarket previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.InstrumentMarket1.Contains(this))
+            {
+                previousValue.InstrumentMarket1.Remove(this);
+            }
+    
+            if (InstrumentMarket2 != null)
+            {
+                if (!InstrumentMarket2.InstrumentMarket1.Contains(this))
+                {
+                    InstrumentMarket2.InstrumentMarket1.Add(this);
+                }
+    
+                UltimateUnderlyingInstrumentMarketId = InstrumentMarket2.InstrumentMarketID;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("InstrumentMarket2")
+                    && (ChangeTracker.OriginalValues["InstrumentMarket2"] == InstrumentMarket2))
+                {
+                    ChangeTracker.OriginalValues.Remove("InstrumentMarket2");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("InstrumentMarket2", previousValue);
+                }
+                if (InstrumentMarket2 != null && !InstrumentMarket2.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    InstrumentMarket2.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupInstrumentMarket3(InstrumentMarket previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.InstrumentMarket11.Contains(this))
+            {
+                previousValue.InstrumentMarket11.Remove(this);
+            }
+    
+            if (InstrumentMarket3 != null)
+            {
+                if (!InstrumentMarket3.InstrumentMarket11.Contains(this))
+                {
+                    InstrumentMarket3.InstrumentMarket11.Add(this);
+                }
+    
+                UnderlyingInstrumentMarketId = InstrumentMarket3.InstrumentMarketID;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("InstrumentMarket3")
+                    && (ChangeTracker.OriginalValues["InstrumentMarket3"] == InstrumentMarket3))
+                {
+                    ChangeTracker.OriginalValues.Remove("InstrumentMarket3");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("InstrumentMarket3", previousValue);
+                }
+                if (InstrumentMarket3 != null && !InstrumentMarket3.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    InstrumentMarket3.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupInstrumentMarket1(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (InstrumentMarket item in e.NewItems)
+                {
+                    item.InstrumentMarket2 = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("InstrumentMarket1", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (InstrumentMarket item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.InstrumentMarket2, this))
+                    {
+                        item.InstrumentMarket2 = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("InstrumentMarket1", item);
+                    }
+                }
+            }
+        }
+    
+        private void FixupInstrumentMarket11(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (InstrumentMarket item in e.NewItems)
+                {
+                    item.InstrumentMarket3 = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("InstrumentMarket11", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (InstrumentMarket item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.InstrumentMarket3, this))
+                    {
+                        item.InstrumentMarket3 = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("InstrumentMarket11", item);
+                    }
                 }
             }
         }

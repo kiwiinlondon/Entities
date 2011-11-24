@@ -5,7 +5,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
     [DataContract]
     public enum ParentInstrumentClassIds
     {
-         [EnumMember]
+        [EnumMember]
         None = 0,
         [EnumMember]
         Equity =	2,

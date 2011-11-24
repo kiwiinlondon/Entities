@@ -48,8 +48,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Region = 26,
         [EnumMember]
-        Analytic = 27
-
+        Analytic = 27,
+        [EnumMember]
+        DerivedAssetClass = 28
     }
 }
 

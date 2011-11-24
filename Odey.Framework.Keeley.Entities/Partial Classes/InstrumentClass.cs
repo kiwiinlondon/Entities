@@ -74,7 +74,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
                 else
                 {
-                    return FMParentInstrumentClassRelationship.ParentInstrumentClassID;
+                    return ParentInstrumentClassRelationship.ParentInstrumentClassID;
                 }
             }
             set

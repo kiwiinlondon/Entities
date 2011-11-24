@@ -36,10 +36,8 @@ namespace Odey.Framework.KeeleyEntitiesTest
            // InstrumentMarket abc = c.Get(6116);
             using (var context = new KeeleyModel())
             {
-                InstrumentMarket p = context.InstrumentMarkets.Include("Instrument.UnderlyingRelationship.Underlyer.InstrumentMarkets").Include("Instrument.OverlyingRelationships.Overlyer.InstrumentMarkets").Where(a => a.InstrumentMarketID == 399).FirstOrDefault();
-                InstrumentMarket z = p.UnderlyingInstrumentMarket;
-              //  context.Regions.ApplyChanges(region);
-                context.SaveChanges();
+                InstrumentClass c = context.InstrumentClasses.Include("ParentInstrumentClassRelationships").Where(i => i.InstrumentClassID == 3).FirstOrDefault();
+                int? a = c.ParentInstrumentClassId;
             }
         }
 

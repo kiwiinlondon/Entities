@@ -192,6 +192,70 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<int> _parentFundId;
+        [DataMember]
+        public bool IsActive
+        {	
+    		
+            get { return _isActive; }
+            set
+            {
+                if (_isActive != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IsActive", _isActive);
+                    _isActive = value;
+                    OnPropertyChanged("IsActive");
+                }
+            }
+        }
+        private bool _isActive;
+        [DataMember]
+        public int FundTypeId
+        {	
+    		
+            get { return _fundTypeId; }
+            set
+            {
+                if (_fundTypeId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("FundTypeId", _fundTypeId);
+                    _fundTypeId = value;
+                    OnPropertyChanged("FundTypeId");
+                }
+            }
+        }
+        private int _fundTypeId;
+        [DataMember]
+        public bool IsExternallyVisible
+        {	
+    		
+            get { return _isExternallyVisible; }
+            set
+            {
+                if (_isExternallyVisible != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IsExternallyVisible", _isExternallyVisible);
+                    _isExternallyVisible = value;
+                    OnPropertyChanged("IsExternallyVisible");
+                }
+            }
+        }
+        private bool _isExternallyVisible;
+        [DataMember]
+        public Nullable<System.DateTime> PortfolioDate
+        {	
+    		
+            get { return _portfolioDate; }
+            set
+            {
+                if (_portfolioDate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PortfolioDate", _portfolioDate);
+                    _portfolioDate = value;
+                    OnPropertyChanged("PortfolioDate");
+                }
+            }
+        }
+        private Nullable<System.DateTime> _portfolioDate;
 
         #endregion
         #region Navigation Properties

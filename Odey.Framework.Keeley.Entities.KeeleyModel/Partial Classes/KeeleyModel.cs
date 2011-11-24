@@ -56,30 +56,47 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
-        public KeeleyModel(SecurityCallStack securityCallStack) : this()
+        public KeeleyModel(SecurityCallStack securityCallStack)
+            : this()
         {
             _securityCallStack = securityCallStack;
-        }
+        }        
 
         public List<ChangedEntity> ChangedEntities { get; set; }
 
+        private static object ConvertDBNUll(object objectToTest)
+        {
+            if (objectToTest.GetType() == typeof(System.DBNull))
+            {
+                return null;
+            }
+            return objectToTest;
+        }
+
         private void AddToChangedEntities(ObjectStateEntry entry, Dictionary<ObjectStateEntry, ChangedEntity> changedEntitiesByEntry)
         {
+            
             ChangedEntity changedEntity = new ChangedEntity(entry.Entity.GetType(), entry.State);
+
             if (entry.State == EntityState.Modified)
             {
+                
                 foreach (string modifiedPropertyName in entry.GetModifiedProperties())
                 {
-                    object originalValue = entry.OriginalValues[modifiedPropertyName];
-                    object currentValue = entry.CurrentValues[modifiedPropertyName];
+                    object originalValue = ConvertDBNUll(entry.OriginalValues[modifiedPropertyName]);
 
-                    if (originalValue == null && currentValue != null || originalValue != null && currentValue == null || !originalValue.Equals(currentValue))
-                    {                        
-                        changedEntity.ChangedProperties.Add(modifiedPropertyName, new ChangedProperty(entry.OriginalValues.GetFieldType(entry.OriginalValues.GetOrdinal(modifiedPropertyName)), originalValue, currentValue));
-                    }
+                    object currentValue = ConvertDBNUll(entry.CurrentValues[modifiedPropertyName]);
+
+                    if (!(originalValue == null && currentValue == null))
+                    {
+                        if ((originalValue == null && currentValue != null) || (originalValue != null && currentValue == null) || !originalValue.Equals(currentValue))
+                        {
+                            changedEntity.ChangedProperties.Add(modifiedPropertyName, new ChangedProperty(entry.OriginalValues.GetFieldType(entry.OriginalValues.GetOrdinal(modifiedPropertyName)), originalValue, currentValue));
+                        }
+                    }                   
                 }
             }
-            
+
             ChangedEntities.Add(changedEntity);
             changedEntitiesByEntry.Add(entry, changedEntity);
         }
