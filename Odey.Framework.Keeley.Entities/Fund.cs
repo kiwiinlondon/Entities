@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(LegalEntity))]
+    [KnownType(typeof(InstrumentMarket))]
     public partial class Fund: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -154,6 +155,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_instrumentMarketId != value)
                 {
                     ChangeTracker.RecordOriginalValue("InstrumentMarketId", _instrumentMarketId);
+                    if (!IsDeserializing)
+                    {
+                        if (InstrumentMarket != null && InstrumentMarket.InstrumentMarketID != value)
+                        {
+                            InstrumentMarket = null;
+                        }
+                    }
                     _instrumentMarketId = value;
                     OnPropertyChanged("InstrumentMarketId");
                 }
@@ -170,6 +178,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_benchmarkInstrumentMarketId != value)
                 {
                     ChangeTracker.RecordOriginalValue("BenchmarkInstrumentMarketId", _benchmarkInstrumentMarketId);
+                    if (!IsDeserializing)
+                    {
+                        if (BenchmarkInstrumentMarket != null && BenchmarkInstrumentMarket.InstrumentMarketID != value)
+                        {
+                            BenchmarkInstrumentMarket = null;
+                        }
+                    }
                     _benchmarkInstrumentMarketId = value;
                     OnPropertyChanged("BenchmarkInstrumentMarketId");
                 }
@@ -241,21 +256,37 @@ namespace Odey.Framework.Keeley.Entities
         }
         private bool _isExternallyVisible;
         [DataMember]
-        public Nullable<System.DateTime> PortfolioDate
+        public System.DateTime InceptionDate
         {	
     		
-            get { return _portfolioDate; }
+            get { return _inceptionDate; }
             set
             {
-                if (_portfolioDate != value)
+                if (_inceptionDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PortfolioDate", _portfolioDate);
-                    _portfolioDate = value;
-                    OnPropertyChanged("PortfolioDate");
+                    ChangeTracker.RecordOriginalValue("InceptionDate", _inceptionDate);
+                    _inceptionDate = value;
+                    OnPropertyChanged("InceptionDate");
                 }
             }
         }
-        private Nullable<System.DateTime> _portfolioDate;
+        private System.DateTime _inceptionDate;
+        [DataMember]
+        public Nullable<int> RiskFreeInstrumentMarketId
+        {	
+    		
+            get { return _riskFreeInstrumentMarketId; }
+            set
+            {
+                if (_riskFreeInstrumentMarketId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("RiskFreeInstrumentMarketId", _riskFreeInstrumentMarketId);
+                    _riskFreeInstrumentMarketId = value;
+                    OnPropertyChanged("RiskFreeInstrumentMarketId");
+                }
+            }
+        }
+        private Nullable<int> _riskFreeInstrumentMarketId;
 
         #endregion
         #region Navigation Properties
@@ -285,6 +316,40 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private LegalEntity _legalEntity;
+    
+        [DataMember]
+        public InstrumentMarket InstrumentMarket
+        {
+            get { return _instrumentMarket; }
+            set
+            {
+                if (!ReferenceEquals(_instrumentMarket, value))
+                {
+                    var previousValue = _instrumentMarket;
+                    _instrumentMarket = value;
+                    FixupInstrumentMarket(previousValue);
+                    OnNavigationPropertyChanged("InstrumentMarket");
+                }
+            }
+        }
+        private InstrumentMarket _instrumentMarket;
+    
+        [DataMember]
+        public InstrumentMarket BenchmarkInstrumentMarket
+        {
+            get { return _benchmarkInstrumentMarket; }
+            set
+            {
+                if (!ReferenceEquals(_benchmarkInstrumentMarket, value))
+                {
+                    var previousValue = _benchmarkInstrumentMarket;
+                    _benchmarkInstrumentMarket = value;
+                    FixupBenchmarkInstrumentMarket(previousValue);
+                    OnNavigationPropertyChanged("BenchmarkInstrumentMarket");
+                }
+            }
+        }
+        private InstrumentMarket _benchmarkInstrumentMarket;
 
         #endregion
         #region ChangeTracking
@@ -375,6 +440,8 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             LegalEntity = null;
+            InstrumentMarket = null;
+            BenchmarkInstrumentMarket = null;
         }
 
         #endregion
@@ -428,6 +495,76 @@ namespace Odey.Framework.Keeley.Entities
                 if (LegalEntity != null && !LegalEntity.ChangeTracker.ChangeTrackingEnabled)
                 {
                     LegalEntity.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupInstrumentMarket(InstrumentMarket previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (InstrumentMarket != null)
+            {
+                InstrumentMarketId = InstrumentMarket.InstrumentMarketID;
+            }
+    
+            else if (!skipKeys)
+            {
+                InstrumentMarketId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("InstrumentMarket")
+                    && (ChangeTracker.OriginalValues["InstrumentMarket"] == InstrumentMarket))
+                {
+                    ChangeTracker.OriginalValues.Remove("InstrumentMarket");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("InstrumentMarket", previousValue);
+                }
+                if (InstrumentMarket != null && !InstrumentMarket.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    InstrumentMarket.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupBenchmarkInstrumentMarket(InstrumentMarket previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (BenchmarkInstrumentMarket != null)
+            {
+                BenchmarkInstrumentMarketId = BenchmarkInstrumentMarket.InstrumentMarketID;
+            }
+    
+            else if (!skipKeys)
+            {
+                BenchmarkInstrumentMarketId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("BenchmarkInstrumentMarket")
+                    && (ChangeTracker.OriginalValues["BenchmarkInstrumentMarket"] == BenchmarkInstrumentMarket))
+                {
+                    ChangeTracker.OriginalValues.Remove("BenchmarkInstrumentMarket");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("BenchmarkInstrumentMarket", previousValue);
+                }
+                if (BenchmarkInstrumentMarket != null && !BenchmarkInstrumentMarket.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    BenchmarkInstrumentMarket.StartTracking();
                 }
             }
         }

@@ -21,6 +21,7 @@ namespace Odey.Framework.Keeley.Entities
     [KnownType(typeof(InstrumentRelationship))]
     [KnownType(typeof(EventInstrumentMap))]
     [KnownType(typeof(InstrumentMarket))]
+    [KnownType(typeof(CollectiveInvestmentScheme))]
     public partial class Instrument: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -204,7 +205,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public Nullable<int> UnderlyingIssuerId
+        public int UnderlyingIssuerId
         {	
     		
             get { return _underlyingIssuerId; }
@@ -218,9 +219,9 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _underlyingIssuerId;
+        private int _underlyingIssuerId;
         [DataMember]
-        public Nullable<int> DerivedAssetClassId
+        public int DerivedAssetClassId
         {	
     		
             get { return _derivedAssetClassId; }
@@ -234,7 +235,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _derivedAssetClassId;
+        private int _derivedAssetClassId;
 
         #endregion
         #region Navigation Properties
@@ -342,6 +343,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private TrackableCollection<InstrumentRelationship> _overlyingRelationships;
+    
+        [DataMember]
+        public CollectiveInvestmentScheme CollectiveInvestmentScheme
+        {
+            get { return _collectiveInvestmentScheme; }
+            set
+            {
+                if (!ReferenceEquals(_collectiveInvestmentScheme, value))
+                {
+                    var previousValue = _collectiveInvestmentScheme;
+                    _collectiveInvestmentScheme = value;
+                    FixupCollectiveInvestmentScheme(previousValue);
+                    OnNavigationPropertyChanged("CollectiveInvestmentScheme");
+                }
+            }
+        }
+        private CollectiveInvestmentScheme _collectiveInvestmentScheme;
 
         #endregion
         #region ChangeTracking
@@ -425,6 +443,7 @@ namespace Odey.Framework.Keeley.Entities
             EventInstrumentMap = null;
             InstrumentMarkets.Clear();
             OverlyingRelationships.Clear();
+            CollectiveInvestmentScheme = null;
         }
 
         #endregion
@@ -527,6 +546,54 @@ namespace Odey.Framework.Keeley.Entities
                 if (EventInstrumentMap != null && !EventInstrumentMap.ChangeTracker.ChangeTrackingEnabled)
                 {
                     EventInstrumentMap.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupCollectiveInvestmentScheme(CollectiveInvestmentScheme previousValue)
+        {
+            // This is the principal end in an association that performs cascade deletes.
+            // Update the event listener to refer to the new dependent.
+            if (previousValue != null)
+            {
+                ChangeTracker.ObjectStateChanging -= previousValue.HandleCascadeDelete;
+            }
+    
+            if (CollectiveInvestmentScheme != null)
+            {
+                ChangeTracker.ObjectStateChanging += CollectiveInvestmentScheme.HandleCascadeDelete;
+            }
+    
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (CollectiveInvestmentScheme != null)
+            {
+                CollectiveInvestmentScheme.InstrumentID = InstrumentID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("CollectiveInvestmentScheme")
+                    && (ChangeTracker.OriginalValues["CollectiveInvestmentScheme"] == CollectiveInvestmentScheme))
+                {
+                    ChangeTracker.OriginalValues.Remove("CollectiveInvestmentScheme");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("CollectiveInvestmentScheme", previousValue);
+                    // This is the principal end of an identifying association, so the dependent must be deleted when the relationship is removed.
+                    // If the current state of the dependent is Added, the relationship can be changed without causing the dependent to be deleted.
+                    if (previousValue != null && previousValue.ChangeTracker.State != ObjectState.Added)
+                    {
+                        previousValue.MarkAsDeleted();
+                    }
+                }
+                if (CollectiveInvestmentScheme != null && !CollectiveInvestmentScheme.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    CollectiveInvestmentScheme.StartTracking();
                 }
             }
         }

@@ -11,6 +11,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        Unknown = 11276
+        Unknown = 11276,
+        [EnumMember]
+        BBALIBOR = 11651,
+        [EnumMember]
+        EURIBOR = 11652,
     }
 }

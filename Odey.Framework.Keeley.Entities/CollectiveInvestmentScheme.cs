@@ -18,92 +18,52 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class EntityRankingSchemeOrder: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(Periodicity))]
+    public partial class CollectiveInvestmentScheme: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int EntityRankingSchemeOrderId
+        public int InstrumentID
         {	
     		
-            get { return _entityRankingSchemeOrderId; }
+            get { return _instrumentID; }
             set
             {
-                if (_entityRankingSchemeOrderId != value)
+                if (_instrumentID != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'EntityRankingSchemeOrderId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'InstrumentID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _entityRankingSchemeOrderId = value;
-                    OnPropertyChanged("EntityRankingSchemeOrderId");
+                    _instrumentID = value;
+                    OnPropertyChanged("InstrumentID");
                 }
             }
         }
-        private int _entityRankingSchemeOrderId;
+        private int _instrumentID;
         [DataMember]
-        public int EntityRankingSchemeId
+        public int DealingFrequencyId
         {	
     		
-            get { return _entityRankingSchemeId; }
+            get { return _dealingFrequencyId; }
             set
             {
-                if (_entityRankingSchemeId != value)
+                if (_dealingFrequencyId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeId", _entityRankingSchemeId);
-                    _entityRankingSchemeId = value;
-                    OnPropertyChanged("EntityRankingSchemeId");
+                    ChangeTracker.RecordOriginalValue("DealingFrequencyId", _dealingFrequencyId);
+                    if (!IsDeserializing)
+                    {
+                        if (Periodicity != null && Periodicity.PeriodicityId != value)
+                        {
+                            Periodicity = null;
+                        }
+                    }
+                    _dealingFrequencyId = value;
+                    OnPropertyChanged("DealingFrequencyId");
                 }
             }
         }
-        private int _entityRankingSchemeId;
-        [DataMember]
-        public int EntityTypeId
-        {	
-    		
-            get { return _entityTypeId; }
-            set
-            {
-                if (_entityTypeId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("EntityTypeId", _entityTypeId);
-                    _entityTypeId = value;
-                    OnPropertyChanged("EntityTypeId");
-                }
-            }
-        }
-        private int _entityTypeId;
-        [DataMember]
-        public int EntityRankingSchemeItemId
-        {	
-    		
-            get { return _entityRankingSchemeItemId; }
-            set
-            {
-                if (_entityRankingSchemeItemId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeItemId", _entityRankingSchemeItemId);
-                    _entityRankingSchemeItemId = value;
-                    OnPropertyChanged("EntityRankingSchemeItemId");
-                }
-            }
-        }
-        private int _entityRankingSchemeItemId;
-        [DataMember]
-        public int Ordering
-        {	
-    		
-            get { return _ordering; }
-            set
-            {
-                if (_ordering != value)
-                {
-                    ChangeTracker.RecordOriginalValue("Ordering", _ordering);
-                    _ordering = value;
-                    OnPropertyChanged("Ordering");
-                }
-            }
-        }
-        private int _ordering;
+        private int _dealingFrequencyId;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -152,22 +112,26 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
         [DataMember]
-        public bool AlwaysStore
-        {	
-    		
-            get { return _alwaysStore; }
+        public Periodicity Periodicity
+        {
+            get { return _periodicity; }
             set
             {
-                if (_alwaysStore != value)
+                if (!ReferenceEquals(_periodicity, value))
                 {
-                    ChangeTracker.RecordOriginalValue("AlwaysStore", _alwaysStore);
-                    _alwaysStore = value;
-                    OnPropertyChanged("AlwaysStore");
+                    var previousValue = _periodicity;
+                    _periodicity = value;
+                    FixupPeriodicity(previousValue);
+                    OnNavigationPropertyChanged("Periodicity");
                 }
             }
         }
-        private bool _alwaysStore;
+        private Periodicity _periodicity;
 
         #endregion
         #region ChangeTracking
@@ -230,6 +194,16 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
+            }
+        }
+    
         protected bool IsDeserializing { get; private set; }
     
         [OnDeserializing]
@@ -247,6 +221,40 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Periodicity = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupPeriodicity(Periodicity previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (Periodicity != null)
+            {
+                DealingFrequencyId = Periodicity.PeriodicityId;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Periodicity")
+                    && (ChangeTracker.OriginalValues["Periodicity"] == Periodicity))
+                {
+                    ChangeTracker.OriginalValues.Remove("Periodicity");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Periodicity", previousValue);
+                }
+                if (Periodicity != null && !Periodicity.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Periodicity.StartTracking();
+                }
+            }
         }
 
         #endregion

@@ -18,92 +18,76 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class EntityRankingSchemeOrder: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class CountryHoliday: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int EntityRankingSchemeOrderId
+        public int CountryHolidayId
         {	
     		
-            get { return _entityRankingSchemeOrderId; }
+            get { return _countryHolidayId; }
             set
             {
-                if (_entityRankingSchemeOrderId != value)
+                if (_countryHolidayId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'EntityRankingSchemeOrderId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'CountryHolidayId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _entityRankingSchemeOrderId = value;
-                    OnPropertyChanged("EntityRankingSchemeOrderId");
+                    _countryHolidayId = value;
+                    OnPropertyChanged("CountryHolidayId");
                 }
             }
         }
-        private int _entityRankingSchemeOrderId;
+        private int _countryHolidayId;
         [DataMember]
-        public int EntityRankingSchemeId
+        public int CountryId
         {	
     		
-            get { return _entityRankingSchemeId; }
+            get { return _countryId; }
             set
             {
-                if (_entityRankingSchemeId != value)
+                if (_countryId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeId", _entityRankingSchemeId);
-                    _entityRankingSchemeId = value;
-                    OnPropertyChanged("EntityRankingSchemeId");
+                    ChangeTracker.RecordOriginalValue("CountryId", _countryId);
+                    _countryId = value;
+                    OnPropertyChanged("CountryId");
                 }
             }
         }
-        private int _entityRankingSchemeId;
+        private int _countryId;
         [DataMember]
-        public int EntityTypeId
+        public System.DateTime ReferenceDate
         {	
     		
-            get { return _entityTypeId; }
+            get { return _referenceDate; }
             set
             {
-                if (_entityTypeId != value)
+                if (_referenceDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityTypeId", _entityTypeId);
-                    _entityTypeId = value;
-                    OnPropertyChanged("EntityTypeId");
+                    ChangeTracker.RecordOriginalValue("ReferenceDate", _referenceDate);
+                    _referenceDate = value;
+                    OnPropertyChanged("ReferenceDate");
                 }
             }
         }
-        private int _entityTypeId;
+        private System.DateTime _referenceDate;
         [DataMember]
-        public int EntityRankingSchemeItemId
+        public string Name
         {	
     		
-            get { return _entityRankingSchemeItemId; }
+            get { return _name; }
             set
             {
-                if (_entityRankingSchemeItemId != value)
+                if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeItemId", _entityRankingSchemeItemId);
-                    _entityRankingSchemeItemId = value;
-                    OnPropertyChanged("EntityRankingSchemeItemId");
+                    ChangeTracker.RecordOriginalValue("Name", _name);
+                    _name = value;
+                    OnPropertyChanged("Name");
                 }
             }
         }
-        private int _entityRankingSchemeItemId;
-        [DataMember]
-        public int Ordering
-        {	
-    		
-            get { return _ordering; }
-            set
-            {
-                if (_ordering != value)
-                {
-                    ChangeTracker.RecordOriginalValue("Ordering", _ordering);
-                    _ordering = value;
-                    OnPropertyChanged("Ordering");
-                }
-            }
-        }
-        private int _ordering;
+        private string _name;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -152,22 +136,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public bool AlwaysStore
-        {	
-    		
-            get { return _alwaysStore; }
-            set
-            {
-                if (_alwaysStore != value)
-                {
-                    ChangeTracker.RecordOriginalValue("AlwaysStore", _alwaysStore);
-                    _alwaysStore = value;
-                    OnPropertyChanged("AlwaysStore");
-                }
-            }
-        }
-        private bool _alwaysStore;
 
         #endregion
         #region ChangeTracking

@@ -1,4 +1,5 @@
 ﻿using System;
+using Odey.Framework.Keeley.Entities.Enums;
 
 namespace Odey.Framework.Keeley.Entities
 {
@@ -43,6 +44,14 @@ namespace Odey.Framework.Keeley.Entities
             get
             {
                 return LegalEntity.FMOrgId.Value;
+            }
+        }
+
+        public PeriodicityIds DealingFrequencyId
+        {
+            get
+            {
+                return (PeriodicityIds)InstrumentMarket.Instrument.CollectiveInvestmentScheme.DealingFrequencyId;
             }
         }
     }

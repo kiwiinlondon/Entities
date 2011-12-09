@@ -448,6 +448,42 @@ namespace Odey.Framework.Keeley.Entities
             get { return _issuerIndustries  ?? (_issuerIndustries = CreateObjectSet<IssuerIndustry>("IssuerIndustries")); }
         }
         private ObjectSet<IssuerIndustry> _issuerIndustries;
+    
+        public ObjectSet<CountryHoliday> CountryHolidays
+        {
+            get { return _countryHolidays  ?? (_countryHolidays = CreateObjectSet<CountryHoliday>("CountryHolidays")); }
+        }
+        private ObjectSet<CountryHoliday> _countryHolidays;
+    
+        public ObjectSet<FundCountryHoliday> FundCountryHolidays
+        {
+            get { return _fundCountryHolidays  ?? (_fundCountryHolidays = CreateObjectSet<FundCountryHoliday>("FundCountryHolidays")); }
+        }
+        private ObjectSet<FundCountryHoliday> _fundCountryHolidays;
+    
+        public ObjectSet<FundPerformance> FundPerformances
+        {
+            get { return _fundPerformances  ?? (_fundPerformances = CreateObjectSet<FundPerformance>("FundPerformances")); }
+        }
+        private ObjectSet<FundPerformance> _fundPerformances;
+    
+        public ObjectSet<CollectiveInvestmentScheme> CollectiveInvestmentSchemes
+        {
+            get { return _collectiveInvestmentSchemes  ?? (_collectiveInvestmentSchemes = CreateObjectSet<CollectiveInvestmentScheme>("CollectiveInvestmentSchemes")); }
+        }
+        private ObjectSet<CollectiveInvestmentScheme> _collectiveInvestmentSchemes;
+    
+        public ObjectSet<Periodicity> Periodicities
+        {
+            get { return _periodicities  ?? (_periodicities = CreateObjectSet<Periodicity>("Periodicities")); }
+        }
+        private ObjectSet<Periodicity> _periodicities;
+    
+        public ObjectSet<PeriodicityInterval> PeriodicityIntervals
+        {
+            get { return _periodicityIntervals  ?? (_periodicityIntervals = CreateObjectSet<PeriodicityInterval>("PeriodicityIntervals")); }
+        }
+        private ObjectSet<PeriodicityInterval> _periodicityIntervals;
 
         #endregion
         #region Function Imports

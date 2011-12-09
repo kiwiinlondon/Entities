@@ -18,92 +18,61 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class EntityRankingSchemeOrder: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(PeriodicityInterval))]
+    public partial class Periodicity: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int EntityRankingSchemeOrderId
+        public int PeriodicityId
         {	
     		
-            get { return _entityRankingSchemeOrderId; }
+            get { return _periodicityId; }
             set
             {
-                if (_entityRankingSchemeOrderId != value)
+                if (_periodicityId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'EntityRankingSchemeOrderId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'PeriodicityId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _entityRankingSchemeOrderId = value;
-                    OnPropertyChanged("EntityRankingSchemeOrderId");
+                    _periodicityId = value;
+                    OnPropertyChanged("PeriodicityId");
                 }
             }
         }
-        private int _entityRankingSchemeOrderId;
+        private int _periodicityId;
         [DataMember]
-        public int EntityRankingSchemeId
+        public int PeriodicityTypeId
         {	
     		
-            get { return _entityRankingSchemeId; }
+            get { return _periodicityTypeId; }
             set
             {
-                if (_entityRankingSchemeId != value)
+                if (_periodicityTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeId", _entityRankingSchemeId);
-                    _entityRankingSchemeId = value;
-                    OnPropertyChanged("EntityRankingSchemeId");
+                    ChangeTracker.RecordOriginalValue("PeriodicityTypeId", _periodicityTypeId);
+                    _periodicityTypeId = value;
+                    OnPropertyChanged("PeriodicityTypeId");
                 }
             }
         }
-        private int _entityRankingSchemeId;
+        private int _periodicityTypeId;
         [DataMember]
-        public int EntityTypeId
+        public string Name
         {	
     		
-            get { return _entityTypeId; }
+            get { return _name; }
             set
             {
-                if (_entityTypeId != value)
+                if (_name != value)
                 {
-                    ChangeTracker.RecordOriginalValue("EntityTypeId", _entityTypeId);
-                    _entityTypeId = value;
-                    OnPropertyChanged("EntityTypeId");
+                    ChangeTracker.RecordOriginalValue("Name", _name);
+                    _name = value;
+                    OnPropertyChanged("Name");
                 }
             }
         }
-        private int _entityTypeId;
-        [DataMember]
-        public int EntityRankingSchemeItemId
-        {	
-    		
-            get { return _entityRankingSchemeItemId; }
-            set
-            {
-                if (_entityRankingSchemeItemId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeItemId", _entityRankingSchemeItemId);
-                    _entityRankingSchemeItemId = value;
-                    OnPropertyChanged("EntityRankingSchemeItemId");
-                }
-            }
-        }
-        private int _entityRankingSchemeItemId;
-        [DataMember]
-        public int Ordering
-        {	
-    		
-            get { return _ordering; }
-            set
-            {
-                if (_ordering != value)
-                {
-                    ChangeTracker.RecordOriginalValue("Ordering", _ordering);
-                    _ordering = value;
-                    OnPropertyChanged("Ordering");
-                }
-            }
-        }
-        private int _ordering;
+        private string _name;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -152,22 +121,44 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+
+        #endregion
+        #region Navigation Properties
+    
         [DataMember]
-        public bool AlwaysStore
-        {	
-    		
-            get { return _alwaysStore; }
+        public TrackableCollection<PeriodicityInterval> PeriodicityIntervals
+        {
+            get
+            {
+                if (_periodicityIntervals == null)
+                {
+                    _periodicityIntervals = new TrackableCollection<PeriodicityInterval>();
+                    _periodicityIntervals.CollectionChanged += FixupPeriodicityIntervals;
+                }
+                return _periodicityIntervals;
+            }
             set
             {
-                if (_alwaysStore != value)
+                if (!ReferenceEquals(_periodicityIntervals, value))
                 {
-                    ChangeTracker.RecordOriginalValue("AlwaysStore", _alwaysStore);
-                    _alwaysStore = value;
-                    OnPropertyChanged("AlwaysStore");
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_periodicityIntervals != null)
+                    {
+                        _periodicityIntervals.CollectionChanged -= FixupPeriodicityIntervals;
+                    }
+                    _periodicityIntervals = value;
+                    if (_periodicityIntervals != null)
+                    {
+                        _periodicityIntervals.CollectionChanged += FixupPeriodicityIntervals;
+                    }
+                    OnNavigationPropertyChanged("PeriodicityIntervals");
                 }
             }
         }
-        private bool _alwaysStore;
+        private TrackableCollection<PeriodicityInterval> _periodicityIntervals;
 
         #endregion
         #region ChangeTracking
@@ -247,6 +238,45 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            PeriodicityIntervals.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupPeriodicityIntervals(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (PeriodicityInterval item in e.NewItems)
+                {
+                    item.PeriodicityId = PeriodicityId;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("PeriodicityIntervals", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (PeriodicityInterval item in e.OldItems)
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("PeriodicityIntervals", item);
+                    }
+                }
+            }
         }
 
         #endregion
