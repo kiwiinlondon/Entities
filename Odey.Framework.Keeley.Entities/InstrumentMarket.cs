@@ -19,7 +19,6 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(Instrument))]
-    [KnownType(typeof(Fund))]
     public partial class InstrumentMarket: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -309,41 +308,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Instrument _instrument;
-    
-        [DataMember]
-        public TrackableCollection<Fund> Funds2
-        {
-            get
-            {
-                if (_funds2 == null)
-                {
-                    _funds2 = new TrackableCollection<Fund>();
-                    _funds2.CollectionChanged += FixupFunds2;
-                }
-                return _funds2;
-            }
-            set
-            {
-                if (!ReferenceEquals(_funds2, value))
-                {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_funds2 != null)
-                    {
-                        _funds2.CollectionChanged -= FixupFunds2;
-                    }
-                    _funds2 = value;
-                    if (_funds2 != null)
-                    {
-                        _funds2.CollectionChanged += FixupFunds2;
-                    }
-                    OnNavigationPropertyChanged("Funds2");
-                }
-            }
-        }
-        private TrackableCollection<Fund> _funds2;
 
         #endregion
         #region ChangeTracking
@@ -424,7 +388,6 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             Instrument = null;
-            Funds2.Clear();
         }
 
         #endregion
@@ -465,42 +428,6 @@ namespace Odey.Framework.Keeley.Entities
                 if (Instrument != null && !Instrument.ChangeTracker.ChangeTrackingEnabled)
                 {
                     Instrument.StartTracking();
-                }
-            }
-        }
-    
-        private void FixupFunds2(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (e.NewItems != null)
-            {
-                foreach (Fund item in e.NewItems)
-                {
-                    item.RiskFreeInstrumentMarketId = InstrumentMarketID;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("Funds2", item);
-                    }
-                }
-            }
-    
-            if (e.OldItems != null)
-            {
-                foreach (Fund item in e.OldItems)
-                {
-                    item.RiskFreeInstrumentMarketId = null;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("Funds2", item);
-                    }
                 }
             }
         }

@@ -131,6 +131,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_benchmarkPriceId != value)
                 {
                     ChangeTracker.RecordOriginalValue("BenchmarkPriceId", _benchmarkPriceId);
+                    if (!IsDeserializing)
+                    {
+                        if (BenchmarkPricePrice != null && BenchmarkPricePrice.PriceId != value)
+                        {
+                            BenchmarkPricePrice = null;
+                        }
+                    }
                     _benchmarkPriceId = value;
                     OnPropertyChanged("BenchmarkPriceId");
                 }
@@ -291,13 +298,6 @@ namespace Odey.Framework.Keeley.Entities
                 if (_riskFreeRatePriceId != value)
                 {
                     ChangeTracker.RecordOriginalValue("RiskFreeRatePriceId", _riskFreeRatePriceId);
-                    if (!IsDeserializing)
-                    {
-                        if (Price2 != null && Price2.PriceId != value)
-                        {
-                            Price2 = null;
-                        }
-                    }
                     _riskFreeRatePriceId = value;
                     OnPropertyChanged("RiskFreeRatePriceId");
                 }
@@ -309,21 +309,21 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        public Price Price2
+        public Price BenchmarkPricePrice
         {
-            get { return _price2; }
+            get { return _benchmarkPricePrice; }
             set
             {
-                if (!ReferenceEquals(_price2, value))
+                if (!ReferenceEquals(_benchmarkPricePrice, value))
                 {
-                    var previousValue = _price2;
-                    _price2 = value;
-                    FixupPrice2(previousValue);
-                    OnNavigationPropertyChanged("Price2");
+                    var previousValue = _benchmarkPricePrice;
+                    _benchmarkPricePrice = value;
+                    FixupBenchmarkPricePrice(previousValue);
+                    OnNavigationPropertyChanged("BenchmarkPricePrice");
                 }
             }
         }
-        private Price _price2;
+        private Price _benchmarkPricePrice;
 
         #endregion
         #region ChangeTracking
@@ -403,38 +403,38 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Price2 = null;
+            BenchmarkPricePrice = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupPrice2(Price previousValue)
+        private void FixupBenchmarkPricePrice(Price previousValue)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (Price2 != null)
+            if (BenchmarkPricePrice != null)
             {
-                RiskFreeRatePriceId = Price2.PriceId;
+                BenchmarkPriceId = BenchmarkPricePrice.PriceId;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
             {
-                if (ChangeTracker.OriginalValues.ContainsKey("Price2")
-                    && (ChangeTracker.OriginalValues["Price2"] == Price2))
+                if (ChangeTracker.OriginalValues.ContainsKey("BenchmarkPricePrice")
+                    && (ChangeTracker.OriginalValues["BenchmarkPricePrice"] == BenchmarkPricePrice))
                 {
-                    ChangeTracker.OriginalValues.Remove("Price2");
+                    ChangeTracker.OriginalValues.Remove("BenchmarkPricePrice");
                 }
                 else
                 {
-                    ChangeTracker.RecordOriginalValue("Price2", previousValue);
+                    ChangeTracker.RecordOriginalValue("BenchmarkPricePrice", previousValue);
                 }
-                if (Price2 != null && !Price2.ChangeTracker.ChangeTrackingEnabled)
+                if (BenchmarkPricePrice != null && !BenchmarkPricePrice.ChangeTracker.ChangeTrackingEnabled)
                 {
-                    Price2.StartTracking();
+                    BenchmarkPricePrice.StartTracking();
                 }
             }
         }
