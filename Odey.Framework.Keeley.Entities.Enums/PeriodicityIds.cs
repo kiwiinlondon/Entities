@@ -24,6 +24,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         LastDayOfMonth = 6,
         [EnumMember]
-        FundValuationDate = 8
+        FundValuationDate = 8,
+        [EnumMember]
+        EveryFriday = 9
     }
 }

@@ -62,6 +62,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Commodity = 58,
         [EnumMember]
-        ProprietaryGovernmentBond = 59
+        ProprietaryGovernmentBond = 59,
+        [EnumMember]
+        CommodityFutureOption = 62,        
+        [EnumMember]
+        InterestRate = 65
     }
 }
