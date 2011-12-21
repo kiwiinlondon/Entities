@@ -484,6 +484,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _periodicityIntervals  ?? (_periodicityIntervals = CreateObjectSet<PeriodicityInterval>("PeriodicityIntervals")); }
         }
         private ObjectSet<PeriodicityInterval> _periodicityIntervals;
+    
+        public ObjectSet<ExtractGroup> ExtractGroups
+        {
+            get { return _extractGroups  ?? (_extractGroups = CreateObjectSet<ExtractGroup>("ExtractGroups")); }
+        }
+        private ObjectSet<ExtractGroup> _extractGroups;
+    
+        public ObjectSet<ExtractGroupItem> ExtractGroupItems
+        {
+            get { return _extractGroupItems  ?? (_extractGroupItems = CreateObjectSet<ExtractGroupItem>("ExtractGroupItems")); }
+        }
+        private ObjectSet<ExtractGroupItem> _extractGroupItems;
 
         #endregion
         #region Function Imports

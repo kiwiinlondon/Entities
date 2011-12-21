@@ -19,44 +19,44 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(ExtractGroupItem))]
-    public partial class Extract: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class ExtractGroup: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ExtractID
+        public int ExtractGroupId
         {	
     		
-            get { return _extractID; }
+            get { return _extractGroupId; }
             set
             {
-                if (_extractID != value)
+                if (_extractGroupId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ExtractID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ExtractGroupId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _extractID = value;
-                    OnPropertyChanged("ExtractID");
+                    _extractGroupId = value;
+                    OnPropertyChanged("ExtractGroupId");
                 }
             }
         }
-        private int _extractID;
+        private int _extractGroupId;
         [DataMember]
-        public int ExtractTypeId
+        public int ExtractRunnerTypeId
         {	
     		
-            get { return _extractTypeId; }
+            get { return _extractRunnerTypeId; }
             set
             {
-                if (_extractTypeId != value)
+                if (_extractRunnerTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("ExtractTypeId", _extractTypeId);
-                    _extractTypeId = value;
-                    OnPropertyChanged("ExtractTypeId");
+                    ChangeTracker.RecordOriginalValue("ExtractRunnerTypeId", _extractRunnerTypeId);
+                    _extractRunnerTypeId = value;
+                    OnPropertyChanged("ExtractRunnerTypeId");
                 }
             }
         }
-        private int _extractTypeId;
+        private int _extractRunnerTypeId;
         [DataMember]
         public string Name
         {	
@@ -121,118 +121,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public int ExtractOutputTypeID
-        {	
-    		
-            get { return _extractOutputTypeID; }
-            set
-            {
-                if (_extractOutputTypeID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ExtractOutputTypeID", _extractOutputTypeID);
-                    _extractOutputTypeID = value;
-                    OnPropertyChanged("ExtractOutputTypeID");
-                }
-            }
-        }
-        private int _extractOutputTypeID;
-        [DataMember]
-        public int ExtractRunnerTypeID
-        {	
-    		
-            get { return _extractRunnerTypeID; }
-            set
-            {
-                if (_extractRunnerTypeID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ExtractRunnerTypeID", _extractRunnerTypeID);
-                    _extractRunnerTypeID = value;
-                    OnPropertyChanged("ExtractRunnerTypeID");
-                }
-            }
-        }
-        private int _extractRunnerTypeID;
-        [DataMember]
-        public int ExtractInputTypeID
-        {	
-    		
-            get { return _extractInputTypeID; }
-            set
-            {
-                if (_extractInputTypeID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ExtractInputTypeID", _extractInputTypeID);
-                    _extractInputTypeID = value;
-                    OnPropertyChanged("ExtractInputTypeID");
-                }
-            }
-        }
-        private int _extractInputTypeID;
-        [DataMember]
-        public int ExtractDeliveryTypeID
-        {	
-    		
-            get { return _extractDeliveryTypeID; }
-            set
-            {
-                if (_extractDeliveryTypeID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ExtractDeliveryTypeID", _extractDeliveryTypeID);
-                    _extractDeliveryTypeID = value;
-                    OnPropertyChanged("ExtractDeliveryTypeID");
-                }
-            }
-        }
-        private int _extractDeliveryTypeID;
-        [DataMember]
-        public bool SendIfEmpty
-        {	
-    		
-            get { return _sendIfEmpty; }
-            set
-            {
-                if (_sendIfEmpty != value)
-                {
-                    ChangeTracker.RecordOriginalValue("SendIfEmpty", _sendIfEmpty);
-                    _sendIfEmpty = value;
-                    OnPropertyChanged("SendIfEmpty");
-                }
-            }
-        }
-        private bool _sendIfEmpty;
-        [DataMember]
-        public int ExtractOutputContainerTypeID
-        {	
-    		
-            get { return _extractOutputContainerTypeID; }
-            set
-            {
-                if (_extractOutputContainerTypeID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ExtractOutputContainerTypeID", _extractOutputContainerTypeID);
-                    _extractOutputContainerTypeID = value;
-                    OnPropertyChanged("ExtractOutputContainerTypeID");
-                }
-            }
-        }
-        private int _extractOutputContainerTypeID;
-        [DataMember]
-        public Nullable<int> ExtractResponseHandlerTypeId
-        {	
-    		
-            get { return _extractResponseHandlerTypeId; }
-            set
-            {
-                if (_extractResponseHandlerTypeId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ExtractResponseHandlerTypeId", _extractResponseHandlerTypeId);
-                    _extractResponseHandlerTypeId = value;
-                    OnPropertyChanged("ExtractResponseHandlerTypeId");
-                }
-            }
-        }
-        private Nullable<int> _extractResponseHandlerTypeId;
 
         #endregion
         #region Navigation Properties
@@ -367,7 +255,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach (ExtractGroupItem item in e.NewItems)
                 {
-                    item.ExtractId = ExtractID;
+                    item.ExtractGroupId = ExtractGroupId;
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         if (!item.ChangeTracker.ChangeTrackingEnabled)
