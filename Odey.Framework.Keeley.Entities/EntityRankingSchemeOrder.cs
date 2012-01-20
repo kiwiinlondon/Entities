@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(EntityRankingSchemeItem))]
     public partial class EntityRankingSchemeOrder: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -82,6 +83,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_entityRankingSchemeItemId != value)
                 {
                     ChangeTracker.RecordOriginalValue("EntityRankingSchemeItemId", _entityRankingSchemeItemId);
+                    if (!IsDeserializing)
+                    {
+                        if (EntityRankingSchemeItem != null && EntityRankingSchemeItem.EntityRankingSchemeItemId != value)
+                        {
+                            EntityRankingSchemeItem = null;
+                        }
+                    }
                     _entityRankingSchemeItemId = value;
                     OnPropertyChanged("EntityRankingSchemeItemId");
                 }
@@ -170,6 +178,26 @@ namespace Odey.Framework.Keeley.Entities
         private bool _alwaysStore;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public EntityRankingSchemeItem EntityRankingSchemeItem
+        {
+            get { return _entityRankingSchemeItem; }
+            set
+            {
+                if (!ReferenceEquals(_entityRankingSchemeItem, value))
+                {
+                    var previousValue = _entityRankingSchemeItem;
+                    _entityRankingSchemeItem = value;
+                    FixupEntityRankingSchemeItem(previousValue);
+                    OnNavigationPropertyChanged("EntityRankingSchemeItem");
+                }
+            }
+        }
+        private EntityRankingSchemeItem _entityRankingSchemeItem;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -247,6 +275,40 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            EntityRankingSchemeItem = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupEntityRankingSchemeItem(EntityRankingSchemeItem previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (EntityRankingSchemeItem != null)
+            {
+                EntityRankingSchemeItemId = EntityRankingSchemeItem.EntityRankingSchemeItemId;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("EntityRankingSchemeItem")
+                    && (ChangeTracker.OriginalValues["EntityRankingSchemeItem"] == EntityRankingSchemeItem))
+                {
+                    ChangeTracker.OriginalValues.Remove("EntityRankingSchemeItem");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("EntityRankingSchemeItem", previousValue);
+                }
+                if (EntityRankingSchemeItem != null && !EntityRankingSchemeItem.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    EntityRankingSchemeItem.StartTracking();
+                }
+            }
         }
 
         #endregion

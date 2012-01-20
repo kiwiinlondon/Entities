@@ -12,6 +12,22 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
+        ManualPrice = 1,
+        [EnumMember]
+        LastTradePrice = 2,
+        [EnumMember]
+        TradePrice = 3,
+        [EnumMember]
+        UnderlyingClosePrice=4,
+        [EnumMember]
+        ClosePrice = 5,
+        [EnumMember]
+        UnderlyingLastTradePrice = 7,
+        [EnumMember]
+        MidDiscountDollarPrice = 9,
+        [EnumMember]
+        XRateBidAsk = 13,
+        [EnumMember]
         DummyPrice = 14,
         [EnumMember]
         PerfDBNavPrice = 16,
