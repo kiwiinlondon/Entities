@@ -66,7 +66,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private string _fMContEventInd;
         [DataMember]
-        public int FMContEventId
+        public Nullable<int> FMContEventId
         {	
     		
             get { return _fMContEventId; }
@@ -80,9 +80,9 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private int _fMContEventId;
+        private Nullable<int> _fMContEventId;
         [DataMember]
-        public int FMOriginalContEventId
+        public Nullable<int> FMOriginalContEventId
         {	
     		
             get { return _fMOriginalContEventId; }
@@ -96,7 +96,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private int _fMOriginalContEventId;
+        private Nullable<int> _fMOriginalContEventId;
         [DataMember]
         public int MatchedStatusId
         {	

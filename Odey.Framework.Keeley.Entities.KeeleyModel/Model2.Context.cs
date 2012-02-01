@@ -496,6 +496,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _extractGroupItems  ?? (_extractGroupItems = CreateObjectSet<ExtractGroupItem>("ExtractGroupItems")); }
         }
         private ObjectSet<ExtractGroupItem> _extractGroupItems;
+    
+        public ObjectSet<FMTradeBridgeLastProcessed> FMTradeBridgeLastProcesseds
+        {
+            get { return _fMTradeBridgeLastProcesseds  ?? (_fMTradeBridgeLastProcesseds = CreateObjectSet<FMTradeBridgeLastProcessed>("FMTradeBridgeLastProcesseds")); }
+        }
+        private ObjectSet<FMTradeBridgeLastProcessed> _fMTradeBridgeLastProcesseds;
 
         #endregion
         #region Function Imports
