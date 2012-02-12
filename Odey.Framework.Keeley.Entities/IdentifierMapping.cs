@@ -18,44 +18,76 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class IdentifierType: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class IdentifierMapping: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int IdentifierTypeID
+        public int IdentifierMappingId
         {	
     		
-            get { return _identifierTypeID; }
+            get { return _identifierMappingId; }
             set
             {
-                if (_identifierTypeID != value)
+                if (_identifierMappingId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'IdentifierTypeID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'IdentifierMappingId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _identifierTypeID = value;
-                    OnPropertyChanged("IdentifierTypeID");
+                    _identifierMappingId = value;
+                    OnPropertyChanged("IdentifierMappingId");
                 }
             }
         }
-        private int _identifierTypeID;
+        private int _identifierMappingId;
         [DataMember]
-        public string Name
+        public int IdentifierTypeId
         {	
     		
-            get { return _name; }
+            get { return _identifierTypeId; }
             set
             {
-                if (_name != value)
+                if (_identifierTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Name", _name);
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("IdentifierTypeId", _identifierTypeId);
+                    _identifierTypeId = value;
+                    OnPropertyChanged("IdentifierTypeId");
                 }
             }
         }
-        private string _name;
+        private int _identifierTypeId;
+        [DataMember]
+        public string OriginalValue
+        {	
+    		
+            get { return _originalValue; }
+            set
+            {
+                if (_originalValue != value)
+                {
+                    ChangeTracker.RecordOriginalValue("OriginalValue", _originalValue);
+                    _originalValue = value;
+                    OnPropertyChanged("OriginalValue");
+                }
+            }
+        }
+        private string _originalValue;
+        [DataMember]
+        public string MappedValue
+        {	
+    		
+            get { return _mappedValue; }
+            set
+            {
+                if (_mappedValue != value)
+                {
+                    ChangeTracker.RecordOriginalValue("MappedValue", _mappedValue);
+                    _mappedValue = value;
+                    OnPropertyChanged("MappedValue");
+                }
+            }
+        }
+        private string _mappedValue;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -104,22 +136,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public string FMIdentType
-        {	
-    		
-            get { return _fMIdentType; }
-            set
-            {
-                if (_fMIdentType != value)
-                {
-                    ChangeTracker.RecordOriginalValue("FMIdentType", _fMIdentType);
-                    _fMIdentType = value;
-                    OnPropertyChanged("FMIdentType");
-                }
-            }
-        }
-        private string _fMIdentType;
 
         #endregion
         #region ChangeTracking

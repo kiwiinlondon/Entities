@@ -502,6 +502,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _fMTradeBridgeLastProcesseds  ?? (_fMTradeBridgeLastProcesseds = CreateObjectSet<FMTradeBridgeLastProcessed>("FMTradeBridgeLastProcesseds")); }
         }
         private ObjectSet<FMTradeBridgeLastProcessed> _fMTradeBridgeLastProcesseds;
+    
+        public ObjectSet<IdentifierMapping> IdentifierMappings
+        {
+            get { return _identifierMappings  ?? (_identifierMappings = CreateObjectSet<IdentifierMapping>("IdentifierMappings")); }
+        }
+        private ObjectSet<IdentifierMapping> _identifierMappings;
+    
+        public ObjectSet<EntityPropertyOverride> EntityPropertyOverrides
+        {
+            get { return _entityPropertyOverrides  ?? (_entityPropertyOverrides = CreateObjectSet<EntityPropertyOverride>("EntityPropertyOverrides")); }
+        }
+        private ObjectSet<EntityPropertyOverride> _entityPropertyOverrides;
 
         #endregion
         #region Function Imports

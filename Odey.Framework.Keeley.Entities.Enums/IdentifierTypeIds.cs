@@ -55,6 +55,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FMSicCode = 24,
         [EnumMember]
-        KeeleyEventId = 25
+        KeeleyEventId = 25,
+        [EnumMember]
+        BBGlobalId = 26,
+        [EnumMember]
+        BBExchangeCode = 27
     }
 }

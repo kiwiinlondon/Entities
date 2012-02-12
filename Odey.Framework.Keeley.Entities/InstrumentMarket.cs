@@ -288,6 +288,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<decimal> _priceQuoteMultiplier;
+        [DataMember]
+        public string BloombergGlobalId
+        {	
+    		
+            get { return _bloombergGlobalId; }
+            set
+            {
+                if (_bloombergGlobalId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BloombergGlobalId", _bloombergGlobalId);
+                    _bloombergGlobalId = value;
+                    OnPropertyChanged("BloombergGlobalId");
+                }
+            }
+        }
+        private string _bloombergGlobalId;
 
         #endregion
         #region Navigation Properties

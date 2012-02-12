@@ -236,6 +236,54 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _derivedAssetClassId;
+        [DataMember]
+        public string BloombergGlobalId
+        {	
+    		
+            get { return _bloombergGlobalId; }
+            set
+            {
+                if (_bloombergGlobalId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BloombergGlobalId", _bloombergGlobalId);
+                    _bloombergGlobalId = value;
+                    OnPropertyChanged("BloombergGlobalId");
+                }
+            }
+        }
+        private string _bloombergGlobalId;
+        [DataMember]
+        public string BloombergTicker
+        {	
+    		
+            get { return _bloombergTicker; }
+            set
+            {
+                if (_bloombergTicker != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BloombergTicker", _bloombergTicker);
+                    _bloombergTicker = value;
+                    OnPropertyChanged("BloombergTicker");
+                }
+            }
+        }
+        private string _bloombergTicker;
+        [DataMember]
+        public Nullable<int> BloombergYellowKeyId
+        {	
+    		
+            get { return _bloombergYellowKeyId; }
+            set
+            {
+                if (_bloombergYellowKeyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BloombergYellowKeyId", _bloombergYellowKeyId);
+                    _bloombergYellowKeyId = value;
+                    OnPropertyChanged("BloombergYellowKeyId");
+                }
+            }
+        }
+        private Nullable<int> _bloombergYellowKeyId;
 
         #endregion
         #region Navigation Properties

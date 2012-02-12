@@ -16,8 +16,19 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            //using (var context = new KeeleyModel())
-            //{
+
+            using (var context = new KeeleyModel())
+            {
+                LegalEntity l = context.LegalEntities.Where(a => a.LegalEntityID == 741).FirstOrDefault();
+
+                string name = l.LongName;
+
+                l.LongName = "Geoff";
+
+                l.LongName = name;
+
+                context.SaveChanges();
+            }
             //    List<InternalAllocation> ias = context.InternalAllocations.Where(a => a.ParentEventId == 434).ToList();
             //    foreach (InternalAllocation i in ias)
             //    {

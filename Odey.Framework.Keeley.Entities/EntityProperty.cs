@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(EntityPropertyOverride))]
     public partial class EntityProperty: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -186,6 +187,44 @@ namespace Odey.Framework.Keeley.Entities
         private Nullable<int> _identifierTypeId;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<EntityPropertyOverride> EntityPropertyOverrides
+        {
+            get
+            {
+                if (_entityPropertyOverrides == null)
+                {
+                    _entityPropertyOverrides = new TrackableCollection<EntityPropertyOverride>();
+                    _entityPropertyOverrides.CollectionChanged += FixupEntityPropertyOverrides;
+                }
+                return _entityPropertyOverrides;
+            }
+            set
+            {
+                if (!ReferenceEquals(_entityPropertyOverrides, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_entityPropertyOverrides != null)
+                    {
+                        _entityPropertyOverrides.CollectionChanged -= FixupEntityPropertyOverrides;
+                    }
+                    _entityPropertyOverrides = value;
+                    if (_entityPropertyOverrides != null)
+                    {
+                        _entityPropertyOverrides.CollectionChanged += FixupEntityPropertyOverrides;
+                    }
+                    OnNavigationPropertyChanged("EntityPropertyOverrides");
+                }
+            }
+        }
+        private TrackableCollection<EntityPropertyOverride> _entityPropertyOverrides;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -263,6 +302,49 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            EntityPropertyOverrides.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupEntityPropertyOverrides(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (EntityPropertyOverride item in e.NewItems)
+                {
+                    item.EntityProperty = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("EntityPropertyOverrides", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (EntityPropertyOverride item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.EntityProperty, this))
+                    {
+                        item.EntityProperty = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("EntityPropertyOverrides", item);
+                    }
+                }
+            }
         }
 
         #endregion

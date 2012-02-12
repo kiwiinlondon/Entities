@@ -50,7 +50,31 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Analytic = 27,
         [EnumMember]
-        DerivedAssetClass = 28
+        DerivedAssetClass = 28,
+        [EnumMember]
+        LegalEntity	= 29,
+        [EnumMember]
+        Market = 31,
+        [EnumMember]
+        Issuer = 32,
+        [EnumMember]
+        Instrument = 33,
+        [EnumMember]
+        InstrumentEventType = 34,
+        [EnumMember]
+        EntityRankingScheme = 35,
+        [EnumMember]
+        EntityRankingSchemeItem = 36,
+        [EnumMember]
+        Custodian = 37,
+        [EnumMember]
+        ChargeType = 38,
+        [EnumMember]
+        BuySellReason = 39,
+        [EnumMember]
+        ApplicationUser = 40,
+        [EnumMember]
+        Account = 41
     }
 }
 

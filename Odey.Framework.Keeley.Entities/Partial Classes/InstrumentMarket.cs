@@ -57,6 +57,14 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public int? BloombergYellowKeyId
+        {
+            get
+            {
+                return Instrument.BloombergYellowKeyId;
+            }
+        }
+
         public string LongName
         {
             get
