@@ -66,6 +66,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CommodityFutureOption = 62,        
         [EnumMember]
-        InterestRate = 65
+        InterestRate = 65,
+        [EnumMember]
+        RealEstateInvestmentTrust = 66,
+        [EnumMember]
+        Unit = 67,
+        [EnumMember]
+        FXFutureOption = 69,
+        [EnumMember]
+        FXOption = 70
     }
 }

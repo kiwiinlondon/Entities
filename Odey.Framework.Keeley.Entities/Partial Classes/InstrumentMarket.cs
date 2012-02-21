@@ -84,7 +84,7 @@ namespace Odey.Framework.Keeley.Entities
                 {
                     if (Instrument.Underlyer.InstrumentMarkets.Count == 0)
                     {
-                        return null;
+                        throw new ApplicationException("Instrument if its an underlyer it must have at least one instrument market");
                     }
                     else if (Instrument.Underlyer.InstrumentMarkets.Count == 1)
                     {
