@@ -70,8 +70,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         RealEstateInvestmentTrust = 66,
         [EnumMember]
-        Unit = 67,
-        [EnumMember]
         FXFutureOption = 69,
         [EnumMember]
         FXOption = 70

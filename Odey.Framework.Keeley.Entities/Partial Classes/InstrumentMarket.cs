@@ -73,8 +73,21 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public string PrimaryBloombergGlobalId
+        {
+            get
+            {
+                return Instrument.BloombergGlobalId;
+            }
+        }
 
-
+        public string PrimaryBloombergTicker
+        {
+            get
+            {
+                return Instrument.BloombergTicker;
+            }
+        }     
 
         public InstrumentMarket UnderlyingInstrumentMarket
         {
