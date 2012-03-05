@@ -20,6 +20,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Swap = 60,
         [EnumMember]
-        Commodity = 61
+        Funds = 72
     }
 }

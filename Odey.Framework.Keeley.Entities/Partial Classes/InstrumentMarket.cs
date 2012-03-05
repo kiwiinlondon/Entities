@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Odey.Framework.Keeley.Entities.Enums;
 
 namespace Odey.Framework.Keeley.Entities
 {
@@ -29,6 +30,14 @@ namespace Odey.Framework.Keeley.Entities
             get
             {
                 return Instrument.InstrumentClassID;
+            }
+        }
+
+        public InstrumentClassIds InstrumentClassIdAsEnum
+        {
+            get
+            {
+                return (InstrumentClassIds)InstrumentClassID;
             }
         }
 

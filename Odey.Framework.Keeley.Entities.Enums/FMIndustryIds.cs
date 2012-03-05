@@ -14,7 +14,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Fund = 687,
         [EnumMember]
-        Unknown = 279
-        
+        Unknown = 279,
+        [EnumMember]
+        UnknownL2 = 712
     }
 }

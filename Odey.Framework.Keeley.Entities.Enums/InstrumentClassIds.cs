@@ -50,28 +50,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         EquityIndexOption = 50,
         [EnumMember]
-        EquityFuture = 51,
-        [EnumMember]
-        FXFuture = 52,
-        [EnumMember]
-        Basket = 54,
-        [EnumMember]
-        PubliclyTradedRoyaltyTrust=55,
-        [EnumMember]
-        EquityIndexSwap=57,
-        [EnumMember]
-        Commodity = 58,
+        FXFuture = 52,        
         [EnumMember]
         ProprietaryGovernmentBond = 59,
         [EnumMember]
-        CommodityFutureOption = 62,        
+        OptionOnFuture = 62,        
         [EnumMember]
-        InterestRate = 65,
-        [EnumMember]
-        RealEstateInvestmentTrust = 66,
-        [EnumMember]
-        FXFutureOption = 69,
-        [EnumMember]
-        FXOption = 70
+        RealEstateInvestmentTrust = 66   
+       
+
     }
 }

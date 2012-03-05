@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Odey.Framework.Keeley.Entities.Enums;
 
 namespace Odey.Framework.Keeley.Entities
 {
@@ -57,6 +59,27 @@ namespace Odey.Framework.Keeley.Entities
             {
                 return LegalEntity.LongName;
             }         
+        }
+
+        private IssuerIndustry OdeyIssuerIndustry
+        {
+            get
+            {
+                return IssuerIndustries.Where(a => a.IndustryClassificationID == (int)IndustryClassificationIds.Odey).FirstOrDefault();
+            }
+        }
+
+        public int OdeyIndustryId
+        {
+            get
+            {
+                return OdeyIssuerIndustry.IndustryID;
+            }
+            set
+            {
+                OdeyIssuerIndustry.IndustryID = value;
+            }
+
         }
     }
 }
