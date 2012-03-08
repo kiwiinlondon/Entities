@@ -514,6 +514,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _entityPropertyOverrides  ?? (_entityPropertyOverrides = CreateObjectSet<EntityPropertyOverride>("EntityPropertyOverrides")); }
         }
         private ObjectSet<EntityPropertyOverride> _entityPropertyOverrides;
+    
+        public ObjectSet<FundWebsiteCacheTime> FundWebsiteCacheTimes
+        {
+            get { return _fundWebsiteCacheTimes  ?? (_fundWebsiteCacheTimes = CreateObjectSet<FundWebsiteCacheTime>("FundWebsiteCacheTimes")); }
+        }
+        private ObjectSet<FundWebsiteCacheTime> _fundWebsiteCacheTimes;
+    
+        public ObjectSet<DealingDateDefinition> DealingDateDefinitions
+        {
+            get { return _dealingDateDefinitions  ?? (_dealingDateDefinitions = CreateObjectSet<DealingDateDefinition>("DealingDateDefinitions")); }
+        }
+        private ObjectSet<DealingDateDefinition> _dealingDateDefinitions;
 
         #endregion
         #region Function Imports

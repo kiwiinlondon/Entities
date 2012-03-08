@@ -284,6 +284,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<int> _bloombergYellowKeyId;
+        [DataMember]
+        public bool Is13F
+        {	
+    		
+            get { return _is13F; }
+            set
+            {
+                if (_is13F != value)
+                {
+                    ChangeTracker.RecordOriginalValue("Is13F", _is13F);
+                    _is13F = value;
+                    OnPropertyChanged("Is13F");
+                }
+            }
+        }
+        private bool _is13F;
 
         #endregion
         #region Navigation Properties

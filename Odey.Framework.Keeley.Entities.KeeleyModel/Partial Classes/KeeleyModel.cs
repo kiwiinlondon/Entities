@@ -148,18 +148,23 @@ namespace Odey.Framework.Keeley.Entities
 
         private void AddUsefulFields(ObjectStateEntry entry, ChangedEntity changedEntity)
         {
-            if (entry.Entity.GetType() == typeof(Portfolio))
+            Type entityType = entry.Entity.GetType();
+            if (entityType == typeof(Portfolio))
             {
                 AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "PositionId");
                 AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "ReferenceDate");
             }
-            else if (entry.Entity.GetType() == typeof(Instrument))
+            else if (entityType == typeof(Instrument))
             {
                 AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "InstrumentClassID");
             }
-            else if (entry.Entity.GetType() == typeof(InstrumentMarket))
+            else if (entityType == typeof(InstrumentMarket))
             {
                 AddValueToUsefulPropertiesUsingReflection(entry, "InstrumentClassID", changedEntity);
+            }
+            else if (entityType == typeof(FundPerformance))
+            {
+                AddValueToUsefulPropertiesUsingReflection(entry, "FundId", changedEntity);
             }
         }
 

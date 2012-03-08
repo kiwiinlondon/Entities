@@ -209,7 +209,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private Nullable<int> _fromRawFXRateId;
         [DataMember]
-        public Nullable<int> ToRawFXRateId
+        public int ToRawFXRateId
         {	
     		
             get { return _toRawFXRateId; }
@@ -230,7 +230,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _toRawFXRateId;
+        private int _toRawFXRateId;
         [DataMember]
         public Nullable<int> FromSecondRawFXRateId
         {	
@@ -480,7 +480,7 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
-        private void FixupToRawFXRate(RawFXRate previousValue, bool skipKeys = false)
+        private void FixupToRawFXRate(RawFXRate previousValue)
         {
             if (IsDeserializing)
             {
@@ -501,11 +501,6 @@ namespace Odey.Framework.Keeley.Entities
     
                 ToRawFXRateId = ToRawFXRate.RawFXRateId;
             }
-            else if (!skipKeys)
-            {
-                ToRawFXRateId = null;
-            }
-    
             if (ChangeTracker.ChangeTrackingEnabled)
             {
                 if (ChangeTracker.OriginalValues.ContainsKey("ToRawFXRate")

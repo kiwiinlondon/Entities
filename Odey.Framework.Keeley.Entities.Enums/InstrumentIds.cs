@@ -11,12 +11,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         None = 0,
         [EnumMember]
-        Unknown = 1,
-        [EnumMember]
-        USWheat = 22500,
-        [EnumMember]
-        USCotton = 22501,
-        [EnumMember]
-        USTreasuryBond = 22510
+        Unknown = 1,        
     }
 }

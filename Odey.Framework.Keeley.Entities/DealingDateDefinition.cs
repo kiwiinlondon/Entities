@@ -18,46 +18,30 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(PeriodicityInterval))]
-    [KnownType(typeof(DealingDateDefinition))]
-    public partial class Periodicity: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(Periodicity))]
+    [KnownType(typeof(Fund))]
+    public partial class DealingDateDefinition: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PeriodicityId
+        public int DealingDateDefinitionId
         {	
     		
-            get { return _periodicityId; }
+            get { return _dealingDateDefinitionId; }
             set
             {
-                if (_periodicityId != value)
+                if (_dealingDateDefinitionId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PeriodicityId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'DealingDateDefinitionId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _periodicityId = value;
-                    OnPropertyChanged("PeriodicityId");
+                    _dealingDateDefinitionId = value;
+                    OnPropertyChanged("DealingDateDefinitionId");
                 }
             }
         }
-        private int _periodicityId;
-        [DataMember]
-        public int PeriodicityTypeId
-        {	
-    		
-            get { return _periodicityTypeId; }
-            set
-            {
-                if (_periodicityTypeId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PeriodicityTypeId", _periodicityTypeId);
-                    _periodicityTypeId = value;
-                    OnPropertyChanged("PeriodicityTypeId");
-                }
-            }
-        }
-        private int _periodicityTypeId;
+        private int _dealingDateDefinitionId;
         [DataMember]
         public string Name
         {	
@@ -74,6 +58,61 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private string _name;
+        [DataMember]
+        public int PeriodicityId
+        {	
+    		
+            get { return _periodicityId; }
+            set
+            {
+                if (_periodicityId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PeriodicityId", _periodicityId);
+                    if (!IsDeserializing)
+                    {
+                        if (Periodicity != null && Periodicity.PeriodicityId != value)
+                        {
+                            Periodicity = null;
+                        }
+                    }
+                    _periodicityId = value;
+                    OnPropertyChanged("PeriodicityId");
+                }
+            }
+        }
+        private int _periodicityId;
+        [DataMember]
+        public System.TimeSpan CutOffTime
+        {	
+    		
+            get { return _cutOffTime; }
+            set
+            {
+                if (_cutOffTime != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CutOffTime", _cutOffTime);
+                    _cutOffTime = value;
+                    OnPropertyChanged("CutOffTime");
+                }
+            }
+        }
+        private System.TimeSpan _cutOffTime;
+        [DataMember]
+        public int CutOffDaysPrior
+        {	
+    		
+            get { return _cutOffDaysPrior; }
+            set
+            {
+                if (_cutOffDaysPrior != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CutOffDaysPrior", _cutOffDaysPrior);
+                    _cutOffDaysPrior = value;
+                    OnPropertyChanged("CutOffDaysPrior");
+                }
+            }
+        }
+        private int _cutOffDaysPrior;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -127,74 +166,56 @@ namespace Odey.Framework.Keeley.Entities
         #region Navigation Properties
     
         [DataMember]
-        public TrackableCollection<PeriodicityInterval> PeriodicityIntervals
+        public Periodicity Periodicity
         {
-            get
-            {
-                if (_periodicityIntervals == null)
-                {
-                    _periodicityIntervals = new TrackableCollection<PeriodicityInterval>();
-                    _periodicityIntervals.CollectionChanged += FixupPeriodicityIntervals;
-                }
-                return _periodicityIntervals;
-            }
+            get { return _periodicity; }
             set
             {
-                if (!ReferenceEquals(_periodicityIntervals, value))
+                if (!ReferenceEquals(_periodicity, value))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
-                    }
-                    if (_periodicityIntervals != null)
-                    {
-                        _periodicityIntervals.CollectionChanged -= FixupPeriodicityIntervals;
-                    }
-                    _periodicityIntervals = value;
-                    if (_periodicityIntervals != null)
-                    {
-                        _periodicityIntervals.CollectionChanged += FixupPeriodicityIntervals;
-                    }
-                    OnNavigationPropertyChanged("PeriodicityIntervals");
+                    var previousValue = _periodicity;
+                    _periodicity = value;
+                    FixupPeriodicity(previousValue);
+                    OnNavigationPropertyChanged("Periodicity");
                 }
             }
         }
-        private TrackableCollection<PeriodicityInterval> _periodicityIntervals;
+        private Periodicity _periodicity;
     
         [DataMember]
-        public TrackableCollection<DealingDateDefinition> DealingDateDefinitions
+        public TrackableCollection<Fund> Funds
         {
             get
             {
-                if (_dealingDateDefinitions == null)
+                if (_funds == null)
                 {
-                    _dealingDateDefinitions = new TrackableCollection<DealingDateDefinition>();
-                    _dealingDateDefinitions.CollectionChanged += FixupDealingDateDefinitions;
+                    _funds = new TrackableCollection<Fund>();
+                    _funds.CollectionChanged += FixupFunds;
                 }
-                return _dealingDateDefinitions;
+                return _funds;
             }
             set
             {
-                if (!ReferenceEquals(_dealingDateDefinitions, value))
+                if (!ReferenceEquals(_funds, value))
                 {
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
                     }
-                    if (_dealingDateDefinitions != null)
+                    if (_funds != null)
                     {
-                        _dealingDateDefinitions.CollectionChanged -= FixupDealingDateDefinitions;
+                        _funds.CollectionChanged -= FixupFunds;
                     }
-                    _dealingDateDefinitions = value;
-                    if (_dealingDateDefinitions != null)
+                    _funds = value;
+                    if (_funds != null)
                     {
-                        _dealingDateDefinitions.CollectionChanged += FixupDealingDateDefinitions;
+                        _funds.CollectionChanged += FixupFunds;
                     }
-                    OnNavigationPropertyChanged("DealingDateDefinitions");
+                    OnNavigationPropertyChanged("Funds");
                 }
             }
         }
-        private TrackableCollection<DealingDateDefinition> _dealingDateDefinitions;
+        private TrackableCollection<Fund> _funds;
 
         #endregion
         #region ChangeTracking
@@ -274,49 +295,53 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            PeriodicityIntervals.Clear();
-            DealingDateDefinitions.Clear();
+            Periodicity = null;
+            Funds.Clear();
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupPeriodicityIntervals(object sender, NotifyCollectionChangedEventArgs e)
+        private void FixupPeriodicity(Periodicity previousValue)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (e.NewItems != null)
+            if (previousValue != null && previousValue.DealingDateDefinitions.Contains(this))
             {
-                foreach (PeriodicityInterval item in e.NewItems)
-                {
-                    item.PeriodicityId = PeriodicityId;
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        if (!item.ChangeTracker.ChangeTrackingEnabled)
-                        {
-                            item.StartTracking();
-                        }
-                        ChangeTracker.RecordAdditionToCollectionProperties("PeriodicityIntervals", item);
-                    }
-                }
+                previousValue.DealingDateDefinitions.Remove(this);
             }
     
-            if (e.OldItems != null)
+            if (Periodicity != null)
             {
-                foreach (PeriodicityInterval item in e.OldItems)
+                if (!Periodicity.DealingDateDefinitions.Contains(this))
                 {
-                    if (ChangeTracker.ChangeTrackingEnabled)
-                    {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("PeriodicityIntervals", item);
-                    }
+                    Periodicity.DealingDateDefinitions.Add(this);
+                }
+    
+                PeriodicityId = Periodicity.PeriodicityId;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Periodicity")
+                    && (ChangeTracker.OriginalValues["Periodicity"] == Periodicity))
+                {
+                    ChangeTracker.OriginalValues.Remove("Periodicity");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Periodicity", previousValue);
+                }
+                if (Periodicity != null && !Periodicity.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Periodicity.StartTracking();
                 }
             }
         }
     
-        private void FixupDealingDateDefinitions(object sender, NotifyCollectionChangedEventArgs e)
+        private void FixupFunds(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (IsDeserializing)
             {
@@ -325,31 +350,31 @@ namespace Odey.Framework.Keeley.Entities
     
             if (e.NewItems != null)
             {
-                foreach (DealingDateDefinition item in e.NewItems)
+                foreach (Fund item in e.NewItems)
                 {
-                    item.Periodicity = this;
+                    item.DealingDateDefinition = this;
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         if (!item.ChangeTracker.ChangeTrackingEnabled)
                         {
                             item.StartTracking();
                         }
-                        ChangeTracker.RecordAdditionToCollectionProperties("DealingDateDefinitions", item);
+                        ChangeTracker.RecordAdditionToCollectionProperties("Funds", item);
                     }
                 }
             }
     
             if (e.OldItems != null)
             {
-                foreach (DealingDateDefinition item in e.OldItems)
+                foreach (Fund item in e.OldItems)
                 {
-                    if (ReferenceEquals(item.Periodicity, this))
+                    if (ReferenceEquals(item.DealingDateDefinition, this))
                     {
-                        item.Periodicity = null;
+                        item.DealingDateDefinition = null;
                     }
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
-                        ChangeTracker.RecordRemovalFromCollectionProperties("DealingDateDefinitions", item);
+                        ChangeTracker.RecordRemovalFromCollectionProperties("Funds", item);
                     }
                 }
             }

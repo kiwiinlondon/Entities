@@ -20,6 +20,7 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     [KnownType(typeof(LegalEntity))]
     [KnownType(typeof(InstrumentMarket))]
+    [KnownType(typeof(DealingDateDefinition))]
     public partial class Fund: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -287,6 +288,29 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<int> _riskFreeInstrumentMarketId;
+        [DataMember]
+        public int DealingDateDefinitionId
+        {	
+    		
+            get { return _dealingDateDefinitionId; }
+            set
+            {
+                if (_dealingDateDefinitionId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("DealingDateDefinitionId", _dealingDateDefinitionId);
+                    if (!IsDeserializing)
+                    {
+                        if (DealingDateDefinition != null && DealingDateDefinition.DealingDateDefinitionId != value)
+                        {
+                            DealingDateDefinition = null;
+                        }
+                    }
+                    _dealingDateDefinitionId = value;
+                    OnPropertyChanged("DealingDateDefinitionId");
+                }
+            }
+        }
+        private int _dealingDateDefinitionId;
 
         #endregion
         #region Navigation Properties
@@ -350,6 +374,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private InstrumentMarket _benchmarkInstrumentMarket;
+    
+        [DataMember]
+        public DealingDateDefinition DealingDateDefinition
+        {
+            get { return _dealingDateDefinition; }
+            set
+            {
+                if (!ReferenceEquals(_dealingDateDefinition, value))
+                {
+                    var previousValue = _dealingDateDefinition;
+                    _dealingDateDefinition = value;
+                    FixupDealingDateDefinition(previousValue);
+                    OnNavigationPropertyChanged("DealingDateDefinition");
+                }
+            }
+        }
+        private DealingDateDefinition _dealingDateDefinition;
 
         #endregion
         #region ChangeTracking
@@ -442,6 +483,7 @@ namespace Odey.Framework.Keeley.Entities
             LegalEntity = null;
             InstrumentMarket = null;
             BenchmarkInstrumentMarket = null;
+            DealingDateDefinition = null;
         }
 
         #endregion
@@ -565,6 +607,45 @@ namespace Odey.Framework.Keeley.Entities
                 if (BenchmarkInstrumentMarket != null && !BenchmarkInstrumentMarket.ChangeTracker.ChangeTrackingEnabled)
                 {
                     BenchmarkInstrumentMarket.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupDealingDateDefinition(DealingDateDefinition previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.Funds.Contains(this))
+            {
+                previousValue.Funds.Remove(this);
+            }
+    
+            if (DealingDateDefinition != null)
+            {
+                if (!DealingDateDefinition.Funds.Contains(this))
+                {
+                    DealingDateDefinition.Funds.Add(this);
+                }
+    
+                DealingDateDefinitionId = DealingDateDefinition.DealingDateDefinitionId;
+            }
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("DealingDateDefinition")
+                    && (ChangeTracker.OriginalValues["DealingDateDefinition"] == DealingDateDefinition))
+                {
+                    ChangeTracker.OriginalValues.Remove("DealingDateDefinition");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("DealingDateDefinition", previousValue);
+                }
+                if (DealingDateDefinition != null && !DealingDateDefinition.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    DealingDateDefinition.StartTracking();
                 }
             }
         }
