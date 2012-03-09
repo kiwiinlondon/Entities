@@ -51,7 +51,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             get
             {
-                return (PeriodicityIds)InstrumentMarket.Instrument.CollectiveInvestmentScheme.DealingFrequencyId;
+                return (PeriodicityIds)DealingDateDefinition.PeriodicityId;
             }
         }
     }

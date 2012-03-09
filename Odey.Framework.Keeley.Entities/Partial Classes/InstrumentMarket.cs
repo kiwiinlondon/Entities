@@ -25,6 +25,14 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public bool Is13F
+        {
+            get
+            {
+                return Instrument.Is13F;
+            }
+        }
+
         public int InstrumentClassID
         {
             get
