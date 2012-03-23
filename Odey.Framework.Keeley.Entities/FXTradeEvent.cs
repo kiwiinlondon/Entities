@@ -321,38 +321,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private bool _isForward;
         [DataMember]
-        public decimal PayBookXrate
-        {	
-    		
-            get { return _payBookXrate; }
-            set
-            {
-                if (_payBookXrate != value)
-                {
-                    ChangeTracker.RecordOriginalValue("PayBookXrate", _payBookXrate);
-                    _payBookXrate = value;
-                    OnPropertyChanged("PayBookXrate");
-                }
-            }
-        }
-        private decimal _payBookXrate;
-        [DataMember]
-        public decimal ReceiveBookXrate
-        {	
-    		
-            get { return _receiveBookXrate; }
-            set
-            {
-                if (_receiveBookXrate != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ReceiveBookXrate", _receiveBookXrate);
-                    _receiveBookXrate = value;
-                    OnPropertyChanged("ReceiveBookXrate");
-                }
-            }
-        }
-        private decimal _receiveBookXrate;
-        [DataMember]
         public System.DateTime InputDate
         {	
     		
@@ -385,22 +353,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _settlementCurrencyId;
         [DataMember]
-        public decimal SettlementBookXrate
-        {	
-    		
-            get { return _settlementBookXrate; }
-            set
-            {
-                if (_settlementBookXrate != value)
-                {
-                    ChangeTracker.RecordOriginalValue("SettlementBookXrate", _settlementBookXrate);
-                    _settlementBookXrate = value;
-                    OnPropertyChanged("SettlementBookXrate");
-                }
-            }
-        }
-        private decimal _settlementBookXrate;
-        [DataMember]
         public bool SupressFromExtracts
         {	
     		
@@ -416,6 +368,70 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _supressFromExtracts;
+        [DataMember]
+        public Nullable<decimal> NonEuroPairReceiveToEuroFXRate
+        {	
+    		
+            get { return _nonEuroPairReceiveToEuroFXRate; }
+            set
+            {
+                if (_nonEuroPairReceiveToEuroFXRate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("NonEuroPairReceiveToEuroFXRate", _nonEuroPairReceiveToEuroFXRate);
+                    _nonEuroPairReceiveToEuroFXRate = value;
+                    OnPropertyChanged("NonEuroPairReceiveToEuroFXRate");
+                }
+            }
+        }
+        private Nullable<decimal> _nonEuroPairReceiveToEuroFXRate;
+        [DataMember]
+        public Nullable<int> NonEuroPairReceiveToEuroFXRateId
+        {	
+    		
+            get { return _nonEuroPairReceiveToEuroFXRateId; }
+            set
+            {
+                if (_nonEuroPairReceiveToEuroFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("NonEuroPairReceiveToEuroFXRateId", _nonEuroPairReceiveToEuroFXRateId);
+                    _nonEuroPairReceiveToEuroFXRateId = value;
+                    OnPropertyChanged("NonEuroPairReceiveToEuroFXRateId");
+                }
+            }
+        }
+        private Nullable<int> _nonEuroPairReceiveToEuroFXRateId;
+        [DataMember]
+        public bool IsRoll
+        {	
+    		
+            get { return _isRoll; }
+            set
+            {
+                if (_isRoll != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IsRoll", _isRoll);
+                    _isRoll = value;
+                    OnPropertyChanged("IsRoll");
+                }
+            }
+        }
+        private bool _isRoll;
+        [DataMember]
+        public Nullable<int> ContraEventId
+        {	
+    		
+            get { return _contraEventId; }
+            set
+            {
+                if (_contraEventId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ContraEventId", _contraEventId);
+                    _contraEventId = value;
+                    OnPropertyChanged("ContraEventId");
+                }
+            }
+        }
+        private Nullable<int> _contraEventId;
 
         #endregion
         #region Navigation Properties

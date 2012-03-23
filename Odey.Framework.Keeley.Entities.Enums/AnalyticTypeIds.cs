@@ -13,9 +13,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         LiquidityWeightedAverageNumberOfDays=2,
         [EnumMember]
-        LiquidityTotalHaircutPercentNAV=3,
+        LiquidityNonLiquidatedPercentNAV=3,
         [EnumMember]
-        LiquidityValueGreaterMaxDailyLimitPercentNAV=4
+        LiquidityValueGreaterMaxDailyLimitPercentNAV=4,
+        [EnumMember]
+        LiquidityHaircutPercentNAV=5
     }
 }
 

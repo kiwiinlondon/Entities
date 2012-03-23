@@ -32,5 +32,14 @@ namespace Odey.Framework.Keeley.Entities
         }
 
         #endregion
+
+        public decimal GetOrientatedValue(int fromCurrencyId)
+        {
+            if (FromCurrencyId == fromCurrencyId)
+            {
+                return Value;
+            }
+            return 1 / Value;
+        }
     }
 }

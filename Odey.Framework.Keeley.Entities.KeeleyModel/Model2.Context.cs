@@ -239,18 +239,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<InternalAllocation> _internalAllocations;
     
-        public ObjectSet<InternalAccountingEvent> InternalAccountingEvents
-        {
-            get { return _internalAccountingEvents  ?? (_internalAccountingEvents = CreateObjectSet<InternalAccountingEvent>("InternalAccountingEvents")); }
-        }
-        private ObjectSet<InternalAccountingEvent> _internalAccountingEvents;
-    
-        public ObjectSet<InternalAccountingEventType> InternalAccountingEventTypes
-        {
-            get { return _internalAccountingEventTypes  ?? (_internalAccountingEventTypes = CreateObjectSet<InternalAccountingEventType>("InternalAccountingEventTypes")); }
-        }
-        private ObjectSet<InternalAccountingEventType> _internalAccountingEventTypes;
-    
         public ObjectSet<InstrumentClassHierarchy> InstrumentClassHierarchies
         {
             get { return _instrumentClassHierarchies  ?? (_instrumentClassHierarchies = CreateObjectSet<InstrumentClassHierarchy>("InstrumentClassHierarchies")); }

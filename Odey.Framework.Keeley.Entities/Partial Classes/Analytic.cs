@@ -18,7 +18,20 @@ namespace Odey.Framework.Keeley.Entities
 
         public List<IRawMarketDatum> RawMarketData
         {
-            get { return new List<IRawMarketDatum> { RawAnalytic }; }
+
+            get
+            {
+                if (RawAnalytic != null)
+                {
+                    return new List<IRawMarketDatum> { RawAnalytic };
+                }
+                else
+                {
+                    return new List<IRawMarketDatum>();
+                }
+            }
+        
+            
         }
 
         #endregion

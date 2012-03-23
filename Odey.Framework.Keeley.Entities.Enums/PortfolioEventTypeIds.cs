@@ -34,7 +34,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Accrual = 13,
         [EnumMember]
-        CashBenefit = 14
+        CashBenefit = 14,
+        [EnumMember]
+        PNLRoll = 15
     }
 }
 

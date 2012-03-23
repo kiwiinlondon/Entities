@@ -353,22 +353,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private bool _tradeInstrumentFXRateMultiply;
         [DataMember]
-        public decimal InstrumentBookFXRate
-        {	
-    		
-            get { return _instrumentBookFXRate; }
-            set
-            {
-                if (_instrumentBookFXRate != value)
-                {
-                    ChangeTracker.RecordOriginalValue("InstrumentBookFXRate", _instrumentBookFXRate);
-                    _instrumentBookFXRate = value;
-                    OnPropertyChanged("InstrumentBookFXRate");
-                }
-            }
-        }
-        private decimal _instrumentBookFXRate;
-        [DataMember]
         public string Ticket
         {	
     		
@@ -496,6 +480,54 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _supressFromExtracts;
+        [DataMember]
+        public decimal TradeEuroFXRate
+        {	
+    		
+            get { return _tradeEuroFXRate; }
+            set
+            {
+                if (_tradeEuroFXRate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("TradeEuroFXRate", _tradeEuroFXRate);
+                    _tradeEuroFXRate = value;
+                    OnPropertyChanged("TradeEuroFXRate");
+                }
+            }
+        }
+        private decimal _tradeEuroFXRate;
+        [DataMember]
+        public Nullable<int> TradeEuroFXRateId
+        {	
+    		
+            get { return _tradeEuroFXRateId; }
+            set
+            {
+                if (_tradeEuroFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("TradeEuroFXRateId", _tradeEuroFXRateId);
+                    _tradeEuroFXRateId = value;
+                    OnPropertyChanged("TradeEuroFXRateId");
+                }
+            }
+        }
+        private Nullable<int> _tradeEuroFXRateId;
+        [DataMember]
+        public bool IsRoll
+        {	
+    		
+            get { return _isRoll; }
+            set
+            {
+                if (_isRoll != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IsRoll", _isRoll);
+                    _isRoll = value;
+                    OnPropertyChanged("IsRoll");
+                }
+            }
+        }
+        private bool _isRoll;
 
         #endregion
         #region Navigation Properties

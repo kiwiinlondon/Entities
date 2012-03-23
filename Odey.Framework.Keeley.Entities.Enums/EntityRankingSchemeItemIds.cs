@@ -36,7 +36,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FMAnalytic = 18,
         [EnumMember]
-        DummyAnalytic = 19
+        DummyAnalytic = 19,
+        [EnumMember]
+        OdeyCalculatedAnalytic = 21
 
     }
 }

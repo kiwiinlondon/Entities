@@ -241,6 +241,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _parentEventId;
+        [DataMember]
+        public decimal EventToBookFXRate
+        {	
+    		
+            get { return _eventToBookFXRate; }
+            set
+            {
+                if (_eventToBookFXRate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("EventToBookFXRate", _eventToBookFXRate);
+                    _eventToBookFXRate = value;
+                    OnPropertyChanged("EventToBookFXRate");
+                }
+            }
+        }
+        private decimal _eventToBookFXRate;
 
         #endregion
         #region Navigation Properties

@@ -147,7 +147,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private string _perfFundName;
         [DataMember]
-        public Nullable<int> InstrumentMarketId
+        public int InstrumentMarketId
         {	
     		
             get { return _instrumentMarketId; }
@@ -168,9 +168,9 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _instrumentMarketId;
+        private int _instrumentMarketId;
         [DataMember]
-        public Nullable<int> BenchmarkInstrumentMarketId
+        public int BenchmarkInstrumentMarketId
         {	
     		
             get { return _benchmarkInstrumentMarketId; }
@@ -191,7 +191,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _benchmarkInstrumentMarketId;
+        private int _benchmarkInstrumentMarketId;
         [DataMember]
         public Nullable<int> ParentFundId
         {	
@@ -273,7 +273,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private System.DateTime _inceptionDate;
         [DataMember]
-        public Nullable<int> RiskFreeInstrumentMarketId
+        public int RiskFreeInstrumentMarketId
         {	
     		
             get { return _riskFreeInstrumentMarketId; }
@@ -287,7 +287,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _riskFreeInstrumentMarketId;
+        private int _riskFreeInstrumentMarketId;
         [DataMember]
         public int DealingDateDefinitionId
         {	
@@ -541,7 +541,7 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
-        private void FixupInstrumentMarket(InstrumentMarket previousValue, bool skipKeys = false)
+        private void FixupInstrumentMarket(InstrumentMarket previousValue)
         {
             if (IsDeserializing)
             {
@@ -551,11 +551,6 @@ namespace Odey.Framework.Keeley.Entities
             if (InstrumentMarket != null)
             {
                 InstrumentMarketId = InstrumentMarket.InstrumentMarketID;
-            }
-    
-            else if (!skipKeys)
-            {
-                InstrumentMarketId = null;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
@@ -576,7 +571,7 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
-        private void FixupBenchmarkInstrumentMarket(InstrumentMarket previousValue, bool skipKeys = false)
+        private void FixupBenchmarkInstrumentMarket(InstrumentMarket previousValue)
         {
             if (IsDeserializing)
             {
@@ -586,11 +581,6 @@ namespace Odey.Framework.Keeley.Entities
             if (BenchmarkInstrumentMarket != null)
             {
                 BenchmarkInstrumentMarketId = BenchmarkInstrumentMarket.InstrumentMarketID;
-            }
-    
-            else if (!skipKeys)
-            {
-                BenchmarkInstrumentMarketId = null;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
