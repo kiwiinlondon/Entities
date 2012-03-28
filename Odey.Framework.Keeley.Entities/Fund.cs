@@ -311,6 +311,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _dealingDateDefinitionId;
+        [DataMember]
+        public string EZEIdentifier
+        {	
+    		
+            get { return _eZEIdentifier; }
+            set
+            {
+                if (_eZEIdentifier != value)
+                {
+                    ChangeTracker.RecordOriginalValue("EZEIdentifier", _eZEIdentifier);
+                    _eZEIdentifier = value;
+                    OnPropertyChanged("EZEIdentifier");
+                }
+            }
+        }
+        private string _eZEIdentifier;
 
         #endregion
         #region Navigation Properties

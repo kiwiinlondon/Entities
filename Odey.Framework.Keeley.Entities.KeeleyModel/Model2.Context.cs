@@ -514,6 +514,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _dealingDateDefinitions  ?? (_dealingDateDefinitions = CreateObjectSet<DealingDateDefinition>("DealingDateDefinitions")); }
         }
         private ObjectSet<DealingDateDefinition> _dealingDateDefinitions;
+    
+        public ObjectSet<ChargeSchedule> ChargeSchedules
+        {
+            get { return _chargeSchedules  ?? (_chargeSchedules = CreateObjectSet<ChargeSchedule>("ChargeSchedules")); }
+        }
+        private ObjectSet<ChargeSchedule> _chargeSchedules;
+    
+        public ObjectSet<CounterpartyChargeSchedule> CounterpartyChargeSchedules
+        {
+            get { return _counterpartyChargeSchedules  ?? (_counterpartyChargeSchedules = CreateObjectSet<CounterpartyChargeSchedule>("CounterpartyChargeSchedules")); }
+        }
+        private ObjectSet<CounterpartyChargeSchedule> _counterpartyChargeSchedules;
 
         #endregion
         #region Function Imports

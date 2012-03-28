@@ -18,100 +18,100 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Fund))]
-    public partial class Book: IObjectWithChangeTracker, INotifyPropertyChanged
+    [KnownType(typeof(ChargeSchedule))]
+    public partial class CounterpartyChargeSchedule: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int BookID
+        public int CounterpartyChargeScheduleId
         {	
     		
-            get { return _bookID; }
+            get { return _counterpartyChargeScheduleId; }
             set
             {
-                if (_bookID != value)
+                if (_counterpartyChargeScheduleId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'BookID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'CounterpartyChargeScheduleId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _bookID = value;
-                    OnPropertyChanged("BookID");
+                    _counterpartyChargeScheduleId = value;
+                    OnPropertyChanged("CounterpartyChargeScheduleId");
                 }
             }
         }
-        private int _bookID;
+        private int _counterpartyChargeScheduleId;
         [DataMember]
-        public Nullable<int> FMOrgId
+        public int CounterpartyId
         {	
     		
-            get { return _fMOrgId; }
+            get { return _counterpartyId; }
             set
             {
-                if (_fMOrgId != value)
+                if (_counterpartyId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FMOrgId", _fMOrgId);
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
+                    ChangeTracker.RecordOriginalValue("CounterpartyId", _counterpartyId);
+                    _counterpartyId = value;
+                    OnPropertyChanged("CounterpartyId");
                 }
             }
         }
-        private Nullable<int> _fMOrgId;
+        private int _counterpartyId;
         [DataMember]
-        public string Name
+        public int ChargeScheduleId
         {	
     		
-            get { return _name; }
+            get { return _chargeScheduleId; }
             set
             {
-                if (_name != value)
+                if (_chargeScheduleId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Name", _name);
-                    _name = value;
-                    OnPropertyChanged("Name");
-                }
-            }
-        }
-        private string _name;
-        [DataMember]
-        public int FundID
-        {	
-    		
-            get { return _fundID; }
-            set
-            {
-                if (_fundID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("FundID", _fundID);
+                    ChangeTracker.RecordOriginalValue("ChargeScheduleId", _chargeScheduleId);
                     if (!IsDeserializing)
                     {
-                        if (Fund != null && Fund.LegalEntityID != value)
+                        if (ChargeSchedule != null && ChargeSchedule.ChargeScheduleId != value)
                         {
-                            Fund = null;
+                            ChargeSchedule = null;
                         }
                     }
-                    _fundID = value;
-                    OnPropertyChanged("FundID");
+                    _chargeScheduleId = value;
+                    OnPropertyChanged("ChargeScheduleId");
                 }
             }
         }
-        private int _fundID;
+        private int _chargeScheduleId;
         [DataMember]
-        public System.DateTime StartDt
+        public System.DateTime EffectiveFromDt
         {	
     		
-            get { return _startDt; }
-            private set
+            get { return _effectiveFromDt; }
+            set
             {
-                if (_startDt != value)
+                if (_effectiveFromDt != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
-                    _startDt = value;
-                    OnPropertyChanged("StartDt");
+                    ChangeTracker.RecordOriginalValue("EffectiveFromDt", _effectiveFromDt);
+                    _effectiveFromDt = value;
+                    OnPropertyChanged("EffectiveFromDt");
                 }
             }
         }
-        private System.DateTime _startDt;
+        private System.DateTime _effectiveFromDt;
+        [DataMember]
+        public System.DateTime EffectiveToDt
+        {	
+    		
+            get { return _effectiveToDt; }
+            set
+            {
+                if (_effectiveToDt != value)
+                {
+                    ChangeTracker.RecordOriginalValue("EffectiveToDt", _effectiveToDt);
+                    _effectiveToDt = value;
+                    OnPropertyChanged("EffectiveToDt");
+                }
+            }
+        }
+        private System.DateTime _effectiveToDt;
         [DataMember]
         public int UpdateUserID
         {	
@@ -144,58 +144,26 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public Nullable<int> ManagerId
-        {	
-    		
-            get { return _managerId; }
-            set
-            {
-                if (_managerId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ManagerId", _managerId);
-                    _managerId = value;
-                    OnPropertyChanged("ManagerId");
-                }
-            }
-        }
-        private Nullable<int> _managerId;
-        [DataMember]
-        public string EZEIdentifier
-        {	
-    		
-            get { return _eZEIdentifier; }
-            set
-            {
-                if (_eZEIdentifier != value)
-                {
-                    ChangeTracker.RecordOriginalValue("EZEIdentifier", _eZEIdentifier);
-                    _eZEIdentifier = value;
-                    OnPropertyChanged("EZEIdentifier");
-                }
-            }
-        }
-        private string _eZEIdentifier;
 
         #endregion
         #region Navigation Properties
     
         [DataMember]
-        public Fund Fund
+        public ChargeSchedule ChargeSchedule
         {
-            get { return _fund; }
+            get { return _chargeSchedule; }
             set
             {
-                if (!ReferenceEquals(_fund, value))
+                if (!ReferenceEquals(_chargeSchedule, value))
                 {
-                    var previousValue = _fund;
-                    _fund = value;
-                    FixupFund(previousValue);
-                    OnNavigationPropertyChanged("Fund");
+                    var previousValue = _chargeSchedule;
+                    _chargeSchedule = value;
+                    FixupChargeSchedule(previousValue);
+                    OnNavigationPropertyChanged("ChargeSchedule");
                 }
             }
         }
-        private Fund _fund;
+        private ChargeSchedule _chargeSchedule;
 
         #endregion
         #region ChangeTracking
@@ -275,38 +243,38 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Fund = null;
+            ChargeSchedule = null;
         }
 
         #endregion
         #region Association Fixup
     
-        private void FixupFund(Fund previousValue)
+        private void FixupChargeSchedule(ChargeSchedule previousValue)
         {
             if (IsDeserializing)
             {
                 return;
             }
     
-            if (Fund != null)
+            if (ChargeSchedule != null)
             {
-                FundID = Fund.LegalEntityID;
+                ChargeScheduleId = ChargeSchedule.ChargeScheduleId;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)
             {
-                if (ChangeTracker.OriginalValues.ContainsKey("Fund")
-                    && (ChangeTracker.OriginalValues["Fund"] == Fund))
+                if (ChangeTracker.OriginalValues.ContainsKey("ChargeSchedule")
+                    && (ChangeTracker.OriginalValues["ChargeSchedule"] == ChargeSchedule))
                 {
-                    ChangeTracker.OriginalValues.Remove("Fund");
+                    ChangeTracker.OriginalValues.Remove("ChargeSchedule");
                 }
                 else
                 {
-                    ChangeTracker.RecordOriginalValue("Fund", previousValue);
+                    ChangeTracker.RecordOriginalValue("ChargeSchedule", previousValue);
                 }
-                if (Fund != null && !Fund.ChangeTracker.ChangeTrackingEnabled)
+                if (ChargeSchedule != null && !ChargeSchedule.ChangeTracker.ChangeTrackingEnabled)
                 {
-                    Fund.StartTracking();
+                    ChargeSchedule.StartTracking();
                 }
             }
         }

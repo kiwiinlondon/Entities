@@ -18,45 +18,44 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    [KnownType(typeof(Fund))]
-    public partial class Book: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class ChargeSchedule: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int BookID
+        public int ChargeScheduleId
         {	
     		
-            get { return _bookID; }
+            get { return _chargeScheduleId; }
             set
             {
-                if (_bookID != value)
+                if (_chargeScheduleId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'BookID' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'ChargeScheduleId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _bookID = value;
-                    OnPropertyChanged("BookID");
+                    _chargeScheduleId = value;
+                    OnPropertyChanged("ChargeScheduleId");
                 }
             }
         }
-        private int _bookID;
+        private int _chargeScheduleId;
         [DataMember]
-        public Nullable<int> FMOrgId
+        public int InstrumentClassId
         {	
     		
-            get { return _fMOrgId; }
+            get { return _instrumentClassId; }
             set
             {
-                if (_fMOrgId != value)
+                if (_instrumentClassId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FMOrgId", _fMOrgId);
-                    _fMOrgId = value;
-                    OnPropertyChanged("FMOrgId");
+                    ChangeTracker.RecordOriginalValue("InstrumentClassId", _instrumentClassId);
+                    _instrumentClassId = value;
+                    OnPropertyChanged("InstrumentClassId");
                 }
             }
         }
-        private Nullable<int> _fMOrgId;
+        private int _instrumentClassId;
         [DataMember]
         public string Name
         {	
@@ -74,44 +73,85 @@ namespace Odey.Framework.Keeley.Entities
         }
         private string _name;
         [DataMember]
-        public int FundID
+        public int ChargeTypeId
         {	
     		
-            get { return _fundID; }
+            get { return _chargeTypeId; }
             set
             {
-                if (_fundID != value)
+                if (_chargeTypeId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("FundID", _fundID);
-                    if (!IsDeserializing)
-                    {
-                        if (Fund != null && Fund.LegalEntityID != value)
-                        {
-                            Fund = null;
-                        }
-                    }
-                    _fundID = value;
-                    OnPropertyChanged("FundID");
+                    ChangeTracker.RecordOriginalValue("ChargeTypeId", _chargeTypeId);
+                    _chargeTypeId = value;
+                    OnPropertyChanged("ChargeTypeId");
                 }
             }
         }
-        private int _fundID;
+        private int _chargeTypeId;
         [DataMember]
-        public System.DateTime StartDt
+        public Nullable<int> IssuerId
         {	
     		
-            get { return _startDt; }
-            private set
+            get { return _issuerId; }
+            set
             {
-                if (_startDt != value)
+                if (_issuerId != value)
                 {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
-                    _startDt = value;
-                    OnPropertyChanged("StartDt");
+                    ChangeTracker.RecordOriginalValue("IssuerId", _issuerId);
+                    _issuerId = value;
+                    OnPropertyChanged("IssuerId");
                 }
             }
         }
-        private System.DateTime _startDt;
+        private Nullable<int> _issuerId;
+        [DataMember]
+        public Nullable<int> CurrencyId
+        {	
+    		
+            get { return _currencyId; }
+            set
+            {
+                if (_currencyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CurrencyId", _currencyId);
+                    _currencyId = value;
+                    OnPropertyChanged("CurrencyId");
+                }
+            }
+        }
+        private Nullable<int> _currencyId;
+        [DataMember]
+        public bool ApplyToQuantity
+        {	
+    		
+            get { return _applyToQuantity; }
+            set
+            {
+                if (_applyToQuantity != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ApplyToQuantity", _applyToQuantity);
+                    _applyToQuantity = value;
+                    OnPropertyChanged("ApplyToQuantity");
+                }
+            }
+        }
+        private bool _applyToQuantity;
+        [DataMember]
+        public decimal PercentageToApply
+        {	
+    		
+            get { return _percentageToApply; }
+            set
+            {
+                if (_percentageToApply != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PercentageToApply", _percentageToApply);
+                    _percentageToApply = value;
+                    OnPropertyChanged("PercentageToApply");
+                }
+            }
+        }
+        private decimal _percentageToApply;
         [DataMember]
         public int UpdateUserID
         {	
@@ -144,58 +184,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
-        [DataMember]
-        public Nullable<int> ManagerId
-        {	
-    		
-            get { return _managerId; }
-            set
-            {
-                if (_managerId != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ManagerId", _managerId);
-                    _managerId = value;
-                    OnPropertyChanged("ManagerId");
-                }
-            }
-        }
-        private Nullable<int> _managerId;
-        [DataMember]
-        public string EZEIdentifier
-        {	
-    		
-            get { return _eZEIdentifier; }
-            set
-            {
-                if (_eZEIdentifier != value)
-                {
-                    ChangeTracker.RecordOriginalValue("EZEIdentifier", _eZEIdentifier);
-                    _eZEIdentifier = value;
-                    OnPropertyChanged("EZEIdentifier");
-                }
-            }
-        }
-        private string _eZEIdentifier;
-
-        #endregion
-        #region Navigation Properties
-    
-        [DataMember]
-        public Fund Fund
-        {
-            get { return _fund; }
-            set
-            {
-                if (!ReferenceEquals(_fund, value))
-                {
-                    var previousValue = _fund;
-                    _fund = value;
-                    FixupFund(previousValue);
-                    OnNavigationPropertyChanged("Fund");
-                }
-            }
-        }
-        private Fund _fund;
 
         #endregion
         #region ChangeTracking
@@ -275,40 +263,6 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
-            Fund = null;
-        }
-
-        #endregion
-        #region Association Fixup
-    
-        private void FixupFund(Fund previousValue)
-        {
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (Fund != null)
-            {
-                FundID = Fund.LegalEntityID;
-            }
-    
-            if (ChangeTracker.ChangeTrackingEnabled)
-            {
-                if (ChangeTracker.OriginalValues.ContainsKey("Fund")
-                    && (ChangeTracker.OriginalValues["Fund"] == Fund))
-                {
-                    ChangeTracker.OriginalValues.Remove("Fund");
-                }
-                else
-                {
-                    ChangeTracker.RecordOriginalValue("Fund", previousValue);
-                }
-                if (Fund != null && !Fund.ChangeTracker.ChangeTrackingEnabled)
-                {
-                    Fund.StartTracking();
-                }
-            }
         }
 
         #endregion
