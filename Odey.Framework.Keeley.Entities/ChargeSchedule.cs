@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(LegalEntityChargeSchedule))]
     public partial class ChargeSchedule: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -186,6 +187,44 @@ namespace Odey.Framework.Keeley.Entities
         private byte[] _dataVersion;
 
         #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public TrackableCollection<LegalEntityChargeSchedule> LegalEntityChargeSchedules
+        {
+            get
+            {
+                if (_legalEntityChargeSchedules == null)
+                {
+                    _legalEntityChargeSchedules = new TrackableCollection<LegalEntityChargeSchedule>();
+                    _legalEntityChargeSchedules.CollectionChanged += FixupLegalEntityChargeSchedules;
+                }
+                return _legalEntityChargeSchedules;
+            }
+            set
+            {
+                if (!ReferenceEquals(_legalEntityChargeSchedules, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_legalEntityChargeSchedules != null)
+                    {
+                        _legalEntityChargeSchedules.CollectionChanged -= FixupLegalEntityChargeSchedules;
+                    }
+                    _legalEntityChargeSchedules = value;
+                    if (_legalEntityChargeSchedules != null)
+                    {
+                        _legalEntityChargeSchedules.CollectionChanged += FixupLegalEntityChargeSchedules;
+                    }
+                    OnNavigationPropertyChanged("LegalEntityChargeSchedules");
+                }
+            }
+        }
+        private TrackableCollection<LegalEntityChargeSchedule> _legalEntityChargeSchedules;
+
+        #endregion
         #region ChangeTracking
     
         protected virtual void OnPropertyChanged(String propertyName)
@@ -263,6 +302,49 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            LegalEntityChargeSchedules.Clear();
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupLegalEntityChargeSchedules(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (LegalEntityChargeSchedule item in e.NewItems)
+                {
+                    item.ChargeSchedule = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("LegalEntityChargeSchedules", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (LegalEntityChargeSchedule item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.ChargeSchedule, this))
+                    {
+                        item.ChargeSchedule = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("LegalEntityChargeSchedules", item);
+                    }
+                }
+            }
         }
 
         #endregion

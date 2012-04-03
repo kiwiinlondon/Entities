@@ -19,30 +19,30 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(ChargeSchedule))]
-    public partial class CounterpartyChargeSchedule: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class LegalEntityChargeSchedule: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int CounterpartyChargeScheduleId
+        public int LegalEntityChargeScheduleId
         {	
     		
-            get { return _counterpartyChargeScheduleId; }
+            get { return _legalEntityChargeScheduleId; }
             set
             {
-                if (_counterpartyChargeScheduleId != value)
+                if (_legalEntityChargeScheduleId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'CounterpartyChargeScheduleId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'LegalEntityChargeScheduleId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _counterpartyChargeScheduleId = value;
-                    OnPropertyChanged("CounterpartyChargeScheduleId");
+                    _legalEntityChargeScheduleId = value;
+                    OnPropertyChanged("LegalEntityChargeScheduleId");
                 }
             }
         }
-        private int _counterpartyChargeScheduleId;
+        private int _legalEntityChargeScheduleId;
         [DataMember]
-        public int CounterpartyId
+        public Nullable<int> CounterpartyId
         {	
     		
             get { return _counterpartyId; }
@@ -56,7 +56,23 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private int _counterpartyId;
+        private Nullable<int> _counterpartyId;
+        [DataMember]
+        public Nullable<int> CustodianId
+        {	
+    		
+            get { return _custodianId; }
+            set
+            {
+                if (_custodianId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CustodianId", _custodianId);
+                    _custodianId = value;
+                    OnPropertyChanged("CustodianId");
+                }
+            }
+        }
+        private Nullable<int> _custodianId;
         [DataMember]
         public int ChargeScheduleId
         {	
@@ -256,11 +272,20 @@ namespace Odey.Framework.Keeley.Entities
                 return;
             }
     
-            if (ChargeSchedule != null)
+            if (previousValue != null && previousValue.LegalEntityChargeSchedules.Contains(this))
             {
-                ChargeScheduleId = ChargeSchedule.ChargeScheduleId;
+                previousValue.LegalEntityChargeSchedules.Remove(this);
             }
     
+            if (ChargeSchedule != null)
+            {
+                if (!ChargeSchedule.LegalEntityChargeSchedules.Contains(this))
+                {
+                    ChargeSchedule.LegalEntityChargeSchedules.Add(this);
+                }
+    
+                ChargeScheduleId = ChargeSchedule.ChargeScheduleId;
+            }
             if (ChangeTracker.ChangeTrackingEnabled)
             {
                 if (ChangeTracker.OriginalValues.ContainsKey("ChargeSchedule")

@@ -521,17 +521,17 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<ChargeSchedule> _chargeSchedules;
     
-        public ObjectSet<CounterpartyChargeSchedule> CounterpartyChargeSchedules
-        {
-            get { return _counterpartyChargeSchedules  ?? (_counterpartyChargeSchedules = CreateObjectSet<CounterpartyChargeSchedule>("CounterpartyChargeSchedules")); }
-        }
-        private ObjectSet<CounterpartyChargeSchedule> _counterpartyChargeSchedules;
-    
         public ObjectSet<AccountMapping> AccountMappings
         {
             get { return _accountMappings  ?? (_accountMappings = CreateObjectSet<AccountMapping>("AccountMappings")); }
         }
         private ObjectSet<AccountMapping> _accountMappings;
+    
+        public ObjectSet<LegalEntityChargeSchedule> LegalEntityChargeSchedules
+        {
+            get { return _legalEntityChargeSchedules  ?? (_legalEntityChargeSchedules = CreateObjectSet<LegalEntityChargeSchedule>("LegalEntityChargeSchedules")); }
+        }
+        private ObjectSet<LegalEntityChargeSchedule> _legalEntityChargeSchedules;
 
         #endregion
         #region Function Imports
