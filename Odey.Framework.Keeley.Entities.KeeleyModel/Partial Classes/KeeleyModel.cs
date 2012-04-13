@@ -154,6 +154,11 @@ namespace Odey.Framework.Keeley.Entities
                 AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "PositionId");
                 AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "ReferenceDate");
             }
+            else if (entityType == typeof(PortfolioEvent))
+            {
+                AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "PositionId");
+                AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "ReferenceDate");
+            }
             else if (entityType == typeof(Instrument))
             {
                 AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "InstrumentClassID");

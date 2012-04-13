@@ -137,22 +137,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private decimal _fXRate;
         [DataMember]
-        public bool FXRateMultiply
-        {	
-    		
-            get { return _fXRateMultiply; }
-            set
-            {
-                if (_fXRateMultiply != value)
-                {
-                    ChangeTracker.RecordOriginalValue("FXRateMultiply", _fXRateMultiply);
-                    _fXRateMultiply = value;
-                    OnPropertyChanged("FXRateMultiply");
-                }
-            }
-        }
-        private bool _fXRateMultiply;
-        [DataMember]
         public System.DateTime StartDt
         {	
     		
@@ -200,6 +184,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<int> LegalEntityChargeScheduleId
+        {	
+    		
+            get { return _legalEntityChargeScheduleId; }
+            set
+            {
+                if (_legalEntityChargeScheduleId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("LegalEntityChargeScheduleId", _legalEntityChargeScheduleId);
+                    _legalEntityChargeScheduleId = value;
+                    OnPropertyChanged("LegalEntityChargeScheduleId");
+                }
+            }
+        }
+        private Nullable<int> _legalEntityChargeScheduleId;
 
         #endregion
         #region ChangeTracking
