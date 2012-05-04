@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(Position))]
+    [KnownType(typeof(Portfolio))]
     public partial class Portfolio: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -576,6 +577,45 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _priceIsLastTradePrice;
+        [DataMember]
+        public Nullable<int> PreviousPortfolioId
+        {	
+    		
+            get { return _previousPortfolioId; }
+            set
+            {
+                if (_previousPortfolioId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PreviousPortfolioId", _previousPortfolioId);
+                    if (!IsDeserializing)
+                    {
+                        if (PreviousPortfolio != null && PreviousPortfolio.PortfolioId != value)
+                        {
+                            PreviousPortfolio = null;
+                        }
+                    }
+                    _previousPortfolioId = value;
+                    OnPropertyChanged("PreviousPortfolioId");
+                }
+            }
+        }
+        private Nullable<int> _previousPortfolioId;
+        [DataMember]
+        public Nullable<decimal> BondNominal
+        {	
+    		
+            get { return _bondNominal; }
+            set
+            {
+                if (_bondNominal != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BondNominal", _bondNominal);
+                    _bondNominal = value;
+                    OnPropertyChanged("BondNominal");
+                }
+            }
+        }
+        private Nullable<decimal> _bondNominal;
 
         #endregion
         #region Navigation Properties
@@ -596,6 +636,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Position _position;
+    
+        [DataMember]
+        public Portfolio PreviousPortfolio
+        {
+            get { return _previousPortfolio; }
+            set
+            {
+                if (!ReferenceEquals(_previousPortfolio, value))
+                {
+                    var previousValue = _previousPortfolio;
+                    _previousPortfolio = value;
+                    FixupPreviousPortfolio(previousValue);
+                    OnNavigationPropertyChanged("PreviousPortfolio");
+                }
+            }
+        }
+        private Portfolio _previousPortfolio;
 
         #endregion
         #region ChangeTracking
@@ -676,6 +733,7 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             Position = null;
+            PreviousPortfolio = null;
         }
 
         #endregion
@@ -707,6 +765,41 @@ namespace Odey.Framework.Keeley.Entities
                 if (Position != null && !Position.ChangeTracker.ChangeTrackingEnabled)
                 {
                     Position.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupPreviousPortfolio(Portfolio previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (PreviousPortfolio != null)
+            {
+                PreviousPortfolioId = PreviousPortfolio.PortfolioId;
+            }
+    
+            else if (!skipKeys)
+            {
+                PreviousPortfolioId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("PreviousPortfolio")
+                    && (ChangeTracker.OriginalValues["PreviousPortfolio"] == PreviousPortfolio))
+                {
+                    ChangeTracker.OriginalValues.Remove("PreviousPortfolio");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("PreviousPortfolio", previousValue);
+                }
+                if (PreviousPortfolio != null && !PreviousPortfolio.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    PreviousPortfolio.StartTracking();
                 }
             }
         }

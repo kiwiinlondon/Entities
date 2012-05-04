@@ -24,7 +24,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FloatingRateNote = 33,
         [EnumMember]
-        GovernmentBond = 34,
+        GovernmentBondCashProxy = 34,
         [EnumMember]
         EquityIndexFuture = 36,
         [EnumMember]
@@ -52,7 +52,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FXFuture = 52,        
         [EnumMember]
-        ProprietaryGovernmentBond = 59,
+        GovtBond = 59,
         [EnumMember]
         OptionOnFuture = 62,        
         [EnumMember]

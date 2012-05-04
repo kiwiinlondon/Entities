@@ -18,60 +18,76 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class ChargeType: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class Bond: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int ChargeTypeId
+        public int InstrumentId
         {	
     		
-            get { return _chargeTypeId; }
+            get { return _instrumentId; }
             set
             {
-                if (_chargeTypeId != value)
+                if (_instrumentId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'ChargeTypeId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'InstrumentId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _chargeTypeId = value;
-                    OnPropertyChanged("ChargeTypeId");
+                    _instrumentId = value;
+                    OnPropertyChanged("InstrumentId");
                 }
             }
         }
-        private int _chargeTypeId;
+        private int _instrumentId;
         [DataMember]
-        public string Code
+        public System.DateTime FirstCouponDate
         {	
     		
-            get { return _code; }
+            get { return _firstCouponDate; }
             set
             {
-                if (_code != value)
+                if (_firstCouponDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Code", _code);
-                    _code = value;
-                    OnPropertyChanged("Code");
+                    ChangeTracker.RecordOriginalValue("FirstCouponDate", _firstCouponDate);
+                    _firstCouponDate = value;
+                    OnPropertyChanged("FirstCouponDate");
                 }
             }
         }
-        private string _code;
+        private System.DateTime _firstCouponDate;
         [DataMember]
-        public string Name
+        public int CouponFrequency
         {	
     		
-            get { return _name; }
+            get { return _couponFrequency; }
             set
             {
-                if (_name != value)
+                if (_couponFrequency != value)
                 {
-                    ChangeTracker.RecordOriginalValue("Name", _name);
-                    _name = value;
-                    OnPropertyChanged("Name");
+                    ChangeTracker.RecordOriginalValue("CouponFrequency", _couponFrequency);
+                    _couponFrequency = value;
+                    OnPropertyChanged("CouponFrequency");
                 }
             }
         }
-        private string _name;
+        private int _couponFrequency;
+        [DataMember]
+        public decimal Coupon
+        {	
+    		
+            get { return _coupon; }
+            set
+            {
+                if (_coupon != value)
+                {
+                    ChangeTracker.RecordOriginalValue("Coupon", _coupon);
+                    _coupon = value;
+                    OnPropertyChanged("Coupon");
+                }
+            }
+        }
+        private decimal _coupon;
         [DataMember]
         public System.DateTime StartDt
         {	
@@ -121,21 +137,21 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public Nullable<bool> PaidToCustodian
+        public int DayCountConventionID
         {	
     		
-            get { return _paidToCustodian; }
+            get { return _dayCountConventionID; }
             set
             {
-                if (_paidToCustodian != value)
+                if (_dayCountConventionID != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PaidToCustodian", _paidToCustodian);
-                    _paidToCustodian = value;
-                    OnPropertyChanged("PaidToCustodian");
+                    ChangeTracker.RecordOriginalValue("DayCountConventionID", _dayCountConventionID);
+                    _dayCountConventionID = value;
+                    OnPropertyChanged("DayCountConventionID");
                 }
             }
         }
-        private Nullable<bool> _paidToCustodian;
+        private int _dayCountConventionID;
 
         #endregion
         #region ChangeTracking
@@ -195,6 +211,16 @@ namespace Odey.Framework.Keeley.Entities
             if (e.NewState == ObjectState.Deleted)
             {
                 ClearNavigationProperties();
+            }
+        }
+    
+        // This entity type is the dependent end in at least one association that performs cascade deletes.
+        // This event handler will process notifications that occur when the principal end is deleted.
+        internal void HandleCascadeDelete(object sender, ObjectStateChangingEventArgs e)
+        {
+            if (e.NewState == ObjectState.Deleted)
+            {
+                this.MarkAsDeleted();
             }
         }
     

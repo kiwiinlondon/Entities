@@ -696,6 +696,54 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private decimal _tradeInstrumentFXRate;
+        [DataMember]
+        public bool ZeroOutAccrual
+        {	
+    		
+            get { return _zeroOutAccrual; }
+            set
+            {
+                if (_zeroOutAccrual != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ZeroOutAccrual", _zeroOutAccrual);
+                    _zeroOutAccrual = value;
+                    OnPropertyChanged("ZeroOutAccrual");
+                }
+            }
+        }
+        private bool _zeroOutAccrual;
+        [DataMember]
+        public Nullable<decimal> BondNominal
+        {	
+    		
+            get { return _bondNominal; }
+            set
+            {
+                if (_bondNominal != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BondNominal", _bondNominal);
+                    _bondNominal = value;
+                    OnPropertyChanged("BondNominal");
+                }
+            }
+        }
+        private Nullable<decimal> _bondNominal;
+        [DataMember]
+        public Nullable<decimal> BondNominalChange
+        {	
+    		
+            get { return _bondNominalChange; }
+            set
+            {
+                if (_bondNominalChange != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BondNominalChange", _bondNominalChange);
+                    _bondNominalChange = value;
+                    OnPropertyChanged("BondNominalChange");
+                }
+            }
+        }
+        private Nullable<decimal> _bondNominalChange;
 
         #endregion
         #region ChangeTracking

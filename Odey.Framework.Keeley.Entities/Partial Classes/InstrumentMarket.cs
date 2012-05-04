@@ -25,6 +25,14 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public Bond Bond
+        {
+            get
+            {
+                return Instrument.Bond;
+            }
+        }
+
         public bool Is13F
         {
             get

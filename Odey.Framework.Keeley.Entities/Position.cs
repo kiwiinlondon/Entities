@@ -184,6 +184,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _entityRankingSchemeId;
+        [DataMember]
+        public bool IsAccrual
+        {	
+    		
+            get { return _isAccrual; }
+            set
+            {
+                if (_isAccrual != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IsAccrual", _isAccrual);
+                    _isAccrual = value;
+                    OnPropertyChanged("IsAccrual");
+                }
+            }
+        }
+        private bool _isAccrual;
 
         #endregion
         #region Navigation Properties

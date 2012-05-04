@@ -241,21 +241,21 @@ namespace Odey.Framework.Keeley.Entities
         }
         private System.DateTime _inputDate;
         [DataMember]
-        public bool IsPending
+        public System.DateTime ExDate
         {	
     		
-            get { return _isPending; }
+            get { return _exDate; }
             set
             {
-                if (_isPending != value)
+                if (_exDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("IsPending", _isPending);
-                    _isPending = value;
-                    OnPropertyChanged("IsPending");
+                    ChangeTracker.RecordOriginalValue("ExDate", _exDate);
+                    _exDate = value;
+                    OnPropertyChanged("ExDate");
                 }
             }
         }
-        private bool _isPending;
+        private System.DateTime _exDate;
 
         #endregion
         #region Navigation Properties

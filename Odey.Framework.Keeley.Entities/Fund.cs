@@ -241,22 +241,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _fundTypeId;
         [DataMember]
-        public bool IsExternallyVisible
-        {	
-    		
-            get { return _isExternallyVisible; }
-            set
-            {
-                if (_isExternallyVisible != value)
-                {
-                    ChangeTracker.RecordOriginalValue("IsExternallyVisible", _isExternallyVisible);
-                    _isExternallyVisible = value;
-                    OnPropertyChanged("IsExternallyVisible");
-                }
-            }
-        }
-        private bool _isExternallyVisible;
-        [DataMember]
         public System.DateTime InceptionDate
         {	
     		
@@ -327,6 +311,38 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private string _eZEIdentifier;
+        [DataMember]
+        public bool PriceIsExternallyVisible
+        {	
+    		
+            get { return _priceIsExternallyVisible; }
+            set
+            {
+                if (_priceIsExternallyVisible != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PriceIsExternallyVisible", _priceIsExternallyVisible);
+                    _priceIsExternallyVisible = value;
+                    OnPropertyChanged("PriceIsExternallyVisible");
+                }
+            }
+        }
+        private bool _priceIsExternallyVisible;
+        [DataMember]
+        public bool PortfolioIsExternallyVisible
+        {	
+    		
+            get { return _portfolioIsExternallyVisible; }
+            set
+            {
+                if (_portfolioIsExternallyVisible != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PortfolioIsExternallyVisible", _portfolioIsExternallyVisible);
+                    _portfolioIsExternallyVisible = value;
+                    OnPropertyChanged("PortfolioIsExternallyVisible");
+                }
+            }
+        }
+        private bool _portfolioIsExternallyVisible;
 
         #endregion
         #region Navigation Properties

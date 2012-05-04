@@ -532,6 +532,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _legalEntityChargeSchedules  ?? (_legalEntityChargeSchedules = CreateObjectSet<LegalEntityChargeSchedule>("LegalEntityChargeSchedules")); }
         }
         private ObjectSet<LegalEntityChargeSchedule> _legalEntityChargeSchedules;
+    
+        public ObjectSet<Bond> Bonds
+        {
+            get { return _bonds  ?? (_bonds = CreateObjectSet<Bond>("Bonds")); }
+        }
+        private ObjectSet<Bond> _bonds;
 
         #endregion
         #region Function Imports
