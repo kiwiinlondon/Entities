@@ -301,6 +301,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _is13F;
+        [DataMember]
+        public string Cusip
+        {	
+    		
+            get { return _cusip; }
+            set
+            {
+                if (_cusip != value)
+                {
+                    ChangeTracker.RecordOriginalValue("Cusip", _cusip);
+                    _cusip = value;
+                    OnPropertyChanged("Cusip");
+                }
+            }
+        }
+        private string _cusip;
 
         #endregion
         #region Navigation Properties

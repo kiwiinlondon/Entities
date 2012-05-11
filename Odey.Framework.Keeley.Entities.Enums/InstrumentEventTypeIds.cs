@@ -11,6 +11,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Dividend = 1,
         [EnumMember]
-        ForwardFXMaturity = 3
+        ForwardFXMaturity = 3,
+        [EnumMember]
+        Coupon = 4
     }
 }

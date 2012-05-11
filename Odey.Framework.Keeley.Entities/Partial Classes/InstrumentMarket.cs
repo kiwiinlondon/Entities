@@ -98,6 +98,14 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public string Cusip
+        {
+            get
+            {
+                return Instrument.Cusip;
+            }
+        }
+
         public string PrimaryBloombergGlobalId
         {
             get

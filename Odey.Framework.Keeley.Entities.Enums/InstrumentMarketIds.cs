@@ -13,12 +13,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Unknown = 11276,
         [EnumMember]
-        BBALIBOR = 11651,
+        BBALIBORUSD = 11651,
         [EnumMember]
         EURIBOR = 11652,
         [EnumMember]
         CacFundIndex = 11667,
         [EnumMember]
-        BaifUcitsFofBalancedIndex = 11668
+        BaifUcitsFofBalancedIndex = 11668,
+        [EnumMember]
+        BBALIBORGBP = 16342
     }
 }

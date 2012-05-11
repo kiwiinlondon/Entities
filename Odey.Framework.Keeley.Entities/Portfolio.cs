@@ -616,6 +616,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<decimal> _bondNominal;
+        [DataMember]
+        public Nullable<decimal> TodayCarryAccrual
+        {	
+    		
+            get { return _todayCarryAccrual; }
+            set
+            {
+                if (_todayCarryAccrual != value)
+                {
+                    ChangeTracker.RecordOriginalValue("TodayCarryAccrual", _todayCarryAccrual);
+                    _todayCarryAccrual = value;
+                    OnPropertyChanged("TodayCarryAccrual");
+                }
+            }
+        }
+        private Nullable<decimal> _todayCarryAccrual;
 
         #endregion
         #region Navigation Properties
