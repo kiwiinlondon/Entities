@@ -365,12 +365,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<EntityRankingSchemeOrder> _entityRankingSchemeOrders;
     
-        public ObjectSet<EventInstrumentMap> EventInstrumentMaps
-        {
-            get { return _eventInstrumentMaps  ?? (_eventInstrumentMaps = CreateObjectSet<EventInstrumentMap>("EventInstrumentMaps")); }
-        }
-        private ObjectSet<EventInstrumentMap> _eventInstrumentMaps;
-    
         public ObjectSet<InstrumentMarket> InstrumentMarkets
         {
             get { return _instrumentMarkets  ?? (_instrumentMarkets = CreateObjectSet<InstrumentMarket>("InstrumentMarkets")); }
@@ -538,6 +532,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _bonds  ?? (_bonds = CreateObjectSet<Bond>("Bonds")); }
         }
         private ObjectSet<Bond> _bonds;
+    
+        public ObjectSet<ForwardFX> ForwardFXes
+        {
+            get { return _forwardFXes  ?? (_forwardFXes = CreateObjectSet<ForwardFX>("ForwardFXes")); }
+        }
+        private ObjectSet<ForwardFX> _forwardFXes;
 
         #endregion
         #region Function Imports

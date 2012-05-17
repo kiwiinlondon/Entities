@@ -114,6 +114,14 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public DateTime? ForwardDate
+        {
+            get
+            {
+                return Instrument.ForwardDate;
+            }
+        }
+
         public string PrimaryBloombergTicker
         {
             get

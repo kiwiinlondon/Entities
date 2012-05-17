@@ -30,5 +30,17 @@ namespace Odey.Framework.Keeley.Entities
                 return (InstrumentClassIds)InstrumentClassID;
             }
         }
+
+        public DateTime? ForwardDate
+        {
+            get
+            {
+                if (ForwardFX != null)
+                {
+                    return ForwardFX.MaturityDate;
+                }
+                return null;
+            }
+        }
     }
 }

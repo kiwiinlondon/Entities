@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(Event))]
+    [KnownType(typeof(InstrumentMarket))]
     public partial class FXTradeEvent: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -432,6 +433,29 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<int> _contraEventId;
+        [DataMember]
+        public Nullable<int> InstrumentMarketId
+        {	
+    		
+            get { return _instrumentMarketId; }
+            set
+            {
+                if (_instrumentMarketId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("InstrumentMarketId", _instrumentMarketId);
+                    if (!IsDeserializing)
+                    {
+                        if (InstrumentMarket != null && InstrumentMarket.InstrumentMarketID != value)
+                        {
+                            InstrumentMarket = null;
+                        }
+                    }
+                    _instrumentMarketId = value;
+                    OnPropertyChanged("InstrumentMarketId");
+                }
+            }
+        }
+        private Nullable<int> _instrumentMarketId;
 
         #endregion
         #region Navigation Properties
@@ -461,6 +485,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Event _event;
+    
+        [DataMember]
+        public InstrumentMarket InstrumentMarket
+        {
+            get { return _instrumentMarket; }
+            set
+            {
+                if (!ReferenceEquals(_instrumentMarket, value))
+                {
+                    var previousValue = _instrumentMarket;
+                    _instrumentMarket = value;
+                    FixupInstrumentMarket(previousValue);
+                    OnNavigationPropertyChanged("InstrumentMarket");
+                }
+            }
+        }
+        private InstrumentMarket _instrumentMarket;
 
         #endregion
         #region ChangeTracking
@@ -551,6 +592,7 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             Event = null;
+            InstrumentMarket = null;
         }
 
         #endregion
@@ -604,6 +646,41 @@ namespace Odey.Framework.Keeley.Entities
                 if (Event != null && !Event.ChangeTracker.ChangeTrackingEnabled)
                 {
                     Event.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupInstrumentMarket(InstrumentMarket previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (InstrumentMarket != null)
+            {
+                InstrumentMarketId = InstrumentMarket.InstrumentMarketID;
+            }
+    
+            else if (!skipKeys)
+            {
+                InstrumentMarketId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("InstrumentMarket")
+                    && (ChangeTracker.OriginalValues["InstrumentMarket"] == InstrumentMarket))
+                {
+                    ChangeTracker.OriginalValues.Remove("InstrumentMarket");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("InstrumentMarket", previousValue);
+                }
+                if (InstrumentMarket != null && !InstrumentMarket.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    InstrumentMarket.StartTracking();
                 }
             }
         }

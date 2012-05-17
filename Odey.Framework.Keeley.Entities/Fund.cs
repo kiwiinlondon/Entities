@@ -343,6 +343,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _portfolioIsExternallyVisible;
+        [DataMember]
+        public int AssetManagementCompanyId
+        {	
+    		
+            get { return _assetManagementCompanyId; }
+            set
+            {
+                if (_assetManagementCompanyId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("AssetManagementCompanyId", _assetManagementCompanyId);
+                    _assetManagementCompanyId = value;
+                    OnPropertyChanged("AssetManagementCompanyId");
+                }
+            }
+        }
+        private int _assetManagementCompanyId;
 
         #endregion
         #region Navigation Properties
