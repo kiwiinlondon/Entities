@@ -304,6 +304,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private string _bloombergGlobalId;
+        [DataMember]
+        public Nullable<System.DateTime> LastRepulledFromSourceDate
+        {	
+    		
+            get { return _lastRepulledFromSourceDate; }
+            set
+            {
+                if (_lastRepulledFromSourceDate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("LastRepulledFromSourceDate", _lastRepulledFromSourceDate);
+                    _lastRepulledFromSourceDate = value;
+                    OnPropertyChanged("LastRepulledFromSourceDate");
+                }
+            }
+        }
+        private Nullable<System.DateTime> _lastRepulledFromSourceDate;
 
         #endregion
         #region Navigation Properties

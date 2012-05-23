@@ -434,7 +434,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private Nullable<int> _contraEventId;
         [DataMember]
-        public Nullable<int> InstrumentMarketId
+        public int InstrumentMarketId
         {	
     		
             get { return _instrumentMarketId; }
@@ -455,7 +455,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private Nullable<int> _instrumentMarketId;
+        private int _instrumentMarketId;
 
         #endregion
         #region Navigation Properties
@@ -650,7 +650,7 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
-        private void FixupInstrumentMarket(InstrumentMarket previousValue, bool skipKeys = false)
+        private void FixupInstrumentMarket(InstrumentMarket previousValue)
         {
             if (IsDeserializing)
             {
@@ -660,11 +660,6 @@ namespace Odey.Framework.Keeley.Entities
             if (InstrumentMarket != null)
             {
                 InstrumentMarketId = InstrumentMarket.InstrumentMarketID;
-            }
-    
-            else if (!skipKeys)
-            {
-                InstrumentMarketId = null;
             }
     
             if (ChangeTracker.ChangeTrackingEnabled)

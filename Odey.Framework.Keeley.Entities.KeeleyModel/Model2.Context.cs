@@ -538,6 +538,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _forwardFXes  ?? (_forwardFXes = CreateObjectSet<ForwardFX>("ForwardFXes")); }
         }
         private ObjectSet<ForwardFX> _forwardFXes;
+    
+        public ObjectSet<EventIdToRepull> EventIdToRepulls
+        {
+            get { return _eventIdToRepulls  ?? (_eventIdToRepulls = CreateObjectSet<EventIdToRepull>("EventIdToRepulls")); }
+        }
+        private ObjectSet<EventIdToRepull> _eventIdToRepulls;
 
         #endregion
         #region Function Imports
