@@ -160,6 +160,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<int> CountryId
+        {	
+    		
+            get { return _countryId; }
+            set
+            {
+                if (_countryId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CountryId", _countryId);
+                    _countryId = value;
+                    OnPropertyChanged("CountryId");
+                }
+            }
+        }
+        private Nullable<int> _countryId;
 
         #endregion
         #region Navigation Properties

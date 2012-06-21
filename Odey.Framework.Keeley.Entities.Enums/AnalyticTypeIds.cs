@@ -17,7 +17,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         LiquidityValueGreaterMaxDailyLimitPercentNAV=4,
         [EnumMember]
-        LiquidityHaircutPercentNAV=5
+        LiquidityHaircutPercentNAV=5,
+        [EnumMember]
+        SharesOutstanding = 6
     }
 }
 

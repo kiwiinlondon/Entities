@@ -138,7 +138,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private bool _applyToQuantity;
         [DataMember]
-        public decimal PercentageToApply
+        public Nullable<decimal> PercentageToApply
         {	
     		
             get { return _percentageToApply; }
@@ -152,7 +152,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private decimal _percentageToApply;
+        private Nullable<decimal> _percentageToApply;
         [DataMember]
         public int UpdateUserID
         {	

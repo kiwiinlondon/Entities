@@ -168,6 +168,38 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<int> _bBCompany;
+        [DataMember]
+        public Nullable<int> CountryOfIncorporationId
+        {	
+    		
+            get { return _countryOfIncorporationId; }
+            set
+            {
+                if (_countryOfIncorporationId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CountryOfIncorporationId", _countryOfIncorporationId);
+                    _countryOfIncorporationId = value;
+                    OnPropertyChanged("CountryOfIncorporationId");
+                }
+            }
+        }
+        private Nullable<int> _countryOfIncorporationId;
+        [DataMember]
+        public int CountryOfDomicileId
+        {	
+    		
+            get { return _countryOfDomicileId; }
+            set
+            {
+                if (_countryOfDomicileId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("CountryOfDomicileId", _countryOfDomicileId);
+                    _countryOfDomicileId = value;
+                    OnPropertyChanged("CountryOfDomicileId");
+                }
+            }
+        }
+        private int _countryOfDomicileId;
 
         #endregion
         #region ChangeTracking

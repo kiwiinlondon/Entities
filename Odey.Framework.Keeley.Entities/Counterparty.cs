@@ -96,6 +96,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<bool> IsElectronic
+        {	
+    		
+            get { return _isElectronic; }
+            set
+            {
+                if (_isElectronic != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IsElectronic", _isElectronic);
+                    _isElectronic = value;
+                    OnPropertyChanged("IsElectronic");
+                }
+            }
+        }
+        private Nullable<bool> _isElectronic;
 
         #endregion
         #region Navigation Properties
