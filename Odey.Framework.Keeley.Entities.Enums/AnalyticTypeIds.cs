@@ -19,7 +19,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         LiquidityHaircutPercentNAV=5,
         [EnumMember]
-        SharesOutstanding = 6
+        SharesOutstanding = 6,
+        [EnumMember]
+        Beta = 7
     }
 }
 
