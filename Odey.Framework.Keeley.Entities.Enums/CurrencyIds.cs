@@ -10,6 +10,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Unknown = 1,
         [EnumMember]
-        Euro = 2536
+        Euro = 2536,
+        [EnumMember]
+        USD = 2548
     }
 }
+
