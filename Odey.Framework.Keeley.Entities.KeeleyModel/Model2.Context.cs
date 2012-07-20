@@ -544,6 +544,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _eventIdToRepulls  ?? (_eventIdToRepulls = CreateObjectSet<EventIdToRepull>("EventIdToRepulls")); }
         }
         private ObjectSet<EventIdToRepull> _eventIdToRepulls;
+    
+        public ObjectSet<FileCollected> FileCollecteds
+        {
+            get { return _fileCollecteds  ?? (_fileCollecteds = CreateObjectSet<FileCollected>("FileCollecteds")); }
+        }
+        private ObjectSet<FileCollected> _fileCollecteds;
+    
+        public ObjectSet<FileToBeCollected> FileToBeCollecteds
+        {
+            get { return _fileToBeCollecteds  ?? (_fileToBeCollecteds = CreateObjectSet<FileToBeCollected>("FileToBeCollecteds")); }
+        }
+        private ObjectSet<FileToBeCollected> _fileToBeCollecteds;
 
         #endregion
         #region Function Imports
