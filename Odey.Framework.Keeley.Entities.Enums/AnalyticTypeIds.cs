@@ -21,7 +21,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         SharesOutstanding = 6,
         [EnumMember]
-        Beta = 7
+        Beta = 7,
+        [EnumMember]
+        IndicativeFundPerformance =8
     }
 }
 

@@ -304,6 +304,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _riskFreeRatePriceId;
+        [DataMember]
+        public bool BenchmarkPriceExistsOnDay
+        {	
+    		
+            get { return _benchmarkPriceExistsOnDay; }
+            set
+            {
+                if (_benchmarkPriceExistsOnDay != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BenchmarkPriceExistsOnDay", _benchmarkPriceExistsOnDay);
+                    _benchmarkPriceExistsOnDay = value;
+                    OnPropertyChanged("BenchmarkPriceExistsOnDay");
+                }
+            }
+        }
+        private bool _benchmarkPriceExistsOnDay;
 
         #endregion
         #region Navigation Properties

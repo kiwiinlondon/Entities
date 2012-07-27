@@ -38,7 +38,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DummyAnalytic = 19,
         [EnumMember]
-        OdeyCalculatedAnalytic = 21
-
+        OdeyCalculatedAnalytic = 21,
+        [EnumMember]
+        ExternalAnalytic = 22
     }
 }

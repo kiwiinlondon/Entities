@@ -24,6 +24,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Institutional =	9,
         [EnumMember]
-        UCITS =10
+        UCITS =10,
+        [EnumMember]
+        ManagedDailyDealing = 11
     }
 }
