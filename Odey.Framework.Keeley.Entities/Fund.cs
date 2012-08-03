@@ -363,6 +363,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private int _assetManagementCompanyId;
+        [DataMember]
+        public Nullable<int> IntranetOrdering
+        {	
+    		
+            get { return _intranetOrdering; }
+            set
+            {
+                if (_intranetOrdering != value)
+                {
+                    ChangeTracker.RecordOriginalValue("IntranetOrdering", _intranetOrdering);
+                    _intranetOrdering = value;
+                    OnPropertyChanged("IntranetOrdering");
+                }
+            }
+        }
+        private Nullable<int> _intranetOrdering;
 
         #endregion
         #region Navigation Properties

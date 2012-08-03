@@ -209,22 +209,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private System.DateTime _valuationBusinessDate;
         [DataMember]
-        public System.DateTime ValuationCalandarDate
-        {	
-    		
-            get { return _valuationCalandarDate; }
-            set
-            {
-                if (_valuationCalandarDate != value)
-                {
-                    ChangeTracker.RecordOriginalValue("ValuationCalandarDate", _valuationCalandarDate);
-                    _valuationCalandarDate = value;
-                    OnPropertyChanged("ValuationCalandarDate");
-                }
-            }
-        }
-        private System.DateTime _valuationCalandarDate;
-        [DataMember]
         public System.DateTime ValidUntil
         {	
     		
@@ -320,6 +304,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private bool _benchmarkPriceExistsOnDay;
+        [DataMember]
+        public Nullable<System.DateTime> BenchmarkPriceValidUntil
+        {	
+    		
+            get { return _benchmarkPriceValidUntil; }
+            set
+            {
+                if (_benchmarkPriceValidUntil != value)
+                {
+                    ChangeTracker.RecordOriginalValue("BenchmarkPriceValidUntil", _benchmarkPriceValidUntil);
+                    _benchmarkPriceValidUntil = value;
+                    OnPropertyChanged("BenchmarkPriceValidUntil");
+                }
+            }
+        }
+        private Nullable<System.DateTime> _benchmarkPriceValidUntil;
 
         #endregion
         #region Navigation Properties
