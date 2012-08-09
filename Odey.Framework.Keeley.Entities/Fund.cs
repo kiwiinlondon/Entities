@@ -21,6 +21,7 @@ namespace Odey.Framework.Keeley.Entities
     [KnownType(typeof(LegalEntity))]
     [KnownType(typeof(InstrumentMarket))]
     [KnownType(typeof(DealingDateDefinition))]
+    [KnownType(typeof(Fund))]
     public partial class Fund: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -379,6 +380,77 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<int> _intranetOrdering;
+        [DataMember]
+        public Nullable<int> ReferenceFundId
+        {	
+    		
+            get { return _referenceFundId; }
+            set
+            {
+                if (_referenceFundId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ReferenceFundId", _referenceFundId);
+                    if (!IsDeserializing)
+                    {
+                        if (Fund3 != null && Fund3.LegalEntityID != value)
+                        {
+                            Fund3 = null;
+                        }
+                    }
+                    _referenceFundId = value;
+                    OnPropertyChanged("ReferenceFundId");
+                }
+            }
+        }
+        private Nullable<int> _referenceFundId;
+        [DataMember]
+        public int PerformanceFeeTypeId
+        {	
+    		
+            get { return _performanceFeeTypeId; }
+            set
+            {
+                if (_performanceFeeTypeId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PerformanceFeeTypeId", _performanceFeeTypeId);
+                    _performanceFeeTypeId = value;
+                    OnPropertyChanged("PerformanceFeeTypeId");
+                }
+            }
+        }
+        private int _performanceFeeTypeId;
+        [DataMember]
+        public Nullable<decimal> LossWarning
+        {	
+    		
+            get { return _lossWarning; }
+            set
+            {
+                if (_lossWarning != value)
+                {
+                    ChangeTracker.RecordOriginalValue("LossWarning", _lossWarning);
+                    _lossWarning = value;
+                    OnPropertyChanged("LossWarning");
+                }
+            }
+        }
+        private Nullable<decimal> _lossWarning;
+        [DataMember]
+        public Nullable<decimal> LossTrigger
+        {	
+    		
+            get { return _lossTrigger; }
+            set
+            {
+                if (_lossTrigger != value)
+                {
+                    ChangeTracker.RecordOriginalValue("LossTrigger", _lossTrigger);
+                    _lossTrigger = value;
+                    OnPropertyChanged("LossTrigger");
+                }
+            }
+        }
+        private Nullable<decimal> _lossTrigger;
 
         #endregion
         #region Navigation Properties
@@ -476,6 +548,58 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private InstrumentMarket _riskFreeInstrumentMarket;
+    
+        [DataMember]
+        public TrackableCollection<Fund> Fund11
+        {
+            get
+            {
+                if (_fund11 == null)
+                {
+                    _fund11 = new TrackableCollection<Fund>();
+                    _fund11.CollectionChanged += FixupFund11;
+                }
+                return _fund11;
+            }
+            set
+            {
+                if (!ReferenceEquals(_fund11, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_fund11 != null)
+                    {
+                        _fund11.CollectionChanged -= FixupFund11;
+                    }
+                    _fund11 = value;
+                    if (_fund11 != null)
+                    {
+                        _fund11.CollectionChanged += FixupFund11;
+                    }
+                    OnNavigationPropertyChanged("Fund11");
+                }
+            }
+        }
+        private TrackableCollection<Fund> _fund11;
+    
+        [DataMember]
+        public Fund Fund3
+        {
+            get { return _fund3; }
+            set
+            {
+                if (!ReferenceEquals(_fund3, value))
+                {
+                    var previousValue = _fund3;
+                    _fund3 = value;
+                    FixupFund3(previousValue);
+                    OnNavigationPropertyChanged("Fund3");
+                }
+            }
+        }
+        private Fund _fund3;
 
         #endregion
         #region ChangeTracking
@@ -570,6 +694,8 @@ namespace Odey.Framework.Keeley.Entities
             BenchmarkInstrumentMarket = null;
             DealingDateDefinition = null;
             RiskFreeInstrumentMarket = null;
+            Fund11.Clear();
+            Fund3 = null;
         }
 
         #endregion
@@ -752,6 +878,89 @@ namespace Odey.Framework.Keeley.Entities
                 if (RiskFreeInstrumentMarket != null && !RiskFreeInstrumentMarket.ChangeTracker.ChangeTrackingEnabled)
                 {
                     RiskFreeInstrumentMarket.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupFund3(Fund previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.Fund11.Contains(this))
+            {
+                previousValue.Fund11.Remove(this);
+            }
+    
+            if (Fund3 != null)
+            {
+                if (!Fund3.Fund11.Contains(this))
+                {
+                    Fund3.Fund11.Add(this);
+                }
+    
+                ReferenceFundId = Fund3.LegalEntityID;
+            }
+            else if (!skipKeys)
+            {
+                ReferenceFundId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Fund3")
+                    && (ChangeTracker.OriginalValues["Fund3"] == Fund3))
+                {
+                    ChangeTracker.OriginalValues.Remove("Fund3");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Fund3", previousValue);
+                }
+                if (Fund3 != null && !Fund3.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Fund3.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupFund11(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (Fund item in e.NewItems)
+                {
+                    item.Fund3 = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("Fund11", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (Fund item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.Fund3, this))
+                    {
+                        item.Fund3 = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("Fund11", item);
+                    }
                 }
             }
         }

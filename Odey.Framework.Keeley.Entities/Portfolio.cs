@@ -20,6 +20,7 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     [KnownType(typeof(Position))]
     [KnownType(typeof(Portfolio))]
+    [KnownType(typeof(FXRate))]
     public partial class Portfolio: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -632,6 +633,109 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<decimal> _todayCarryAccrual;
+        [DataMember]
+        public Nullable<decimal> Delta
+        {	
+    		
+            get { return _delta; }
+            set
+            {
+                if (_delta != value)
+                {
+                    ChangeTracker.RecordOriginalValue("Delta", _delta);
+                    _delta = value;
+                    OnPropertyChanged("Delta");
+                }
+            }
+        }
+        private Nullable<decimal> _delta;
+        [DataMember]
+        public Nullable<decimal> UnderlyingPrice
+        {	
+    		
+            get { return _underlyingPrice; }
+            set
+            {
+                if (_underlyingPrice != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UnderlyingPrice", _underlyingPrice);
+                    _underlyingPrice = value;
+                    OnPropertyChanged("UnderlyingPrice");
+                }
+            }
+        }
+        private Nullable<decimal> _underlyingPrice;
+        [DataMember]
+        public Nullable<int> DeltaId
+        {	
+    		
+            get { return _deltaId; }
+            set
+            {
+                if (_deltaId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("DeltaId", _deltaId);
+                    _deltaId = value;
+                    OnPropertyChanged("DeltaId");
+                }
+            }
+        }
+        private Nullable<int> _deltaId;
+        [DataMember]
+        public Nullable<int> UnderlyingPriceId
+        {	
+    		
+            get { return _underlyingPriceId; }
+            set
+            {
+                if (_underlyingPriceId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UnderlyingPriceId", _underlyingPriceId);
+                    _underlyingPriceId = value;
+                    OnPropertyChanged("UnderlyingPriceId");
+                }
+            }
+        }
+        private Nullable<int> _underlyingPriceId;
+        [DataMember]
+        public Nullable<decimal> UnderlyingPriceToPositionFXRate
+        {	
+    		
+            get { return _underlyingPriceToPositionFXRate; }
+            set
+            {
+                if (_underlyingPriceToPositionFXRate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UnderlyingPriceToPositionFXRate", _underlyingPriceToPositionFXRate);
+                    _underlyingPriceToPositionFXRate = value;
+                    OnPropertyChanged("UnderlyingPriceToPositionFXRate");
+                }
+            }
+        }
+        private Nullable<decimal> _underlyingPriceToPositionFXRate;
+        [DataMember]
+        public Nullable<int> UnderlyingPriceToPositionFXRateId
+        {	
+    		
+            get { return _underlyingPriceToPositionFXRateId; }
+            set
+            {
+                if (_underlyingPriceToPositionFXRateId != value)
+                {
+                    ChangeTracker.RecordOriginalValue("UnderlyingPriceToPositionFXRateId", _underlyingPriceToPositionFXRateId);
+                    if (!IsDeserializing)
+                    {
+                        if (FXRate3 != null && FXRate3.FXRateId != value)
+                        {
+                            FXRate3 = null;
+                        }
+                    }
+                    _underlyingPriceToPositionFXRateId = value;
+                    OnPropertyChanged("UnderlyingPriceToPositionFXRateId");
+                }
+            }
+        }
+        private Nullable<int> _underlyingPriceToPositionFXRateId;
 
         #endregion
         #region Navigation Properties
@@ -669,6 +773,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Portfolio _previousPortfolio;
+    
+        [DataMember]
+        public FXRate FXRate3
+        {
+            get { return _fXRate3; }
+            set
+            {
+                if (!ReferenceEquals(_fXRate3, value))
+                {
+                    var previousValue = _fXRate3;
+                    _fXRate3 = value;
+                    FixupFXRate3(previousValue);
+                    OnNavigationPropertyChanged("FXRate3");
+                }
+            }
+        }
+        private FXRate _fXRate3;
 
         #endregion
         #region ChangeTracking
@@ -750,6 +871,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             Position = null;
             PreviousPortfolio = null;
+            FXRate3 = null;
         }
 
         #endregion
@@ -816,6 +938,50 @@ namespace Odey.Framework.Keeley.Entities
                 if (PreviousPortfolio != null && !PreviousPortfolio.ChangeTracker.ChangeTrackingEnabled)
                 {
                     PreviousPortfolio.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupFXRate3(FXRate previousValue, bool skipKeys = false)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && previousValue.Portfolios2.Contains(this))
+            {
+                previousValue.Portfolios2.Remove(this);
+            }
+    
+            if (FXRate3 != null)
+            {
+                if (!FXRate3.Portfolios2.Contains(this))
+                {
+                    FXRate3.Portfolios2.Add(this);
+                }
+    
+                UnderlyingPriceToPositionFXRateId = FXRate3.FXRateId;
+            }
+            else if (!skipKeys)
+            {
+                UnderlyingPriceToPositionFXRateId = null;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("FXRate3")
+                    && (ChangeTracker.OriginalValues["FXRate3"] == FXRate3))
+                {
+                    ChangeTracker.OriginalValues.Remove("FXRate3");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("FXRate3", previousValue);
+                }
+                if (FXRate3 != null && !FXRate3.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    FXRate3.StartTracking();
                 }
             }
         }

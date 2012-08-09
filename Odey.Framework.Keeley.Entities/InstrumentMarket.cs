@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(Instrument))]
+    [KnownType(typeof(InstrumentMarket))]
     public partial class InstrumentMarket: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -250,6 +251,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_underlyingInstrumentMarketId != value)
                 {
                     ChangeTracker.RecordOriginalValue("UnderlyingInstrumentMarketId", _underlyingInstrumentMarketId);
+                    if (!IsDeserializing)
+                    {
+                        if (PrivateUnderlyingInstrumentMarket != null && PrivateUnderlyingInstrumentMarket.InstrumentMarketID != value)
+                        {
+                            PrivateUnderlyingInstrumentMarket = null;
+                        }
+                    }
                     _underlyingInstrumentMarketId = value;
                     OnPropertyChanged("UnderlyingInstrumentMarketId");
                 }
@@ -340,6 +348,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Instrument _instrument;
+    
+        [DataMember]
+        private InstrumentMarket PrivateUnderlyingInstrumentMarket
+        {
+            get { return _privateUnderlyingInstrumentMarket; }
+            set
+            {
+                if (!ReferenceEquals(_privateUnderlyingInstrumentMarket, value))
+                {
+                    var previousValue = _privateUnderlyingInstrumentMarket;
+                    _privateUnderlyingInstrumentMarket = value;
+                    FixupPrivateUnderlyingInstrumentMarket(previousValue);
+                    OnNavigationPropertyChanged("PrivateUnderlyingInstrumentMarket");
+                }
+            }
+        }
+        private InstrumentMarket _privateUnderlyingInstrumentMarket;
 
         #endregion
         #region ChangeTracking
@@ -420,6 +445,7 @@ namespace Odey.Framework.Keeley.Entities
         protected virtual void ClearNavigationProperties()
         {
             Instrument = null;
+            PrivateUnderlyingInstrumentMarket = null;
         }
 
         #endregion
@@ -460,6 +486,36 @@ namespace Odey.Framework.Keeley.Entities
                 if (Instrument != null && !Instrument.ChangeTracker.ChangeTrackingEnabled)
                 {
                     Instrument.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupPrivateUnderlyingInstrumentMarket(InstrumentMarket previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (PrivateUnderlyingInstrumentMarket != null)
+            {
+                UnderlyingInstrumentMarketId = PrivateUnderlyingInstrumentMarket.InstrumentMarketID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("PrivateUnderlyingInstrumentMarket")
+                    && (ChangeTracker.OriginalValues["PrivateUnderlyingInstrumentMarket"] == PrivateUnderlyingInstrumentMarket))
+                {
+                    ChangeTracker.OriginalValues.Remove("PrivateUnderlyingInstrumentMarket");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("PrivateUnderlyingInstrumentMarket", previousValue);
+                }
+                if (PrivateUnderlyingInstrumentMarket != null && !PrivateUnderlyingInstrumentMarket.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    PrivateUnderlyingInstrumentMarket.StartTracking();
                 }
             }
         }

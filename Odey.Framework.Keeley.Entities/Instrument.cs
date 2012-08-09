@@ -23,6 +23,7 @@ namespace Odey.Framework.Keeley.Entities
     [KnownType(typeof(CollectiveInvestmentScheme))]
     [KnownType(typeof(Bond))]
     [KnownType(typeof(ForwardFX))]
+    [KnownType(typeof(InstrumentClass))]
     public partial class Instrument: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -71,6 +72,13 @@ namespace Odey.Framework.Keeley.Entities
                 if (_instrumentClassID != value)
                 {
                     ChangeTracker.RecordOriginalValue("InstrumentClassID", _instrumentClassID);
+                    if (!IsDeserializing)
+                    {
+                        if (InstrumentClass != null && InstrumentClass.InstrumentClassID != value)
+                        {
+                            InstrumentClass = null;
+                        }
+                    }
                     _instrumentClassID = value;
                     OnPropertyChanged("InstrumentClassID");
                 }
@@ -458,6 +466,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private ForwardFX _forwardFX;
+    
+        [DataMember]
+        public InstrumentClass InstrumentClass
+        {
+            get { return _instrumentClass; }
+            set
+            {
+                if (!ReferenceEquals(_instrumentClass, value))
+                {
+                    var previousValue = _instrumentClass;
+                    _instrumentClass = value;
+                    FixupInstrumentClass(previousValue);
+                    OnNavigationPropertyChanged("InstrumentClass");
+                }
+            }
+        }
+        private InstrumentClass _instrumentClass;
 
         #endregion
         #region ChangeTracking
@@ -543,6 +568,7 @@ namespace Odey.Framework.Keeley.Entities
             CollectiveInvestmentScheme = null;
             Bond = null;
             ForwardFX = null;
+            InstrumentClass = null;
         }
 
         #endregion
@@ -741,6 +767,36 @@ namespace Odey.Framework.Keeley.Entities
                 if (ForwardFX != null && !ForwardFX.ChangeTracker.ChangeTrackingEnabled)
                 {
                     ForwardFX.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupInstrumentClass(InstrumentClass previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (InstrumentClass != null)
+            {
+                InstrumentClassID = InstrumentClass.InstrumentClassID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("InstrumentClass")
+                    && (ChangeTracker.OriginalValues["InstrumentClass"] == InstrumentClass))
+                {
+                    ChangeTracker.OriginalValues.Remove("InstrumentClass");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("InstrumentClass", previousValue);
+                }
+                if (InstrumentClass != null && !InstrumentClass.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    InstrumentClass.StartTracking();
                 }
             }
         }

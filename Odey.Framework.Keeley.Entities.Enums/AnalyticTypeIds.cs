@@ -23,7 +23,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Beta = 7,
         [EnumMember]
-        IndicativeFundPerformance =8
+        IndicativeFundPerformance =8,
+        [EnumMember]
+        OptionDelta = 9
     }
 }
 

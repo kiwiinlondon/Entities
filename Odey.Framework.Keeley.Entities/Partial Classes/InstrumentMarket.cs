@@ -57,6 +57,14 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public ParentInstrumentClassIds ParentInstrumentClassIdAsEnum
+        {
+            get
+            {
+                return Instrument.ParentInstrumentClassIdAsEnum;
+            }
+        }
+
         public int IssueCurrencyID
         {
             get
@@ -128,9 +136,33 @@ namespace Odey.Framework.Keeley.Entities
             {
                 return Instrument.BloombergTicker;
             }
-        }     
+        }
 
-        public InstrumentMarket UnderlyingInstrumentMarket
+        public InstrumentMarket DerivedUnderlyingInstrumentMarket
+        {
+            get
+            {
+                if (UnderlyingInstrumentMarketId == InstrumentMarketID)
+                {
+                    return null;
+                }
+                else if (PrivateUnderlyingInstrumentMarket == null)
+                {
+                    throw new ApplicationException("Underlying InstrumentMarket was not included in Include");
+                }
+                else
+                {
+                    return PrivateUnderlyingInstrumentMarket;
+                }
+            }
+            set
+            {
+                PrivateUnderlyingInstrumentMarket = value;
+            }
+        }
+
+
+        public InstrumentMarket CalculatedUnderlyingInstrumentMarket
         {
             get
             {
@@ -163,30 +195,7 @@ namespace Odey.Framework.Keeley.Entities
                     return null;
                 }
             }
-        }
-
-        public List<InstrumentMarket> OverlyingInstrumentMarkets
-        {
-            get
-            {
-                List<InstrumentMarket> instrumentMarkets = new List<InstrumentMarket>();
-                foreach (InstrumentRelationship instrumentRelationship in Instrument.OverlyingRelationships)
-                {
-                    if (instrumentRelationship.Overlyer != null)
-                    {
-                        foreach (InstrumentMarket instrumentMarket in instrumentRelationship.Overlyer.InstrumentMarkets)
-                        {
-                            if (instrumentMarket.UnderlyingInstrumentMarket.InstrumentMarketID == InstrumentMarketID)
-                            {
-                                instrumentMarkets.Add(instrumentMarket);
-                            }
-                        }
-                    }
-                }
-                return instrumentMarkets;
-            }
-        }
-      
+        }           
     }
 }
 

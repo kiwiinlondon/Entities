@@ -31,6 +31,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+
+        public int ParentInstrumentClassId
+        {
+            get
+            {
+                return InstrumentClass.ParentInstrumentClassId.Value;
+            }
+        }
+
+        public ParentInstrumentClassIds ParentInstrumentClassIdAsEnum
+        {
+            get
+            {
+                return (ParentInstrumentClassIds)ParentInstrumentClassId;
+            }
+        }
+
         public DateTime? ForwardDate
         {
             get

@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(RawFXRate))]
+    [KnownType(typeof(Portfolio))]
     public partial class FXRate: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -348,6 +349,41 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private RawFXRate _toSecondRawFXRate;
+    
+        [DataMember]
+        public TrackableCollection<Portfolio> Portfolios2
+        {
+            get
+            {
+                if (_portfolios2 == null)
+                {
+                    _portfolios2 = new TrackableCollection<Portfolio>();
+                    _portfolios2.CollectionChanged += FixupPortfolios2;
+                }
+                return _portfolios2;
+            }
+            set
+            {
+                if (!ReferenceEquals(_portfolios2, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        throw new InvalidOperationException("Cannot set the FixupChangeTrackingCollection when ChangeTracking is enabled");
+                    }
+                    if (_portfolios2 != null)
+                    {
+                        _portfolios2.CollectionChanged -= FixupPortfolios2;
+                    }
+                    _portfolios2 = value;
+                    if (_portfolios2 != null)
+                    {
+                        _portfolios2.CollectionChanged += FixupPortfolios2;
+                    }
+                    OnNavigationPropertyChanged("Portfolios2");
+                }
+            }
+        }
+        private TrackableCollection<Portfolio> _portfolios2;
 
         #endregion
         #region ChangeTracking
@@ -431,6 +467,7 @@ namespace Odey.Framework.Keeley.Entities
             ToRawFXRate = null;
             FromSecondRawFXRate = null;
             ToSecondRawFXRate = null;
+            Portfolios2.Clear();
         }
 
         #endregion
@@ -603,6 +640,45 @@ namespace Odey.Framework.Keeley.Entities
                 if (ToSecondRawFXRate != null && !ToSecondRawFXRate.ChangeTracker.ChangeTrackingEnabled)
                 {
                     ToSecondRawFXRate.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupPortfolios2(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (e.NewItems != null)
+            {
+                foreach (Portfolio item in e.NewItems)
+                {
+                    item.FXRate3 = this;
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        if (!item.ChangeTracker.ChangeTrackingEnabled)
+                        {
+                            item.StartTracking();
+                        }
+                        ChangeTracker.RecordAdditionToCollectionProperties("Portfolios2", item);
+                    }
+                }
+            }
+    
+            if (e.OldItems != null)
+            {
+                foreach (Portfolio item in e.OldItems)
+                {
+                    if (ReferenceEquals(item.FXRate3, this))
+                    {
+                        item.FXRate3 = null;
+                    }
+                    if (ChangeTracker.ChangeTrackingEnabled)
+                    {
+                        ChangeTracker.RecordRemovalFromCollectionProperties("Portfolios2", item);
+                    }
                 }
             }
         }
