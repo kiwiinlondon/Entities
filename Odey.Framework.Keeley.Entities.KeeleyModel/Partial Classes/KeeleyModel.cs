@@ -171,6 +171,10 @@ namespace Odey.Framework.Keeley.Entities
             {
                 AddValueToUsefulPropertiesUsingReflection(entry, "FundId", changedEntity);
             }
+            else if (entityType == typeof(Analytic))
+            {
+                AddValueToUsefulPropertiesUsingReflection(entry, "AnalyticTypeID", changedEntity);
+            }
         }
 
         private void AddValueToUsefulProperties(ChangedEntity changedEntity, CurrentValueRecord currentValues, string key)

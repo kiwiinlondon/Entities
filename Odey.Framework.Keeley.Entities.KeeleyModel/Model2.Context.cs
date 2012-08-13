@@ -556,6 +556,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _fileToBeCollecteds  ?? (_fileToBeCollecteds = CreateObjectSet<FileToBeCollected>("FileToBeCollecteds")); }
         }
         private ObjectSet<FileToBeCollected> _fileToBeCollecteds;
+    
+        public ObjectSet<CacheInvalidation> CacheInvalidations
+        {
+            get { return _cacheInvalidations  ?? (_cacheInvalidations = CreateObjectSet<CacheInvalidation>("CacheInvalidations")); }
+        }
+        private ObjectSet<CacheInvalidation> _cacheInvalidations;
 
         #endregion
         #region Function Imports
