@@ -736,6 +736,86 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<int> _underlyingPriceToPositionFXRateId;
+        [DataMember]
+        public decimal ValuationFXRate
+        {	
+    		
+            get { return _valuationFXRate; }
+            set
+            {
+                if (_valuationFXRate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationFXRate", _valuationFXRate);
+                    _valuationFXRate = value;
+                    OnPropertyChanged("ValuationFXRate");
+                }
+            }
+        }
+        private decimal _valuationFXRate;
+        [DataMember]
+        public decimal ValuationNetPosition
+        {	
+    		
+            get { return _valuationNetPosition; }
+            set
+            {
+                if (_valuationNetPosition != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationNetPosition", _valuationNetPosition);
+                    _valuationNetPosition = value;
+                    OnPropertyChanged("ValuationNetPosition");
+                }
+            }
+        }
+        private decimal _valuationNetPosition;
+        [DataMember]
+        public decimal ValuationDeltaNetCostInstrumentCurrency
+        {	
+    		
+            get { return _valuationDeltaNetCostInstrumentCurrency; }
+            set
+            {
+                if (_valuationDeltaNetCostInstrumentCurrency != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationDeltaNetCostInstrumentCurrency", _valuationDeltaNetCostInstrumentCurrency);
+                    _valuationDeltaNetCostInstrumentCurrency = value;
+                    OnPropertyChanged("ValuationDeltaNetCostInstrumentCurrency");
+                }
+            }
+        }
+        private decimal _valuationDeltaNetCostInstrumentCurrency;
+        [DataMember]
+        public decimal ValuationPrice
+        {	
+    		
+            get { return _valuationPrice; }
+            set
+            {
+                if (_valuationPrice != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationPrice", _valuationPrice);
+                    _valuationPrice = value;
+                    OnPropertyChanged("ValuationPrice");
+                }
+            }
+        }
+        private decimal _valuationPrice;
+        [DataMember]
+        public decimal ValuationPriceToPositionFXRate
+        {	
+    		
+            get { return _valuationPriceToPositionFXRate; }
+            set
+            {
+                if (_valuationPriceToPositionFXRate != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationPriceToPositionFXRate", _valuationPriceToPositionFXRate);
+                    _valuationPriceToPositionFXRate = value;
+                    OnPropertyChanged("ValuationPriceToPositionFXRate");
+                }
+            }
+        }
+        private decimal _valuationPriceToPositionFXRate;
 
         #endregion
         #region Navigation Properties

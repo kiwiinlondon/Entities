@@ -744,6 +744,38 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private Nullable<decimal> _bondNominalChange;
+        [DataMember]
+        public decimal ValuationNetPosition
+        {	
+    		
+            get { return _valuationNetPosition; }
+            set
+            {
+                if (_valuationNetPosition != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationNetPosition", _valuationNetPosition);
+                    _valuationNetPosition = value;
+                    OnPropertyChanged("ValuationNetPosition");
+                }
+            }
+        }
+        private decimal _valuationNetPosition;
+        [DataMember]
+        public decimal ValuationDeltaNetCostInstrumentCurrency
+        {	
+    		
+            get { return _valuationDeltaNetCostInstrumentCurrency; }
+            set
+            {
+                if (_valuationDeltaNetCostInstrumentCurrency != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationDeltaNetCostInstrumentCurrency", _valuationDeltaNetCostInstrumentCurrency);
+                    _valuationDeltaNetCostInstrumentCurrency = value;
+                    OnPropertyChanged("ValuationDeltaNetCostInstrumentCurrency");
+                }
+            }
+        }
+        private decimal _valuationDeltaNetCostInstrumentCurrency;
 
         #endregion
         #region ChangeTracking

@@ -82,7 +82,7 @@ namespace Odey.Framework.Keeley.Entities
         }
         private int _periodicityId;
         [DataMember]
-        public System.TimeSpan CutOffTime
+        public Nullable<System.TimeSpan> CutOffTime
         {	
     		
             get { return _cutOffTime; }
@@ -96,7 +96,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
         }
-        private System.TimeSpan _cutOffTime;
+        private Nullable<System.TimeSpan> _cutOffTime;
         [DataMember]
         public int CutOffDaysPrior
         {	
