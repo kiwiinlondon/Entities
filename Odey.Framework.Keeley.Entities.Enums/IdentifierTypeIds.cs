@@ -59,6 +59,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BBGlobalId = 26,
         [EnumMember]
-        BBExchangeCode = 27
+        BBExchangeCode = 27,
+        [EnumMember]
+        KeeleyName = 29
     }
 }

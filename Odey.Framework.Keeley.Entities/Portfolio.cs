@@ -816,6 +816,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private decimal _valuationPriceToPositionFXRate;
+        [DataMember]
+        public decimal ValuationMarketValue
+        {	
+    		
+            get { return _valuationMarketValue; }
+            set
+            {
+                if (_valuationMarketValue != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationMarketValue", _valuationMarketValue);
+                    _valuationMarketValue = value;
+                    OnPropertyChanged("ValuationMarketValue");
+                }
+            }
+        }
+        private decimal _valuationMarketValue;
 
         #endregion
         #region Navigation Properties
