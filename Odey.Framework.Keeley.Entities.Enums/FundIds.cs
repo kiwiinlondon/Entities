@@ -10,10 +10,24 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum FundIds
     {
         [EnumMember]
-        OEI=741,
+        OEI = 741,
         [EnumMember]
-        OEIMAC=4927,
+        OEIMAC = 4927,
         [EnumMember]
-        GIANO94 = 4849
+        GIANO94 = 4849,
+        [EnumMember]
+        OUAR = 3609,
+        [EnumMember]
+        DYSS = 5591,
+        [EnumMember]
+        MR11 = 5590,
+        [EnumMember]
+        OPUS = 5328,
+        [EnumMember]
+        OCE = 5082,
+        [EnumMember]
+        PORT = 5330,
+        [EnumMember]
+        VITR = 5333
     }
 }

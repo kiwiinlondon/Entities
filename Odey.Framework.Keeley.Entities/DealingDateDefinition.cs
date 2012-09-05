@@ -161,6 +161,22 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private byte[] _dataVersion;
+        [DataMember]
+        public Nullable<System.TimeSpan> ValuationCutOff
+        {	
+    		
+            get { return _valuationCutOff; }
+            set
+            {
+                if (_valuationCutOff != value)
+                {
+                    ChangeTracker.RecordOriginalValue("ValuationCutOff", _valuationCutOff);
+                    _valuationCutOff = value;
+                    OnPropertyChanged("ValuationCutOff");
+                }
+            }
+        }
+        private Nullable<System.TimeSpan> _valuationCutOff;
 
         #endregion
         #region Navigation Properties

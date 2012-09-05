@@ -527,12 +527,6 @@ namespace Odey.Framework.Keeley.Entities
         }
         private ObjectSet<LegalEntityChargeSchedule> _legalEntityChargeSchedules;
     
-        public ObjectSet<Bond> Bonds
-        {
-            get { return _bonds  ?? (_bonds = CreateObjectSet<Bond>("Bonds")); }
-        }
-        private ObjectSet<Bond> _bonds;
-    
         public ObjectSet<ForwardFX> ForwardFXes
         {
             get { return _forwardFXes  ?? (_forwardFXes = CreateObjectSet<ForwardFX>("ForwardFXes")); }
@@ -562,6 +556,18 @@ namespace Odey.Framework.Keeley.Entities
             get { return _cacheInvalidations  ?? (_cacheInvalidations = CreateObjectSet<CacheInvalidation>("CacheInvalidations")); }
         }
         private ObjectSet<CacheInvalidation> _cacheInvalidations;
+    
+        public ObjectSet<FundNetAssetValue> FundNetAssetValues
+        {
+            get { return _fundNetAssetValues  ?? (_fundNetAssetValues = CreateObjectSet<FundNetAssetValue>("FundNetAssetValues")); }
+        }
+        private ObjectSet<FundNetAssetValue> _fundNetAssetValues;
+    
+        public ObjectSet<Bond> Bonds
+        {
+            get { return _bonds  ?? (_bonds = CreateObjectSet<Bond>("Bonds")); }
+        }
+        private ObjectSet<Bond> _bonds;
 
         #endregion
         #region Function Imports

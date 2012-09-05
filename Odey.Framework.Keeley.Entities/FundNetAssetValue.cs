@@ -18,108 +18,95 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
-    public partial class PortfolioRollDate: IObjectWithChangeTracker, INotifyPropertyChanged
+    public partial class FundNetAssetValue: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
         [DataMember]
-        public int PortfolioRollDateId
+        public int FundId
         {	
     		
-            get { return _portfolioRollDateId; }
+            get { return _fundId; }
             set
             {
-                if (_portfolioRollDateId != value)
+                if (_fundId != value)
                 {
                     if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
                     {
-                        throw new InvalidOperationException("The property 'PortfolioRollDateId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                        throw new InvalidOperationException("The property 'FundId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
-                    _portfolioRollDateId = value;
-                    OnPropertyChanged("PortfolioRollDateId");
+                    _fundId = value;
+                    OnPropertyChanged("FundId");
                 }
             }
         }
-        private int _portfolioRollDateId;
+        private int _fundId;
         [DataMember]
-        public int PortfolioAggregationLevelId
+        public System.DateTime ReferenceDate
         {	
     		
-            get { return _portfolioAggregationLevelId; }
+            get { return _referenceDate; }
             set
             {
-                if (_portfolioAggregationLevelId != value)
+                if (_referenceDate != value)
                 {
-                    ChangeTracker.RecordOriginalValue("PortfolioAggregationLevelId", _portfolioAggregationLevelId);
-                    _portfolioAggregationLevelId = value;
-                    OnPropertyChanged("PortfolioAggregationLevelId");
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added)
+                    {
+                        throw new InvalidOperationException("The property 'ReferenceDate' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
+                    }
+                    _referenceDate = value;
+                    OnPropertyChanged("ReferenceDate");
                 }
             }
         }
-        private int _portfolioAggregationLevelId;
+        private System.DateTime _referenceDate;
         [DataMember]
-        public System.DateTime RollDate
+        public decimal MarketValue
         {	
     		
-            get { return _rollDate; }
+            get { return _marketValue; }
             set
             {
-                if (_rollDate != value)
+                if (_marketValue != value)
                 {
-                    ChangeTracker.RecordOriginalValue("RollDate", _rollDate);
-                    _rollDate = value;
-                    OnPropertyChanged("RollDate");
+                    ChangeTracker.RecordOriginalValue("MarketValue", _marketValue);
+                    _marketValue = value;
+                    OnPropertyChanged("MarketValue");
                 }
             }
         }
-        private System.DateTime _rollDate;
+        private decimal _marketValue;
         [DataMember]
-        public System.DateTime StartDt
+        public decimal ValuationMarketValue
         {	
     		
-            get { return _startDt; }
-            private set
-            {
-                if (_startDt != value)
-                {
-                    ChangeTracker.RecordOriginalValue("StartDt", _startDt);
-                    _startDt = value;
-                    OnPropertyChanged("StartDt");
-                }
-            }
-        }
-        private System.DateTime _startDt;
-        [DataMember]
-        public int UpdateUserID
-        {	
-    		
-            get { return _updateUserID; }
-            private set
-            {
-                if (_updateUserID != value)
-                {
-                    ChangeTracker.RecordOriginalValue("UpdateUserID", _updateUserID);
-                    _updateUserID = value;
-                    OnPropertyChanged("UpdateUserID");
-                }
-            }
-        }
-        private int _updateUserID;
-        [DataMember]
-        private byte[] DataVersion
-        {	
-    		
-            get { return _dataVersion; }
+            get { return _valuationMarketValue; }
             set
             {
-                if (_dataVersion != value)
+                if (_valuationMarketValue != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DataVersion", _dataVersion);
-                    _dataVersion = value;
-                    OnPropertyChanged("DataVersion");
+                    ChangeTracker.RecordOriginalValue("ValuationMarketValue", _valuationMarketValue);
+                    _valuationMarketValue = value;
+                    OnPropertyChanged("ValuationMarketValue");
                 }
             }
         }
-        private byte[] _dataVersion;
+        private decimal _valuationMarketValue;
+        [DataMember]
+        public Nullable<long> PositionCount
+        {	
+    		
+            get { return _positionCount; }
+            set
+            {
+                if (_positionCount != value)
+                {
+                    ChangeTracker.RecordOriginalValue("PositionCount", _positionCount);
+                    _positionCount = value;
+                    OnPropertyChanged("PositionCount");
+                }
+            }
+        }
+        private Nullable<long> _positionCount;
 
         #endregion
         #region ChangeTracking

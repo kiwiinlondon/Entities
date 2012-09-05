@@ -12,8 +12,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DaiwaPAStandardExtract = 1,
         [EnumMember]
-        CapitaReconcilationFile = 2,
+        CapitaPositionFile = 2,
         [EnumMember]
-        DaiwaPositionFile = 3
+        DaiwaPositionFile = 3,
+        [EnumMember]
+        EFAPositionFile = 4,
     }
 }

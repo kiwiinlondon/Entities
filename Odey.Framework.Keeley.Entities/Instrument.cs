@@ -21,9 +21,9 @@ namespace Odey.Framework.Keeley.Entities
     [KnownType(typeof(InstrumentRelationship))]
     [KnownType(typeof(InstrumentMarket))]
     [KnownType(typeof(CollectiveInvestmentScheme))]
-    [KnownType(typeof(Bond))]
     [KnownType(typeof(ForwardFX))]
     [KnownType(typeof(InstrumentClass))]
+    [KnownType(typeof(Bond))]
     public partial class Instrument: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -434,23 +434,6 @@ namespace Odey.Framework.Keeley.Entities
         private CollectiveInvestmentScheme _collectiveInvestmentScheme;
     
         [DataMember]
-        public Bond Bond
-        {
-            get { return _bond; }
-            set
-            {
-                if (!ReferenceEquals(_bond, value))
-                {
-                    var previousValue = _bond;
-                    _bond = value;
-                    FixupBond(previousValue);
-                    OnNavigationPropertyChanged("Bond");
-                }
-            }
-        }
-        private Bond _bond;
-    
-        [DataMember]
         public ForwardFX ForwardFX
         {
             get { return _forwardFX; }
@@ -483,6 +466,23 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
         private InstrumentClass _instrumentClass;
+    
+        [DataMember]
+        public Bond Bond
+        {
+            get { return _bond; }
+            set
+            {
+                if (!ReferenceEquals(_bond, value))
+                {
+                    var previousValue = _bond;
+                    _bond = value;
+                    FixupBond(previousValue);
+                    OnNavigationPropertyChanged("Bond");
+                }
+            }
+        }
+        private Bond _bond;
 
         #endregion
         #region ChangeTracking
@@ -566,9 +566,9 @@ namespace Odey.Framework.Keeley.Entities
             InstrumentMarkets.Clear();
             OverlyingRelationships.Clear();
             CollectiveInvestmentScheme = null;
-            Bond = null;
             ForwardFX = null;
             InstrumentClass = null;
+            Bond = null;
         }
 
         #endregion
@@ -675,54 +675,6 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
     
-        private void FixupBond(Bond previousValue)
-        {
-            // This is the principal end in an association that performs cascade deletes.
-            // Update the event listener to refer to the new dependent.
-            if (previousValue != null)
-            {
-                ChangeTracker.ObjectStateChanging -= previousValue.HandleCascadeDelete;
-            }
-    
-            if (Bond != null)
-            {
-                ChangeTracker.ObjectStateChanging += Bond.HandleCascadeDelete;
-            }
-    
-            if (IsDeserializing)
-            {
-                return;
-            }
-    
-            if (Bond != null)
-            {
-                Bond.InstrumentId = InstrumentID;
-            }
-    
-            if (ChangeTracker.ChangeTrackingEnabled)
-            {
-                if (ChangeTracker.OriginalValues.ContainsKey("Bond")
-                    && (ChangeTracker.OriginalValues["Bond"] == Bond))
-                {
-                    ChangeTracker.OriginalValues.Remove("Bond");
-                }
-                else
-                {
-                    ChangeTracker.RecordOriginalValue("Bond", previousValue);
-                    // This is the principal end of an identifying association, so the dependent must be deleted when the relationship is removed.
-                    // If the current state of the dependent is Added, the relationship can be changed without causing the dependent to be deleted.
-                    if (previousValue != null && previousValue.ChangeTracker.State != ObjectState.Added)
-                    {
-                        previousValue.MarkAsDeleted();
-                    }
-                }
-                if (Bond != null && !Bond.ChangeTracker.ChangeTrackingEnabled)
-                {
-                    Bond.StartTracking();
-                }
-            }
-        }
-    
         private void FixupForwardFX(ForwardFX previousValue)
         {
             // This is the principal end in an association that performs cascade deletes.
@@ -797,6 +749,59 @@ namespace Odey.Framework.Keeley.Entities
                 if (InstrumentClass != null && !InstrumentClass.ChangeTracker.ChangeTrackingEnabled)
                 {
                     InstrumentClass.StartTracking();
+                }
+            }
+        }
+    
+        private void FixupBond(Bond previousValue)
+        {
+            // This is the principal end in an association that performs cascade deletes.
+            // Update the event listener to refer to the new dependent.
+            if (previousValue != null)
+            {
+                ChangeTracker.ObjectStateChanging -= previousValue.HandleCascadeDelete;
+            }
+    
+            if (Bond != null)
+            {
+                ChangeTracker.ObjectStateChanging += Bond.HandleCascadeDelete;
+            }
+    
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && ReferenceEquals(previousValue.Instrument, this))
+            {
+                previousValue.Instrument = null;
+            }
+    
+            if (Bond != null)
+            {
+                Bond.Instrument = this;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Bond")
+                    && (ChangeTracker.OriginalValues["Bond"] == Bond))
+                {
+                    ChangeTracker.OriginalValues.Remove("Bond");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Bond", previousValue);
+                    // This is the principal end of an identifying association, so the dependent must be deleted when the relationship is removed.
+                    // If the current state of the dependent is Added, the relationship can be changed without causing the dependent to be deleted.
+                    if (previousValue != null && previousValue.ChangeTracker.State != ObjectState.Added)
+                    {
+                        previousValue.MarkAsDeleted();
+                    }
+                }
+                if (Bond != null && !Bond.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Bond.StartTracking();
                 }
             }
         }

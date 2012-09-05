@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 namespace Odey.Framework.Keeley.Entities
 {
     [DataContract(IsReference = true)]
+    [KnownType(typeof(Instrument))]
     public partial class Bond: IObjectWithChangeTracker, INotifyPropertyChanged
     {
         #region Primitive Properties
@@ -34,12 +35,35 @@ namespace Odey.Framework.Keeley.Entities
                     {
                         throw new InvalidOperationException("The property 'InstrumentId' is part of the object's key and cannot be changed. Changes to key properties can only be made when the object is not being tracked or is in the Added state.");
                     }
+                    if (!IsDeserializing)
+                    {
+                        if (Instrument != null && Instrument.InstrumentID != value)
+                        {
+                            Instrument = null;
+                        }
+                    }
                     _instrumentId = value;
                     OnPropertyChanged("InstrumentId");
                 }
             }
         }
         private int _instrumentId;
+        [DataMember]
+        public int DayCountConventionID
+        {	
+    		
+            get { return _dayCountConventionID; }
+            set
+            {
+                if (_dayCountConventionID != value)
+                {
+                    ChangeTracker.RecordOriginalValue("DayCountConventionID", _dayCountConventionID);
+                    _dayCountConventionID = value;
+                    OnPropertyChanged("DayCountConventionID");
+                }
+            }
+        }
+        private int _dayCountConventionID;
         [DataMember]
         public System.DateTime FirstCouponDate
         {	
@@ -137,21 +161,50 @@ namespace Odey.Framework.Keeley.Entities
         }
         private byte[] _dataVersion;
         [DataMember]
-        public int DayCountConventionID
+        public bool InDefault
         {	
     		
-            get { return _dayCountConventionID; }
+            get { return _inDefault; }
             set
             {
-                if (_dayCountConventionID != value)
+                if (_inDefault != value)
                 {
-                    ChangeTracker.RecordOriginalValue("DayCountConventionID", _dayCountConventionID);
-                    _dayCountConventionID = value;
-                    OnPropertyChanged("DayCountConventionID");
+                    ChangeTracker.RecordOriginalValue("InDefault", _inDefault);
+                    _inDefault = value;
+                    OnPropertyChanged("InDefault");
                 }
             }
         }
-        private int _dayCountConventionID;
+        private bool _inDefault;
+
+        #endregion
+        #region Navigation Properties
+    
+        [DataMember]
+        public Instrument Instrument
+        {
+            get { return _instrument; }
+            set
+            {
+                if (!ReferenceEquals(_instrument, value))
+                {
+                    if (ChangeTracker.ChangeTrackingEnabled && ChangeTracker.State != ObjectState.Added && value != null)
+                    {
+                        // This the dependent end of an identifying relationship, so the principal end cannot be changed if it is already set,
+                        // otherwise it can only be set to an entity with a primary key that is the same value as the dependent's foreign key.
+                        if (InstrumentId != value.InstrumentID)
+                        {
+                            throw new InvalidOperationException("The principal end of an identifying relationship can only be changed when the dependent end is in the Added state.");
+                        }
+                    }
+                    var previousValue = _instrument;
+                    _instrument = value;
+                    FixupInstrument(previousValue);
+                    OnNavigationPropertyChanged("Instrument");
+                }
+            }
+        }
+        private Instrument _instrument;
 
         #endregion
         #region ChangeTracking
@@ -241,6 +294,46 @@ namespace Odey.Framework.Keeley.Entities
     
         protected virtual void ClearNavigationProperties()
         {
+            Instrument = null;
+        }
+
+        #endregion
+        #region Association Fixup
+    
+        private void FixupInstrument(Instrument previousValue)
+        {
+            if (IsDeserializing)
+            {
+                return;
+            }
+    
+            if (previousValue != null && ReferenceEquals(previousValue.Bond, this))
+            {
+                previousValue.Bond = null;
+            }
+    
+            if (Instrument != null)
+            {
+                Instrument.Bond = this;
+                InstrumentId = Instrument.InstrumentID;
+            }
+    
+            if (ChangeTracker.ChangeTrackingEnabled)
+            {
+                if (ChangeTracker.OriginalValues.ContainsKey("Instrument")
+                    && (ChangeTracker.OriginalValues["Instrument"] == Instrument))
+                {
+                    ChangeTracker.OriginalValues.Remove("Instrument");
+                }
+                else
+                {
+                    ChangeTracker.RecordOriginalValue("Instrument", previousValue);
+                }
+                if (Instrument != null && !Instrument.ChangeTracker.ChangeTrackingEnabled)
+                {
+                    Instrument.StartTracking();
+                }
+            }
         }
 
         #endregion

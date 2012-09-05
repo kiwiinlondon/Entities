@@ -311,7 +311,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach (PortfolioRollDate item in e.NewItems)
                 {
-                    item.PortfolioAggregationLevel = this;
+                    item.PortfolioAggregationLevelId = PortfolioAggregationLevelId;
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         if (!item.ChangeTracker.ChangeTrackingEnabled)
@@ -327,10 +327,6 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach (PortfolioRollDate item in e.OldItems)
                 {
-                    if (ReferenceEquals(item.PortfolioAggregationLevel, this))
-                    {
-                        item.PortfolioAggregationLevel = null;
-                    }
                     if (ChangeTracker.ChangeTrackingEnabled)
                     {
                         ChangeTracker.RecordRemovalFromCollectionProperties("PortfolioRollDates", item);
