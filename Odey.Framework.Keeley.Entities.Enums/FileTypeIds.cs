@@ -17,5 +17,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DaiwaPositionFile = 3,
         [EnumMember]
         EFAPositionFile = 4,
+        [EnumMember]
+        NorthernTrustFile = 5
     }
 }

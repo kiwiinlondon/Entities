@@ -568,6 +568,12 @@ namespace Odey.Framework.Keeley.Entities
             get { return _bonds  ?? (_bonds = CreateObjectSet<Bond>("Bonds")); }
         }
         private ObjectSet<Bond> _bonds;
+    
+        public ObjectSet<RestrictedList> RestrictedLists
+        {
+            get { return _restrictedLists  ?? (_restrictedLists = CreateObjectSet<RestrictedList>("RestrictedLists")); }
+        }
+        private ObjectSet<RestrictedList> _restrictedLists;
 
         #endregion
         #region Function Imports

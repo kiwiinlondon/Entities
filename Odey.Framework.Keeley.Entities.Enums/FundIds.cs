@@ -28,6 +28,24 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PORT = 5330,
         [EnumMember]
-        VITR = 5333
+        VITR = 5333,
+        [EnumMember]
+        FEBT = 5084,
+        [EnumMember]
+        FEBX = 5313,
+        [EnumMember]
+        FGT = 5314,
+        [EnumMember]
+        GARD = 5315,
+        [EnumMember]
+        BARC=4963,
+        [EnumMember]
+        BARF=4964,
+        [EnumMember]
+        TPTL=5332,
+        [EnumMember]
+        BEST=4965,
+        [EnumMember]
+        OBID=5325
     }
 }
