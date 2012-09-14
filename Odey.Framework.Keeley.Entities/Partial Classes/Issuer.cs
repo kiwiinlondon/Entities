@@ -4,19 +4,18 @@ using Odey.Framework.Keeley.Entities.Enums;
 
 namespace Odey.Framework.Keeley.Entities
 {
-    partial class Issuer
+    public partial class Issuer
     {
 
-        public Issuer()
-        {
-        }
 
         public Issuer(int legalEntityId)
+            : this()
         {
             LegalEntityID = legalEntityId;
-        }   
+        }
 
         public Issuer(LegalEntity legalEntity)
+            : this()
         {
             LegalEntity = legalEntity;
         }        

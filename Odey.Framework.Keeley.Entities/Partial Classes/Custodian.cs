@@ -10,6 +10,7 @@ namespace Odey.Framework.Keeley.Entities
         }
 
         public Custodian(LegalEntity legalEntity)
+            : this()
         {
             LegalEntity = legalEntity;
         }

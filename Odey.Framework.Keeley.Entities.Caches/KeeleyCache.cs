@@ -4,7 +4,7 @@ using Odey.Framework.Infrastructure.Caches;
 
 namespace Odey.Framework.Keeley.Entities.Caches
 {
-    public abstract class KeeleyCache<K, T> : OdeyCache<K, T> where T : IObjectWithChangeTracker
+    public abstract class KeeleyCache<K, T> : OdeyCache<K, T>
     {        
         protected abstract Dictionary<K, T> CreateCache(KeeleyModel context);
 

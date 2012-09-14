@@ -12,6 +12,7 @@ namespace Odey.Framework.Keeley.Entities
         }
 
         public Currency(Instrument instrument)
+            : this()
         {
             Instrument = instrument;
         }

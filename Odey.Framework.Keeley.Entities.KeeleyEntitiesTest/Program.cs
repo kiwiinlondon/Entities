@@ -9,6 +9,7 @@ using Odey.Framework.Keeley.Entities.Caches;
 using Odey.Framework.Keeley.Entities.Enums;
 using Odey.Framework.Keeley.Entities.Interfaces;
 using Odey.StaticServices.Clients;
+using ServiceModelEx;
 
 namespace Odey.Framework.KeeleyEntitiesTest
 {
@@ -16,19 +17,19 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
+            CreateIssuer();
+            //using (var context = new KeeleyModel())
+            //{
+            //    LegalEntity l = context.LegalEntities.Where(a => a.LegalEntityID == 741).FirstOrDefault();
 
-            using (var context = new KeeleyModel())
-            {
-                LegalEntity l = context.LegalEntities.Where(a => a.LegalEntityID == 741).FirstOrDefault();
+            //    string name = l.LongName;
 
-                string name = l.LongName;
+            //    l.LongName = "Geoff";
 
-                l.LongName = "Geoff";
+            //    l.LongName = name;
 
-                l.LongName = name;
-
-                context.SaveChanges();
-            }
+            //    context.SaveChanges();
+            //}
             //    List<InternalAllocation> ias = context.InternalAllocations.Where(a => a.ParentEventId == 434).ToList();
             //    foreach (InternalAllocation i in ias)
             //    {
@@ -77,7 +78,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
                 user.Name = "John Doe";
                 user.WindowsLogin = @"OAM\DoeJ";
                 //user.UpdateUserID = 1;
-                context.ApplicationUsers.AddObject(user);
+                context.ApplicationUsers.Add(user);
                 context.SaveChanges();
             }
 
@@ -91,7 +92,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
                 region.IsoCode = "AX";
                 region.Name = "Asia Excl Japan";
                 //region.UpdateUserID = 1;
-                context.Regions.AddObject(region);
+                context.Regions.Add(region);
                 context.SaveChanges();
             }
 
@@ -105,7 +106,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
                 country.IsoCode = "BD";
                 country.Name = "Bangladesh";
                 //country.UpdateUserID = 1;
-                context.Countries.AddObject(country);
+                context.Countries.Add(country);
                 context.SaveChanges();
             }
 
@@ -113,16 +114,24 @@ namespace Odey.Framework.KeeleyEntitiesTest
 
         static void CreateIssuer()
         {
-            using (var context = new KeeleyModel())
+            Instrument i = null;
+            using (var context = new KeeleyModel(null))
             {
-                LegalEntity legalEntity = new LegalEntity();
-                legalEntity.Name = "NISHAT MILLS LIMITED";
-                legalEntity.LongName = "NISHAT MILLS LIMITED";
-                legalEntity.FMOrgId = 46096;
-                //legalEntity.UpdateUserID = 1;
-                legalEntity.CountryID = 5;
-                Issuer issuer = new Issuer(legalEntity);
-                context.Issuers.AddObject(issuer);
+                i = context.Instruments.Include("UnderlyingRelationship.Underlyer.InstrumentMarkets").Include("InstrumentMarkets").Include("Bond").Include("InstrumentClass.ParentInstrumentClassRelationships")
+                    .Where(a => a.InstrumentID == 29351).FirstOrDefault();
+                
+            }
+
+            InstrumentClient instrumentClient = new InstrumentClient();
+
+            Instrument instrument = instrumentClient.GetForIdentifierSettingUpIfNotPresent(IdentifierTypeIds.BBGlobalId, "BBG000BD84L8", false, 4);
+
+            using (var context = new KeeleyModel(null))
+            {
+                InstrumentMarket im = new InstrumentMarket();
+              
+                context.InstrumentMarkets.Add(im);
+                im.Instrument = instrument;
                 context.SaveChanges();
             }
 
@@ -135,7 +144,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
 
                 InstrumentClass c = context.InstrumentClasses.Where(a => a.InstrumentClassID == 1).FirstOrDefault();
                 c.Name = "All";
-                context.InstrumentClasses.ApplyChanges(c);
+                
                 //context.ApplicationUsers.AddObject(user);
                 context.SaveChanges();
 
@@ -149,8 +158,8 @@ namespace Odey.Framework.KeeleyEntitiesTest
 
                 ApplicationUser user = context.ApplicationUsers.Where(a => a.UserID == 20).FirstOrDefault();
                 //user.UpdateUserID = 20;
-                context.AcceptAllChanges();
-                context.DeleteObject(user);
+              //  context.AcceptAllChanges();
+             //   context.DeleteObject(user);
                 //context.ApplicationUsers.DeleteObject(user);
                 //context.ApplicationUsers.AddObject(user);
                 context.SaveChanges();

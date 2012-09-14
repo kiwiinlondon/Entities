@@ -38,14 +38,32 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GARD = 5315,
         [EnumMember]
-        BARC=4963,
+        BARC = 4963,
         [EnumMember]
-        BARF=4964,
+        BARF = 4964,
         [EnumMember]
-        TPTL=5332,
+        TPTL = 5332,
         [EnumMember]
-        BEST=4965,
+        BEST = 4965,
         [EnumMember]
-        OBID=5325
+        OBID = 5325,
+        [EnumMember]
+        CFNO = 4966,
+        [EnumMember]
+        MMAG = 5987,
+        [EnumMember]
+        OSYN = 5329,
+        [EnumMember]
+        CAC = 2485,
+        [EnumMember]
+        JLEG = 5732,
+        [EnumMember]
+        ALEG = 4930,
+        [EnumMember]
+        OEAF = 5326,
+        [EnumMember]
+        OF = 5592,
+        [EnumMember]
+        OPE = 5327,
     }
 }

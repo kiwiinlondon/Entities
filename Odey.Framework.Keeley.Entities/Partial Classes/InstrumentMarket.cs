@@ -13,6 +13,7 @@ namespace Odey.Framework.Keeley.Entities
         }
 
         public InstrumentMarket(Instrument instrument)
+            : this()
         {
             Instrument = instrument;
         }
@@ -174,7 +175,7 @@ namespace Odey.Framework.Keeley.Entities
                     }
                     else if (Instrument.Underlyer.InstrumentMarkets.Count == 1)
                     {
-                        return Instrument.Underlyer.InstrumentMarkets[0];
+                        return Instrument.Underlyer.InstrumentMarkets.First();
                     }
                     else
                     {

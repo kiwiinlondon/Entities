@@ -10,6 +10,7 @@ namespace Odey.Framework.Keeley.Entities
         }
 
         public Counterparty(LegalEntity legalEntity)
+            : this()
         {
             LegalEntity = legalEntity;
         }
