@@ -12,7 +12,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Euro = 2536,
         [EnumMember]
-        USD = 2548
+        USD = 2548,
+        [EnumMember]
+        GBP=2541,
+        [EnumMember]
+        NOK = 2544,
+        [EnumMember]
+        CHF = 2539
     }
 }
 

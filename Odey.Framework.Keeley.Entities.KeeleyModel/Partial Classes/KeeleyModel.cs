@@ -176,19 +176,30 @@ namespace Odey.Framework.Keeley.Entities
         private void AddUsefulFields(DbEntityEntry entry, ChangedEntity changedEntity)
         {
             Type entityType = entry.Entity.GetType();
+
+            DbPropertyValues values; 
+            if (entry.State == EntityState.Deleted)
+            {
+                values = entry.OriginalValues;
+            }
+            else
+            {
+                values = entry.CurrentValues;
+            } 
+
             if (entityType == typeof(Portfolio))
             {
-                AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "PositionId");
-                AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "ReferenceDate");
+                AddValueToUsefulProperties(changedEntity, values, "PositionId");
+                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
             }
             else if (entityType == typeof(PortfolioEvent))
             {
-                AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "PositionId");
-                AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "ReferenceDate");
+                AddValueToUsefulProperties(changedEntity, values, "PositionId");
+                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
             }
             else if (entityType == typeof(Instrument))
             {
-                AddValueToUsefulProperties(changedEntity, entry.CurrentValues, "InstrumentClassID");
+                AddValueToUsefulProperties(changedEntity, values, "InstrumentClassID");
             }
             else if (entityType == typeof(InstrumentMarket))
             {

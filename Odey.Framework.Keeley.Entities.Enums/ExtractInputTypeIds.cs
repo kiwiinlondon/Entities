@@ -16,6 +16,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Portfolio = 5 ,
         [EnumMember]
-        FXPositions = 6
+        FXPositions = 6,
+        [EnumMember]
+        ThreeWayNavOutput=7
     }
 }

@@ -55,5 +55,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<PortfolioEvent> PortfolioEvents { get; set; }
         [DataMember]
         public virtual Event Event { get; set; }
+        [DataMember]
+        public virtual Book Book { get; set; }
     }
 }

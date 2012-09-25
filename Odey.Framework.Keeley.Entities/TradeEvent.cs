@@ -81,5 +81,9 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual Event Event { get; set; }
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
+        [DataMember]
+        public virtual Counterparty Counterparty { get; set; }
     }
 }
