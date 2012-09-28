@@ -70,6 +70,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> LossWarning { get; set; }
     	[DataMember]
         public Nullable<decimal> LossTrigger { get; set; }
+    	[DataMember]
+        public string ShareClassDescriptor { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }

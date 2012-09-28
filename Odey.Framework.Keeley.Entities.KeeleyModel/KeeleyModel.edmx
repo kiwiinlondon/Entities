@@ -1222,6 +1222,7 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="IsElectronic" Type="bit" />
+          <Property Name="UbsCsaName" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -1614,6 +1615,7 @@
           <Property Name="PerformanceFeeTypeId" Type="int" Nullable="false" />
           <Property Name="LossWarning" Type="numeric" Precision="27" Scale="8" />
           <Property Name="LossTrigger" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ShareClassDescriptor" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="FundCountryHoliday">
           <Key>
@@ -5330,11 +5332,15 @@
         <Function Name="Counterparty_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsElectronic" Type="bit" Mode="In" />
+          <Parameter Name="UbsCsaName" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Counterparty_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsElectronic" Type="bit" Mode="In" />
+          <Parameter Name="UbsCsaName" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Country_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CountryID" Type="int" Mode="In" />
@@ -8560,6 +8566,7 @@
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.CounterpartyLegalEntiyFK" FromRole="Counterparty" ToRole="LegalEntity" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <Property Type="Boolean" Name="IsElectronic" />
+          <Property Type="String" Name="UbsCsaName" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="CounterpartyUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -11939,6 +11946,7 @@
           <NavigationProperty Name="FundCountryHolidays" Relationship="Odey.Framework.Keeley.Entities.FundCountryHoldayFundIdFK" FromRole="Fund" ToRole="FundCountryHoliday" />
           <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.FundLegalEntiyFK" FromRole="Fund" ToRole="LegalEntity" />
           <NavigationProperty Name="RiskFreeInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FundRiskFreeInstrumentMarketIdFK" FromRole="Fund" ToRole="InstrumentMarket" />
+          <Property Type="String" Name="ShareClassDescriptor" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -12834,6 +12842,7 @@
           <EntitySetMapping Name="Counterparties">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Counterparty">
               <MappingFragment StoreEntitySet="Counterparty">
+                <ScalarProperty Name="UbsCsaName" ColumnName="UbsCsaName" />
                 <ScalarProperty Name="IsElectronic" ColumnName="IsElectronic" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -12844,12 +12853,16 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Counterparty">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Counterparty_Insert">
+                  <ScalarProperty Name="UbsCsaName" ParameterName="UbsCsaName" />
+                  <ScalarProperty Name="IsElectronic" ParameterName="IsElectronic" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="LegalEntityID" ParameterName="LegalEntityID" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Counterparty_Update">
+                  <ScalarProperty Name="UbsCsaName" ParameterName="UbsCsaName" Version="Current" />
+                  <ScalarProperty Name="IsElectronic" ParameterName="IsElectronic" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="LegalEntityID" ParameterName="LegalEntityID" Version="Current" />
@@ -15379,6 +15392,7 @@
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="ShareClassDescriptor" ColumnName="ShareClassDescriptor" />
                 <ScalarProperty Name="LossTrigger" ColumnName="LossTrigger" />
                 <ScalarProperty Name="LossWarning" ColumnName="LossWarning" />
                 <ScalarProperty Name="PerformanceFeeTypeId" ColumnName="PerformanceFeeTypeId" />
