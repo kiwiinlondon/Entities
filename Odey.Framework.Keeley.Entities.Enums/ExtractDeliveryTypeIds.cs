@@ -16,6 +16,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FTP = 5,
         [EnumMember]
-        FTPWithResponse = 6
+        FTPWithResponse = 6,
+        [EnumMember]
+        SaveToDirectory = 7
     }
 }

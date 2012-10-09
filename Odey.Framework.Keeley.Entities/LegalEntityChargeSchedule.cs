@@ -37,5 +37,7 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual ChargeSchedule ChargeSchedule { get; set; }
+        [DataMember]
+        public virtual Country Country { get; set; }
     }
 }

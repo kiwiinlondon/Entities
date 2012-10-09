@@ -269,20 +269,23 @@ namespace Odey.Framework.Keeley.Entities
 
         #region Apply Changes
 
-        public void ApplyDetached<TEntity>(List<TEntity> roots) where TEntity : class, IObjectWithState
+
+
+        public void AddDetached<TEntity>(List<TEntity> roots) where TEntity : class, IObjectWithState
         {
             foreach (TEntity entity in roots)
             {
-                ApplyDetached<TEntity>(entity);
+                AddDetached<TEntity>(entity);
             }
         }
 
-
-        public void ApplyDetached<TEntity>(TEntity root) where TEntity : class, IObjectWithState
+        public void AddDetached<TEntity>(TEntity root) where TEntity : class, IObjectWithState
         {
-
             Set<TEntity>().Add(root);
-           // CheckForEntitiesWithoutStateInterface();
+        }
+
+        public void ApplyDetached()
+        {
             foreach (var entry in ChangeTracker.Entries())
             {
                 if (entry.Entity is IObjectWithState)

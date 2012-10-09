@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Position
     {
+    	
+        public Position()
+        {
+            this.Exposures = new List<Exposure>();
+        }
+    
     	[DataMember]
         public int PositionId { get; set; }
     	[DataMember]
@@ -41,5 +47,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual Book Book { get; set; }
+        [DataMember]
+        public virtual List<Exposure> Exposures { get; set; }
     }
 }

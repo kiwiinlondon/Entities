@@ -14,30 +14,23 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class Country
+    public partial class IndexConstituent
     {
-    	
-        public Country()
-        {
-            this.LegalEntityChargeSchedules = new List<LegalEntityChargeSchedule>();
-        }
-    
     	[DataMember]
-        public int CountryID { get; set; }
+        public int IndexConstituentId { get; set; }
     	[DataMember]
-        public string Name { get; set; }
+        public int InstrumentId { get; set; }
     	[DataMember]
-        public string IsoCode { get; set; }
+        public int ConstituentInstrumentId { get; set; }
     	[DataMember]
-        public int RegionID { get; set; }
+        public System.DateTime ReferenceDate { get; set; }
+    	[DataMember]
+        public decimal Weighting { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    
-        [DataMember]
-        public virtual List<LegalEntityChargeSchedule> LegalEntityChargeSchedules { get; set; }
     }
 }

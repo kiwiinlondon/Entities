@@ -113,6 +113,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<Bond> Bonds { get; set; }
         public DbSet<RestrictedList> RestrictedLists { get; set; }
         public DbSet<Fund> Funds { get; set; }
+        public DbSet<Exposure> Exposures { get; set; }
+        public DbSet<IndexConstituent> IndexConstituents { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

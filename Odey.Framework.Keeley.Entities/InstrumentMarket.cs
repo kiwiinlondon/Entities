@@ -56,6 +56,6 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual Instrument Instrument { get; set; }
         [DataMember]
-        private InstrumentMarket PrivateUnderlyingInstrumentMarket { get; set; }
+        public virtual InstrumentMarket UnderlyingInstrumentMarket { get; set; }
     }
 }

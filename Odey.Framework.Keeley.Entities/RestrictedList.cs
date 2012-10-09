@@ -30,6 +30,12 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public string OpeningComment { get; set; }
+    	[DataMember]
+        public string ClosingComment { get; set; }
+    	[DataMember]
+        public string RestrictedPerson { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

@@ -137,31 +137,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 return Instrument.BloombergTicker;
             }
-        }
-
-        public InstrumentMarket DerivedUnderlyingInstrumentMarket
-        {
-            get
-            {
-                if (UnderlyingInstrumentMarketId == InstrumentMarketID)
-                {
-                    return null;
-                }
-                else if (PrivateUnderlyingInstrumentMarket == null)
-                {
-                    throw new ApplicationException("Underlying InstrumentMarket was not included in Include");
-                }
-                else
-                {
-                    return PrivateUnderlyingInstrumentMarket;
-                }
-            }
-            set
-            {
-                PrivateUnderlyingInstrumentMarket = value;
-            }
-        }
-
+        }      
 
         public InstrumentMarket CalculatedUnderlyingInstrumentMarket
         {
