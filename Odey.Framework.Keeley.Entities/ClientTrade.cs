@@ -14,38 +14,39 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class Exposure
+    public partial class ClientTrade
     {
     	[DataMember]
-        public int ExposureId { get; set; }
+        public int ClientTradeId { get; set; }
     	[DataMember]
-        public int PositionId { get; set; }
+        public System.DateTime SettlementDate { get; set; }
     	[DataMember]
-        public int InstrumentId { get; set; }
+        public System.DateTime TradeDate { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
+        public int FundId { get; set; }
     	[DataMember]
-        public decimal NetPosition { get; set; }
+        public string TradeReference { get; set; }
     	[DataMember]
-        public decimal EquityExposure { get; set; }
+        public decimal Quantity { get; set; }
     	[DataMember]
-        public decimal FXExposure { get; set; }
+        public decimal Price { get; set; }
     	[DataMember]
-        public decimal CommodityExposure { get; set; }
+        public int CurrencyId { get; set; }
     	[DataMember]
-        public decimal FixedIncomeExposure { get; set; }
+        public decimal Discount { get; set; }
     	[DataMember]
-        public decimal OtherExposure { get; set; }
+        public decimal NetConsideration { get; set; }
+    	[DataMember]
+        public decimal Commission { get; set; }
+    	[DataMember]
+        public decimal DilutionLevy { get; set; }
+    	[DataMember]
+        public int ClientAccountId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public int PortfolioId { get; set; }
-    
-        [DataMember]
-        public virtual Portfolio Portfolio { get; set; }
     }
 }

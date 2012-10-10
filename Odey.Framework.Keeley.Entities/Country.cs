@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Country
     {
-    	
-        public Country()
-        {
-            this.LegalEntityChargeSchedules = new List<LegalEntityChargeSchedule>();
-        }
-    
     	[DataMember]
         public int CountryID { get; set; }
     	[DataMember]
@@ -36,8 +30,5 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    
-        [DataMember]
-        public virtual List<LegalEntityChargeSchedule> LegalEntityChargeSchedules { get; set; }
     }
 }

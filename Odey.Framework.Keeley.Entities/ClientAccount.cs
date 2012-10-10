@@ -14,17 +14,28 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class FundNetAssetValue
+    public partial class ClientAccount
     {
     	[DataMember]
-        public int FundId { get; set; }
+        public int ClientAccountId { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
+        public int ClientId { get; set; }
     	[DataMember]
-        public Nullable<decimal> MarketValue { get; set; }
+        public string AccountReference { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationMarketValue { get; set; }
+        public int AdministratorId { get; set; }
     	[DataMember]
-        public Nullable<long> PositionCount { get; set; }
+        public string Name { get; set; }
+    	[DataMember]
+        public Nullable<int> CountryId { get; set; }
+    	[DataMember]
+        public System.DateTime StartDt { get; set; }
+    	[DataMember]
+        public int UpdateUserID { get; set; }
+    	[DataMember]
+        public byte[] DataVersion { get; set; }
+    
+        [DataMember]
+        public virtual Client Client { get; set; }
     }
 }

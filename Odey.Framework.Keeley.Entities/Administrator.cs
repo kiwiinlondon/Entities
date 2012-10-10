@@ -14,17 +14,18 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class FundNetAssetValue
+    public partial class Administrator
     {
     	[DataMember]
-        public int FundId { get; set; }
+        public int LegalEntityID { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
+        public System.DateTime StartDt { get; set; }
     	[DataMember]
-        public Nullable<decimal> MarketValue { get; set; }
+        public int UpdateUserID { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationMarketValue { get; set; }
-    	[DataMember]
-        public Nullable<long> PositionCount { get; set; }
+        public byte[] DataVersion { get; set; }
+    
+        [DataMember]
+        public virtual LegalEntity LegalEntity { get; set; }
     }
 }

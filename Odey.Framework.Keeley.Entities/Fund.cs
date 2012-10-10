@@ -20,6 +20,7 @@ namespace Odey.Framework.Keeley.Entities
         public Fund()
         {
             this.FundCountryHolidays = new List<FundCountryHoliday>();
+            this.ClientTrades = new List<ClientTrade>();
         }
     
     	[DataMember]
@@ -85,5 +86,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual LegalEntity LegalEntity { get; set; }
         [DataMember]
         public virtual InstrumentMarket RiskFreeInstrumentMarket { get; set; }
+        [DataMember]
+        public virtual List<ClientTrade> ClientTrades { get; set; }
     }
 }

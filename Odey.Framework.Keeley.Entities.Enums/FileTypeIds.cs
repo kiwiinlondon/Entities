@@ -18,6 +18,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         EFAPositionFile = 4,
         [EnumMember]
-        NorthernTrustFile = 5
+        NorthernTrustFile = 5,
+        [EnumMember]
+        DexiaAccountRegistry = 6,
+        [EnumMember]
+        DexiaAccountTrades = 7
     }
 }

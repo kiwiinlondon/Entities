@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Portfolio
     {
+    	
+        public Portfolio()
+        {
+            this.Exposures = new List<Exposure>();
+        }
+    
     	[DataMember]
         public int PortfolioId { get; set; }
     	[DataMember]
@@ -121,5 +127,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Portfolio PreviousPortfolio { get; set; }
         [DataMember]
         public virtual FXRate FXRate3 { get; set; }
+        [DataMember]
+        public virtual List<Exposure> Exposures { get; set; }
     }
 }
