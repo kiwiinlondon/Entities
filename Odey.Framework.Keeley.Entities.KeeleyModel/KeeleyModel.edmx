@@ -21,6 +21,7 @@
           <EntitySet Name="ChargeType" EntityType="KeeleyModel.Store.ChargeType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Client" EntityType="KeeleyModel.Store.Client" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientAccount" EntityType="KeeleyModel.Store.ClientAccount" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ClientPortfolio" EntityType="KeeleyModel.Store.ClientPortfolio" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientTrade" EntityType="KeeleyModel.Store.ClientTrade" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CollectiveInvestmentScheme" EntityType="KeeleyModel.Store.CollectiveInvestmentScheme" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Counterparty" EntityType="KeeleyModel.Store.Counterparty" store:Type="Tables" Schema="dbo" />
@@ -262,6 +263,14 @@
           <AssociationSet Name="ClientAccountUserIDFK" Association="KeeleyModel.Store.ClientAccountUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientAccount" EntitySet="ClientAccount" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioPriceIDFK" Association="KeeleyModel.Store.ClientPortfolioPriceIDFK">
+            <End Role="Price" EntitySet="Price" />
+            <End Role="ClientPortfolio" EntitySet="ClientPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioUserIDFK" Association="KeeleyModel.Store.ClientPortfolioUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ClientPortfolio" EntitySet="ClientPortfolio" />
           </AssociationSet>
           <AssociationSet Name="ClientTradeCurrencyIDFK" Association="KeeleyModel.Store.ClientTradeCurrencyIDFK">
             <End Role="Currency" EntitySet="Currency" />
@@ -1321,6 +1330,22 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="ClientPortfolio">
+          <Key>
+            <PropertyRef Name="ClientPortfolioId" />
+          </Key>
+          <Property Name="ClientPortfolioId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ChangeInQuantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="MarketValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="PriceId" Type="int" Nullable="false" />
+          <Property Name="Price" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="Cost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
             <PropertyRef Name="ClientTradeId" />
@@ -1328,7 +1353,7 @@
           <Property Name="ClientTradeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SettlementDate" Type="datetime" Nullable="false" />
           <Property Name="TradeDate" Type="datetime" Nullable="false" />
-          <Property Name="TradeType" Type="int" Nullable="false" />
+          <Property Name="ClientTradeTypeId" Type="int" Nullable="false" />
           <Property Name="FundId" Type="int" Nullable="false" />
           <Property Name="TradeReference" Type="varchar" Nullable="false" MaxLength="20" />
           <Property Name="Quantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
@@ -2947,6 +2972,30 @@
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="ClientAccount">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioPriceIDFK">
+          <End Role="Price" Type="KeeleyModel.Store.Price" Multiplicity="1" />
+          <End Role="ClientPortfolio" Type="KeeleyModel.Store.ClientPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="PriceId" />
+            </Principal>
+            <Dependent Role="ClientPortfolio">
+              <PropertyRef Name="PriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="ClientPortfolio" Type="KeeleyModel.Store.ClientPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPortfolio">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -5791,6 +5840,33 @@
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="ClientPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolio_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeInQuantity" Type="numeric" Mode="In" />
+          <Parameter Name="MarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="PriceId" Type="int" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="Cost" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeInQuantity" Type="numeric" Mode="In" />
+          <Parameter Name="MarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="PriceId" Type="int" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="Cost" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="ClientSubType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientSubTypeId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -5816,6 +5892,7 @@
         <Function Name="ClientTrade_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SettlementDate" Type="datetime" Mode="In" />
           <Parameter Name="TradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="ClientTradeTypeId" Type="int" Mode="In" />
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="TradeReference" Type="varchar" Mode="In" />
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
@@ -5832,6 +5909,7 @@
           <Parameter Name="ClientTradeId" Type="int" Mode="In" />
           <Parameter Name="SettlementDate" Type="datetime" Mode="In" />
           <Parameter Name="TradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="ClientTradeTypeId" Type="int" Mode="In" />
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="TradeReference" Type="varchar" Mode="In" />
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
@@ -8728,6 +8806,7 @@
           <FunctionImport Name="ClientTrade_Insert">
             <Parameter Name="SettlementDate" Mode="In" Type="DateTime" />
             <Parameter Name="TradeDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ClientTradeTypeId" Mode="In" Type="Int32" />
             <Parameter Name="FundId" Mode="In" Type="Int32" />
             <Parameter Name="TradeReference" Mode="In" Type="String" />
             <Parameter Name="Quantity" Mode="In" Type="Decimal" />
@@ -8744,6 +8823,7 @@
             <Parameter Name="ClientTradeId" Mode="In" Type="Int32" />
             <Parameter Name="SettlementDate" Mode="In" Type="DateTime" />
             <Parameter Name="TradeDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ClientTradeTypeId" Mode="In" Type="Int32" />
             <Parameter Name="FundId" Mode="In" Type="Int32" />
             <Parameter Name="TradeReference" Mode="In" Type="String" />
             <Parameter Name="Quantity" Mode="In" Type="Decimal" />
@@ -8772,6 +8852,15 @@
             <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
             <Parameter Name="DataVersion" Mode="In" Type="Binary" />
           </FunctionImport>
+          <EntitySet Name="ClientPortfolios" EntityType="Odey.Framework.Keeley.Entities.ClientPortfolio" />
+          <AssociationSet Name="ClientPortfolioUserIDFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ClientPortfolio" EntitySet="ClientPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioPriceIDFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioPriceIDFK">
+            <End Role="Price" EntitySet="Prices" />
+            <End Role="ClientPortfolio" EntitySet="ClientPortfolios" />
+          </AssociationSet>                    
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -8784,7 +8873,7 @@
           <Property Name="WindowsLogin" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
-          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />          
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -13094,7 +13183,6 @@
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="Client" Relationship="Odey.Framework.Keeley.Entities.ClientAccountClientIDFK" FromRole="ClientAccount" ToRole="Client" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -13116,7 +13204,7 @@
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="Int32" Name="TradeType" Nullable="false" />
+          <Property Type="Int32" Name="ClientTradeTypeId" Nullable="false" />
           </EntityType>
         <Association Name="AdministratorUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -13274,6 +13362,46 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ClientPortfolio">
+          <Key>
+            <PropertyRef Name="ClientPortfolioId" />
+          </Key>
+          <Property Type="Int32" Name="ClientPortfolioId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="Quantity" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ChangeInQuantity" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="MarketValue" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="PriceId" Nullable="false" />
+          <Property Type="Decimal" Name="Price" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="Cost" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
+        <Association Name="ClientPortfolioUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolio" Role="ClientPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPortfolio">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioPriceIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.Price" Role="Price" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolio" Role="ClientPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="PriceId" />
+            </Principal>
+            <Dependent Role="ClientPortfolio">
+              <PropertyRef Name="PriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>                
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -16820,7 +16948,7 @@
           <EntitySetMapping Name="ClientTrades">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <MappingFragment StoreEntitySet="ClientTrade">
-                <ScalarProperty Name="TradeType" ColumnName="TradeType" />
+                <ScalarProperty Name="ClientTradeTypeId" ColumnName="ClientTradeTypeId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -16842,6 +16970,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientTrade_Insert">
+                  <ScalarProperty Name="ClientTradeTypeId" ParameterName="ClientTradeTypeId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" />
                   <ScalarProperty Name="DilutionLevy" ParameterName="DilutionLevy" />
@@ -16860,6 +16989,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientTrade_Update">
+                  <ScalarProperty Name="ClientTradeTypeId" ParameterName="ClientTradeTypeId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" Version="Current" />
@@ -16904,6 +17034,59 @@
           <FunctionImportMapping FunctionImportName="ClientType_Delete" FunctionName="KeeleyModel.Store.ClientType_Delete" />
           <FunctionImportMapping FunctionImportName="ClientType_Insert" FunctionName="KeeleyModel.Store.ClientType_Insert" />
           <FunctionImportMapping FunctionImportName="ClientType_Update" FunctionName="KeeleyModel.Store.ClientType_Update" />
+          <EntitySetMapping Name="ClientPortfolios">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
+              <MappingFragment StoreEntitySet="ClientPortfolio">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="PriceId" ColumnName="PriceId" />
+                <ScalarProperty Name="MarketValue" ColumnName="MarketValue" />
+                <ScalarProperty Name="ChangeInQuantity" ColumnName="ChangeInQuantity" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="ClientPortfolioId" ColumnName="ClientPortfolioId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Cost" ParameterName="Cost" />
+                  <ScalarProperty Name="Price" ParameterName="Price" />
+                  <ScalarProperty Name="PriceId" ParameterName="PriceId" />
+                  <ScalarProperty Name="MarketValue" ParameterName="MarketValue" />
+                  <ScalarProperty Name="ChangeInQuantity" ParameterName="ChangeInQuantity" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ResultBinding Name="ClientPortfolioId" ColumnName="ClientPortfolioId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Cost" ParameterName="Cost" Version="Current" />
+                  <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
+                  <ScalarProperty Name="PriceId" ParameterName="PriceId" Version="Current" />
+                  <ScalarProperty Name="MarketValue" ParameterName="MarketValue" Version="Current" />
+                  <ScalarProperty Name="ChangeInQuantity" ParameterName="ChangeInQuantity" Version="Current" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="ClientPortfolioId" ParameterName="ClientPortfolioId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ClientPortfolioId" ParameterName="ClientPortfolioId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>          
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -16925,7 +17108,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="56">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.875" PointY="15.875" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -22629,6 +22812,9 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientTradeCurrencyIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientTradeFundIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposurePortfolioIDFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolio" Width="1.5" PointX="10.802877053060977" PointY="13.354400998612121" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPriceIDFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

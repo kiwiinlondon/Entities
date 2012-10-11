@@ -14,41 +14,29 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class ClientTrade
+    public partial class ClientPortfolio
     {
     	[DataMember]
-        public int ClientTradeId { get; set; }
+        public int ClientPortfolioId { get; set; }
     	[DataMember]
-        public System.DateTime SettlementDate { get; set; }
-    	[DataMember]
-        public System.DateTime TradeDate { get; set; }
-    	[DataMember]
-        public int FundId { get; set; }
-    	[DataMember]
-        public string TradeReference { get; set; }
+        public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
         public decimal Quantity { get; set; }
     	[DataMember]
+        public decimal ChangeInQuantity { get; set; }
+    	[DataMember]
+        public decimal MarketValue { get; set; }
+    	[DataMember]
+        public int PriceId { get; set; }
+    	[DataMember]
         public decimal Price { get; set; }
     	[DataMember]
-        public int CurrencyId { get; set; }
-    	[DataMember]
-        public decimal Discount { get; set; }
-    	[DataMember]
-        public decimal NetConsideration { get; set; }
-    	[DataMember]
-        public decimal Commission { get; set; }
-    	[DataMember]
-        public decimal DilutionLevy { get; set; }
-    	[DataMember]
-        public int ClientAccountId { get; set; }
+        public decimal Cost { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public int ClientTradeTypeId { get; set; }
     }
 }

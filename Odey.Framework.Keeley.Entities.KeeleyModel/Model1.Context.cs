@@ -119,6 +119,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<Client> Clients { get; set; }
         public DbSet<ClientAccount> ClientAccounts { get; set; }
         public DbSet<ClientTrade> ClientTrades { get; set; }
+        public DbSet<ClientPortfolio> ClientPortfolios { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -711,7 +712,7 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrade_Delete", clientTradeIdParameter, dataVersionParameter, updateUserIDParameter);
         }
     
-        public virtual int ClientTrade_Insert(Nullable<System.DateTime> settlementDate, Nullable<System.DateTime> tradeDate, Nullable<int> fundId, string tradeReference, Nullable<decimal> quantity, Nullable<decimal> price, Nullable<int> currencyId, Nullable<decimal> discount, Nullable<decimal> netConsideration, Nullable<decimal> commission, Nullable<decimal> dilutionLevy, Nullable<int> clientAccountId, Nullable<int> updateUserID)
+        public virtual int ClientTrade_Insert(Nullable<System.DateTime> settlementDate, Nullable<System.DateTime> tradeDate, Nullable<int> clientTradeTypeId, Nullable<int> fundId, string tradeReference, Nullable<decimal> quantity, Nullable<decimal> price, Nullable<int> currencyId, Nullable<decimal> discount, Nullable<decimal> netConsideration, Nullable<decimal> commission, Nullable<decimal> dilutionLevy, Nullable<int> clientAccountId, Nullable<int> updateUserID)
         {
             var settlementDateParameter = settlementDate.HasValue ?
                 new ObjectParameter("SettlementDate", settlementDate) :
@@ -720,6 +721,10 @@ namespace Odey.Framework.Keeley.Entities
             var tradeDateParameter = tradeDate.HasValue ?
                 new ObjectParameter("TradeDate", tradeDate) :
                 new ObjectParameter("TradeDate", typeof(System.DateTime));
+    
+            var clientTradeTypeIdParameter = clientTradeTypeId.HasValue ?
+                new ObjectParameter("ClientTradeTypeId", clientTradeTypeId) :
+                new ObjectParameter("ClientTradeTypeId", typeof(int));
     
             var fundIdParameter = fundId.HasValue ?
                 new ObjectParameter("FundId", fundId) :
@@ -765,10 +770,10 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("UpdateUserID", updateUserID) :
                 new ObjectParameter("UpdateUserID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrade_Insert", settlementDateParameter, tradeDateParameter, fundIdParameter, tradeReferenceParameter, quantityParameter, priceParameter, currencyIdParameter, discountParameter, netConsiderationParameter, commissionParameter, dilutionLevyParameter, clientAccountIdParameter, updateUserIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrade_Insert", settlementDateParameter, tradeDateParameter, clientTradeTypeIdParameter, fundIdParameter, tradeReferenceParameter, quantityParameter, priceParameter, currencyIdParameter, discountParameter, netConsiderationParameter, commissionParameter, dilutionLevyParameter, clientAccountIdParameter, updateUserIDParameter);
         }
     
-        public virtual int ClientTrade_Update(Nullable<int> clientTradeId, Nullable<System.DateTime> settlementDate, Nullable<System.DateTime> tradeDate, Nullable<int> fundId, string tradeReference, Nullable<decimal> quantity, Nullable<decimal> price, Nullable<int> currencyId, Nullable<decimal> discount, Nullable<decimal> netConsideration, Nullable<decimal> commission, Nullable<decimal> dilutionLevy, Nullable<int> clientAccountId, Nullable<int> updateUserID, byte[] dataVersion)
+        public virtual int ClientTrade_Update(Nullable<int> clientTradeId, Nullable<System.DateTime> settlementDate, Nullable<System.DateTime> tradeDate, Nullable<int> clientTradeTypeId, Nullable<int> fundId, string tradeReference, Nullable<decimal> quantity, Nullable<decimal> price, Nullable<int> currencyId, Nullable<decimal> discount, Nullable<decimal> netConsideration, Nullable<decimal> commission, Nullable<decimal> dilutionLevy, Nullable<int> clientAccountId, Nullable<int> updateUserID, byte[] dataVersion)
         {
             var clientTradeIdParameter = clientTradeId.HasValue ?
                 new ObjectParameter("ClientTradeId", clientTradeId) :
@@ -781,6 +786,10 @@ namespace Odey.Framework.Keeley.Entities
             var tradeDateParameter = tradeDate.HasValue ?
                 new ObjectParameter("TradeDate", tradeDate) :
                 new ObjectParameter("TradeDate", typeof(System.DateTime));
+    
+            var clientTradeTypeIdParameter = clientTradeTypeId.HasValue ?
+                new ObjectParameter("ClientTradeTypeId", clientTradeTypeId) :
+                new ObjectParameter("ClientTradeTypeId", typeof(int));
     
             var fundIdParameter = fundId.HasValue ?
                 new ObjectParameter("FundId", fundId) :
@@ -830,7 +839,7 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("DataVersion", dataVersion) :
                 new ObjectParameter("DataVersion", typeof(byte[]));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrade_Update", clientTradeIdParameter, settlementDateParameter, tradeDateParameter, fundIdParameter, tradeReferenceParameter, quantityParameter, priceParameter, currencyIdParameter, discountParameter, netConsiderationParameter, commissionParameter, dilutionLevyParameter, clientAccountIdParameter, updateUserIDParameter, dataVersionParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrade_Update", clientTradeIdParameter, settlementDateParameter, tradeDateParameter, clientTradeTypeIdParameter, fundIdParameter, tradeReferenceParameter, quantityParameter, priceParameter, currencyIdParameter, discountParameter, netConsiderationParameter, commissionParameter, dilutionLevyParameter, clientAccountIdParameter, updateUserIDParameter, dataVersionParameter);
         }
     
         public virtual int ClientType_Delete(Nullable<int> clientTypeId, byte[] dataVersion, Nullable<int> updateUserID)
