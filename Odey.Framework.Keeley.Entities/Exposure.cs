@@ -25,11 +25,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public decimal NetPosition { get; set; }
-    	[DataMember]
         public Nullable<decimal> EquityExposure { get; set; }
-    	[DataMember]
-        public decimal FXExposure { get; set; }
     	[DataMember]
         public Nullable<decimal> CommodityExposure { get; set; }
     	[DataMember]
@@ -48,6 +44,18 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CurrencyExposure { get; set; }
     	[DataMember]
         public Nullable<decimal> GovernmentBondExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeEquityExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeCurrencyExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeCommodityExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeFixedIncomeExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeOtherExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeGovernmentBondExposure { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
