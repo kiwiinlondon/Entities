@@ -56,6 +56,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ChangeOtherExposure { get; set; }
     	[DataMember]
         public Nullable<decimal> ChangeGovernmentBondExposure { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> MaturityDate { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
