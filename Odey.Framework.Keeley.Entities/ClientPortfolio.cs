@@ -38,5 +38,12 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public int ClientAccountId { get; set; }
+    	[DataMember]
+        public decimal Price1 { get; set; }
+    
+        [DataMember]
+        public virtual ClientAccount ClientAccount { get; set; }
     }
 }

@@ -264,6 +264,10 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientAccount" EntitySet="ClientAccount" />
           </AssociationSet>
+          <AssociationSet Name="ClientPortfolioClientAccountIDFK" Association="KeeleyModel.Store.ClientPortfolioClientAccountIDFK">
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+            <End Role="ClientPortfolio" EntitySet="ClientPortfolio" />
+          </AssociationSet>
           <AssociationSet Name="ClientPortfolioPriceIDFK" Association="KeeleyModel.Store.ClientPortfolioPriceIDFK">
             <End Role="Price" EntitySet="Price" />
             <End Role="ClientPortfolio" EntitySet="ClientPortfolio" />
@@ -1335,6 +1339,7 @@
             <PropertyRef Name="ClientPortfolioId" />
           </Key>
           <Property Name="ClientPortfolioId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ClientAccountId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="Quantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="ChangeInQuantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
@@ -2974,6 +2979,18 @@
             </Principal>
             <Dependent Role="ClientAccount">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioClientAccountIDFK">
+          <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="1" />
+          <End Role="ClientPortfolio" Type="KeeleyModel.Store.ClientPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientPortfolio">
+              <PropertyRef Name="ClientAccountId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5848,6 +5865,7 @@
         </Function>
         <Function Name="ClientPortfolio_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="ClientAccountId" Type="int" Mode="In" />
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
           <Parameter Name="ChangeInQuantity" Type="numeric" Mode="In" />
           <Parameter Name="MarketValue" Type="numeric" Mode="In" />
@@ -5858,6 +5876,7 @@
         </Function>
         <Function Name="ClientPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
+          <Parameter Name="ClientAccountId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
           <Parameter Name="ChangeInQuantity" Type="numeric" Mode="In" />
@@ -8744,8 +8763,12 @@
             <End Role="ClientPortfolio" EntitySet="ClientPortfolios" />
           </AssociationSet>
           <FunctionImport Name="RollExposure" ReturnType="Collection(DateTime)">
-            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
-          </FunctionImport>                    
+          <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="ClientPortfolioClientAccountIDFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioClientAccountIDFK">
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
+            <End Role="ClientPortfolio" EntitySet="ClientPortfolios" />
+          </AssociationSet>                    
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -13071,6 +13094,7 @@
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Client" Relationship="Odey.Framework.Keeley.Entities.ClientAccountClientIDFK" FromRole="ClientAccount" ToRole="Client" />
           <NavigationProperty Name="ClientTrades" Relationship="Odey.Framework.Keeley.Entities.ClientTradesClientAccountIDFK" FromRole="ClientAccount" ToRole="ClientTrade" />
+          <NavigationProperty Name="ClientPortfolios" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioClientAccountIDFK" FromRole="ClientAccount" ToRole="ClientPortfolio" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -13266,6 +13290,9 @@
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="ClientAccountId" Nullable="false" />
+          <NavigationProperty Name="ClientAccount" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioClientAccountIDFK" FromRole="ClientPortfolio" ToRole="ClientAccount" />
+          <Property Type="Decimal" Name="Price1" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="ClientPortfolioUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -13288,6 +13315,18 @@
             </Principal>
             <Dependent Role="ClientPortfolio">
               <PropertyRef Name="PriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioClientAccountIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolio" Role="ClientPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientPortfolio">
+              <PropertyRef Name="ClientAccountId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>                
@@ -16916,11 +16955,12 @@
           <EntitySetMapping Name="ClientPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <MappingFragment StoreEntitySet="ClientPortfolio">
+                <ScalarProperty Name="Price1" ColumnName="Price" />
+                <ScalarProperty Name="ClientAccountId" ColumnName="ClientAccountId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="PriceId" ColumnName="PriceId" />
                 <ScalarProperty Name="MarketValue" ColumnName="MarketValue" />
                 <ScalarProperty Name="ChangeInQuantity" ColumnName="ChangeInQuantity" />
@@ -16932,6 +16972,9 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">
+                  <AssociationEnd AssociationSet="ClientPortfolioClientAccountIDFK" From="ClientPortfolio" To="ClientAccount">
+                    <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" />
+                  </AssociationEnd>
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Cost" ParameterName="Cost" />
                   <ScalarProperty Name="Price" ParameterName="Price" />
@@ -16945,6 +16988,9 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">
+                  <AssociationEnd AssociationSet="ClientPortfolioClientAccountIDFK" From="ClientPortfolio" To="ClientAccount">
+                    <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" Version="Current" />
+                  </AssociationEnd>
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="Cost" ParameterName="Cost" Version="Current" />
@@ -22695,6 +22741,7 @@
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolio" Width="1.5" PointX="14.75" PointY="54.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPriceIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioClientAccountIDFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
