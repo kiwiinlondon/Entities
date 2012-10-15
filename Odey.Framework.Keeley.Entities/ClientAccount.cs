@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class ClientAccount
     {
+    	
+        public ClientAccount()
+        {
+            this.ClientTrades = new List<ClientTrade>();
+        }
+    
     	[DataMember]
         public int ClientAccountId { get; set; }
     	[DataMember]
@@ -37,5 +43,7 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual Client Client { get; set; }
+        [DataMember]
+        public virtual List<ClientTrade> ClientTrades { get; set; }
     }
 }

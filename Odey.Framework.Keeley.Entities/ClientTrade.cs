@@ -50,5 +50,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int ClientTradeTypeId { get; set; }
+    
+        [DataMember]
+        public virtual ClientAccount ClientAccount { get; set; }
     }
 }
