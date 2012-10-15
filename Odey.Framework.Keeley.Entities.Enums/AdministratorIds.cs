@@ -13,7 +13,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [DataMember]
         RBCDexia = 4356,
         [DataMember]
-        Capita =4514,
+        CapitaUK = 4514,
         [DataMember]
         Daiwa = 3845
     }

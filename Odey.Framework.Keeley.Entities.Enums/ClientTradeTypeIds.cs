@@ -13,6 +13,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Normal = 1,
         [EnumMember]
-        Transfer = 2
+        Transfer = 2,
+        [EnumMember]
+        Dividend = 3
     }
 }

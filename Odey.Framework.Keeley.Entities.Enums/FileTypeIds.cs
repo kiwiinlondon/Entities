@@ -24,6 +24,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DexiaAccountTrades = 7,
         [EnumMember]
-        JPMorganPositionFile = 8
+        JPMorganPositionFile = 8,
+        [EnumMember]
+        CapitaUKAccountRegistry = 9,
+        [EnumMember]
+        CapitaUKAccountTrades = 10,
+        [EnumMember]
+        DaiwaAccountRegistry = 11,
+        [EnumMember]
+        DaiwaAccountTrades = 12
     }
 }
