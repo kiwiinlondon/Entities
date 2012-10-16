@@ -10,11 +10,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
     [DataContract]
     public enum AdministratorIds
     {
-        [DataMember]
+        [EnumMember]
         RBCDexia = 4356,
-        [DataMember]
+        [EnumMember]
         CapitaUK = 4514,
-        [DataMember]
-        Daiwa = 3845
+        [EnumMember]
+        Daiwa = 3845,
+        [EnumMember]
+        CapitaIRE = 6052
     }
 }

@@ -20,7 +20,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OEIEURSHARECLASSMAC = 5584,
         [EnumMember]
-        OEIGBPAMANSHARECLASS = 5766,        
+        OEIGBPAMANSHARECLASS = 5766,       
+        [EnumMember]
+        OEIEURMSHARECLASS = 6051,
         [EnumMember]
         OEIMAC = 4927,
         [EnumMember]
