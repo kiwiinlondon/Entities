@@ -12,7 +12,21 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OEI = 741,
         [EnumMember]
+        OEIGBPASHARECLASS = 5505,
+        [EnumMember]
+        OEIGBPBSHARECLASS = 5507,
+        [EnumMember]
+        OEIUSDSHARECLASS = 5508,
+        [EnumMember]
+        OEIEURSHARECLASSMAC = 5584,
+        [EnumMember]
         OEIMAC = 4927,
+        [EnumMember]
+        OEIMACGBPASHARECLASS = 5512,
+        [EnumMember]
+        OEIMACGBPBSHARECLASS = 5513,
+        [EnumMember]
+        OEIMACGBPBMSHARECLASS = 5905,        
         [EnumMember]
         GIANO94 = 4849,
         [EnumMember]
