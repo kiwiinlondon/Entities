@@ -32,6 +32,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DaiwaAccountRegistry = 11,
         [EnumMember]
-        DaiwaAccountTrades = 12
+        DaiwaAccountTrades = 12,
+        [EnumMember]
+        CapitaIREAccountRegistry = 13,
+        [EnumMember]
+        CapitaIREAccountTrades = 14
     }
 }
