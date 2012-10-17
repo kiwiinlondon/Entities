@@ -21,8 +21,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int PositionId { get; set; }
     	[DataMember]
-        public int InstrumentId { get; set; }
-    	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
         public Nullable<decimal> EquityExposure { get; set; }
@@ -58,8 +56,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ChangeGovernmentBondExposure { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> MaturityDate { get; set; }
+    	[DataMember]
+        public bool IsPrimaryExposure { get; set; }
+    	[DataMember]
+        public int InstrumentMarketId { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }

@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class InstrumentMarket
     {
+    	
+        public InstrumentMarket()
+        {
+            this.Exposures = new List<Exposure>();
+        }
+    
     	[DataMember]
         public int InstrumentMarketID { get; set; }
     	[DataMember]
@@ -57,5 +63,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Instrument Instrument { get; set; }
         [DataMember]
         public virtual InstrumentMarket UnderlyingInstrumentMarket { get; set; }
+        [DataMember]
+        public virtual List<Exposure> Exposures { get; set; }
     }
 }

@@ -416,8 +416,8 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Event" EntitySet="Event" />
           </AssociationSet>
-          <AssociationSet Name="ExposureInstrumentIDFK" Association="KeeleyModel.Store.ExposureInstrumentIDFK">
-            <End Role="Instrument" EntitySet="Instrument" />
+          <AssociationSet Name="ExposureInstrumentMarketIDFK" Association="KeeleyModel.Store.ExposureInstrumentMarketIDFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
             <End Role="Exposure" EntitySet="Exposure" />
           </AssociationSet>
           <AssociationSet Name="ExposurePortfolioIDFK" Association="KeeleyModel.Store.ExposurePortfolioIDFK">
@@ -1558,7 +1558,7 @@
           </Key>
           <Property Name="ExposureId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="PositionId" Type="int" Nullable="false" />
-          <Property Name="InstrumentId" Type="int" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="PortfolioId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="EquityExposure" Type="numeric" Precision="27" Scale="8" />
@@ -1577,6 +1577,7 @@
           <Property Name="ChangeOtherExposure" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ChangeGovernmentBondExposure" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MaturityDate" Type="datetime" />
+          <Property Name="IsPrimaryExposure" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Extract">
           <Key>
@@ -3443,15 +3444,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ExposureInstrumentIDFK">
-          <End Role="Instrument" Type="KeeleyModel.Store.Instrument" Multiplicity="1" />
+        <Association Name="ExposureInstrumentMarketIDFK">
+          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="1" />
           <End Role="Exposure" Type="KeeleyModel.Store.Exposure" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Instrument">
-              <PropertyRef Name="InstrumentID" />
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
             </Principal>
             <Dependent Role="Exposure">
-              <PropertyRef Name="InstrumentId" />
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6158,7 +6159,7 @@
         </Function>
         <Function Name="Exposure_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PositionId" Type="int" Mode="In" />
-          <Parameter Name="InstrumentId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="EquityExposure" Type="numeric" Mode="In" />
@@ -6175,6 +6176,7 @@
           <Parameter Name="ChangeOtherExposure" Type="numeric" Mode="In" />
           <Parameter Name="ChangeGovernmentBondExposure" Type="numeric" Mode="In" />
           <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
+          <Parameter Name="IsPrimaryExposure" Type="bit" Mode="In" />
         </Function>
         <Function Name="Exposure_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -6182,7 +6184,7 @@
         <Function Name="Exposure_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExposureId" Type="int" Mode="In" />
           <Parameter Name="PositionId" Type="int" Mode="In" />
-          <Parameter Name="InstrumentId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="EquityExposure" Type="numeric" Mode="In" />
@@ -6200,6 +6202,7 @@
           <Parameter Name="ChangeOtherExposure" Type="numeric" Mode="In" />
           <Parameter Name="ChangeGovernmentBondExposure" Type="numeric" Mode="In" />
           <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
+          <Parameter Name="IsPrimaryExposure" Type="bit" Mode="In" />
         </Function>
         <Function Name="ExtractEntity_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractEntityID" Type="int" Mode="In" />
@@ -8688,10 +8691,6 @@
           </AssociationSet>
           <EntitySet Name="Exposures" EntityType="Odey.Framework.Keeley.Entities.Exposure" />
           <EntitySet Name="IndexConstituents" EntityType="Odey.Framework.Keeley.Entities.IndexConstituent" />
-          <AssociationSet Name="ExposureInstrumentIDFK" Association="Odey.Framework.Keeley.Entities.ExposureInstrumentIDFK">
-            <End Role="Instrument" EntitySet="Instruments" />
-            <End Role="Exposure" EntitySet="Exposures" />
-          </AssociationSet>
           <AssociationSet Name="ExposurePositionIDFK" Association="Odey.Framework.Keeley.Entities.ExposurePositionIDFK">
             <End Role="Position" EntitySet="Positions" />
             <End Role="Exposure" EntitySet="Exposures" />
@@ -8791,6 +8790,14 @@
           <AssociationSet Name="ClientPortfolioFundIDFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioFundIDFK">
             <End Role="Fund" EntitySet="Funds" />
             <End Role="ClientPortfolio" EntitySet="ClientPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="ExposureInstrumentIDFK1" Association="Odey.Framework.Keeley.Entities.ExposureInstrumentIDFK1">
+            <End Role="Instrument" EntitySet="Instruments" />
+            <End Role="Exposure" EntitySet="Exposures" />
+          </AssociationSet>
+          <AssociationSet Name="ExposureInstrumentMarketIDFK" Association="Odey.Framework.Keeley.Entities.ExposureInstrumentMarketIDFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="Exposure" EntitySet="Exposures" />
           </AssociationSet>                    
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -8861,7 +8868,8 @@
           <Property Type="String" Name="Cusip" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ForwardFX" Relationship="Odey.Framework.Keeley.Entities.FK__ForwardFX__Instr__2AB62B09" FromRole="Instrument" ToRole="ForwardFX" />
           <NavigationProperty Name="InstrumentClass" Relationship="Odey.Framework.Keeley.Entities.InstrumentInstrumentClassIDFK" FromRole="Instrument" ToRole="InstrumentClass" />
-          <NavigationProperty Name="Bond" Relationship="Odey.Framework.Keeley.Entities.BondInstrumentIdFK" FromRole="Instrument" ToRole="Bond" />          
+          <NavigationProperty Name="Bond" Relationship="Odey.Framework.Keeley.Entities.BondInstrumentIdFK" FromRole="Instrument" ToRole="Bond" />
+          <NavigationProperty Name="Exposures" Relationship="Odey.Framework.Keeley.Entities.ExposureInstrumentIDFK1" FromRole="Instrument" ToRole="Exposure" />          
         </EntityType>
         <EntityType Name="InstrumentClass">
           <Key>
@@ -10963,6 +10971,7 @@
           <Property Type="String" Name="BloombergGlobalId" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastRepulledFromSourceDate" Precision="3" />
           <NavigationProperty Name="UnderlyingInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.fkinstrumentmarketUnderlyingInstrumentMarketId" FromRole="InstrumentMarket" ToRole="InstrumentMarket1" a:GetterAccess="Public" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Exposures" Relationship="Odey.Framework.Keeley.Entities.ExposureInstrumentMarketIDFK" FromRole="InstrumentMarket" ToRole="Exposure" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -12961,7 +12970,6 @@
           </Key>
           <Property Type="Int32" Name="ExposureId" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="PositionId" Nullable="false" />
-          <Property Type="Int32" Name="InstrumentId" Nullable="false" />
           <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
           <Property Type="Decimal" Name="EquityExposure" Precision="27" Scale="8" Nullable="true" />
           <Property Type="Decimal" Name="CommodityExposure" Precision="27" Scale="8" Nullable="true" />
@@ -12981,6 +12989,9 @@
           <Property Type="Decimal" Name="ChangeOtherExposure" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="ChangeGovernmentBondExposure" Precision="27" Scale="8" />
           <Property Type="DateTime" Name="MaturityDate" Precision="3" />
+          <Property Type="Boolean" Name="IsPrimaryExposure" Nullable="false" />
+          <Property Type="Int32" Name="InstrumentMarketId" Nullable="false" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.ExposureInstrumentMarketIDFK" FromRole="Exposure" ToRole="InstrumentMarket" />
           </EntityType>
         <EntityType Name="IndexConstituent">
           <Key>
@@ -12995,18 +13006,6 @@
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
         </EntityType>
-        <Association Name="ExposureInstrumentIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Instrument" Role="Instrument" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.Exposure" Role="Exposure" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Instrument">
-              <PropertyRef Name="InstrumentID" />
-            </Principal>
-            <Dependent Role="Exposure">
-              <PropertyRef Name="InstrumentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="ExposurePositionIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.Exposure" Role="Exposure" Multiplicity="*" />
@@ -13363,6 +13362,30 @@
             </Principal>
             <Dependent Role="ClientPortfolio">
               <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExposureInstrumentIDFK1">
+          <End Type="Odey.Framework.Keeley.Entities.Instrument" Role="Instrument" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Exposure" Role="Exposure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instrument">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="Exposure">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExposureInstrumentMarketIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Exposure" Role="Exposure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Exposure">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>                
@@ -16670,6 +16693,8 @@
           <EntitySetMapping Name="Exposures">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <MappingFragment StoreEntitySet="Exposure">
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="IsPrimaryExposure" ColumnName="IsPrimaryExposure" />
                 <ScalarProperty Name="MaturityDate" ColumnName="MaturityDate" />
                 <ScalarProperty Name="ChangeGovernmentBondExposure" ColumnName="ChangeGovernmentBondExposure" />
                 <ScalarProperty Name="ChangeOtherExposure" ColumnName="ChangeOtherExposure" />
@@ -16688,7 +16713,6 @@
                 <ScalarProperty Name="CommodityExposure" ColumnName="CommodityExposure" />
                 <ScalarProperty Name="EquityExposure" ColumnName="EquityExposure" />
                 <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
-                <ScalarProperty Name="InstrumentId" ColumnName="InstrumentId" />
                 <ScalarProperty Name="PositionId" ColumnName="PositionId" />
                 <ScalarProperty Name="ExposureId" ColumnName="ExposureId" />
               </MappingFragment>
@@ -16696,6 +16720,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Exposure_Insert">
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ScalarProperty Name="IsPrimaryExposure" ParameterName="IsPrimaryExposure" />
                   <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" />
                   <ScalarProperty Name="ChangeGovernmentBondExposure" ParameterName="ChangeGovernmentBondExposure" />
                   <ScalarProperty Name="ChangeOtherExposure" ParameterName="ChangeOtherExposure" />
@@ -16712,13 +16738,14 @@
                   <ScalarProperty Name="CommodityExposure" ParameterName="CommodityExposure" />
                   <ScalarProperty Name="EquityExposure" ParameterName="EquityExposure" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
-                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" />
                   <ScalarProperty Name="PositionId" ParameterName="PositionId" />
                   <ResultBinding Name="ExposureId" ColumnName="ExposureId" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Exposure_Update">
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="IsPrimaryExposure" ParameterName="IsPrimaryExposure" Version="Current" />
                   <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" Version="Current" />
                   <ScalarProperty Name="ChangeGovernmentBondExposure" ParameterName="ChangeGovernmentBondExposure" Version="Current" />
                   <ScalarProperty Name="ChangeOtherExposure" ParameterName="ChangeOtherExposure" Version="Current" />
@@ -16736,7 +16763,6 @@
                   <ScalarProperty Name="CommodityExposure" ParameterName="CommodityExposure" Version="Current" />
                   <ScalarProperty Name="EquityExposure" ParameterName="EquityExposure" Version="Current" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
-                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" Version="Current" />
                   <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
                   <ScalarProperty Name="ExposureId" ParameterName="ExposureId" Version="Current" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
@@ -17069,7 +17095,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="63">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.875" PointY="15.875" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -22535,57 +22561,6 @@
         </edmx:AssociationConnector>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Exposure" Width="2.25" PointX="30" PointY="21.625" Height="3.5186979166666674" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.IndexConstituent" Width="1.5" PointX="10.875" PointY="35.625" Height="2.5571907552083317" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposureInstrumentIDFK">
-          <edmx:ConnectorPoint PointX="8.734371874999999" PointY="24.701315104166667" />
-          <edmx:ConnectorPoint PointX="8.734371874999999" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="9.2760398541666671" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="9.4427065208333349" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="9.6354180416666662" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="9.802084708333334" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="9.8697943541666664" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="10.036461020833334" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="10.166666666666666" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="10.333333333333334" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="13.291666666666666" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="13.458333333333334" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="13.479166666666666" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="13.645833333333334" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="14.186197604166667" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="14.352864270833335" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="14.572919166666667" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="14.739585833333335" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="14.869792916666667" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="15.036459583333334" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="15.416666666666666" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="16.291666666666668" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="16.458333333333332" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="16.5625" PointY="24.946595052083339" />
-          <edmx:ConnectorPoint PointX="16.5625" PointY="23.0625" />
-          <edmx:ConnectorPoint PointX="18.21875" PointY="23.0625" />
-          <edmx:ConnectorPoint PointX="18.21875" PointY="23.302307942708339" />
-          <edmx:ConnectorPoint PointX="21.1875" PointY="23.302307942708339" />
-          <edmx:ConnectorPoint PointX="21.1875" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="22.869791666666668" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="23.145833333333332" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="23.253341489042295" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="23.42000815570896" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="23.575609614042296" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="23.74227628070896" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="24.708333333333332" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="24.9375" PointY="22.9375" />
-          <edmx:ConnectorPoint PointX="24.9375" PointY="23.754293619791667" />
-          <edmx:ConnectorPoint PointX="26.510416666666668" PointY="23.754293619791667" />
-          <edmx:ConnectorPoint PointX="26.677083333333332" PointY="23.754293619791667" />
-          <edmx:ConnectorPoint PointX="28.797204295463246" PointY="23.754293619791667" />
-          <edmx:ConnectorPoint PointX="28.96387096212991" PointY="23.754293619791667" />
-          <edmx:ConnectorPoint PointX="29.385416666666668" PointY="23.754293619791667" />
-          <edmx:ConnectorPoint PointX="29.552083333333332" PointY="23.754293619791667" />
-          <edmx:ConnectorPoint PointX="29.90625" PointY="23.754293619791667" />
-          <edmx:ConnectorPoint PointX="29.90625" PointY="23.947924363281302" />
-          <edmx:ConnectorPoint PointX="30" PointY="23.947924363281302" />
-        </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposurePositionIDFK">
           <edmx:ConnectorPoint PointX="29.096521314398288" PointY="17.393697916666667" />
           <edmx:ConnectorPoint PointX="29.096521314398288" PointY="22.689646809895834" />
@@ -22778,6 +22753,8 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPriceIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioClientAccountIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioFundIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposureInstrumentIDFK1" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposureInstrumentMarketIDFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
