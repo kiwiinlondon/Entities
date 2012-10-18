@@ -36,6 +36,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitaIREAccountRegistry = 13,
         [EnumMember]
-        CapitaIREAccountTrades = 14
+        CapitaIREAccountTrades = 14,
+        [EnumMember]
+        JPMorganJLegFile=15
     }
 }

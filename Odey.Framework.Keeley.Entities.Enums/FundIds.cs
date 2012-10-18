@@ -83,5 +83,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OF = 5592,
         [EnumMember]
         OPE = 5327,
+        [EnumMember]
+        ATLAS = 6053
     }
 }
