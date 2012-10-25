@@ -21,7 +21,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public Nullable<decimal> MarketValue { get; set; }
+        public decimal MarketValue { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationMarketValue { get; set; }
     	[DataMember]

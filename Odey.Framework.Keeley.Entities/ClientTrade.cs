@@ -50,6 +50,10 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int ClientTradeTypeId { get; set; }
+    	[DataMember]
+        public decimal HWMPrice { get; set; }
+    	[DataMember]
+        public decimal CurrentQuantity { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
