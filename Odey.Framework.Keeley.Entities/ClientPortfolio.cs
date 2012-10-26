@@ -42,6 +42,10 @@ namespace Odey.Framework.Keeley.Entities
         public int ClientAccountId { get; set; }
     	[DataMember]
         public Nullable<int> FundId { get; set; }
+    	[DataMember]
+        public decimal RealisedPnl { get; set; }
+    	[DataMember]
+        public decimal ChangeRealisedPnl { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
