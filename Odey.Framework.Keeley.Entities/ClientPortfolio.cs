@@ -43,9 +43,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> FundId { get; set; }
     	[DataMember]
-        public decimal RealisedPnl { get; set; }
+        public decimal OpeningValue { get; set; }
     	[DataMember]
-        public decimal ChangeRealisedPnl { get; set; }
+        public decimal TodayRealisedPnl { get; set; }
+    	[DataMember]
+        public decimal TodayUnRealisedPnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeInCost { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }

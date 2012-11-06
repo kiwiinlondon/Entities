@@ -1355,8 +1355,10 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="RealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="ChangeRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TodayRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="OpeningValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TodayUnRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ChangeInCost" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -1381,6 +1383,7 @@
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="HWMPrice" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="CurrentQuantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="EqFactor" Type="numeric" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="CollectiveInvestmentScheme">
           <Key>
@@ -5895,9 +5898,11 @@
           <Parameter Name="MarketValue" Type="numeric" Mode="In" />
           <Parameter Name="PriceId" Type="int" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
-          <Parameter Name="RealisedPnl" Type="numeric" Mode="In" />
-          <Parameter Name="ChangeRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeInCost" Type="numeric" Mode="In" />
+          <Parameter Name="TodayRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
+          <Parameter Name="TodayUnrealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValue" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -5910,9 +5915,11 @@
           <Parameter Name="MarketValue" Type="numeric" Mode="In" />
           <Parameter Name="PriceId" Type="int" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
-          <Parameter Name="RealisedPnl" Type="numeric" Mode="In" />
-          <Parameter Name="ChangeRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeInCost" Type="numeric" Mode="In" />
+          <Parameter Name="TodayRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
+          <Parameter Name="TodayUnrealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValue" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
@@ -5954,6 +5961,7 @@
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
           <Parameter Name="HWMPrice" Type="numeric" Mode="In" />
           <Parameter Name="CurrentQuantity" Type="numeric" Mode="In" />
+          <Parameter Name="EqFactor" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientTrade_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -5973,6 +5981,7 @@
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
           <Parameter Name="HWMPrice" Type="numeric" Mode="In" />
           <Parameter Name="CurrentQuantity" Type="numeric" Mode="In" />
+          <Parameter Name="EqFactor" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
@@ -13156,6 +13165,7 @@
           <NavigationProperty Name="ClientAccount" Relationship="Odey.Framework.Keeley.Entities.ClientTradesClientAccountIDFK" FromRole="ClientTrade" ToRole="ClientAccount" />
           <Property Type="Decimal" Name="HWMPrice" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="CurrentQuantity" Precision="27" Scale="8" Nullable="false" />
+          <Property Type="Decimal" Name="EqFactor" Nullable="false" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="AdministratorUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -13331,8 +13341,10 @@
           <Property Type="Int32" Name="ClientAccountId" Nullable="false" />
           <NavigationProperty Name="ClientAccount" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioClientAccountIDFK" FromRole="ClientPortfolio" ToRole="ClientAccount" />
           <Property Type="Int32" Name="FundId" />
-          <Property Type="Decimal" Name="RealisedPnl" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="ChangeRealisedPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OpeningValue" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayRealisedPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayUnRealisedPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ChangeInCost" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="ClientPortfolioUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -16963,6 +16975,7 @@
           <EntitySetMapping Name="ClientTrades">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <MappingFragment StoreEntitySet="ClientTrade">
+                <ScalarProperty Name="EqFactor" ColumnName="EqFactor" />
                 <ScalarProperty Name="CurrentQuantity" ColumnName="CurrentQuantity" />
                 <ScalarProperty Name="HWMPrice" ColumnName="HWMPrice" />
                 <ScalarProperty Name="ClientTradeTypeId" ColumnName="ClientTradeTypeId" />
@@ -16987,6 +17000,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientTrade_Insert">
+                  <ScalarProperty Name="EqFactor" ParameterName="EqFactor" />
                   <ScalarProperty Name="CurrentQuantity" ParameterName="CurrentQuantity" />
                   <ScalarProperty Name="HWMPrice" ParameterName="HWMPrice" />
                   <ScalarProperty Name="ClientTradeTypeId" ParameterName="ClientTradeTypeId" />
@@ -17008,6 +17022,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientTrade_Update">
+                  <ScalarProperty Name="EqFactor" ParameterName="EqFactor" Version="Current" />
                   <ScalarProperty Name="CurrentQuantity" ParameterName="CurrentQuantity" Version="Current" />
                   <ScalarProperty Name="HWMPrice" ParameterName="HWMPrice" Version="Current" />
                   <ScalarProperty Name="ClientTradeTypeId" ParameterName="ClientTradeTypeId" Version="Current" />
@@ -17040,8 +17055,10 @@
           <EntitySetMapping Name="ClientPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <MappingFragment StoreEntitySet="ClientPortfolio">
-                <ScalarProperty Name="ChangeRealisedPnl" ColumnName="ChangeRealisedPnl" />
-                <ScalarProperty Name="RealisedPnl" ColumnName="RealisedPnl" />
+                <ScalarProperty Name="ChangeInCost" ColumnName="ChangeInCost" />
+                <ScalarProperty Name="TodayUnRealisedPnl" ColumnName="TodayUnRealisedPnl" />
+                <ScalarProperty Name="TodayRealisedPnl" ColumnName="TodayRealisedPnl" />
+                <ScalarProperty Name="OpeningValue" ColumnName="OpeningValue" />
                 <ScalarProperty Name="FundId" ColumnName="FundId" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="ClientAccountId" ColumnName="ClientAccountId" />
@@ -17060,8 +17077,10 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">                  
-                  <ScalarProperty Name="ChangeRealisedPnl" ParameterName="ChangeRealisedPnl" />
-                  <ScalarProperty Name="RealisedPnl" ParameterName="RealisedPnl" />
+                  <ScalarProperty Name="TodayUnRealisedPnl" ParameterName="TodayUnrealisedPnl" />
+                  <ScalarProperty Name="TodayRealisedPnl" ParameterName="TodayRealisedPnl" />
+                  <ScalarProperty Name="ChangeInCost" ParameterName="ChangeInCost" />
+                  <ScalarProperty Name="OpeningValue" ParameterName="OpeningValue" />
                   <ScalarProperty Name="FundId" ParameterName="FundId" />
                   <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" />                  
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -17076,9 +17095,11 @@
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
-                <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">                  
-                  <ScalarProperty Name="ChangeRealisedPnl" ParameterName="ChangeRealisedPnl" Version="Current" />
-                  <ScalarProperty Name="RealisedPnl" ParameterName="RealisedPnl" Version="Current" />
+                <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">
+                  <ScalarProperty Name="TodayUnRealisedPnl" ParameterName="TodayUnrealisedPnl" Version="Current" />
+                  <ScalarProperty Name="TodayRealisedPnl" ParameterName="TodayRealisedPnl" Version="Current" />
+                  <ScalarProperty Name="ChangeInCost" ParameterName="ChangeInCost" Version="Current" />
+                  <ScalarProperty Name="OpeningValue" ParameterName="OpeningValue" Version="Current" />
                   <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
                   <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" Version="Current" />                  
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />

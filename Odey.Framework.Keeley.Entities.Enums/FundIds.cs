@@ -38,7 +38,23 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DYSS = 5591,
         [EnumMember]
+        DYSSGBPISHARECLASS = 5747,
+        [EnumMember]
+        DYSSGBPMSHARECLASS = 5749,
+        [EnumMember]
+        DYSSGBPRSHARECLASS = 5750,
+        [EnumMember]
+        DYSSEURSHARECLASS = 5901,
+        [EnumMember]
         MR11 = 5590,
+        [EnumMember]
+        MR11GBPSHARECLASS = 5746,
+        [EnumMember]
+        MR11USDSHARECLASS = 5902,
+        [EnumMember]
+        MR11GBPMSHARECLASS = 5903,
+        [EnumMember]
+        MR11EURMSHARECLASS = 5904,
         [EnumMember]
         OPUS = 5328,
         [EnumMember]

@@ -54,6 +54,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal HWMPrice { get; set; }
     	[DataMember]
         public decimal CurrentQuantity { get; set; }
+    	[DataMember]
+        public decimal EqFactor { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
