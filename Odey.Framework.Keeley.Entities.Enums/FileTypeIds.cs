@@ -40,6 +40,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         JPMorganJLegFile=15,
         [EnumMember]
-        DaiwaEQFactorHWMPrice = 16
+        DaiwaEQFactorHWMPrice = 16,
+        [EnumMember]
+        CapitaUKClientTransfers = 17
     }
 }
