@@ -94,11 +94,55 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ALEG = 4930,
         [EnumMember]
+        ALEGEURISHARECLASS = 5515,
+        [EnumMember]
+        ALEGGBPSHARECLASS = 5516,
+        [EnumMember]
+        ALEGGBPASHARECLASS = 5517,
+        [EnumMember]
+        ALEGGBPDSHARECLASS = 5518,
+        [EnumMember]
+        ALEGUSDSHARECLASS = 5520,
+        [EnumMember]
         OEAF = 5326,
+        [EnumMember]
+        OEAFEURASHARECLASS = 5523,
+        [EnumMember]
+        OEAFEURAISHARECLASS = 5524,
+        [EnumMember]
+        OEAFGBPDSHARECLASS = 5525,
+        [EnumMember]
+        OEAFGBPSHARECLASS = 5526,
+        [EnumMember]
+        OEAFEURISHARECLASS = 5528,
+        [EnumMember]
+        OEAFGBPISHARECLASS = 5529,
+        [EnumMember]
+        OEAFUSDSHARECLASS = 5530,
         [EnumMember]
         OF = 5592,
         [EnumMember]
+        OFCHFASHARECLASS = 5910,
+        [EnumMember]
+        OFCHFBSHARECLASS = 5911,
+        [EnumMember]
+        OFEURBSHARECLASS = 5914,
+        [EnumMember]
+        OFGBPASHARECLASS = 5906,
+        [EnumMember]
+        OFGBPBSHARECLASS = 5907,
+        [EnumMember]
+        OFNOKASHARECLASS = 5912,
+        [EnumMember]
+        OFNOKBSHARECLASS = 5913,
+        [EnumMember]
+        OFUSDASHARECLASS = 5908,
+        [EnumMember]
+        OFUSDBSHARECLASS = 5909,
+        [EnumMember]
         OPE = 5327,
+        [EnumMember]
+        OPEFGBPDSHARECLASS = 5531,        
         [EnumMember]
         ATLAS = 6053
     }
