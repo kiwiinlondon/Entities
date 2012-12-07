@@ -14,36 +14,28 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class Price
+    public partial class InterestRateReturn
     {
-    	
-        public Price()
-        {
-            this.InterestRateReturns = new List<InterestRateReturn>();
-        }
-    
     	[DataMember]
-        public int PriceId { get; set; }
+        public int InterestRateReturnId { get; set; }
     	[DataMember]
         public int InstrumentMarketId { get; set; }
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public int EntityRankingSchemeId { get; set; }
+        public Nullable<int> PriceId { get; set; }
     	[DataMember]
-        public int RawPriceId { get; set; }
+        public System.DateTime StartDt { get; set; }
     	[DataMember]
         public decimal Value { get; set; }
     	[DataMember]
-        public System.DateTime StartDt { get; set; }
+        public int CurrencyId { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
     
         [DataMember]
-        public virtual RawPrice RawPrice { get; set; }
-        [DataMember]
-        public virtual List<InterestRateReturn> InterestRateReturns { get; set; }
+        public virtual Price Price { get; set; }
     }
 }

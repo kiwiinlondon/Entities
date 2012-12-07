@@ -120,6 +120,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ClientAccount> ClientAccounts { get; set; }
         public DbSet<ClientTrade> ClientTrades { get; set; }
         public DbSet<ClientPortfolio> ClientPortfolios { get; set; }
+        public DbSet<Index> Indices { get; set; }
+        public DbSet<InterestRateReturn> InterestRateReturns { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
