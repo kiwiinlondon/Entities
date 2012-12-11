@@ -19,7 +19,6 @@ namespace Odey.Framework.Keeley.Entities
     	
         public Instrument()
         {
-            this.InstrumentMarkets = new List<InstrumentMarket>();
             this.OverlyingRelationships = new List<InstrumentRelationship>();
             this.Exposures = new List<Exposure>();
         }
@@ -63,8 +62,6 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual InstrumentRelationship UnderlyingRelationship { get; set; }
-        [DataMember]
-        public virtual List<InstrumentMarket> InstrumentMarkets { get; set; }
         [DataMember]
         public virtual List<InstrumentRelationship> OverlyingRelationships { get; set; }
         [DataMember]

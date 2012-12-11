@@ -140,40 +140,7 @@ namespace Odey.Framework.Keeley.Entities
             }
         }      
 
-        public InstrumentMarket CalculatedUnderlyingInstrumentMarket
-        {
-            get
-            {
-                if (Instrument.Underlyer != null)
-                {
-                    if (Instrument.Underlyer.InstrumentMarkets.Count == 0)
-                    {
-                        throw new ApplicationException("Instrument if its an underlyer it must have at least one instrument market");
-                    }
-                    else if (Instrument.Underlyer.InstrumentMarkets.Count == 1)
-                    {
-                        return Instrument.Underlyer.InstrumentMarkets.First();
-                    }
-                    else
-                    {
-                        InstrumentMarket underlyer = Instrument.Underlyer.InstrumentMarkets.Where(a => a.MarketID == MarketID).FirstOrDefault();
-                        if (underlyer == null)
-                        {
-                            underlyer = Instrument.Underlyer.InstrumentMarkets.Where(a => a.IsPrimary == true).FirstOrDefault();
-                        }
-                        if (underlyer != null)
-                        {
-                            return underlyer;
-                        }
-                        throw new ApplicationException(String.Format("Unable to establish underlying instrument market {0}", Instrument.InstrumentID));
-                    }
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }           
+           
     }
 }
 
