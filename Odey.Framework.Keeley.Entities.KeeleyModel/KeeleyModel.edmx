@@ -50,6 +50,7 @@
           <EntitySet Name="ExtractOutputType" EntityType="KeeleyModel.Store.ExtractOutputType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ExtractRun" EntityType="KeeleyModel.Store.ExtractRun" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ExtractType" EntityType="KeeleyModel.Store.ExtractType" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="FailedTrade" EntityType="KeeleyModel.Store.FailedTrade" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FileCollected" EntityType="KeeleyModel.Store.FileCollected" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FileToBeCollected" EntityType="KeeleyModel.Store.FileToBeCollected" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FMTradeBridgeLastProcessed" EntityType="KeeleyModel.Store.FMTradeBridgeLastProcessed" store:Type="Tables" Schema="dbo" />
@@ -538,6 +539,14 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Extract" EntitySet="Extract" />
           </AssociationSet>
+          <AssociationSet Name="FailedTradeEventIdPK" Association="KeeleyModel.Store.FailedTradeEventIdPK">
+            <End Role="TradeEvent" EntitySet="TradeEvent" />
+            <End Role="FailedTrade" EntitySet="FailedTrade" />
+          </AssociationSet>
+          <AssociationSet Name="FailedTradeUserIDFK" Association="KeeleyModel.Store.FailedTradeUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="FailedTrade" EntitySet="FailedTrade" />
+          </AssociationSet>
           <AssociationSet Name="FileCollectedFileToBeCollectedFK" Association="KeeleyModel.Store.FileCollectedFileToBeCollectedFK">
             <End Role="FileToBeCollected" EntitySet="FileToBeCollected" />
             <End Role="FileCollected" EntitySet="FileCollected" />
@@ -577,6 +586,10 @@
           <AssociationSet Name="FK__FundWebsi__FundI__1AE9D794" Association="KeeleyModel.Store.FK__FundWebsi__FundI__1AE9D794">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="FundWebsiteCacheTime" EntitySet="FundWebsiteCacheTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TradeEven__Contr__6555CF79" Association="KeeleyModel.Store.FK__TradeEven__Contr__6555CF79">
+            <End Role="TradeEvent" EntitySet="TradeEvent" />
+            <End Role="TradeEvent1" EntitySet="TradeEvent" />
           </AssociationSet>
           <AssociationSet Name="FK__TradeEven__Trade__265B8A40" Association="KeeleyModel.Store.FK__TradeEven__Trade__265B8A40">
             <End Role="FXRate" EntitySet="FXRate" />
@@ -1768,6 +1781,17 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="FailedTrade">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="DaysToSettle" Type="int" Nullable="false" />
+          <Property Name="FailedTradeReasonId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="FileCollected">
           <Key>
             <PropertyRef Name="FileCollectedId" />
@@ -2549,6 +2573,7 @@
           <Property Name="TradeEuroFXRate" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TradeEuroFXRateId" Type="int" />
           <Property Name="IsRoll" Type="bit" Nullable="false" />
+          <Property Name="ContraEventId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3861,6 +3886,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FailedTradeEventIdPK">
+          <End Role="TradeEvent" Type="KeeleyModel.Store.TradeEvent" Multiplicity="1" />
+          <End Role="FailedTrade" Type="KeeleyModel.Store.FailedTrade" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TradeEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="FailedTrade">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FailedTradeUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="FailedTrade" Type="KeeleyModel.Store.FailedTrade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FailedTrade">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FileCollectedFileToBeCollectedFK">
           <End Role="FileToBeCollected" Type="KeeleyModel.Store.FileToBeCollected" Multiplicity="1" />
           <End Role="FileCollected" Type="KeeleyModel.Store.FileCollected" Multiplicity="*" />
@@ -3978,6 +4027,18 @@
             </Principal>
             <Dependent Role="FundWebsiteCacheTime">
               <PropertyRef Name="FundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TradeEven__Contr__6555CF79">
+          <End Role="TradeEvent" Type="KeeleyModel.Store.TradeEvent" Multiplicity="0..1" />
+          <End Role="TradeEvent1" Type="KeeleyModel.Store.TradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TradeEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="TradeEvent1">
+              <PropertyRef Name="ContraEventId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6434,6 +6495,24 @@
           <Parameter Name="FilePath" Type="varchar" Mode="In" />
           <Parameter Name="RuntimeParameters" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="FailedTrade_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FailedTrade_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventId" Type="int" Mode="In" />
+          <Parameter Name="DaysToSettle" Type="int" Mode="In" />
+          <Parameter Name="FailedTradeReasonId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FailedTrade_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventId" Type="int" Mode="In" />
+          <Parameter Name="DaysToSettle" Type="int" Mode="In" />
+          <Parameter Name="FailedTradeReasonId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="FileCollected_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FileCollectedId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -7720,6 +7799,7 @@
           <Parameter Name="TradeEuroFXRate" Type="numeric" Mode="In" />
           <Parameter Name="TradeEuroFXRateId" Type="int" Mode="In" />
           <Parameter Name="IsRoll" Type="bit" Mode="In" />
+          <Parameter Name="ContraEventId" Type="int" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -7752,6 +7832,7 @@
           <Parameter Name="TradeEuroFXRate" Type="numeric" Mode="In" />
           <Parameter Name="TradeEuroFXRateId" Type="int" Mode="In" />
           <Parameter Name="IsRoll" Type="bit" Mode="In" />
+          <Parameter Name="ContraEventId" Type="int" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -8990,6 +9071,19 @@
           <AssociationSet Name="InterestRateReturnPriceIdFK" Association="Odey.Framework.Keeley.Entities.InterestRateReturnPriceIdFK">
             <End Role="Price" EntitySet="Prices" />
             <End Role="InterestRateReturn" EntitySet="InterestRateReturns" />
+          </AssociationSet>
+          <EntitySet Name="FailedTrades" EntityType="Odey.Framework.Keeley.Entities.FailedTrade" />
+          <AssociationSet Name="FailedTradeUserIDFK" Association="Odey.Framework.Keeley.Entities.FailedTradeUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="FailedTrade" EntitySet="FailedTrades" />
+          </AssociationSet>
+          <AssociationSet Name="FailedTradeEventIdPK" Association="Odey.Framework.Keeley.Entities.FailedTradeEventIdPK">
+            <End Role="TradeEvent" EntitySet="TradeEvents" />
+            <End Role="FailedTrade" EntitySet="FailedTrades" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TradeEven__Contr__6555CF79" Association="Odey.Framework.Keeley.Entities.FK__TradeEven__Contr__6555CF79">
+            <End Role="TradeEvent" EntitySet="TradeEvents" />
+            <End Role="TradeEvent1" EntitySet="TradeEvents" />
           </AssociationSet>                    
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -9072,7 +9166,7 @@
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="ParentInstrumentClassRelationships" Relationship="Odey.Framework.Keeley.Entities.InstrumentClassRelationshipInstrumentClassIDFK" FromRole="InstrumentClass" ToRole="InstrumentClassRelationship" a:GetterAccess="Private" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="ParentInstrumentClassRelationships" Relationship="Odey.Framework.Keeley.Entities.InstrumentClassRelationshipInstrumentClassIDFK" FromRole="InstrumentClass" ToRole="InstrumentClassRelationship" a:GetterAccess="Public" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Market">
           <Key>
@@ -9759,7 +9853,8 @@
           <Property Type="Boolean" Name="IsRoll" Nullable="false" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.TradeEventInstrumentMarketIDFK" FromRole="TradeEvent" ToRole="InstrumentMarket" />
           <NavigationProperty Name="Counterparty" Relationship="Odey.Framework.Keeley.Entities.TradeEventCounterpartyIDFK" FromRole="TradeEvent" ToRole="Counterparty" />
-        </EntityType>
+          <Property Type="Int32" Name="ContraEventId" />
+          </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.TradeEvent" Role="TradeEvent" Multiplicity="*" />
@@ -13683,6 +13778,53 @@
               <PropertyRef Name="PriceId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FailedTrade">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Type="Int32" Name="EventId" Nullable="false" />
+          <Property Type="Int32" Name="DaysToSettle" Nullable="false" />
+          <Property Type="Int32" Name="FailedTradeReasonId" Nullable="false" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
+        <Association Name="FailedTradeUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FailedTrade" Role="FailedTrade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FailedTrade">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FailedTradeEventIdPK">
+          <End Type="Odey.Framework.Keeley.Entities.TradeEvent" Role="TradeEvent" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FailedTrade" Role="FailedTrade" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TradeEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="FailedTrade">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TradeEven__Contr__6555CF79">
+          <End Type="Odey.Framework.Keeley.Entities.TradeEvent" Role="TradeEvent" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.TradeEvent" Role="TradeEvent1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TradeEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="TradeEvent1">
+              <PropertyRef Name="ContraEventId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>                
         </Schema>
     </edmx:ConceptualModels>
@@ -14527,6 +14669,7 @@
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="ContraEventId" ColumnName="ContraEventId" />
                 <ScalarProperty Name="IsRoll" ColumnName="IsRoll" />
                 <ScalarProperty Name="TradeEuroFXRateId" ColumnName="TradeEuroFXRateId" />
                 <ScalarProperty Name="TradeEuroFXRate" ColumnName="TradeEuroFXRate" />
@@ -14563,6 +14706,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="ContraEventId" ParameterName="ContraEventId" />
                   <ScalarProperty Name="IsRoll" ParameterName="IsRoll" />
                   <ScalarProperty Name="TradeEuroFXRateId" ParameterName="TradeEuroFXRateId" />
                   <ScalarProperty Name="TradeEuroFXRate" ParameterName="TradeEuroFXRate" />
@@ -14596,6 +14740,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="ContraEventId" ParameterName="ContraEventId" Version="Current" />
                   <ScalarProperty Name="IsRoll" ParameterName="IsRoll" Version="Current" />
                   <ScalarProperty Name="TradeEuroFXRateId" ParameterName="TradeEuroFXRateId" Version="Current" />
                   <ScalarProperty Name="TradeEuroFXRate" ParameterName="TradeEuroFXRate" Version="Current" />
@@ -17446,6 +17591,44 @@
                 </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FailedTrades">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FailedTrade">
+              <MappingFragment StoreEntitySet="FailedTrade">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="FailedTradeReasonId" ColumnName="FailedTradeReasonId" />
+                <ScalarProperty Name="DaysToSettle" ColumnName="DaysToSettle" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FailedTrade">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FailedTrade_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="FailedTradeReasonId" ParameterName="FailedTradeReasonId" />
+                  <ScalarProperty Name="DaysToSettle" ParameterName="DaysToSettle" />
+                  <ScalarProperty Name="EventId" ParameterName="EventId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FailedTrade_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="FailedTradeReasonId" ParameterName="FailedTradeReasonId" Version="Current" />
+                  <ScalarProperty Name="DaysToSettle" ParameterName="DaysToSettle" Version="Current" />
+                  <ScalarProperty Name="EventId" ParameterName="EventId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FailedTrade_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="EventId" ParameterName="EventId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
           </EntitySetMapping>          
         </EntityContainerMapping>
       </Mapping>
@@ -18195,7 +18378,7 @@
           <edmx:ConnectorPoint PointX="1.9530757717958254" PointY="7.7112939453125" />
           <edmx:ConnectorPoint PointX="3" PointY="7.7112939453125" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.TradeEvent" Width="1.5" PointX="20.375" PointY="9.625" Height="7.5570279947916674" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.TradeEvent" Width="1.5" PointX="20.25" PointY="9.25" Height="7.5570279947916674" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TradeEventTraderIDFK">
           <edmx:ConnectorPoint PointX="1.0087360581973897" PointY="16.25" />
           <edmx:ConnectorPoint PointX="1.0087360581973897" PointY="13.346968964843754" />
@@ -23136,6 +23319,10 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InterestRateReturnCurrencyIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InterestRateReturnInstrumentMarketIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InterestRateReturnPriceIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FailedTrade" Width="1.5" PointX="11.010136428759498" PointY="24.360095512289597" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FailedTradeUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FailedTradeEventIdPK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TradeEven__Contr__6555CF79" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

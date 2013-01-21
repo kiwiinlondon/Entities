@@ -56,8 +56,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OptionOnFuture = 62,        
         [EnumMember]
-        RealEstateInvestmentTrust = 66   
-       
+        RealEstateInvestmentTrust = 66 ,  
+        [EnumMember]
+        EquityFuture = 78  
 
     }
 }

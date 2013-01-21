@@ -14,28 +14,19 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class InstrumentClass
+    public partial class FailedTrade
     {
-    	
-        public InstrumentClass()
-        {
-            this.ParentInstrumentClassRelationships = new List<InstrumentClassRelationship>();
-        }
-    
     	[DataMember]
-        public int InstrumentClassID { get; set; }
+        public int EventId { get; set; }
     	[DataMember]
-        public string FMInstClass { get; set; }
+        public int DaysToSettle { get; set; }
     	[DataMember]
-        public string Name { get; set; }
+        public int FailedTradeReasonId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    
-        [DataMember]
-        public virtual List<InstrumentClassRelationship> ParentInstrumentClassRelationships { get; private set; }
     }
 }

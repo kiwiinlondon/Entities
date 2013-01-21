@@ -42,6 +42,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DaiwaEQFactorHWMPrice = 16,
         [EnumMember]
-        CapitaUKClientTransfers = 17
+        CapitaUKClientTransfers = 17,
+        [EnumMember]
+        FailedTrades = 18
     }
 }

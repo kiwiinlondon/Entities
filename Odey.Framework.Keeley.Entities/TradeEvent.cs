@@ -78,6 +78,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> TradeEuroFXRateId { get; set; }
     	[DataMember]
         public bool IsRoll { get; set; }
+    	[DataMember]
+        public Nullable<int> ContraEventId { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
