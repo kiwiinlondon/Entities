@@ -144,6 +144,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OPEFGBPDSHARECLASS = 5531,        
         [EnumMember]
-        ATLAS = 6053
+        ATLAS = 6053,
+        [EnumMember]
+        ORION = 6121,
+        [EnumMember]
+        NAVAR = 6130
     }
 }

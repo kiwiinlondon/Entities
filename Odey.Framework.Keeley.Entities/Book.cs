@@ -34,6 +34,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> ManagerId { get; set; }
     	[DataMember]
         public string EZEIdentifier { get; set; }
+    	[DataMember]
+        public bool IsPrimary { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

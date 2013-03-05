@@ -1271,6 +1271,7 @@
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="ManagerId" Type="int" />
           <Property Name="EZEIdentifier" Type="varchar" MaxLength="100" />
+          <Property Name="IsPrimary" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="BuySellReason">
           <Key>
@@ -1398,6 +1399,10 @@
           <Property Name="OpeningValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TodayUnRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="ChangeInCost" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="EqualisationFactor" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ITDSubscriptions" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedPNL" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ITDSubscriptionsValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -1423,6 +1428,9 @@
           <Property Name="HWMPrice" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="CurrentQuantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="EqFactor" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="Balance" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TotalCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="AdministratorCurrentQuantity" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="CollectiveInvestmentScheme">
           <Key>
@@ -5923,6 +5931,8 @@
           <Parameter Name="FundID" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="EZEIdentifier" Type="varchar" Mode="In" />
+          <Parameter Name="IsPrimary" Type="bit" Mode="In" />
         </Function>
         <Function Name="Book_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BookID" Type="int" Mode="In" />
@@ -5932,6 +5942,8 @@
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="EZEIdentifier" Type="varchar" Mode="In" />
+          <Parameter Name="IsPrimary" Type="bit" Mode="In" />
         </Function>
         <Function Name="BuySellReason_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BuySellReasonID" Type="int" Mode="In" />
@@ -6072,20 +6084,24 @@
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
           <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
           <Parameter Name="ChangeInQuantity" Type="numeric" Mode="In" />
           <Parameter Name="MarketValue" Type="numeric" Mode="In" />
           <Parameter Name="PriceId" Type="int" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
-          <Parameter Name="ChangeInCost" Type="numeric" Mode="In" />
-          <Parameter Name="TodayRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
-          <Parameter Name="TodayUnrealisedPnl" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningValue" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="TodayRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValue" Type="numeric" Mode="In" />
+          <Parameter Name="TodayUnRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeInCost" Type="numeric" Mode="In" />
+          <Parameter Name="EqualisationFactor" Type="numeric" Mode="In" />
+          <Parameter Name="ITDSubscriptions" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedPNL" Type="numeric" Mode="In" />
+          <Parameter Name="ITDSubscriptionsValue" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
@@ -6097,13 +6113,17 @@
           <Parameter Name="MarketValue" Type="numeric" Mode="In" />
           <Parameter Name="PriceId" Type="int" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
-          <Parameter Name="ChangeInCost" Type="numeric" Mode="In" />
-          <Parameter Name="TodayRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
-          <Parameter Name="TodayUnrealisedPnl" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningValue" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="TodayRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValue" Type="numeric" Mode="In" />
+          <Parameter Name="TodayUnRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeInCost" Type="numeric" Mode="In" />
+          <Parameter Name="EqualisationFactor" Type="numeric" Mode="In" />
+          <Parameter Name="ITDSubscriptions" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedPNL" Type="numeric" Mode="In" />
+          <Parameter Name="ITDSubscriptionsValue" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ClientSubType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientSubTypeId" Type="int" Mode="In" />
@@ -6141,10 +6161,13 @@
           <Parameter Name="Commission" Type="numeric" Mode="In" />
           <Parameter Name="DilutionLevy" Type="numeric" Mode="In" />
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="HWMPrice" Type="numeric" Mode="In" />
           <Parameter Name="CurrentQuantity" Type="numeric" Mode="In" />
           <Parameter Name="EqFactor" Type="numeric" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="Balance" Type="numeric" Mode="In" />
+          <Parameter Name="TotalCost" Type="numeric" Mode="In" />
+          <Parameter Name="AdministratorCurrentQuantity" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ClientTrade_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientTradeId" Type="int" Mode="In" />
@@ -6161,11 +6184,14 @@
           <Parameter Name="Commission" Type="numeric" Mode="In" />
           <Parameter Name="DilutionLevy" Type="numeric" Mode="In" />
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="HWMPrice" Type="numeric" Mode="In" />
           <Parameter Name="CurrentQuantity" Type="numeric" Mode="In" />
           <Parameter Name="EqFactor" Type="numeric" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="Balance" Type="numeric" Mode="In" />
+          <Parameter Name="TotalCost" Type="numeric" Mode="In" />
+          <Parameter Name="AdministratorCurrentQuantity" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ClientType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientTypeId" Type="int" Mode="In" />
@@ -9113,6 +9139,7 @@
           <Property Type="Int32" Name="ManagerId" />
           <Property Type="String" Name="EZEIdentifier" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.BookFundIDFK" FromRole="Book" ToRole="Fund" />
+          <Property Type="Boolean" Name="IsPrimary" Nullable="false" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -13430,6 +13457,9 @@
           <Property Type="Decimal" Name="HWMPrice" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="CurrentQuantity" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="EqFactor" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="Balance" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TotalCost" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="AdministratorCurrentQuantity" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="AdministratorUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -13609,6 +13639,10 @@
           <Property Type="Decimal" Name="TodayRealisedPnl" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="TodayUnRealisedPnl" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="ChangeInCost" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="EqualisationFactor" Precision="27" Scale="8" Nullable="false" />
+          <Property Type="Decimal" Name="ITDSubscriptions" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ITDRealisedPNL" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ITDSubscriptionsValue" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="ClientPortfolioUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -13874,7 +13908,8 @@
             </EntityTypeMapping>
             </EntitySetMapping>
           <EntitySetMapping Name="Books"><EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Book"><MappingFragment StoreEntitySet="Book">
-            <ScalarProperty Name="EZEIdentifier" ColumnName="EZEIdentifier" />
+            <ScalarProperty Name="IsPrimary" ColumnName="IsPrimary" />
+                <ScalarProperty Name="EZEIdentifier" ColumnName="EZEIdentifier" />
                 <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="BookID" ColumnName="BookID" />
             <ScalarProperty Name="FMOrgId" ColumnName="FMOrgId" />
@@ -13887,6 +13922,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Book">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Book_Insert">
+                  <ScalarProperty Name="IsPrimary" ParameterName="IsPrimary" />
+                  <ScalarProperty Name="EZEIdentifier" ParameterName="EZEIdentifier" />
                   <ScalarProperty Name="ManagerId" ParameterName="ManagerId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="FundID" ParameterName="FundID" />
@@ -13897,6 +13934,8 @@
                   <ResultBinding Name="BookID" ColumnName="BookID" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Book_Update">
+                  <ScalarProperty Name="IsPrimary" ParameterName="IsPrimary" Version="Current" />
+                  <ScalarProperty Name="EZEIdentifier" ParameterName="EZEIdentifier" Version="Current" />
                   <ScalarProperty Name="ManagerId" ParameterName="ManagerId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
@@ -17386,6 +17425,9 @@
           <EntitySetMapping Name="ClientTrades">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <MappingFragment StoreEntitySet="ClientTrade">
+                <ScalarProperty Name="AdministratorCurrentQuantity" ColumnName="AdministratorCurrentQuantity" />
+                <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
                 <ScalarProperty Name="EqFactor" ColumnName="EqFactor" />
                 <ScalarProperty Name="CurrentQuantity" ColumnName="CurrentQuantity" />
                 <ScalarProperty Name="HWMPrice" ColumnName="HWMPrice" />
@@ -17411,6 +17453,9 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientTrade_Insert">
+                  <ScalarProperty Name="AdministratorCurrentQuantity" ParameterName="AdministratorCurrentQuantity" />
+                  <ScalarProperty Name="TotalCost" ParameterName="TotalCost" />
+                  <ScalarProperty Name="Balance" ParameterName="Balance" />
                   <ScalarProperty Name="EqFactor" ParameterName="EqFactor" />
                   <ScalarProperty Name="CurrentQuantity" ParameterName="CurrentQuantity" />
                   <ScalarProperty Name="HWMPrice" ParameterName="HWMPrice" />
@@ -17433,6 +17478,9 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientTrade_Update">
+                  <ScalarProperty Name="AdministratorCurrentQuantity" ParameterName="AdministratorCurrentQuantity" Version="Current" />
+                  <ScalarProperty Name="TotalCost" ParameterName="TotalCost" Version="Current" />
+                  <ScalarProperty Name="Balance" ParameterName="Balance" Version="Current" />
                   <ScalarProperty Name="EqFactor" ParameterName="EqFactor" Version="Current" />
                   <ScalarProperty Name="CurrentQuantity" ParameterName="CurrentQuantity" Version="Current" />
                   <ScalarProperty Name="HWMPrice" ParameterName="HWMPrice" Version="Current" />
@@ -17466,6 +17514,10 @@
           <EntitySetMapping Name="ClientPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <MappingFragment StoreEntitySet="ClientPortfolio">
+                <ScalarProperty Name="ITDSubscriptionsValue" ColumnName="ITDSubscriptionsValue" />
+                <ScalarProperty Name="ITDRealisedPNL" ColumnName="ITDRealisedPNL" />
+                <ScalarProperty Name="ITDSubscriptions" ColumnName="ITDSubscriptions" />
+                <ScalarProperty Name="EqualisationFactor" ColumnName="EqualisationFactor" />
                 <ScalarProperty Name="ChangeInCost" ColumnName="ChangeInCost" />
                 <ScalarProperty Name="TodayUnRealisedPnl" ColumnName="TodayUnRealisedPnl" />
                 <ScalarProperty Name="TodayRealisedPnl" ColumnName="TodayRealisedPnl" />
@@ -17487,8 +17539,12 @@
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">                  
-                  <ScalarProperty Name="TodayUnRealisedPnl" ParameterName="TodayUnrealisedPnl" />
+                <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">
+                  <ScalarProperty Name="ITDSubscriptionsValue" ParameterName="ITDSubscriptionsValue" />
+                  <ScalarProperty Name="ITDRealisedPNL" ParameterName="ITDRealisedPNL" />
+                  <ScalarProperty Name="ITDSubscriptions" ParameterName="ITDSubscriptions" />
+                  <ScalarProperty Name="TodayUnRealisedPnl" ParameterName="TodayUnRealisedPnl" />
+                  <ScalarProperty Name="EqualisationFactor" ParameterName="EqualisationFactor" />
                   <ScalarProperty Name="TodayRealisedPnl" ParameterName="TodayRealisedPnl" />
                   <ScalarProperty Name="ChangeInCost" ParameterName="ChangeInCost" />
                   <ScalarProperty Name="OpeningValue" ParameterName="OpeningValue" />
@@ -17507,7 +17563,11 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">
-                  <ScalarProperty Name="TodayUnRealisedPnl" ParameterName="TodayUnrealisedPnl" Version="Current" />
+                  <ScalarProperty Name="ITDSubscriptionsValue" ParameterName="ITDSubscriptionsValue" Version="Current" />
+                  <ScalarProperty Name="ITDRealisedPNL" ParameterName="ITDRealisedPNL" Version="Current" />
+                  <ScalarProperty Name="ITDSubscriptions" ParameterName="ITDSubscriptions" Version="Current" />
+                  <ScalarProperty Name="EqualisationFactor" ParameterName="EqualisationFactor" Version="Current" />
+                  <ScalarProperty Name="TodayUnRealisedPnl" ParameterName="TodayUnRealisedPnl" Version="Current" />
                   <ScalarProperty Name="TodayRealisedPnl" ParameterName="TodayRealisedPnl" Version="Current" />
                   <ScalarProperty Name="ChangeInCost" ParameterName="ChangeInCost" Version="Current" />
                   <ScalarProperty Name="OpeningValue" ParameterName="OpeningValue" Version="Current" />

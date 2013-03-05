@@ -56,6 +56,12 @@ namespace Odey.Framework.Keeley.Entities
         public decimal CurrentQuantity { get; set; }
     	[DataMember]
         public decimal EqFactor { get; set; }
+    	[DataMember]
+        public decimal Balance { get; set; }
+    	[DataMember]
+        public decimal TotalCost { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AdministratorCurrentQuantity { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
