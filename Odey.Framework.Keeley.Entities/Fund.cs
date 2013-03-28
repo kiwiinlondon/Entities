@@ -20,8 +20,6 @@ namespace Odey.Framework.Keeley.Entities
         public Fund()
         {
             this.FundCountryHolidays = new List<FundCountryHoliday>();
-            this.ClientTrades = new List<ClientTrade>();
-            this.ClientPortfolios = new List<ClientPortfolio>();
         }
     
     	[DataMember]
@@ -74,6 +72,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> LossTrigger { get; set; }
     	[DataMember]
         public string ShareClassDescriptor { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ManagementFee { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
@@ -87,9 +89,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual LegalEntity LegalEntity { get; set; }
         [DataMember]
         public virtual InstrumentMarket RiskFreeInstrumentMarket { get; set; }
-        [DataMember]
-        public virtual List<ClientTrade> ClientTrades { get; set; }
-        [DataMember]
-        public virtual List<ClientPortfolio> ClientPortfolios { get; set; }
     }
 }

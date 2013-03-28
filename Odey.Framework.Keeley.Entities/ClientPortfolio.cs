@@ -49,7 +49,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal TodayUnRealisedPnl { get; set; }
     	[DataMember]
-        public Nullable<decimal> ChangeInCost { get; set; }
+        public decimal ChangeInCost { get; set; }
     	[DataMember]
         public decimal EqualisationFactor { get; set; }
     	[DataMember]

@@ -22,6 +22,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Delisted = 5,
         [EnumMember]
-        Expired = 6
+        Expired = 6,
+        [EnumMember]
+        OdeyUnlistedFund = 7
     }
 }
