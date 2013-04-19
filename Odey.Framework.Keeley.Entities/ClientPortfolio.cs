@@ -52,12 +52,6 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ChangeInCost { get; set; }
     	[DataMember]
         public decimal EqualisationFactor { get; set; }
-    	[DataMember]
-        public decimal ITDSubscriptions { get; set; }
-    	[DataMember]
-        public decimal ITDRealisedPNL { get; set; }
-    	[DataMember]
-        public decimal ITDSubscriptionsValue { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
