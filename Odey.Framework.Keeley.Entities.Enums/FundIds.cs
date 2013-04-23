@@ -148,7 +148,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ORION = 6121,
         [EnumMember]
-        NAVAR = 6130,
+        NAVER = 6130,
         [EnumMember]
         SWAN = 6184
         
