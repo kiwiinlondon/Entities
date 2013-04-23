@@ -88,11 +88,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PORT = 5330,
         [EnumMember]
-        PORT_GBP_I_ACC = 5332,
+        PORT_GBP_I_ACC = 5532,
         [EnumMember]
-        PORT_GBP_R_ACC = 5333,
+        PORT_GBP_R_ACC = 5533,
         [EnumMember]
-        PORT_GBP_R_INC = 5334,
+        PORT_GBP_R_INC = 5534,
         
         [EnumMember]
         VITR = 5333,
