@@ -56,6 +56,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DYSSGBPRSHARECLASS = 5750,
         [EnumMember]
         DYSSEURSHARECLASS = 5901,
+        [EnumMember]
+        DYSS_USD_R = 6239,
         
         [EnumMember]
         MR11 = 5590,
