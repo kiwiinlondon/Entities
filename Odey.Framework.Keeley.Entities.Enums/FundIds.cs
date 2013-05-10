@@ -58,6 +58,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DYSSEURSHARECLASS = 5901,
         [EnumMember]
         DYSS_USD_R = 6239,
+        [EnumMember]
+        DYSS_EUR_R = 6244,
+        
         
         [EnumMember]
         MR11 = 5590,
