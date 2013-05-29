@@ -1243,6 +1243,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Initials" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Bond">
           <Key>
@@ -1400,6 +1401,8 @@
           <Property Name="TodayUnRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="ChangeInCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="EqualisationFactor" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ITDSumCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -6099,6 +6102,8 @@
           <Parameter Name="TodayUnRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="ChangeInCost" Type="numeric" Mode="In" />
           <Parameter Name="EqualisationFactor" Type="numeric" Mode="In" />
+          <Parameter Name="ITDSumCost" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedPnl" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
@@ -6118,6 +6123,8 @@
           <Parameter Name="TodayUnRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="ChangeInCost" Type="numeric" Mode="In" />
           <Parameter Name="EqualisationFactor" Type="numeric" Mode="In" />
+          <Parameter Name="ITDSumCost" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedPnl" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ClientSubType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientSubTypeId" Type="int" Mode="In" />
@@ -9119,7 +9126,8 @@
           <Property Name="WindowsLogin" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
-          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />          
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />          
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -13637,6 +13645,8 @@
           <Property Type="Decimal" Name="TodayUnRealisedPnl" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="ChangeInCost" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="EqualisationFactor" Precision="27" Scale="8" Nullable="false" />
+          <Property Type="Decimal" Name="ITDSumCost" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ITDRealisedPnl" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="ClientPortfolioUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -13861,7 +13871,8 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="KeeleyModelStoreContainer" CdmEntityContainer="KeeleyModel">
           <EntitySetMapping Name="ApplicationUsers"><EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ApplicationUser"><MappingFragment StoreEntitySet="ApplicationUser">
-            <ScalarProperty Name="UserID" ColumnName="UserID" />
+            <ScalarProperty Name="Initials" ColumnName="Initials" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
             <ScalarProperty Name="FMPersID" ColumnName="FMPersID" />
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="Email" ColumnName="Email" />
@@ -17513,6 +17524,8 @@
           <EntitySetMapping Name="ClientPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <MappingFragment StoreEntitySet="ClientPortfolio">
+                <ScalarProperty Name="ITDRealisedPnl" ColumnName="ITDRealisedPnl" />
+                <ScalarProperty Name="ITDSumCost" ColumnName="ITDSumCost" />
                 <ScalarProperty Name="EqualisationFactor" ColumnName="EqualisationFactor" />
                 <ScalarProperty Name="ChangeInCost" ColumnName="ChangeInCost" />
                 <ScalarProperty Name="TodayUnRealisedPnl" ColumnName="TodayUnRealisedPnl" />
@@ -17536,6 +17549,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">
+                  <ScalarProperty Name="ITDRealisedPnl" ParameterName="ITDRealisedPnl" />
+                  <ScalarProperty Name="ITDSumCost" ParameterName="ITDSumCost" />
                   <ScalarProperty Name="TodayUnRealisedPnl" ParameterName="TodayUnRealisedPnl" />
                   <ScalarProperty Name="EqualisationFactor" ParameterName="EqualisationFactor" />
                   <ScalarProperty Name="TodayRealisedPnl" ParameterName="TodayRealisedPnl" />
@@ -17556,6 +17571,8 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">
+                  <ScalarProperty Name="ITDRealisedPnl" ParameterName="ITDRealisedPnl" Version="Current" />
+                  <ScalarProperty Name="ITDSumCost" ParameterName="ITDSumCost" Version="Current" />
                   <ScalarProperty Name="EqualisationFactor" ParameterName="EqualisationFactor" Version="Current" />
                   <ScalarProperty Name="TodayUnRealisedPnl" ParameterName="TodayUnRealisedPnl" Version="Current" />
                   <ScalarProperty Name="TodayRealisedPnl" ParameterName="TodayRealisedPnl" Version="Current" />
