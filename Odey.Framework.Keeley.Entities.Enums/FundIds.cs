@@ -255,6 +255,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SWAN_USD_R = 6189,
         [EnumMember]
         SWAN_USD_IR = 6243,
+
+
+        [EnumMember]
+        DEVM = 6253,
+        [EnumMember]
+        DEVM_STI = 6263,
+        [EnumMember]
+        DEVM_STM = 6264,
         
     }
 }
