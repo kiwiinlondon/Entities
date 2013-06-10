@@ -44,6 +44,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitaUKClientTransfers = 17,
         [EnumMember]
-        FailedTrades = 18
+        FailedTrades = 18,
+
+        [EnumMember]
+        QuintillionPositionFile = 19,
     }
 }
