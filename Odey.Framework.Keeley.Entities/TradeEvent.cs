@@ -81,7 +81,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> ContraEventId { get; set; }
     	[DataMember]
-        public Nullable<System.DateTime> OriginalInputDate { get; set; }
+        public System.DateTime OriginalInputDate { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
