@@ -48,5 +48,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         QuintillionPositionFile = 19,
+
+        [EnumMember]
+        QuintillionIndicativePrices = 20,
     }
 }
