@@ -255,6 +255,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SWAN_USD_R = 6189,
         [EnumMember]
         SWAN_USD_IR = 6243,
+        [EnumMember]
+        SWAN_EUR_IR = 6293,
 
 
         [EnumMember]
