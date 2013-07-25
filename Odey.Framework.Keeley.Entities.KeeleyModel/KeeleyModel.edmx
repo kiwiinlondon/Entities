@@ -999,6 +999,10 @@
             <End Role="PortfolioEventType" EntitySet="PortfolioEventType" />
             <End Role="PortfolioEvent" EntitySet="PortfolioEvent" />
           </AssociationSet>
+          <AssociationSet Name="PortfolioHedgeRatioIdFK" Association="KeeleyModel.Store.PortfolioHedgeRatioIdFK">
+            <End Role="Analytic" EntitySet="Analytic" />
+            <End Role="Portfolio" EntitySet="Portfolio" />
+          </AssociationSet>
           <AssociationSet Name="portfoliopriceidfk" Association="KeeleyModel.Store.portfoliopriceidfk">
             <End Role="Price" EntitySet="Price" />
             <End Role="Portfolio" EntitySet="Portfolio" />
@@ -2343,6 +2347,8 @@
           <Property Name="ValuationPrice" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="ValuationPriceToPositionFXRate" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="ValuationMarketValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="HedgeRatio" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="HedgeRatioId" Type="int" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -5280,6 +5286,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="PortfolioHedgeRatioIdFK">
+          <End Role="Analytic" Type="KeeleyModel.Store.Analytic" Multiplicity="0..1" />
+          <End Role="Portfolio" Type="KeeleyModel.Store.Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Analytic">
+              <PropertyRef Name="AnalyticId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="HedgeRatioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="portfoliopriceidfk">
           <End Role="Price" Type="KeeleyModel.Store.Price" Multiplicity="0..1" />
           <End Role="Portfolio" Type="KeeleyModel.Store.Portfolio" Multiplicity="*" />
@@ -7432,6 +7450,8 @@
           <Parameter Name="ValuationPrice" Type="numeric" Mode="In" />
           <Parameter Name="ValuationPriceToPositionFXRate" Type="numeric" Mode="In" />
           <Parameter Name="ValuationMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
+          <Parameter Name="HedgeRatioId" Type="int" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -7485,6 +7505,8 @@
           <Parameter Name="ValuationPrice" Type="numeric" Mode="In" />
           <Parameter Name="ValuationPriceToPositionFXRate" Type="numeric" Mode="In" />
           <Parameter Name="ValuationMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
+          <Parameter Name="HedgeRatioId" Type="int" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -9205,6 +9227,10 @@
           <AssociationSet Name="FK__TradeEven__Contr__6555CF79" Association="Odey.Framework.Keeley.Entities.FK__TradeEven__Contr__6555CF79">
             <End Role="TradeEvent" EntitySet="TradeEvents" />
             <End Role="TradeEvent1" EntitySet="TradeEvents" />
+          </AssociationSet>
+          <AssociationSet Name="PortfolioHedgeRatioIdFK" Association="Odey.Framework.Keeley.Entities.PortfolioHedgeRatioIdFK">
+            <End Role="Analytic" EntitySet="Analytics" />
+            <End Role="Portfolio" EntitySet="Portfolios" />
           </AssociationSet>                    
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -11086,7 +11112,6 @@
           <Property Type="Int32" Name="UnderlyingPriceId" />
           <Property Type="Decimal" Name="UnderlyingPriceToPositionFXRate" Precision="27" Scale="8" />
           <Property Type="Int32" Name="UnderlyingPriceToPositionFXRateId" />
-          <NavigationProperty Name="FXRate3" Relationship="Odey.Framework.Keeley.Entities.PortfolioUnderlyingPriceToPositionFXRateIdFk" FromRole="Portfolio" ToRole="FXRate" />
           <Property Type="Decimal" Name="ValuationFXRate" Nullable="false" Precision="35" Scale="16" />
           <Property Type="Decimal" Name="ValuationNetPosition" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="ValuationDeltaNetCostInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
@@ -11094,6 +11119,8 @@
           <Property Type="Decimal" Name="ValuationPriceToPositionFXRate" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="ValuationMarketValue" Nullable="false" Precision="27" Scale="8" />
           <NavigationProperty Name="Exposures" Relationship="Odey.Framework.Keeley.Entities.ExposurePortfolioIDFK" FromRole="Portfolio" ToRole="Exposure" />
+          <Property Type="Decimal" Name="HedgeRatio" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="HedgeRatioId" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -13958,6 +13985,18 @@
               <PropertyRef Name="ContraEventId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="PortfolioHedgeRatioIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Analytic" Role="Analytic" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Analytic">
+              <PropertyRef Name="AnalyticId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="HedgeRatioId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>                
         </Schema>
     </edmx:ConceptualModels>
@@ -15856,6 +15895,8 @@
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="HedgeRatioId" ColumnName="HedgeRatioId" />
+                <ScalarProperty Name="HedgeRatio" ColumnName="HedgeRatio" />
                 <ScalarProperty Name="ValuationMarketValue" ColumnName="ValuationMarketValue" />
                 <ScalarProperty Name="ValuationPriceToPositionFXRate" ColumnName="ValuationPriceToPositionFXRate" />
                 <ScalarProperty Name="ValuationPrice" ColumnName="ValuationPrice" />
@@ -15910,6 +15951,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="HedgeRatioId" ParameterName="HedgeRatioId" />
+                  <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" />
                   <ScalarProperty Name="ValuationMarketValue" ParameterName="ValuationMarketValue" />
                   <ScalarProperty Name="ValuationPriceToPositionFXRate" ParameterName="ValuationPriceToPositionFXRate" />
                   <ScalarProperty Name="ValuationPrice" ParameterName="ValuationPrice" />
@@ -15961,6 +16004,8 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="HedgeRatioId" ParameterName="HedgeRatioId" Version="Current" />
+                  <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" Version="Current" />
                   <ScalarProperty Name="ValuationMarketValue" ParameterName="ValuationMarketValue" Version="Current" />
                   <ScalarProperty Name="ValuationPriceToPositionFXRate" ParameterName="ValuationPriceToPositionFXRate" Version="Current" />
                   <ScalarProperty Name="ValuationPrice" ParameterName="ValuationPrice" Version="Current" />
@@ -17882,13 +17927,13 @@
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="59">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="32">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="15.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -20234,7 +20279,7 @@
           <edmx:ConnectorPoint PointX="34.208333333333336" PointY="21.024851888020834" />
           <edmx:ConnectorPoint PointX="34.625" PointY="21.024851888020834" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Portfolio" Width="1.5" PointX="31.125" PointY="9.125" Height="9.2877408854166674" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Portfolio" Width="1.5" PointX="32.25" PointY="8.375" Height="9.2877408854166674" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioTradeDateUpdateUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.26483903249105" />
           <edmx:ConnectorPoint PointX="2.6666666666666665" PointY="17.26483903249105" />
@@ -23560,6 +23605,7 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FailedTradeUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FailedTradeEventIdPK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TradeEven__Contr__6555CF79" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioHedgeRatioIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

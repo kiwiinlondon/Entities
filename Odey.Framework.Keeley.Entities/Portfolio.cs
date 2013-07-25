@@ -120,13 +120,15 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ValuationPriceToPositionFXRate { get; set; }
     	[DataMember]
         public decimal ValuationMarketValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> HedgeRatio { get; set; }
+    	[DataMember]
+        public Nullable<int> HedgeRatioId { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
         [DataMember]
         public virtual Portfolio PreviousPortfolio { get; set; }
-        [DataMember]
-        public virtual FXRate FXRate3 { get; set; }
         [DataMember]
         public virtual List<Exposure> Exposures { get; set; }
     }
