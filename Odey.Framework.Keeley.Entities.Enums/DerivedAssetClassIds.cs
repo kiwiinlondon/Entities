@@ -13,6 +13,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         GovernmentBond = 6,
         Cash = 7,
         ForeignExchange = 9,
-        Other = 10
+        Other = 10,
+        InterestRate = 11
     }
 }

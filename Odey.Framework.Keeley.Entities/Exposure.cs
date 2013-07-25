@@ -60,6 +60,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsPrimaryExposure { get; set; }
     	[DataMember]
         public int InstrumentMarketId { get; set; }
+    	[DataMember]
+        public bool IsLong { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
