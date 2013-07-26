@@ -62,6 +62,10 @@ namespace Odey.Framework.Keeley.Entities
         public int InstrumentMarketId { get; set; }
     	[DataMember]
         public bool IsLong { get; set; }
+    	[DataMember]
+        public Nullable<decimal> InterestRateExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeInterestRateExposure { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
