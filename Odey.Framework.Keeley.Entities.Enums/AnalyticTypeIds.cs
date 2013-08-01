@@ -29,7 +29,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         HedgeRatio = 10,
         [EnumMember]
-        BBVolumeAverage30DValue = 11
+        BBVolumeAverage30DValue = 11,
+        [EnumMember]
+        VaR = 12,
     }
 }
 
