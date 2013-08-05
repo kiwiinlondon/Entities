@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Administrator
     {
+    	
+        public Administrator()
+        {
+            this.Fund = new List<Fund>();
+        }
+    
     	[DataMember]
         public int LegalEntityID { get; set; }
     	[DataMember]
@@ -27,5 +33,7 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual LegalEntity LegalEntity { get; set; }
+        [DataMember]
+        public virtual List<Fund> Fund { get; set; }
     }
 }

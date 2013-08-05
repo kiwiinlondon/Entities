@@ -76,6 +76,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> PerformanceFee { get; set; }
     	[DataMember]
         public Nullable<decimal> ManagementFee { get; set; }
+    	[DataMember]
+        public Nullable<int> AdministratorId { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
@@ -89,5 +91,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual LegalEntity LegalEntity { get; set; }
         [DataMember]
         public virtual InstrumentMarket RiskFreeInstrumentMarket { get; set; }
+        [DataMember]
+        public virtual Administrator Administrator { get; set; }
     }
 }

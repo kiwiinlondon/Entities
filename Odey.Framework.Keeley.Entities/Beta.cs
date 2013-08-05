@@ -38,10 +38,10 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     
         [DataMember]
+        public virtual Currency Currency { get; set; }
+        [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual InstrumentMarket RelativeIndexInstrumentMarket { get; set; }
-        [DataMember]
-        public virtual Currency Currency { get; set; }
     }
 }
