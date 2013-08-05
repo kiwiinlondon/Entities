@@ -8,6 +8,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum FileNameResolutionIds
     {
         Today=1,
-        EuropeanFundAdministration=2
+        EuropeanFundAdministration=2,
+        EndOfPreviousMonthIrish=3
     }
 }
