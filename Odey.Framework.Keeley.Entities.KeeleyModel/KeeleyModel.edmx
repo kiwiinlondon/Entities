@@ -11,6 +11,7 @@
           <EntitySet Name="Administrator" EntityType="KeeleyModel.Store.Administrator" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Analytic" EntityType="KeeleyModel.Store.Analytic" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ApplicationUser" EntityType="KeeleyModel.Store.ApplicationUser" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Beta" EntityType="KeeleyModel.Store.Beta" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Bond" EntityType="KeeleyModel.Store.Bond" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Book" EntityType="KeeleyModel.Store.Book" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="BuySellReason" EntityType="KeeleyModel.Store.BuySellReason" store:Type="Tables" Schema="dbo" />
@@ -166,6 +167,18 @@
           <AssociationSet Name="ApplicationUserUpdateUserIDFK" Association="KeeleyModel.Store.ApplicationUserUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ApplicationUser1" EntitySet="ApplicationUser" />
+          </AssociationSet>
+          <AssociationSet Name="BetaCurrencyIdFK" Association="KeeleyModel.Store.BetaCurrencyIdFK">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Beta" EntitySet="Beta" />
+          </AssociationSet>
+          <AssociationSet Name="BetaInstrumentMarketIdFK" Association="KeeleyModel.Store.BetaInstrumentMarketIdFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="Beta" EntitySet="Beta" />
+          </AssociationSet>
+          <AssociationSet Name="BetaUserIDFK" Association="KeeleyModel.Store.BetaUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Beta" EntitySet="Beta" />
           </AssociationSet>
           <AssociationSet Name="BondInstrumentIdFK" Association="KeeleyModel.Store.BondInstrumentIdFK">
             <End Role="Instrument" EntitySet="Instrument" />
@@ -1143,6 +1156,10 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Region" EntitySet="Region" />
           </AssociationSet>
+          <AssociationSet Name="RelativeIndexInstrumentMarketIdFK" Association="KeeleyModel.Store.RelativeIndexInstrumentMarketIdFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="Beta" EntitySet="Beta" />
+          </AssociationSet>
           <AssociationSet Name="RestrictedListInstrumentIdFK" Association="KeeleyModel.Store.RestrictedListInstrumentIdFK">
             <End Role="Instrument" EntitySet="Instrument" />
             <End Role="RestrictedList" EntitySet="RestrictedList" />
@@ -1248,6 +1265,21 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="Initials" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Beta">
+          <Key>
+            <PropertyRef Name="BetaId" />
+          </Key>
+          <Property Name="BetaId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="BetaTypeId" Type="int" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="RelativeIndexInstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="Value" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="Bond">
           <Key>
@@ -2788,6 +2820,42 @@
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="ApplicationUser1">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BetaCurrencyIdFK">
+          <End Role="Currency" Type="KeeleyModel.Store.Currency" Multiplicity="1" />
+          <End Role="Beta" Type="KeeleyModel.Store.Beta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="Beta">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BetaInstrumentMarketIdFK">
+          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="1" />
+          <End Role="Beta" Type="KeeleyModel.Store.Beta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Beta">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BetaUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="Beta" Type="KeeleyModel.Store.Beta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Beta">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -5717,6 +5785,18 @@
             </Principal>
             <Dependent Role="Region">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RelativeIndexInstrumentMarketIdFK">
+          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="1" />
+          <End Role="Beta" Type="KeeleyModel.Store.Beta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Beta">
+              <PropertyRef Name="RelativeIndexInstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9237,6 +9317,19 @@
           <AssociationSet Name="PortfolioHedgeRatioIdFK" Association="Odey.Framework.Keeley.Entities.PortfolioHedgeRatioIdFK">
             <End Role="Analytic" EntitySet="Analytics" />
             <End Role="Portfolio" EntitySet="Portfolios" />
+          </AssociationSet>
+          <EntitySet Name="Beta" EntityType="Odey.Framework.Keeley.Entities.Beta" />
+          <AssociationSet Name="BetaInstrumentMarket" Association="Odey.Framework.Keeley.Entities.BetaInstrumentMarket">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+          </AssociationSet>
+          <AssociationSet Name="BetaRelativeIndexInstrumentMarket" Association="Odey.Framework.Keeley.Entities.BetaRelativeIndexInstrumentMarket">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+          </AssociationSet>
+          <AssociationSet Name="BetaCurrency" Association="Odey.Framework.Keeley.Entities.BetaCurrency">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="Currency" EntitySet="Currencies" />
           </AssociationSet>                    
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -14005,6 +14098,60 @@
               <PropertyRef Name="HedgeRatioId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Beta">
+          <Key>
+            <PropertyRef Name="BetaId" />
+          </Key>
+          <Property Type="Int32" Name="BetaId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="BetaTypeId" Nullable="false" />
+          <Property Type="Int32" Name="InstrumentMarketId" Nullable="false" />
+          <Property Type="Int32" Name="RelativeIndexInstrumentMarketId" Nullable="false" />
+          <Property Type="Int32" Name="CurrencyId" Nullable="false" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="Value" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.BetaInstrumentMarket" FromRole="Beta" ToRole="InstrumentMarket" />
+          <NavigationProperty Name="RelativeIndexInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.BetaRelativeIndexInstrumentMarket" FromRole="Beta" ToRole="InstrumentMarket" />
+          <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.BetaCurrency" FromRole="Beta" ToRole="Currency" />
+        </EntityType>
+        <Association Name="BetaInstrumentMarket">
+          <End Type="Odey.Framework.Keeley.Entities.Beta" Role="Beta" Multiplicity="*" />
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Beta">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BetaRelativeIndexInstrumentMarket">
+          <End Type="Odey.Framework.Keeley.Entities.Beta" Role="Beta" Multiplicity="*" />
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Beta">
+              <PropertyRef Name="RelativeIndexInstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BetaCurrency">
+          <End Type="Odey.Framework.Keeley.Entities.Beta" Role="Beta" Multiplicity="*" />
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="Beta">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>                
         </Schema>
     </edmx:ConceptualModels>
@@ -17925,6 +18072,22 @@
                 </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Beta">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
+              <MappingFragment StoreEntitySet="Beta">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="RelativeIndexInstrumentMarketId" ColumnName="RelativeIndexInstrumentMarketId" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="BetaTypeId" ColumnName="BetaTypeId" />
+                <ScalarProperty Name="BetaId" ColumnName="BetaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
           </EntitySetMapping>          
         </EntityContainerMapping>
       </Mapping>
@@ -17947,7 +18110,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="32">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="72">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="15.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -23607,7 +23770,7 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioFundIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposureInstrumentIDFK1" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposureInstrumentMarketIDFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Index" Width="1.875" PointX="18" PointY="135" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Index" Width="1.875" PointX="29.875" PointY="38.875" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InterestRateReturn" Width="1.5" PointX="6.375" PointY="59.375" />
@@ -23620,6 +23783,10 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FailedTradeEventIdPK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TradeEven__Contr__6555CF79" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioHedgeRatioIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Beta" Width="2.5" PointX="30.625" PointY="46" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.BetaInstrumentMarket" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.BetaRelativeIndexInstrumentMarket" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.BetaCurrency" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
