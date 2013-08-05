@@ -10,7 +10,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Unknown = 1,
         [EnumMember]
-        GreatBritain = 62
-
+        GreatBritain = 62,
+        [EnumMember]
+        Ireland = 56
     }
 }
