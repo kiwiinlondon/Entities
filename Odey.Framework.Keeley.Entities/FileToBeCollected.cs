@@ -41,6 +41,8 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public string EmailWhenReceived { get; set; }
     	[DataMember]
-        public Nullable<int> FilesToBeCollectedGroupId { get; set; }
+        public Nullable<int> FileToBeCollectedGroupId { get; set; }
+    	[DataMember]
+        public Nullable<int> FundId { get; set; }
     }
 }
