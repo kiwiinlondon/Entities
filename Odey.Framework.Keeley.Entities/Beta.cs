@@ -19,8 +19,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int BetaId { get; set; }
     	[DataMember]
-        public int BetaTypeId { get; set; }
-    	[DataMember]
         public int InstrumentMarketId { get; set; }
     	[DataMember]
         public int RelativeIndexInstrumentMarketId { get; set; }
@@ -36,6 +34,8 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public int AnalyticTypeId { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

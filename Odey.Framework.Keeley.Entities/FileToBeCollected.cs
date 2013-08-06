@@ -40,5 +40,7 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public string EmailWhenReceived { get; set; }
+    	[DataMember]
+        public Nullable<int> FilesToBeCollectedGroupId { get; set; }
     }
 }

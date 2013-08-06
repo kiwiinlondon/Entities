@@ -1275,7 +1275,7 @@
             <PropertyRef Name="BetaId" />
           </Key>
           <Property Name="BetaId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="BetaTypeId" Type="int" Nullable="false" />
+          <Property Name="AnalyticTypeId" Type="int" Nullable="false" />
           <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="RelativeIndexInstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="CurrencyId" Type="int" Nullable="false" />
@@ -1874,6 +1874,7 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="EmailWhenReceived" Type="varchar" MaxLength="1000" />
+          <Property Name="FilesToBeCollectedGroupId" Type="int" />
         </EntityType>
         <EntityType Name="FMTradeBridgeLastProcessed">
           <Key>
@@ -6025,7 +6026,7 @@
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="Beta_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BetaTypeId" Type="int" Mode="In" />
+          <Parameter Name="AnalyticTypeId" Type="int" Mode="In" />
           <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="RelativeIndexInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
@@ -6035,7 +6036,7 @@
         </Function>
         <Function Name="Beta_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BetaId" Type="int" Mode="In" />
-          <Parameter Name="BetaTypeId" Type="int" Mode="In" />
+          <Parameter Name="AnalyticTypeId" Type="int" Mode="In" />
           <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="RelativeIndexInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
@@ -13174,6 +13175,7 @@
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="EmailWhenReceived" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="FilesToBeCollectedGroupId" />
         </EntityType>
         <Association Name="FileToBeCollectedUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14157,7 +14159,6 @@
             <PropertyRef Name="BetaId" />
           </Key>
           <Property Type="Int32" Name="BetaId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="Int32" Name="BetaTypeId" Nullable="false" />
           <Property Type="Int32" Name="InstrumentMarketId" Nullable="false" />
           <Property Type="Int32" Name="RelativeIndexInstrumentMarketId" Nullable="false" />
           <Property Type="Int32" Name="CurrencyId" Nullable="false" />
@@ -14169,6 +14170,7 @@
           <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.BetaCurrencyIdFK" FromRole="Beta" ToRole="Currency" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.BetaInstrumentMarketIdFK" FromRole="Beta" ToRole="InstrumentMarket" />
           <NavigationProperty Name="RelativeIndexInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.RelativeIndexInstrumentMarketIdFK" FromRole="Beta" ToRole="InstrumentMarket" />
+          <Property Type="Int32" Name="AnalyticTypeId" Nullable="false" />
         </EntityType>
         <Association Name="FK__Fund__Administra__0A2691EF">
           <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="0..1" />
@@ -17455,6 +17457,7 @@
           <EntitySetMapping Name="FileToBeCollecteds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FileToBeCollected">
               <MappingFragment StoreEntitySet="FileToBeCollected">
+                <ScalarProperty Name="FilesToBeCollectedGroupId" ColumnName="FilesToBeCollectedGroupId" />
                 <ScalarProperty Name="EmailWhenReceived" ColumnName="EmailWhenReceived" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -18154,6 +18157,7 @@
           <EntitySetMapping Name="Beta">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
               <MappingFragment StoreEntitySet="Beta">
+                <ScalarProperty Name="AnalyticTypeId" ColumnName="AnalyticTypeId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -18162,22 +18166,22 @@
                 <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
                 <ScalarProperty Name="RelativeIndexInstrumentMarketId" ColumnName="RelativeIndexInstrumentMarketId" />
                 <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
-                <ScalarProperty Name="BetaTypeId" ColumnName="BetaTypeId" />
                 <ScalarProperty Name="BetaId" ColumnName="BetaId" />
               </MappingFragment>
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Beta_Insert">
+                  <ScalarProperty Name="AnalyticTypeId" ParameterName="AnalyticTypeId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Value" ParameterName="Value" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
                   <ScalarProperty Name="RelativeIndexInstrumentMarketId" ParameterName="RelativeIndexInstrumentMarketId" />
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
-                  <ScalarProperty Name="BetaTypeId" ParameterName="BetaTypeId" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Beta_Update">
+                  <ScalarProperty Name="AnalyticTypeId" ParameterName="AnalyticTypeId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="Value" ParameterName="Value" Version="Current" />
@@ -18185,7 +18189,6 @@
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
                   <ScalarProperty Name="RelativeIndexInstrumentMarketId" ParameterName="RelativeIndexInstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
-                  <ScalarProperty Name="BetaTypeId" ParameterName="BetaTypeId" Version="Current" />
                   <ScalarProperty Name="BetaId" ParameterName="BetaId" Version="Current" />
                 </UpdateFunction>
                 <DeleteFunction FunctionName="KeeleyModel.Store.Beta_Delete">
