@@ -8,30 +8,45 @@ namespace Odey.Framework.Keeley.Entities.Enums
     {
         [EnumMember]
         None=0,
+        
         [EnumMember]
         BBVolumeAverage30D = 1,
+        
         [EnumMember]
         LiquidityWeightedAverageNumberOfDays=2,
+        
         [EnumMember]
         LiquidityNonLiquidatedPercentNAV=3,
+        
         [EnumMember]
         LiquidityValueGreaterMaxDailyLimitPercentNAV=4,
+        
         [EnumMember]
         LiquidityHaircutPercentNAV=5,
+        
         [EnumMember]
         SharesOutstanding = 6,
+
         [EnumMember]
-        Beta = 7,
+        Beta90DayDaily = 7,
+        
         [EnumMember]
         IndicativeFundPerformance =8,
+        
         [EnumMember]
         OptionDelta = 9,
+        
         [EnumMember]
         HedgeRatio = 10,
+        
         [EnumMember]
         BBVolumeAverage30DValue = 11,
+        
         [EnumMember]
         VaR = 12,
+        
+        [EnumMember]
+        Beta2YearDaily = 13,
     }
 }
 
