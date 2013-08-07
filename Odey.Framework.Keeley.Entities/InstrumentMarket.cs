@@ -52,6 +52,8 @@ namespace Odey.Framework.Keeley.Entities
         public string BloombergGlobalId { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> LastRepulledFromSourceDate { get; set; }
+    	[DataMember]
+        public string FactsetId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

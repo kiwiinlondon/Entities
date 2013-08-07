@@ -2111,6 +2111,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="IndexTypeId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Instrument">
           <Key>
@@ -2220,6 +2221,7 @@
           <Property Name="PriceQuoteMultiplier" Type="decimal" Precision="27" Scale="8" />
           <Property Name="BloombergGlobalId" Type="varchar" MaxLength="25" />
           <Property Name="LastRepulledFromSourceDate" Type="datetime" />
+          <Property Name="FactsetId" Type="varchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="InstrumentRelationship">
           <Key>
@@ -11634,6 +11636,7 @@
           <Property Type="String" Name="BloombergGlobalId" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastRepulledFromSourceDate" Precision="3" />
           <NavigationProperty Name="UnderlyingInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.fkinstrumentmarketUnderlyingInstrumentMarketId" FromRole="InstrumentMarket" ToRole="InstrumentMarket1" a:GetterAccess="Public" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Type="String" Name="FactsetId" MaxLength="150" FixedLength="false" Unicode="false" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14082,6 +14085,7 @@
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" FromRole="Indx" ToRole="InstrumentMarket" />
+          <Property Type="Int32" Name="IndexTypeId" Nullable="false" />
         </EntityType>
         <Association Name="IndexIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -16672,6 +16676,7 @@
           <EntitySetMapping Name="InstrumentMarkets">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <MappingFragment StoreEntitySet="InstrumentMarket">
+                <ScalarProperty Name="FactsetId" ColumnName="FactsetId" />
                 <ScalarProperty Name="LastRepulledFromSourceDate" ColumnName="LastRepulledFromSourceDate" />
                 <ScalarProperty Name="BloombergGlobalId" ColumnName="BloombergGlobalId" />
                 <ScalarProperty Name="PriceQuoteMultiplier" ColumnName="PriceQuoteMultiplier" />
@@ -18187,6 +18192,7 @@
           <EntitySetMapping Name="Indices">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Index">
               <MappingFragment StoreEntitySet="Indx">
+                <ScalarProperty Name="IndexTypeId" ColumnName="IndexTypeId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -23995,7 +24001,7 @@
           <edmx:ConnectorPoint PointX="25.75390375" PointY="23.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Administrator" Width="1.5" PointX="5.3839548236615746" PointY="9.8373165176423818" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" Width="1.5" PointX="3.3283453059049068" PointY="12.159212013780703" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" Width="1.5" PointX="1.125" PointY="10.5" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientAccount" Width="1.5" PointX="8.625" PointY="55.375" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientTrade" Width="1.5" PointX="11.25" PointY="54.625" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AdministratorUserIDFK" />
@@ -24018,7 +24024,7 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioFundIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposureInstrumentIDFK1" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposureInstrumentMarketIDFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Index" Width="1.875" PointX="29.875" PointY="38.875" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Index" Width="1.875" PointX="22.875" PointY="36.375" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InterestRateReturn" Width="1.5" PointX="6.375" PointY="59.375" />
@@ -24026,12 +24032,12 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InterestRateReturnCurrencyIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InterestRateReturnInstrumentMarketIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InterestRateReturnPriceIdFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FailedTrade" Width="1.5" PointX="11.010136428759498" PointY="24.360095512289597" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FailedTrade" Width="1.5" PointX="13.125" PointY="23.375" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FailedTradeUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FailedTradeEventIdPK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TradeEven__Contr__6555CF79" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioHedgeRatioIdFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Beta" Width="1.5" PointX="18.5" PointY="61.75" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Beta" Width="1.5" PointX="26.25" PointY="40.875" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Fund__Administra__0A2691EF" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.BetaCurrencyIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.BetaInstrumentMarketIdFK" />
