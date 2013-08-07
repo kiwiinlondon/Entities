@@ -33,9 +33,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int FileToBeCollectedGroupTypeId { get; set; }
-    	[DataMember]
         public string Email { get; set; }
+    	[DataMember]
+        public int FileGroupTypeId { get; set; }
     
         [DataMember]
         public virtual List<FileToBeCollected> FileToBeCollected { get; set; }
