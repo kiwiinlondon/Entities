@@ -54,6 +54,7 @@
           <EntitySet Name="FailedTrade" EntityType="KeeleyModel.Store.FailedTrade" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FileCollected" EntityType="KeeleyModel.Store.FileCollected" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FileToBeCollected" EntityType="KeeleyModel.Store.FileToBeCollected" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="FileToBeCollectedGroup" EntityType="KeeleyModel.Store.FileToBeCollectedGroup" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FMTradeBridgeLastProcessed" EntityType="KeeleyModel.Store.FMTradeBridgeLastProcessed" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ForwardFX" EntityType="KeeleyModel.Store.ForwardFX" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Fund" EntityType="KeeleyModel.Store.Fund" store:Type="Tables" Schema="dbo" />
@@ -579,6 +580,14 @@
           <AssociationSet Name="FK__Book__ManagerId__43CBF196" Association="KeeleyModel.Store.FK__Book__ManagerId__43CBF196">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Book" EntitySet="Book" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FilesToBe__Updat__085E450E" Association="KeeleyModel.Store.FK__FilesToBe__Updat__085E450E">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="FileToBeCollectedGroup" EntitySet="FileToBeCollectedGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FileToBeC__Files__1D5961F4" Association="KeeleyModel.Store.FK__FileToBeC__Files__1D5961F4">
+            <End Role="FileToBeCollectedGroup" EntitySet="FileToBeCollectedGroup" />
+            <End Role="FileToBeCollected" EntitySet="FileToBeCollected" />
           </AssociationSet>
           <AssociationSet Name="FK__FileToBeC__FundI__4DFC994F" Association="KeeleyModel.Store.FK__FileToBeC__FundI__4DFC994F">
             <End Role="Fund" EntitySet="Fund" />
@@ -1880,6 +1889,18 @@
           <Property Name="EmailWhenReceived" Type="varchar" MaxLength="1000" />
           <Property Name="FileToBeCollectedGroupId" Type="int" />
           <Property Name="FundId" Type="int" />
+        </EntityType>
+        <EntityType Name="FileToBeCollectedGroup">
+          <Key>
+            <PropertyRef Name="FileToBeCollectedGroupId" />
+          </Key>
+          <Property Name="FileToBeCollectedGroupId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" MaxLength="200" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="FileToBeCollectedGroupTypeId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="FMTradeBridgeLastProcessed">
           <Key>
@@ -4068,6 +4089,30 @@
             </Principal>
             <Dependent Role="Book">
               <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FilesToBe__Updat__085E450E">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="FileToBeCollectedGroup" Type="KeeleyModel.Store.FileToBeCollectedGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FileToBeCollectedGroup">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FileToBeC__Files__1D5961F4">
+          <End Role="FileToBeCollectedGroup" Type="KeeleyModel.Store.FileToBeCollectedGroup" Multiplicity="0..1" />
+          <End Role="FileToBeCollected" Type="KeeleyModel.Store.FileToBeCollected" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileToBeCollectedGroup">
+              <PropertyRef Name="FileToBeCollectedGroupId" />
+            </Principal>
+            <Dependent Role="FileToBeCollected">
+              <PropertyRef Name="FileToBeCollectedGroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9403,6 +9448,15 @@
             <End Role="Fund" EntitySet="Funds" />
             <End Role="FileToBeCollected" EntitySet="FileToBeCollecteds" />
           </AssociationSet>
+          <EntitySet Name="FileToBeCollectedGroup" EntityType="Odey.Framework.Keeley.Entities.FileToBeCollectedGroup" />
+          <AssociationSet Name="FK__FilesToBe__Updat__085E450E" Association="Odey.Framework.Keeley.Entities.FK__FilesToBe__Updat__085E450E">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="FileToBeCollectedGroup" EntitySet="FileToBeCollectedGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FileToBeC__Files__1D5961F4" Association="Odey.Framework.Keeley.Entities.FK__FileToBeC__Files__1D5961F4">
+            <End Role="FileToBeCollectedGroup" EntitySet="FileToBeCollectedGroup" />
+            <End Role="FileToBeCollected" EntitySet="FileToBeCollecteds" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -14265,6 +14319,43 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="FileToBeCollectedGroup">
+          <Key>
+            <PropertyRef Name="FileToBeCollectedGroupId" />
+          </Key>
+          <Property Type="Int32" Name="FileToBeCollectedGroupId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Name" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="FileToBeCollectedGroupTypeId" Nullable="false" />
+          <Property Type="String" Name="Email" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="FileToBeCollected" Relationship="Odey.Framework.Keeley.Entities.FK__FileToBeC__Files__1D5961F4" FromRole="FileToBeCollectedGroup" ToRole="FileToBeCollected" />
+        </EntityType>
+        <Association Name="FK__FilesToBe__Updat__085E450E">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FileToBeCollectedGroup" Role="FileToBeCollectedGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FileToBeCollectedGroup">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FileToBeC__Files__1D5961F4">
+          <End Type="Odey.Framework.Keeley.Entities.FileToBeCollectedGroup" Role="FileToBeCollectedGroup" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.FileToBeCollected" Role="FileToBeCollected" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileToBeCollectedGroup">
+              <PropertyRef Name="FileToBeCollectedGroupId" />
+            </Principal>
+            <Dependent Role="FileToBeCollected">
+              <PropertyRef Name="FileToBeCollectedGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -18232,6 +18323,19 @@
                 </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileToBeCollectedGroup">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FileToBeCollectedGroup">
+              <MappingFragment StoreEntitySet="FileToBeCollectedGroup">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FileToBeCollectedGroupTypeId" ColumnName="FileToBeCollectedGroupTypeId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FileToBeCollectedGroupId" ColumnName="FileToBeCollectedGroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
           </EntitySetMapping>          
         </EntityContainerMapping>
       </Mapping>
@@ -18255,7 +18359,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <edmx:Diagram Name="KeeleyEntities" ZoomLevel="72">
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="15.25" Height="2.5571907552083353" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="15" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.875" PointX="8.25" PointY="18.875" Height="5.8263151041666674" IsExpanded="true" />
@@ -23934,6 +24038,9 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RelativeIndexInstrumentMarketIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.BetaUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FileToBeC__FundI__4DFC994F" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FileToBeCollectedGroup" Width="1.5" PointX="8.375" PointY="64.5" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FilesToBe__Updat__085E450E" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FileToBeC__Files__1D5961F4" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
