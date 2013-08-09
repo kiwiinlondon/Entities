@@ -36,6 +36,8 @@ namespace Odey.Framework.Keeley.Entities
         public string EZEIdentifier { get; set; }
     	[DataMember]
         public bool IsPrimary { get; set; }
+    	[DataMember]
+        public bool IsActive { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
