@@ -36,6 +36,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int AnalyticTypeId { get; set; }
+    	[DataMember]
+        public System.DateTime UpdateDate { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
