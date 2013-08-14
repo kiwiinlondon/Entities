@@ -78,6 +78,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ManagementFee { get; set; }
     	[DataMember]
         public Nullable<int> AdministratorId { get; set; }
+    	[DataMember]
+        public string AdministratorIdentifier { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
