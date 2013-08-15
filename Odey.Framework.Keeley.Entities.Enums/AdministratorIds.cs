@@ -15,7 +15,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitaUK = 4514,
         [EnumMember]
-        Daiwa = 3845,
+        Quintillion = 6307,
         [EnumMember]
         CapitaIRE = 6052
     }
