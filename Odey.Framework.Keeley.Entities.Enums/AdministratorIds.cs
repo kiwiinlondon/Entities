@@ -15,7 +15,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitaUK = 4514,
         [EnumMember]
-        Quintillion = 6307,
+        Quintillion = 6308,
         [EnumMember]
         CapitaIRE = 6052
     }
