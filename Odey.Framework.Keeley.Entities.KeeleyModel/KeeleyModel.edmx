@@ -1017,6 +1017,14 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PortfolioAggregationLevel" EntitySet="PortfolioAggregationLevel" />
           </AssociationSet>
+          <AssociationSet Name="PortfolioBetaLongTermIdFK" Association="KeeleyModel.Store.PortfolioBetaLongTermIdFK">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="Portfolio" EntitySet="Portfolio" />
+          </AssociationSet>
+          <AssociationSet Name="PortfolioBetaShortTermIdFK" Association="KeeleyModel.Store.PortfolioBetaShortTermIdFK">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="Portfolio" EntitySet="Portfolio" />
+          </AssociationSet>
           <AssociationSet Name="PortfolioCurrentFXRateIdFK" Association="KeeleyModel.Store.PortfolioCurrentFXRateIdFK">
             <End Role="FXRate" EntitySet="FXRate" />
             <End Role="Portfolio" EntitySet="Portfolio" />
@@ -2420,6 +2428,10 @@
           <Property Name="ValuationMarketValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="HedgeRatio" Type="numeric" Precision="27" Scale="8" />
           <Property Name="HedgeRatioId" Type="int" />
+          <Property Name="BetaShortTerm" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BetaShortTermId" Type="int" />
+          <Property Name="BetaLongTerm" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BetaLongTermId" Type="int" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -5405,6 +5417,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="PortfolioBetaLongTermIdFK">
+          <End Role="Beta" Type="KeeleyModel.Store.Beta" Multiplicity="0..1" />
+          <End Role="Portfolio" Type="KeeleyModel.Store.Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beta">
+              <PropertyRef Name="BetaId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="BetaLongTermId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PortfolioBetaShortTermIdFK">
+          <End Role="Beta" Type="KeeleyModel.Store.Beta" Multiplicity="0..1" />
+          <End Role="Portfolio" Type="KeeleyModel.Store.Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beta">
+              <PropertyRef Name="BetaId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="BetaShortTermId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PortfolioCurrentFXRateIdFK">
           <End Role="FXRate" Type="KeeleyModel.Store.FXRate" Multiplicity="0..1" />
           <End Role="Portfolio" Type="KeeleyModel.Store.Portfolio" Multiplicity="*" />
@@ -7654,6 +7690,10 @@
           <Parameter Name="ValuationMarketValue" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatioId" Type="int" Mode="In" />
+          <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
+          <Parameter Name="BetaShortTermId" Type="int" Mode="In" />
+          <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
+          <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -7709,6 +7749,10 @@
           <Parameter Name="ValuationMarketValue" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatioId" Type="int" Mode="In" />
+          <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
+          <Parameter Name="BetaShortTermId" Type="int" Mode="In" />
+          <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
+          <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -9471,6 +9515,14 @@
           <AssociationSet Name="InstrumentMarketIndex" Association="Odey.Framework.Keeley.Entities.InstrumentMarketIndex">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="Index" EntitySet="Indices" />
+          </AssociationSet>
+          <AssociationSet Name="PortfolioBetaLongTermIdFK" Association="Odey.Framework.Keeley.Entities.PortfolioBetaLongTermIdFK">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="Portfolio" EntitySet="Portfolios" />
+          </AssociationSet>
+          <AssociationSet Name="PortfolioBetaShortTermIdFK" Association="Odey.Framework.Keeley.Entities.PortfolioBetaShortTermIdFK">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="Portfolio" EntitySet="Portfolios" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -11362,6 +11414,10 @@
           <NavigationProperty Name="Exposures" Relationship="Odey.Framework.Keeley.Entities.ExposurePortfolioIDFK" FromRole="Portfolio" ToRole="Exposure" />
           <Property Type="Decimal" Name="HedgeRatio" Precision="27" Scale="8" />
           <Property Type="Int32" Name="HedgeRatioId" />
+          <Property Type="Decimal" Name="BetaShortTerm" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="BetaShortTermId" />
+          <Property Type="Decimal" Name="BetaLongTerm" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="BetaLongTermId" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14267,6 +14323,8 @@
           <NavigationProperty Name="RelativeIndexInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.RelativeIndexInstrumentMarketIdFK" FromRole="Beta" ToRole="InstrumentMarket" />
           <Property Type="Int32" Name="AnalyticTypeId" Nullable="false" />
           <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Portfolio" Relationship="Odey.Framework.Keeley.Entities.PortfolioBetaLongTermIdFK" FromRole="Beta" ToRole="Portfolio" />
+          <NavigationProperty Name="Portfolio1" Relationship="Odey.Framework.Keeley.Entities.PortfolioBetaShortTermIdFK" FromRole="Beta" ToRole="Portfolio" />
         </EntityType>
         <Association Name="FK__Fund__Administra__0A2691EF">
           <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="0..1" />
@@ -14386,6 +14444,30 @@
             </Principal>
             <Dependent Role="InstrumentMarket">
               <PropertyRef Name="InstrumentMarketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PortfolioBetaLongTermIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Beta" Role="Beta" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beta">
+              <PropertyRef Name="BetaId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="BetaLongTermId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PortfolioBetaShortTermIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Beta" Role="Beta" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beta">
+              <PropertyRef Name="BetaId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="BetaShortTermId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -16289,6 +16371,10 @@
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="BetaLongTermId" ColumnName="BetaLongTermId" />
+                <ScalarProperty Name="BetaLongTerm" ColumnName="BetaLongTerm" />
+                <ScalarProperty Name="BetaShortTermId" ColumnName="BetaShortTermId" />
+                <ScalarProperty Name="BetaShortTerm" ColumnName="BetaShortTerm" />
                 <ScalarProperty Name="HedgeRatioId" ColumnName="HedgeRatioId" />
                 <ScalarProperty Name="HedgeRatio" ColumnName="HedgeRatio" />
                 <ScalarProperty Name="ValuationMarketValue" ColumnName="ValuationMarketValue" />
@@ -16345,6 +16431,10 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" />
+                  <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" />
+                  <ScalarProperty Name="BetaShortTermId" ParameterName="BetaShortTermId" />
+                  <ScalarProperty Name="BetaShortTerm" ParameterName="BetaShortTerm" />
                   <ScalarProperty Name="HedgeRatioId" ParameterName="HedgeRatioId" />
                   <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" />
                   <ScalarProperty Name="ValuationMarketValue" ParameterName="ValuationMarketValue" />
@@ -16398,6 +16488,10 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" Version="Current" />
+                  <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" Version="Current" />
+                  <ScalarProperty Name="BetaShortTermId" ParameterName="BetaShortTermId" Version="Current" />
+                  <ScalarProperty Name="BetaShortTerm" ParameterName="BetaShortTerm" Version="Current" />
                   <ScalarProperty Name="HedgeRatioId" ParameterName="HedgeRatioId" Version="Current" />
                   <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" Version="Current" />
                   <ScalarProperty Name="ValuationMarketValue" ParameterName="ValuationMarketValue" Version="Current" />
@@ -18396,13 +18490,13 @@
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="72">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="58">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="15" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -24086,6 +24180,8 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FilesToBe__Updat__085E450E" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FileToBeC__Files__1D5961F4" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketIndex" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioBetaLongTermIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioBetaShortTermIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

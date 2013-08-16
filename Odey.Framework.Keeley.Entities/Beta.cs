@@ -16,6 +16,13 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Beta
     {
+    	
+        public Beta()
+        {
+            this.Portfolio = new List<Portfolio>();
+            this.Portfolio1 = new List<Portfolio>();
+        }
+    
     	[DataMember]
         public int BetaId { get; set; }
     	[DataMember]
@@ -45,5 +52,9 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual InstrumentMarket RelativeIndexInstrumentMarket { get; set; }
+        [DataMember]
+        public virtual List<Portfolio> Portfolio { get; set; }
+        [DataMember]
+        public virtual List<Portfolio> Portfolio1 { get; set; }
     }
 }
