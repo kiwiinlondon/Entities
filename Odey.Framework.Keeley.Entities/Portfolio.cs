@@ -124,10 +124,6 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> HedgeRatio { get; set; }
     	[DataMember]
         public Nullable<int> HedgeRatioId { get; set; }
-    	[DataMember]
-        public Nullable<decimal> BetaShortTerm { get; set; }
-    	[DataMember]
-        public Nullable<decimal> BetaLongTerm { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
