@@ -444,5 +444,14 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("RollExposure", updateUserIdParameter);
         }
+    
+        public virtual int Beta_Roll(Nullable<int> updateUserId)
+        {
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Beta_Roll", updateUserIdParameter);
+        }
     }
 }
