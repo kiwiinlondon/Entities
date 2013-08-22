@@ -67,9 +67,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ChangeInterestRateExposure { get; set; }
     	[DataMember]
-        public Nullable<decimal> BetaLongTerm { get; set; }
+        public decimal BetaLongTerm { get; set; }
     	[DataMember]
-        public Nullable<decimal> BetaShortTerm { get; set; }
+        public decimal BetaShortTerm { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
