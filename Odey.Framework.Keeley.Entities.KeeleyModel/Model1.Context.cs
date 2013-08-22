@@ -120,7 +120,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ClientAccount> ClientAccounts { get; set; }
         public DbSet<ClientTrade> ClientTrades { get; set; }
         public DbSet<ClientPortfolio> ClientPortfolios { get; set; }
-        public DbSet<Index> Indices { get; set; }
         public DbSet<InterestRateReturn> InterestRateReturns { get; set; }
         public DbSet<FailedTrade> FailedTrades { get; set; }
         public DbSet<Beta> Beta { get; set; }
