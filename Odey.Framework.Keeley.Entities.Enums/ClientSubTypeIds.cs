@@ -11,7 +11,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum ClientSubTypeIds
     {
         [EnumMember]
-        Unkown = 1,
+        Unknown = 1,
         [EnumMember]
         PrivateBankAssetManager = 3,
         [EnumMember]
