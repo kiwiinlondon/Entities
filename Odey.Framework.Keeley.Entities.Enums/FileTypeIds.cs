@@ -30,9 +30,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitaUKAccountTrades = 10,
         [EnumMember]
-        DaiwaAccountRegistry = 11,
+        QuintillionAccountRegistry = 11,
         [EnumMember]
-        DaiwaAccountTrades = 12,
+        QuintillionAccountTrades = 12,
         [EnumMember]
         CapitaIREAccountRegistry = 13,
         [EnumMember]
@@ -40,7 +40,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         JPMorganJLegFile=15,
         [EnumMember]
-        DaiwaEQFactorHWMPrice = 16,
+        QuintillionEQFactorHWMPrice = 16,
         [EnumMember]
         CapitaUKClientTransfers = 17,
         [EnumMember]

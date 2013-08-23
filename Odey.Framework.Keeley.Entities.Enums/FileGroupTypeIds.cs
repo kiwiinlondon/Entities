@@ -7,9 +7,11 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum FileToBeCollectedGroupIds
+    public enum FileGroupTypeIds
     {
         [EnumMember]
-        CapitaIrelandClient=1
+        CapitaIrelandClient=1,
+        [EnumMember]
+        QuintillionClient=2
     }
 }
