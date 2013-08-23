@@ -60,6 +60,6 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual InstrumentMarket UnderlyingInstrumentMarket { get; set; }
         [DataMember]
-        public virtual Index Index { get; set; }
+        public virtual Index Indx { get; set; }
     }
 }

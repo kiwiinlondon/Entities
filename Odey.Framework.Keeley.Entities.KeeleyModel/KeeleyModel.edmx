@@ -11715,7 +11715,7 @@
           <Property Type="DateTime" Name="LastRepulledFromSourceDate" Precision="3" />
           <NavigationProperty Name="UnderlyingInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.fkinstrumentmarketUnderlyingInstrumentMarketId" FromRole="InstrumentMarket" ToRole="InstrumentMarket1" a:GetterAccess="Public" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Type="String" Name="FactsetId" MaxLength="150" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Index" Relationship="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" FromRole="InstrumentMarket" ToRole="Indx" />
+          <NavigationProperty Name="Indx" Relationship="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" FromRole="InstrumentMarket" ToRole="Indx" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14440,6 +14440,7 @@
           </Key>
           <Property Type="Int32" Name="InstrumentMarketId" Nullable="false" />
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="IndexTypeId" Nullable="false" />
           <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.IndexIDFK" FromRole="Indx" ToRole="ApplicationUser" />
@@ -14448,6 +14449,14 @@
         <Association Name="IndexIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.Index" Role="Indx" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Indx">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="IndexInstrumentIDFK">
           <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
@@ -18466,20 +18475,13 @@
               <MappingFragment StoreEntitySet="Indx">
                 <ScalarProperty Name="IndexTypeId" ColumnName="IndexTypeId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
                 <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="IndexIDFK" TypeName="Odey.Framework.Keeley.Entities.IndexIDFK" StoreEntitySet="Indx">
-            <EndProperty Name="Indx">
-              <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
-            </EndProperty>
-            <EndProperty Name="ApplicationUser">
-              <ScalarProperty Name="UserID" ColumnName="UpdateUserID" />
-            </EndProperty>
-          </AssociationSetMapping>          
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -18494,14 +18496,14 @@
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <edmx:Diagram Name="KeeleyEntities" ZoomLevel="58">
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="14.5" Height="2.5571907552083353" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="14.125" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.875" PointX="8.25" PointY="18.875" Height="5.8263151041666674" IsExpanded="true" />
@@ -20338,7 +20340,7 @@
           <edmx:ConnectorPoint PointX="16.802083333333332" PointY="48.292999674479162" />
           <edmx:ConnectorPoint PointX="17.125" PointY="48.292999674479162" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioEvent" Width="4.5" PointX="35" PointY="23.125" Height="10.249248046875003" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioEvent" Width="4.5" PointX="35.125" PointY="23.375" Height="10.249248046875003" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioSettlementDate" Width="2" PointX="34.375" PointY="17.625" Height="4.0956022135416656" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioSettlementDateUpdateUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.648667293701173" />
@@ -24182,7 +24184,7 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FileToBeC__Files__1D5961F4" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioBetaLongTermIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioBetaShortTermIdFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Index" Width="1.5" PointX="29.25" PointY="32.25" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Index" Width="1.5" PointX="29.875" PointY="32.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" />
         </edmx:Diagram>
