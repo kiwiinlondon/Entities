@@ -67,6 +67,7 @@
           <EntitySet Name="IdentifierType" EntityType="KeeleyModel.Store.IdentifierType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="IndexConstituent" EntityType="KeeleyModel.Store.IndexConstituent" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Industry" EntityType="KeeleyModel.Store.Industry" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Indx" EntityType="KeeleyModel.Store.Indx" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Instrument" EntityType="KeeleyModel.Store.Instrument" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="InstrumentClass" EntityType="KeeleyModel.Store.InstrumentClass" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="InstrumentClassHierarchy" EntityType="KeeleyModel.Store.InstrumentClassHierarchy" store:Type="Tables" Schema="dbo" />
@@ -787,6 +788,14 @@
           <AssociationSet Name="IndexConstituentInstrumentIDFK" Association="KeeleyModel.Store.IndexConstituentInstrumentIDFK">
             <End Role="Instrument" EntitySet="Instrument" />
             <End Role="IndexConstituent" EntitySet="IndexConstituent" />
+          </AssociationSet>
+          <AssociationSet Name="IndexIDFK" Association="KeeleyModel.Store.IndexIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Indx" EntitySet="Indx" />
+          </AssociationSet>
+          <AssociationSet Name="IndexInstrumentIDFK" Association="KeeleyModel.Store.IndexInstrumentIDFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="Indx" EntitySet="Indx" />
           </AssociationSet>
           <AssociationSet Name="IndustryParentIndustryIDFK" Association="KeeleyModel.Store.IndustryParentIndustryIDFK">
             <End Role="Industry" EntitySet="Industry" />
@@ -2106,6 +2115,16 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="Indx">
+          <Key>
+            <PropertyRef Name="InstrumentMarketId" />
+          </Key>
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="IndexTypeId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Instrument">
           <Key>
@@ -4713,6 +4732,30 @@
             </Principal>
             <Dependent Role="IndexConstituent">
               <PropertyRef Name="InstrumentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IndexIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="Indx" Type="KeeleyModel.Store.Indx" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Indx">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IndexInstrumentIDFK">
+          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="1" />
+          <End Role="Indx" Type="KeeleyModel.Store.Indx" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Indx">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9480,6 +9523,15 @@
           <FunctionImport Name="Beta_Roll" ReturnType="Collection(DateTime)">
           <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Indx" EntityType="Odey.Framework.Keeley.Entities.Index" />
+          <AssociationSet Name="IndexIDFK" Association="Odey.Framework.Keeley.Entities.IndexIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Indx" EntitySet="Indx" />
+          </AssociationSet>
+          <AssociationSet Name="IndexInstrumentIDFK" Association="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="Indx" EntitySet="Indx" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -11663,6 +11715,7 @@
           <Property Type="DateTime" Name="LastRepulledFromSourceDate" Precision="3" />
           <NavigationProperty Name="UnderlyingInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.fkinstrumentmarketUnderlyingInstrumentMarketId" FromRole="InstrumentMarket" ToRole="InstrumentMarket1" a:GetterAccess="Public" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Type="String" Name="FactsetId" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Index" Relationship="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" FromRole="InstrumentMarket" ToRole="Indx" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14378,6 +14431,33 @@
             </Principal>
             <Dependent Role="Portfolio">
               <PropertyRef Name="BetaShortTermId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Index">
+          <Key>
+            <PropertyRef Name="InstrumentMarketId" />
+          </Key>
+          <Property Type="Int32" Name="InstrumentMarketId" Nullable="false" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="IndexTypeId" Nullable="false" />
+          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.IndexIDFK" FromRole="Indx" ToRole="ApplicationUser" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" FromRole="Indx" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="IndexIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Index" Role="Indx" Multiplicity="*" />
+        </Association>
+        <Association Name="IndexInstrumentIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Index" Role="Indx" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Indx">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -18380,7 +18460,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="Beta_Roll" FunctionName="KeeleyModel.Store.Beta_Roll" />          
+          <FunctionImportMapping FunctionImportName="Beta_Roll" FunctionName="KeeleyModel.Store.Beta_Roll" />
+          <EntitySetMapping Name="Indx">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Index">
+              <MappingFragment StoreEntitySet="Indx">
+                <ScalarProperty Name="IndexTypeId" ColumnName="IndexTypeId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="IndexIDFK" TypeName="Odey.Framework.Keeley.Entities.IndexIDFK" StoreEntitySet="Indx">
+            <EndProperty Name="Indx">
+              <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+            </EndProperty>
+            <EndProperty Name="ApplicationUser">
+              <ScalarProperty Name="UserID" ColumnName="UpdateUserID" />
+            </EndProperty>
+          </AssociationSetMapping>          
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -18403,7 +18501,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <edmx:Diagram Name="KeeleyEntities" ZoomLevel="58">
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="15" Height="2.5571907552083353" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="14.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.875" PointX="8.25" PointY="18.875" Height="5.8263151041666674" IsExpanded="true" />
@@ -21109,7 +21207,7 @@
           <edmx:ConnectorPoint PointX="13.2939470625" PointY="39.625" />
           <edmx:ConnectorPoint PointX="13.2939470625" PointY="40" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentMarket" Width="2.125" PointX="17.875" PointY="17.375" Height="4.8648079427083353" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentMarket" Width="2.125" PointX="17.75" PointY="16.875" Height="4.8648079427083353" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketUpdateUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.737975772705081" />
           <edmx:ConnectorPoint PointX="4.666666666666667" PointY="17.737975772705081" />
@@ -24084,6 +24182,9 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FileToBeC__Files__1D5961F4" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioBetaLongTermIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioBetaShortTermIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Index" Width="1.5" PointX="29.25" PointY="32.25" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
