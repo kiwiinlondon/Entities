@@ -20,9 +20,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         NorthernTrustFile = 5,
         [EnumMember]
-        DexiaAccountRegistry = 6,
+        RBCAccountRegistry = 6,
         [EnumMember]
-        DexiaAccountTrades = 7,
+        RBCAccountTrades = 7,
         [EnumMember]
         JPMorganPositionFile = 8,
         [EnumMember]
