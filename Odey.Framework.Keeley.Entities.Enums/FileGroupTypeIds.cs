@@ -10,8 +10,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum FileGroupTypeIds
     {
         [EnumMember]
-        CapitaIrelandClient=1,
-        [EnumMember]
-        QuintillionClient=2
+        Client=1,
     }
 }
