@@ -40,6 +40,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OdeyCalculatedAnalytic = 21,
         [EnumMember]
-        ExternalAnalytic = 22
+        ExternalAnalytic = 22,
+        [EnumMember]
+        OptionMidPrice = 24
     }
 }
