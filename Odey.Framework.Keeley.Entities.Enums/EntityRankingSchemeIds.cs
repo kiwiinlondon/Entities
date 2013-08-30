@@ -18,6 +18,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         TreasuryBonds=3,
         [EnumMember]
-        FundValuation=6
+        FundValuation=6,
+        [EnumMember]
+        Options = 10
     }
 }
