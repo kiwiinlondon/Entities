@@ -64,6 +64,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AdministratorCurrentQuantity { get; set; }
     	[DataMember]
         public decimal Cost { get; set; }
+    	[DataMember]
+        public Nullable<int> RelatedTradeId { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }

@@ -581,6 +581,10 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Book" EntitySet="Book" />
           </AssociationSet>
+          <AssociationSet Name="FK__ClientTra__Relat__4D0E0477" Association="KeeleyModel.Store.FK__ClientTra__Relat__4D0E0477">
+            <End Role="ClientTrade" EntitySet="ClientTrade" />
+            <End Role="ClientTrade1" EntitySet="ClientTrade" />
+          </AssociationSet>
           <AssociationSet Name="FK__FilesToBe__Updat__085E450E" Association="KeeleyModel.Store.FK__FilesToBe__Updat__085E450E">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="FileToBeCollectedGroup" EntitySet="FileToBeCollectedGroup" />
@@ -1495,6 +1499,7 @@
           <Property Name="TotalCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="AdministratorCurrentQuantity" Type="numeric" Precision="27" Scale="8" />
           <Property Name="Cost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="RelatedTradeId" Type="int" />
         </EntityType>
         <EntityType Name="CollectiveInvestmentScheme">
           <Key>
@@ -4112,6 +4117,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__ClientTra__Relat__4D0E0477">
+          <End Role="ClientTrade" Type="KeeleyModel.Store.ClientTrade" Multiplicity="0..1" />
+          <End Role="ClientTrade1" Type="KeeleyModel.Store.ClientTrade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientTrade">
+              <PropertyRef Name="ClientTradeId" />
+            </Principal>
+            <Dependent Role="ClientTrade1">
+              <PropertyRef Name="RelatedTradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__FilesToBe__Updat__085E450E">
           <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
           <End Role="FileToBeCollectedGroup" Type="KeeleyModel.Store.FileToBeCollectedGroup" Multiplicity="*" />
@@ -6429,6 +6446,7 @@
           <Parameter Name="TotalCost" Type="numeric" Mode="In" />
           <Parameter Name="AdministratorCurrentQuantity" Type="numeric" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
+          <Parameter Name="RelatedTradeId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientTrade_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientTradeId" Type="int" Mode="In" />
@@ -6454,6 +6472,7 @@
           <Parameter Name="TotalCost" Type="numeric" Mode="In" />
           <Parameter Name="AdministratorCurrentQuantity" Type="numeric" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
+          <Parameter Name="RelatedTradeId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientTypeId" Type="int" Mode="In" />
@@ -9534,6 +9553,10 @@
           <AssociationSet Name="IndexInstrumentIDFK" Association="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="Indx" EntitySet="Indices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ClientTra__Relat__4D0E0477" Association="Odey.Framework.Keeley.Entities.FK__ClientTra__Relat__4D0E0477">
+            <End Role="ClientTrade" EntitySet="ClientTrades" />
+            <End Role="ClientTrade1" EntitySet="ClientTrades" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -13907,6 +13930,7 @@
           <Property Type="Decimal" Name="TotalCost" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="AdministratorCurrentQuantity" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="Cost" Precision="27" Scale="8" Nullable="false" />
+          <Property Type="Int32" Name="RelatedTradeId" />
           </EntityType>
         <Association Name="AdministratorUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14471,6 +14495,18 @@
             </Principal>
             <Dependent Role="Indx">
               <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientTra__Relat__4D0E0477">
+          <End Type="Odey.Framework.Keeley.Entities.ClientTrade" Role="ClientTrade" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientTrade" Role="ClientTrade1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientTrade">
+              <PropertyRef Name="ClientTradeId" />
+            </Principal>
+            <Dependent Role="ClientTrade1">
+              <PropertyRef Name="RelatedTradeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -18160,6 +18196,7 @@
           <EntitySetMapping Name="ClientTrades">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <MappingFragment StoreEntitySet="ClientTrade">
+                <ScalarProperty Name="RelatedTradeId" ColumnName="RelatedTradeId" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
                 <ScalarProperty Name="AdministratorCurrentQuantity" ColumnName="AdministratorCurrentQuantity" />
                 <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
@@ -18189,6 +18226,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientTrade_Insert">
+                  <ScalarProperty Name="RelatedTradeId" ParameterName="RelatedTradeId" />
                   <ScalarProperty Name="Cost" ParameterName="Cost" />
                   <ScalarProperty Name="AdministratorCurrentQuantity" ParameterName="AdministratorCurrentQuantity" />
                   <ScalarProperty Name="TotalCost" ParameterName="TotalCost" />
@@ -18215,6 +18253,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientTrade_Update">
+                  <ScalarProperty Name="RelatedTradeId" ParameterName="RelatedTradeId" Version="Current" />
                   <ScalarProperty Name="Cost" ParameterName="Cost" Version="Current" />
                   <ScalarProperty Name="AdministratorCurrentQuantity" ParameterName="AdministratorCurrentQuantity" Version="Current" />
                   <ScalarProperty Name="TotalCost" ParameterName="TotalCost" Version="Current" />
@@ -24194,6 +24233,7 @@
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Index" Width="1.5" PointX="29.875" PointY="32.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientTra__Relat__4D0E0477" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
