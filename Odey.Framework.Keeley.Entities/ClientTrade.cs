@@ -66,6 +66,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal Cost { get; set; }
     	[DataMember]
         public Nullable<int> RelatedTradeId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TransferPriceOverride { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
