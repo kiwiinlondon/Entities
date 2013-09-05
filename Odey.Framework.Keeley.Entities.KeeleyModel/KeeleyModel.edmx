@@ -1431,6 +1431,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Unconfirmed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientAccount">
           <Key>
@@ -6325,6 +6326,7 @@
           <Parameter Name="Name" Type="varchar" Mode="In" />
           <Parameter Name="CountryId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="Unconfirmed" Type="bit" Mode="In" />
         </Function>
         <Function Name="Client_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientId" Type="int" Mode="In" />
@@ -6334,6 +6336,7 @@
           <Parameter Name="CountryId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="Unconfirmed" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientAccount_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
@@ -13881,11 +13884,12 @@
           <Property Type="String" Name="ExternalReference" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="ClientSubTypeId" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="CountryId" />
+          <Property Type="Int32" Name="CountryId" Nullable="false" />
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="ClientAccounts" Relationship="Odey.Framework.Keeley.Entities.ClientAccountClientIDFK" FromRole="Client" ToRole="ClientAccount" />
+          <Property Type="Boolean" Name="Unconfirmed" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientAccount">
           <Key>
@@ -14021,7 +14025,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ClientAccountCountryIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Country" Role="Country" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.Client" Role="Client" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
@@ -18109,6 +18113,7 @@
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Client">
               <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="Unconfirmed" ColumnName="Unconfirmed" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -18122,6 +18127,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Client">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Client_Insert">
+                  <ScalarProperty Name="Unconfirmed" ParameterName="Unconfirmed" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="CountryId" ParameterName="CountryId" />
                   <ScalarProperty Name="Name" ParameterName="Name" />
@@ -18132,6 +18138,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Client_Update">
+                  <ScalarProperty Name="Unconfirmed" ParameterName="Unconfirmed" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="CountryId" ParameterName="CountryId" Version="Current" />
@@ -18555,7 +18562,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="58">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="54">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="14.125" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />

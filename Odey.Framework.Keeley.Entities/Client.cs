@@ -31,13 +31,15 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public string Name { get; set; }
     	[DataMember]
-        public Nullable<int> CountryId { get; set; }
+        public int CountryId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public bool Unconfirmed { get; set; }
     
         [DataMember]
         public virtual List<ClientAccount> ClientAccounts { get; set; }
