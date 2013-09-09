@@ -21,7 +21,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int DayCountConventionID { get; set; }
     	[DataMember]
-        public System.DateTime FirstCouponDate { get; set; }
+        public Nullable<System.DateTime> FirstCouponDate { get; set; }
     	[DataMember]
         public int CouponFrequency { get; set; }
     	[DataMember]
