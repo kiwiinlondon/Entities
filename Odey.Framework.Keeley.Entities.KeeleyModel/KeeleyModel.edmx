@@ -581,6 +581,14 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Book" EntitySet="Book" />
           </AssociationSet>
+          <AssociationSet Name="FK__ClientAcc__Paren__6E7AB091" Association="KeeleyModel.Store.FK__ClientAcc__Paren__6E7AB091">
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+            <End Role="ClientAccount1" EntitySet="ClientAccount" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ClientAcc__Staff__733F65AE" Association="KeeleyModel.Store.FK__ClientAcc__Staff__733F65AE">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+          </AssociationSet>
           <AssociationSet Name="FK__ClientTra__Relat__4D0E0477" Association="KeeleyModel.Store.FK__ClientTra__Relat__4D0E0477">
             <End Role="ClientTrade" EntitySet="ClientTrade" />
             <End Role="ClientTrade1" EntitySet="ClientTrade" />
@@ -1427,7 +1435,7 @@
           <Property Name="ExternalReference" Type="varchar" MaxLength="20" />
           <Property Name="ClientSubTypeId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="CountryId" Type="int" />
+          <Property Name="CountryId" Type="int" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
@@ -1442,10 +1450,13 @@
           <Property Name="AccountReference" Type="varchar" MaxLength="50" />
           <Property Name="AdministratorId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="CountryId" Type="int" />
+          <Property Name="CountryId" Type="int" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="ParentClientAccountId" Type="int" />
+          <Property Name="StaffId" Type="int" />
         </EntityType>
         <EntityType Name="ClientPortfolio">
           <Key>
@@ -3160,7 +3171,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ClientAccount2CountryIDFK">
-          <End Role="Country" Type="KeeleyModel.Store.Country" Multiplicity="0..1" />
+          <End Role="Country" Type="KeeleyModel.Store.Country" Multiplicity="1" />
           <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
@@ -3196,7 +3207,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ClientAccountCountryIDFK">
-          <End Role="Country" Type="KeeleyModel.Store.Country" Multiplicity="0..1" />
+          <End Role="Country" Type="KeeleyModel.Store.Country" Multiplicity="1" />
           <End Role="Client" Type="KeeleyModel.Store.Client" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
@@ -4116,6 +4127,30 @@
             </Principal>
             <Dependent Role="Book">
               <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientAcc__Paren__6E7AB091">
+          <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="0..1" />
+          <End Role="ClientAccount1" Type="KeeleyModel.Store.ClientAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientAccount1">
+              <PropertyRef Name="ParentClientAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientAcc__Staff__733F65AE">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="0..1" />
+          <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientAccount">
+              <PropertyRef Name="StaffId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6350,6 +6385,9 @@
           <Parameter Name="Name" Type="varchar" Mode="In" />
           <Parameter Name="CountryId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsActive" Type="bit" Mode="In" />
+          <Parameter Name="ParentClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="StaffId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientAccount_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
@@ -6360,6 +6398,9 @@
           <Parameter Name="CountryId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsActive" Type="bit" Mode="In" />
+          <Parameter Name="ParentClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="StaffId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
@@ -9563,6 +9604,14 @@
           <AssociationSet Name="FK__ClientTra__Relat__4D0E0477" Association="Odey.Framework.Keeley.Entities.FK__ClientTra__Relat__4D0E0477">
             <End Role="ClientTrade" EntitySet="ClientTrades" />
             <End Role="ClientTrade1" EntitySet="ClientTrades" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ClientAcc__Staff__733F65AE" Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Staff__733F65AE">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ClientAcc__Paren__6E7AB091" Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Paren__6E7AB091">
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
+            <End Role="ClientAccount1" EntitySet="ClientAccounts" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -13900,13 +13949,16 @@
           <Property Type="String" Name="AccountReference" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="AdministratorId" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="CountryId" />
+          <Property Type="Int32" Name="CountryId" Nullable="false" />
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Client" Relationship="Odey.Framework.Keeley.Entities.ClientAccountClientIDFK" FromRole="ClientAccount" ToRole="Client" />
           <NavigationProperty Name="ClientTrades" Relationship="Odey.Framework.Keeley.Entities.ClientTradesClientAccountIDFK" FromRole="ClientAccount" ToRole="ClientTrade" />
           <NavigationProperty Name="ClientPortfolios" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioClientAccountIDFK" FromRole="ClientAccount" ToRole="ClientPortfolio" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="Int32" Name="ParentClientAccountId" />
+          <Property Type="Int32" Name="StaffId" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -14037,7 +14089,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ClientAccount2CountryIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Country" Role="Country" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
@@ -14515,6 +14567,30 @@
             </Principal>
             <Dependent Role="ClientTrade1">
               <PropertyRef Name="RelatedTradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientAcc__Staff__733F65AE">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientAccount">
+              <PropertyRef Name="StaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientAcc__Paren__6E7AB091">
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientAccount1">
+              <PropertyRef Name="ParentClientAccountId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -18160,6 +18236,9 @@
           <EntitySetMapping Name="ClientAccounts">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientAccount">
               <MappingFragment StoreEntitySet="ClientAccount">
+                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+                <ScalarProperty Name="ParentClientAccountId" ColumnName="ParentClientAccountId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -18174,6 +18253,9 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientAccount">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientAccount_Insert">
+                  <ScalarProperty Name="StaffId" ParameterName="StaffId" />
+                  <ScalarProperty Name="ParentClientAccountId" ParameterName="ParentClientAccountId" />
+                  <ScalarProperty Name="IsActive" ParameterName="IsActive" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="CountryId" ParameterName="CountryId" />
                   <ScalarProperty Name="Name" ParameterName="Name" />
@@ -18185,6 +18267,9 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientAccount_Update">
+                  <ScalarProperty Name="StaffId" ParameterName="StaffId" Version="Current" />
+                  <ScalarProperty Name="ParentClientAccountId" ParameterName="ParentClientAccountId" Version="Current" />
+                  <ScalarProperty Name="IsActive" ParameterName="IsActive" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="CountryId" ParameterName="CountryId" Version="Current" />
@@ -18563,7 +18648,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <edmx:Diagram Name="KeeleyEntities" ZoomLevel="54">
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="14.125" Height="2.5571907552083353" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.75" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.875" PointX="8.25" PointY="18.875" Height="5.8263151041666674" IsExpanded="true" />
@@ -24248,6 +24333,8 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientTra__Relat__4D0E0477" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Staff__733F65AE" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Paren__6E7AB091" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
