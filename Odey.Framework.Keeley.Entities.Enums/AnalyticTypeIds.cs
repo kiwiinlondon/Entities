@@ -49,10 +49,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Beta2YearDaily = 13,
 
         [EnumMember]
-        BetaFund2YearWeighted = 14,
+        BetaFund90DayWeightedNetEquitiesOnly = 14,
 
         [EnumMember]
-        BetaFund90DayWeighted = 15,
+        BetaFund90DayWeightedGrossEquitiesOnly = 15,
     }
 }
 
