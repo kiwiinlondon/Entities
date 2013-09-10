@@ -47,6 +47,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         
         [EnumMember]
         Beta2YearDaily = 13,
+
+        [EnumMember]
+        BetaFund2YearDaily = 14,
+
+        [EnumMember]
+        BetaFund90DayDaily = 15,
     }
 }
 
