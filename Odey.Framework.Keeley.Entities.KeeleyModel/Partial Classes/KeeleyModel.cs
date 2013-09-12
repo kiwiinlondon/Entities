@@ -8,6 +8,7 @@ using System.Reflection;
 using Odey.Framework.Keeley.Entities.Caches;
 using Odey.Framework.Keeley.Entities;
 using System.Security.Principal;
+using Odey.Framework.Keeley.Entities.Enums.Extensions;
 using ServiceModelEx;
 using Odey.Framework.Keeley.Entities.Enums;
 using Odey.Framework.Infrastructure.Contracts;

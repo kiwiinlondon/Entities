@@ -1,19 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
+    [DataContract]
     public enum DerivedAssetClassIds
     {
+        [Description("Equity")]
+        [EnumMember]
         Equity = 1,
+
+        [Description("Bond")]
+        [EnumMember]
         Bond = 2,
+
+        [Description("Commodity")]
+        [EnumMember]
         Commodity = 3,
+
+        [Description("Government Bond")]
+        [EnumMember]
         GovernmentBond = 6,
+
+        [Description("Cash")]
+        [EnumMember]
         Cash = 7,
+
+        [Description("Foreign Exchange")]
         ForeignExchange = 9,
+
+        [Description("Other")]
         Other = 10,
-        InterestRate = 11
+
+        [Description("Interest Rate")]
+        InterestRate = 11,
     }
 }
