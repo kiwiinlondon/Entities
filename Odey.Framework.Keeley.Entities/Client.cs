@@ -31,8 +31,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public string Name { get; set; }
     	[DataMember]
-        public int CountryId { get; set; }
-    	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }

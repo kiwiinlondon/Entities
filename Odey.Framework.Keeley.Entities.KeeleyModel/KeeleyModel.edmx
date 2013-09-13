@@ -273,10 +273,6 @@
             <End Role="Client" EntitySet="Client" />
             <End Role="ClientAccount" EntitySet="ClientAccount" />
           </AssociationSet>
-          <AssociationSet Name="ClientAccountCountryIDFK" Association="KeeleyModel.Store.ClientAccountCountryIDFK">
-            <End Role="Country" EntitySet="Country" />
-            <End Role="Client" EntitySet="Client" />
-          </AssociationSet>
           <AssociationSet Name="ClientAccountUserIDFK" Association="KeeleyModel.Store.ClientAccountUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientAccount" EntitySet="ClientAccount" />
@@ -1435,7 +1431,6 @@
           <Property Name="ExternalReference" Type="varchar" MaxLength="20" />
           <Property Name="ClientSubTypeId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="CountryId" Type="int" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
@@ -3203,18 +3198,6 @@
             </Principal>
             <Dependent Role="ClientAccount">
               <PropertyRef Name="ClientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ClientAccountCountryIDFK">
-          <End Role="Country" Type="KeeleyModel.Store.Country" Multiplicity="1" />
-          <End Role="Client" Type="KeeleyModel.Store.Client" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Country">
-              <PropertyRef Name="CountryID" />
-            </Principal>
-            <Dependent Role="Client">
-              <PropertyRef Name="CountryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6359,7 +6342,6 @@
           <Parameter Name="ExternalReference" Type="varchar" Mode="In" />
           <Parameter Name="ClientSubTypeId" Type="int" Mode="In" />
           <Parameter Name="Name" Type="varchar" Mode="In" />
-          <Parameter Name="CountryId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="Unconfirmed" Type="bit" Mode="In" />
         </Function>
@@ -6368,7 +6350,6 @@
           <Parameter Name="ExternalReference" Type="varchar" Mode="In" />
           <Parameter Name="ClientSubTypeId" Type="int" Mode="In" />
           <Parameter Name="Name" Type="varchar" Mode="In" />
-          <Parameter Name="CountryId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="Unconfirmed" Type="bit" Mode="In" />
@@ -9446,8 +9427,8 @@
             <End Role="Administrator" EntitySet="Administrators" />
           </AssociationSet>
           <AssociationSet Name="Client1UserIDFK" Association="Odey.Framework.Keeley.Entities.Client1UserIDFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="Client" EntitySet="Clients" />
+            <End EntitySet="ApplicationUsers" Role="ApplicationUser" />
+            <End EntitySet="Clients" Role="Client" />
           </AssociationSet>
           <AssociationSet Name="ClientAccountUserIDFK" Association="Odey.Framework.Keeley.Entities.ClientAccountUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
@@ -9458,12 +9439,8 @@
             <End Role="ClientTrade" EntitySet="ClientTrades" />
           </AssociationSet>
           <AssociationSet Name="ClientAccountClientIDFK" Association="Odey.Framework.Keeley.Entities.ClientAccountClientIDFK">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="ClientAccount" EntitySet="ClientAccounts" />
-          </AssociationSet>
-          <AssociationSet Name="ClientAccountCountryIDFK" Association="Odey.Framework.Keeley.Entities.ClientAccountCountryIDFK">
-            <End Role="Country" EntitySet="Countries" />
-            <End Role="Client" EntitySet="Clients" />
+            <End EntitySet="Clients" Role="Client" />
+            <End EntitySet="ClientAccounts" Role="ClientAccount" />
           </AssociationSet>
           <AssociationSet Name="ClientAccount2CountryIDFK" Association="Odey.Framework.Keeley.Entities.ClientAccount2CountryIDFK">
             <End Role="Country" EntitySet="Countries" />
@@ -13929,16 +13906,15 @@
           <Key>
             <PropertyRef Name="ClientId" />
           </Key>
-          <Property Type="Int32" Name="ClientId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="String" Name="ExternalReference" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="ClientSubTypeId" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="CountryId" Nullable="false" />
-          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
-          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
-          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" Name="ClientId" Nullable="false" a:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="ExternalReference" MaxLength="20" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="ClientSubTypeId" Nullable="false" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="StartDt" Nullable="false" Precision="3" Type="DateTime" />
+          <Property Name="UpdateUserID" Nullable="false" Type="Int32" />
+          <Property xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" Type="Binary" />
           <NavigationProperty Name="ClientAccounts" Relationship="Odey.Framework.Keeley.Entities.ClientAccountClientIDFK" FromRole="Client" ToRole="ClientAccount" />
-          <Property Type="Boolean" Name="Unconfirmed" Nullable="false" />
+          <Property Name="Unconfirmed" Nullable="false" Type="Boolean" />
         </EntityType>
         <EntityType Name="ClientAccount">
           <Key>
@@ -14029,8 +14005,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="Client1UserIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.Client" Role="Client" Multiplicity="*" />
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Multiplicity="1" Role="ApplicationUser" />
+          <End Type="Odey.Framework.Keeley.Entities.Client" Multiplicity="*" Role="Client" />
           <ReferentialConstraint>
             <Principal Role="ApplicationUser">
               <PropertyRef Name="UserID" />
@@ -14065,26 +14041,14 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ClientAccountClientIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Client" Role="Client" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="*" />
+          <End Type="Odey.Framework.Keeley.Entities.Client" Multiplicity="1" Role="Client" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Multiplicity="*" Role="ClientAccount" />
           <ReferentialConstraint>
             <Principal Role="Client">
               <PropertyRef Name="ClientId" />
             </Principal>
             <Dependent Role="ClientAccount">
               <PropertyRef Name="ClientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ClientAccountCountryIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Country" Role="Country" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.Client" Role="Client" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Country">
-              <PropertyRef Name="CountryID" />
-            </Principal>
-            <Dependent Role="Client">
-              <PropertyRef Name="CountryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -18191,7 +18155,6 @@
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ClientSubTypeId" ColumnName="ClientSubTypeId" />
                 <ScalarProperty Name="ExternalReference" ColumnName="ExternalReference" />
@@ -18203,7 +18166,6 @@
                 <InsertFunction FunctionName="KeeleyModel.Store.Client_Insert">
                   <ScalarProperty Name="Unconfirmed" ParameterName="Unconfirmed" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="CountryId" ParameterName="CountryId" />
                   <ScalarProperty Name="Name" ParameterName="Name" />
                   <ScalarProperty Name="ClientSubTypeId" ParameterName="ClientSubTypeId" />
                   <ScalarProperty Name="ExternalReference" ParameterName="ExternalReference" />
@@ -18215,7 +18177,6 @@
                   <ScalarProperty Name="Unconfirmed" ParameterName="Unconfirmed" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="CountryId" ParameterName="CountryId" Version="Current" />
                   <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
                   <ScalarProperty Name="ClientSubTypeId" ParameterName="ClientSubTypeId" Version="Current" />
                   <ScalarProperty Name="ExternalReference" ParameterName="ExternalReference" Version="Current" />
@@ -24282,7 +24243,7 @@
           <edmx:ConnectorPoint PointX="25.75390375" PointY="23.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Administrator" Width="1.5" PointX="5.3839548236615746" PointY="9.8373165176423818" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" Width="1.5" PointX="1.125" PointY="10.5" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" PointX="1.125" PointY="10.5" Width="1.5" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientAccount" Width="1.5" PointX="8.625" PointY="55.375" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientTrade" Width="1.5" PointX="11.25" PointY="54.625" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AdministratorUserIDFK" />
@@ -24292,7 +24253,6 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientAccountUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientTradeUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientAccountClientIDFK" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientAccountCountryIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientAccount2CountryIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientTradesClientAccountIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientTradeCurrencyIDFK" />
