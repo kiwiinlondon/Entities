@@ -28,7 +28,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SharesOutstanding = 6,
 
         [EnumMember]
-        Beta90DayDaily = 7,
+        BetaShortTerm = 7,
         
         [EnumMember]
         IndicativeFundPerformance =8,
@@ -46,13 +46,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         VaR = 12,
         
         [EnumMember]
-        Beta2YearDaily = 13,
+        BetaLongTerm = 13,
 
         [EnumMember]
-        BetaFund90DayWeightedNetEquitiesOnly = 14,
+        BetaFundShortTermWeightedNetEquitiesOnly = 14,
 
         [EnumMember]
-        BetaFund90DayWeightedGrossEquitiesOnly = 15,
+        BetaFundShortTermWeightedGrossEquitiesOnly = 15,
     }
 }
 
