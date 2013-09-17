@@ -47,6 +47,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> ParentClientAccountId { get; set; }
     	[DataMember]
         public Nullable<int> StaffId { get; set; }
+    	[DataMember]
+        public Nullable<int> FundId { get; set; }
     
         [DataMember]
         public virtual Client Client { get; set; }

@@ -577,6 +577,10 @@
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Book" EntitySet="Book" />
           </AssociationSet>
+          <AssociationSet Name="FK__ClientAcc__FundI__69386F35" Association="KeeleyModel.Store.FK__ClientAcc__FundI__69386F35">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+          </AssociationSet>
           <AssociationSet Name="FK__ClientAcc__Paren__6E7AB091" Association="KeeleyModel.Store.FK__ClientAcc__Paren__6E7AB091">
             <End Role="ClientAccount" EntitySet="ClientAccount" />
             <End Role="ClientAccount1" EntitySet="ClientAccount" />
@@ -1452,6 +1456,7 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="ParentClientAccountId" Type="int" />
           <Property Name="StaffId" Type="int" />
+          <Property Name="FundId" Type="int" />
         </EntityType>
         <EntityType Name="ClientPortfolio">
           <Key>
@@ -4113,6 +4118,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__ClientAcc__FundI__69386F35">
+          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="0..1" />
+          <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientAccount">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__ClientAcc__Paren__6E7AB091">
           <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="0..1" />
           <End Role="ClientAccount1" Type="KeeleyModel.Store.ClientAccount" Multiplicity="*" />
@@ -6369,6 +6386,7 @@
           <Parameter Name="IsActive" Type="bit" Mode="In" />
           <Parameter Name="ParentClientAccountId" Type="int" Mode="In" />
           <Parameter Name="StaffId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientAccount_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
@@ -6382,6 +6400,7 @@
           <Parameter Name="IsActive" Type="bit" Mode="In" />
           <Parameter Name="ParentClientAccountId" Type="int" Mode="In" />
           <Parameter Name="StaffId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
@@ -9589,6 +9608,10 @@
           <AssociationSet Name="FK__ClientAcc__Paren__6E7AB091" Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Paren__6E7AB091">
             <End Role="ClientAccount" EntitySet="ClientAccounts" />
             <End Role="ClientAccount1" EntitySet="ClientAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ClientAcc__FundI__69386F35" Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__FundI__69386F35">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -13935,6 +13958,7 @@
           <Property Type="Boolean" Name="IsActive" Nullable="false" />
           <Property Type="Int32" Name="ParentClientAccountId" />
           <Property Type="Int32" Name="StaffId" />
+          <Property Type="Int32" Name="FundId" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -14553,6 +14577,18 @@
             </Principal>
             <Dependent Role="ClientAccount1">
               <PropertyRef Name="ParentClientAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientAcc__FundI__69386F35">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientAccount">
+              <PropertyRef Name="FundId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -18195,6 +18231,7 @@
           <EntitySetMapping Name="ClientAccounts">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientAccount">
               <MappingFragment StoreEntitySet="ClientAccount">
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
                 <ScalarProperty Name="StaffId" ColumnName="StaffId" />
                 <ScalarProperty Name="ParentClientAccountId" ColumnName="ParentClientAccountId" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -18212,6 +18249,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientAccount">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientAccount_Insert">
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
                   <ScalarProperty Name="StaffId" ParameterName="StaffId" />
                   <ScalarProperty Name="ParentClientAccountId" ParameterName="ParentClientAccountId" />
                   <ScalarProperty Name="IsActive" ParameterName="IsActive" />
@@ -18226,6 +18264,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientAccount_Update">
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
                   <ScalarProperty Name="StaffId" ParameterName="StaffId" Version="Current" />
                   <ScalarProperty Name="ParentClientAccountId" ParameterName="ParentClientAccountId" Version="Current" />
                   <ScalarProperty Name="IsActive" ParameterName="IsActive" Version="Current" />
@@ -24293,6 +24332,7 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientTra__Relat__4D0E0477" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Staff__733F65AE" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Paren__6E7AB091" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__FundI__69386F35" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
