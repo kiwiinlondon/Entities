@@ -51,5 +51,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         QuintillionIndicativePrices = 20,
+        
+        [EnumMember]
+        RiskReportFigures = 21,
     }
 }
