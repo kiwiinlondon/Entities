@@ -21,6 +21,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             this.ClientTrades = new List<ClientTrade>();
             this.ClientPortfolios = new List<ClientPortfolio>();
+            this.SubAccounts = new List<ClientAccount>();
         }
     
     	[DataMember]
@@ -56,5 +57,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<ClientTrade> ClientTrades { get; set; }
         [DataMember]
         public virtual List<ClientPortfolio> ClientPortfolios { get; set; }
+        [DataMember]
+        public virtual List<ClientAccount> SubAccounts { get; set; }
     }
 }
