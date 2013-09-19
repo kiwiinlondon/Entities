@@ -54,5 +54,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         
         [EnumMember]
         RiskReportFigures = 21,
+
+        [EnumMember]
+        QuintillionClientTransfers = 22,
     }
 }
