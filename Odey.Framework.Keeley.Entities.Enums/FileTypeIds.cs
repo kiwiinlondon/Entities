@@ -57,5 +57,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         QuintillionClientTransfers = 22,
+
+        [EnumMember]
+        ArkusRiskReport = 23,
     }
 }
