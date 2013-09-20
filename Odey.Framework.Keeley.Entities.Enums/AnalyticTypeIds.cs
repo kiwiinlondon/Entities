@@ -27,8 +27,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         SharesOutstanding = 6,
 
+        /// <summary>
+        /// currently 60 day daily
+        /// </summary>
         [EnumMember]
-        BetaShortTerm = 7, //currently 60 day daily
+        BetaShortTerm = 7, 
         
         [EnumMember]
         IndicativeFundPerformance =8,
@@ -45,14 +48,24 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         VaR = 12,
         
+        /// <summary>
+        /// currently 2 year daily
+        /// </summary>
         [EnumMember]
-        BetaLongTerm = 13, //currently 2 year daily
+        BetaLongTerm = 13, 
 
         [EnumMember]
         BetaFundShortTermWeightedNetEquitiesOnly = 14,
 
         [EnumMember]
         BetaFundShortTermWeightedGrossEquitiesOnly = 15,
+
+        /// <summary>
+        /// Currently Sep 2001 September 11th Scenario.
+        /// From Arkus Risk Report
+        /// </summary>
+        [EnumMember]
+        CompositeStressTest = 16,
     }
 }
 
