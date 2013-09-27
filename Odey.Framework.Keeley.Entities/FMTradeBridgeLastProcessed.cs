@@ -26,5 +26,7 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<bool> IsTrade { get; set; }
+    	[DataMember]
+        public System.DateTime LastProcessedTime { get; set; }
     }
 }
