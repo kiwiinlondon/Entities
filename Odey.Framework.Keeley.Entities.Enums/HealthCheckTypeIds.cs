@@ -8,7 +8,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
     {
         [EnumMember]
         FM_TRADE_BRIDGE_RAN = 1,
-        
+
+        [EnumMember]
+        INTRANET_PING = 2,
     }
 }
 
