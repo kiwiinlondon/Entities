@@ -56,6 +56,14 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ITDSumCost { get; set; }
     	[DataMember]
         public decimal ITDRealisedPnl { get; set; }
+    	[DataMember]
+        public int ITDNumberDays { get; set; }
+    	[DataMember]
+        public decimal TwelveMonthSumCost { get; set; }
+    	[DataMember]
+        public decimal TwelveMonthRealisedPnl { get; set; }
+    	[DataMember]
+        public int TwelveMonthNumberDays { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
