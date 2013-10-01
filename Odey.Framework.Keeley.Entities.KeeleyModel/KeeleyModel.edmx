@@ -23,6 +23,7 @@
           <EntitySet Name="Client" EntityType="KeeleyModel.Store.Client" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientAccount" EntityType="KeeleyModel.Store.ClientAccount" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientPortfolio" EntityType="KeeleyModel.Store.ClientPortfolio" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ClientPortfolioPeriodReturn" EntityType="KeeleyModel.Store.ClientPortfolioPeriodReturn" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientTrade" EntityType="KeeleyModel.Store.ClientTrade" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CollectiveInvestmentScheme" EntityType="KeeleyModel.Store.CollectiveInvestmentScheme" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Counterparty" EntityType="KeeleyModel.Store.Counterparty" store:Type="Tables" Schema="dbo" />
@@ -284,6 +285,18 @@
           <AssociationSet Name="ClientPortfolioFundIDFK" Association="KeeleyModel.Store.ClientPortfolioFundIDFK">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="ClientPortfolio" EntitySet="ClientPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioPeriodReturClientAccountIdFK" Association="KeeleyModel.Store.ClientPortfolioPeriodReturClientAccountIdFK">
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+            <End Role="ClientPortfolioPeriodReturn" EntitySet="ClientPortfolioPeriodReturn" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioPeriodReturFundIdFK" Association="KeeleyModel.Store.ClientPortfolioPeriodReturFundIdFK">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="ClientPortfolioPeriodReturn" EntitySet="ClientPortfolioPeriodReturn" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioPeriodReturnUserIDFK" Association="KeeleyModel.Store.ClientPortfolioPeriodReturnUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ClientPortfolioPeriodReturn" EntitySet="ClientPortfolioPeriodReturn" />
           </AssociationSet>
           <AssociationSet Name="ClientPortfolioPriceIDFK" Association="KeeleyModel.Store.ClientPortfolioPriceIDFK">
             <End Role="Price" EntitySet="Price" />
@@ -1486,6 +1499,27 @@
           <Property Name="TwelveMonthSumCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TwelveMonthRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TwelveMonthNumberDays" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClientPortfolioPeriodReturn">
+          <Key>
+            <PropertyRef Name="ClientPortfolioPeriodReturnID" />
+          </Key>
+          <Property Name="ClientPortfolioPeriodReturnID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ClientAccountId" Type="int" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="CurrentUnrealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ITDNumberDays" Type="int" Nullable="false" />
+          <Property Name="ITDRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TwelveMonthNumberDays" Type="int" Nullable="false" />
+          <Property Name="TwelveMonthSumCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TwelveMonthRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="IsLast" Type="bit" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="ITDSumCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="UnrealisedPnlTwelveMonthsAgo" Type="numeric" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -3244,6 +3278,42 @@
             </Principal>
             <Dependent Role="ClientPortfolio">
               <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioPeriodReturClientAccountIdFK">
+          <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="1" />
+          <End Role="ClientPortfolioPeriodReturn" Type="KeeleyModel.Store.ClientPortfolioPeriodReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientPortfolioPeriodReturn">
+              <PropertyRef Name="ClientAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioPeriodReturFundIdFK">
+          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="1" />
+          <End Role="ClientPortfolioPeriodReturn" Type="KeeleyModel.Store.ClientPortfolioPeriodReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioPeriodReturn">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioPeriodReturnUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="ClientPortfolioPeriodReturn" Type="KeeleyModel.Store.ClientPortfolioPeriodReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioPeriodReturn">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6460,6 +6530,43 @@
           <Parameter Name="TwelveMonthRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="TwelveMonthNumberDays" Type="int" Mode="In" />
         </Function>
+        <Function Name="ClientPortfolioPeriodReturn_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPortfolioPeriodReturnID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolioPeriodReturn_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="CurrentUnrealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ITDNumberDays" Type="int" Mode="In" />
+          <Parameter Name="ITDRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="TwelveMonthNumberDays" Type="int" Mode="In" />
+          <Parameter Name="TwelveMonthSumCost" Type="numeric" Mode="In" />
+          <Parameter Name="TwelveMonthRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="IsLast" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="ITDSumCost" Type="numeric" Mode="In" />
+          <Parameter Name="UnrealisedPnlTwelveMonthsAgo" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolioPeriodReturn_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPortfolioPeriodReturnID" Type="int" Mode="In" />
+          <Parameter Name="ClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="CurrentUnrealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ITDNumberDays" Type="int" Mode="In" />
+          <Parameter Name="ITDRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="TwelveMonthNumberDays" Type="int" Mode="In" />
+          <Parameter Name="TwelveMonthSumCost" Type="numeric" Mode="In" />
+          <Parameter Name="TwelveMonthRealisedPnl" Type="numeric" Mode="In" />
+          <Parameter Name="IsLast" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="ITDSumCost" Type="numeric" Mode="In" />
+          <Parameter Name="UnrealisedPnlTwelveMonthsAgo" Type="numeric" Mode="In" />
+        </Function>
         <Function Name="ClientSubType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientSubTypeId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -9625,6 +9732,19 @@
           <AssociationSet Name="FK__ClientAcc__FundI__69386F35" Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__FundI__69386F35">
             <End Role="Fund" EntitySet="Funds" />
             <End Role="ClientAccount" EntitySet="ClientAccounts" />
+          </AssociationSet>
+          <EntitySet Name="ClientPortfolioPeriodReturns" EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn" />
+          <AssociationSet Name="ClientPortfolioPeriodReturnUserIDFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturnUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ClientPortfolioPeriodReturn" EntitySet="ClientPortfolioPeriodReturns" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioPeriodReturClientAccountIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturClientAccountIdFK">
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
+            <End Role="ClientPortfolioPeriodReturn" EntitySet="ClientPortfolioPeriodReturns" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioPeriodReturFundIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturFundIdFK">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="ClientPortfolioPeriodReturn" EntitySet="ClientPortfolioPeriodReturns" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -14611,6 +14731,63 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ClientPortfolioPeriodReturn">
+          <Key>
+            <PropertyRef Name="ClientPortfolioPeriodReturnID" />
+          </Key>
+          <Property Type="Int32" Name="ClientPortfolioPeriodReturnID" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="ClientAccountId" Nullable="false" />
+          <Property Type="Int32" Name="FundId" Nullable="false" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="CurrentUnrealisedPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="ITDNumberDays" Nullable="false" />
+          <Property Type="Decimal" Name="ITDRealisedPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="TwelveMonthNumberDays" Nullable="false" />
+          <Property Type="Decimal" Name="TwelveMonthSumCost" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TwelveMonthRealisedPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Boolean" Name="IsLast" Nullable="false" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Decimal" Name="ITDSumCost" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="UnrealisedPnlTwelveMonthsAgo" Nullable="false" Precision="27" Scale="8" />
+          </EntityType>
+        <Association Name="ClientPortfolioPeriodReturnUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn" Role="ClientPortfolioPeriodReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioPeriodReturn">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioPeriodReturClientAccountIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn" Role="ClientPortfolioPeriodReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientPortfolioPeriodReturn">
+              <PropertyRef Name="ClientAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioPeriodReturFundIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn" Role="ClientPortfolioPeriodReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioPeriodReturn">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -18656,6 +18833,74 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ClientPortfolioPeriodReturns">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn">
+              <MappingFragment StoreEntitySet="ClientPortfolioPeriodReturn">
+                <ScalarProperty Name="UnrealisedPnlTwelveMonthsAgo" ColumnName="UnrealisedPnlTwelveMonthsAgo" />
+                <ScalarProperty Name="ITDSumCost" ColumnName="ITDSumCost" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="IsLast" ColumnName="IsLast" />
+                <ScalarProperty Name="TwelveMonthRealisedPnl" ColumnName="TwelveMonthRealisedPnl" />
+                <ScalarProperty Name="TwelveMonthSumCost" ColumnName="TwelveMonthSumCost" />
+                <ScalarProperty Name="TwelveMonthNumberDays" ColumnName="TwelveMonthNumberDays" />
+                <ScalarProperty Name="ITDRealisedPnl" ColumnName="ITDRealisedPnl" />
+                <ScalarProperty Name="ITDNumberDays" ColumnName="ITDNumberDays" />
+                <ScalarProperty Name="CurrentUnrealisedPnl" ColumnName="CurrentUnrealisedPnl" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="ClientAccountId" ColumnName="ClientAccountId" />
+                <ScalarProperty Name="ClientPortfolioPeriodReturnID" ColumnName="ClientPortfolioPeriodReturnID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolioPeriodReturn_Insert">
+                  <ScalarProperty Name="UnrealisedPnlTwelveMonthsAgo" ParameterName="UnrealisedPnlTwelveMonthsAgo" />
+                  <ScalarProperty Name="ITDSumCost" ParameterName="ITDSumCost" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="IsLast" ParameterName="IsLast" />
+                  <ScalarProperty Name="TwelveMonthRealisedPnl" ParameterName="TwelveMonthRealisedPnl" />
+                  <ScalarProperty Name="TwelveMonthSumCost" ParameterName="TwelveMonthSumCost" />
+                  <ScalarProperty Name="TwelveMonthNumberDays" ParameterName="TwelveMonthNumberDays" />
+                  <ScalarProperty Name="ITDRealisedPnl" ParameterName="ITDRealisedPnl" />
+                  <ScalarProperty Name="ITDNumberDays" ParameterName="ITDNumberDays" />
+                  <ScalarProperty Name="CurrentUnrealisedPnl" ParameterName="CurrentUnrealisedPnl" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" />
+                  <ResultBinding Name="ClientPortfolioPeriodReturnID" ColumnName="ClientPortfolioPeriodReturnID" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolioPeriodReturn_Update">
+                  <ScalarProperty Name="UnrealisedPnlTwelveMonthsAgo" ParameterName="UnrealisedPnlTwelveMonthsAgo" Version="Current" />
+                  <ScalarProperty Name="ITDSumCost" ParameterName="ITDSumCost" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="IsLast" ParameterName="IsLast" Version="Current" />
+                  <ScalarProperty Name="TwelveMonthRealisedPnl" ParameterName="TwelveMonthRealisedPnl" Version="Current" />
+                  <ScalarProperty Name="TwelveMonthSumCost" ParameterName="TwelveMonthSumCost" Version="Current" />
+                  <ScalarProperty Name="TwelveMonthNumberDays" ParameterName="TwelveMonthNumberDays" Version="Current" />
+                  <ScalarProperty Name="ITDRealisedPnl" ParameterName="ITDRealisedPnl" Version="Current" />
+                  <ScalarProperty Name="ITDNumberDays" ParameterName="ITDNumberDays" Version="Current" />
+                  <ScalarProperty Name="CurrentUnrealisedPnl" ParameterName="CurrentUnrealisedPnl" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" Version="Current" />
+                  <ScalarProperty Name="ClientPortfolioPeriodReturnID" ParameterName="ClientPortfolioPeriodReturnID" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ClientPortfolioPeriodReturn_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ClientPortfolioPeriodReturnID" ParameterName="ClientPortfolioPeriodReturnID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -18670,15 +18915,15 @@
     <edmx:Options>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
         <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="69">
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.75" Height="2.5571907552083353" IsExpanded="true" />
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="90">
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.875" PointX="8.25" PointY="18.875" Height="5.8263151041666674" IsExpanded="true" />
@@ -24365,6 +24610,10 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Staff__733F65AE" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Paren__6E7AB091" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__FundI__69386F35" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn" Width="1.5" PointX="3.5698663478576886" PointY="18.764892750775857" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturnUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturClientAccountIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturFundIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
