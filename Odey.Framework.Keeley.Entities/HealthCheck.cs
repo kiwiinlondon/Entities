@@ -26,5 +26,9 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime LastCheckTime { get; set; }
     	[DataMember]
         public int EmailFrequencyMins { get; set; }
+    	[DataMember]
+        public int HealthCheckId { get; set; }
+    	[DataMember]
+        public string Arguments { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         INTRANET_PING = 2,
 
         [EnumMember]
-        QUINTILLION_INDICATIVE_PRICES_RAN = 3,
+        FILE_COLLECTED_CHECK = 3,
     }
 }
 
