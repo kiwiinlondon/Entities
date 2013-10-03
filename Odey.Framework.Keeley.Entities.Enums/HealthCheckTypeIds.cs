@@ -11,6 +11,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         INTRANET_PING = 2,
+
+        [EnumMember]
+        QUINTILLION_INDICATIVE_PRICES_RAN = 3,
     }
 }
 
