@@ -7,6 +7,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
 {
     public enum ClientAccountIds
     {
-        OeiMacFeeder = 21384
+        OEIMacFeeder = 21384
     }
 }
