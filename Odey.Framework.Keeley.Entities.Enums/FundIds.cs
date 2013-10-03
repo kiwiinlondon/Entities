@@ -156,6 +156,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ALEGGBPDSHARECLASS = 5518,
         [EnumMember]
         ALEGUSDSHARECLASS = 5520,
+        [EnumMember]
+        ALEGAUDSHARECLASS = 6354,
+
         
         [EnumMember]
         OEAF = 5326,
