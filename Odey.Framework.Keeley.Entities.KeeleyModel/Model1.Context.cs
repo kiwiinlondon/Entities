@@ -126,6 +126,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FileToBeCollectedGroup> FileToBeCollectedGroup { get; set; }
         public DbSet<Index> Indices { get; set; }
         public DbSet<ClientPortfolioPeriodReturn> ClientPortfolioPeriodReturns { get; set; }
+        public DbSet<ClientPortfolioBridge> ClientPortfolioBridges { get; set; }
+        public DbSet<HealthCheck> HealthChecks { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

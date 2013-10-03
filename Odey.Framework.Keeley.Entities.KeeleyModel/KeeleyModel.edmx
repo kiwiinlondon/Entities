@@ -23,6 +23,7 @@
           <EntitySet Name="Client" EntityType="KeeleyModel.Store.Client" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientAccount" EntityType="KeeleyModel.Store.ClientAccount" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientPortfolio" EntityType="KeeleyModel.Store.ClientPortfolio" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ClientPortfolioBridge" EntityType="KeeleyModel.Store.ClientPortfolioBridge" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientPortfolioPeriodReturn" EntityType="KeeleyModel.Store.ClientPortfolioPeriodReturn" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientTrade" EntityType="KeeleyModel.Store.ClientTrade" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CollectiveInvestmentScheme" EntityType="KeeleyModel.Store.CollectiveInvestmentScheme" store:Type="Tables" Schema="dbo" />
@@ -64,6 +65,7 @@
           <EntitySet Name="FundWebsiteCacheTime" EntityType="KeeleyModel.Store.FundWebsiteCacheTime" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FXRate" EntityType="KeeleyModel.Store.FXRate" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FXTradeEvent" EntityType="KeeleyModel.Store.FXTradeEvent" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HealthCheck" EntityType="KeeleyModel.Store.HealthCheck" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="IdentifierMapping" EntityType="KeeleyModel.Store.IdentifierMapping" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="IdentifierType" EntityType="KeeleyModel.Store.IdentifierType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="IndexConstituent" EntityType="KeeleyModel.Store.IndexConstituent" store:Type="Tables" Schema="dbo" />
@@ -277,6 +279,22 @@
           <AssociationSet Name="ClientAccountUserIDFK" Association="KeeleyModel.Store.ClientAccountUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientAccount" EntitySet="ClientAccount" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioBridgeClientAccountIdFK" Association="KeeleyModel.Store.ClientPortfolioBridgeClientAccountIdFK">
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridge" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioBridgeClientFundIdFK" Association="KeeleyModel.Store.ClientPortfolioBridgeClientFundIdFK">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridge" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioBridgeCurrencyIdIdFK" Association="KeeleyModel.Store.ClientPortfolioBridgeCurrencyIdIdFK">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridge" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioBridgeUpdateUserIDFK" Association="KeeleyModel.Store.ClientPortfolioBridgeUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridge" />
           </AssociationSet>
           <AssociationSet Name="ClientPortfolioClientAccountIDFK" Association="KeeleyModel.Store.ClientPortfolioClientAccountIDFK">
             <End Role="ClientAccount" EntitySet="ClientAccount" />
@@ -1500,6 +1518,23 @@
           <Property Name="TwelveMonthRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TwelveMonthNumberDays" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="ClientPortfolioBridge">
+          <Key>
+            <PropertyRef Name="ClientPortfolioBridgeId" />
+          </Key>
+          <Property Name="ClientPortfolioBridgeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ClientAccountId" Type="int" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="ParentFundId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="UpdateReturns" Type="bit" Nullable="false" />
+          <Property Name="ClientFundReturnId" Type="int" />
+          <Property Name="AccountFundReturnId" Type="int" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="ClientPortfolioPeriodReturn">
           <Key>
             <PropertyRef Name="ClientPortfolioPeriodReturnID" />
@@ -2123,6 +2158,16 @@
           <Property Name="ContraEventId" Type="int" />
           <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="OriginalInputDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HealthCheck">
+          <Key>
+            <PropertyRef Name="HealthCheckTypeId" />
+          </Key>
+          <Property Name="HealthCheckTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ErrorInProgress" Type="bit" Nullable="false" />
+          <Property Name="LastCheckTime" Type="datetime" Nullable="false" />
+          <Property Name="EmailFrequencyMins" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="IdentifierMapping">
           <Key>
@@ -3253,6 +3298,54 @@
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="ClientAccount">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioBridgeClientAccountIdFK">
+          <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="1" />
+          <End Role="ClientPortfolioBridge" Type="KeeleyModel.Store.ClientPortfolioBridge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientPortfolioBridge">
+              <PropertyRef Name="ClientAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioBridgeClientFundIdFK">
+          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="1" />
+          <End Role="ClientPortfolioBridge" Type="KeeleyModel.Store.ClientPortfolioBridge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioBridge">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioBridgeCurrencyIdIdFK">
+          <End Role="Currency" Type="KeeleyModel.Store.Currency" Multiplicity="1" />
+          <End Role="ClientPortfolioBridge" Type="KeeleyModel.Store.ClientPortfolioBridge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioBridge">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioBridgeUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="ClientPortfolioBridge" Type="KeeleyModel.Store.ClientPortfolioBridge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioBridge">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -6530,6 +6623,35 @@
           <Parameter Name="TwelveMonthRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="TwelveMonthNumberDays" Type="int" Mode="In" />
         </Function>
+        <Function Name="ClientPortfolioBridge_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPortfolioBridgeId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolioBridge_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ParentFundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateReturns" Type="bit" Mode="In" />
+          <Parameter Name="ClientFundReturnId" Type="int" Mode="In" />
+          <Parameter Name="AccountFundReturnId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolioBridge_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPortfolioBridgeId" Type="int" Mode="In" />
+          <Parameter Name="ClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ParentFundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateReturns" Type="bit" Mode="In" />
+          <Parameter Name="ClientFundReturnId" Type="int" Mode="In" />
+          <Parameter Name="AccountFundReturnId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
+        </Function>
         <Function Name="ClientPortfolioPeriodReturn_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioPeriodReturnID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -9745,6 +9867,24 @@
           <AssociationSet Name="ClientPortfolioPeriodReturFundIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturFundIdFK">
             <End Role="Fund" EntitySet="Funds" />
             <End Role="ClientPortfolioPeriodReturn" EntitySet="ClientPortfolioPeriodReturns" />
+          </AssociationSet>
+          <EntitySet Name="ClientPortfolioBridges" EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" />
+          <EntitySet Name="HealthChecks" EntityType="Odey.Framework.Keeley.Entities.HealthCheck" />
+          <AssociationSet Name="ClientPortfolioBridgeUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridges" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioBridgeClientAccountIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientAccountIdFK">
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
+            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridges" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioBridgeClientFundIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientFundIdFK">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridges" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioBridgeCurrencyIdIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeCurrencyIdIdFK">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridges" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -14788,6 +14928,83 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ClientPortfolioBridge">
+          <Key>
+            <PropertyRef Name="ClientPortfolioBridgeId" />
+          </Key>
+          <Property Type="Int32" Name="ClientPortfolioBridgeId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="ClientAccountId" Nullable="false" />
+          <Property Type="Int32" Name="FundId" Nullable="false" />
+          <Property Type="Int32" Name="ParentFundId" Nullable="false" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
+          <Property Type="Boolean" Name="UpdateReturns" Nullable="false" />
+          <Property Type="Int32" Name="ClientFundReturnId" />
+          <Property Type="Int32" Name="AccountFundReturnId" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="CurrencyId" Nullable="false" />
+          <NavigationProperty Name="ClientAccount" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientAccountIdFK" FromRole="ClientPortfolioBridge" ToRole="ClientAccount" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientFundIdFK" FromRole="ClientPortfolioBridge" ToRole="Fund" />
+        </EntityType>
+        <EntityType Name="HealthCheck">
+          <Key>
+            <PropertyRef Name="HealthCheckTypeId" />
+          </Key>
+          <Property Type="Int32" Name="HealthCheckTypeId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ErrorInProgress" Nullable="false" />
+          <Property Type="DateTime" Name="LastCheckTime" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="EmailFrequencyMins" Nullable="false" />
+        </EntityType>
+        <Association Name="ClientPortfolioBridgeUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" Role="ClientPortfolioBridge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioBridge">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioBridgeClientAccountIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" Role="ClientPortfolioBridge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientPortfolioBridge">
+              <PropertyRef Name="ClientAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioBridgeClientFundIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" Role="ClientPortfolioBridge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioBridge">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioBridgeCurrencyIdIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" Role="ClientPortfolioBridge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioBridge">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -18901,6 +19118,73 @@
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ClientPortfolioBridges">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioBridge">
+              <MappingFragment StoreEntitySet="ClientPortfolioBridge">
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="AccountFundReturnId" ColumnName="AccountFundReturnId" />
+                <ScalarProperty Name="ClientFundReturnId" ColumnName="ClientFundReturnId" />
+                <ScalarProperty Name="UpdateReturns" ColumnName="UpdateReturns" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="ParentFundId" ColumnName="ParentFundId" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="ClientAccountId" ColumnName="ClientAccountId" />
+                <ScalarProperty Name="ClientPortfolioBridgeId" ColumnName="ClientPortfolioBridgeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioBridge">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolioBridge_Insert">
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="AccountFundReturnId" ParameterName="AccountFundReturnId" />
+                  <ScalarProperty Name="ClientFundReturnId" ParameterName="ClientFundReturnId" />
+                  <ScalarProperty Name="UpdateReturns" ParameterName="UpdateReturns" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="ParentFundId" ParameterName="ParentFundId" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" />
+                  <ResultBinding Name="ClientPortfolioBridgeId" ColumnName="ClientPortfolioBridgeId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolioBridge_Update">
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="AccountFundReturnId" ParameterName="AccountFundReturnId" Version="Current" />
+                  <ScalarProperty Name="ClientFundReturnId" ParameterName="ClientFundReturnId" Version="Current" />
+                  <ScalarProperty Name="UpdateReturns" ParameterName="UpdateReturns" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="ParentFundId" ParameterName="ParentFundId" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" Version="Current" />
+                  <ScalarProperty Name="ClientPortfolioBridgeId" ParameterName="ClientPortfolioBridgeId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ClientPortfolioBridge_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ClientPortfolioBridgeId" ParameterName="ClientPortfolioBridgeId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HealthChecks">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.HealthCheck">
+              <MappingFragment StoreEntitySet="HealthCheck">
+                <ScalarProperty Name="EmailFrequencyMins" ColumnName="EmailFrequencyMins" />
+                <ScalarProperty Name="LastCheckTime" ColumnName="LastCheckTime" />
+                <ScalarProperty Name="ErrorInProgress" ColumnName="ErrorInProgress" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="HealthCheckTypeId" ColumnName="HealthCheckTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -18922,7 +19206,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="90">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="50">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -24610,10 +24894,16 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Staff__733F65AE" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Paren__6E7AB091" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__FundI__69386F35" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn" Width="1.5" PointX="3.5698663478576886" PointY="18.764892750775857" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn" Width="1.5" PointX="5.25" PointY="67.375" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturnUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturClientAccountIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturFundIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" Width="1.5" PointX="20.625" PointY="51.25" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.HealthCheck" Width="1.5" PointX="23.625" PointY="52.75" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientAccountIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientFundIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeCurrencyIdIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
