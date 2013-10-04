@@ -30,5 +30,11 @@ namespace Odey.Framework.Keeley.Entities
         public int HealthCheckId { get; set; }
     	[DataMember]
         public string Arguments { get; set; }
+    	[DataMember]
+        public System.DateTime StartDt { get; set; }
+    	[DataMember]
+        public int UpdateUserID { get; set; }
+    	[DataMember]
+        public byte[] DataVersion { get; set; }
     }
 }
