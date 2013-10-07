@@ -29,10 +29,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public bool UpdateReturns { get; set; }
     	[DataMember]
-        public int ClientFundReturnId { get; set; }
-    	[DataMember]
-        public int AccountFundReturnId { get; set; }
-    	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
@@ -40,6 +36,14 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int CurrencyId { get; set; }
+    	[DataMember]
+        public decimal ClientAccountMarketValue { get; set; }
+    	[DataMember]
+        public decimal ClientAccountCost { get; set; }
+    	[DataMember]
+        public decimal ClientCost { get; set; }
+    	[DataMember]
+        public decimal ClientMarketValue { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
