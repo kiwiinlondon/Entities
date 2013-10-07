@@ -67,5 +67,7 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
+        [DataMember]
+        public virtual Fund Fund { get; set; }
     }
 }

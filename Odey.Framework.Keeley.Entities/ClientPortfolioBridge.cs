@@ -29,9 +29,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public bool UpdateReturns { get; set; }
     	[DataMember]
-        public Nullable<int> ClientFundReturnId { get; set; }
+        public int ClientFundReturnId { get; set; }
     	[DataMember]
-        public Nullable<int> AccountFundReturnId { get; set; }
+        public int AccountFundReturnId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
