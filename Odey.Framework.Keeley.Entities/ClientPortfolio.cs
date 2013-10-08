@@ -64,6 +64,14 @@ namespace Odey.Framework.Keeley.Entities
         public decimal TwelveMonthRealisedPnl { get; set; }
     	[DataMember]
         public int TwelveMonthNumberDays { get; set; }
+    	[DataMember]
+        public decimal ClientMarketValue { get; set; }
+    	[DataMember]
+        public decimal ClientCost { get; set; }
+    	[DataMember]
+        public System.DateTime FirstTradeDate { get; set; }
+    	[DataMember]
+        public bool UpdateClient { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
