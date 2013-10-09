@@ -27,27 +27,17 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public bool UpdateReturns { get; set; }
-    	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int CurrencyId { get; set; }
+        public int ClientFundReturnId { get; set; }
     	[DataMember]
-        public decimal ClientAccountMarketValue { get; set; }
+        public int ClientAccountFundReturnId { get; set; }
     	[DataMember]
-        public decimal ClientAccountCost { get; set; }
-    	[DataMember]
-        public decimal ClientCost { get; set; }
-    	[DataMember]
-        public decimal ClientMarketValue { get; set; }
-    	[DataMember]
-        public int ClientReturnId { get; set; }
-    	[DataMember]
-        public int ClientAccountReturnId { get; set; }
+        public bool IsFirst { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }

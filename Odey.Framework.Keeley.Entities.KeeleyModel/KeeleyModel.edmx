@@ -288,10 +288,6 @@
             <End Role="Fund" EntitySet="Fund" />
             <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridge" />
           </AssociationSet>
-          <AssociationSet Name="ClientPortfolioBridgeCurrencyIdIdFK" Association="KeeleyModel.Store.ClientPortfolioBridgeCurrencyIdIdFK">
-            <End Role="Currency" EntitySet="Currency" />
-            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridge" />
-          </AssociationSet>
           <AssociationSet Name="ClientPortfolioBridgeUpdateUserIDFK" Association="KeeleyModel.Store.ClientPortfolioBridgeUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridge" />
@@ -1495,7 +1491,7 @@
           </Key>
           <Property Name="ClientPortfolioId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ClientAccountId" Type="int" Nullable="false" />
-          <Property Name="FundId" Type="int" />
+          <Property Name="FundId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="Quantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="ChangeInQuantity" Type="numeric" Nullable="false" Precision="27" Scale="8" />
@@ -1517,10 +1513,9 @@
           <Property Name="TwelveMonthSumCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TwelveMonthRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TwelveMonthNumberDays" Type="int" Nullable="false" />
-          <Property Name="ClientMarketValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="ClientCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="FirstTradeDate" Type="datetime" Nullable="false" />
           <Property Name="UpdateClient" Type="bit" Nullable="false" />
+          <Property Name="ClientReturnId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientPortfolioBridge">
           <Key>
@@ -1531,17 +1526,12 @@
           <Property Name="FundId" Type="int" Nullable="false" />
           <Property Name="ParentFundId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
-          <Property Name="UpdateReturns" Type="bit" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="CurrencyId" Type="int" Nullable="false" />
-          <Property Name="ClientAccountMarketValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="ClientAccountCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="ClientCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="ClientMarketValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="ClientReturnId" Type="int" Nullable="false" />
-          <Property Name="ClientAccountReturnId" Type="int" Nullable="false" />
+          <Property Name="ClientFundReturnId" Type="int" Nullable="false" />
+          <Property Name="ClientAccountFundReturnId" Type="int" Nullable="false" />
+          <Property Name="IsFirst" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientPortfolioPeriodReturn">
           <Key>
@@ -3340,18 +3330,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ClientPortfolioBridgeCurrencyIdIdFK">
-          <End Role="Currency" Type="KeeleyModel.Store.Currency" Multiplicity="1" />
-          <End Role="ClientPortfolioBridge" Type="KeeleyModel.Store.ClientPortfolioBridge" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Currency">
-              <PropertyRef Name="InstrumentID" />
-            </Principal>
-            <Dependent Role="ClientPortfolioBridge">
-              <PropertyRef Name="CurrencyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="ClientPortfolioBridgeUpdateUserIDFK">
           <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
           <End Role="ClientPortfolioBridge" Type="KeeleyModel.Store.ClientPortfolioBridge" Multiplicity="*" />
@@ -3377,7 +3355,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ClientPortfolioFundIDFK">
-          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="0..1" />
+          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="1" />
           <End Role="ClientPortfolio" Type="KeeleyModel.Store.ClientPortfolio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fund">
@@ -6611,10 +6589,9 @@
           <Parameter Name="TwelveMonthSumCost" Type="numeric" Mode="In" />
           <Parameter Name="TwelveMonthRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="TwelveMonthNumberDays" Type="int" Mode="In" />
-          <Parameter Name="ClientMarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="ClientCost" Type="numeric" Mode="In" />
           <Parameter Name="FirstTradeDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateClient" Type="bit" Mode="In" />
+          <Parameter Name="ClientReturnId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
@@ -6640,10 +6617,9 @@
           <Parameter Name="TwelveMonthSumCost" Type="numeric" Mode="In" />
           <Parameter Name="TwelveMonthRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="TwelveMonthNumberDays" Type="int" Mode="In" />
-          <Parameter Name="ClientMarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="ClientCost" Type="numeric" Mode="In" />
           <Parameter Name="FirstTradeDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateClient" Type="bit" Mode="In" />
+          <Parameter Name="ClientReturnId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioBridge_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioBridgeId" Type="int" Mode="In" />
@@ -6655,15 +6631,10 @@
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="ParentFundId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="UpdateReturns" Type="bit" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="CurrencyId" Type="int" Mode="In" />
-          <Parameter Name="ClientAccountMarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="ClientAccountCost" Type="numeric" Mode="In" />
-          <Parameter Name="ClientCost" Type="numeric" Mode="In" />
-          <Parameter Name="ClientMarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="ClientReturnId" Type="int" Mode="In" />
-          <Parameter Name="ClientAccountReturnId" Type="int" Mode="In" />
+          <Parameter Name="ClientFundReturnId" Type="int" Mode="In" />
+          <Parameter Name="ClientAccountFundReturnId" Type="int" Mode="In" />
+          <Parameter Name="IsFirst" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioBridge_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioBridgeId" Type="int" Mode="In" />
@@ -6671,16 +6642,11 @@
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="ParentFundId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="UpdateReturns" Type="bit" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="CurrencyId" Type="int" Mode="In" />
-          <Parameter Name="ClientAccountMarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="ClientAccountCost" Type="numeric" Mode="In" />
-          <Parameter Name="ClientCost" Type="numeric" Mode="In" />
-          <Parameter Name="ClientMarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="ClientReturnId" Type="int" Mode="In" />
-          <Parameter Name="ClientAccountReturnId" Type="int" Mode="In" />
+          <Parameter Name="ClientFundReturnId" Type="int" Mode="In" />
+          <Parameter Name="ClientAccountFundReturnId" Type="int" Mode="In" />
+          <Parameter Name="IsFirst" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioPeriodReturn_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioPeriodReturnID" Type="int" Mode="In" />
@@ -9910,10 +9876,6 @@
           </AssociationSet>
           <AssociationSet Name="ClientPortfolioBridgeClientFundIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientFundIdFK">
             <End Role="Fund" EntitySet="Funds" />
-            <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridges" />
-          </AssociationSet>
-          <AssociationSet Name="ClientPortfolioBridgeCurrencyIdIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeCurrencyIdIdFK">
-            <End Role="Currency" EntitySet="Currencies" />
             <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridges" />
           </AssociationSet>
           </EntityContainer>
@@ -14458,7 +14420,7 @@
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="ClientAccountId" Nullable="false" />
           <NavigationProperty Name="ClientAccount" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioClientAccountIDFK" FromRole="ClientPortfolio" ToRole="ClientAccount" />
-          <Property Type="Int32" Name="FundId" />
+          <Property Type="Int32" Name="FundId" Nullable="false" />
           <Property Type="Decimal" Name="OpeningValue" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="TodayRealisedPnl" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="TodayUnRealisedPnl" Nullable="false" Precision="27" Scale="8" />
@@ -14471,10 +14433,9 @@
           <Property Type="Decimal" Name="TwelveMonthRealisedPnl" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Int32" Name="TwelveMonthNumberDays" Nullable="false" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioFundIDFK" FromRole="ClientPortfolio" ToRole="Fund" />
-          <Property Type="Decimal" Name="ClientMarketValue" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="ClientCost" Nullable="false" Precision="27" Scale="8" />
           <Property Type="DateTime" Name="FirstTradeDate" Nullable="false" Precision="3" />
           <Property Type="Boolean" Name="UpdateClient" Nullable="false" />
+          <Property Type="Int32" Name="ClientReturnId" Nullable="false" />
         </EntityType>
         <Association Name="ClientPortfolioUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14513,7 +14474,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ClientPortfolioFundIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.ClientPortfolio" Role="ClientPortfolio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fund">
@@ -14972,19 +14933,14 @@
           <Property Type="Int32" Name="FundId" Nullable="false" />
           <Property Type="Int32" Name="ParentFundId" Nullable="false" />
           <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
-          <Property Type="Boolean" Name="UpdateReturns" Nullable="false" />
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="Int32" Name="CurrencyId" Nullable="false" />
           <NavigationProperty Name="ClientAccount" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientAccountIdFK" FromRole="ClientPortfolioBridge" ToRole="ClientAccount" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientFundIdFK" FromRole="ClientPortfolioBridge" ToRole="Fund" />
-          <Property Type="Decimal" Name="ClientAccountMarketValue" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="ClientAccountCost" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="ClientCost" Precision="27" Scale="8" Nullable="false" />
-          <Property Type="Decimal" Name="ClientMarketValue" Precision="27" Scale="8" Nullable="false" />
-          <Property Type="Int32" Name="ClientReturnId" Nullable="false" />
-          <Property Type="Int32" Name="ClientAccountReturnId" Nullable="false" />
+          <Property Type="Int32" Name="ClientFundReturnId" Nullable="false" />
+          <Property Type="Int32" Name="ClientAccountFundReturnId" Nullable="false" />
+          <Property Type="Boolean" Name="IsFirst" Nullable="false" />
         </EntityType>
         <EntityType Name="HealthCheck">
           <Key>
@@ -15035,18 +14991,6 @@
             </Principal>
             <Dependent Role="ClientPortfolioBridge">
               <PropertyRef Name="FundId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ClientPortfolioBridgeCurrencyIdIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" Role="ClientPortfolioBridge" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Currency">
-              <PropertyRef Name="InstrumentID" />
-            </Principal>
-            <Dependent Role="ClientPortfolioBridge">
-              <PropertyRef Name="CurrencyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -18847,10 +18791,9 @@
           <EntitySetMapping Name="ClientPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <MappingFragment StoreEntitySet="ClientPortfolio">
+                <ScalarProperty Name="ClientReturnId" ColumnName="ClientReturnId" />
                 <ScalarProperty Name="UpdateClient" ColumnName="UpdateClient" />
                 <ScalarProperty Name="FirstTradeDate" ColumnName="FirstTradeDate" />
-                <ScalarProperty Name="ClientCost" ColumnName="ClientCost" />
-                <ScalarProperty Name="ClientMarketValue" ColumnName="ClientMarketValue" />
                 <ScalarProperty Name="TwelveMonthNumberDays" ColumnName="TwelveMonthNumberDays" />
                 <ScalarProperty Name="TwelveMonthRealisedPnl" ColumnName="TwelveMonthRealisedPnl" />
                 <ScalarProperty Name="TwelveMonthSumCost" ColumnName="TwelveMonthSumCost" />
@@ -18880,10 +18823,9 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">
+                  <ScalarProperty Name="ClientReturnId" ParameterName="ClientReturnId" />
                   <ScalarProperty Name="UpdateClient" ParameterName="UpdateClient" />
                   <ScalarProperty Name="FirstTradeDate" ParameterName="FirstTradeDate" />
-                  <ScalarProperty Name="ClientCost" ParameterName="ClientCost" />
-                  <ScalarProperty Name="ClientMarketValue" ParameterName="ClientMarketValue" />
                   <ScalarProperty Name="TwelveMonthNumberDays" ParameterName="TwelveMonthNumberDays" />
                   <ScalarProperty Name="TwelveMonthRealisedPnl" ParameterName="TwelveMonthRealisedPnl" />
                   <ScalarProperty Name="TwelveMonthSumCost" ParameterName="TwelveMonthSumCost" />
@@ -18910,10 +18852,9 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">
+                  <ScalarProperty Name="ClientReturnId" ParameterName="ClientReturnId" Version="Current" />
                   <ScalarProperty Name="UpdateClient" ParameterName="UpdateClient" Version="Current" />
                   <ScalarProperty Name="FirstTradeDate" ParameterName="FirstTradeDate" Version="Current" />
-                  <ScalarProperty Name="ClientCost" ParameterName="ClientCost" Version="Current" />
-                  <ScalarProperty Name="ClientMarketValue" ParameterName="ClientMarketValue" Version="Current" />
                   <ScalarProperty Name="TwelveMonthNumberDays" ParameterName="TwelveMonthNumberDays" Version="Current" />
                   <ScalarProperty Name="TwelveMonthRealisedPnl" ParameterName="TwelveMonthRealisedPnl" Version="Current" />
                   <ScalarProperty Name="TwelveMonthSumCost" ParameterName="TwelveMonthSumCost" Version="Current" />
@@ -19178,17 +19119,12 @@
           <EntitySetMapping Name="ClientPortfolioBridges">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioBridge">
               <MappingFragment StoreEntitySet="ClientPortfolioBridge">
-                <ScalarProperty Name="ClientAccountReturnId" ColumnName="ClientAccountReturnId" />
-                <ScalarProperty Name="ClientReturnId" ColumnName="ClientReturnId" />
-                <ScalarProperty Name="ClientMarketValue" ColumnName="ClientMarketValue" />
-                <ScalarProperty Name="ClientCost" ColumnName="ClientCost" />
-                <ScalarProperty Name="ClientAccountCost" ColumnName="ClientAccountCost" />
-                <ScalarProperty Name="ClientAccountMarketValue" ColumnName="ClientAccountMarketValue" />
-                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="IsFirst" ColumnName="IsFirst" />
+                <ScalarProperty Name="ClientAccountFundReturnId" ColumnName="ClientAccountFundReturnId" />
+                <ScalarProperty Name="ClientFundReturnId" ColumnName="ClientFundReturnId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="UpdateReturns" ColumnName="UpdateReturns" />
                 <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
                 <ScalarProperty Name="ParentFundId" ColumnName="ParentFundId" />
                 <ScalarProperty Name="FundId" ColumnName="FundId" />
@@ -19199,15 +19135,10 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioBridge">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolioBridge_Insert">
-                  <ScalarProperty Name="ClientAccountReturnId" ParameterName="ClientAccountReturnId" />
-                  <ScalarProperty Name="ClientReturnId" ParameterName="ClientReturnId" />
-                  <ScalarProperty Name="ClientMarketValue" ParameterName="ClientMarketValue" />
-                  <ScalarProperty Name="ClientCost" ParameterName="ClientCost" />
-                  <ScalarProperty Name="ClientAccountCost" ParameterName="ClientAccountCost" />
-                  <ScalarProperty Name="ClientAccountMarketValue" ParameterName="ClientAccountMarketValue" />
-                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
+                  <ScalarProperty Name="IsFirst" ParameterName="IsFirst" />
+                  <ScalarProperty Name="ClientAccountFundReturnId" ParameterName="ClientAccountFundReturnId" />
+                  <ScalarProperty Name="ClientFundReturnId" ParameterName="ClientFundReturnId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="UpdateReturns" ParameterName="UpdateReturns" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
                   <ScalarProperty Name="ParentFundId" ParameterName="ParentFundId" />
                   <ScalarProperty Name="FundId" ParameterName="FundId" />
@@ -19217,16 +19148,11 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolioBridge_Update">
-                  <ScalarProperty Name="ClientAccountReturnId" ParameterName="ClientAccountReturnId" Version="Current" />
-                  <ScalarProperty Name="ClientReturnId" ParameterName="ClientReturnId" Version="Current" />
-                  <ScalarProperty Name="ClientMarketValue" ParameterName="ClientMarketValue" Version="Current" />
-                  <ScalarProperty Name="ClientCost" ParameterName="ClientCost" Version="Current" />
-                  <ScalarProperty Name="ClientAccountCost" ParameterName="ClientAccountCost" Version="Current" />
-                  <ScalarProperty Name="ClientAccountMarketValue" ParameterName="ClientAccountMarketValue" Version="Current" />
-                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
+                  <ScalarProperty Name="IsFirst" ParameterName="IsFirst" Version="Current" />
+                  <ScalarProperty Name="ClientAccountFundReturnId" ParameterName="ClientAccountFundReturnId" Version="Current" />
+                  <ScalarProperty Name="ClientFundReturnId" ParameterName="ClientFundReturnId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="UpdateReturns" ParameterName="UpdateReturns" Version="Current" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
                   <ScalarProperty Name="ParentFundId" ParameterName="ParentFundId" Version="Current" />
                   <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
@@ -19281,7 +19207,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="50">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="19">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -24978,7 +24904,6 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientAccountIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientFundIdFK" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeCurrencyIdIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

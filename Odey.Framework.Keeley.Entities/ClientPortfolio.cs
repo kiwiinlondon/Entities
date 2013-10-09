@@ -41,7 +41,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int ClientAccountId { get; set; }
     	[DataMember]
-        public Nullable<int> FundId { get; set; }
+        public int FundId { get; set; }
     	[DataMember]
         public decimal OpeningValue { get; set; }
     	[DataMember]
@@ -65,13 +65,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int TwelveMonthNumberDays { get; set; }
     	[DataMember]
-        public decimal ClientMarketValue { get; set; }
-    	[DataMember]
-        public decimal ClientCost { get; set; }
-    	[DataMember]
         public System.DateTime FirstTradeDate { get; set; }
     	[DataMember]
         public bool UpdateClient { get; set; }
+    	[DataMember]
+        public int ClientReturnId { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
