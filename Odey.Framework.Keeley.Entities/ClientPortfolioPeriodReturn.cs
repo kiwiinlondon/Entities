@@ -48,5 +48,7 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ITDSumCost { get; set; }
     	[DataMember]
         public decimal UnrealisedPnlTwelveMonthsAgo { get; set; }
+    	[DataMember]
+        public System.DateTime FirstTradeDate { get; set; }
     }
 }
