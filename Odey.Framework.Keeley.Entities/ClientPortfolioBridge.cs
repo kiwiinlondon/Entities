@@ -40,6 +40,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsFirst { get; set; }
     	[DataMember]
         public int ClientReturnId { get; set; }
+    	[DataMember]
+        public decimal MarketValue { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
