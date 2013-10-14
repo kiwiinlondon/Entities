@@ -50,5 +50,7 @@ namespace Odey.Framework.Keeley.Entities
         public decimal UnrealisedPnlTwelveMonthsAgo { get; set; }
     	[DataMember]
         public System.DateTime FirstTradeDate { get; set; }
+    	[DataMember]
+        public System.DateTime TwelveMonthsAgo { get; set; }
     }
 }

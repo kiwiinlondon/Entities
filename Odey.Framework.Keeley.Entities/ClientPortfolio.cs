@@ -67,9 +67,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime FirstTradeDate { get; set; }
     	[DataMember]
-        public bool UpdateClient { get; set; }
-    	[DataMember]
-        public int ClientReturnId { get; set; }
+        public bool UpdateBridge { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }

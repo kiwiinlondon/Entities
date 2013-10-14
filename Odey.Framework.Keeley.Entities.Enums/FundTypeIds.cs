@@ -26,6 +26,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         UCITS =10,
         [EnumMember]
-        ManagedDailyDealing = 11
+        ManagedDailyDealing = 11,
+        [EnumMember]
+        Virtual=12
     }
 }

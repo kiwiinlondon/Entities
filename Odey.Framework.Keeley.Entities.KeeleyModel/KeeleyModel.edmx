@@ -1514,8 +1514,7 @@
           <Property Name="TwelveMonthRealisedPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TwelveMonthNumberDays" Type="int" Nullable="false" />
           <Property Name="FirstTradeDate" Type="datetime" Nullable="false" />
-          <Property Name="UpdateClient" Type="bit" Nullable="false" />
-          <Property Name="ClientReturnId" Type="int" Nullable="false" />
+          <Property Name="UpdateBridge" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientPortfolioBridge">
           <Key>
@@ -1556,6 +1555,7 @@
           <Property Name="ITDSumCost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="UnrealisedPnlTwelveMonthsAgo" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="FirstTradeDate" Type="datetime" Nullable="false" />
+          <Property Name="TwelveMonthsAgo" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -6593,8 +6593,7 @@
           <Parameter Name="TwelveMonthRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="TwelveMonthNumberDays" Type="int" Mode="In" />
           <Parameter Name="FirstTradeDate" Type="datetime" Mode="In" />
-          <Parameter Name="UpdateClient" Type="bit" Mode="In" />
-          <Parameter Name="ClientReturnId" Type="int" Mode="In" />
+          <Parameter Name="UpdateBridge" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
@@ -6621,8 +6620,7 @@
           <Parameter Name="TwelveMonthRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="TwelveMonthNumberDays" Type="int" Mode="In" />
           <Parameter Name="FirstTradeDate" Type="datetime" Mode="In" />
-          <Parameter Name="UpdateClient" Type="bit" Mode="In" />
-          <Parameter Name="ClientReturnId" Type="int" Mode="In" />
+          <Parameter Name="UpdateBridge" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioBridge_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioBridgeId" Type="int" Mode="In" />
@@ -6675,6 +6673,7 @@
           <Parameter Name="ITDSumCost" Type="numeric" Mode="In" />
           <Parameter Name="UnrealisedPnlTwelveMonthsAgo" Type="numeric" Mode="In" />
           <Parameter Name="FirstTradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="TwelveMonthsAgo" Type="datetime" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioPeriodReturn_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioPeriodReturnID" Type="int" Mode="In" />
@@ -6693,6 +6692,7 @@
           <Parameter Name="ITDSumCost" Type="numeric" Mode="In" />
           <Parameter Name="UnrealisedPnlTwelveMonthsAgo" Type="numeric" Mode="In" />
           <Parameter Name="FirstTradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="TwelveMonthsAgo" Type="datetime" Mode="In" />
         </Function>
         <Function Name="ClientSubType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientSubTypeId" Type="int" Mode="In" />
@@ -14443,8 +14443,7 @@
           <Property Type="Int32" Name="TwelveMonthNumberDays" Nullable="false" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioFundIDFK" FromRole="ClientPortfolio" ToRole="Fund" />
           <Property Type="DateTime" Name="FirstTradeDate" Nullable="false" Precision="3" />
-          <Property Type="Boolean" Name="UpdateClient" Nullable="false" />
-          <Property Type="Int32" Name="ClientReturnId" Nullable="false" />
+          <Property Type="Boolean" Name="UpdateBridge" Nullable="false" />
         </EntityType>
         <Association Name="ClientPortfolioUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14897,6 +14896,7 @@
           <Property Type="Decimal" Name="ITDSumCost" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="UnrealisedPnlTwelveMonthsAgo" Nullable="false" Precision="27" Scale="8" />
           <Property Type="DateTime" Name="FirstTradeDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="TwelveMonthsAgo" Nullable="false" Precision="3" />
           </EntityType>
         <Association Name="ClientPortfolioPeriodReturnUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -18803,8 +18803,7 @@
           <EntitySetMapping Name="ClientPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <MappingFragment StoreEntitySet="ClientPortfolio">
-                <ScalarProperty Name="ClientReturnId" ColumnName="ClientReturnId" />
-                <ScalarProperty Name="UpdateClient" ColumnName="UpdateClient" />
+                <ScalarProperty Name="UpdateBridge" ColumnName="UpdateBridge" />
                 <ScalarProperty Name="FirstTradeDate" ColumnName="FirstTradeDate" />
                 <ScalarProperty Name="TwelveMonthNumberDays" ColumnName="TwelveMonthNumberDays" />
                 <ScalarProperty Name="TwelveMonthRealisedPnl" ColumnName="TwelveMonthRealisedPnl" />
@@ -18835,8 +18834,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">
-                  <ScalarProperty Name="ClientReturnId" ParameterName="ClientReturnId" />
-                  <ScalarProperty Name="UpdateClient" ParameterName="UpdateClient" />
+                  <ScalarProperty Name="UpdateBridge" ParameterName="UpdateBridge" />
                   <ScalarProperty Name="FirstTradeDate" ParameterName="FirstTradeDate" />
                   <ScalarProperty Name="TwelveMonthNumberDays" ParameterName="TwelveMonthNumberDays" />
                   <ScalarProperty Name="TwelveMonthRealisedPnl" ParameterName="TwelveMonthRealisedPnl" />
@@ -18864,8 +18862,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">
-                  <ScalarProperty Name="ClientReturnId" ParameterName="ClientReturnId" Version="Current" />
-                  <ScalarProperty Name="UpdateClient" ParameterName="UpdateClient" Version="Current" />
+                  <ScalarProperty Name="UpdateBridge" ParameterName="UpdateBridge" Version="Current" />
                   <ScalarProperty Name="FirstTradeDate" ParameterName="FirstTradeDate" Version="Current" />
                   <ScalarProperty Name="TwelveMonthNumberDays" ParameterName="TwelveMonthNumberDays" Version="Current" />
                   <ScalarProperty Name="TwelveMonthRealisedPnl" ParameterName="TwelveMonthRealisedPnl" Version="Current" />
@@ -19063,6 +19060,7 @@
           <EntitySetMapping Name="ClientPortfolioPeriodReturns">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn">
               <MappingFragment StoreEntitySet="ClientPortfolioPeriodReturn">
+                <ScalarProperty Name="TwelveMonthsAgo" ColumnName="TwelveMonthsAgo" />
                 <ScalarProperty Name="FirstTradeDate" ColumnName="FirstTradeDate" />
                 <ScalarProperty Name="UnrealisedPnlTwelveMonthsAgo" ColumnName="UnrealisedPnlTwelveMonthsAgo" />
                 <ScalarProperty Name="ITDSumCost" ColumnName="ITDSumCost" />
@@ -19085,6 +19083,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturn">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolioPeriodReturn_Insert">
+                  <ScalarProperty Name="TwelveMonthsAgo" ParameterName="TwelveMonthsAgo" />
                   <ScalarProperty Name="FirstTradeDate" ParameterName="FirstTradeDate" />
                   <ScalarProperty Name="UnrealisedPnlTwelveMonthsAgo" ParameterName="UnrealisedPnlTwelveMonthsAgo" />
                   <ScalarProperty Name="ITDSumCost" ParameterName="ITDSumCost" />
@@ -19104,6 +19103,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolioPeriodReturn_Update">
+                  <ScalarProperty Name="TwelveMonthsAgo" ParameterName="TwelveMonthsAgo" Version="Current" />
                   <ScalarProperty Name="FirstTradeDate" ParameterName="FirstTradeDate" Version="Current" />
                   <ScalarProperty Name="UnrealisedPnlTwelveMonthsAgo" ParameterName="UnrealisedPnlTwelveMonthsAgo" Version="Current" />
                   <ScalarProperty Name="ITDSumCost" ParameterName="ITDSumCost" Version="Current" />
@@ -19228,7 +19228,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="19">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="92">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
