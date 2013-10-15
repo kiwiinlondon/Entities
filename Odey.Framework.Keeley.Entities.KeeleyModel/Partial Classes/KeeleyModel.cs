@@ -123,7 +123,7 @@ namespace Odey.Framework.Keeley.Entities
         #endregion
 
         #region Changed Entities
-        //private List<ChangedEntity> ChangedEntities { get; set; }
+        public List<ChangedEntity> ChangedEntities { get; set; }
 
         //private static object ConvertDBNUll(object objectToTest)
         //{
@@ -134,107 +134,78 @@ namespace Odey.Framework.Keeley.Entities
         //    return objectToTest;
         //}
 
-        //private void AddToChangedEntities(DbEntityEntry entry, Dictionary<DbEntityEntry, ChangedEntity> changedEntitiesByEntry)
-        //{
+        private void AddToChangedEntities(DbEntityEntry entry, Dictionary<DbEntityEntry, ChangedEntity> changedEntitiesByEntry)
+        {
 
-        //    ChangedEntity changedEntity = new ChangedEntity(entry.Entity.GetType(), entry.State);
+            ChangedEntity changedEntity = new ChangedEntity(entry.Entity.GetType(), entry.State);
+            ChangedEntities.Add(changedEntity);
+            changedEntitiesByEntry.Add(entry, changedEntity);
+            if (entry.State == EntityState.Deleted)
+            {
+                changedEntity.Key = GetPrimaryKeyValue(entry);
+            }
+            AddUsefulFields(entry, changedEntity);
+        }
 
-        //    if (entry.State == EntityState.Modified)
-        //    {
-        //        foreach (var modifiedPropertyName in entry.CurrentValues.PropertyNames)
-        //        {
-        //            object originalValue = entry.OriginalValues.GetValue<object>(modifiedPropertyName);
-        //            object currentValue = entry.CurrentValues.GetValue<object>(modifiedPropertyName);
+        private EntityKeyMember[] GetPrimaryKeyValue(DbEntityEntry entry)
+        {
+            var objectStateEntry = ((IObjectContextAdapter)this).ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.Entity);
+            return objectStateEntry.EntityKey.EntityKeyValues;
+        }
 
-        //            if (!(originalValue == null && currentValue == null))
-        //            {
-        //                Type type;
-        //                if (originalValue == null)
-        //                {
-        //                    type = currentValue.GetType();
-        //                }
-        //                else
-        //                {
-        //                    type = originalValue.GetType();
-        //                }
+        private void EnhanceChangedEntities(Dictionary<DbEntityEntry, ChangedEntity> addedEntities)
+        {
+            foreach (KeyValuePair<DbEntityEntry, ChangedEntity> change in addedEntities)
+            {
+                if (change.Value.EntityState != EntityState.Deleted)
+                {
+                    change.Value.Key = GetPrimaryKeyValue(change.Key);
+                }
+            }
 
-        //                if ((originalValue == null && currentValue != null) || (originalValue != null && currentValue == null) || !originalValue.Equals(currentValue))
-        //                {
-        //                    changedEntity.ChangedProperties.Add(modifiedPropertyName, new ChangedProperty(type, originalValue, currentValue));
-        //                }
-        //            }
-        //        }
-        //    }
+        }
 
-        //    ChangedEntities.Add(changedEntity);
-        //    changedEntitiesByEntry.Add(entry, changedEntity);
-        //    if (entry.State == EntityState.Deleted)
-        //    {
-        //        changedEntity.Key = GetPrimaryKeyValue(entry);
-        //    }
-        //    AddUsefulFields(entry, changedEntity);
-        //}
+        private void AddUsefulFields(DbEntityEntry entry, ChangedEntity changedEntity)
+        {
+            Type entityType = entry.Entity.GetType();
 
-        //private EntityKeyMember[] GetPrimaryKeyValue(DbEntityEntry entry)
-        //{
-        //    var objectStateEntry = ((IObjectContextAdapter)this).ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.Entity);
-        //    return objectStateEntry.EntityKey.EntityKeyValues;
-        //}
+            DbPropertyValues values;
+            if (entry.State == EntityState.Deleted)
+            {
+                values = entry.OriginalValues;
+            }
+            else
+            {
+                values = entry.CurrentValues;
+            }
 
-        //private void EnhanceChangedEntities(Dictionary<DbEntityEntry, ChangedEntity> addedEntities)
-        //{
-        //    foreach (KeyValuePair<DbEntityEntry, ChangedEntity> change in addedEntities)
-        //    {
-        //        if (change.Value.EntityState != EntityState.Deleted)
-        //        {
-        //            change.Value.Key = GetPrimaryKeyValue(change.Key);
-        //            change.Value.DataVersion = (byte[])change.Key.CurrentValues["DataVersion"];
-        //        }
-        //    }
-
-        //}
-
-        //private void AddUsefulFields(DbEntityEntry entry, ChangedEntity changedEntity)
-        //{
-        //    Type entityType = entry.Entity.GetType();
-
-        //    DbPropertyValues values; 
-        //    if (entry.State == EntityState.Deleted)
-        //    {
-        //        values = entry.OriginalValues;
-        //    }
-        //    else
-        //    {
-        //        values = entry.CurrentValues;
-        //    } 
-
-        //    if (entityType == typeof(Portfolio))
-        //    {
-        //        AddValueToUsefulProperties(changedEntity, values, "PositionId");
-        //        AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
-        //    }
-        //    else if (entityType == typeof(PortfolioEvent))
-        //    {
-        //        AddValueToUsefulProperties(changedEntity, values, "PositionId");
-        //        AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
-        //    }
-        //    else if (entityType == typeof(Instrument))
-        //    {
-        //        AddValueToUsefulProperties(changedEntity, values, "InstrumentClassID");
-        //    }
-        //    else if (entityType == typeof(InstrumentMarket))
-        //    {
-        //        AddValueToUsefulPropertiesUsingReflection(entry, "InstrumentClassID", changedEntity);
-        //    }
-        //    else if (entityType == typeof(FundPerformance))
-        //    {
-        //        AddValueToUsefulPropertiesUsingReflection(entry, "FundId", changedEntity);
-        //    }
-        //    else if (entityType == typeof(Analytic))
-        //    {
-        //        AddValueToUsefulPropertiesUsingReflection(entry, "AnalyticTypeID", changedEntity);
-        //    }
-        //}
+            if (entityType == typeof(Portfolio))
+            {
+                AddValueToUsefulProperties(changedEntity, values, "PositionId");
+                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
+            }
+            else if (entityType == typeof(PortfolioEvent))
+            {
+                AddValueToUsefulProperties(changedEntity, values, "PositionId");
+                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
+            }
+            else if (entityType == typeof(Instrument))
+            {
+                AddValueToUsefulProperties(changedEntity, values, "InstrumentClassID");
+            }
+            else if (entityType == typeof(InstrumentMarket))
+            {
+                AddValueToUsefulPropertiesUsingReflection(entry, "InstrumentClassID", changedEntity);
+            }
+            else if (entityType == typeof(FundPerformance))
+            {
+                AddValueToUsefulPropertiesUsingReflection(entry, "FundId", changedEntity);
+            }
+            else if (entityType == typeof(Analytic))
+            {
+                AddValueToUsefulPropertiesUsingReflection(entry, "AnalyticTypeID", changedEntity);
+            }
+        }
 
         private void AddValueToUsefulProperties(ChangedEntity changedEntity, DbPropertyValues currentValues, string key)
         {
@@ -255,13 +226,13 @@ namespace Odey.Framework.Keeley.Entities
         {
             
             //needed to bring context back in line with entity
-           // ChangedEntities = new List<ChangedEntity>();
+            ChangedEntities = new List<ChangedEntity>();
             Dictionary<DbEntityEntry, ChangedEntity> changedEntitiesByEntry = new Dictionary<DbEntityEntry, ChangedEntity>();
 
             foreach (DbEntityEntry entry in this.ChangeTracker.Entries().Where(p => p.State == System.Data.EntityState.Added || p.State == System.Data.EntityState.Deleted || p.State == System.Data.EntityState.Modified))
             {
 
-              //  AddToChangedEntities(entry, changedEntitiesByEntry);
+                AddToChangedEntities(entry, changedEntitiesByEntry);
                 if (entry.State != EntityState.Deleted)
                 {
                     PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
@@ -282,7 +253,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
             }
             int toReturn = base.SaveChanges();
-            //EnhanceChangedEntities(changedEntitiesByEntry);
+            EnhanceChangedEntities(changedEntitiesByEntry);
             return toReturn;
         }
 
