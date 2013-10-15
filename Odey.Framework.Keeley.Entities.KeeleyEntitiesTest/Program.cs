@@ -17,39 +17,10 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            CreateIssuer();
-            //using (var context = new KeeleyModel())
-            //{
-            //    LegalEntity l = context.LegalEntities.Where(a => a.LegalEntityID == 741).FirstOrDefault();
-
-            //    string name = l.LongName;
-
-            //    l.LongName = "Geoff";
-
-            //    l.LongName = name;
-
-            //    context.SaveChanges();
-            //}
-            //    List<InternalAllocation> ias = context.InternalAllocations.Where(a => a.ParentEventId == 434).ToList();
-            //    foreach (InternalAllocation i in ias)
-            //    {
-            //        List<PositionAccountMovement> movements = context.PositionAccountMovements.Where(a => a.InternalAllocationId == i.EventID).ToList();
-            //        for (int c = movements.Count - 1; c >= 0; c--)
-            //        {
-            //            PositionAccountMovement a = i.PositionAccountMovements[c];
-            //            context.PositionAccountMovements.DeleteObject(a);
-            //        }
-            //       // context.InternalAllocations.DeleteObject(i);
-            //    }
-            //    context.SaveChanges();
-            //}
-
-            //InstrumentMarketClient c = new InstrumentMarketClient();
-           // InstrumentMarket abc = c.Get(6116);
-            using (var context = new KeeleyModel())
+            using (var context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-                InstrumentClass c = context.InstrumentClasses.Include("ParentInstrumentClassRelationships").Where(i => i.InstrumentClassID == 3).FirstOrDefault();
-                int? a = c.ParentInstrumentClassId;
+                var ret = context.Countries.First();
+                ret = ret;
             }
         }
 
