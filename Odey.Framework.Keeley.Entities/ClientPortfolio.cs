@@ -53,21 +53,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal EqualisationFactor { get; set; }
     	[DataMember]
-        public decimal ITDSumCost { get; set; }
-    	[DataMember]
-        public decimal ITDRealisedPnl { get; set; }
-    	[DataMember]
-        public int ITDNumberDays { get; set; }
-    	[DataMember]
-        public decimal TwelveMonthSumCost { get; set; }
-    	[DataMember]
-        public decimal TwelveMonthRealisedPnl { get; set; }
-    	[DataMember]
-        public int TwelveMonthNumberDays { get; set; }
-    	[DataMember]
         public System.DateTime FirstTradeDate { get; set; }
     	[DataMember]
         public bool UpdateBridge { get; set; }
+    	[DataMember]
+        public bool IsLast { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
