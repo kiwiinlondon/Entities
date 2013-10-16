@@ -50,6 +50,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> StaffId { get; set; }
     	[DataMember]
         public Nullable<int> FundId { get; set; }
+    	[DataMember]
+        public Nullable<bool> ManualUpdate { get; set; }
     
         [DataMember]
         public virtual Client Client { get; set; }
