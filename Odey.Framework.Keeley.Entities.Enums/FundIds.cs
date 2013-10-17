@@ -265,9 +265,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DEVM = 6253,
         [EnumMember]
+        DEVM_EUR_I = 6285,
+        [EnumMember]
         DEVM_STI = 6263,
         [EnumMember]
         DEVM_STM = 6264,
+        [EnumMember]
+        DEVM_USD_R = 6313,
+        [EnumMember]
+        DEVM_STR = 6383,
         
     }
 }
