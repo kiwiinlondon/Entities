@@ -19,7 +19,11 @@ namespace Odey.Framework.KeeleyEntitiesTest
         {
             using (var context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-                var ret = context.Countries.First();
+                var ret = context.InstrumentMarkets
+                    .Include(i=>i.Instrument)
+                    .Include(i=>i.UnderlyingInstrumentMarket.Instrument)
+                    .Include(i => i.UltimateUnderlyingInstrumentMarket.Instrument)
+                    .First(i => i.InstrumentMarketID == 18532);
                 ret = ret;
             }
         }
