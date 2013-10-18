@@ -21,6 +21,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BaifUcitsFofBalancedIndex = 11668,
         [EnumMember]
-        BBALIBORGBP = 16342
+        BBALIBORGBP = 16342,
+        [EnumMember]
+        OBID = 9908,
+        [EnumMember]
+        BEST = 9902,
     }
 }
