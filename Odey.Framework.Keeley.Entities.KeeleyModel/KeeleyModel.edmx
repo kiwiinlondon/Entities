@@ -1484,7 +1484,7 @@
           <Property Name="ParentClientAccountId" Type="int" />
           <Property Name="StaffId" Type="int" />
           <Property Name="FundId" Type="int" />
-          <Property Name="ManualUpdate" Type="bit" />
+          <Property Name="ManualUpdate" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientPortfolio">
           <Key>
@@ -1529,6 +1529,7 @@
           <Property Name="IsFirst" Type="bit" Nullable="false" />
           <Property Name="ClientReturnId" Type="int" Nullable="false" />
           <Property Name="MarketValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientPortfolioPeriodReturn">
           <Key>
@@ -6625,6 +6626,7 @@
           <Parameter Name="IsFirst" Type="bit" Mode="In" />
           <Parameter Name="ClientReturnId" Type="int" Mode="In" />
           <Parameter Name="MarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="ClientId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioBridge_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioBridgeId" Type="int" Mode="In" />
@@ -6639,6 +6641,7 @@
           <Parameter Name="IsFirst" Type="bit" Mode="In" />
           <Parameter Name="ClientReturnId" Type="int" Mode="In" />
           <Parameter Name="MarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="ClientId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioPeriodReturn_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioPeriodReturnID" Type="int" Mode="In" />
@@ -14225,7 +14228,7 @@
           <Property Type="Int32" Name="StaffId" />
           <Property Type="Int32" Name="FundId" />
           <NavigationProperty Name="SubAccounts" Relationship="Odey.Framework.Keeley.Entities.FK__ClientAcc__Paren__6E7AB091" FromRole="ClientAccount" ToRole="ClientAccount1" />
-          <Property Type="Boolean" Name="ManualUpdate" />
+          <Property Type="Boolean" Name="ManualUpdate" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -14932,13 +14935,13 @@
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="ClientAccount" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientAccountIdFK" FromRole="ClientPortfolioBridge" ToRole="ClientAccount" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientFundIdFK" FromRole="ClientPortfolioBridge" ToRole="Fund" />
           <Property Type="Int32" Name="ClientFundReturnId" Nullable="false" />
           <Property Type="Int32" Name="ClientAccountFundReturnId" Nullable="false" />
           <Property Type="Boolean" Name="IsFirst" Nullable="false" />
           <Property Type="Int32" Name="ClientReturnId" Nullable="false" />
           <Property Type="Decimal" Name="MarketValue" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="ClientId" Nullable="false" />
         </EntityType>
         <EntityType Name="HealthCheck">
           <Key>
@@ -19117,6 +19120,7 @@
           <EntitySetMapping Name="ClientPortfolioBridges">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioBridge">
               <MappingFragment StoreEntitySet="ClientPortfolioBridge">
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
                 <ScalarProperty Name="MarketValue" ColumnName="MarketValue" />
                 <ScalarProperty Name="ClientReturnId" ColumnName="ClientReturnId" />
                 <ScalarProperty Name="IsFirst" ColumnName="IsFirst" />
@@ -19135,6 +19139,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioBridge">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolioBridge_Insert">
+                  <ScalarProperty Name="ClientId" ParameterName="ClientId" />
                   <ScalarProperty Name="MarketValue" ParameterName="MarketValue" />
                   <ScalarProperty Name="ClientReturnId" ParameterName="ClientReturnId" />
                   <ScalarProperty Name="IsFirst" ParameterName="IsFirst" />
@@ -19150,6 +19155,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolioBridge_Update">
+                  <ScalarProperty Name="ClientId" ParameterName="ClientId" Version="Current" />
                   <ScalarProperty Name="MarketValue" ParameterName="MarketValue" Version="Current" />
                   <ScalarProperty Name="ClientReturnId" ParameterName="ClientReturnId" Version="Current" />
                   <ScalarProperty Name="IsFirst" ParameterName="IsFirst" Version="Current" />
@@ -24903,7 +24909,7 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturnUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturClientAccountIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioPeriodReturFundIdFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" Width="1.5" PointX="20.625" PointY="51.25" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioBridge" Width="1.875" PointX="20.625" PointY="51.25" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.HealthCheck" Width="1.5" PointX="23.625" PointY="52.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientAccountIdFK" />

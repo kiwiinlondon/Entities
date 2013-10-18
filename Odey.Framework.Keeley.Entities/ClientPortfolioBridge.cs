@@ -42,9 +42,9 @@ namespace Odey.Framework.Keeley.Entities
         public int ClientReturnId { get; set; }
     	[DataMember]
         public decimal MarketValue { get; set; }
+    	[DataMember]
+        public int ClientId { get; set; }
     
-        [DataMember]
-        public virtual ClientAccount ClientAccount { get; set; }
         [DataMember]
         public virtual Fund Fund { get; set; }
     }

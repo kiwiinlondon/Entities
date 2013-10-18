@@ -60,5 +60,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         ArkusRiskReport = 23,
+        [EnumMember]
+        OBIDPrices = 24	
     }
 }
