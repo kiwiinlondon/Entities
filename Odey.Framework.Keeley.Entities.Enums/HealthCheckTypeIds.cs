@@ -16,7 +16,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         FILE_COLLECTED_CHECK = 3,
 
         [EnumMember]
-        MISSING_FACTSET_ID = 4,
+        MISSING_BETA_VALUE = 4,
     }
 }
 
