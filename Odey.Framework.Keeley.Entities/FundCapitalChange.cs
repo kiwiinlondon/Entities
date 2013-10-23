@@ -14,36 +14,15 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class ClientPortfolioBridge
+    public partial class FundCapitalChange
     {
-    	[DataMember]
-        public int ClientPortfolioBridgeId { get; set; }
-    	[DataMember]
-        public int ClientAccountId { get; set; }
     	[DataMember]
         public int FundId { get; set; }
     	[DataMember]
-        public int ParentFundId { get; set; }
-    	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
-    	[DataMember]
-        public System.DateTime StartDt { get; set; }
-    	[DataMember]
-        public int UpdateUserID { get; set; }
-    	[DataMember]
-        public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public int ClientFundReturnId { get; set; }
-    	[DataMember]
-        public int ClientAccountFundReturnId { get; set; }
-    	[DataMember]
-        public bool IsFirst { get; set; }
     	[DataMember]
         public decimal MarketValue { get; set; }
     	[DataMember]
-        public decimal Cost { get; set; }
-    
-        [DataMember]
-        public virtual Fund Fund { get; set; }
+        public Nullable<decimal> CapitalChange { get; set; }
     }
 }
