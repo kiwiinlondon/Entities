@@ -33,10 +33,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int ClientFundReturnId { get; set; }
-    	[DataMember]
-        public int ClientAccountFundReturnId { get; set; }
-    	[DataMember]
         public bool IsFirst { get; set; }
     	[DataMember]
         public decimal MarketValue { get; set; }
