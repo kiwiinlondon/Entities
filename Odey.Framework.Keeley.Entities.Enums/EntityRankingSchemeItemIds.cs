@@ -44,6 +44,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OptionMidPrice = 24,
         [EnumMember]
-        MidPrice = 26
+        MidPrice = 26,
+        [EnumMember]
+        OdeyCalculatedPrice = 27
     }
 }
