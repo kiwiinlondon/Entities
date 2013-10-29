@@ -129,6 +129,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ClientPortfolioBridge> ClientPortfolioBridges { get; set; }
         public DbSet<HealthCheck> HealthChecks { get; set; }
         public DbSet<FundCapitalChange> FundCapitalChanges { get; set; }
+        public DbSet<OfficialNetAssetValue> OfficialNetAssetValues { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

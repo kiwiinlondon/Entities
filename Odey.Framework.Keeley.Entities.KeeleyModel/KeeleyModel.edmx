@@ -87,6 +87,7 @@
           <EntitySet Name="LegalEntityChargeSchedule" EntityType="KeeleyModel.Store.LegalEntityChargeSchedule" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Market" EntityType="KeeleyModel.Store.Market" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="MatchedStatus" EntityType="KeeleyModel.Store.MatchedStatus" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OfficialNetAssetValue" EntityType="KeeleyModel.Store.OfficialNetAssetValue" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Periodicity" EntityType="KeeleyModel.Store.Periodicity" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="PeriodicityInterval" EntityType="KeeleyModel.Store.PeriodicityInterval" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Portfolio" EntityType="KeeleyModel.Store.Portfolio" store:Type="Tables" Schema="dbo" />
@@ -1047,6 +1048,14 @@
           <AssociationSet Name="MatchedStatusUpdateUserIDFK" Association="KeeleyModel.Store.MatchedStatusUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="MatchedStatus" EntitySet="MatchedStatus" />
+          </AssociationSet>
+          <AssociationSet Name="OfficialNetAssetValueFundId" Association="KeeleyModel.Store.OfficialNetAssetValueFundId">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="OfficialNetAssetValue" EntitySet="OfficialNetAssetValue" />
+          </AssociationSet>
+          <AssociationSet Name="OfficialNetAssetValueUserId" Association="KeeleyModel.Store.OfficialNetAssetValueUserId">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="OfficialNetAssetValue" EntitySet="OfficialNetAssetValue" />
           </AssociationSet>
           <AssociationSet Name="PeriodicityIntervalPeriodicityId" Association="KeeleyModel.Store.PeriodicityIntervalPeriodicityId">
             <End Role="Periodicity" EntitySet="Periodicity" />
@@ -2459,6 +2468,18 @@
           <Property Name="MatchedStatusID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="varchar" MaxLength="30" />
           <Property Name="Name" Type="varchar" MaxLength="200" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OfficialNetAssetValue">
+          <Key>
+            <PropertyRef Name="OfficialNetAssetValueId" />
+          </Key>
+          <Property Name="OfficialNetAssetValueId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="Value" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
@@ -5604,6 +5625,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="OfficialNetAssetValueFundId">
+          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="1" />
+          <End Role="OfficialNetAssetValue" Type="KeeleyModel.Store.OfficialNetAssetValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="OfficialNetAssetValue">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OfficialNetAssetValueUserId">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="OfficialNetAssetValue" Type="KeeleyModel.Store.OfficialNetAssetValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="OfficialNetAssetValue">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PeriodicityIntervalPeriodicityId">
           <End Role="Periodicity" Type="KeeleyModel.Store.Periodicity" Multiplicity="1" />
           <End Role="PeriodicityInterval" Type="KeeleyModel.Store.PeriodicityInterval" Multiplicity="*" />
@@ -7961,6 +8006,25 @@
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="OfficialNetAssetValue_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OfficialNetAssetValueId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OfficialNetAssetValue_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Value" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OfficialNetAssetValue_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OfficialNetAssetValueId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Value" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="Portfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -9893,6 +9957,15 @@
             <End Role="Issuer" EntitySet="Issuers" />
           </AssociationSet>
           <EntitySet Name="FundCapitalChanges" EntityType="Odey.Framework.Keeley.Entities.FundCapitalChange" />
+          <EntitySet Name="OfficialNetAssetValues" EntityType="Odey.Framework.Keeley.Entities.OfficialNetAssetValue" />
+          <AssociationSet Name="OfficialNetAssetValueUserId" Association="Odey.Framework.Keeley.Entities.OfficialNetAssetValueUserId">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="OfficialNetAssetValue" EntitySet="OfficialNetAssetValues" />
+          </AssociationSet>
+          <AssociationSet Name="OfficialNetAssetValueFundId" Association="Odey.Framework.Keeley.Entities.OfficialNetAssetValueFundId">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="OfficialNetAssetValue" EntitySet="OfficialNetAssetValues" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -15029,6 +15102,42 @@
           <Property Type="Decimal" Name="MarketValue" Nullable="false" Precision="38" Scale="8" />
           <Property Type="Decimal" Name="CapitalChange" Precision="38" Scale="6" />
         </EntityType>
+        <EntityType Name="OfficialNetAssetValue">
+          <Key>
+            <PropertyRef Name="OfficialNetAssetValueId" />
+          </Key>
+          <Property Type="Int32" Name="OfficialNetAssetValueId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="FundId" Nullable="false" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="Value" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
+        <Association Name="OfficialNetAssetValueUserId">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.OfficialNetAssetValue" Role="OfficialNetAssetValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="OfficialNetAssetValue">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OfficialNetAssetValueFundId">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.OfficialNetAssetValue" Role="OfficialNetAssetValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="OfficialNetAssetValue">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -19217,6 +19326,47 @@
                 <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
                 <ScalarProperty Name="FundId" ColumnName="FundId" />
               </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OfficialNetAssetValues">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
+              <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="OfficialNetAssetValueId" ColumnName="OfficialNetAssetValueId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Value" ParameterName="Value" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="OfficialNetAssetValueId" ColumnName="OfficialNetAssetValueId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Value" ParameterName="Value" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           </EntityContainerMapping>
@@ -24939,6 +25089,9 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioBridgeClientFundIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentIssuer" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FundCapitalChange" Width="1.5" PointX="7.14439386089537" PointY="30.37700311764004" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.OfficialNetAssetValue" Width="1.5" PointX="2.375" PointY="70.5" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.OfficialNetAssetValueUserId" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.OfficialNetAssetValueFundId" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
