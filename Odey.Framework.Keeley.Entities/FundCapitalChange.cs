@@ -24,5 +24,7 @@ namespace Odey.Framework.Keeley.Entities
         public decimal MarketValue { get; set; }
     	[DataMember]
         public Nullable<decimal> CapitalChange { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OfficialNav { get; set; }
     }
 }
