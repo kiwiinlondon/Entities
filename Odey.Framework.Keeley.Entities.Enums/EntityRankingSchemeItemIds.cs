@@ -30,7 +30,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DummyPrice = 14,
         [EnumMember]
-        PerfDBNavPrice = 16,
+        AdministratorPrice = 16,
         [EnumMember]
         ManualAnalytic = 17,
         [EnumMember]
@@ -46,6 +46,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MidPrice = 26,
         [EnumMember]
-        OdeyCalculatedPrice = 27
+        OdeyCalculatedPriceNav = 27,
+        [EnumMember]
+        OdeyCalculatedPriceOfficialNav = 28
     }
 }
