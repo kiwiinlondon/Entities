@@ -26,5 +26,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ValuationMarketValue { get; set; }
     	[DataMember]
         public Nullable<long> PositionCount { get; set; }
+    
+        [DataMember]
+        public virtual Fund Fund { get; set; }
     }
 }

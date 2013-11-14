@@ -93,5 +93,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual LegalEntity LegalEntity { get; set; }
         [DataMember]
         public virtual InstrumentMarket RiskFreeInstrumentMarket { get; set; }
+        [DataMember]
+        public virtual Currency Currency { get; set; }
     }
 }

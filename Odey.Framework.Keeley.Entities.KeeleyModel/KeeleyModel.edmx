@@ -9968,6 +9968,14 @@
             <End Role="Fund" EntitySet="Funds" />
             <End Role="OfficialNetAssetValue" EntitySet="OfficialNetAssetValues" />
           </AssociationSet>
+          <AssociationSet Name="FundNetAssetValueFund" Association="Odey.Framework.Keeley.Entities.FundNetAssetValueFund">
+            <End Role="FundNetAssetValue" EntitySet="FundNetAssetValues" />
+            <End Role="Fund" EntitySet="Funds" />
+          </AssociationSet>
+          <AssociationSet Name="FundCurrency" Association="Odey.Framework.Keeley.Entities.FundCurrency">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="Currency" EntitySet="Currencies" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -13852,6 +13860,7 @@
           <Property Type="Decimal" Name="MarketValue" Precision="38" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="ValuationMarketValue" Precision="38" Scale="8" />
           <Property Type="Int64" Name="PositionCount" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FundNetAssetValueFund" FromRole="FundNetAssetValue" ToRole="Fund" />
         </EntityType>
         <EntityType Name="Bond">
           <Key>
@@ -13971,6 +13980,7 @@
           <Property Type="Decimal" Name="ManagementFee" Precision="27" Scale="8" />
           <Property Type="Int32" Name="AdministratorId" />
           <Property Type="String" Name="AdministratorIdentifier" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.FundCurrency" FromRole="Fund" ToRole="Currency" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -15138,6 +15148,30 @@
             </Principal>
             <Dependent Role="OfficialNetAssetValue">
               <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FundNetAssetValueFund">
+          <End Type="Odey.Framework.Keeley.Entities.FundNetAssetValue" Role="FundNetAssetValue" Multiplicity="*" />
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FundNetAssetValue">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FundCurrency">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="*" />
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="Fund">
+              <PropertyRef Name="CurrencyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -22372,7 +22406,7 @@
           <edmx:ConnectorPoint PointX="14.25" PointY="1.2086252952130248" />
           <edmx:ConnectorPoint PointX="11.875" PointY="1.2086252952130248" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Price" Width="1.5" PointX="19.125" PointY="0.5" Height="2.9417936197916665" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Price" Width="1.5" PointX="19.625" PointY="0.625" Height="2.9417936197916665" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RawPrice" Width="1.5" PointX="16.875" PointY="0.5" Height="3.3263964843749996" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PriceUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.305171840843791" />
@@ -24195,7 +24229,7 @@
           <edmx:ConnectorPoint PointX="23.1171875" PointY="22.308126223282841" />
           <edmx:ConnectorPoint PointX="23.1171875" PointY="16.153219401041667" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ForwardFX" Width="1.5" PointX="13.125" PointY="5.75" Height="2.9417936197916656" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ForwardFX" Width="1.5" PointX="12.375" PointY="4.5" Height="2.9417936197916656" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ForwardFXUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.380777315857721" />
           <edmx:ConnectorPoint PointX="2.6666666666666665" PointY="17.380777315857721" />
@@ -25030,7 +25064,7 @@
           <edmx:ConnectorPoint PointX="25.75390375" PointY="24.196595052083339" />
           <edmx:ConnectorPoint PointX="25.75390375" PointY="23.884095052083335" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Administrator" Width="1.5" PointX="5.3839548236615746" PointY="9.8373165176423818" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Administrator" Width="1.5" PointX="4.875" PointY="9.75" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" PointX="1.125" PointY="10.5" Width="1.5" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientAccount" Width="1.5" PointX="8.625" PointY="55.375" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientTrade" Width="1.5" PointX="11.25" PointY="54.625" />
@@ -25096,6 +25130,8 @@
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.OfficialNetAssetValue" Width="1.5" PointX="2.375" PointY="70.5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.OfficialNetAssetValueUserId" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.OfficialNetAssetValueFundId" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FundNetAssetValueFund" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FundCurrency" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
