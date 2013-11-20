@@ -55,9 +55,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime FirstTradeDate { get; set; }
     	[DataMember]
-        public bool UpdateBridge { get; set; }
-    	[DataMember]
         public bool IsLast { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ManagerQuantity { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ManagerValue { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
