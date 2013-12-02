@@ -19,11 +19,14 @@ namespace Odey.Framework.KeeleyEntitiesTest
         {
             using (var context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-                var ret = context.InstrumentMarkets
-                    .Include(i=>i.Instrument)
-                    .Include(i=>i.UnderlyingInstrumentMarket.Instrument)
-                    .Include(i => i.UltimateUnderlyingInstrumentMarket.Instrument)
-                    .First(i => i.InstrumentMarketID == 18532);
+                var ret = context.FundNetAssetValues
+                    .Include(a => a.Fund.LegalEntity)
+                    .Where(a => a.ReferenceDate == DateTime.Today
+                                && a.Fund.IsActive
+                                && (a.Fund.FundTypeId == (int) FundTypeIds.Hedge || a.Fund.FundTypeId == (int) FundTypeIds.UCITS))
+                    .ToList()
+                     .OrderBy(f => f.Fund.Name)
+                     .ToList();
                 ret = ret;
             }
         }
