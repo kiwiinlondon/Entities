@@ -25,6 +25,7 @@
           <EntitySet Name="ClientPortfolio" EntityType="KeeleyModel.Store.ClientPortfolio" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientPortfolioBridge" EntityType="KeeleyModel.Store.ClientPortfolioBridge" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientPortfolioPeriodReturn" EntityType="KeeleyModel.Store.ClientPortfolioPeriodReturn" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ClientSubAccountAdministratorMapping" EntityType="KeeleyModel.Store.ClientSubAccountAdministratorMapping" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientTrade" EntityType="KeeleyModel.Store.ClientTrade" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CollectiveInvestmentScheme" EntityType="KeeleyModel.Store.CollectiveInvestmentScheme" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Counterparty" EntityType="KeeleyModel.Store.Counterparty" store:Type="Tables" Schema="dbo" />
@@ -329,6 +330,22 @@
           <AssociationSet Name="ClientPortfolioUserIDFK" Association="KeeleyModel.Store.ClientPortfolioUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientPortfolio" EntitySet="ClientPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSubAccountAdministratorMappingClientAccountIdFK" Association="KeeleyModel.Store.ClientSubAccountAdministratorMappingClientAccountIdFK">
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+            <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMapping" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSubAccountAdministratorMappingFundAdministratorIdFK" Association="KeeleyModel.Store.ClientSubAccountAdministratorMappingFundAdministratorIdFK">
+            <End Role="Administrator" EntitySet="Administrator" />
+            <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMapping" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSubAccountAdministratorMappingSubAccountAdministratorIdFK" Association="KeeleyModel.Store.ClientSubAccountAdministratorMappingSubAccountAdministratorIdFK">
+            <End Role="Administrator" EntitySet="Administrator" />
+            <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMapping" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSubAccountAdministratorMappingUpdateUserIDFK" Association="KeeleyModel.Store.ClientSubAccountAdministratorMappingUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMapping" />
           </AssociationSet>
           <AssociationSet Name="ClientTradeCurrencyIDFK" Association="KeeleyModel.Store.ClientTradeCurrencyIDFK">
             <End Role="Currency" EntitySet="Currency" />
@@ -1569,6 +1586,18 @@
           <Property Name="UnrealisedPnlTwelveMonthsAgo" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="FirstTradeDate" Type="datetime" Nullable="false" />
           <Property Name="TwelveMonthsAgo" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClientSubAccountAdministratorMapping">
+          <Key>
+            <PropertyRef Name="SubAccountAdministratorMappingId" />
+          </Key>
+          <Property Name="SubAccountAdministratorMappingId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SubAccountAdministratorId" Type="int" Nullable="false" />
+          <Property Name="FundAdministratorId" Type="int" Nullable="false" />
+          <Property Name="ParentClientId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -3465,6 +3494,54 @@
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="ClientPortfolio">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSubAccountAdministratorMappingClientAccountIdFK">
+          <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="1" />
+          <End Role="ClientSubAccountAdministratorMapping" Type="KeeleyModel.Store.ClientSubAccountAdministratorMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientSubAccountAdministratorMapping">
+              <PropertyRef Name="ParentClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSubAccountAdministratorMappingFundAdministratorIdFK">
+          <End Role="Administrator" Type="KeeleyModel.Store.Administrator" Multiplicity="1" />
+          <End Role="ClientSubAccountAdministratorMapping" Type="KeeleyModel.Store.ClientSubAccountAdministratorMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrator">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientSubAccountAdministratorMapping">
+              <PropertyRef Name="FundAdministratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSubAccountAdministratorMappingSubAccountAdministratorIdFK">
+          <End Role="Administrator" Type="KeeleyModel.Store.Administrator" Multiplicity="1" />
+          <End Role="ClientSubAccountAdministratorMapping" Type="KeeleyModel.Store.ClientSubAccountAdministratorMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrator">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientSubAccountAdministratorMapping">
+              <PropertyRef Name="SubAccountAdministratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSubAccountAdministratorMappingUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="ClientSubAccountAdministratorMapping" Type="KeeleyModel.Store.ClientSubAccountAdministratorMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientSubAccountAdministratorMapping">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -9982,6 +10059,23 @@
             <End Role="Fund" EntitySet="Funds" />
             <End Role="Currency" EntitySet="Currencies" />
           </AssociationSet>
+          <EntitySet Name="ClientSubAccountAdministratorMappings" EntityType="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMapping" />
+          <AssociationSet Name="ClientSubAccountAdministratorMappingFundAdministratorIdFK" Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingFundAdministratorIdFK">
+            <End Role="Administrator" EntitySet="Administrators" />
+            <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMappings" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSubAccountAdministratorMappingSubAccountAdministratorIdFK" Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingSubAccountAdministratorIdFK">
+            <End Role="Administrator" EntitySet="Administrators" />
+            <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMappings" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSubAccountAdministratorMappingUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMappings" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSubAccountAdministratorMappingClientAccountIdFK" Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingClientAccountIdFK">
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
+            <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMappings" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -15183,6 +15277,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ClientSubAccountAdministratorMapping">
+          <Key>
+            <PropertyRef Name="SubAccountAdministratorMappingId" />
+          </Key>
+          <Property Type="Int32" Name="SubAccountAdministratorMappingId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="SubAccountAdministratorId" Nullable="false" />
+          <Property Type="Int32" Name="FundAdministratorId" Nullable="false" />
+          <Property Type="Int32" Name="ParentClientId" Nullable="false" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
+        <Association Name="ClientSubAccountAdministratorMappingFundAdministratorIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMapping" Role="ClientSubAccountAdministratorMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrator">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientSubAccountAdministratorMapping">
+              <PropertyRef Name="FundAdministratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSubAccountAdministratorMappingSubAccountAdministratorIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMapping" Role="ClientSubAccountAdministratorMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrator">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientSubAccountAdministratorMapping">
+              <PropertyRef Name="SubAccountAdministratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSubAccountAdministratorMappingUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMapping" Role="ClientSubAccountAdministratorMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientSubAccountAdministratorMapping">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSubAccountAdministratorMappingClientAccountIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMapping" Role="ClientSubAccountAdministratorMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientSubAccountAdministratorMapping">
+              <PropertyRef Name="ParentClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -19419,6 +19573,19 @@
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
               </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientSubAccountAdministratorMappings">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMapping">
+              <MappingFragment StoreEntitySet="ClientSubAccountAdministratorMapping">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="ParentClientId" ColumnName="ParentClientId" />
+                <ScalarProperty Name="FundAdministratorId" ColumnName="FundAdministratorId" />
+                <ScalarProperty Name="SubAccountAdministratorId" ColumnName="SubAccountAdministratorId" />
+                <ScalarProperty Name="SubAccountAdministratorMappingId" ColumnName="SubAccountAdministratorMappingId" />
+              </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           </EntityContainerMapping>
@@ -25146,6 +25313,11 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.OfficialNetAssetValueFundId" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FundNetAssetValueFund" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FundCurrency" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMapping" Width="1.5" PointX="11.375" PointY="62.625" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingFundAdministratorIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingSubAccountAdministratorIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingClientAccountIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
