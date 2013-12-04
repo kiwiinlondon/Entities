@@ -17,6 +17,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Quintillion = 6308,
         [EnumMember]
-        CapitaIRE = 6052
+        CapitaIRE = 6052,
+        [EnumMember]
+        NucleusFundPlatform=6444
     }
 }

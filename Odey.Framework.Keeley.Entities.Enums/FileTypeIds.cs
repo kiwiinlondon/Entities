@@ -63,6 +63,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OBIDPrices = 24,
         [EnumMember]
-        BestPrices = 25	
+        BestPrices = 25,
+        [EnumMember]
+        NucleusClientHoldings = 256
     }
 }
