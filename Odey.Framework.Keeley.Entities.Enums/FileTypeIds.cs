@@ -65,6 +65,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BestPrices = 25,
         [EnumMember]
-        NucleusClientHoldings = 256
+        NucleusClientHoldings = 26
     }
 }
