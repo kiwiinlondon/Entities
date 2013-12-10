@@ -19,6 +19,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitaIRE = 6052,
         [EnumMember]
-        NucleusFundPlatform=6444
+        NucleusFundPlatform=6444,
+        [EnumMember]
+        TransactFundPlatform=6453
     }
 }
