@@ -21,6 +21,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         NucleusFundPlatform=6444,
         [EnumMember]
-        TransactFundPlatform=6453
+        TransactFundPlatform=6453,
+        [EnumMember]
+        CofundsFundPlatform=6465,
+        [EnumMember]
+        OdeyWealthFundPlatform=6467
     }
 }
