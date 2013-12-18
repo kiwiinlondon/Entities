@@ -25,6 +25,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CofundsFundPlatform=6465,
         [EnumMember]
-        OdeyWealthFundPlatform=6467
+        OdeyWealthFundPlatform=6467,
+        [EnumMember]
+        InvestmentFundsDirectFundPlatform = 6475
     }
 }

@@ -71,6 +71,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CofundsClientHoldings = 30,
         [EnumMember]
-        OdeyWealthClientHoldings = 31
+        OdeyWealthClientHoldings = 31,
+        [EnumMember]
+        InvestmentFundsDirectClientHoldings = 32
     }
 }
