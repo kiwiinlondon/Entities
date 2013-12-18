@@ -290,7 +290,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         EAR_USD_S = 6459,
         [EnumMember]
-        EAR_USD_I = 6470
-        
+        EAR_USD_I = 6470,
+        [EnumMember]
+        EAR_GBP_R = 6476,
     }
 }
