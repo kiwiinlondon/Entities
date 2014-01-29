@@ -14,16 +14,26 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class OfficialNetAssetValue
+    public partial class FocusList
     {
     	[DataMember]
-        public int OfficialNetAssetValueId { get; set; }
+        public int FocusListId { get; set; }
     	[DataMember]
-        public int FundId { get; set; }
+        public int InstrumentMarketId { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
+        public int AnalystId { get; set; }
     	[DataMember]
-        public decimal Value { get; set; }
+        public System.DateTime InDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> InPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> StartOfYearPrice { get; set; }
+    	[DataMember]
+        public bool IsLong { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> OutDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OutPrice { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -31,6 +41,8 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<decimal> InSpecieTransfer { get; set; }
+        public Nullable<decimal> CurrentPrice { get; set; }
+    	[DataMember]
+        public int CurrentPriceId { get; set; }
     }
 }
