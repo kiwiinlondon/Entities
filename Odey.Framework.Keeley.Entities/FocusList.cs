@@ -43,6 +43,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> CurrentPrice { get; set; }
     	[DataMember]
-        public int CurrentPriceId { get; set; }
+        public Nullable<int> CurrentPriceId { get; set; }
     }
 }
