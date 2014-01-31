@@ -278,22 +278,25 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         EAR = 6437,
         [EnumMember]
-        EAR_USD_M = 6447,
-        [EnumMember]
         EAR_GBP_M = 6448,
         [EnumMember]
         EAR_GBP_S = 6449,
         [EnumMember]
+        EAR_GBP_R = 6476,
+        [EnumMember]
         EAR_EUR_S = 6451,
         [EnumMember]
         EAR_EUR_I = 6458,
+         [EnumMember]
+        EAR_EUR_M = 6520,
         [EnumMember]
         EAR_EUR_R = 6495,
         [EnumMember]
         EAR_USD_S = 6459,
         [EnumMember]
-        EAR_USD_I = 6470,
+        EAR_USD_M = 6447,
         [EnumMember]
-        EAR_GBP_R = 6476,
+        EAR_USD_I = 6470,
+        
     }
 }
