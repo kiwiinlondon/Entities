@@ -176,6 +176,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OEAFGBPISHARECLASS = 5529,
         [EnumMember]
         OEAFUSDSHARECLASS = 5530,
+        [EnumMember]
+        OEAF_USD_BI = 6525,
         
         
         [EnumMember]
