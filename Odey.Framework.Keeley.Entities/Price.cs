@@ -45,5 +45,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual RawPrice RawPrice { get; set; }
         [DataMember]
         public virtual List<InterestRateReturn> InterestRateReturns { get; set; }
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }

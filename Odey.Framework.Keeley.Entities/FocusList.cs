@@ -41,8 +41,8 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<decimal> CurrentPrice { get; set; }
+        public decimal CurrentPrice { get; set; }
     	[DataMember]
-        public Nullable<int> CurrentPriceId { get; set; }
+        public int CurrentPriceId { get; set; }
     }
 }
