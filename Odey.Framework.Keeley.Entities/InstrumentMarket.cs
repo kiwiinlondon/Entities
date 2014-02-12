@@ -47,7 +47,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int UltimateUnderlyingInstrumentMarketId { get; set; }
     	[DataMember]
-        public Nullable<decimal> PriceQuoteMultiplier { get; set; }
+        public decimal PriceQuoteMultiplier { get; set; }
     	[DataMember]
         public string BloombergGlobalId { get; set; }
     	[DataMember]
