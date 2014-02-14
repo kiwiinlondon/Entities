@@ -9,6 +9,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
     {
         Today=1,
         EuropeanFundAdministration=2,
-        EndOfPreviousMonth=3
+        EndOfPreviousMonth=3,
+        PreviousWorkingDay=4,
     }
 }
