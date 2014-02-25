@@ -61,6 +61,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BBExchangeCode = 27,
         [EnumMember]
-        KeeleyName = 29
+        KeeleyName = 29,
+        [EnumMember]
+        PulseFundCode = 30
     }
 }
