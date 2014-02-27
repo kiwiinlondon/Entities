@@ -36,11 +36,11 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
-        public int FMOrgId
+        public int? FMOrgId
         {
             get
             {
-                return LegalEntity.FMOrgId.Value;
+                return LegalEntity.FMOrgId;
             }
         }
 

@@ -76,5 +76,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         InvestmentFundsDirectClientHoldings = 32,
         [EnumMember]
         EFAFundPriceFile = 33,
+        [EnumMember]
+        PulseTradeFile = 34
     }
 }
