@@ -2090,7 +2090,7 @@
           <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="AnalystId" Type="int" Nullable="false" />
           <Property Name="InDate" Type="datetime" Nullable="false" />
-          <Property Name="InPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="InPrice" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="StartOfYearPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IsLong" Type="bit" Nullable="false" />
           <Property Name="OutDate" Type="datetime" />
@@ -2100,6 +2100,8 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="CurrentPriceDate" Type="datetime" />
+          <Property Name="EndOfYearPrice" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ForwardFX">
           <Key>
@@ -7501,6 +7503,8 @@
           <Parameter Name="CurrentPrice" Type="numeric" Mode="In" />
           <Parameter Name="CurrentPriceId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="CurrentPriceDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndOfYearPrice" Type="numeric" Mode="In" />
         </Function>
         <Function Name="FocusList_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FocusListId" Type="int" Mode="In" />
@@ -7516,6 +7520,8 @@
           <Parameter Name="CurrentPriceId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="CurrentPriceDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndOfYearPrice" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ForwardFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -15529,7 +15535,7 @@
           <Property Type="Int32" Name="InstrumentMarketId" Nullable="false" />
           <Property Type="Int32" Name="AnalystId" Nullable="false" />
           <Property Type="DateTime" Name="InDate" Nullable="false" Precision="3" />
-          <Property Type="Decimal" Name="InPrice" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="InPrice" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="StartOfYearPrice" Precision="27" Scale="8" />
           <Property Type="Boolean" Name="IsLong" Nullable="false" />
           <Property Type="DateTime" Name="OutDate" Precision="3" />
@@ -15539,6 +15545,8 @@
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Decimal" Name="CurrentPrice" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Int32" Name="CurrentPriceId" Nullable="false" />
+          <Property Type="DateTime" Name="CurrentPriceDate" Precision="3" />
+          <Property Type="Decimal" Name="EndOfYearPrice" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="FocusListAnalystIdFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19853,6 +19861,8 @@
           <EntitySetMapping Name="FocusLists">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusList">
               <MappingFragment StoreEntitySet="FocusList">
+                <ScalarProperty Name="EndOfYearPrice" ColumnName="EndOfYearPrice" />
+                <ScalarProperty Name="CurrentPriceDate" ColumnName="CurrentPriceDate" />
                 <ScalarProperty Name="CurrentPriceId" ColumnName="CurrentPriceId" />
                 <ScalarProperty Name="CurrentPrice" ColumnName="CurrentPrice" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -19872,6 +19882,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusList">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.FocusList_Insert">
+                  <ScalarProperty Name="EndOfYearPrice" ParameterName="EndOfYearPrice" />
+                  <ScalarProperty Name="CurrentPriceDate" ParameterName="CurrentPriceDate" />
                   <ScalarProperty Name="CurrentPriceId" ParameterName="CurrentPriceId" />
                   <ScalarProperty Name="CurrentPrice" ParameterName="CurrentPrice" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -19888,6 +19900,8 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.FocusList_Update">
+                  <ScalarProperty Name="EndOfYearPrice" ParameterName="EndOfYearPrice" Version="Current" />
+                  <ScalarProperty Name="CurrentPriceDate" ParameterName="CurrentPriceDate" Version="Current" />
                   <ScalarProperty Name="CurrentPriceId" ParameterName="CurrentPriceId" Version="Current" />
                   <ScalarProperty Name="CurrentPrice" ParameterName="CurrentPrice" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
