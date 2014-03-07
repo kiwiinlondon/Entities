@@ -12,6 +12,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GreatBritain = 62,
         [EnumMember]
-        Ireland = 56
+        Ireland = 56,
+        [EnumMember]
+        UnitedStates = 53        
     }
 }
