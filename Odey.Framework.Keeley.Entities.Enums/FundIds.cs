@@ -49,13 +49,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DYSS = 5591,
         [EnumMember]
-        DYSSGBPISHARECLASS = 5747,
+        DYSS_GBP_I = 5747,
         [EnumMember]
-        DYSSGBPMSHARECLASS = 5749,
+        DYSS_GBP_M = 5749,
         [EnumMember]
-        DYSSGBPRSHARECLASS = 5750,
+        DYSS_GBP_R = 5750,
         [EnumMember]
-        DYSSEURSHARECLASS = 5901,
+        DYSS_EUR_I = 5901,
         [EnumMember]
         DYSS_USD_R = 6239,
         [EnumMember]
@@ -65,13 +65,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MR11 = 5590,
         [EnumMember]
-        MR11GBPSHARECLASS = 5746,
+        MR11_GBP_R = 5746,
         [EnumMember]
-        MR11USDSHARECLASS = 5902,
+        MR11_USD_R = 5902,
         [EnumMember]
-        MR11GBPMSHARECLASS = 5903,
+        MR11_GBP_M = 5903,
         [EnumMember]
-        MR11EURMSHARECLASS = 5904,
+        MR11_EUR_M = 5904,
         
         
         [EnumMember]
@@ -163,19 +163,19 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OEAF = 5326,
         [EnumMember]
-        OEAFEURASHARECLASS = 5523,
+        OEAF_EUR_A = 5523,
         [EnumMember]
-        OEAFEURAISHARECLASS = 5524,
+        OEAF_EUR_AI = 5524,
         [EnumMember]
-        OEAFGBPDSHARECLASS = 5525,
+        OEAF_GBP_D = 5525,
         [EnumMember]
-        OEAFGBPSHARECLASS = 5526,
+        OEAF_GBP_O = 5526,
         [EnumMember]
-        OEAFEURISHARECLASS = 5528,
+        OEAF_EUR_I = 5528,
         [EnumMember]
-        OEAFGBPISHARECLASS = 5529,
+        OEAF_GBP_I = 5529,
         [EnumMember]
-        OEAFUSDSHARECLASS = 5530,
+        OEAF_USD_O = 5530,
         [EnumMember]
         OEAF_USD_BI = 6525,
         
@@ -183,29 +183,31 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OF = 5592,
         [EnumMember]
-        OFCHFASHARECLASS = 5910,
+        OF_CHF_A = 5910,
         [EnumMember]
-        OFCHFBSHARECLASS = 5911,
+        OF_CHF_R = 5911,
         [EnumMember]
-        OFEURBSHARECLASS = 5914,
+        OF_EUR_R = 5914,
         [EnumMember]
-        OFGBPASHARECLASS = 5906,
+        OF_GBP_I = 5906,
         [EnumMember]
-        OFGBPBSHARECLASS = 5907,
+        OF_GBP_B = 5907,
         [EnumMember]
-        OFNOKASHARECLASS = 5912,
+        OF_NOK_A = 5912,
         [EnumMember]
-        OFNOKBSHARECLASS = 5913,
+        OF_NOK_R = 5913,
         [EnumMember]
-        OFUSDASHARECLASS = 5908,
+        OF_USD_A = 5908,
         [EnumMember]
-        OFUSDBSHARECLASS = 5909,
+        OF_USD_R = 5909,
         
         
         [EnumMember]
         OPE = 5327,
         [EnumMember]
-        OPEFGBPDSHARECLASS = 5531,        
+        OPE_GBP_R = 5531,
+        [EnumMember]
+        OPE_EUR_R = 5955,  
         
         [EnumMember]
         ATLAS = 6053,
