@@ -304,6 +304,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EAR_USD_I = 6470,
         [EnumMember]
         EAR_USD_R = 6526,
+        [EnumMember]
+        EAR_GBP_MW = 6576,
+        
 
         [EnumMember]
         VT = 6552
