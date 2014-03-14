@@ -32,5 +32,7 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<decimal> InSpecieTransfer { get; set; }
+    	[DataMember]
+        public Nullable<decimal> UnitsInIssue { get; set; }
     }
 }
