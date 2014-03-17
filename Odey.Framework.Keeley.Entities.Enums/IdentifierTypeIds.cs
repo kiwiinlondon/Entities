@@ -68,5 +68,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         PulseTradeCode = 31,
         [EnumMember]
         KeeleyEmail = 32,
+        [EnumMember]
+        KeeleyTradeId = 33
     }
 }
