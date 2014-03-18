@@ -72,7 +72,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MR11_GBP_M = 5903,
         [EnumMember]
         MR11_EUR_M = 5904,
-        
+        [EnumMember]
+        MR11_GBP_MW = 6580,
         
         [EnumMember]
         OPUS = 5328,
