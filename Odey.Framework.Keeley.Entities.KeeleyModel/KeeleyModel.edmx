@@ -2146,7 +2146,7 @@
           <Property Name="LossTrigger" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ShareClassDescriptor" Type="varchar" MaxLength="50" />
           <Property Name="PerformanceFee" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="ManagementFee" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ManagementFee" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="AdministratorId" Type="int" />
           <Property Name="AdministratorIdentifier" Type="varchar" MaxLength="100" />
         </EntityType>
@@ -2562,7 +2562,10 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="InSpecieTransfer" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="UnitsInIssue" Type="decimal" Precision="27" Scale="8" />
+          <Property Name="UnitsInIssue" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="GrossAssetValue" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TodayManagementFee" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ValueIsForReferenceDate" Type="bit" />
         </EntityType>
         <EntityType Name="Periodicity">
           <Key>
@@ -8253,7 +8256,13 @@
           <Parameter Name="Value" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="InSpecieTransfer" Type="numeric" Mode="In" />
-          <Parameter Name="UnitsInIssue" Type="decimal" Mode="In" />
+          <Parameter Name="UnitsInIssue" Type="numeric" Mode="In" />
+          <Parameter Name="GrossAssetValue" Type="numeric" Mode="In" />
+          <Parameter Name="TodayManagementFee" Type="numeric" Mode="In" />
+          <Parameter Name="ValueIsForReferenceDate" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OfficialNetAssetValueId" Type="int" Mode="In" />
@@ -8263,7 +8272,10 @@
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="InSpecieTransfer" Type="numeric" Mode="In" />
-          <Parameter Name="UnitsInIssue" Type="decimal" Mode="In" />
+          <Parameter Name="UnitsInIssue" Type="numeric" Mode="In" />
+          <Parameter Name="GrossAssetValue" Type="numeric" Mode="In" />
+          <Parameter Name="TodayManagementFee" Type="numeric" Mode="In" />
+          <Parameter Name="ValueIsForReferenceDate" Type="bit" Mode="In" />
         </Function>
         <Function Name="Portfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -10252,6 +10264,9 @@
             <End Role="Price" EntitySet="Prices" />
             <End Role="FocusList" EntitySet="FocusLists" />
           </AssociationSet>
+          <FunctionImport Name="OfficialNetAssetValue_Roll" ReturnType="Collection(DateTime)">
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -14257,7 +14272,7 @@
           <NavigationProperty Name="RiskFreeInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FundRiskFreeInstrumentMarketIdFK" FromRole="Fund" ToRole="InstrumentMarket" />
           <Property Type="String" Name="ShareClassDescriptor" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Decimal" Name="PerformanceFee" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="ManagementFee" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ManagementFee" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Int32" Name="AdministratorId" />
           <Property Type="String" Name="AdministratorIdentifier" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.FundCurrency" FromRole="Fund" ToRole="Currency" />
@@ -15411,6 +15426,9 @@
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Decimal" Name="InSpecieTransfer" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="UnitsInIssue" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="GrossAssetValue" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayManagementFee" Precision="27" Scale="8" />
+          <Property Type="Boolean" Name="ValueIsForReferenceDate" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19811,6 +19829,9 @@
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="ValueIsForReferenceDate" ColumnName="ValueIsForReferenceDate" />
+                <ScalarProperty Name="TodayManagementFee" ColumnName="TodayManagementFee" />
+                <ScalarProperty Name="GrossAssetValue" ColumnName="GrossAssetValue" />
                 <ScalarProperty Name="UnitsInIssue" ColumnName="UnitsInIssue" />
                 <ScalarProperty Name="InSpecieTransfer" ColumnName="InSpecieTransfer" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -19825,6 +19846,9 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="ValueIsForReferenceDate" ParameterName="ValueIsForReferenceDate" />
+                  <ScalarProperty Name="TodayManagementFee" ParameterName="TodayManagementFee" />
+                  <ScalarProperty Name="GrossAssetValue" ParameterName="GrossAssetValue" />
                   <ScalarProperty Name="UnitsInIssue" ParameterName="UnitsInIssue" />
                   <ScalarProperty Name="InSpecieTransfer" ParameterName="InSpecieTransfer" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -19836,6 +19860,9 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="ValueIsForReferenceDate" ParameterName="ValueIsForReferenceDate" Version="Current" />
+                  <ScalarProperty Name="TodayManagementFee" ParameterName="TodayManagementFee" Version="Current" />
+                  <ScalarProperty Name="GrossAssetValue" ParameterName="GrossAssetValue" Version="Current" />
                   <ScalarProperty Name="UnitsInIssue" ParameterName="UnitsInIssue" Version="Current" />
                   <ScalarProperty Name="InSpecieTransfer" ParameterName="InSpecieTransfer" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
@@ -19937,6 +19964,7 @@
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OfficialNetAssetValue_Roll" FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Roll" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -19951,8 +19979,8 @@
     <edmx:Options>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>

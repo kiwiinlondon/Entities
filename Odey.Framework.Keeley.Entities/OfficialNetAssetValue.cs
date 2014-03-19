@@ -34,5 +34,11 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> InSpecieTransfer { get; set; }
     	[DataMember]
         public Nullable<decimal> UnitsInIssue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> GrossAssetValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayManagementFee { get; set; }
+    	[DataMember]
+        public Nullable<bool> ValueIsForReferenceDate { get; set; }
     }
 }
