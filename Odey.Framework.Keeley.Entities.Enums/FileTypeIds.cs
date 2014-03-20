@@ -77,6 +77,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         EFAFundPriceFile = 33,
         [EnumMember]
-        PulseTradeFile = 34
+        PulseTradeFile = 34,
+        [EnumMember]
+        QuintillionNav = 35,
     }
 }
