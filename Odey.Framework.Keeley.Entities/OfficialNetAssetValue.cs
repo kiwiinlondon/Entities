@@ -39,6 +39,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> TodayManagementFee { get; set; }
     	[DataMember]
-        public Nullable<bool> ValueIsForReferenceDate { get; set; }
+        public bool ValueIsForReferenceDate { get; set; }
     }
 }
