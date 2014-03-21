@@ -310,6 +310,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         
 
         [EnumMember]
-        OTR = 6552
+        OTR = 6552,
+        [EnumMember]
+        OTR_USD_R = 6590,
     }
 }
