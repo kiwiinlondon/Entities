@@ -10,6 +10,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FundManager = 1,
         [EnumMember]
-        Odey = 2
+        Odey = 2,
+        [EnumMember]
+        GICS = 3
     }
 }
