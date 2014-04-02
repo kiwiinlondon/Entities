@@ -716,6 +716,14 @@
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
             <End Role="FocusList" EntitySet="FocusList" />
           </AssociationSet>
+          <AssociationSet Name="FocusListRelativeCurrentPriceIdFK" Association="KeeleyModel.Store.FocusListRelativeCurrentPriceIdFK">
+            <End Role="Price" EntitySet="Price" />
+            <End Role="FocusList" EntitySet="FocusList" />
+          </AssociationSet>
+          <AssociationSet Name="FocusListRelativeIndexInstrumentMarketIdFK" Association="KeeleyModel.Store.FocusListRelativeIndexInstrumentMarketIdFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="FocusList" EntitySet="FocusList" />
+          </AssociationSet>
           <AssociationSet Name="FocusListUpdateUserIDFK" Association="KeeleyModel.Store.FocusListUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="FocusList" EntitySet="FocusList" />
@@ -887,6 +895,10 @@
           <AssociationSet Name="IndustryParentIndustryIDFK" Association="KeeleyModel.Store.IndustryParentIndustryIDFK">
             <End Role="Industry" EntitySet="Industry" />
             <End Role="Industry1" EntitySet="Industry" />
+          </AssociationSet>
+          <AssociationSet Name="IndustryRelativeIndexIdFK" Association="KeeleyModel.Store.IndustryRelativeIndexIdFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="Industry" EntitySet="Industry" />
           </AssociationSet>
           <AssociationSet Name="IndustryUserIDFK" Association="KeeleyModel.Store.IndustryUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -2102,6 +2114,12 @@
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CurrentPriceDate" Type="datetime" Nullable="false" />
           <Property Name="EndOfYearPrice" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="RelativeIndexInstrumentMarketId" Type="int" />
+          <Property Name="RelativeInPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="RelativeOutPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="RelativeEndOfYearPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="RelativeCurrentPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="RelativeCurrentPriceId" Type="int" />
         </EntityType>
         <EntityType Name="ForwardFX">
           <Key>
@@ -2310,6 +2328,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="RelativeIndexInstrumentMarketId" Type="int" />
         </EntityType>
         <EntityType Name="Indx">
           <Key>
@@ -4701,6 +4720,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FocusListRelativeCurrentPriceIdFK">
+          <End Role="Price" Type="KeeleyModel.Store.Price" Multiplicity="0..1" />
+          <End Role="FocusList" Type="KeeleyModel.Store.FocusList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="PriceId" />
+            </Principal>
+            <Dependent Role="FocusList">
+              <PropertyRef Name="RelativeCurrentPriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FocusListRelativeIndexInstrumentMarketIdFK">
+          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="0..1" />
+          <End Role="FocusList" Type="KeeleyModel.Store.FocusList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="FocusList">
+              <PropertyRef Name="RelativeIndexInstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FocusListUpdateUserIDFK">
           <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
           <End Role="FocusList" Type="KeeleyModel.Store.FocusList" Multiplicity="*" />
@@ -5214,6 +5257,18 @@
             </Principal>
             <Dependent Role="Industry1">
               <PropertyRef Name="ParentIndustryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IndustryRelativeIndexIdFK">
+          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="0..1" />
+          <End Role="Industry" Type="KeeleyModel.Store.Industry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Industry">
+              <PropertyRef Name="RelativeIndexInstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7509,6 +7564,12 @@
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="CurrentPriceDate" Type="datetime" Mode="In" />
           <Parameter Name="EndOfYearPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeIndexInstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="RelativeInPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeOutPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeEndOfYearPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeCurrentPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeCurrentPriceId" Type="int" Mode="In" />
         </Function>
         <Function Name="FocusList_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FocusListId" Type="int" Mode="In" />
@@ -7526,6 +7587,12 @@
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="CurrentPriceDate" Type="datetime" Mode="In" />
           <Parameter Name="EndOfYearPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeIndexInstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="RelativeInPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeOutPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeEndOfYearPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeCurrentPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RelativeCurrentPriceId" Type="int" Mode="In" />
         </Function>
         <Function Name="ForwardFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -7795,6 +7862,7 @@
           <Parameter Name="Name" Type="varchar" Mode="In" />
           <Parameter Name="Code" Type="varchar" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="RelativeIndexInstrumentMarketId" Type="int" Mode="In" />
         </Function>
         <Function Name="Industry_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IndustryID" Type="int" Mode="In" />
@@ -7804,6 +7872,7 @@
           <Parameter Name="Code" Type="varchar" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="RelativeIndexInstrumentMarketId" Type="int" Mode="In" />
         </Function>
         <Function Name="Instrument_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentID" Type="int" Mode="In" />
@@ -10264,6 +10333,18 @@
           <AssociationSet Name="FocusListCurrentPriceIdFK" Association="Odey.Framework.Keeley.Entities.FocusListCurrentPriceIdFK">
             <End Role="Price" EntitySet="Prices" />
             <End Role="FocusList" EntitySet="FocusLists" />
+          </AssociationSet>
+          <AssociationSet Name="FocusListRelativeCurrentPriceIdFK" Association="Odey.Framework.Keeley.Entities.FocusListRelativeCurrentPriceIdFK">
+            <End Role="Price" EntitySet="Prices" />
+            <End Role="FocusList" EntitySet="FocusLists" />
+          </AssociationSet>
+          <AssociationSet Name="FocusListRelativeIndexInstrumentMarketIdFK" Association="Odey.Framework.Keeley.Entities.FocusListRelativeIndexInstrumentMarketIdFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="FocusList" EntitySet="FocusLists" />
+          </AssociationSet>
+          <AssociationSet Name="IndustryRelativeIndexIdFK" Association="Odey.Framework.Keeley.Entities.IndustryRelativeIndexIdFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="Industry" EntitySet="Industries" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -13092,6 +13173,7 @@
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="RelativeIndexInstrumentMarketId" />
         </EntityType>
         <EntityType Name="IssuerIndustry">
           <Key>
@@ -15569,6 +15651,12 @@
           <Property Type="Int32" Name="CurrentPriceId" Nullable="false" />
           <Property Type="DateTime" Name="CurrentPriceDate" Precision="3" Nullable="false" />
           <Property Type="Decimal" Name="EndOfYearPrice" Precision="27" Scale="8" Nullable="false" />
+          <Property Type="Int32" Name="RelativeIndexInstrumentMarketId" />
+          <Property Type="Decimal" Name="RelativeInPrice" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="RelativeOutPrice" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="RelativeEndOfYearPrice" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="RelativeCurrentPrice" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="RelativeCurrentPriceId" />
           </EntityType>
         <Association Name="FocusListAnalystIdFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -15615,6 +15703,42 @@
             </Principal>
             <Dependent Role="FocusList">
               <PropertyRef Name="CurrentPriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FocusListRelativeCurrentPriceIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Price" Role="Price" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="PriceId" />
+            </Principal>
+            <Dependent Role="FocusList">
+              <PropertyRef Name="RelativeCurrentPriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FocusListRelativeIndexInstrumentMarketIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="FocusList">
+              <PropertyRef Name="RelativeIndexInstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IndustryRelativeIndexIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Industry" Role="Industry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Industry">
+              <PropertyRef Name="RelativeIndexInstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -18387,6 +18511,7 @@
           <EntitySetMapping Name="Industries">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Industry">
               <MappingFragment StoreEntitySet="Industry">
+                <ScalarProperty Name="RelativeIndexInstrumentMarketId" ColumnName="RelativeIndexInstrumentMarketId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -19897,6 +20022,12 @@
           <EntitySetMapping Name="FocusLists">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusList">
               <MappingFragment StoreEntitySet="FocusList">
+                <ScalarProperty Name="RelativeCurrentPriceId" ColumnName="RelativeCurrentPriceId" />
+                <ScalarProperty Name="RelativeCurrentPrice" ColumnName="RelativeCurrentPrice" />
+                <ScalarProperty Name="RelativeEndOfYearPrice" ColumnName="RelativeEndOfYearPrice" />
+                <ScalarProperty Name="RelativeOutPrice" ColumnName="RelativeOutPrice" />
+                <ScalarProperty Name="RelativeInPrice" ColumnName="RelativeInPrice" />
+                <ScalarProperty Name="RelativeIndexInstrumentMarketId" ColumnName="RelativeIndexInstrumentMarketId" />
                 <ScalarProperty Name="EndOfYearPrice" ColumnName="EndOfYearPrice" />
                 <ScalarProperty Name="CurrentPriceDate" ColumnName="CurrentPriceDate" />
                 <ScalarProperty Name="CurrentPriceId" ColumnName="CurrentPriceId" />
@@ -19918,6 +20049,12 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusList">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.FocusList_Insert">
+                  <ScalarProperty Name="RelativeCurrentPriceId" ParameterName="RelativeCurrentPriceId" />
+                  <ScalarProperty Name="RelativeCurrentPrice" ParameterName="RelativeCurrentPrice" />
+                  <ScalarProperty Name="RelativeEndOfYearPrice" ParameterName="RelativeEndOfYearPrice" />
+                  <ScalarProperty Name="RelativeOutPrice" ParameterName="RelativeOutPrice" />
+                  <ScalarProperty Name="RelativeInPrice" ParameterName="RelativeInPrice" />
+                  <ScalarProperty Name="RelativeIndexInstrumentMarketId" ParameterName="RelativeIndexInstrumentMarketId" />
                   <ScalarProperty Name="EndOfYearPrice" ParameterName="EndOfYearPrice" />
                   <ScalarProperty Name="CurrentPriceDate" ParameterName="CurrentPriceDate" />
                   <ScalarProperty Name="CurrentPriceId" ParameterName="CurrentPriceId" />
@@ -19977,7 +20114,7 @@
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
@@ -25693,11 +25830,14 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSubAccountAdministratorMappingClientAccountIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__LegalEnti__Paren__21E80B97" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FocusList" Width="1.5" PointX="6.375" PointY="47.375" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FocusList" Width="2.375" PointX="6.375" PointY="47.375" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListAnalystIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListInstrumentMarketIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListCurrentPriceIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListRelativeCurrentPriceIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListRelativeIndexInstrumentMarketIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndustryRelativeIndexIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

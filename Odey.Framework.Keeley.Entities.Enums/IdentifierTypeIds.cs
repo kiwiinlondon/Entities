@@ -69,6 +69,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         KeeleyEmail = 32,
         [EnumMember]
-        KeeleyTradeId = 33
+        KeeleyTradeId = 33,
+        [EnumMember]
+        GICSCode = 34
     }
 }

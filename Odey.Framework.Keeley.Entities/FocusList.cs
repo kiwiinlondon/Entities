@@ -48,5 +48,17 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime CurrentPriceDate { get; set; }
     	[DataMember]
         public decimal EndOfYearPrice { get; set; }
+    	[DataMember]
+        public Nullable<int> RelativeIndexInstrumentMarketId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RelativeInPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RelativeOutPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RelativeEndOfYearPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RelativeCurrentPrice { get; set; }
+    	[DataMember]
+        public Nullable<int> RelativeCurrentPriceId { get; set; }
     }
 }
