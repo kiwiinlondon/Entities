@@ -62,5 +62,7 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AdjustmentFactorITD { get; set; }
     	[DataMember]
         public Nullable<decimal> AdjustmentFactorYTD { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> RelativeCurrentPriceDate { get; set; }
     }
 }
