@@ -2103,7 +2103,6 @@
           <Property Name="AnalystId" Type="int" Nullable="false" />
           <Property Name="InDate" Type="datetime" Nullable="false" />
           <Property Name="InPrice" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="StartOfYearPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IsLong" Type="bit" Nullable="false" />
           <Property Name="OutDate" Type="datetime" />
           <Property Name="OutPrice" Type="numeric" Precision="27" Scale="8" />
@@ -2114,12 +2113,14 @@
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CurrentPriceDate" Type="datetime" Nullable="false" />
           <Property Name="EndOfYearPrice" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="RelativeIndexInstrumentMarketId" Type="int" />
+          <Property Name="RelativeIndexInstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="RelativeInPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RelativeOutPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RelativeEndOfYearPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RelativeCurrentPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RelativeCurrentPriceId" Type="int" />
+          <Property Name="AdjustmentFactorITD" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="AdjustmentFactorYTD" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ForwardFX">
           <Key>
@@ -4733,7 +4734,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FocusListRelativeIndexInstrumentMarketIdFK">
-          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="0..1" />
+          <End Role="InstrumentMarket" Type="KeeleyModel.Store.InstrumentMarket" Multiplicity="1" />
           <End Role="FocusList" Type="KeeleyModel.Store.FocusList" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="InstrumentMarket">
@@ -7555,7 +7556,6 @@
           <Parameter Name="AnalystId" Type="int" Mode="In" />
           <Parameter Name="InDate" Type="datetime" Mode="In" />
           <Parameter Name="InPrice" Type="numeric" Mode="In" />
-          <Parameter Name="StartOfYearPrice" Type="numeric" Mode="In" />
           <Parameter Name="IsLong" Type="bit" Mode="In" />
           <Parameter Name="OutDate" Type="datetime" Mode="In" />
           <Parameter Name="OutPrice" Type="numeric" Mode="In" />
@@ -7570,6 +7570,8 @@
           <Parameter Name="RelativeEndOfYearPrice" Type="numeric" Mode="In" />
           <Parameter Name="RelativeCurrentPrice" Type="numeric" Mode="In" />
           <Parameter Name="RelativeCurrentPriceId" Type="int" Mode="In" />
+          <Parameter Name="AdjustmentFactorITD" Type="numeric" Mode="In" />
+          <Parameter Name="AdjustmentFactorYTD" Type="numeric" Mode="In" />
         </Function>
         <Function Name="FocusList_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FocusListId" Type="int" Mode="In" />
@@ -7577,7 +7579,6 @@
           <Parameter Name="AnalystId" Type="int" Mode="In" />
           <Parameter Name="InDate" Type="datetime" Mode="In" />
           <Parameter Name="InPrice" Type="numeric" Mode="In" />
-          <Parameter Name="StartOfYearPrice" Type="numeric" Mode="In" />
           <Parameter Name="IsLong" Type="bit" Mode="In" />
           <Parameter Name="OutDate" Type="datetime" Mode="In" />
           <Parameter Name="OutPrice" Type="numeric" Mode="In" />
@@ -7593,6 +7594,8 @@
           <Parameter Name="RelativeEndOfYearPrice" Type="numeric" Mode="In" />
           <Parameter Name="RelativeCurrentPrice" Type="numeric" Mode="In" />
           <Parameter Name="RelativeCurrentPriceId" Type="int" Mode="In" />
+          <Parameter Name="AdjustmentFactorITD" Type="numeric" Mode="In" />
+          <Parameter Name="AdjustmentFactorYTD" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ForwardFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -15640,7 +15643,6 @@
           <Property Type="Int32" Name="AnalystId" Nullable="false" />
           <Property Type="DateTime" Name="InDate" Nullable="false" Precision="3" />
           <Property Type="Decimal" Name="InPrice" Precision="27" Scale="8" Nullable="false" />
-          <Property Type="Decimal" Name="StartOfYearPrice" Precision="27" Scale="8" />
           <Property Type="Boolean" Name="IsLong" Nullable="false" />
           <Property Type="DateTime" Name="OutDate" Precision="3" />
           <Property Type="Decimal" Name="OutPrice" Precision="27" Scale="8" />
@@ -15651,12 +15653,14 @@
           <Property Type="Int32" Name="CurrentPriceId" Nullable="false" />
           <Property Type="DateTime" Name="CurrentPriceDate" Precision="3" Nullable="false" />
           <Property Type="Decimal" Name="EndOfYearPrice" Precision="27" Scale="8" Nullable="false" />
-          <Property Type="Int32" Name="RelativeIndexInstrumentMarketId" />
+          <Property Type="Int32" Name="RelativeIndexInstrumentMarketId" Nullable="false" />
           <Property Type="Decimal" Name="RelativeInPrice" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="RelativeOutPrice" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="RelativeEndOfYearPrice" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="RelativeCurrentPrice" Precision="27" Scale="8" />
           <Property Type="Int32" Name="RelativeCurrentPriceId" />
+          <Property Type="Decimal" Name="AdjustmentFactorITD" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="AdjustmentFactorYTD" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="FocusListAnalystIdFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -15719,7 +15723,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FocusListRelativeIndexInstrumentMarketIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="InstrumentMarket">
@@ -20024,6 +20028,8 @@
           <EntitySetMapping Name="FocusLists">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusList">
               <MappingFragment StoreEntitySet="FocusList">
+                <ScalarProperty Name="AdjustmentFactorYTD" ColumnName="AdjustmentFactorYTD" />
+                <ScalarProperty Name="AdjustmentFactorITD" ColumnName="AdjustmentFactorITD" />
                 <ScalarProperty Name="RelativeCurrentPriceId" ColumnName="RelativeCurrentPriceId" />
                 <ScalarProperty Name="RelativeCurrentPrice" ColumnName="RelativeCurrentPrice" />
                 <ScalarProperty Name="RelativeEndOfYearPrice" ColumnName="RelativeEndOfYearPrice" />
@@ -20040,7 +20046,6 @@
                 <ScalarProperty Name="OutPrice" ColumnName="OutPrice" />
                 <ScalarProperty Name="OutDate" ColumnName="OutDate" />
                 <ScalarProperty Name="IsLong" ColumnName="IsLong" />
-                <ScalarProperty Name="StartOfYearPrice" ColumnName="StartOfYearPrice" />
                 <ScalarProperty Name="InPrice" ColumnName="InPrice" />
                 <ScalarProperty Name="InDate" ColumnName="InDate" />
                 <ScalarProperty Name="AnalystId" ColumnName="AnalystId" />
@@ -20051,6 +20056,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusList">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.FocusList_Insert">
+                  <ScalarProperty Name="AdjustmentFactorYTD" ParameterName="AdjustmentFactorYTD" />
+                  <ScalarProperty Name="AdjustmentFactorITD" ParameterName="AdjustmentFactorITD" />
                   <ScalarProperty Name="RelativeCurrentPriceId" ParameterName="RelativeCurrentPriceId" />
                   <ScalarProperty Name="RelativeCurrentPrice" ParameterName="RelativeCurrentPrice" />
                   <ScalarProperty Name="RelativeEndOfYearPrice" ParameterName="RelativeEndOfYearPrice" />
@@ -20065,7 +20072,6 @@
                   <ScalarProperty Name="OutPrice" ParameterName="OutPrice" />
                   <ScalarProperty Name="OutDate" ParameterName="OutDate" />
                   <ScalarProperty Name="IsLong" ParameterName="IsLong" />
-                  <ScalarProperty Name="StartOfYearPrice" ParameterName="StartOfYearPrice" />
                   <ScalarProperty Name="InPrice" ParameterName="InPrice" />
                   <ScalarProperty Name="InDate" ParameterName="InDate" />
                   <ScalarProperty Name="AnalystId" ParameterName="AnalystId" />
@@ -20075,6 +20081,8 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.FocusList_Update">
+                  <ScalarProperty Name="AdjustmentFactorYTD" ParameterName="AdjustmentFactorYTD" Version="Current" />
+                  <ScalarProperty Name="AdjustmentFactorITD" ParameterName="AdjustmentFactorITD" Version="Current" />
                   <ScalarProperty Name="RelativeCurrentPriceId" ParameterName="RelativeCurrentPriceId" Version="Current" />
                   <ScalarProperty Name="RelativeCurrentPrice" ParameterName="RelativeCurrentPrice" Version="Current" />
                   <ScalarProperty Name="RelativeEndOfYearPrice" ParameterName="RelativeEndOfYearPrice" Version="Current" />
@@ -20090,7 +20098,6 @@
                   <ScalarProperty Name="OutPrice" ParameterName="OutPrice" Version="Current" />
                   <ScalarProperty Name="OutDate" ParameterName="OutDate" Version="Current" />
                   <ScalarProperty Name="IsLong" ParameterName="IsLong" Version="Current" />
-                  <ScalarProperty Name="StartOfYearPrice" ParameterName="StartOfYearPrice" Version="Current" />
                   <ScalarProperty Name="InPrice" ParameterName="InPrice" Version="Current" />
                   <ScalarProperty Name="InDate" ParameterName="InDate" Version="Current" />
                   <ScalarProperty Name="AnalystId" ParameterName="AnalystId" Version="Current" />

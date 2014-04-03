@@ -27,8 +27,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal InPrice { get; set; }
     	[DataMember]
-        public Nullable<decimal> StartOfYearPrice { get; set; }
-    	[DataMember]
         public bool IsLong { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> OutDate { get; set; }
@@ -49,7 +47,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal EndOfYearPrice { get; set; }
     	[DataMember]
-        public Nullable<int> RelativeIndexInstrumentMarketId { get; set; }
+        public int RelativeIndexInstrumentMarketId { get; set; }
     	[DataMember]
         public Nullable<decimal> RelativeInPrice { get; set; }
     	[DataMember]
@@ -60,5 +58,9 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> RelativeCurrentPrice { get; set; }
     	[DataMember]
         public Nullable<int> RelativeCurrentPriceId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AdjustmentFactorITD { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AdjustmentFactorYTD { get; set; }
     }
 }
