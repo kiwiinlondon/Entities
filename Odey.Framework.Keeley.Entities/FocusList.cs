@@ -49,20 +49,20 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int RelativeIndexInstrumentMarketId { get; set; }
     	[DataMember]
-        public Nullable<decimal> RelativeInPrice { get; set; }
+        public decimal RelativeInPrice { get; set; }
     	[DataMember]
         public Nullable<decimal> RelativeOutPrice { get; set; }
     	[DataMember]
-        public Nullable<decimal> RelativeEndOfYearPrice { get; set; }
+        public decimal RelativeEndOfYearPrice { get; set; }
     	[DataMember]
-        public Nullable<decimal> RelativeCurrentPrice { get; set; }
+        public decimal RelativeCurrentPrice { get; set; }
     	[DataMember]
-        public Nullable<int> RelativeCurrentPriceId { get; set; }
+        public int RelativeCurrentPriceId { get; set; }
     	[DataMember]
         public Nullable<decimal> AdjustmentFactorITD { get; set; }
     	[DataMember]
         public Nullable<decimal> AdjustmentFactorYTD { get; set; }
     	[DataMember]
-        public Nullable<System.DateTime> RelativeCurrentPriceDate { get; set; }
+        public System.DateTime RelativeCurrentPriceDate { get; set; }
     }
 }
