@@ -132,6 +132,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> BetaLongTerm { get; set; }
     	[DataMember]
         public Nullable<int> BetaLongTermId { get; set; }
+    	[DataMember]
+        public System.DateTime PreviousReferenceDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayCapitalChange { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

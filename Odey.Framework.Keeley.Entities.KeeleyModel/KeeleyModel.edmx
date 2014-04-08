@@ -121,6 +121,7 @@
       [FundNetAssetValue].[ReferenceDate] AS [ReferenceDate], 
       [FundNetAssetValue].[MarketValue] AS [MarketValue], 
       [FundNetAssetValue].[ValuationMarketValue] AS [ValuationMarketValue], 
+      [FundNetAssetValue].[TodayCapitalChange] AS [TodayCapitalChange], 
       [FundNetAssetValue].[PositionCount] AS [PositionCount]
       FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </EntitySet>
@@ -2670,6 +2671,8 @@
           <Property Name="BetaShortTermId" Type="int" />
           <Property Name="BetaLongTerm" Type="numeric" Precision="27" Scale="8" />
           <Property Name="BetaLongTermId" Type="int" />
+          <Property Name="PreviousReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="TodayCapitalChange" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2944,6 +2947,7 @@
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="MarketValue" Type="numeric" Nullable="false" Precision="38" Scale="8" />
           <Property Name="ValuationMarketValue" Type="numeric" Precision="38" Scale="8" />
+          <Property Name="TodayCapitalChange" Type="numeric" Precision="38" Scale="8" />
           <Property Name="PositionCount" Type="bigint" />
         </EntityType>
         <Association Name="AccountAllocationUpdateUserIDFK">
@@ -8412,6 +8416,8 @@
           <Parameter Name="BetaShortTermId" Type="int" Mode="In" />
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
+          <Parameter Name="PreviousReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="TodayCapitalChange" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8471,6 +8477,8 @@
           <Parameter Name="BetaShortTermId" Type="int" Mode="In" />
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
+          <Parameter Name="PreviousReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="TodayCapitalChange" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -12249,6 +12257,8 @@
           <Property Type="Int32" Name="BetaShortTermId" />
           <Property Type="Decimal" Name="BetaLongTerm" Precision="27" Scale="8" />
           <Property Type="Int32" Name="BetaLongTermId" />
+          <Property Type="DateTime" Name="PreviousReferenceDate" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="TodayCapitalChange" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14242,6 +14252,7 @@
           <Property Type="Decimal" Name="ValuationMarketValue" Precision="38" Scale="8" />
           <Property Type="Int64" Name="PositionCount" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FundNetAssetValueFund" FromRole="FundNetAssetValue" ToRole="Fund" />
+          <Property Type="Decimal" Name="TodayCapitalChange" Precision="38" Scale="8" />
         </EntityType>
         <EntityType Name="Bond">
           <Key>
@@ -17656,6 +17667,8 @@
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="TodayCapitalChange" ColumnName="TodayCapitalChange" />
+                <ScalarProperty Name="PreviousReferenceDate" ColumnName="PreviousReferenceDate" />
                 <ScalarProperty Name="BetaLongTermId" ColumnName="BetaLongTermId" />
                 <ScalarProperty Name="BetaLongTerm" ColumnName="BetaLongTerm" />
                 <ScalarProperty Name="BetaShortTermId" ColumnName="BetaShortTermId" />
@@ -17716,6 +17729,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="TodayCapitalChange" ParameterName="TodayCapitalChange" />
+                  <ScalarProperty Name="PreviousReferenceDate" ParameterName="PreviousReferenceDate" />
                   <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" />
                   <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" />
                   <ScalarProperty Name="BetaShortTermId" ParameterName="BetaShortTermId" />
@@ -17773,6 +17788,8 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="TodayCapitalChange" ParameterName="TodayCapitalChange" Version="Current" />
+                  <ScalarProperty Name="PreviousReferenceDate" ParameterName="PreviousReferenceDate" Version="Current" />
                   <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" Version="Current" />
                   <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" Version="Current" />
                   <ScalarProperty Name="BetaShortTermId" ParameterName="BetaShortTermId" Version="Current" />
@@ -19035,6 +19052,7 @@
           <EntitySetMapping Name="FundNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FundNetAssetValue">
               <MappingFragment StoreEntitySet="FundNetAssetValue">
+                <ScalarProperty Name="TodayCapitalChange" ColumnName="TodayCapitalChange" />
                 <ScalarProperty Name="PositionCount" ColumnName="PositionCount" />
                 <ScalarProperty Name="ValuationMarketValue" ColumnName="ValuationMarketValue" />
                 <ScalarProperty Name="MarketValue" ColumnName="MarketValue" />
@@ -20142,7 +20160,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="80">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="50">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
