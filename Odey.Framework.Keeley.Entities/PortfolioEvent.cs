@@ -110,5 +110,9 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ValuationNetPosition { get; set; }
     	[DataMember]
         public decimal ValuationDeltaNetCostInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CapitalChange { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayCapitalChange { get; set; }
     }
 }
