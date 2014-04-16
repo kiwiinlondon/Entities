@@ -11,5 +11,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EuropeanFundAdministration=2,
         EndOfPreviousMonth=3,
         PreviousWorkingDay=4,
+        TMinus2WorkingDays = 5,
     }
 }
