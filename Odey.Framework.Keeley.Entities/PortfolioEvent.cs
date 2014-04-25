@@ -114,5 +114,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CapitalChange { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayCapitalChange { get; set; }
+    	[DataMember]
+        public Nullable<int> FXRateId { get; set; }
+    	[DataMember]
+        public bool UseFXRateForDay { get; set; }
+    
+        [DataMember]
+        public virtual Position Position { get; set; }
     }
 }

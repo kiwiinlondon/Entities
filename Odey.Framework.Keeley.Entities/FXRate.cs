@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class FXRate
     {
-    	
-        public FXRate()
-        {
-            this.Portfolios2 = new List<Portfolio>();
-        }
-    
     	[DataMember]
         public int FXRateId { get; set; }
     	[DataMember]
@@ -59,7 +53,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual RawFXRate FromSecondRawFXRate { get; set; }
         [DataMember]
         public virtual RawFXRate ToSecondRawFXRate { get; set; }
-        [DataMember]
-        public virtual List<Portfolio> Portfolios2 { get; set; }
     }
 }

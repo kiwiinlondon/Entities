@@ -689,6 +689,10 @@
             <End Role="LegalEntity" EntitySet="LegalEntity" />
             <End Role="LegalEntity1" EntitySet="LegalEntity" />
           </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__FXRat__7213CCE8" Association="KeeleyModel.Store.FK__Portfolio__FXRat__7213CCE8">
+            <End Role="FXRate" EntitySet="FXRate" />
+            <End Role="PortfolioEvent" EntitySet="PortfolioEvent" />
+          </AssociationSet>
           <AssociationSet Name="FK__TradeEven__Contr__6555CF79" Association="KeeleyModel.Store.FK__TradeEven__Contr__6555CF79">
             <End Role="TradeEvent" EntitySet="TradeEvent" />
             <End Role="TradeEvent1" EntitySet="TradeEvent" />
@@ -2737,6 +2741,8 @@
           <Property Name="ValuationNetPosition" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="CapitalChange" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayCapitalChange" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FXRateId" Type="int" />
+          <Property Name="UseFXRateForDay" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PortfolioEventType">
           <Key>
@@ -4641,6 +4647,18 @@
             </Principal>
             <Dependent Role="LegalEntity1">
               <PropertyRef Name="ParentLegalEntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__FXRat__7213CCE8">
+          <End Role="FXRate" Type="KeeleyModel.Store.FXRate" Multiplicity="0..1" />
+          <End Role="PortfolioEvent" Type="KeeleyModel.Store.PortfolioEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FXRate">
+              <PropertyRef Name="FXRateId" />
+            </Principal>
+            <Dependent Role="PortfolioEvent">
+              <PropertyRef Name="FXRateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8557,6 +8575,8 @@
           <Parameter Name="ValuationNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="CapitalChange" Type="numeric" Mode="In" />
           <Parameter Name="TodayCapitalChange" Type="numeric" Mode="In" />
+          <Parameter Name="FXRateId" Type="int" Mode="In" />
+          <Parameter Name="UseFXRateForDay" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -8607,6 +8627,8 @@
           <Parameter Name="ValuationNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="CapitalChange" Type="numeric" Mode="In" />
           <Parameter Name="TodayCapitalChange" Type="numeric" Mode="In" />
+          <Parameter Name="FXRateId" Type="int" Mode="In" />
+          <Parameter Name="UseFXRateForDay" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioEventType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventTypeId" Type="int" Mode="In" />
@@ -10366,6 +10388,10 @@
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="Industry" EntitySet="Industries" />
           </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__FXRat__7213CCE8" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__FXRat__7213CCE8">
+            <End Role="FXRate" EntitySet="FXRates" />
+            <End Role="PortfolioEvent" EntitySet="PortfolioEvents" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -11990,7 +12016,7 @@
           <Property Type="Int32" Name="PortfolioEventTypeId" Nullable="false" />
           <Property Type="Int32" Name="ChangeNumber" Nullable="false" />
           <Property Type="Decimal" Name="Quantity" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="FXRate" Nullable="false" Precision="35" Scale="16" />
+          <Property Type="Decimal" Name="FXRate" Precision="35" Scale="16" Nullable="false" />
           <Property Type="Decimal" Name="Price" Nullable="false" Precision="35" Scale="16" />
           <Property Type="Decimal" Name="NetCostChangeInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="NetCostChangeBookCurrency" Nullable="false" Precision="27" Scale="8" />
@@ -12031,6 +12057,9 @@
           <Property Type="Decimal" Name="ValuationDeltaNetCostInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="CapitalChange" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="TodayCapitalChange" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="FXRateId" />
+          <Property Type="Boolean" Name="UseFXRateForDay" Nullable="false" />
+          <NavigationProperty Name="Position" Relationship="Odey.Framework.Keeley.Entities.PositionAccountMovementPositionAccountIdFK" FromRole="PortfolioEvent" ToRole="Position" />
         </EntityType>
         <EntityType Name="PortfolioSettlementDate">
           <Key>
@@ -12337,7 +12366,6 @@
           <Property Type="Int32" Name="ToSecondRawFXRateId" />
           <NavigationProperty Name="FromSecondRawFXRate" Relationship="Odey.Framework.Keeley.Entities.FXRateFromSecondRawFXRateIdFK" FromRole="FXRate" ToRole="RawFXRate" />
           <NavigationProperty Name="ToSecondRawFXRate" Relationship="Odey.Framework.Keeley.Entities.FXRateToSecondRawFXRateIdFK" FromRole="FXRate" ToRole="RawFXRate" />
-          <NavigationProperty Name="Portfolios2" Relationship="Odey.Framework.Keeley.Entities.PortfolioUnderlyingPriceToPositionFXRateIdFk" FromRole="FXRate" ToRole="Portfolio" />
         </EntityType>
         <EntityType Name="RawFXRate">
           <Key>
@@ -15769,6 +15797,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Portfolio__FXRat__7213CCE8">
+          <End Type="Odey.Framework.Keeley.Entities.FXRate" Role="FXRate" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.PortfolioEvent" Role="PortfolioEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FXRate">
+              <PropertyRef Name="FXRateId" />
+            </Principal>
+            <Dependent Role="PortfolioEvent">
+              <PropertyRef Name="FXRateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -17396,6 +17436,8 @@
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="UseFXRateForDay" ColumnName="UseFXRateForDay" />
+                <ScalarProperty Name="FXRateId" ColumnName="FXRateId" />
                 <ScalarProperty Name="TodayCapitalChange" ColumnName="TodayCapitalChange" />
                 <ScalarProperty Name="CapitalChange" ColumnName="CapitalChange" />
                 <ScalarProperty Name="ValuationDeltaNetCostInstrumentCurrency" ColumnName="ValuationDeltaNetCostInstrumentCurrency" />
@@ -17450,6 +17492,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="UseFXRateForDay" ParameterName="UseFXRateForDay" />
+                  <ScalarProperty Name="FXRateId" ParameterName="FXRateId" />
                   <ScalarProperty Name="TodayCapitalChange" ParameterName="TodayCapitalChange" />
                   <ScalarProperty Name="CapitalChange" ParameterName="CapitalChange" />
                   <ScalarProperty Name="ValuationDeltaNetCostInstrumentCurrency" ParameterName="ValuationDeltaNetCostInstrumentCurrency" />
@@ -17501,6 +17545,8 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="UseFXRateForDay" ParameterName="UseFXRateForDay" Version="Current" />
+                  <ScalarProperty Name="FXRateId" ParameterName="FXRateId" Version="Current" />
                   <ScalarProperty Name="TodayCapitalChange" ParameterName="TodayCapitalChange" Version="Current" />
                   <ScalarProperty Name="CapitalChange" ParameterName="CapitalChange" Version="Current" />
                   <ScalarProperty Name="ValuationDeltaNetCostInstrumentCurrency" ParameterName="ValuationDeltaNetCostInstrumentCurrency" Version="Current" />
@@ -25892,6 +25938,7 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListRelativeCurrentPriceIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListRelativeIndexInstrumentMarketIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndustryRelativeIndexIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__FXRat__7213CCE8" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
