@@ -211,9 +211,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OPE_EUR_R = 5955,  
         
         [EnumMember]
-        ATLAS = 6053,
+        ATLAS = 6053,//I S
         [EnumMember]
         ATLAS_GBP_R_S = 6055,
+        [EnumMember]
+        ATLAS_GBP_I = 6654,
         
         [EnumMember]
         ORION = 6121,
