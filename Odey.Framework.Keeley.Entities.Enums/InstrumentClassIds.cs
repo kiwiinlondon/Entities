@@ -58,7 +58,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         RealEstateInvestmentTrust = 66 ,  
         [EnumMember]
-        EquityFuture = 78  
-
+        EquityFuture = 78,
+        [EnumMember]
+        InflationLinkedBond=82
     }
 }
