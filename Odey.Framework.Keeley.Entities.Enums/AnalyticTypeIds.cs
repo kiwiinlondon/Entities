@@ -66,6 +66,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         /// </summary>
         [EnumMember]
         CompositeStressTest = 16,
+
+        [EnumMember]
+        IndexRatio = 17,
     }
 }
 

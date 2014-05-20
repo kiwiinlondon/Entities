@@ -693,6 +693,10 @@
             <End Role="FXRate" EntitySet="FXRate" />
             <End Role="PortfolioEvent" EntitySet="PortfolioEvent" />
           </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Index__2FB5372B" Association="KeeleyModel.Store.FK__Portfolio__Index__2FB5372B">
+            <End Role="Analytic" EntitySet="Analytic" />
+            <End Role="Portfolio" EntitySet="Portfolio" />
+          </AssociationSet>
           <AssociationSet Name="FK__TradeEven__Contr__6555CF79" Association="KeeleyModel.Store.FK__TradeEven__Contr__6555CF79">
             <End Role="TradeEvent" EntitySet="TradeEvent" />
             <End Role="TradeEvent1" EntitySet="TradeEvent" />
@@ -2677,6 +2681,8 @@
           <Property Name="BetaLongTermId" Type="int" />
           <Property Name="PreviousReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="TodayCapitalChange" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IndexRatio" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IndexRatioID" Type="int" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2926,6 +2932,7 @@
           <Property Name="IsRoll" Type="bit" Nullable="false" />
           <Property Name="ContraEventId" Type="int" />
           <Property Name="OriginalInputDate" Type="datetime" Nullable="false" />
+          <Property Name="IndexRatio" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Keeley.dbo.FundCapitalChange' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -4659,6 +4666,18 @@
             </Principal>
             <Dependent Role="PortfolioEvent">
               <PropertyRef Name="FXRateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__Index__2FB5372B">
+          <End Role="Analytic" Type="KeeleyModel.Store.Analytic" Multiplicity="0..1" />
+          <End Role="Portfolio" Type="KeeleyModel.Store.Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Analytic">
+              <PropertyRef Name="AnalyticId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="IndexRatioID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8438,6 +8457,8 @@
           <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
           <Parameter Name="PreviousReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="TodayCapitalChange" Type="numeric" Mode="In" />
+          <Parameter Name="IndexRatio" Type="numeric" Mode="In" />
+          <Parameter Name="IndexRatioID" Type="int" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8499,6 +8520,8 @@
           <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
           <Parameter Name="PreviousReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="TodayCapitalChange" Type="numeric" Mode="In" />
+          <Parameter Name="IndexRatio" Type="numeric" Mode="In" />
+          <Parameter Name="IndexRatioID" Type="int" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -8942,6 +8965,7 @@
           <Parameter Name="IsRoll" Type="bit" Mode="In" />
           <Parameter Name="ContraEventId" Type="int" Mode="In" />
           <Parameter Name="OriginalInputDate" Type="datetime" Mode="In" />
+          <Parameter Name="IndexRatio" Type="numeric" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -8976,6 +9000,7 @@
           <Parameter Name="IsRoll" Type="bit" Mode="In" />
           <Parameter Name="ContraEventId" Type="int" Mode="In" />
           <Parameter Name="OriginalInputDate" Type="datetime" Mode="In" />
+          <Parameter Name="IndexRatio" Type="numeric" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -10392,6 +10417,10 @@
             <End Role="FXRate" EntitySet="FXRates" />
             <End Role="PortfolioEvent" EntitySet="PortfolioEvents" />
           </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Index__2FB5372B" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Index__2FB5372B">
+            <End Role="Analytic" EntitySet="Analytics" />
+            <End Role="Portfolio" EntitySet="Portfolios" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -11168,6 +11197,7 @@
           <NavigationProperty Name="Counterparty" Relationship="Odey.Framework.Keeley.Entities.TradeEventCounterpartyIDFK" FromRole="TradeEvent" ToRole="Counterparty" />
           <Property Type="Int32" Name="ContraEventId" />
           <Property Type="DateTime" Name="OriginalInputDate" Precision="3" Nullable="false" />
+          <Property Type="Decimal" Name="IndexRatio" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -12296,6 +12326,8 @@
           <Property Type="Int32" Name="BetaLongTermId" />
           <Property Type="DateTime" Name="PreviousReferenceDate" Nullable="false" Precision="3" />
           <Property Type="Decimal" Name="TodayCapitalChange" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="IndexRatio" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="IndexRatioID" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -15809,6 +15841,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Portfolio__Index__2FB5372B">
+          <End Type="Odey.Framework.Keeley.Entities.Analytic" Role="Analytic" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Analytic">
+              <PropertyRef Name="AnalyticId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="IndexRatioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -16667,6 +16711,7 @@
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="IndexRatio" ColumnName="IndexRatio" />
                 <ScalarProperty Name="OriginalInputDate" ColumnName="OriginalInputDate" />
                 <ScalarProperty Name="ContraEventId" ColumnName="ContraEventId" />
                 <ScalarProperty Name="IsRoll" ColumnName="IsRoll" />
@@ -16705,6 +16750,7 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="IndexRatio" ParameterName="IndexRatio" />
                   <ScalarProperty Name="OriginalInputDate" ParameterName="OriginalInputDate" />
                   <ScalarProperty Name="ContraEventId" ParameterName="ContraEventId" />
                   <ScalarProperty Name="IsRoll" ParameterName="IsRoll" />
@@ -16740,6 +16786,7 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="IndexRatio" ParameterName="IndexRatio" Version="Current" />
                   <ScalarProperty Name="OriginalInputDate" ParameterName="OriginalInputDate" Version="Current" />
                   <ScalarProperty Name="ContraEventId" ParameterName="ContraEventId" Version="Current" />
                   <ScalarProperty Name="IsRoll" ParameterName="IsRoll" Version="Current" />
@@ -17727,6 +17774,8 @@
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="IndexRatioID" ColumnName="IndexRatioID" />
+                <ScalarProperty Name="IndexRatio" ColumnName="IndexRatio" />
                 <ScalarProperty Name="TodayCapitalChange" ColumnName="TodayCapitalChange" />
                 <ScalarProperty Name="PreviousReferenceDate" ColumnName="PreviousReferenceDate" />
                 <ScalarProperty Name="BetaLongTermId" ColumnName="BetaLongTermId" />
@@ -17789,6 +17838,8 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="IndexRatioID" ParameterName="IndexRatioID" />
+                  <ScalarProperty Name="IndexRatio" ParameterName="IndexRatio" />
                   <ScalarProperty Name="TodayCapitalChange" ParameterName="TodayCapitalChange" />
                   <ScalarProperty Name="PreviousReferenceDate" ParameterName="PreviousReferenceDate" />
                   <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" />
@@ -17848,6 +17899,8 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="IndexRatioID" ParameterName="IndexRatioID" Version="Current" />
+                  <ScalarProperty Name="IndexRatio" ParameterName="IndexRatio" Version="Current" />
                   <ScalarProperty Name="TodayCapitalChange" ParameterName="TodayCapitalChange" Version="Current" />
                   <ScalarProperty Name="PreviousReferenceDate" ParameterName="PreviousReferenceDate" Version="Current" />
                   <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" Version="Current" />
@@ -20220,7 +20273,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="50">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="46">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -22566,7 +22619,7 @@
           <edmx:ConnectorPoint PointX="34.208333333333336" PointY="21.024851888020834" />
           <edmx:ConnectorPoint PointX="34.625" PointY="21.024851888020834" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Portfolio" Width="1.5" PointX="32.25" PointY="8.375" Height="9.2877408854166674" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Portfolio" Width="1.5" PointX="32.375" PointY="8.125" Height="9.2877408854166674" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioTradeDateUpdateUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.26483903249105" />
           <edmx:ConnectorPoint PointX="2.6666666666666665" PointY="17.26483903249105" />
@@ -25939,6 +25992,7 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListRelativeIndexInstrumentMarketIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndustryRelativeIndexIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__FXRat__7213CCE8" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Index__2FB5372B" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

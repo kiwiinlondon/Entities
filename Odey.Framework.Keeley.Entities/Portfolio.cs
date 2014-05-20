@@ -136,6 +136,10 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime PreviousReferenceDate { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayCapitalChange { get; set; }
+    	[DataMember]
+        public Nullable<decimal> IndexRatio { get; set; }
+    	[DataMember]
+        public Nullable<int> IndexRatioID { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
