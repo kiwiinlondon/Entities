@@ -69,6 +69,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         IndexRatio = 17,
+
+        [EnumMember]
+        LiquidityHaircutPercentNAVFirm = 18,
     }
 }
 
