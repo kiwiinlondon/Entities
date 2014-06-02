@@ -311,5 +311,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OTR = 6552,
         [EnumMember]
         OTR_USD_R = 6590,
+
+        [EnumMember]
+        CAMO = 6684,
+        
     }
 }
