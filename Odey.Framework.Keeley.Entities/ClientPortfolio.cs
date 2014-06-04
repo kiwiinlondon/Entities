@@ -60,6 +60,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ManagerQuantity { get; set; }
     	[DataMember]
         public Nullable<decimal> ManagerValue { get; set; }
+    	[DataMember]
+        public decimal SubscriptionRedemptionValue { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }

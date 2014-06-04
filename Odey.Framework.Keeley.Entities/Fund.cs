@@ -80,6 +80,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> AdministratorId { get; set; }
     	[DataMember]
         public string AdministratorIdentifier { get; set; }
+    	[DataMember]
+        public bool IsVoting { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
