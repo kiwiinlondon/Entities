@@ -179,7 +179,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OEAF_USD_O = 5530,
         [EnumMember]
         OEAF_USD_BI = 6525,
-        
+        [EnumMember]
+        OEAF_EUR_CI = 6707,
+
         
         [EnumMember]
         OF = 5592,
