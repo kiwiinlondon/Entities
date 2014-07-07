@@ -19,14 +19,16 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitaIRE = 6052,
         [EnumMember]
-        NucleusFundPlatform=6444,
+        NucleusFundPlatform = 6444,
         [EnumMember]
-        TransactFundPlatform=6453,
+        TransactFundPlatform = 6453,
         [EnumMember]
-        CofundsFundPlatform=6465,
+        CofundsFundPlatform = 6465,
         [EnumMember]
-        OdeyWealthFundPlatform=6467,
+        OdeyWealthFundPlatform = 6467,
         [EnumMember]
-        InvestmentFundsDirectFundPlatform = 6475
+        InvestmentFundsDirectFundPlatform = 6475,
+        [EnumMember]
+        ValueTrack = 6557
     }
 }
