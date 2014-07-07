@@ -10,6 +10,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum ClientIds
     {
         [EnumMember]
-        Dummy = 9706
+        Dummy = 9706,
+        [EnumMember]
+        Staff = 7425
     }
 }
