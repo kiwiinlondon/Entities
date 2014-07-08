@@ -80,5 +80,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         PulseTradeFile = 34,
         [EnumMember]
         QuintillionNav = 35,
+        [EnumMember]
+        PulsePositionFile = 36
     }
 }
