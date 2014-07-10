@@ -18,6 +18,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FXPositions = 6,
         [EnumMember]
-        ThreeWayNavOutput=7
+        ThreeWayNavOutput=7,
+        [EnumMember]
+        PerformanceWithAUM=8
     }
 }
