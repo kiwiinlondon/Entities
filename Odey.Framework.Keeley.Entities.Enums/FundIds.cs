@@ -312,7 +312,16 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OTR = 6552,
         [EnumMember]
+        OTR_GBP_I = 6656,
+        [EnumMember]
+        OTR_GBP_R = 6657,
+        [EnumMember]
         OTR_USD_R = 6590,
+        [EnumMember]
+        OTR_USD_I = 6658,
+        [EnumMember]
+        OTR_EUR = 6739,
+        
 
         [EnumMember]
         CAMO = 6684,
