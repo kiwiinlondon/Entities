@@ -12,5 +12,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EndOfPreviousMonth=3,
         PreviousWorkingDay=4,
         TMinus2WorkingDays = 5,
+        NoResolution = 6,
     }
 }
