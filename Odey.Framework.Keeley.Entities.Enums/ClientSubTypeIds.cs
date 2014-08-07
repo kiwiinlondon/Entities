@@ -45,6 +45,18 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FundOfFundsHedge = 18,
         [EnumMember]
-        OdeyHoldingsAG = 19 
+        OdeyHoldingsAG = 19, 
+        [EnumMember]
+        SegregatedAccount = 20,
+        [EnumMember]
+        Institutional = 22, 
+        [EnumMember]
+        Trust = 23, 
+        [EnumMember]
+        DirectWealthManager = 24, 
+        [EnumMember]
+        Platform = 25, 
+        [EnumMember]
+        OdeyFund = 26,
     }
 }
