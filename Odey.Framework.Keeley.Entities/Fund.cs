@@ -77,7 +77,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal ManagementFee { get; set; }
     	[DataMember]
-        public Nullable<int> AdministratorId { get; set; }
+        public int AdministratorId { get; set; }
     	[DataMember]
         public string AdministratorIdentifier { get; set; }
     	[DataMember]

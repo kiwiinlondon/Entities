@@ -28,6 +28,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> IsElectronic { get; set; }
     	[DataMember]
         public string UbsCsaName { get; set; }
+    	[DataMember]
+        public Nullable<decimal> UbsCsaRateOverride { get; set; }
     
         [DataMember]
         private LegalEntity LegalEntity { get; set; }

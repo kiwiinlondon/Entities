@@ -62,10 +62,20 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ManagerValue { get; set; }
     	[DataMember]
         public decimal SubscriptionRedemptionValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayRedemptionPnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningValueAfterTodaysTrades { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayPnl { get; set; }
+    	[DataMember]
+        public Nullable<int> ClientPortfolioByClientShareClassId { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
         [DataMember]
         public virtual Fund Fund { get; set; }
+        [DataMember]
+        public virtual ClientPortfolioByClientShareClass ClientPortfolioByClientShareClass { get; set; }
     }
 }

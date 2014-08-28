@@ -24,6 +24,7 @@
           <EntitySet Name="ClientAccount" EntityType="KeeleyModel.Store.ClientAccount" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientPortfolio" EntityType="KeeleyModel.Store.ClientPortfolio" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientPortfolioBridge" EntityType="KeeleyModel.Store.ClientPortfolioBridge" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ClientPortfolioByClientShareClass" EntityType="KeeleyModel.Store.ClientPortfolioByClientShareClass" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientPortfolioPeriodReturn" EntityType="KeeleyModel.Store.ClientPortfolioPeriodReturn" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientSubAccountAdministratorMapping" EntityType="KeeleyModel.Store.ClientSubAccountAdministratorMapping" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ClientTrade" EntityType="KeeleyModel.Store.ClientTrade" store:Type="Tables" Schema="dbo" />
@@ -304,6 +305,22 @@
           <AssociationSet Name="ClientPortfolioBridgeUpdateUserIDFK" Association="KeeleyModel.Store.ClientPortfolioBridgeUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientPortfolioBridge" EntitySet="ClientPortfolioBridge" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioByClientShareClassClientIdFK" Association="KeeleyModel.Store.ClientPortfolioByClientShareClassClientIdFK">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioByClientShareClassFundIdFK" Association="KeeleyModel.Store.ClientPortfolioByClientShareClassFundIdFK">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioByClientShareClassId" Association="KeeleyModel.Store.ClientPortfolioByClientShareClassId">
+            <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
+            <End Role="ClientPortfolio" EntitySet="ClientPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioByClientShareClassUserIDFK" Association="KeeleyModel.Store.ClientPortfolioByClientShareClassUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
           </AssociationSet>
           <AssociationSet Name="ClientPortfolioClientAccountIDFK" Association="KeeleyModel.Store.ClientPortfolioClientAccountIDFK">
             <End Role="ClientAccount" EntitySet="ClientAccount" />
@@ -1591,6 +1608,10 @@
           <Property Name="ManagerQuantity" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ManagerValue" Type="numeric" Precision="27" Scale="8" />
           <Property Name="SubscriptionRedemptionValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TodayRedemptionPnl" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OpeningValueAfterTodaysTrades" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TodayPnl" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ClientPortfolioByClientShareClassId" Type="int" />
         </EntityType>
         <EntityType Name="ClientPortfolioBridge">
           <Key>
@@ -1607,6 +1628,24 @@
           <Property Name="IsFirst" Type="bit" Nullable="false" />
           <Property Name="MarketValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
           <Property Name="Cost" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+        </EntityType>
+        <EntityType Name="ClientPortfolioByClientShareClass">
+          <Key>
+            <PropertyRef Name="ClientPortfolioByClientShareClassId" />
+          </Key>
+          <Property Name="ClientPortfolioByClientShareClassId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="ITDReturn" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TodayReturn" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TodayRedemptionPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="OpeningValue" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="OpeningValueAfterTodaysTrades" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TodayPnl" Type="numeric" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="ClientPortfolioPeriodReturn">
           <Key>
@@ -1695,6 +1734,7 @@
           <Property Name="DataVersion" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="IsElectronic" Type="bit" />
           <Property Name="UbsCsaName" Type="varchar" MaxLength="50" />
+          <Property Name="UbsCsaRateOverride" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -2069,7 +2109,7 @@
           <Property Name="FileToBeCollectedId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="70" />
           <Property Name="FileCollectionTypeId" Type="int" Nullable="false" />
-          <Property Name="FileCollectionTypeProfileName" Type="varchar" Nullable="false" MaxLength="70" />
+          <Property Name="FileCollectionTypeProfileName" Type="varchar" MaxLength="70" />
           <Property Name="FileDestinationPath" Type="varchar" Nullable="false" MaxLength="150" />
           <Property Name="FileNameTemplate" Type="varchar" Nullable="false" MaxLength="150" />
           <Property Name="FileNameResolutionTypeId" Type="int" />
@@ -2177,7 +2217,7 @@
           <Property Name="ShareClassDescriptor" Type="varchar" MaxLength="50" />
           <Property Name="PerformanceFee" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ManagementFee" Type="numeric" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="AdministratorId" Type="int" />
+          <Property Name="AdministratorId" Type="int" Nullable="false" />
           <Property Name="AdministratorIdentifier" Type="varchar" MaxLength="100" />
           <Property Name="IsVoting" Type="bit" Nullable="false" />
         </EntityType>
@@ -3507,6 +3547,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ClientPortfolioByClientShareClassClientIdFK">
+          <End Role="Client" Type="KeeleyModel.Store.Client" Multiplicity="1" />
+          <End Role="ClientPortfolioByClientShareClass" Type="KeeleyModel.Store.ClientPortfolioByClientShareClass" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="ClientPortfolioByClientShareClass">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioByClientShareClassFundIdFK">
+          <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="1" />
+          <End Role="ClientPortfolioByClientShareClass" Type="KeeleyModel.Store.ClientPortfolioByClientShareClass" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioByClientShareClass">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioByClientShareClassId">
+          <End Role="ClientPortfolioByClientShareClass" Type="KeeleyModel.Store.ClientPortfolioByClientShareClass" Multiplicity="0..1" />
+          <End Role="ClientPortfolio" Type="KeeleyModel.Store.ClientPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientPortfolioByClientShareClass">
+              <PropertyRef Name="ClientPortfolioByClientShareClassId" />
+            </Principal>
+            <Dependent Role="ClientPortfolio">
+              <PropertyRef Name="ClientPortfolioByClientShareClassId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioByClientShareClassUserIDFK">
+          <End Role="ApplicationUser" Type="KeeleyModel.Store.ApplicationUser" Multiplicity="1" />
+          <End Role="ClientPortfolioByClientShareClass" Type="KeeleyModel.Store.ClientPortfolioByClientShareClass" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioByClientShareClass">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ClientPortfolioClientAccountIDFK">
           <End Role="ClientAccount" Type="KeeleyModel.Store.ClientAccount" Multiplicity="1" />
           <End Role="ClientPortfolio" Type="KeeleyModel.Store.ClientPortfolio" Multiplicity="*" />
@@ -4588,7 +4676,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Fund__Administra__0A2691EF">
-          <End Role="Administrator" Type="KeeleyModel.Store.Administrator" Multiplicity="0..1" />
+          <End Role="Administrator" Type="KeeleyModel.Store.Administrator" Multiplicity="1" />
           <End Role="Fund" Type="KeeleyModel.Store.Fund" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Administrator">
@@ -6949,6 +7037,10 @@
           <Parameter Name="ManagerQuantity" Type="numeric" Mode="In" />
           <Parameter Name="ManagerValue" Type="numeric" Mode="In" />
           <Parameter Name="SubscriptionRedemptionValue" Type="numeric" Mode="In" />
+          <Parameter Name="TodayRedemptionPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValueAfterTodaysTrades" Type="numeric" Mode="In" />
+          <Parameter Name="TodayPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ClientPortfolioByClientShareClassId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
@@ -6973,6 +7065,10 @@
           <Parameter Name="ManagerQuantity" Type="numeric" Mode="In" />
           <Parameter Name="ManagerValue" Type="numeric" Mode="In" />
           <Parameter Name="SubscriptionRedemptionValue" Type="numeric" Mode="In" />
+          <Parameter Name="TodayRedemptionPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValueAfterTodaysTrades" Type="numeric" Mode="In" />
+          <Parameter Name="TodayPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ClientPortfolioByClientShareClassId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioBridge_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioBridgeId" Type="int" Mode="In" />
@@ -7000,6 +7096,37 @@
           <Parameter Name="IsFirst" Type="bit" Mode="In" />
           <Parameter Name="MarketValue" Type="numeric" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolioByClientShareClass_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPortfolioByClientShareClassId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolioByClientShareClass_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="ITDReturn" Type="numeric" Mode="In" />
+          <Parameter Name="TodayReturn" Type="numeric" Mode="In" />
+          <Parameter Name="TodayRedemptionPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValue" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValueAfterTodaysTrades" Type="numeric" Mode="In" />
+          <Parameter Name="TodayPnl" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPortfolioByClientShareClass_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPortfolioByClientShareClassId" Type="int" Mode="In" />
+          <Parameter Name="ClientId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="ITDReturn" Type="numeric" Mode="In" />
+          <Parameter Name="TodayReturn" Type="numeric" Mode="In" />
+          <Parameter Name="TodayRedemptionPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValue" Type="numeric" Mode="In" />
+          <Parameter Name="OpeningValueAfterTodaysTrades" Type="numeric" Mode="In" />
+          <Parameter Name="TodayPnl" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
         <Function Name="ClientPortfolioPeriodReturn_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioPeriodReturnID" Type="int" Mode="In" />
@@ -10425,6 +10552,23 @@
             <End Role="Analytic" EntitySet="Analytics" />
             <End Role="Portfolio" EntitySet="Portfolios" />
           </AssociationSet>
+          <EntitySet Name="ClientPortfolioByClientShareClass" EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass" />
+          <AssociationSet Name="ClientPortfolioByClientShareClassUserIDFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioByClientShareClassClientIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassClientIdFK">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioByClientShareClassFundIdFK" Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassFundIdFK">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
+          </AssociationSet>
+          <AssociationSet Name="ClientPortfolioByClientShareClassId" Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassId">
+            <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
+            <End Role="ClientPortfolio" EntitySet="ClientPortfolios" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -11035,6 +11179,7 @@
           <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.CounterpartyLegalEntiyFK" FromRole="Counterparty" ToRole="LegalEntity" a:GetterAccess="Private" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Type="Boolean" Name="IsElectronic" />
           <Property Type="String" Name="UbsCsaName" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="UbsCsaRateOverride" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="CounterpartyUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -14233,7 +14378,7 @@
           <Property Type="Int32" Name="FileToBeCollectedId" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="FileCollectionTypeId" Nullable="false" />
-          <Property Type="String" Name="FileCollectionTypeProfileName" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FileCollectionTypeProfileName" MaxLength="70" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="FileDestinationPath" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="FileNameTemplate" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="FileNameResolutionTypeId" />
@@ -14442,7 +14587,7 @@
           <Property Type="String" Name="ShareClassDescriptor" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Decimal" Name="PerformanceFee" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="ManagementFee" Precision="27" Scale="8" Nullable="false" />
-          <Property Type="Int32" Name="AdministratorId" />
+          <Property Type="Int32" Name="AdministratorId" Nullable="false" />
           <Property Type="String" Name="AdministratorIdentifier" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.FundCurrency" FromRole="Fund" ToRole="Currency" />
           <Property Type="Boolean" Name="IsVoting" Nullable="false" />
@@ -15000,6 +15145,11 @@
           <Property Type="Decimal" Name="ManagerQuantity" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="ManagerValue" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="SubscriptionRedemptionValue" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayRedemptionPnl" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OpeningValueAfterTodaysTrades" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayPnl" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="ClientPortfolioByClientShareClassId" />
+          <NavigationProperty Name="ClientPortfolioByClientShareClass" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassId" FromRole="ClientPortfolio" ToRole="ClientPortfolioByClientShareClass" />
         </EntityType>
         <Association Name="ClientPortfolioUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -15216,7 +15366,7 @@
           <Property Type="Boolean" Name="UpdatedOnReferenceDay" Nullable="false" />
         </EntityType>
         <Association Name="FK__Fund__Administra__0A2691EF">
-          <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Administrator">
@@ -15856,6 +16006,75 @@
             </Principal>
             <Dependent Role="Portfolio">
               <PropertyRef Name="IndexRatioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ClientPortfolioByClientShareClass">
+          <Key>
+            <PropertyRef Name="ClientPortfolioByClientShareClassId" />
+          </Key>
+          <Property Type="Int32" Name="ClientPortfolioByClientShareClassId" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="ClientId" Nullable="false" />
+          <Property Type="Int32" Name="FundId" Nullable="false" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="ITDReturn" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayReturn" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayRedemptionPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OpeningValue" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OpeningValueAfterTodaysTrades" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Client" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassClientIdFK" FromRole="ClientPortfolioByClientShareClass" ToRole="Client" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassFundIdFK" FromRole="ClientPortfolioByClientShareClass" ToRole="Fund" />
+          <NavigationProperty Name="ClientPortfolio" Relationship="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassId" FromRole="ClientPortfolioByClientShareClass" ToRole="ClientPortfolio" />
+        </EntityType>
+        <Association Name="ClientPortfolioByClientShareClassUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass" Role="ClientPortfolioByClientShareClass" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioByClientShareClass">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioByClientShareClassClientIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Client" Role="Client" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass" Role="ClientPortfolioByClientShareClass" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="ClientPortfolioByClientShareClass">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioByClientShareClassFundIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass" Role="ClientPortfolioByClientShareClass" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientPortfolioByClientShareClass">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientPortfolioByClientShareClassId">
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass" Role="ClientPortfolioByClientShareClass" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPortfolio" Role="ClientPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientPortfolioByClientShareClass">
+              <PropertyRef Name="ClientPortfolioByClientShareClassId" />
+            </Principal>
+            <Dependent Role="ClientPortfolio">
+              <PropertyRef Name="ClientPortfolioByClientShareClassId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -16582,6 +16801,7 @@
           <EntitySetMapping Name="Counterparties">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Counterparty">
               <MappingFragment StoreEntitySet="Counterparty">
+                <ScalarProperty Name="UbsCsaRateOverride" ColumnName="UbsCsaRateOverride" />
                 <ScalarProperty Name="UbsCsaName" ColumnName="UbsCsaName" />
                 <ScalarProperty Name="IsElectronic" ColumnName="IsElectronic" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -19697,6 +19917,10 @@
           <EntitySetMapping Name="ClientPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <MappingFragment StoreEntitySet="ClientPortfolio">
+                <ScalarProperty Name="ClientPortfolioByClientShareClassId" ColumnName="ClientPortfolioByClientShareClassId" />
+                <ScalarProperty Name="TodayPnl" ColumnName="TodayPnl" />
+                <ScalarProperty Name="OpeningValueAfterTodaysTrades" ColumnName="OpeningValueAfterTodaysTrades" />
+                <ScalarProperty Name="TodayRedemptionPnl" ColumnName="TodayRedemptionPnl" />
                 <ScalarProperty Name="SubscriptionRedemptionValue" ColumnName="SubscriptionRedemptionValue" />
                 <ScalarProperty Name="ManagerValue" ColumnName="ManagerValue" />
                 <ScalarProperty Name="ManagerQuantity" ColumnName="ManagerQuantity" />
@@ -19725,6 +19949,10 @@
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Insert">
+                  <ScalarProperty Name="ClientPortfolioByClientShareClassId" ParameterName="ClientPortfolioByClientShareClassId" />
+                  <ScalarProperty Name="TodayPnl" ParameterName="TodayPnl" />
+                  <ScalarProperty Name="OpeningValueAfterTodaysTrades" ParameterName="OpeningValueAfterTodaysTrades" />
+                  <ScalarProperty Name="TodayRedemptionPnl" ParameterName="TodayRedemptionPnl" />
                   <ScalarProperty Name="SubscriptionRedemptionValue" ParameterName="SubscriptionRedemptionValue" />
                   <ScalarProperty Name="ManagerValue" ParameterName="ManagerValue" />
                   <ScalarProperty Name="ManagerQuantity" ParameterName="ManagerQuantity" />
@@ -19750,6 +19978,10 @@
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolio_Update">
+                  <ScalarProperty Name="ClientPortfolioByClientShareClassId" ParameterName="ClientPortfolioByClientShareClassId" Version="Current" />
+                  <ScalarProperty Name="TodayPnl" ParameterName="TodayPnl" Version="Current" />
+                  <ScalarProperty Name="OpeningValueAfterTodaysTrades" ParameterName="OpeningValueAfterTodaysTrades" Version="Current" />
+                  <ScalarProperty Name="TodayRedemptionPnl" ParameterName="TodayRedemptionPnl" Version="Current" />
                   <ScalarProperty Name="SubscriptionRedemptionValue" ParameterName="SubscriptionRedemptionValue" Version="Current" />
                   <ScalarProperty Name="ManagerValue" ParameterName="ManagerValue" Version="Current" />
                   <ScalarProperty Name="ManagerQuantity" ParameterName="ManagerQuantity" Version="Current" />
@@ -20262,6 +20494,65 @@
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ClientPortfolioByClientShareClass">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass">
+              <MappingFragment StoreEntitySet="ClientPortfolioByClientShareClass">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="TodayPnl" ColumnName="TodayPnl" />
+                <ScalarProperty Name="OpeningValueAfterTodaysTrades" ColumnName="OpeningValueAfterTodaysTrades" />
+                <ScalarProperty Name="OpeningValue" ColumnName="OpeningValue" />
+                <ScalarProperty Name="TodayRedemptionPnl" ColumnName="TodayRedemptionPnl" />
+                <ScalarProperty Name="TodayReturn" ColumnName="TodayReturn" />
+                <ScalarProperty Name="ITDReturn" ColumnName="ITDReturn" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="ClientPortfolioByClientShareClassId" ColumnName="ClientPortfolioByClientShareClassId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ClientPortfolioByClientShareClass_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="TodayPnl" ParameterName="TodayPnl" />
+                  <ScalarProperty Name="OpeningValueAfterTodaysTrades" ParameterName="OpeningValueAfterTodaysTrades" />
+                  <ScalarProperty Name="OpeningValue" ParameterName="OpeningValue" />
+                  <ScalarProperty Name="TodayRedemptionPnl" ParameterName="TodayRedemptionPnl" />
+                  <ScalarProperty Name="TodayReturn" ParameterName="TodayReturn" />
+                  <ScalarProperty Name="ITDReturn" ParameterName="ITDReturn" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ScalarProperty Name="ClientId" ParameterName="ClientId" />
+                  <ResultBinding Name="ClientPortfolioByClientShareClassId" ColumnName="ClientPortfolioByClientShareClassId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ClientPortfolioByClientShareClass_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="TodayPnl" ParameterName="TodayPnl" Version="Current" />
+                  <ScalarProperty Name="OpeningValueAfterTodaysTrades" ParameterName="OpeningValueAfterTodaysTrades" Version="Current" />
+                  <ScalarProperty Name="OpeningValue" ParameterName="OpeningValue" Version="Current" />
+                  <ScalarProperty Name="TodayRedemptionPnl" ParameterName="TodayRedemptionPnl" Version="Current" />
+                  <ScalarProperty Name="TodayReturn" ParameterName="TodayReturn" Version="Current" />
+                  <ScalarProperty Name="ITDReturn" ParameterName="ITDReturn" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="ClientId" ParameterName="ClientId" Version="Current" />
+                  <ScalarProperty Name="ClientPortfolioByClientShareClassId" ParameterName="ClientPortfolioByClientShareClassId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ClientPortfolioByClientShareClass_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ClientPortfolioByClientShareClassId" ParameterName="ClientPortfolioByClientShareClassId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -20283,7 +20574,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="46">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="53">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -26003,6 +26294,11 @@
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndustryRelativeIndexIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__FXRat__7213CCE8" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Index__2FB5372B" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass" Width="2.125" PointX="12" PointY="153" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassClientIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassFundIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassId" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
