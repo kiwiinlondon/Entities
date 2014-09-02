@@ -70,6 +70,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodayPnl { get; set; }
     	[DataMember]
         public Nullable<int> ClientPortfolioByClientShareClassId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayReturn { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDReturn { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
