@@ -8,8 +8,6 @@ namespace Odey.Framework.Keeley.Entities
 {
     
     public partial class ClientPortfolio : IClientPortfolio
-    {
-        
-
+    {       
     }
 }
