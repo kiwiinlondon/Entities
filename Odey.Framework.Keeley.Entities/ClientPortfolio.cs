@@ -63,17 +63,17 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal SubscriptionRedemptionValue { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayRedemptionPnl { get; set; }
+        public decimal TodayRedemptionPnl { get; set; }
     	[DataMember]
-        public Nullable<decimal> OpeningValueAfterTodaysTrades { get; set; }
+        public decimal OpeningValueAfterTodaysTrades { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayPnl { get; set; }
+        public decimal TodayPnl { get; set; }
     	[DataMember]
-        public Nullable<int> ClientPortfolioByClientShareClassId { get; set; }
+        public int ClientPortfolioByClientShareClassId { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayReturn { get; set; }
+        public decimal TodayReturn { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDReturn { get; set; }
+        public decimal ITDReturn { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }

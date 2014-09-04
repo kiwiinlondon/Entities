@@ -7,7 +7,7 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities
 {
     
-    public partial class ClientPortfolio //: IClientPortfolio
+    public partial class ClientPortfolio : IClientPortfolio
     {
         
 
