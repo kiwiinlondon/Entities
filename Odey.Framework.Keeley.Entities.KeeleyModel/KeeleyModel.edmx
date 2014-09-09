@@ -207,6 +207,7 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Unconfirmed" Type="bit" Nullable="false" />
+          <Property Name="SalesPersonId" Type="int" />
         </EntityType>
         <EntityType Name="ClientAccount">
           <Key>
@@ -226,6 +227,7 @@
           <Property Name="StaffId" Type="int" />
           <Property Name="FundId" Type="int" />
           <Property Name="ManualUpdate" Type="bit" Nullable="false" />
+          <Property Name="ClientHasChanged" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientPortfolio">
           <Key>
@@ -2322,6 +2324,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="ClientPortfolio">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSalesPersonIdFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="Client" Type="Self.Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Client">
+              <PropertyRef Name="SalesPersonId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5614,6 +5628,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Name" Type="varchar" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="Unconfirmed" Type="bit" Mode="In" />
+          <Parameter Name="SalesPersonId" Type="int" Mode="In" />
         </Function>
         <Function Name="Client_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientId" Type="int" Mode="In" />
@@ -5623,6 +5638,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="Unconfirmed" Type="bit" Mode="In" />
+          <Parameter Name="SalesPersonId" Type="int" Mode="In" />
         </Function>
         <Function Name="ClientAccount_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
@@ -5641,6 +5657,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="StaffId" Type="int" Mode="In" />
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="ManualUpdate" Type="bit" Mode="In" />
+          <Parameter Name="ClientHasChanged" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientAccount_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
@@ -5656,6 +5673,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="StaffId" Type="int" Mode="In" />
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="ManualUpdate" Type="bit" Mode="In" />
+          <Parameter Name="ClientHasChanged" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
@@ -8145,6 +8163,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientPortfolio" EntitySet="ClientPortfolio" />
           </AssociationSet>
+          <AssociationSet Name="ClientSalesPersonIdFK" Association="Self.ClientSalesPersonIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Client" EntitySet="Client" />
+          </AssociationSet>
           <AssociationSet Name="ClientSubAccountAdministratorMappingClientAccountIdFK" Association="Self.ClientSubAccountAdministratorMappingClientAccountIdFK">
             <End Role="ClientAccount" EntitySet="ClientAccount" />
             <End Role="ClientSubAccountAdministratorMapping" EntitySet="ClientSubAccountAdministratorMapping" />
@@ -10572,6 +10594,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ClientPortfolioByClientShareClassId" Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassId">
             <End Role="ClientPortfolioByClientShareClass" EntitySet="ClientPortfolioByClientShareClass" />
             <End Role="ClientPortfolio" EntitySet="ClientPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="ClientSalesPersonIdFK" Association="Odey.Framework.Keeley.Entities.ClientSalesPersonIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Client" EntitySet="Clients" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -14919,6 +14945,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" Type="Binary" />
           <NavigationProperty Name="ClientAccounts" Relationship="Odey.Framework.Keeley.Entities.ClientAccountClientIDFK" FromRole="Client" ToRole="ClientAccount" />
           <Property Name="Unconfirmed" Nullable="false" Type="Boolean" />
+          <Property Name="SalesPersonId" Type="Int32" />
         </EntityType>
         <EntityType Name="ClientAccount">
           <Key>
@@ -14942,6 +14969,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="FundId" />
           <NavigationProperty Name="SubAccounts" Relationship="Odey.Framework.Keeley.Entities.FK__ClientAcc__Paren__6E7AB091" FromRole="ClientAccount" ToRole="ClientAccount1" />
           <Property Type="Boolean" Name="ManualUpdate" Nullable="false" />
+          <Property Name="ClientHasChanged" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="ClientTrade">
           <Key>
@@ -16081,6 +16109,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="ClientPortfolio">
               <PropertyRef Name="ClientPortfolioByClientShareClassId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientSalesPersonIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Client" Role="Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Client">
+              <PropertyRef Name="SalesPersonId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -19719,6 +19759,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Client">
               <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="SalesPersonId" ColumnName="SalesPersonId" />
                 <ScalarProperty Name="Unconfirmed" ColumnName="Unconfirmed" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -19732,6 +19773,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Client">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Client_Insert">
+                  <ScalarProperty Name="SalesPersonId" ParameterName="SalesPersonId" />
                   <ScalarProperty Name="Unconfirmed" ParameterName="Unconfirmed" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Name" ParameterName="Name" />
@@ -19742,6 +19784,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Client_Update">
+                  <ScalarProperty Name="SalesPersonId" ParameterName="SalesPersonId" Version="Current" />
                   <ScalarProperty Name="Unconfirmed" ParameterName="Unconfirmed" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
@@ -19763,6 +19806,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="ClientAccounts">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientAccount">
               <MappingFragment StoreEntitySet="ClientAccount">
+                <ScalarProperty Name="ClientHasChanged" ColumnName="ClientHasChanged" />
                 <ScalarProperty Name="ManualUpdate" ColumnName="ManualUpdate" />
                 <ScalarProperty Name="FundId" ColumnName="FundId" />
                 <ScalarProperty Name="StaffId" ColumnName="StaffId" />
@@ -19782,6 +19826,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientAccount">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientAccount_Insert">
+                  <ScalarProperty Name="ClientHasChanged" ParameterName="ClientHasChanged" />
                   <ScalarProperty Name="ManualUpdate" ParameterName="ManualUpdate" />
                   <ScalarProperty Name="FundId" ParameterName="FundId" />
                   <ScalarProperty Name="StaffId" ParameterName="StaffId" />
@@ -19798,6 +19843,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientAccount_Update">
+                  <ScalarProperty Name="ClientHasChanged" ParameterName="ClientHasChanged" Version="Current" />
                   <ScalarProperty Name="ManualUpdate" ParameterName="ManualUpdate" Version="Current" />
                   <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
                   <ScalarProperty Name="StaffId" ParameterName="StaffId" Version="Current" />
@@ -20587,7 +20633,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="10">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -26224,7 +26270,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25.75390375" PointY="23.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Administrator" Width="1.5" PointX="4.875" PointY="9.75" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" PointX="1.125" PointY="10.5" Width="1.5" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" PointX="1.25" PointY="10.375" Width="1.5" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientAccount" Width="1.5" PointX="8.625" PointY="55.375" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientTrade" Width="1.5" PointX="11.25" PointY="54.625" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AdministratorUserIDFK" />
@@ -26307,11 +26353,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndustryRelativeIndexIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__FXRat__7213CCE8" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Index__2FB5372B" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass" Width="2.125" PointX="12" PointY="153" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClass" Width="2.125" PointX="16.75" PointY="69.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassClientIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassFundIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassId" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSalesPersonIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

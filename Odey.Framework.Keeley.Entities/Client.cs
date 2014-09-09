@@ -38,6 +38,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public bool Unconfirmed { get; set; }
+    	[DataMember]
+        public Nullable<int> SalesPersonId { get; set; }
     
         [DataMember]
         public virtual List<ClientAccount> ClientAccounts { get; set; }
