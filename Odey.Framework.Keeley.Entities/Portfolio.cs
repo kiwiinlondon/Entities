@@ -140,6 +140,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> IndexRatio { get; set; }
     	[DataMember]
         public Nullable<int> IndexRatioID { get; set; }
+    	[DataMember]
+        public decimal DisclosedNetPosition { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
