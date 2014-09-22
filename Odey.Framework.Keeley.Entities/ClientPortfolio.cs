@@ -74,6 +74,16 @@ namespace Odey.Framework.Keeley.Entities
         public decimal TodayReturn { get; set; }
     	[DataMember]
         public decimal ITDReturn { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayRedemptionValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayRedemptionQuantity { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodaySubscriptionValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodaySubscriptionQuantity { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValueOfTodaysSubscriptionRedeemed { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
