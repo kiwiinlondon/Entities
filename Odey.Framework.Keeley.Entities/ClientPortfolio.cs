@@ -84,6 +84,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodaySubscriptionQuantity { get; set; }
     	[DataMember]
         public Nullable<decimal> ValueOfTodaysSubscriptionRedeemed { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> FirstNavDate { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
