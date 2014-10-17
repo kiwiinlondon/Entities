@@ -20,6 +20,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FundValuation=6,
         [EnumMember]
-        Options = 10
+        Options = 10,
+        [EnumMember]
+        AustralianFutures = 12,
     }
 }
