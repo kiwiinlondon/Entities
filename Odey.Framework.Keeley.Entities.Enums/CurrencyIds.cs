@@ -18,7 +18,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         NOK = 2544,
         [EnumMember]
-        CHF = 2539
+        CHF = 2539,
+        [EnumMember]
+        AUD = 2537,
     }
 }
 
