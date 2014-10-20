@@ -10,6 +10,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Unknown = 3762,
         [EnumMember]
-        LondonStockExchange = 3612
+        LondonStockExchange = 3612,
+        [EnumMember]
+        SydneyFuturesExchange = 6785,
+
     }
 }
