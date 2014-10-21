@@ -94,6 +94,10 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ITDSubscriptionCost { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayRedemptionCost { get; set; }
+    	[DataMember]
+        public decimal SumITDSubscriptionCost { get; set; }
+    	[DataMember]
+        public int DaysSinceInception { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
