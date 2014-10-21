@@ -46,7 +46,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         BBVolumeAverage30DValue = 11,
         
         [EnumMember]
-        VaR = 12,
+        VaR1Day = 12,
         
         /// <summary>
         /// currently 2 year daily
@@ -72,6 +72,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         LiquidityHaircutPercentNAVFirm = 18,
+
+        [EnumMember]
+        VaR20Day = 19,
     }
 }
 
