@@ -244,6 +244,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         NAVER_GBP_R = 6136,
         [EnumMember]
         NAVER_USD_I = 6137,
+        [EnumMember]
+        NAVER_EUR_R = 6821,
+
+        
         
         [EnumMember]
         SWAN = 6184,

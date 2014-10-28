@@ -28,6 +28,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ManagedDailyDealing = 11,
         [EnumMember]
-        Virtual=12
+        Virtual=12,
+        [EnumMember]
+        WealthSegregated=13,
     }
 }
