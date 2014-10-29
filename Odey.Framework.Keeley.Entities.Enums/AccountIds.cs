@@ -11,5 +11,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
     {
         [EnumMember]
         VT = 108,
+
+        [EnumMember]
+        WSEG = 134,
     }
 }
