@@ -329,6 +329,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         CAMO = 6684,
+
+        [EnumMember]
+        WSEG = 6823,
         
     }
 }
