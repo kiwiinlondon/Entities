@@ -14,5 +14,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         WSEG = 134,
+
+        [EnumMember]
+        ITR = 135,
     }
 }

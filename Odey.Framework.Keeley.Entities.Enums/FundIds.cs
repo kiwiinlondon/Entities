@@ -332,6 +332,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         WSEG = 6823,
+
+        [EnumMember]
+        ITR = 6825,
+        [EnumMember]
+        ITR_GBP_MW = 6829,
+        [EnumMember]
+        ITR_USD_MW = 6827,
         
     }
 }
