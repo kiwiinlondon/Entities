@@ -220,6 +220,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ATLAS_GBP_I = 6654,
         [EnumMember]
         ATLAS_USD_I = 6824,
+        [EnumMember]
+        ATLAS_EUR_I = 6837,
         
         [EnumMember]
         ORION = 6121,
