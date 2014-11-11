@@ -34,6 +34,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         
         [EnumMember]
         GIANO94 = 4849,
+        [EnumMember]
+        GIANO94_GBP_R = 6807,
         
         [EnumMember]
         OUAR = 3609,
