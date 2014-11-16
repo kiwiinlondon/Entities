@@ -68,6 +68,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> RelatedTradeId { get; set; }
     	[DataMember]
         public Nullable<decimal> TransferPriceOverride { get; set; }
+    	[DataMember]
+        public decimal BalanceEndOfDay { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
