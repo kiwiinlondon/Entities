@@ -98,6 +98,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal SumITDSubscriptionCost { get; set; }
     	[DataMember]
         public int DaysSinceInception { get; set; }
+    	[DataMember]
+        public bool isFlat { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
