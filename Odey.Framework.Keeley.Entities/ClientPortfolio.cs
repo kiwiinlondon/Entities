@@ -100,6 +100,8 @@ namespace Odey.Framework.Keeley.Entities
         public int DaysSinceInception { get; set; }
     	[DataMember]
         public bool isFlat { get; set; }
+    	[DataMember]
+        public System.DateTime FirstNavDateCurrent { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
