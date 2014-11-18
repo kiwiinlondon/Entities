@@ -1304,6 +1304,32 @@
           <Property Name="TodayManagementFee" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ValueIsForReferenceDate" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="PADealing">
+          <Key>
+            <PropertyRef Name="PADealingID" />
+          </Key>
+          <Property Name="PADealingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RequestingUserID" Type="int" Nullable="false" />
+          <Property Name="InstrumentMarketID" Type="int" Nullable="false" />
+          <Property Name="IsBuy" Type="bit" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="RequestTimeStamp" Type="datetime" Nullable="false" />
+          <Property Name="RequestNote" Type="varchar" MaxLength="150" />
+          <Property Name="IsAutomaticRejection" Type="bit" />
+          <Property Name="IsComplianceApproved" Type="bit" />
+          <Property Name="ComplianceTimeStamp" Type="datetime" />
+          <Property Name="ComplianceRejectionReasonID" Type="int" />
+          <Property Name="ComplianceNote" Type="varchar" MaxLength="150" />
+          <Property Name="IsTraderApproved" Type="bit" />
+          <Property Name="TraderTimeStamp" Type="datetime" />
+          <Property Name="TraderRejectionReasonID" Type="int" />
+          <Property Name="TraderNote" Type="varchar" MaxLength="150" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="ComplianceUserId" Type="int" />
+          <Property Name="TraderUserId" Type="int" />
+        </EntityType>
         <EntityType Name="Periodicity">
           <Key>
             <PropertyRef Name="PeriodicityId" />
@@ -4707,6 +4733,66 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="PADealingComplianceUserID">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="PADealing" Type="Self.PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="ComplianceUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingInstrumentMarketIDFK">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="PADealing" Type="Self.PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingRequestingUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="PADealing" Type="Self.PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="RequestingUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingTraderUserID">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="PADealing" Type="Self.PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="TraderUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="PADealing" Type="Self.PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PeriodicityIntervalPeriodicityId">
           <End Role="Periodicity" Type="Self.Periodicity" Multiplicity="1" />
           <End Role="PeriodicityInterval" Type="Self.PeriodicityInterval" Multiplicity="*" />
@@ -7241,6 +7327,53 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TodayManagementFee" Type="numeric" Mode="In" />
           <Parameter Name="ValueIsForReferenceDate" Type="bit" Mode="In" />
         </Function>
+        <Function Name="PADealing_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PADealingID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PADealing_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RequestingUserID" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
+          <Parameter Name="IsBuy" Type="bit" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="RequestTimeStamp" Type="datetime" Mode="In" />
+          <Parameter Name="RequestNote" Type="varchar" Mode="In" />
+          <Parameter Name="IsAutomaticRejection" Type="bit" Mode="In" />
+          <Parameter Name="IsComplianceApproved" Type="bit" Mode="In" />
+          <Parameter Name="ComplianceTimeStamp" Type="datetime" Mode="In" />
+          <Parameter Name="ComplianceRejectionReasonID" Type="int" Mode="In" />
+          <Parameter Name="ComplianceNote" Type="varchar" Mode="In" />
+          <Parameter Name="IsTraderApproved" Type="bit" Mode="In" />
+          <Parameter Name="TraderTimeStamp" Type="datetime" Mode="In" />
+          <Parameter Name="TraderRejectionReasonID" Type="int" Mode="In" />
+          <Parameter Name="TraderNote" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="ComplianceUserId" Type="int" Mode="In" />
+          <Parameter Name="TraderUserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PADealing_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PADealingID" Type="int" Mode="In" />
+          <Parameter Name="RequestingUserID" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
+          <Parameter Name="IsBuy" Type="bit" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="RequestTimeStamp" Type="datetime" Mode="In" />
+          <Parameter Name="RequestNote" Type="varchar" Mode="In" />
+          <Parameter Name="IsAutomaticRejection" Type="bit" Mode="In" />
+          <Parameter Name="IsComplianceApproved" Type="bit" Mode="In" />
+          <Parameter Name="ComplianceTimeStamp" Type="datetime" Mode="In" />
+          <Parameter Name="ComplianceRejectionReasonID" Type="int" Mode="In" />
+          <Parameter Name="ComplianceNote" Type="varchar" Mode="In" />
+          <Parameter Name="IsTraderApproved" Type="bit" Mode="In" />
+          <Parameter Name="TraderTimeStamp" Type="datetime" Mode="In" />
+          <Parameter Name="TraderRejectionReasonID" Type="int" Mode="In" />
+          <Parameter Name="TraderNote" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="ComplianceUserId" Type="int" Mode="In" />
+          <Parameter Name="TraderUserId" Type="int" Mode="In" />
+        </Function>
         <Function Name="Portfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -7952,6 +8085,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="Market" EntityType="Self.Market" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MatchedStatus" EntityType="Self.MatchedStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OfficialNetAssetValue" EntityType="Self.OfficialNetAssetValue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PADealing" EntityType="Self.PADealing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Periodicity" EntityType="Self.Periodicity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PeriodicityInterval" EntityType="Self.PeriodicityInterval" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Portfolio" EntityType="Self.Portfolio" Schema="dbo" store:Type="Tables" />
@@ -8998,6 +9132,26 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="OfficialNetAssetValueUserId" Association="Self.OfficialNetAssetValueUserId">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="OfficialNetAssetValue" EntitySet="OfficialNetAssetValue" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingComplianceUserID" Association="Self.PADealingComplianceUserID">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="PADealing" EntitySet="PADealing" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingInstrumentMarketIDFK" Association="Self.PADealingInstrumentMarketIDFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="PADealing" EntitySet="PADealing" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingRequestingUserIDFK" Association="Self.PADealingRequestingUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="PADealing" EntitySet="PADealing" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingTraderUserID" Association="Self.PADealingTraderUserID">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="PADealing" EntitySet="PADealing" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingUpdateUserIDFK" Association="Self.PADealingUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="PADealing" EntitySet="PADealing" />
           </AssociationSet>
           <AssociationSet Name="PeriodicityIntervalPeriodicityId" Association="Self.PeriodicityIntervalPeriodicityId">
             <End Role="Periodicity" EntitySet="Periodicity" />
@@ -10647,6 +10801,27 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="Client" EntitySet="Clients" />
           </AssociationSet>
+          <EntitySet Name="PADealings" EntityType="Odey.Framework.Keeley.Entities.PADealing" />
+          <AssociationSet Name="PADealingComplianceUserID" Association="Odey.Framework.Keeley.Entities.PADealingComplianceUserID">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="PADealing" EntitySet="PADealings" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingRequestingUserIDFK" Association="Odey.Framework.Keeley.Entities.PADealingRequestingUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="PADealing" EntitySet="PADealings" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingTraderUserID" Association="Odey.Framework.Keeley.Entities.PADealingTraderUserID">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="PADealing" EntitySet="PADealings" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.PADealingUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="PADealing" EntitySet="PADealings" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingInstrumentMarketIDFK" Association="Odey.Framework.Keeley.Entities.PADealingInstrumentMarketIDFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="PADealing" EntitySet="PADealings" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -10660,7 +10835,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />          
+          <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -16188,6 +16363,96 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PADealing">
+          <Key>
+            <PropertyRef Name="PADealingID" />
+          </Key>
+          <Property Name="PADealingID" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="RequestingUserID" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentMarketID" Type="Int32" Nullable="false" />
+          <Property Name="IsBuy" Type="Boolean" Nullable="false" />
+          <Property Name="Quantity" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="RequestTimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RequestNote" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="IsAutomaticRejection" Type="Boolean" />
+          <Property Name="IsComplianceApproved" Type="Boolean" />
+          <Property Name="ComplianceTimeStamp" Type="DateTime" Precision="3" />
+          <Property Name="ComplianceRejectionReasonID" Type="Int32" />
+          <Property Name="ComplianceNote" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="IsTraderApproved" Type="Boolean" />
+          <Property Name="TraderTimeStamp" Type="DateTime" Precision="3" />
+          <Property Name="TraderRejectionReasonID" Type="Int32" />
+          <Property Name="TraderNote" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ComplianceUserId" Type="Int32" />
+          <Property Name="TraderUserId" Type="Int32" />
+          <NavigationProperty Name="ComplianceUser" Relationship="Odey.Framework.Keeley.Entities.PADealingComplianceUserID" FromRole="PADealing" ToRole="ApplicationUser" />
+          <NavigationProperty Name="RequestingUser" Relationship="Odey.Framework.Keeley.Entities.PADealingRequestingUserIDFK" FromRole="PADealing" ToRole="ApplicationUser" />
+          <NavigationProperty Name="TraderUser" Relationship="Odey.Framework.Keeley.Entities.PADealingTraderUserID" FromRole="PADealing" ToRole="ApplicationUser" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.PADealingInstrumentMarketIDFK" FromRole="PADealing" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="PADealingComplianceUserID">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.PADealing" Role="PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="ComplianceUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingRequestingUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.PADealing" Role="PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="RequestingUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingTraderUserID">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.PADealing" Role="PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="TraderUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.PADealing" Role="PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingInstrumentMarketIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.PADealing" Role="PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20723,6 +20988,89 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PADealings">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealing">
+              <MappingFragment StoreEntitySet="PADealing">
+                <ScalarProperty Name="TraderUserId" ColumnName="TraderUserId" />
+                <ScalarProperty Name="ComplianceUserId" ColumnName="ComplianceUserId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="TraderNote" ColumnName="TraderNote" />
+                <ScalarProperty Name="TraderRejectionReasonID" ColumnName="TraderRejectionReasonID" />
+                <ScalarProperty Name="TraderTimeStamp" ColumnName="TraderTimeStamp" />
+                <ScalarProperty Name="IsTraderApproved" ColumnName="IsTraderApproved" />
+                <ScalarProperty Name="ComplianceNote" ColumnName="ComplianceNote" />
+                <ScalarProperty Name="ComplianceRejectionReasonID" ColumnName="ComplianceRejectionReasonID" />
+                <ScalarProperty Name="ComplianceTimeStamp" ColumnName="ComplianceTimeStamp" />
+                <ScalarProperty Name="IsComplianceApproved" ColumnName="IsComplianceApproved" />
+                <ScalarProperty Name="IsAutomaticRejection" ColumnName="IsAutomaticRejection" />
+                <ScalarProperty Name="RequestNote" ColumnName="RequestNote" />
+                <ScalarProperty Name="RequestTimeStamp" ColumnName="RequestTimeStamp" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="IsBuy" ColumnName="IsBuy" />
+                <ScalarProperty Name="InstrumentMarketID" ColumnName="InstrumentMarketID" />
+                <ScalarProperty Name="RequestingUserID" ColumnName="RequestingUserID" />
+                <ScalarProperty Name="PADealingID" ColumnName="PADealingID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealing">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.PADealing_Insert">
+                  <ScalarProperty Name="TraderUserId" ParameterName="TraderUserId" />
+                  <ScalarProperty Name="ComplianceUserId" ParameterName="ComplianceUserId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="TraderNote" ParameterName="TraderNote" />
+                  <ScalarProperty Name="TraderRejectionReasonID" ParameterName="TraderRejectionReasonID" />
+                  <ScalarProperty Name="TraderTimeStamp" ParameterName="TraderTimeStamp" />
+                  <ScalarProperty Name="IsTraderApproved" ParameterName="IsTraderApproved" />
+                  <ScalarProperty Name="ComplianceNote" ParameterName="ComplianceNote" />
+                  <ScalarProperty Name="ComplianceRejectionReasonID" ParameterName="ComplianceRejectionReasonID" />
+                  <ScalarProperty Name="ComplianceTimeStamp" ParameterName="ComplianceTimeStamp" />
+                  <ScalarProperty Name="IsComplianceApproved" ParameterName="IsComplianceApproved" />
+                  <ScalarProperty Name="IsAutomaticRejection" ParameterName="IsAutomaticRejection" />
+                  <ScalarProperty Name="RequestNote" ParameterName="RequestNote" />
+                  <ScalarProperty Name="RequestTimeStamp" ParameterName="RequestTimeStamp" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" />
+                  <ScalarProperty Name="IsBuy" ParameterName="IsBuy" />
+                  <ScalarProperty Name="InstrumentMarketID" ParameterName="InstrumentMarketID" />
+                  <ScalarProperty Name="RequestingUserID" ParameterName="RequestingUserID" />
+                  <ResultBinding Name="PADealingID" ColumnName="PADealingID" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.PADealing_Update">
+                  <ScalarProperty Name="TraderUserId" ParameterName="TraderUserId" Version="Current" />
+                  <ScalarProperty Name="ComplianceUserId" ParameterName="ComplianceUserId" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="TraderNote" ParameterName="TraderNote" Version="Current" />
+                  <ScalarProperty Name="TraderRejectionReasonID" ParameterName="TraderRejectionReasonID" Version="Current" />
+                  <ScalarProperty Name="TraderTimeStamp" ParameterName="TraderTimeStamp" Version="Current" />
+                  <ScalarProperty Name="IsTraderApproved" ParameterName="IsTraderApproved" Version="Current" />
+                  <ScalarProperty Name="ComplianceNote" ParameterName="ComplianceNote" Version="Current" />
+                  <ScalarProperty Name="ComplianceRejectionReasonID" ParameterName="ComplianceRejectionReasonID" Version="Current" />
+                  <ScalarProperty Name="ComplianceTimeStamp" ParameterName="ComplianceTimeStamp" Version="Current" />
+                  <ScalarProperty Name="IsComplianceApproved" ParameterName="IsComplianceApproved" Version="Current" />
+                  <ScalarProperty Name="IsAutomaticRejection" ParameterName="IsAutomaticRejection" Version="Current" />
+                  <ScalarProperty Name="RequestNote" ParameterName="RequestNote" Version="Current" />
+                  <ScalarProperty Name="RequestTimeStamp" ParameterName="RequestTimeStamp" Version="Current" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" Version="Current" />
+                  <ScalarProperty Name="IsBuy" ParameterName="IsBuy" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketID" ParameterName="InstrumentMarketID" Version="Current" />
+                  <ScalarProperty Name="RequestingUserID" ParameterName="RequestingUserID" Version="Current" />
+                  <ScalarProperty Name="PADealingID" ParameterName="PADealingID" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.PADealing_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="PADealingID" ParameterName="PADealingID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -20745,7 +21093,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="54">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="121">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -26471,6 +26819,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassFundIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassId" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSalesPersonIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PADealing" Width="1.5" PointX="30.375" PointY="0.875" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingComplianceUserID" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingRequestingUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingTraderUserID" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingInstrumentMarketIDFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
