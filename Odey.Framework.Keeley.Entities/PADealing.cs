@@ -19,17 +19,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int PADealingID { get; set; }
     	[DataMember]
-        public int RequestingUserID { get; set; }
-    	[DataMember]
         public int InstrumentMarketID { get; set; }
     	[DataMember]
-        public bool IsBuy { get; set; }
-    	[DataMember]
-        public decimal Quantity { get; set; }
-    	[DataMember]
         public System.DateTime RequestTimeStamp { get; set; }
-    	[DataMember]
-        public string RequestNote { get; set; }
     	[DataMember]
         public Nullable<bool> IsAutomaticRejection { get; set; }
     	[DataMember]
@@ -39,15 +31,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> ComplianceRejectionReasonID { get; set; }
     	[DataMember]
-        public string ComplianceNote { get; set; }
-    	[DataMember]
         public Nullable<bool> IsTraderApproved { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> TraderTimeStamp { get; set; }
     	[DataMember]
         public Nullable<int> TraderRejectionReasonID { get; set; }
-    	[DataMember]
-        public string TraderNote { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -55,17 +43,37 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<int> ComplianceUserId { get; set; }
+        public int RequestUserID { get; set; }
     	[DataMember]
-        public Nullable<int> TraderUserId { get; set; }
+        public int PADealingAccountID { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RequestQuantity { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RequestValue { get; set; }
+    	[DataMember]
+        public string RequestNotes { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ActualQuantity { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsContractRecieved { get; set; }
+    	[DataMember]
+        public Nullable<int> ComplianceUserID { get; set; }
+    	[DataMember]
+        public string ComplianceNotes { get; set; }
+    	[DataMember]
+        public int TraderID { get; set; }
+    	[DataMember]
+        public string TraderNotes { get; set; }
     
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual ApplicationUser ComplianceUser { get; set; }
         [DataMember]
-        public virtual ApplicationUser RequestingUser { get; set; }
+        public virtual ApplicationUser RequestUser { get; set; }
         [DataMember]
         public virtual ApplicationUser TraderUser { get; set; }
         [DataMember]
-        public virtual InstrumentMarket InstrumentMarket { get; set; }
+        public virtual PADealingAccount PADealingAccount { get; set; }
     }
 }
