@@ -1325,7 +1325,7 @@
           <Property Name="ComplianceRejectionReasonID" Type="int" />
           <Property Name="ComplianceNotes" Type="varchar" MaxLength="150" />
           <Property Name="IsTraderApproved" Type="bit" />
-          <Property Name="TraderID" Type="int" Nullable="false" />
+          <Property Name="TraderUserId" Type="int" Nullable="false" />
           <Property Name="TraderTimeStamp" Type="datetime" />
           <Property Name="TraderRejectionReasonID" Type="int" />
           <Property Name="TraderNotes" Type="varchar" MaxLength="150" />
@@ -1343,6 +1343,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="PADealingAccountUserID" Type="int" />
         </EntityType>
         <EntityType Name="Periodicity">
           <Key>
@@ -4759,6 +4760,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="PADealingAccountUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="PADealingAccount" Type="Self.PADealingAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealingAccount">
+              <PropertyRef Name="PADealingAccountUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PADealingComplianceUserIDFK">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
           <End Role="PADealing" Type="Self.PADealing" Multiplicity="*" />
@@ -4803,7 +4816,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="PADealing">
-              <PropertyRef Name="TraderID" />
+              <PropertyRef Name="TraderUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9199,6 +9212,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="PADealingAccount" EntitySet="PADealingAccount" />
             <End Role="PADealing" EntitySet="PADealing" />
           </AssociationSet>
+          <AssociationSet Name="PADealingAccountUserIDFK" Association="Self.PADealingAccountUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="PADealingAccount" EntitySet="PADealingAccount" />
+          </AssociationSet>
           <AssociationSet Name="PADealingComplianceUserIDFK" Association="Self.PADealingComplianceUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PADealing" EntitySet="PADealing" />
@@ -10889,16 +10906,20 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="PADealing" EntitySet="PADealings" />
           </AssociationSet>
-          <AssociationSet Name="PADealingTraderUserIDFK" Association="Odey.Framework.Keeley.Entities.PADealingTraderUserIDFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="PADealing" EntitySet="PADealings" />
-          </AssociationSet>
           <AssociationSet Name="PAtDealingAccountUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.PAtDealingAccountUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="PADealingAccount" EntitySet="PADealingAccounts" />
           </AssociationSet>
           <AssociationSet Name="PADealingAccountIDFK" Association="Odey.Framework.Keeley.Entities.PADealingAccountIDFK">
             <End Role="PADealingAccount" EntitySet="PADealingAccounts" />
+            <End Role="PADealing" EntitySet="PADealings" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingAccountUserIDFK" Association="Odey.Framework.Keeley.Entities.PADealingAccountUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="PADealingAccount" EntitySet="PADealingAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingTraderUserIDFK1" Association="Odey.Framework.Keeley.Entities.PADealingTraderUserIDFK1">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="PADealing" EntitySet="PADealings" />
           </AssociationSet>
           </EntityContainer>
@@ -16469,12 +16490,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="IsContractRecieved" Type="Boolean" />
           <Property Name="ComplianceUserID" Type="Int32" />
           <Property Name="ComplianceNotes" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="TraderID" Type="Int32" Nullable="false" />
           <Property Name="TraderNotes" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ComplianceUser" Relationship="Odey.Framework.Keeley.Entities.PADealingComplianceUserIDFK" FromRole="PADealing" ToRole="ApplicationUser" />
           <NavigationProperty Name="RequestUser" Relationship="Odey.Framework.Keeley.Entities.PADealingRequestingUserIDFK1" FromRole="PADealing" ToRole="ApplicationUser" />
-          <NavigationProperty Name="TraderUser" Relationship="Odey.Framework.Keeley.Entities.PADealingTraderUserIDFK" FromRole="PADealing" ToRole="ApplicationUser" />
           <NavigationProperty Name="PADealingAccount" Relationship="Odey.Framework.Keeley.Entities.PADealingAccountIDFK" FromRole="PADealing" ToRole="PADealingAccount" />
+          <Property Name="TraderUserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TraderUser" Relationship="Odey.Framework.Keeley.Entities.PADealingTraderUserIDFK1" FromRole="PADealing" ToRole="ApplicationUser" />
         </EntityType>
         <Association Name="PADealingUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -16510,6 +16531,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="PADealingAccountUserID" Type="Int32" />
+          <NavigationProperty Name="PADealingAccountUser" Relationship="Odey.Framework.Keeley.Entities.PADealingAccountUserIDFK" FromRole="PADealingAccount" ToRole="ApplicationUser" />
         </EntityType>
         <Association Name="PADealingComplianceUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
@@ -16535,18 +16558,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="PADealingTraderUserIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.PADealing" Role="PADealing" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PADealing">
-              <PropertyRef Name="TraderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="PAtDealingAccountUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.PADealingAccount" Role="PADealingAccount" Multiplicity="*" />
@@ -16568,6 +16579,30 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="PADealing">
               <PropertyRef Name="PADealingAccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingAccountUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.PADealingAccount" Role="PADealingAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealingAccount">
+              <PropertyRef Name="PADealingAccountUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingTraderUserIDFK1">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.PADealing" Role="PADealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PADealing">
+              <PropertyRef Name="TraderUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -21109,8 +21144,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PADealings">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealing">
               <MappingFragment StoreEntitySet="PADealing">
+                <ScalarProperty Name="TraderUserId" ColumnName="TraderUserId" />
                 <ScalarProperty Name="TraderNotes" ColumnName="TraderNotes" />
-                <ScalarProperty Name="TraderID" ColumnName="TraderID" />
                 <ScalarProperty Name="ComplianceNotes" ColumnName="ComplianceNotes" />
                 <ScalarProperty Name="ComplianceUserID" ColumnName="ComplianceUserID" />
                 <ScalarProperty Name="IsContractRecieved" ColumnName="IsContractRecieved" />
@@ -21142,7 +21177,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="TraderNotes" ParameterName="TraderNotes" />
                   <ScalarProperty Name="TraderRejectionReasonID" ParameterName="TraderRejectionReasonID" />
                   <ScalarProperty Name="TraderTimeStamp" ParameterName="TraderTimeStamp" />
-                  <ScalarProperty Name="TraderID" ParameterName="TraderID" />
                   <ScalarProperty Name="IsTraderApproved" ParameterName="IsTraderApproved" />
                   <ScalarProperty Name="ComplianceNotes" ParameterName="ComplianceNotes" />
                   <ScalarProperty Name="ComplianceRejectionReasonID" ParameterName="ComplianceRejectionReasonID" />
@@ -21169,7 +21203,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="TraderNotes" ParameterName="TraderNotes" Version="Current" />
                   <ScalarProperty Name="TraderRejectionReasonID" ParameterName="TraderRejectionReasonID" Version="Current" />
                   <ScalarProperty Name="TraderTimeStamp" ParameterName="TraderTimeStamp" Version="Current" />
-                  <ScalarProperty Name="TraderID" ParameterName="TraderID" Version="Current" />
                   <ScalarProperty Name="IsTraderApproved" ParameterName="IsTraderApproved" Version="Current" />
                   <ScalarProperty Name="ComplianceNotes" ParameterName="ComplianceNotes" Version="Current" />
                   <ScalarProperty Name="ComplianceRejectionReasonID" ParameterName="ComplianceRejectionReasonID" Version="Current" />
@@ -21201,6 +21234,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PADealingAccounts">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealingAccount">
               <MappingFragment StoreEntitySet="PADealingAccount">
+                <ScalarProperty Name="PADealingAccountUserID" ColumnName="PADealingAccountUserID" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -21232,8 +21266,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="200">
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.5" Height="2.5571907552083353" IsExpanded="true" />
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="141">
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.875" PointX="8.25" PointY="18.875" Height="5.8263151041666674" IsExpanded="true" />
@@ -26958,15 +26992,20 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassFundIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientPortfolioByClientShareClassId" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSalesPersonIdFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PADealing" Width="2.5" PointX="30.375" PointY="0.875" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingUpdateUserIDFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PADealing" Width="2.5" PointX="30.375" PointY="0.5" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingUpdateUserIDFK" ManuallyRouted="false" >
+        </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingInstrumentMarketIDFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PADealingAccount" Width="1.5" PointX="2.75" PointY="60" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingComplianceUserIDFK" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingRequestingUserIDFK1" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingTraderUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingComplianceUserIDFK" ManuallyRouted="false" >
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingRequestingUserIDFK1" ManuallyRouted="false" >
+        </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PAtDealingAccountUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingAccountIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingAccountUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingTraderUserIDFK1" ManuallyRouted="false" >
+        </edmx:AssociationConnector>
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

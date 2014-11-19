@@ -61,9 +61,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public string ComplianceNotes { get; set; }
     	[DataMember]
-        public int TraderID { get; set; }
-    	[DataMember]
         public string TraderNotes { get; set; }
+    	[DataMember]
+        public int TraderUserId { get; set; }
     
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
@@ -72,8 +72,8 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual ApplicationUser RequestUser { get; set; }
         [DataMember]
-        public virtual ApplicationUser TraderUser { get; set; }
-        [DataMember]
         public virtual PADealingAccount PADealingAccount { get; set; }
+        [DataMember]
+        public virtual ApplicationUser TraderUser { get; set; }
     }
 }
