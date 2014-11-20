@@ -70,6 +70,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TransferPriceOverride { get; set; }
     	[DataMember]
         public decimal BalanceEndOfDay { get; set; }
+    	[DataMember]
+        public System.DateTime NavDate { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
