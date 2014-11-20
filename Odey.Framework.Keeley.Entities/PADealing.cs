@@ -63,7 +63,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public string TraderNotes { get; set; }
     	[DataMember]
-        public int TraderUserId { get; set; }
+        public Nullable<int> TraderUserId { get; set; }
     
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
