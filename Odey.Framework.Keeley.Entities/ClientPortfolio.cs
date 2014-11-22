@@ -102,6 +102,10 @@ namespace Odey.Framework.Keeley.Entities
         public bool isFlat { get; set; }
     	[DataMember]
         public System.DateTime FirstNavDateCurrent { get; set; }
+    	[DataMember]
+        public decimal IndexUnits { get; set; }
+    	[DataMember]
+        public decimal CostEuro { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }

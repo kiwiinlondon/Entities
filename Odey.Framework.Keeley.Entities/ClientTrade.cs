@@ -72,6 +72,10 @@ namespace Odey.Framework.Keeley.Entities
         public decimal BalanceEndOfDay { get; set; }
     	[DataMember]
         public System.DateTime NavDate { get; set; }
+    	[DataMember]
+        public decimal NetConsiderationEuro { get; set; }
+    	[DataMember]
+        public decimal IndexUnits { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
