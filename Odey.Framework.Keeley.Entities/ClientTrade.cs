@@ -76,6 +76,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal NetConsiderationEuro { get; set; }
     	[DataMember]
         public decimal IndexUnits { get; set; }
+    	[DataMember]
+        public decimal EqFactorEuro { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
