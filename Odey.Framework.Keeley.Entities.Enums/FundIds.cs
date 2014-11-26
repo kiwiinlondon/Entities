@@ -154,7 +154,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ALEGGBPSHARECLASS = 5516,
         [EnumMember]
-        ALEGGBPASHARECLASS = 5517,
+        ALEG_GBP_AD = 5517,
         [EnumMember]
         ALEGGBPDSHARECLASS = 5518,
         [EnumMember]
