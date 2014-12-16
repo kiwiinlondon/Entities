@@ -78,6 +78,20 @@ namespace Odey.Framework.Keeley.Entities
         public decimal IndexUnits { get; set; }
     	[DataMember]
         public decimal EqFactorEuro { get; set; }
+    	[DataMember]
+        public decimal NetConsiderationGBP { get; set; }
+    	[DataMember]
+        public decimal EqFactorGBP { get; set; }
+    	[DataMember]
+        public decimal NetConsiderationUSD { get; set; }
+    	[DataMember]
+        public decimal EqFactorUSD { get; set; }
+    	[DataMember]
+        public decimal CostEuro { get; set; }
+    	[DataMember]
+        public decimal CostUSD { get; set; }
+    	[DataMember]
+        public decimal CostGBP { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
