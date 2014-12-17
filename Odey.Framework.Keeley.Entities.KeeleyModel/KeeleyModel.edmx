@@ -1182,6 +1182,7 @@
           <Property Name="BloombergGlobalId" Type="varchar" MaxLength="25" />
           <Property Name="LastRepulledFromSourceDate" Type="datetime" />
           <Property Name="FactsetId" Type="varchar" MaxLength="150" />
+          <Property Name="UltimateUnderlyerPerOverlyer" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="InstrumentRelationship">
           <Key>
@@ -7115,6 +7116,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BloombergGlobalId" Type="varchar" Mode="In" />
           <Parameter Name="LastRepulledFromSourceDate" Type="datetime" Mode="In" />
           <Parameter Name="FactsetId" Type="varchar" Mode="In" />
+          <Parameter Name="UltimateUnderlyerPerOverlyer" Type="numeric" Mode="In" />
         </Function>
         <Function Name="InstrumentMarket_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
@@ -7135,6 +7137,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BloombergGlobalId" Type="varchar" Mode="In" />
           <Parameter Name="LastRepulledFromSourceDate" Type="datetime" Mode="In" />
           <Parameter Name="FactsetId" Type="varchar" Mode="In" />
+          <Parameter Name="UltimateUnderlyerPerOverlyer" Type="numeric" Mode="In" />
         </Function>
         <Function Name="InstrumentRelationship_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OverlyingInstrumentID" Type="int" Mode="In" />
@@ -13168,6 +13171,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="String" Name="FactsetId" MaxLength="150" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Index" Relationship="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" FromRole="InstrumentMarket" ToRole="Indx" />
           <NavigationProperty Name="UltimateUnderlyingInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.fkinstrumentmarketUltimateUnderlyingInstrumentMarketId" FromRole="InstrumentMarket" ToRole="InstrumentMarket1" />
+          <Property Name="UltimateUnderlyerPerOverlyer" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19036,6 +19040,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="InstrumentMarkets">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <MappingFragment StoreEntitySet="InstrumentMarket">
+                <ScalarProperty Name="UltimateUnderlyerPerOverlyer" ColumnName="UltimateUnderlyerPerOverlyer" />
                 <ScalarProperty Name="FactsetId" ColumnName="FactsetId" />
                 <ScalarProperty Name="LastRepulledFromSourceDate" ColumnName="LastRepulledFromSourceDate" />
                 <ScalarProperty Name="BloombergGlobalId" ColumnName="BloombergGlobalId" />
@@ -19060,6 +19065,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Insert">
+                  <ScalarProperty Name="UltimateUnderlyerPerOverlyer" ParameterName="UltimateUnderlyerPerOverlyer" />
                   <ScalarProperty Name="FactsetId" ParameterName="FactsetId" />
                   <ScalarProperty Name="LastRepulledFromSourceDate" ParameterName="LastRepulledFromSourceDate" />
                   <ScalarProperty Name="BloombergGlobalId" ParameterName="BloombergGlobalId" />
@@ -19081,6 +19087,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Update">
+                  <ScalarProperty Name="UltimateUnderlyerPerOverlyer" ParameterName="UltimateUnderlyerPerOverlyer" Version="Current" />
                   <ScalarProperty Name="FactsetId" ParameterName="FactsetId" Version="Current" />
                   <ScalarProperty Name="LastRepulledFromSourceDate" ParameterName="LastRepulledFromSourceDate" Version="Current" />
                   <ScalarProperty Name="BloombergGlobalId" ParameterName="BloombergGlobalId" Version="Current" />
@@ -21403,7 +21410,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="37">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="72">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />

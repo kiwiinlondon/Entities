@@ -54,6 +54,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> LastRepulledFromSourceDate { get; set; }
     	[DataMember]
         public string FactsetId { get; set; }
+    	[DataMember]
+        public decimal UltimateUnderlyerPerOverlyer { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
