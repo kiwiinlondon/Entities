@@ -14,16 +14,18 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class PADealingAccount
+    public partial class PADealingBalance
     {
     	[DataMember]
-        public int PADealingAccountID { get; set; }
+        public int PADealingBalanceID { get; set; }
     	[DataMember]
         public int UserID { get; set; }
     	[DataMember]
-        public string Name { get; set; }
+        public int InstrumentMarketID { get; set; }
     	[DataMember]
-        public string Number { get; set; }
+        public int UserAccountID { get; set; }
+    	[DataMember]
+        public decimal Quantity { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -33,5 +35,9 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual ApplicationUser ApplicationUser { get; set; }
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
+        [DataMember]
+        public virtual PADealingAccount PADealingAccount { get; set; }
     }
 }

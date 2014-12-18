@@ -9,12 +9,19 @@ namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
 
-    public enum PADealingReasons
+    public enum PADealingRejectionReasons
     {
         [Description("Restricted List")]
         [EnumMember]
         RestrictedList = 1,
 
+        [Description("Focus List")]
+        [EnumMember]
+        FocusList = 2,
+
+        [Description("Other")]
+        [EnumMember]
+        Other = 3,
         
     }
 }
