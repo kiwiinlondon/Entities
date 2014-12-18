@@ -107,9 +107,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal CostEuro { get; set; }
     	[DataMember]
-        public Nullable<decimal> CostUSD { get; set; }
+        public decimal CostUSD { get; set; }
     	[DataMember]
-        public Nullable<decimal> CostGBP { get; set; }
+        public decimal CostGBP { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
