@@ -6,6 +6,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum IndustryIds
     {
         [EnumMember]
-        GICSUnclassifiedSubIndustry = 849
+        GICSUnclassifiedSector = 846,
+
+        [EnumMember]
+        GICSUnclassifiedIndustryGroup = 847,
+
+        [EnumMember]
+        GICSUnclassifiedIndustry = 848,
+
+        [EnumMember]
+        GICSUnclassifiedSubIndustry = 849,
     }
 }
