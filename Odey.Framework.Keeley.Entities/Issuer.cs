@@ -32,6 +32,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public string FactsetId { get; set; }
+    	[DataMember]
+        public int GicsLevel3IndustryID { get; set; }
     
         [DataMember]
         public virtual LegalEntity LegalEntity { get; set; }
