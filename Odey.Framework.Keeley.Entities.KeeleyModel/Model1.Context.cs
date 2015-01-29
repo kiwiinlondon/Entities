@@ -125,14 +125,12 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<Beta> Beta { get; set; }
         public DbSet<FileToBeCollectedGroup> FileToBeCollectedGroup { get; set; }
         public DbSet<Index> Indices { get; set; }
-        public DbSet<ClientPortfolioPeriodReturn> ClientPortfolioPeriodReturns { get; set; }
         public DbSet<ClientPortfolioBridge> ClientPortfolioBridges { get; set; }
         public DbSet<HealthCheck> HealthChecks { get; set; }
         public DbSet<FundCapitalChange> FundCapitalChanges { get; set; }
         public DbSet<OfficialNetAssetValue> OfficialNetAssetValues { get; set; }
         public DbSet<ClientSubAccountAdministratorMapping> ClientSubAccountAdministratorMappings { get; set; }
         public DbSet<FocusList> FocusLists { get; set; }
-        public DbSet<ClientPortfolioByClientShareClass> ClientPortfolioByClientShareClass { get; set; }
         public DbSet<PADealing> PADealings { get; set; }
         public DbSet<PADealingAccount> PADealingAccounts { get; set; }
         public DbSet<PADealingBalance> PADealingBalances { get; set; }

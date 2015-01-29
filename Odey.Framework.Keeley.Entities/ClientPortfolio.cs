@@ -115,7 +115,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual ClientAccount ClientAccount { get; set; }
         [DataMember]
         public virtual Fund Fund { get; set; }
-        [DataMember]
-        public virtual ClientPortfolioByClientShareClass ClientPortfolioByClientShareClass { get; set; }
     }
 }
