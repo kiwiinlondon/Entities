@@ -61,20 +61,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ManagerValue { get; set; }
     	[DataMember]
-        public decimal SubscriptionRedemptionValue { get; set; }
-    	[DataMember]
-        public decimal TodayRedemptionPnl { get; set; }
-    	[DataMember]
-        public decimal OpeningValueAfterTodaysTrades { get; set; }
-    	[DataMember]
-        public decimal TodayPnl { get; set; }
-    	[DataMember]
-        public int ClientPortfolioByClientShareClassId { get; set; }
-    	[DataMember]
-        public decimal TodayReturn { get; set; }
-    	[DataMember]
-        public decimal ITDReturn { get; set; }
-    	[DataMember]
         public Nullable<decimal> TodayRedemptionValue { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayRedemptionQuantity { get; set; }
@@ -82,8 +68,6 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodaySubscriptionValue { get; set; }
     	[DataMember]
         public Nullable<decimal> TodaySubscriptionQuantity { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ValueOfTodaysSubscriptionRedeemed { get; set; }
     	[DataMember]
         public System.DateTime FirstNavDate { get; set; }
     	[DataMember]
@@ -94,8 +78,6 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ITDSubscriptionCost { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayRedemptionCost { get; set; }
-    	[DataMember]
-        public decimal SumITDSubscriptionCost { get; set; }
     	[DataMember]
         public int DaysSinceInception { get; set; }
     	[DataMember]
