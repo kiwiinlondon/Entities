@@ -10,6 +10,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum IndexIds
     {    
         [EnumMember]
-        MSCIWorldNetTR = 9920
+        MSCIWorldNetTR = 9920,
+        [EnumMember]
+        HFRXMacroMultiStrategy = 20442
     }
 }
