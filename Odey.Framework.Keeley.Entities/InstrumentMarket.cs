@@ -56,6 +56,8 @@ namespace Odey.Framework.Keeley.Entities
         public string FactsetId { get; set; }
     	[DataMember]
         public decimal UltimateUnderlyerPerOverlyer { get; set; }
+    	[DataMember]
+        public Nullable<bool> ResolveFromExternalSource { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
