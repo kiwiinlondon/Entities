@@ -38,5 +38,7 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsCancelled { get; set; }
     	[DataMember]
         public System.DateTime InputDate { get; set; }
+    	[DataMember]
+        public System.DateTime AdministratorTradeDate { get; set; }
     }
 }
