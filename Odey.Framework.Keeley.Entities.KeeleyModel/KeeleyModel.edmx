@@ -1300,6 +1300,8 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="IsExistingHolding" Type="bit" Nullable="false" />
+          <Property Name="IsPending" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PADealingAccount">
           <Key>
@@ -1325,6 +1327,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LastPADealDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Periodicity">
           <Key>
@@ -7369,6 +7372,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TraderNotes" Type="varchar" Mode="In" />
           <Parameter Name="TraderTimeStamp" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsExistingHolding" Type="bit" Mode="In" />
+          <Parameter Name="IsPending" Type="bit" Mode="In" />
         </Function>
         <Function Name="PADealing_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PADealingID" Type="int" Mode="In" />
@@ -7393,6 +7398,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TraderTimeStamp" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsExistingHolding" Type="bit" Mode="In" />
+          <Parameter Name="IsPending" Type="bit" Mode="In" />
         </Function>
         <Function Name="PADealingAccount_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PADealingAccountID" Type="int" Mode="In" />
@@ -7424,6 +7431,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UserAccountID" Type="int" Mode="In" />
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="LastPADealDate" Type="datetime" Mode="In" />
         </Function>
         <Function Name="PADealingBalance_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PADealingBalanceID" Type="int" Mode="In" />
@@ -7433,6 +7441,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="LastPADealDate" Type="datetime" Mode="In" />
         </Function>
         <Function Name="Portfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -16336,6 +16345,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="TraderUser" Relationship="Odey.Framework.Keeley.Entities.PADealingTraderUserIDFK" FromRole="PADealing" ToRole="ApplicationUser" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.PADealingInstrumentMarketIDFK" FromRole="PADealing" ToRole="InstrumentMarket" />
           <NavigationProperty Name="PADealingAccount" Relationship="Odey.Framework.Keeley.Entities.PADealingPADealingAccountIDFK" FromRole="PADealing" ToRole="PADealingAccount" />
+          <Property Name="IsExistingHolding" Type="Boolean" Nullable="false" />
+          <Property Name="IsPending" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PADealingAccount">
           <Key>
@@ -16365,6 +16376,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.PADealingBalanceUserID" FromRole="PADealingBalance" ToRole="ApplicationUser" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.PADealingBalanceInstrumentMarketID" FromRole="PADealingBalance" ToRole="InstrumentMarket" />
           <NavigationProperty Name="PADealingAccount" Relationship="Odey.Framework.Keeley.Entities.PADealingBalanceUserAccountID" FromRole="PADealingBalance" ToRole="PADealingAccount" />
+          <Property Name="LastPADealDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <Association Name="PADealingAccountUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20945,6 +20957,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PADealings">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealing">
               <MappingFragment StoreEntitySet="PADealing">
+                <ScalarProperty Name="IsPending" ColumnName="IsPending" />
+                <ScalarProperty Name="IsExistingHolding" ColumnName="IsExistingHolding" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -20973,6 +20987,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealing">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PADealing_Insert">
+                  <ScalarProperty Name="IsPending" ParameterName="IsPending" />
+                  <ScalarProperty Name="IsExistingHolding" ParameterName="IsExistingHolding" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="TraderTimeStamp" ParameterName="TraderTimeStamp" />
                   <ScalarProperty Name="TraderNotes" ParameterName="TraderNotes" />
@@ -20998,6 +21014,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PADealing_Update">
+                  <ScalarProperty Name="IsPending" ParameterName="IsPending" Version="Current" />
+                  <ScalarProperty Name="IsExistingHolding" ParameterName="IsExistingHolding" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="TraderTimeStamp" ParameterName="TraderTimeStamp" Version="Current" />
@@ -21075,6 +21093,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PADealingBalances">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealingBalance">
               <MappingFragment StoreEntitySet="PADealingBalance">
+                <ScalarProperty Name="LastPADealDate" ColumnName="LastPADealDate" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -21088,6 +21107,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealingBalance">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PADealingBalance_Insert">
+                  <ScalarProperty Name="LastPADealDate" ParameterName="LastPADealDate" />
+                  <ScalarProperty Name="LastPADealDate" ParameterName="LastPADealDate" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Quantity" ParameterName="Quantity" />
                   <ScalarProperty Name="UserAccountID" ParameterName="UserAccountID" />
@@ -21098,6 +21119,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PADealingBalance_Update">
+                  <ScalarProperty Name="LastPADealDate" ParameterName="LastPADealDate" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="Quantity" ParameterName="Quantity" Version="Current" />
@@ -21138,7 +21160,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="50">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="74">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
