@@ -66,6 +66,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsExistingHolding { get; set; }
     	[DataMember]
         public bool IsPending { get; set; }
+    	[DataMember]
+        public byte[] ContractNoteFile { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ComplianceUser { get; set; }

@@ -76,5 +76,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<Exposure> Exposures { get; set; }
         [DataMember]
         public virtual Issuer Issuer { get; set; }
+        [DataMember]
+        public virtual Issuer Issuer1 { get; set; }
     }
 }
