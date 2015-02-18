@@ -4301,7 +4301,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
-       
+        <Association Name="InstrumentUnderlyingIssuerIdFK">
+          <End Role="Issuer" Type="Self.Issuer" Multiplicity="1" />
+          <End Role="Instrument" Type="Self.Instrument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="Instrument">
+              <PropertyRef Name="UnderlyingIssuerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="InstrumentUpdateUserIDFK">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
           <End Role="Instrument" Type="Self.Instrument" Multiplicity="*" />
@@ -9062,7 +9073,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="InstrumentRelationship" EntitySet="InstrumentRelationship" />
           </AssociationSet>
-          
+          <AssociationSet Name="InstrumentUnderlyingIssuerIdFK" Association="Self.InstrumentUnderlyingIssuerIdFK">
+            <End Role="Issuer" EntitySet="Issuer" />
+            <End Role="Instrument" EntitySet="Instrument" />
+          </AssociationSet>
           <AssociationSet Name="InstrumentUpdateUserIDFK" Association="Self.InstrumentUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Instrument" EntitySet="Instrument" />
@@ -10896,7 +10910,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="PADealingAccount" EntitySet="PADealingAccounts" />
             <End Role="PADealingBalance" EntitySet="PADealingBalances" />
           </AssociationSet>
-          
+          <AssociationSet Name="InstrumentUnderlyingIssuerIdFK" Association="Odey.Framework.Keeley.Entities.InstrumentUnderlyingIssuerIdFK">
+            <End Role="Issuer" EntitySet="Issuers" />
+            <End Role="Instrument" EntitySet="Instruments" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -10970,8 +10987,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="InstrumentClass" Relationship="Odey.Framework.Keeley.Entities.InstrumentInstrumentClassIDFK" FromRole="Instrument" ToRole="InstrumentClass" />
           <NavigationProperty Name="Bond" Relationship="Odey.Framework.Keeley.Entities.BondInstrumentIdFK" FromRole="Instrument" ToRole="Bond" />
           <NavigationProperty Name="Exposures" Relationship="Odey.Framework.Keeley.Entities.ExposureInstrumentIDFK1" FromRole="Instrument" ToRole="Exposure" />
-          <NavigationProperty Name="Issuer" Relationship="Odey.Framework.Keeley.Entities.InstrumentIssuerIDFK" FromRole="Instrument" ToRole="Issuer" />
-
+          <NavigationProperty Name="Issuer" Relationship="Odey.Framework.Keeley.Entities.InstrumentIssuerIDFK" FromRole="Instrument" ToRole="Issuer" />          
         </EntityType>
         <EntityType Name="InstrumentClass">
           <Key>
@@ -13552,7 +13568,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="IssuerIndustries" Relationship="Odey.Framework.Keeley.Entities.IssuerIndustryIssuerIDFK" FromRole="Issuer" ToRole="IssuerIndustry" />
           <Property Type="String" Name="FactsetId" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="GicsLevel3IndustryID" Type="Int32" Nullable="false" />
- 
         </EntityType>
         <Association Name="IssuerUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -16531,7 +16546,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        
+        <Association Name="InstrumentUnderlyingIssuerIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Issuer" Role="Issuer" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Instrument" Role="Instrument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="Instrument">
+              <PropertyRef Name="UnderlyingIssuerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -21149,8 +21175,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                 </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
-          </EntitySetMapping>
-          
+          </EntitySetMapping>         
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -26905,6 +26930,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingInstrumentMarketIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingPADealingAccountIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingBalanceUserAccountID" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentUnderlyingIssuerIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
