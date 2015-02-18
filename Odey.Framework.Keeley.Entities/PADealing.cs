@@ -68,6 +68,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsPending { get; set; }
     	[DataMember]
         public byte[] ContractNoteFile { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> ContractNoteTimeStamp { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ComplianceUser { get; set; }
