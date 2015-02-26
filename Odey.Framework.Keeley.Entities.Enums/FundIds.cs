@@ -349,6 +349,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ITR_GBP_MW = 6829,
         [EnumMember]
         ITR_USD_MW = 6827,
-        
+
+        [EnumMember]
+        KELT = 6970,
+        [EnumMember]
+        KELT_GBP_A = 6973,
+        [EnumMember]
+        KELT_EUR_B = 6974,
+        [EnumMember]
+        KELT_EUR_A_Acc = 6978
     }
 }
