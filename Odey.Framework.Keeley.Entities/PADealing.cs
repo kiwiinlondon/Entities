@@ -72,6 +72,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> ContractNoteTimeStamp { get; set; }
     	[DataMember]
         public bool IsCancelled { get; set; }
+    	[DataMember]
+        public string ContractNoteFileName { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ComplianceUser { get; set; }
