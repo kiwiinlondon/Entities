@@ -207,6 +207,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OF_USD_A = 5908,
         [EnumMember]
         OF_USD_R = 5909,
+        [EnumMember]
+        OF_USD_RP = 6986,
         
         
         [EnumMember]
