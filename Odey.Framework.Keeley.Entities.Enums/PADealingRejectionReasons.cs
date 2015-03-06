@@ -19,9 +19,17 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FocusList = 2,
 
+        [Description("Negative Balance")]
+        [EnumMember]
+        NegativeBalance = 3,
+
+        [Description("Previous Holding")]
+        [EnumMember]
+        PreviousHolding = 4,
+
         [Description("Other")]
         [EnumMember]
-        Other = 3,
+        Other = 5,
         
     }
 }
