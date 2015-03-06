@@ -39,7 +39,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ActualQuantity { get; set; }
     	[DataMember]
-        public bool IsContractRecieved { get; set; }
+        public bool IsContractReceived { get; set; }
     	[DataMember]
         public Nullable<bool> IsComplianceApproved { get; set; }
     	[DataMember]
