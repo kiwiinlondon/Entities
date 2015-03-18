@@ -60,6 +60,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         EquityFuture = 78,
         [EnumMember]
-        InflationLinkedBond=82
+        InflationLinkedBond=82,
+        [EnumMember]
+        Right=88
     }
 }
