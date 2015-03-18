@@ -359,6 +359,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         KELT_EUR_B = 6974,
         [EnumMember]
-        KELT_EUR_A_Acc = 6978
+        KELT_EUR_A_Acc = 6978,
+
+        [EnumMember]
+        MW=6994,
+        [EnumMember]
+        DAMI=6995
     }
 }
