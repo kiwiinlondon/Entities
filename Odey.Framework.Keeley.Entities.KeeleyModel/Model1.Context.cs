@@ -134,6 +134,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<PADealingAccount> PADealingAccounts { get; set; }
         public DbSet<PADealingBalance> PADealingBalances { get; set; }
         public DbSet<PADealing> PADealings { get; set; }
+        public DbSet<FMPortfolio> FMPortfolios { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
