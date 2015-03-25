@@ -14,6 +14,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Ireland = 56,
         [EnumMember]
-        UnitedStates = 53        
+        UnitedStates = 53,        
+        [EnumMember]
+        Australia = 55    
     }
 }

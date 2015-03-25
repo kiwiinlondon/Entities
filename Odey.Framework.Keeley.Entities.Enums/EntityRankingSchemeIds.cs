@@ -23,5 +23,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Options = 10,
         [EnumMember]
         AustralianFutures = 12,
+        [EnumMember]
+        AustralianGovtBonds = 13,
     }
 }
