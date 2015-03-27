@@ -34,5 +34,7 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public string Initials { get; set; }
+    	[DataMember]
+        public bool IsActive { get; set; }
     }
 }
