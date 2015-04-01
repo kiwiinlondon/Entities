@@ -24,6 +24,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Expired = 6,
         [EnumMember]
-        OdeyUnlistedFund = 7
+        OdeyUnlistedFund = 7,
+        [EnumMember]
+        OdeyManagementShareClass = 8
     }
 }

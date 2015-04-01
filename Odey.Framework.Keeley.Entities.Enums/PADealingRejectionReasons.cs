@@ -27,9 +27,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PreviousHolding = 4,
 
+        [Description("Expired")]
+        [EnumMember]
+        Expired = 5,
+
         [Description("Other")]
         [EnumMember]
-        Other = 5,
+        Other = 6,
         
     }
 }
