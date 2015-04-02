@@ -775,12 +775,12 @@
           <Property Name="BookId" Type="int" Nullable="false" />
           <Property Name="Currency" Type="varchar" MaxLength="3" Nullable="false" />
           <Property Name="MaturityDate" Type="datetime" />
-          <Property Name="NetPosition" Type="decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="FXRate" Type="decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="MarketValue" Type="decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="DeltaMarketValue" Type="decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="TotalAccrual" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="NetPosition" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="Price" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="FXRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="MarketValue" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="DeltaMarketValue" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="TotalAccrual" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -1339,6 +1339,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="IsOdeyWealthAccount" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PADealingBalance">
           <Key>
@@ -1353,6 +1354,8 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="LastPADealDate" Type="datetime" Nullable="false" />
+          <Property Name="CurrentPrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="CurrentPriceId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Periodicity">
           <Key>
@@ -4721,6 +4724,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="PADealingBalanceCurrentPriceIdFK">
+          <End Role="Price" Type="Self.Price" Multiplicity="1" />
+          <End Role="PADealingBalance" Type="Self.PADealingBalance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="PriceId" />
+            </Principal>
+            <Dependent Role="PADealingBalance">
+              <PropertyRef Name="CurrentPriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PADealingBalanceInstrumentMarketID">
           <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
           <End Role="PADealingBalance" Type="Self.PADealingBalance" Multiplicity="*" />
@@ -6598,12 +6613,12 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BookId" Type="int" Mode="In" />
           <Parameter Name="Currency" Type="varchar" Mode="In" />
           <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
-          <Parameter Name="NetPosition" Type="decimal" Mode="In" />
-          <Parameter Name="Price" Type="decimal" Mode="In" />
-          <Parameter Name="FXRate" Type="decimal" Mode="In" />
-          <Parameter Name="MarketValue" Type="decimal" Mode="In" />
-          <Parameter Name="DeltaMarketValue" Type="decimal" Mode="In" />
-          <Parameter Name="TotalAccrual" Type="decimal" Mode="In" />
+          <Parameter Name="NetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="FXRate" Type="numeric" Mode="In" />
+          <Parameter Name="MarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="DeltaMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="TotalAccrual" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="FMPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -6613,12 +6628,12 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BookId" Type="int" Mode="In" />
           <Parameter Name="Currency" Type="varchar" Mode="In" />
           <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
-          <Parameter Name="NetPosition" Type="decimal" Mode="In" />
-          <Parameter Name="Price" Type="decimal" Mode="In" />
-          <Parameter Name="FXRate" Type="decimal" Mode="In" />
-          <Parameter Name="MarketValue" Type="decimal" Mode="In" />
-          <Parameter Name="DeltaMarketValue" Type="decimal" Mode="In" />
-          <Parameter Name="TotalAccrual" Type="decimal" Mode="In" />
+          <Parameter Name="NetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="FXRate" Type="numeric" Mode="In" />
+          <Parameter Name="MarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="DeltaMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="TotalAccrual" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
@@ -7507,6 +7522,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Name" Type="varchar" Mode="In" />
           <Parameter Name="Number" Type="varchar" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsOdeyWealthAccount" Type="bit" Mode="In" />
         </Function>
         <Function Name="PADealingAccount_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PADealingAccountID" Type="int" Mode="In" />
@@ -7515,6 +7531,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Number" Type="varchar" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsOdeyWealthAccount" Type="bit" Mode="In" />
         </Function>
         <Function Name="PADealingBalance_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PADealingBalanceID" Type="int" Mode="In" />
@@ -7528,6 +7545,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="LastPADealDate" Type="datetime" Mode="In" />
+          <Parameter Name="CurrentPrice" Type="numeric" Mode="In" />
+          <Parameter Name="CurrentPriceId" Type="int" Mode="In" />
         </Function>
         <Function Name="PADealingBalance_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PADealingBalanceID" Type="int" Mode="In" />
@@ -7538,6 +7557,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="LastPADealDate" Type="datetime" Mode="In" />
+          <Parameter Name="CurrentPrice" Type="numeric" Mode="In" />
+          <Parameter Name="CurrentPriceId" Type="int" Mode="In" />
         </Function>
         <Function Name="Portfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -9287,6 +9308,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PADealingAccount" EntitySet="PADealingAccount" />
           </AssociationSet>
+          <AssociationSet Name="PADealingBalanceCurrentPriceIdFK" Association="Self.PADealingBalanceCurrentPriceIdFK">
+            <End Role="Price" EntitySet="Price" />
+            <End Role="PADealingBalance" EntitySet="PADealingBalance" />
+          </AssociationSet>
           <AssociationSet Name="PADealingBalanceInstrumentMarketID" Association="Self.PADealingBalanceInstrumentMarketID">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
             <End Role="PADealingBalance" EntitySet="PADealingBalance" />
@@ -11004,6 +11029,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FMPortfolioUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.FMPortfolioUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="FMPortfolio" EntitySet="FMPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="PADealingBalanceCurrentPriceIdFK" Association="Odey.Framework.Keeley.Entities.PADealingBalanceCurrentPriceIdFK">
+            <End Role="Price" EntitySet="Prices" />
+            <End Role="PADealingBalance" EntitySet="PADealingBalances" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -16440,6 +16469,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.PADealingAccountUserID" FromRole="PADealingAccount" ToRole="ApplicationUser" />
+          <Property Name="IsOdeyWealthAccount" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PADealingBalance">
           <Key>
@@ -16457,6 +16487,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.PADealingBalanceInstrumentMarketID" FromRole="PADealingBalance" ToRole="InstrumentMarket" />
           <NavigationProperty Name="PADealingAccount" Relationship="Odey.Framework.Keeley.Entities.PADealingBalanceUserAccountID" FromRole="PADealingBalance" ToRole="PADealingAccount" />
           <Property Name="LastPADealDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CurrentPrice" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="CurrentPriceId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Price" Relationship="Odey.Framework.Keeley.Entities.PADealingBalanceCurrentPriceIdFK" FromRole="PADealingBalance" ToRole="Price" />
         </EntityType>
         <Association Name="PADealingAccountUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -16663,12 +16696,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="BookId" Type="Int32" Nullable="false" />
           <Property Name="Currency" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="MaturityDate" Type="DateTime" Precision="3" />
-          <Property Name="NetPosition" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="FXRate" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="MarketValue" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="DeltaMarketValue" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="TotalAccrual" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="NetPosition" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="FXRate" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="MarketValue" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="DeltaMarketValue" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TotalAccrual" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
@@ -16682,6 +16715,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="FMPortfolio">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PADealingBalanceCurrentPriceIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Price" Role="Price" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.PADealingBalance" Role="PADealingBalance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="PriceId" />
+            </Principal>
+            <Dependent Role="PADealingBalance">
+              <PropertyRef Name="CurrentPriceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -21125,6 +21170,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PADealingAccounts">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealingAccount">
               <MappingFragment StoreEntitySet="PADealingAccount">
+                <ScalarProperty Name="IsOdeyWealthAccount" ColumnName="IsOdeyWealthAccount" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -21137,6 +21183,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealingAccount">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PADealingAccount_Insert">
+                  <ScalarProperty Name="IsOdeyWealthAccount" ParameterName="IsOdeyWealthAccount" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Number" ParameterName="Number" />
                   <ScalarProperty Name="Name" ParameterName="Name" />
@@ -21146,6 +21193,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PADealingAccount_Update">
+                  <ScalarProperty Name="IsOdeyWealthAccount" ParameterName="IsOdeyWealthAccount" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="Number" ParameterName="Number" Version="Current" />
@@ -21166,6 +21214,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PADealingBalances">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealingBalance">
               <MappingFragment StoreEntitySet="PADealingBalance">
+                <ScalarProperty Name="CurrentPriceId" ColumnName="CurrentPriceId" />
+                <ScalarProperty Name="CurrentPrice" ColumnName="CurrentPrice" />
                 <ScalarProperty Name="LastPADealDate" ColumnName="LastPADealDate" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -21180,6 +21230,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealingBalance">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PADealingBalance_Insert">
+                  <ScalarProperty Name="CurrentPriceId" ParameterName="CurrentPriceId" />
+                  <ScalarProperty Name="CurrentPrice" ParameterName="CurrentPrice" />
                   <ScalarProperty Name="LastPADealDate" ParameterName="LastPADealDate" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Quantity" ParameterName="Quantity" />
@@ -21191,6 +21243,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PADealingBalance_Update">
+                  <ScalarProperty Name="CurrentPriceId" ParameterName="CurrentPriceId" Version="Current" />
+                  <ScalarProperty Name="CurrentPrice" ParameterName="CurrentPrice" Version="Current" />
                   <ScalarProperty Name="LastPADealDate" ParameterName="LastPADealDate" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
@@ -24382,7 +24436,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="14.25" PointY="1.2086252952130248" />
           <edmx:ConnectorPoint PointX="11.875" PointY="1.2086252952130248" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Price" Width="1.5" PointX="19.625" PointY="0.625" Height="2.9417936197916665" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Price" Width="1.5" PointX="19.625" PointY="0.5" Height="2.9417936197916665" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RawPrice" Width="1.5" PointX="16.875" PointY="0.5" Height="3.3263964843749996" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PriceUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.305171840843791" />
@@ -27122,7 +27176,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Index__2FB5372B" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientSalesPersonIdFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PADealingAccount" Width="1.5" PointX="31.125" PointY="0.75" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PADealingBalance" Width="1.75" PointX="30.375" PointY="4.625" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PADealingBalance" Width="1.75" PointX="30.375" PointY="4.25" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingAccountUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingAccountUserID" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingBalanceUpdateUserIDFK" />
@@ -27139,6 +27193,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingPADealingAccountIDFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FMPortfolio" Width="1.5" PointX="2.875" PointY="60" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FMPortfolioUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingBalanceCurrentPriceIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

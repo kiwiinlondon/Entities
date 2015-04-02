@@ -34,6 +34,10 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public System.DateTime LastPADealDate { get; set; }
+    	[DataMember]
+        public decimal CurrentPrice { get; set; }
+    	[DataMember]
+        public int CurrentPriceId { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ApplicationUser { get; set; }
@@ -41,5 +45,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual PADealingAccount PADealingAccount { get; set; }
+        [DataMember]
+        public virtual Price Price { get; set; }
     }
 }
