@@ -74,6 +74,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsCancelled { get; set; }
     	[DataMember]
         public string ContractNoteFileName { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ActualValue { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ComplianceUser { get; set; }
