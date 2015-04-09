@@ -38,6 +38,10 @@ namespace Odey.Framework.Keeley.Entities
         public decimal CurrentPrice { get; set; }
     	[DataMember]
         public int CurrentPriceId { get; set; }
+    	[DataMember]
+        public decimal BookCost { get; set; }
+    	[DataMember]
+        public decimal RealisedPNL { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ApplicationUser { get; set; }
