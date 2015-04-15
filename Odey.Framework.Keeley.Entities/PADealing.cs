@@ -76,6 +76,8 @@ namespace Odey.Framework.Keeley.Entities
         public string ContractNoteFileName { get; set; }
     	[DataMember]
         public Nullable<decimal> ActualValue { get; set; }
+    	[DataMember]
+        public int InputUserId { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ComplianceUser { get; set; }
@@ -87,5 +89,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual PADealingAccount PADealingAccount { get; set; }
+        [DataMember]
+        public virtual ApplicationUser InputUser { get; set; }
     }
 }
