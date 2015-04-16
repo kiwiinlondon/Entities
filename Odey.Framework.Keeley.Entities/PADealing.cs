@@ -78,6 +78,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ActualValue { get; set; }
     	[DataMember]
         public int InputUserId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Cost { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ComplianceUser { get; set; }
