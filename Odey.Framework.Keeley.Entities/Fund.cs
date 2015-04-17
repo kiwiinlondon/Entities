@@ -82,6 +82,8 @@ namespace Odey.Framework.Keeley.Entities
         public string AdministratorIdentifier { get; set; }
     	[DataMember]
         public bool IsVoting { get; set; }
+    	[DataMember]
+        public System.DateTime ClientLoadDate { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
