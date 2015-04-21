@@ -1713,6 +1713,24 @@
           <Property Name="OriginalInputDate" Type="datetime" Nullable="false" />
           <Property Name="IndexRatio" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
+        <EntityType Name="TransferEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="int" Nullable="false" />
+          <Property Name="FromAccountId" Type="int" Nullable="false" />
+          <Property Name="ToAccountId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="InstrumentMarketID" Type="int" Nullable="false" />
+          <Property Name="AmendmentNumber" Type="int" Nullable="false" />
+          <Property Name="IsCancelled" Type="bit" Nullable="false" />
+          <Property Name="TradeDate" Type="datetime" Nullable="false" />
+          <Property Name="SettlementDate" Type="datetime" Nullable="false" />
+          <Property Name="InputDate" Type="datetime" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Keeley.dbo.FundCapitalChange' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="FundCapitalChange">
@@ -5594,6 +5612,66 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="TransferEventEventIDFK">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="TransferEvent" Type="Self.TransferEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventFromAccountIdFK">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="TransferEvent" Type="Self.TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="FromAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventInstrumentMarketIDFK">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="TransferEvent" Type="Self.TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventToAccountIdFK">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="TransferEvent" Type="Self.TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="ToAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="TransferEvent" Type="Self.TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="Account_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AccountID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -8306,6 +8384,38 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="TransferEvent_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TransferEvent_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="FromAccountId" Type="int" Mode="In" />
+          <Parameter Name="ToAccountId" Type="int" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
+          <Parameter Name="AmendmentNumber" Type="int" Mode="In" />
+          <Parameter Name="IsCancelled" Type="bit" Mode="In" />
+          <Parameter Name="TradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="SettlementDate" Type="datetime" Mode="In" />
+          <Parameter Name="InputDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TransferEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="FromAccountId" Type="int" Mode="In" />
+          <Parameter Name="ToAccountId" Type="int" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
+          <Parameter Name="AmendmentNumber" Type="int" Mode="In" />
+          <Parameter Name="IsCancelled" Type="bit" Mode="In" />
+          <Parameter Name="TradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="SettlementDate" Type="datetime" Mode="In" />
+          <Parameter Name="InputDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <EntityContainer Name="KeeleyModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountMapping" EntityType="Self.AccountMapping" Schema="dbo" store:Type="Tables" />
@@ -8411,6 +8521,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RestrictedList" EntityType="Self.RestrictedList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TradeEvent" EntityType="Self.TradeEvent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransferEvent" EntityType="Self.TransferEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundCapitalChange" EntityType="Self.FundCapitalChange" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
 [FundCapitalChange].[FundId] AS [FundId], 
@@ -9713,6 +9824,26 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="TradeEventUpdateUserIDFK" Association="Self.TradeEventUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="TradeEvent" EntitySet="TradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventEventIDFK" Association="Self.TransferEventEventIDFK">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="TransferEvent" EntitySet="TransferEvent" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventFromAccountIdFK" Association="Self.TransferEventFromAccountIdFK">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="TransferEvent" EntitySet="TransferEvent" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventInstrumentMarketIDFK" Association="Self.TransferEventInstrumentMarketIDFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="TransferEvent" EntitySet="TransferEvent" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventToAccountIdFK" Association="Self.TransferEventToAccountIdFK">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="TransferEvent" EntitySet="TransferEvent" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventUpdateUserIDFK" Association="Self.TransferEventUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="TransferEvent" EntitySet="TransferEvent" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -11188,6 +11319,27 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="PADealingInputUserIdFK" Association="Odey.Framework.Keeley.Entities.PADealingInputUserIdFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="PADealing" EntitySet="PADealings" />
+          </AssociationSet>
+          <EntitySet Name="TransferEvents" EntityType="Odey.Framework.Keeley.Entities.TransferEvent" />
+          <AssociationSet Name="TransferEventFromAccountIdFK" Association="Odey.Framework.Keeley.Entities.TransferEventFromAccountIdFK">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventToAccountIdFK" Association="Odey.Framework.Keeley.Entities.TransferEventToAccountIdFK">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.TransferEventUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventEventIDFK" Association="Odey.Framework.Keeley.Entities.TransferEventEventIDFK">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventInstrumentMarketIDFK" Association="Odey.Framework.Keeley.Entities.TransferEventInstrumentMarketIDFK">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="TransferEvent" EntitySet="TransferEvents" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -16954,6 +17106,88 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TransferEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="Int32" Nullable="false" />
+          <Property Name="FromAccountId" Type="Int32" Nullable="false" />
+          <Property Name="ToAccountId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="InstrumentMarketID" Type="Int32" Nullable="false" />
+          <Property Name="AmendmentNumber" Type="Int32" Nullable="false" />
+          <Property Name="IsCancelled" Type="Boolean" Nullable="false" />
+          <Property Name="TradeDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SettlementDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="InputDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="FromAccount" Relationship="Odey.Framework.Keeley.Entities.TransferEventFromAccountIdFK" FromRole="TransferEvent" ToRole="Account" />
+          <NavigationProperty Name="ToAccount" Relationship="Odey.Framework.Keeley.Entities.TransferEventToAccountIdFK" FromRole="TransferEvent" ToRole="Account" />
+          <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.TransferEventEventIDFK" FromRole="TransferEvent" ToRole="Event" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.TransferEventInstrumentMarketIDFK" FromRole="TransferEvent" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="TransferEventFromAccountIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="FromAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventToAccountIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="ToAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventEventIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.Event" Role="Event" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventInstrumentMarketIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -21794,6 +22028,66 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TransferEvents">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TransferEvent">
+              <MappingFragment StoreEntitySet="TransferEvent">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
+                <ScalarProperty Name="TradeDate" ColumnName="TradeDate" />
+                <ScalarProperty Name="IsCancelled" ColumnName="IsCancelled" />
+                <ScalarProperty Name="AmendmentNumber" ColumnName="AmendmentNumber" />
+                <ScalarProperty Name="InstrumentMarketID" ColumnName="InstrumentMarketID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ToAccountId" ColumnName="ToAccountId" />
+                <ScalarProperty Name="FromAccountId" ColumnName="FromAccountId" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TransferEvent">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.TransferEvent_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="InputDate" ParameterName="InputDate" />
+                  <ScalarProperty Name="SettlementDate" ParameterName="SettlementDate" />
+                  <ScalarProperty Name="TradeDate" ParameterName="TradeDate" />
+                  <ScalarProperty Name="IsCancelled" ParameterName="IsCancelled" />
+                  <ScalarProperty Name="AmendmentNumber" ParameterName="AmendmentNumber" />
+                  <ScalarProperty Name="InstrumentMarketID" ParameterName="InstrumentMarketID" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" />
+                  <ScalarProperty Name="ToAccountId" ParameterName="ToAccountId" />
+                  <ScalarProperty Name="FromAccountId" ParameterName="FromAccountId" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" />
+                  <ResultBinding Name="EventID" ColumnName="EventID" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.TransferEvent_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="InputDate" ParameterName="InputDate" Version="Current" />
+                  <ScalarProperty Name="SettlementDate" ParameterName="SettlementDate" Version="Current" />
+                  <ScalarProperty Name="TradeDate" ParameterName="TradeDate" Version="Current" />
+                  <ScalarProperty Name="IsCancelled" ParameterName="IsCancelled" Version="Current" />
+                  <ScalarProperty Name="AmendmentNumber" ParameterName="AmendmentNumber" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketID" ParameterName="InstrumentMarketID" Version="Current" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" Version="Current" />
+                  <ScalarProperty Name="ToAccountId" ParameterName="ToAccountId" Version="Current" />
+                  <ScalarProperty Name="FromAccountId" ParameterName="FromAccountId" Version="Current" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.TransferEvent_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -21816,7 +22110,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="58">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="112">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.625" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -26564,57 +26858,55 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="23.489583333333332" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="23.322916666666668" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="23.192708333333332" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="22.947916666666668" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="22.286456833333332" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="22.119790166666668" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="21.67708133333333" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="21.510414666666666" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="19.875" PointY="22.14365214029948" />
-          <edmx:ConnectorPoint PointX="19.875" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="19.80094280929487" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="19.634276142628206" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="19.366698717948719" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="19.200032051282054" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="19.196004352564103" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="19.029337685897438" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="18.9400641025641" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="18.750141849358975" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="18.380208333333332" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="18.129839743589745" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="17.520833333333332" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="17.276041666666668" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="17.253979561584249" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="17.087312894917584" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="17.083335833333333" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="16.916669166666669" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="15.708333333333334" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="15.416666666666666" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="15.395833333333334" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="15.229166666666666" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="15.114583333333334" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="14.791666666666666" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="14.770833333333334" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="14.604166666666666" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="14.192706333333334" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="14.026039666666666" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="13.778646083333333" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="13.611979416666665" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="13.286459583333334" PointY="22.888815104166664" />
-          <edmx:ConnectorPoint PointX="12.760416666666666" PointY="22.888815104166667" />
-          <edmx:ConnectorPoint PointX="12.25" PointY="22.888815104166667" />
+          <edmx:ConnectorPoint PointX="25" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="24.510416666666668" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="24.130209708333332" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="23.963543041666668" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="23.802086083333332" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="23.635419416666668" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="23.177083333333332" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="22.885416666666668" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="22.606773333333333" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="22.440106666666669" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="22.345050833333332" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="22.178384166666667" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="19.9375" PointY="22.120228613798616" />
+          <edmx:ConnectorPoint PointX="19.9375" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.904628320112177" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.737961653445513" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.426033829126602" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.259367162459938" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.081230324919872" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="18.914563658253208" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="18.707279329126603" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="18.540612662459939" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="18.338495592948718" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="18.124953926282053" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="17.520833333333332" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="17.291666666666668" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="16.4096484375" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="16.242981770833335" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.708333333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.416666666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.395833333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.229166666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.114583333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.791666666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.770833333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.604166666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.192706333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.026039666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.778646083333333" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.611979416666665" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.286459583333334" PointY="22.826315104166664" />
+          <edmx:ConnectorPoint PointX="12.760416666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="12.25" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.57031525" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.57031525" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.5488310625" PointY="25.134095052083339" />
+          <edmx:ConnectorPoint PointX="11.5488310625" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -27575,6 +27867,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaInstrumentMarketIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingInputUserIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.TransferEvent" Width="1.5" PointX="33.625" PointY="2.25" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventFromAccountIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventToAccountIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventEventIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventInstrumentMarketIDFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
