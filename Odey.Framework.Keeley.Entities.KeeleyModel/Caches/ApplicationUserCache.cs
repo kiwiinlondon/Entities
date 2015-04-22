@@ -11,7 +11,7 @@ namespace Odey.Framework.Keeley.Entities.Caches
         {
             using (KeeleyModel context = new KeeleyModel())
             {
-                return context.ApplicationUsers.Where(a=> a.WindowsLogin != null).ToDictionary(a => a.WindowsLogin, a => a);
+                return context.ApplicationUsers.Where(a=> a.WindowsLogin != null).ToDictionary(a => a.WindowsLogin.ToUpper(), a => a);
             }
         }
 

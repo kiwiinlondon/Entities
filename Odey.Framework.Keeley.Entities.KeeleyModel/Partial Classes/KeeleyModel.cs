@@ -48,7 +48,7 @@ namespace Odey.Framework.Keeley.Entities
             {
                 throw new ApplicationException("Original Call frame was not supplied so user cannot be authenticated");
             }
-            updateUserName = callFrame.IdentityName;
+            updateUserName = callFrame.IdentityName.ToUpper();
             ApplicationUser user = null;
             if (updateUserName != null)
             {
