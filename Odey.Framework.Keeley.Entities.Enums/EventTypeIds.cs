@@ -18,6 +18,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         InternalAllocation = 5,
         [EnumMember]
-        TransferEvent = 6
+        TransferEvent = 13
     }
 }
