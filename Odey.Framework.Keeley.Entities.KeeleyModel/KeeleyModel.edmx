@@ -11355,10 +11355,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="TransferEvent" EntitySet="TransferEvents" />
           </AssociationSet>
-          <AssociationSet Name="TransferEventEventIDFK" Association="Odey.Framework.Keeley.Entities.TransferEventEventIDFK">
-            <End Role="Event" EntitySet="Events" />
-            <End Role="TransferEvent" EntitySet="TransferEvents" />
-          </AssociationSet>
           <AssociationSet Name="TransferEventInstrumentMarketIDFK" Association="Odey.Framework.Keeley.Entities.TransferEventInstrumentMarketIDFK">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="TransferEvent" EntitySet="TransferEvents" />
@@ -11366,6 +11362,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ApprovedByTransferEventFK" Association="Odey.Framework.Keeley.Entities.ApprovedByTransferEventFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
+          <AssociationSet Name="TransferEventEvent" Association="Odey.Framework.Keeley.Entities.TransferEventEvent">
+            <End Role="TransferEvent" EntitySet="TransferEvents" />
+            <End Role="Event" EntitySet="Events" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -17151,11 +17151,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="FromAccount" Relationship="Odey.Framework.Keeley.Entities.TransferEventFromAccountIdFK" FromRole="TransferEvent" ToRole="Account" />
           <NavigationProperty Name="ToAccount" Relationship="Odey.Framework.Keeley.Entities.TransferEventToAccountIdFK" FromRole="TransferEvent" ToRole="Account" />
-          <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.TransferEventEventIDFK" FromRole="TransferEvent" ToRole="Event" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.TransferEventInstrumentMarketIDFK" FromRole="TransferEvent" ToRole="InstrumentMarket" />
           <Property Name="Notes" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="ApprovedByUserId" Type="Int32" />
           <NavigationProperty Name="ApprovedByUser" Relationship="Odey.Framework.Keeley.Entities.ApprovedByTransferEventFK" FromRole="TransferEvent" ToRole="ApplicationUser" />
+          <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.TransferEventEvent" FromRole="TransferEvent" ToRole="Event" />
         </EntityType>
         <Association Name="TransferEventFromAccountIdFK">
           <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
@@ -17193,18 +17193,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="TransferEventEventIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Event" Role="Event" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Event">
-              <PropertyRef Name="EventID" />
-            </Principal>
-            <Dependent Role="TransferEvent">
-              <PropertyRef Name="EventID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="TransferEventInstrumentMarketIDFK">
           <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="*" />
@@ -17226,6 +17214,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="TransferEvent">
               <PropertyRef Name="ApprovedByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransferEventEvent">
+          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Event" Role="Event" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="EventID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -22156,7 +22156,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="82">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="94">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.625" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -27917,9 +27917,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventFromAccountIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventToAccountIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventUpdateUserIDFK" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventEventIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventInstrumentMarketIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ApprovedByTransferEventFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventEvent" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

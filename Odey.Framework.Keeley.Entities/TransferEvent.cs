@@ -42,14 +42,20 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public string Notes { get; set; }
+    	[DataMember]
+        public Nullable<int> ApprovedByUserId { get; set; }
     
         [DataMember]
         public virtual Account FromAccount { get; set; }
         [DataMember]
         public virtual Account ToAccount { get; set; }
         [DataMember]
-        public virtual Event Event { get; set; }
-        [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
+        [DataMember]
+        public virtual ApplicationUser ApprovedByUser { get; set; }
+        [DataMember]
+        public virtual Event Event { get; set; }
     }
 }
