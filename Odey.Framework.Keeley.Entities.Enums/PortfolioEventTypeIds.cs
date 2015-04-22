@@ -36,7 +36,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CashBenefit = 14,
         [EnumMember]
-        PNLRoll = 15
+        PNLRoll = 15,
+        [EnumMember]
+        AccountTransfer = 16
     }
 }
 
