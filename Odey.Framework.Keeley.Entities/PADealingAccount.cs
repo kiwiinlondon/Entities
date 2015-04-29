@@ -31,8 +31,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public bool IsOdeyWealthAccount { get; set; }
-    	[DataMember]
         public int PADealingBrokerId { get; set; }
     
         [DataMember]
