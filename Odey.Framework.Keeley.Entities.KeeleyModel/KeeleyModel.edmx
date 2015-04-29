@@ -1375,15 +1375,6 @@
           <Property Name="BookCost" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="RealisedPNL" Type="numeric" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
-        <EntityType Name="PADealingBroker">
-          <Key>
-            <PropertyRef Name="LegalEntityId" />
-          </Key>
-          <Property Name="LegalEntityId" Type="int" Nullable="false" />
-          <Property Name="StartDt" Type="datetime" Nullable="false" />
-          <Property Name="UpdateUserID" Type="int" Nullable="false" />
-          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
         <EntityType Name="Periodicity">
           <Key>
             <PropertyRef Name="PeriodicityId" />
@@ -4795,18 +4786,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="PADealingAccountBrokerIdFK">
-          <End Role="PADealingBroker" Type="Self.PADealingBroker" Multiplicity="1" />
-          <End Role="PADealingAccount" Type="Self.PADealingAccount" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PADealingBroker">
-              <PropertyRef Name="LegalEntityId" />
-            </Principal>
-            <Dependent Role="PADealingAccount">
-              <PropertyRef Name="PADealingBrokerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="PADealingAccountUpdateUserIDFK">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
           <End Role="PADealingAccount" Type="Self.PADealingAccount" Multiplicity="*" />
@@ -4888,30 +4867,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="PADealingBalance">
               <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PADealingBrokerLegalEntityIdFK">
-          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="1" />
-          <End Role="PADealingBroker" Type="Self.PADealingBroker" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="LegalEntity">
-              <PropertyRef Name="LegalEntityID" />
-            </Principal>
-            <Dependent Role="PADealingBroker">
-              <PropertyRef Name="LegalEntityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PADealingBrokerUpdateUserIdFK">
-          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
-          <End Role="PADealingBroker" Type="Self.PADealingBroker" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PADealingBroker">
-              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8568,7 +8523,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="PADealing" EntityType="Self.PADealing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PADealingAccount" EntityType="Self.PADealingAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PADealingBalance" EntityType="Self.PADealingBalance" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PADealingBroker" EntityType="Self.PADealingBroker" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Periodicity" EntityType="Self.Periodicity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PeriodicityInterval" EntityType="Self.PeriodicityInterval" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Portfolio" EntityType="Self.Portfolio" Schema="dbo" store:Type="Tables" />
@@ -9613,10 +9567,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="OfficialNetAssetValue" EntitySet="OfficialNetAssetValue" />
           </AssociationSet>
-          <AssociationSet Name="PADealingAccountBrokerIdFK" Association="Self.PADealingAccountBrokerIdFK">
-            <End Role="PADealingBroker" EntitySet="PADealingBroker" />
-            <End Role="PADealingAccount" EntitySet="PADealingAccount" />
-          </AssociationSet>
           <AssociationSet Name="PADealingAccountUpdateUserIDFK" Association="Self.PADealingAccountUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PADealingAccount" EntitySet="PADealingAccount" />
@@ -9644,14 +9594,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="PADealingBalanceUserID" Association="Self.PADealingBalanceUserID">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PADealingBalance" EntitySet="PADealingBalance" />
-          </AssociationSet>
-          <AssociationSet Name="PADealingBrokerLegalEntityIdFK" Association="Self.PADealingBrokerLegalEntityIdFK">
-            <End Role="LegalEntity" EntitySet="LegalEntity" />
-            <End Role="PADealingBroker" EntitySet="PADealingBroker" />
-          </AssociationSet>
-          <AssociationSet Name="PADealingBrokerUpdateUserIdFK" Association="Self.PADealingBrokerUpdateUserIdFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
-            <End Role="PADealingBroker" EntitySet="PADealingBroker" />
           </AssociationSet>
           <AssociationSet Name="PADealingComplianceUserIDFK" Association="Self.PADealingComplianceUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -11424,19 +11366,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="TransferEventEvent" Association="Odey.Framework.Keeley.Entities.TransferEventEvent">
             <End Role="TransferEvent" EntitySet="TransferEvents" />
             <End Role="Event" EntitySet="Events" />
-          </AssociationSet>
-          <EntitySet Name="PADealingBrokers" EntityType="Odey.Framework.Keeley.Entities.PADealingBroker" />
-          <AssociationSet Name="PADealingBrokerUpdateUserIdFK" Association="Odey.Framework.Keeley.Entities.PADealingBrokerUpdateUserIdFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="PADealingBroker" EntitySet="PADealingBrokers" />
-          </AssociationSet>
-          <AssociationSet Name="PADealingBrokerLegalEntityIdFK" Association="Odey.Framework.Keeley.Entities.PADealingBrokerLegalEntityIdFK">
-            <End Role="LegalEntity" EntitySet="LegalEntities" />
-            <End Role="PADealingBroker" EntitySet="PADealingBrokers" />
-          </AssociationSet>
-          <AssociationSet Name="PADealingAccountBrokerIdFK" Association="Odey.Framework.Keeley.Entities.PADealingAccountBrokerIdFK">
-            <End Role="PADealingBroker" EntitySet="PADealingBrokers" />
-            <End Role="PADealingAccount" EntitySet="PADealingAccounts" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -17300,53 +17229,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="PADealingBroker">
-          <Key>
-            <PropertyRef Name="LegalEntityId" />
-          </Key>
-          <Property Name="LegalEntityId" Type="Int32" Nullable="false" />
-          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
-          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.PADealingBrokerUpdateUserIdFK" FromRole="PADealingBroker" ToRole="ApplicationUser" />
-          <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.PADealingBrokerLegalEntityIdFK" FromRole="PADealingBroker" ToRole="LegalEntity" />
-        </EntityType>
-        <Association Name="PADealingBrokerUpdateUserIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.PADealingBroker" Role="PADealingBroker" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PADealingBroker">
-              <PropertyRef Name="UpdateUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PADealingBrokerLegalEntityIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.LegalEntity" Role="LegalEntity" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.PADealingBroker" Role="PADealingBroker" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="LegalEntity">
-              <PropertyRef Name="LegalEntityID" />
-            </Principal>
-            <Dependent Role="PADealingBroker">
-              <PropertyRef Name="LegalEntityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PADealingAccountBrokerIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.PADealingBroker" Role="PADealingBroker" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.PADealingAccount" Role="PADealingAccount" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PADealingBroker">
-              <PropertyRef Name="LegalEntityId" />
-            </Principal>
-            <Dependent Role="PADealingAccount">
-              <PropertyRef Name="PADealingBrokerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22252,16 +22134,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PADealingBrokers">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PADealingBroker">
-              <MappingFragment StoreEntitySet="PADealingBroker">
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="LegalEntityId" ColumnName="LegalEntityId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -22284,7 +22156,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="94">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="93">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.625" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -27032,27 +26904,31 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="23.802086083333332" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="23.635419416666668" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="23.114583333333332" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="22.947916666666668" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="22.286456833333332" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="22.119790166666668" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="21.67708133333333" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="21.510414666666666" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="19.989583333333332" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="19.822916666666668" PointY="21.961046236230036" />
-          <edmx:ConnectorPoint PointX="19.75" PointY="21.961046236230036" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="23.489583333333332" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="23.322916666666668" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="23.114583333333332" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="22.947916666666668" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="22.286456833333332" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="22.119790166666668" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="21.67708133333333" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="21.510414666666666" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="19.989583333333332" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="19.822916666666668" PointY="21.8913002991046" />
+          <edmx:ConnectorPoint PointX="19.75" PointY="21.8913002991046" />
           <edmx:ConnectorPoint PointX="19.75" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.365825189102562" PointY="22.826315104166664" />
-          <edmx:ConnectorPoint PointX="18.523301282051282" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.504391025641024" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.337724358974359" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.24900641025641" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.082339743589745" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.055379352564103" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="18.58214743589744" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="18.439871794871795" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="18.129839743589745" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="17.520833333333332" PointY="22.826315104166667" />
@@ -27061,18 +26937,22 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="16.916669166666669" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="16.4096484375" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="16.242981770833335" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="15.229166666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="15.208333333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="15.041666666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.427084583333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.416666666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.114583333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.791666666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.770833333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.604166666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.192706333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="14.026039666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.778646083333333" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.611979416666665" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.286459583333334" PointY="22.826315104166664" />
           <edmx:ConnectorPoint PointX="12.666666666666666" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.542117253906252" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.542117253906252" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.541781563476565" PointY="25.134095052083339" />
+          <edmx:ConnectorPoint PointX="11.541781563476565" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
