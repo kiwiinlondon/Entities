@@ -35,7 +35,5 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual ApplicationUser ApplicationUser { get; set; }
-        [DataMember]
-        public virtual PADealingBroker PADealingBroker { get; set; }
     }
 }

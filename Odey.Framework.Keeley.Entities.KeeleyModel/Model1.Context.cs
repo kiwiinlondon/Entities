@@ -137,7 +137,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FMPortfolio> FMPortfolios { get; set; }
         public DbSet<AnalystIdea> AnalystIdeas { get; set; }
         public DbSet<TransferEvent> TransferEvents { get; set; }
-        public DbSet<PADealingBroker> PADealingBrokers { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
