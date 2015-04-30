@@ -9,7 +9,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
 
-    public enum PADealingRejectionReasons
+    public enum PADealingRejectionReasonsIds
     {
         [Description("Restricted List")]
         [EnumMember]

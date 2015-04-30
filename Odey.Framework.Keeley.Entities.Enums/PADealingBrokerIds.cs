@@ -9,7 +9,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
 
-    public enum PADealingBroker
+    public enum PADealingBrokerIds
     {
         [Description("Odey Wealth Management (UK) Ltd")]
         [EnumMember]
