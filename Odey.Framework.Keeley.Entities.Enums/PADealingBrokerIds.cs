@@ -14,6 +14,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [Description("Odey Wealth Management (UK) Ltd")]
         [EnumMember]
         OdeyWealthManagementUK = 6783,
+
+        [Description("INAPPLICABLE ORGANISATION")]
+        [EnumMember]
+        Other = 3762,
        
     }
 }

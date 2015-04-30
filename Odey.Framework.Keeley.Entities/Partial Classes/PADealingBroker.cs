@@ -1,10 +1,18 @@
-﻿namespace Odey.Framework.Keeley.Entities
+﻿using Odey.Framework.Keeley.Entities.Enums;
+
+namespace Odey.Framework.Keeley.Entities
 {
     public partial class PADealingBroker
     {
         public string Name
         {
-            get { return LegalEntity.Name; }
+            get
+            {
+                if (this.LegalEntityId == (int)PADealingBrokerIds.Other)
+                    return "Other";
+
+                return LegalEntity.Name;
+            }
         }
     }
 }
