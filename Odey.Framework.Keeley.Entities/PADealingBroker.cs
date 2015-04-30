@@ -14,28 +14,18 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class PADealingAccount
+    public partial class PADealingBroker
     {
     	[DataMember]
-        public int PADealingAccountID { get; set; }
-    	[DataMember]
-        public int UserID { get; set; }
-    	[DataMember]
-        public string Name { get; set; }
-    	[DataMember]
-        public string Number { get; set; }
+        public int LegalEntityId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public int PADealingBrokerId { get; set; }
     
         [DataMember]
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        [DataMember]
-        public virtual PADealingBroker PADealingBroker { get; set; }
+        public virtual LegalEntity LegalEntity { get; set; }
     }
 }
