@@ -1269,6 +1269,19 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CountryId" Type="int" />
         </EntityType>
+        <EntityType Name="ManagerPriceTarget">
+          <Key>
+            <PropertyRef Name="ManagerPriceRangeId" />
+          </Key>
+          <Property Name="ManagerPriceRangeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ManagerId" Type="int" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="StopLossPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TargetPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="Market">
           <Key>
             <PropertyRef Name="LegalEntityID" />
@@ -4735,6 +4748,42 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ManagerPriceTargetInstrumentMarketId">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="ManagerPriceTarget" Type="Self.ManagerPriceTarget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTarget">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerPriceTargetManagerIdFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ManagerPriceTarget" Type="Self.ManagerPriceTarget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTarget">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerPriceTargetUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ManagerPriceTarget" Type="Self.ManagerPriceTarget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTarget">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="MarketLegalEntiyFK">
           <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="1" />
           <End Role="Market" Type="Self.Market" Multiplicity="0..1" />
@@ -7631,6 +7680,27 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ParentLegalEntityId" Type="int" Mode="In" />
           <Parameter Name="PulseIdentifier" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="ManagerPriceTarget_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ManagerPriceRangeId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ManagerPriceTarget_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="StopLossPrice" Type="numeric" Mode="In" />
+          <Parameter Name="TargetPrice" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ManagerPriceTarget_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ManagerPriceRangeId" Type="int" Mode="In" />
+          <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="StopLossPrice" Type="numeric" Mode="In" />
+          <Parameter Name="TargetPrice" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="Market_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -8562,6 +8632,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="IssuerIndustry" EntityType="Self.IssuerIndustry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LegalEntity" EntityType="Self.LegalEntity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LegalEntityChargeSchedule" EntityType="Self.LegalEntityChargeSchedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ManagerPriceTarget" EntityType="Self.ManagerPriceTarget" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Market" EntityType="Self.Market" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MatchedStatus" EntityType="Self.MatchedStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OfficialNetAssetValue" EntityType="Self.OfficialNetAssetValue" Schema="dbo" store:Type="Tables" />
@@ -9592,6 +9663,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="LegalEntityUpdateUserIDFK" Association="Self.LegalEntityUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="LegalEntity" EntitySet="LegalEntity" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetInstrumentMarketId" Association="Self.ManagerPriceTargetInstrumentMarketId">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="ManagerPriceTarget" EntitySet="ManagerPriceTarget" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetManagerIdFK" Association="Self.ManagerPriceTargetManagerIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ManagerPriceTarget" EntitySet="ManagerPriceTarget" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetUserIDFK" Association="Self.ManagerPriceTargetUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ManagerPriceTarget" EntitySet="ManagerPriceTarget" />
           </AssociationSet>
           <AssociationSet Name="MarketLegalEntiyFK" Association="Self.MarketLegalEntiyFK">
             <End Role="LegalEntity" EntitySet="LegalEntity" />
@@ -11437,6 +11520,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="PADealingAccountBrokerIdFK" Association="Odey.Framework.Keeley.Entities.PADealingAccountBrokerIdFK">
             <End Role="PADealingBroker" EntitySet="PADealingBrokers" />
             <End Role="PADealingAccount" EntitySet="PADealingAccounts" />
+          </AssociationSet>
+          <EntitySet Name="ManagerPriceTargets" EntityType="Odey.Framework.Keeley.Entities.ManagerPriceTarget" />
+          <AssociationSet Name="ManagerPriceTargetManagerIdFK" Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetManagerIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ManagerPriceTarget" EntitySet="ManagerPriceTargets" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetUserIDFK" Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ManagerPriceTarget" EntitySet="ManagerPriceTargets" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetInstrumentMarketId" Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetInstrumentMarketId">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="ManagerPriceTarget" EntitySet="ManagerPriceTargets" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -17347,6 +17443,57 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ManagerPriceTarget">
+          <Key>
+            <PropertyRef Name="ManagerPriceRangeId" />
+          </Key>
+          <Property Name="ManagerPriceRangeId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ManagerId" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="StopLossPrice" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TargetPrice" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="ManagerUser" Relationship="Odey.Framework.Keeley.Entities.ManagerPriceTargetManagerIdFK" FromRole="ManagerPriceTarget" ToRole="ApplicationUser" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.ManagerPriceTargetInstrumentMarketId" FromRole="ManagerPriceTarget" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="ManagerPriceTargetManagerIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ManagerPriceTarget" Role="ManagerPriceTarget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTarget">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerPriceTargetUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ManagerPriceTarget" Role="ManagerPriceTarget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTarget">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerPriceTargetInstrumentMarketId">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ManagerPriceTarget" Role="ManagerPriceTarget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTarget">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22262,6 +22409,50 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ManagerPriceTargets">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ManagerPriceTarget">
+              <MappingFragment StoreEntitySet="ManagerPriceTarget">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="TargetPrice" ColumnName="TargetPrice" />
+                <ScalarProperty Name="StopLossPrice" ColumnName="StopLossPrice" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="ManagerPriceRangeId" ColumnName="ManagerPriceRangeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ManagerPriceTarget">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ManagerPriceTarget_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="TargetPrice" ParameterName="TargetPrice" />
+                  <ScalarProperty Name="StopLossPrice" ParameterName="StopLossPrice" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ScalarProperty Name="ManagerId" ParameterName="ManagerId" />
+                  <ResultBinding Name="ManagerPriceRangeId" ColumnName="ManagerPriceRangeId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ManagerPriceTarget_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="TargetPrice" ParameterName="TargetPrice" Version="Current" />
+                  <ScalarProperty Name="StopLossPrice" ParameterName="StopLossPrice" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="ManagerId" ParameterName="ManagerId" Version="Current" />
+                  <ScalarProperty Name="ManagerPriceRangeId" ParameterName="ManagerPriceRangeId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ManagerPriceTarget_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ManagerPriceRangeId" ParameterName="ManagerPriceRangeId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -27032,51 +27223,47 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="23.489583333333332" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="23.322916666666668" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="23.114583333333332" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="22.947916666666668" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="22.500800400641026" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="22.334133733974362" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="21.67708133333333" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="21.510414666666666" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="19.989583333333332" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="19.822916666666668" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="19.75" PointY="21.856427330541884" />
-          <edmx:ConnectorPoint PointX="19.75" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.58143022275641" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.414763556089746" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.329527112179488" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.082339743589745" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.055379352564103" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.773397435897436" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.7488141025641" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.582147435897436" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.439871794871795" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.129839743589745" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="17.520833333333332" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="17.291666666666668" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="17.083335833333333" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="16.916669166666669" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="16.4096484375" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="16.242981770833335" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="22.826315104166664" />
-          <edmx:ConnectorPoint PointX="15.010416666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.395833333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="12.760416666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="12.25" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="25" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="24.130209708333332" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="23.963543041666668" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="23.802086083333332" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="23.635419416666668" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="23.114583333333332" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="22.947916666666668" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="22.591147083333329" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="22.424480416666665" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="22.33723770833333" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="22.170571041666665" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="19.9375" PointY="22.2685698109564" />
+          <edmx:ConnectorPoint PointX="19.9375" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="19.716558773237178" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="19.549892106570514" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="19.412284213141024" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="19.24561754647436" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="19.05373109294872" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="18.887064426282056" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="18.693529713141025" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="18.526863046474361" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="18.338495592948718" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="18.124953926282053" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="17.520833333333332" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="17.260416666666668" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="16.4076953125" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="16.241028645833335" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="15.708333333333334" PointY="22.824361979166664" />
+          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="13.333333333333334" PointY="22.824361979166664" />
+          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="12.708333333333334" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="12.541666666666666" PointY="22.824361979166667" />
+          <edmx:ConnectorPoint PointX="12.25" PointY="22.824361979166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.541697640869142" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.541697640869142" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.541676660217288" PointY="25.134095052083339" />
+          <edmx:ConnectorPoint PointX="11.541676660217288" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -28048,6 +28235,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingBrokerUpdateUserIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingBrokerLegalEntityIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingAccountBrokerIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ManagerPriceTarget" Width="1.5" PointX="20.625" PointY="4.625" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetManagerIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetInstrumentMarketId" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
