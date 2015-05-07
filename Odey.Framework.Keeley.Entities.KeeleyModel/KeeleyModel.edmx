@@ -1282,6 +1282,19 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="ManagerPriceTargetIssuer">
+          <Key>
+            <PropertyRef Name="ManagerPriceTargetIssuerId" />
+          </Key>
+          <Property Name="ManagerPriceTargetIssuerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ManagerId" Type="int" Nullable="false" />
+          <Property Name="IssuerId" Type="int" Nullable="false" />
+          <Property Name="StopLossPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TargetPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="Market">
           <Key>
             <PropertyRef Name="LegalEntityID" />
@@ -4761,6 +4774,42 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ManagerPriceTargetIssuerIssuerIdFK">
+          <End Role="Issuer" Type="Self.Issuer" Multiplicity="1" />
+          <End Role="ManagerPriceTargetIssuer" Type="Self.ManagerPriceTargetIssuer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTargetIssuer">
+              <PropertyRef Name="IssuerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerPriceTargetIssuerManagerIdFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ManagerPriceTargetIssuer" Type="Self.ManagerPriceTargetIssuer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTargetIssuer">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerPriceTargetIssuerUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ManagerPriceTargetIssuer" Type="Self.ManagerPriceTargetIssuer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTargetIssuer">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ManagerPriceTargetManagerIdFK">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
           <End Role="ManagerPriceTarget" Type="Self.ManagerPriceTarget" Multiplicity="*" />
@@ -7714,6 +7763,27 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="ManagerPriceTargetIssuer_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ManagerPriceTargetIssuerId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ManagerPriceTargetIssuer_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="IssuerId" Type="int" Mode="In" />
+          <Parameter Name="StopLossPrice" Type="numeric" Mode="In" />
+          <Parameter Name="TargetPrice" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ManagerPriceTargetIssuer_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ManagerPriceTargetIssuerId" Type="int" Mode="In" />
+          <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="IssuerId" Type="int" Mode="In" />
+          <Parameter Name="StopLossPrice" Type="numeric" Mode="In" />
+          <Parameter Name="TargetPrice" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="Market_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -8648,6 +8718,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="LegalEntity" EntityType="Self.LegalEntity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LegalEntityChargeSchedule" EntityType="Self.LegalEntityChargeSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ManagerPriceTarget" EntityType="Self.ManagerPriceTarget" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ManagerPriceTargetIssuer" EntityType="Self.ManagerPriceTargetIssuer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Market" EntityType="Self.Market" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MatchedStatus" EntityType="Self.MatchedStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OfficialNetAssetValue" EntityType="Self.OfficialNetAssetValue" Schema="dbo" store:Type="Tables" />
@@ -9682,6 +9753,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ManagerPriceTargetInstrumentMarketId" Association="Self.ManagerPriceTargetInstrumentMarketId">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
             <End Role="ManagerPriceTarget" EntitySet="ManagerPriceTarget" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetIssuerIssuerIdFK" Association="Self.ManagerPriceTargetIssuerIssuerIdFK">
+            <End Role="Issuer" EntitySet="Issuer" />
+            <End Role="ManagerPriceTargetIssuer" EntitySet="ManagerPriceTargetIssuer" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetIssuerManagerIdFK" Association="Self.ManagerPriceTargetIssuerManagerIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ManagerPriceTargetIssuer" EntitySet="ManagerPriceTargetIssuer" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetIssuerUpdateUserIDFK" Association="Self.ManagerPriceTargetIssuerUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ManagerPriceTargetIssuer" EntitySet="ManagerPriceTargetIssuer" />
           </AssociationSet>
           <AssociationSet Name="ManagerPriceTargetManagerIdFK" Association="Self.ManagerPriceTargetManagerIdFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -11556,6 +11639,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="TransferEventInputUserId" Association="Odey.Framework.Keeley.Entities.TransferEventInputUserId">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
+          <EntitySet Name="ManagerPriceTargetIssuers" EntityType="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuer" />
+          <AssociationSet Name="ManagerPriceTargetIssuerManagerIdFK" Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerManagerIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ManagerPriceTargetIssuer" EntitySet="ManagerPriceTargetIssuers" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetIssuerUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ManagerPriceTargetIssuer" EntitySet="ManagerPriceTargetIssuers" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerPriceTargetIssuerIssuerIdFK" Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerIssuerIdFK">
+            <End Role="Issuer" EntitySet="Issuers" />
+            <End Role="ManagerPriceTargetIssuer" EntitySet="ManagerPriceTargetIssuers" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -17531,6 +17627,57 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ManagerPriceTargetIssuer">
+          <Key>
+            <PropertyRef Name="ManagerPriceTargetIssuerId" />
+          </Key>
+          <Property Name="ManagerPriceTargetIssuerId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ManagerId" Type="Int32" Nullable="false" />
+          <Property Name="IssuerId" Type="Int32" Nullable="false" />
+          <Property Name="StopLossPrice" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TargetPrice" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="ManagerUser" Relationship="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerManagerIdFK" FromRole="ManagerPriceTargetIssuer" ToRole="ApplicationUser" />
+          <NavigationProperty Name="Issuer" Relationship="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerIssuerIdFK" FromRole="ManagerPriceTargetIssuer" ToRole="Issuer" />
+        </EntityType>
+        <Association Name="ManagerPriceTargetIssuerManagerIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuer" Role="ManagerPriceTargetIssuer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTargetIssuer">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerPriceTargetIssuerUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuer" Role="ManagerPriceTargetIssuer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTargetIssuer">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ManagerPriceTargetIssuerIssuerIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Issuer" Role="Issuer" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuer" Role="ManagerPriceTargetIssuer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ManagerPriceTargetIssuer">
+              <PropertyRef Name="IssuerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22493,6 +22640,50 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ManagerPriceTargetIssuers">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuer">
+              <MappingFragment StoreEntitySet="ManagerPriceTargetIssuer">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="TargetPrice" ColumnName="TargetPrice" />
+                <ScalarProperty Name="StopLossPrice" ColumnName="StopLossPrice" />
+                <ScalarProperty Name="IssuerId" ColumnName="IssuerId" />
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="ManagerPriceTargetIssuerId" ColumnName="ManagerPriceTargetIssuerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuer">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ManagerPriceTargetIssuer_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="TargetPrice" ParameterName="TargetPrice" />
+                  <ScalarProperty Name="StopLossPrice" ParameterName="StopLossPrice" />
+                  <ScalarProperty Name="IssuerId" ParameterName="IssuerId" />
+                  <ScalarProperty Name="ManagerId" ParameterName="ManagerId" />
+                  <ResultBinding Name="ManagerPriceTargetIssuerId" ColumnName="ManagerPriceTargetIssuerId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ManagerPriceTargetIssuer_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="TargetPrice" ParameterName="TargetPrice" Version="Current" />
+                  <ScalarProperty Name="StopLossPrice" ParameterName="StopLossPrice" Version="Current" />
+                  <ScalarProperty Name="IssuerId" ParameterName="IssuerId" Version="Current" />
+                  <ScalarProperty Name="ManagerId" ParameterName="ManagerId" Version="Current" />
+                  <ScalarProperty Name="ManagerPriceTargetIssuerId" ParameterName="ManagerPriceTargetIssuerId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ManagerPriceTargetIssuer_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ManagerPriceTargetIssuerId" ParameterName="ManagerPriceTargetIssuerId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -27263,47 +27454,43 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="23.489583333333332" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="23.322916666666668" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="23.192708333333332" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="22.947916666666668" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="22.286456833333332" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="22.119790166666668" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="21.67708133333333" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="21.510414666666666" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.153248409770349" />
-          <edmx:ConnectorPoint PointX="19.875" PointY="22.153248409770349" />
+          <edmx:ConnectorPoint PointX="25" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="23.802086083333332" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="23.635419416666668" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="23.192708333333332" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="23.026041666666668" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="22.286456833333332" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="22.119790166666668" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="21.67708133333333" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="21.510414666666666" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.10879305947384" />
+          <edmx:ConnectorPoint PointX="19.875" PointY="22.10879305947384" />
           <edmx:ConnectorPoint PointX="19.875" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.603669871794871" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.437003205128207" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.24900641025641" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.959025185897435" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.9400641025641" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.582147435897433" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.662079261217947" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.495412594551283" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.365825189102562" PointY="22.826315104166664" />
+          <edmx:ConnectorPoint PointX="18.523301282051282" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="18.439871794871795" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="18.129839743589745" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="17.520833333333332" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="17.276041666666668" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="17.139446594551281" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="16.916669166666672" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="15.708333333333334" PointY="22.826315104166664" />
+          <edmx:ConnectorPoint PointX="17.291666666666668" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="17.083335833333333" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="16.916669166666669" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="16.4096484375" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="16.242981770833335" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="22.826315104166664" />
           <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.489583333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="12.708333333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="12.541666666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.333333333333334" PointY="22.826315104166664" />
+          <edmx:ConnectorPoint PointX="12.760416666666666" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.541671415054323" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.541671415054323" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.541670103763583" PointY="25.134095052083339" />
+          <edmx:ConnectorPoint PointX="11.541670103763583" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -28280,6 +28467,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetInstrumentMarketId" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventInputUserId" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuer" Width="1.5" PointX="16" PointY="6" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerManagerIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerIssuerIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
