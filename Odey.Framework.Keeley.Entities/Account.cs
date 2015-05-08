@@ -32,5 +32,7 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int FundId { get; set; }
+    	[DataMember]
+        public int AccountTypeId { get; set; }
     }
 }
