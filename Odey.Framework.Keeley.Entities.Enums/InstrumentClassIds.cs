@@ -62,6 +62,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         InflationLinkedBond=82,
         [EnumMember]
-        Right=88
+        Right=88,
+        [EnumMember]
+        FXOption=87
     }
 }
