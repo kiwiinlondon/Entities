@@ -40,8 +40,12 @@ namespace Odey.Framework.Keeley.Entities
         public bool Unconfirmed { get; set; }
     	[DataMember]
         public Nullable<int> SalesPersonId { get; set; }
+    	[DataMember]
+        public int CountryId { get; set; }
     
         [DataMember]
         public virtual List<ClientAccount> ClientAccounts { get; set; }
+        [DataMember]
+        public virtual Country Country { get; set; }
     }
 }
