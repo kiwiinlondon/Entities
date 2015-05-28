@@ -34,5 +34,8 @@ namespace Odey.Framework.Keeley.Entities
         public int FundId { get; set; }
     	[DataMember]
         public int AccountTypeId { get; set; }
+    
+        [DataMember]
+        public virtual Custodian Custodian { get; set; }
     }
 }
