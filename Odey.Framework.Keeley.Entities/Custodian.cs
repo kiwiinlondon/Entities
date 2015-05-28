@@ -26,6 +26,6 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     
         [DataMember]
-        private LegalEntity LegalEntity { get; set; }
+        public LegalEntity LegalEntity { get; set; }
     }
 }
