@@ -45,5 +45,7 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual List<ExtractEntityPropertyValue> ExtractEntityPropertyValues { get; set; }
+        [DataMember]
+        public virtual EntityType EntityType { get; set; }
     }
 }

@@ -37,5 +37,7 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual EntityRankingSchemeItem EntityRankingSchemeItem { get; set; }
+        [DataMember]
+        public virtual EntityType EntityType { get; set; }
     }
 }

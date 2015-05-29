@@ -14,14 +14,16 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class EntityProperty
+    public partial class EntityType
     {
+    	
+        public EntityType()
+        {
+            this.EntityProperties = new List<EntityProperty>();
+        }
+    
     	[DataMember]
-        public int EntityPropertyID { get; set; }
-    	[DataMember]
-        public int EntityTypeId { get; set; }
-    	[DataMember]
-        public bool NeedsToBeCalculated { get; set; }
+        public int EntityTypeID { get; set; }
     	[DataMember]
         public string Name { get; set; }
     	[DataMember]
@@ -31,15 +33,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public bool PropertyOnChildEntity { get; set; }
-    	[DataMember]
-        public int TypeCode { get; set; }
-    	[DataMember]
-        public Nullable<int> IdentifierTypeId { get; set; }
-    	[DataMember]
-        public bool IsPrimaryKey { get; set; }
+        public string FullyQualifiedName { get; set; }
     
         [DataMember]
-        public virtual EntityType EntityType { get; set; }
+        public virtual List<EntityProperty> EntityProperties { get; set; }
     }
 }
