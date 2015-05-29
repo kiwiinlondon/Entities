@@ -453,6 +453,7 @@
           <Property Name="PropertyOnChildEntity" Type="bit" Nullable="false" />
           <Property Name="TypeCode" Type="int" Nullable="false" />
           <Property Name="IdentifierTypeId" Type="int" />
+          <Property Name="IsPrimaryKey" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="EntityPropertyOverride">
           <Key>
@@ -505,6 +506,17 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="AlwaysStore" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EntityType">
+          <Key>
+            <PropertyRef Name="EntityTypeID" />
+          </Key>
+          <Property Name="EntityTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="FullyQualifiedName" Type="varchar" MaxLength="500" Nullable="false" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -2760,6 +2772,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="EntityPropertyEntityTypeIDFK">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="1" />
+          <End Role="EntityProperty" Type="Self.EntityProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityProperty">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="EntityPropertyIdentifierTypeIDFK">
           <End Role="IdentifierType" Type="Self.IdentifierType" Multiplicity="0..1" />
           <End Role="EntityProperty" Type="Self.EntityProperty" Multiplicity="*" />
@@ -2808,6 +2832,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="EntityRankingSchemeItemEntityTypeIDFK">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="1" />
+          <End Role="EntityRankingSchemeItem" Type="Self.EntityRankingSchemeItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityRankingSchemeItem">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="EntityRankingSchemeItemUserIDFK">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
           <End Role="EntityRankingSchemeItem" Type="Self.EntityRankingSchemeItem" Multiplicity="*" />
@@ -2844,6 +2880,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="EntityRankingSchemeOrderEntityTypeIdFK">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="1" />
+          <End Role="EntityRankingSchemeOrder" Type="Self.EntityRankingSchemeOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityRankingSchemeOrder">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="EntityRankingSchemeRuleUserIDFK">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
           <End Role="EntityRankingSchemeOrder" Type="Self.EntityRankingSchemeOrder" Multiplicity="*" />
@@ -2864,6 +2912,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="EntityRankingScheme">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EntityTypeUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="EntityType">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -2961,6 +3021,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="Exposure">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExtractEntityEntityTypeIdFK">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="1" />
+          <End Role="ExtractEntity" Type="Self.ExtractEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="ExtractEntity">
+              <PropertyRef Name="EntityTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8686,6 +8758,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="EntityRankingScheme" EntityType="Self.EntityRankingScheme" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EntityRankingSchemeItem" EntityType="Self.EntityRankingSchemeItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EntityRankingSchemeOrder" EntityType="Self.EntityRankingSchemeOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EntityType" EntityType="Self.EntityType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EventIdToRepull" EntityType="Self.EventIdToRepull" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EventType" EntityType="Self.EventType" Schema="dbo" store:Type="Tables" />
@@ -9100,6 +9173,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="DealingDateDefinition" EntitySet="DealingDateDefinition" />
           </AssociationSet>
+          <AssociationSet Name="EntityPropertyEntityTypeIDFK" Association="Self.EntityPropertyEntityTypeIDFK">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="EntityProperty" EntitySet="EntityProperty" />
+          </AssociationSet>
           <AssociationSet Name="EntityPropertyIdentifierTypeIDFK" Association="Self.EntityPropertyIdentifierTypeIDFK">
             <End Role="IdentifierType" EntitySet="IdentifierType" />
             <End Role="EntityProperty" EntitySet="EntityProperty" />
@@ -9116,6 +9193,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="EntityProperty" EntitySet="EntityProperty" />
           </AssociationSet>
+          <AssociationSet Name="EntityRankingSchemeItemEntityTypeIDFK" Association="Self.EntityRankingSchemeItemEntityTypeIDFK">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="EntityRankingSchemeItem" EntitySet="EntityRankingSchemeItem" />
+          </AssociationSet>
           <AssociationSet Name="EntityRankingSchemeItemUserIDFK" Association="Self.EntityRankingSchemeItemUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="EntityRankingSchemeItem" EntitySet="EntityRankingSchemeItem" />
@@ -9128,6 +9209,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="EntityRankingSchemeItem" EntitySet="EntityRankingSchemeItem" />
             <End Role="EntityRankingSchemeOrder" EntitySet="EntityRankingSchemeOrder" />
           </AssociationSet>
+          <AssociationSet Name="EntityRankingSchemeOrderEntityTypeIdFK" Association="Self.EntityRankingSchemeOrderEntityTypeIdFK">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="EntityRankingSchemeOrder" EntitySet="EntityRankingSchemeOrder" />
+          </AssociationSet>
           <AssociationSet Name="EntityRankingSchemeRuleUserIDFK" Association="Self.EntityRankingSchemeRuleUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="EntityRankingSchemeOrder" EntitySet="EntityRankingSchemeOrder" />
@@ -9135,6 +9220,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="EntityRankingSchemeUserIDFK" Association="Self.EntityRankingSchemeUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="EntityRankingScheme" EntitySet="EntityRankingScheme" />
+          </AssociationSet>
+          <AssociationSet Name="EntityTypeUserIDFK" Association="Self.EntityTypeUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="EntityType" EntitySet="EntityType" />
           </AssociationSet>
           <AssociationSet Name="EventEventTypeIDFK" Association="Self.EventEventTypeIDFK">
             <End Role="EventType" EntitySet="EventType" />
@@ -9167,6 +9256,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ExposureUserIDFK" Association="Self.ExposureUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Exposure" EntitySet="Exposure" />
+          </AssociationSet>
+          <AssociationSet Name="ExtractEntityEntityTypeIdFK" Association="Self.ExtractEntityEntityTypeIdFK">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="ExtractEntity" EntitySet="ExtractEntity" />
           </AssociationSet>
           <AssociationSet Name="ExtractEntityExtractIdFK" Association="Self.ExtractEntityExtractIdFK">
             <End Role="Extract" EntitySet="Extract" />
@@ -11679,6 +11772,27 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ClientAccount" EntitySet="ClientAccounts" />
             <End Role="ClientAccount1" EntitySet="ClientAccounts" />
           </AssociationSet>
+          <EntitySet Name="EntityTypes" EntityType="Odey.Framework.Keeley.Entities.EntityType" />
+          <AssociationSet Name="EntityTypeUserIDFK" Association="Odey.Framework.Keeley.Entities.EntityTypeUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="EntityType" EntitySet="EntityTypes" />
+          </AssociationSet>
+          <AssociationSet Name="EntityPropertyEntityTypeIDFK" Association="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK">
+            <End Role="EntityType" EntitySet="EntityTypes" />
+            <End Role="EntityProperty" EntitySet="EntityProperties" />
+          </AssociationSet>
+          <AssociationSet Name="EntityRankingSchemeItemEntityTypeIDFK" Association="Odey.Framework.Keeley.Entities.EntityRankingSchemeItemEntityTypeIDFK">
+            <End Role="EntityType" EntitySet="EntityTypes" />
+            <End Role="EntityRankingSchemeItem" EntitySet="EntityRankingSchemeItems" />
+          </AssociationSet>
+          <AssociationSet Name="EntityRankingSchemeOrderEntityTypeIdFK" Association="Odey.Framework.Keeley.Entities.EntityRankingSchemeOrderEntityTypeIdFK">
+            <End Role="EntityType" EntitySet="EntityTypes" />
+            <End Role="EntityRankingSchemeOrder" EntitySet="EntityRankingSchemeOrders" />
+          </AssociationSet>
+          <AssociationSet Name="ExtractEntityEntityTypeIdFK" Association="Odey.Framework.Keeley.Entities.ExtractEntityEntityTypeIdFK">
+            <End Role="EntityType" EntitySet="EntityTypes" />
+            <End Role="ExtractEntity" EntitySet="ExtractEntities" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -12913,7 +13027,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Boolean" Name="PropertyOnChildEntity" Nullable="false" />
           <Property Type="Int32" Name="TypeCode" Nullable="false" />
           <Property Type="Int32" Name="IdentifierTypeId" />
-          <NavigationProperty Name="EntityPropertyOverrides" Relationship="Odey.Framework.Keeley.Entities.EntityPropertyOverrideEntityPropertyIdFK" FromRole="EntityProperty" ToRole="EntityPropertyOverride" />
+          <Property Name="IsPrimaryKey" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="EntityType" Relationship="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK" FromRole="EntityProperty" ToRole="EntityType" />
         </EntityType>
         <EntityType Name="Extract">
           <Key>
@@ -12949,6 +13064,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="ExtractEntityPropertyValues" Relationship="Odey.Framework.Keeley.Entities.ExtractEntityPropertyValueExtractEntityIDFK" FromRole="ExtractEntity" ToRole="ExtractEntityPropertyValue" />
           <Property Type="Int32" Name="EntityTypeId" Nullable="false" />
+          <NavigationProperty Name="EntityType" Relationship="Odey.Framework.Keeley.Entities.ExtractEntityEntityTypeIdFK" FromRole="ExtractEntity" ToRole="EntityType" />
         </EntityType>
         <EntityType Name="ExtractInputConfiguration">
           <Key>
@@ -13639,6 +13755,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="EntityType" Relationship="Odey.Framework.Keeley.Entities.EntityRankingSchemeItemEntityTypeIDFK" FromRole="EntityRankingSchemeItem" ToRole="EntityType" />
         </EntityType>
         <EntityType Name="FXRate">
           <Key>
@@ -13806,6 +13923,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Boolean" Name="AlwaysStore" Nullable="false" />
           <NavigationProperty Name="EntityRankingSchemeItem" Relationship="Odey.Framework.Keeley.Entities.EntityRankingSchemeOrderEntityRankingSchemeItemFK" FromRole="EntityRankingSchemeOrder" ToRole="EntityRankingSchemeItem" />
+          <NavigationProperty Name="EntityType" Relationship="Odey.Framework.Keeley.Entities.EntityRankingSchemeOrderEntityTypeIdFK" FromRole="EntityRankingSchemeOrder" ToRole="EntityType" />
         </EntityType>
         <Association Name="EntityRankingSchemeRuleUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -17722,6 +17840,78 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EntityType">
+          <Key>
+            <PropertyRef Name="EntityTypeID" />
+          </Key>
+          <Property Name="EntityTypeID" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FullyQualifiedName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="EntityProperties" Relationship="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK" FromRole="EntityType" ToRole="EntityProperty" />
+        </EntityType>
+        <Association Name="EntityTypeUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="EntityType">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EntityPropertyEntityTypeIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EntityProperty" Role="EntityProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityProperty">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EntityRankingSchemeItemEntityTypeIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EntityRankingSchemeItem" Role="EntityRankingSchemeItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityRankingSchemeItem">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EntityRankingSchemeOrderEntityTypeIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EntityRankingSchemeOrder" Role="EntityRankingSchemeOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityRankingSchemeOrder">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExtractEntityEntityTypeIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ExtractEntity" Role="ExtractEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="ExtractEntity">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -19065,6 +19255,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="EntityProperties">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EntityProperty">
               <MappingFragment StoreEntitySet="EntityProperty">
+                <ScalarProperty Name="IsPrimaryKey" ColumnName="IsPrimaryKey" />
                 <ScalarProperty Name="IdentifierTypeId" ColumnName="IdentifierTypeId" />
                 <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
                 <ScalarProperty Name="PropertyOnChildEntity" ColumnName="PropertyOnChildEntity" />
@@ -22734,6 +22925,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="EntityTypes">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EntityType">
+              <MappingFragment StoreEntitySet="EntityType">
+                <ScalarProperty Name="FullyQualifiedName" ColumnName="FullyQualifiedName" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EntityTypeID" ColumnName="EntityTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -22757,7 +22960,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <edmx:Diagram Name="KeeleyEntities" ZoomLevel="69">
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.625" Height="2.5571907552083353" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.875" PointX="8.25" PointY="18.875" Height="5.8263151041666674" IsExpanded="true" />
@@ -27523,8 +27726,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="19.822916666666668" PointY="21.893364036352835" />
           <edmx:ConnectorPoint PointX="19.75" PointY="21.893364036352835" />
           <edmx:ConnectorPoint PointX="19.75" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.504391025641024" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.337724358974359" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="19.24900641025641" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="19.082339743589745" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="19.055379352564103" PointY="22.826315104166667" />
@@ -27533,18 +27734,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="18.129839743589745" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="17.520833333333332" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="17.291666666666668" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="17.083335833333333" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="16.916669166666669" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="16.4096484375" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="16.242981770833335" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="17.215423409576324" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="16.916669166666672" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="15.708333333333334" PointY="22.826315104166664" />
           <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="13.489583333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.322916666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.270833333333334" PointY="22.826315104166664" />
+          <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.729166666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="12.708333333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="12.541666666666666" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="25.134095052083339" />
           <edmx:ConnectorPoint PointX="11.541669693985224" PointY="25.134095052083339" />
@@ -28405,7 +28602,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25.75390375" PointY="23.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Administrator" Width="1.5" PointX="4.875" PointY="9.75" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" PointX="1.25" PointY="10.375" Width="1.5" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Client" PointX="1.125" PointY="9.25" Width="1.5" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientAccount" Width="1.5" PointX="8.625" PointY="55.25" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientTrade" Width="1.5" PointX="11.25" PointY="54.625" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AdministratorUserIDFK" />
@@ -28530,6 +28727,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ManagerPriceTargetIssuerIssuerIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientCountryFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientAccountClientAccount" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.EntityType" Width="1.5" PointX="3" PointY="65.375" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityTypeUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityRankingSchemeItemEntityTypeIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityRankingSchemeOrderEntityTypeIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractEntityEntityTypeIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
