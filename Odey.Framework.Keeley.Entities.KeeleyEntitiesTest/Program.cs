@@ -20,11 +20,11 @@ namespace Odey.Framework.KeeleyEntitiesTest
         {
             using (var context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-               
-                var ab = context.Instruments.FirstOrDefault(a => a.InstrumentID == 34098);
-                ab.Name = "March 15 Puts on SBRY LN LIFFE (201)";
+
+                var ab = context.Instruments.FirstOrDefault(a => a.InstrumentID == 2536);
+                ab.Name = null;
                // EntityPropertyOverrideUtilities.ApplyOverrides(ab, context);
-                EntityPropertyOverrideUtilities.CreateOrUpdateOverrides(context, new Dictionary<int, List<int>>() { { 33, new List<int> { 98, 99 } } });
+                EntityPropertyOverrideUtilities.CreateOrUpdateOverrides(context, new EntityPropertyIds[] {EntityPropertyIds.Instrument_Name,EntityPropertyIds.Instrument_LongName}  );
                // var d = context.GetOriginalValues()[ab]["Name"];
                 context.SaveChanges();
               //  d = d;

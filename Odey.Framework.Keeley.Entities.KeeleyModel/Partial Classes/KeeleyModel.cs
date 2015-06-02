@@ -221,7 +221,7 @@ namespace Odey.Framework.Keeley.Entities
         #endregion
 
         #region Save Changes
-        public Dictionary<object,DbPropertyValues> GetOriginalValuesOfModifiedEntities()
+        public Dictionary<object,DbPropertyValues> GetModifiedEntities()
         {
             Dictionary<object, DbPropertyValues> originalValues = new Dictionary<object, DbPropertyValues>();
             foreach (DbEntityEntry entry in this.ChangeTracker.Entries().Where(p => p.State == System.Data.EntityState.Modified))

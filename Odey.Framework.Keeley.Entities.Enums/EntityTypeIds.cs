@@ -74,7 +74,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ApplicationUser = 40,
         [EnumMember]
-        Account = 41
+        Account = 41,
+        [EnumMember]
+        Client = 44
     }
 }
 

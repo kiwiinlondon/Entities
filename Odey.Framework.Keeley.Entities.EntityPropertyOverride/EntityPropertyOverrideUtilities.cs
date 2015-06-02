@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using Odey.Framework.Keeley.Entities.Caches;
 using System.Data.Entity.Infrastructure;
+using Odey.Framework.Keeley.Entities.Enums;
 
 namespace Odey.Framework.Keeley.Entities.EntityPropertyOverrides
 {
@@ -26,24 +27,33 @@ namespace Odey.Framework.Keeley.Entities.EntityPropertyOverrides
 
         }
 
-        public static void ApplyOverrides<T>(T entity, KeeleyModel context)
+        public static void ApplyOverrides(KeeleyModel context)
+        {
+            IEnumerable<object> modifiedEntities = context.GetModifiedEntities().Values;
+            foreach (object modifiedEntity in modifiedEntities)
+            {
+                ApplyOverrides(modifiedEntity, context);
+            }
+        }
+
+        private static void ApplyOverrides<T>(T entity, KeeleyModel context)
         {
             Type typeOfEntity;
             EntityType entityType;
             int entityId;
-            Dictionary<int, EntityPropertyOverride> overrides = GetExistingOverridesForEntity(entity, context, out typeOfEntity, out entityType, out entityId);
-            ApplyOverrides(entity, context, overrides.Values, entityId, entityType, typeOfEntity);
+            GetEntityDetails(entity, out typeOfEntity, out entityType, out entityId);
+            List<EntityPropertyOverride> overrides = context.EntityPropertyOverrides.Where(a => a.EntityID == entityId && a.EntityProperty.EntityTypeId == entityType.EntityTypeID).ToList();
+            ApplyOverrides(entity, context, overrides, entityId, entityType, typeOfEntity);
         }
 
-        private static Dictionary<int, EntityPropertyOverride> GetExistingOverridesForEntity<T>(T entity, KeeleyModel context, out Type typeOfEntity, out EntityType entityType, out int entityId)
+        private static void GetEntityDetails<T>(T entity, out Type typeOfEntity, out EntityType entityType, out int entityId)
         {
             typeOfEntity = entity.GetType();
             entityType = GetEntityType(typeOfEntity);
-            int id = GetId(entity, typeOfEntity, entityType);
-            entityId = id;
-            int entityTypeId = entityType.EntityTypeID;
-            return context.EntityPropertyOverrides.Where(a => a.EntityID == id && a.EntityProperty.EntityTypeId == entityTypeId).ToDictionary(a=>a.EntityPropertyId,a=>a);
+            entityId = GetId(entity, typeOfEntity, entityType);
         }
+
+        
 
         public static void ApplyOverrides<T>(T entity, KeeleyModel context, IEnumerable<EntityPropertyOverride> overrides, int entityId, EntityType entityType, Type typeOfEntity)
         {
@@ -75,18 +85,29 @@ namespace Odey.Framework.Keeley.Entities.EntityPropertyOverrides
             }
         }
 
-        public static void CreateOrUpdateOverrides(KeeleyModel context, Dictionary<int, List<int>> entityPropertyIdsThatCanBeOverridenByEntityTypeId)
+        public static void CreateOrUpdateOverrides(KeeleyModel context, EntityPropertyIds[] entityPropertyIdsThatCanBeOverriden)
         {
-            foreach (var modifiedEntity in context.GetOriginalValuesOfModifiedEntities())            
+            if (entityPropertyIdsThatCanBeOverriden != null && entityPropertyIdsThatCanBeOverriden.Count() > 0)
             {
-                var entity = modifiedEntity.Key;
-                Type typeOfEntity;
-                EntityType entityType;
-                int entityId;
-                Dictionary<int,EntityPropertyOverride> existingOverrides = GetExistingOverridesForEntity(entity, context, out typeOfEntity, out entityType, out entityId);
-                List<int> entityPropertyIds = entityPropertyIdsThatCanBeOverridenByEntityTypeId[entityType.EntityTypeID];
-                List<EntityProperty> entityProperties = entityType.EntityProperties.Where(a => entityPropertyIds.Contains(a.EntityPropertyID)).ToList();
-                CreateOrUpdateOverrides(entity, context, entityProperties, entityType, typeOfEntity, entityId, modifiedEntity.Value, existingOverrides);
+                foreach (var modifiedEntity in context.GetModifiedEntities())
+                {
+                    var entity = modifiedEntity.Key;
+                    Type typeOfEntity;
+                    EntityType entityType;
+                    int entityId;
+                    GetEntityDetails(entity, out typeOfEntity, out entityType, out entityId);
+
+                    List<EntityProperty> entityProperties = entityType.EntityProperties.Where(a => entityPropertyIdsThatCanBeOverriden.Contains((EntityPropertyIds)a.EntityPropertyID)).ToList();
+
+                    if (entityProperties.Count() > 0)
+                    {
+                        int[] entityPropertyIds = entityProperties.Select(a => a.EntityPropertyID).ToArray();
+                        Dictionary<int, EntityPropertyOverride> existingOverrides = context.EntityPropertyOverrides
+                            .Where(a => a.EntityID == entityId && entityPropertyIds.Contains(a.EntityPropertyId)).ToDictionary(a => a.EntityPropertyId, a => a);
+
+                        CreateOrUpdateOverrides(entity, context, entityProperties, entityType, typeOfEntity, entityId, modifiedEntity.Value, existingOverrides);
+                    }
+                }
             }
         }
 
