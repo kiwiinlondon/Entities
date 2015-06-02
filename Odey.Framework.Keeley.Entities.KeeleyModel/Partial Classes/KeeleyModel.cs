@@ -138,7 +138,6 @@ namespace Odey.Framework.Keeley.Entities
         {
 
             ChangedEntity changedEntity = new ChangedEntity(entry.Entity.GetType(), entry.State);
-            ChangedEntities.Add(changedEntity);
             changedEntitiesByEntry.Add(entry, changedEntity);
             if (entry.State == EntityState.Deleted)
             {
@@ -222,36 +221,54 @@ namespace Odey.Framework.Keeley.Entities
         #endregion
 
         #region Save Changes
-        public override int SaveChanges()
+        public Dictionary<object,DbPropertyValues> GetOriginalValuesOfModifiedEntities()
         {
-            
-            //needed to bring context back in line with entity
-            ChangedEntities = new List<ChangedEntity>();
-            Dictionary<DbEntityEntry, ChangedEntity> changedEntitiesByEntry = new Dictionary<DbEntityEntry, ChangedEntity>();
+            Dictionary<object, DbPropertyValues> originalValues = new Dictionary<object, DbPropertyValues>();
+            foreach (DbEntityEntry entry in this.ChangeTracker.Entries().Where(p => p.State == System.Data.EntityState.Modified))
+            {
+                originalValues.Add(entry.Entity, entry.OriginalValues);                
+            }
+            return originalValues;
+        }
+
+        private Dictionary<DbEntityEntry, ChangedEntity> GetChangedEntites()
+        {
+            Dictionary<DbEntityEntry, ChangedEntity>  changedEntitiesByEntry = new Dictionary<DbEntityEntry, ChangedEntity>();
 
             foreach (DbEntityEntry entry in this.ChangeTracker.Entries().Where(p => p.State == System.Data.EntityState.Added || p.State == System.Data.EntityState.Deleted || p.State == System.Data.EntityState.Modified))
-            {
-
+            {                
                 AddToChangedEntities(entry, changedEntitiesByEntry);
-                if (entry.State != EntityState.Deleted)
-                {
-                    PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
+                SetUpdateuserId(entry);
+            }
+            return changedEntitiesByEntry;
+        }
 
-                    if (updateUserIdPropInfo != null)
+        private void SetUpdateuserId(DbEntityEntry entry)
+        {
+            if (entry.State != EntityState.Deleted)
+            {
+                PropertyInfo updateUserIdPropInfo = entry.Entity.GetType().GetProperty("UpdateUserID");
+
+                if (updateUserIdPropInfo != null)
+                {
+                    string updateUserName;
+                    int? userId = GetApplicationUserId(out updateUserName);
+                    if (userId == null)
                     {
-                        string updateUserName;
-                        int? userId = GetApplicationUserId(out updateUserName);
-                        if (userId == null)
-                        {
-                            throw new ApplicationException(String.Format("User {0} is not authorised to make changes to entity type {1}", updateUserName, entry.Entity.GetType().ToString()));
-                        }
-                        else
-                        {
-                            updateUserIdPropInfo.SetValue(entry.Entity, userId.Value, null);
-                        }
+                        throw new ApplicationException(String.Format("User {0} is not authorised to make changes to entity type {1}", updateUserName, entry.Entity.GetType().ToString()));
+                    }
+                    else
+                    {
+                        updateUserIdPropInfo.SetValue(entry.Entity, userId.Value, null);
                     }
                 }
             }
+        }
+
+        public override int SaveChanges()
+        {
+            Dictionary<DbEntityEntry, ChangedEntity> changedEntitiesByEntry = GetChangedEntites();
+            ChangedEntities = changedEntitiesByEntry.Values.ToList();
             int toReturn = base.SaveChanges();
             EnhanceChangedEntities(changedEntitiesByEntry);
             return toReturn;

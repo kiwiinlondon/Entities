@@ -10,6 +10,7 @@ using Odey.Framework.Keeley.Entities.Enums;
 using Odey.Framework.Keeley.Entities.Interfaces;
 using Odey.StaticServices.Clients;
 using ServiceModelEx;
+using Odey.Framework.Keeley.Entities.EntityPropertyOverrides;
 
 namespace Odey.Framework.KeeleyEntitiesTest
 {
@@ -19,15 +20,14 @@ namespace Odey.Framework.KeeleyEntitiesTest
         {
             using (var context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-                var ret = context.FundNetAssetValues
-                    .Include(a => a.Fund.LegalEntity)
-                    .Where(a => a.ReferenceDate == DateTime.Today
-                                && a.Fund.IsActive
-                                && (a.Fund.FundTypeId == (int) FundTypeIds.Hedge || a.Fund.FundTypeId == (int) FundTypeIds.UCITS))
-                    .ToList()
-                     .OrderBy(f => f.Fund.Name)
-                     .ToList();
-                ret = ret;
+               
+                var ab = context.Instruments.FirstOrDefault(a => a.InstrumentID == 34098);
+                ab.Name = "March 15 Puts on SBRY LN LIFFE (201)";
+               // EntityPropertyOverrideUtilities.ApplyOverrides(ab, context);
+                EntityPropertyOverrideUtilities.CreateOrUpdateOverrides(context, new Dictionary<int, List<int>>() { { 33, new List<int> { 98, 99 } } });
+               // var d = context.GetOriginalValues()[ab]["Name"];
+                context.SaveChanges();
+              //  d = d;
             }
         }
 
