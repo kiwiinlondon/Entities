@@ -196,6 +196,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Client_ClientId = 114,
         [EnumMember]
-        Client_Name = 115
+        Client_Name = 115,
+        [EnumMember]
+        Client_ClientSubTypeId = 116
     }
 }

@@ -19,11 +19,16 @@ namespace Odey.Framework.Keeley.Entities.EntityPropertyOverrides
             return cache.Get(entityType.FullName);
 
         }
-        private static int GetId<T>(T entity, Type typeOfEntity, EntityType entityType)
-        {
-            PropertyInfo propInfo = typeOfEntity.GetProperty(entityType.PrimaryKey.Name);
-            object primarykeyValue = propInfo.GetValue(entity);
-            return (int)primarykeyValue;
+        private static int? GetId<T>(T entity, Type typeOfEntity, EntityType entityType)
+        {           
+            EntityProperty primarykey = entityType.PrimaryKey;
+            if (primarykey != null)
+            {
+                PropertyInfo propInfo = typeOfEntity.GetProperty(primarykey.Name);
+                object primarykeyValue = propInfo.GetValue(entity);
+                return (int)primarykeyValue;
+            }
+            return null;
 
         }
 
@@ -40,22 +45,32 @@ namespace Odey.Framework.Keeley.Entities.EntityPropertyOverrides
         {
             Type typeOfEntity;
             EntityType entityType;
-            int entityId;
+            int? entityId;
             GetEntityDetails(entity, out typeOfEntity, out entityType, out entityId);
-            List<EntityPropertyOverride> overrides = context.EntityPropertyOverrides.Where(a => a.EntityID == entityId && a.EntityProperty.EntityTypeId == entityType.EntityTypeID).ToList();
-            ApplyOverrides(entity, context, overrides, entityId, entityType, typeOfEntity);
+            if (entityId.HasValue)
+            {
+                List<EntityPropertyOverride> overrides = context.EntityPropertyOverrides.Where(a => a.EntityID == entityId && a.EntityProperty.EntityTypeId == entityType.EntityTypeID).ToList();
+                ApplyOverrides(entity, context, overrides, entityId.Value, entityType, typeOfEntity);
+            }
         }
 
-        private static void GetEntityDetails<T>(T entity, out Type typeOfEntity, out EntityType entityType, out int entityId)
+        private static void GetEntityDetails<T>(T entity, out Type typeOfEntity, out EntityType entityType, out int? entityId)
         {
             typeOfEntity = entity.GetType();
             entityType = GetEntityType(typeOfEntity);
-            entityId = GetId(entity, typeOfEntity, entityType);
+            if (entityType == null)
+            {
+                entityId = null;
+            }
+            else
+            {
+                entityId = GetId(entity, typeOfEntity, entityType);
+            }
         }
 
         
 
-        public static void ApplyOverrides<T>(T entity, KeeleyModel context, IEnumerable<EntityPropertyOverride> overrides, int entityId, EntityType entityType, Type typeOfEntity)
+        private static void ApplyOverrides<T>(T entity, KeeleyModel context, IEnumerable<EntityPropertyOverride> overrides, int entityId, EntityType entityType, Type typeOfEntity)
         {
             if (entityId != default(int))
             {
@@ -94,18 +109,21 @@ namespace Odey.Framework.Keeley.Entities.EntityPropertyOverrides
                     var entity = modifiedEntity.Key;
                     Type typeOfEntity;
                     EntityType entityType;
-                    int entityId;
+                    int? entityId;
                     GetEntityDetails(entity, out typeOfEntity, out entityType, out entityId);
 
-                    List<EntityProperty> entityProperties = entityType.EntityProperties.Where(a => entityPropertyIdsThatCanBeOverriden.Contains((EntityPropertyIds)a.EntityPropertyID)).ToList();
-
-                    if (entityProperties.Count() > 0)
+                    if (entityId.HasValue)
                     {
-                        int[] entityPropertyIds = entityProperties.Select(a => a.EntityPropertyID).ToArray();
-                        Dictionary<int, EntityPropertyOverride> existingOverrides = context.EntityPropertyOverrides
-                            .Where(a => a.EntityID == entityId && entityPropertyIds.Contains(a.EntityPropertyId)).ToDictionary(a => a.EntityPropertyId, a => a);
+                        List<EntityProperty> entityProperties = entityType.EntityProperties.Where(a => entityPropertyIdsThatCanBeOverriden.Contains((EntityPropertyIds)a.EntityPropertyID)).ToList();
 
-                        CreateOrUpdateOverrides(entity, context, entityProperties, entityType, typeOfEntity, entityId, modifiedEntity.Value, existingOverrides);
+                        if (entityProperties.Count() > 0)
+                        {
+                            int[] entityPropertyIds = entityProperties.Select(a => a.EntityPropertyID).ToArray();
+                            Dictionary<int, EntityPropertyOverride> existingOverrides = context.EntityPropertyOverrides
+                                .Where(a => a.EntityID == entityId && entityPropertyIds.Contains(a.EntityPropertyId)).ToDictionary(a => a.EntityPropertyId, a => a);
+
+                            CreateOrUpdateOverrides(entity, context, entityProperties, entityType, typeOfEntity, entityId.Value, modifiedEntity.Value, existingOverrides);
+                        }
                     }
                 }
             }

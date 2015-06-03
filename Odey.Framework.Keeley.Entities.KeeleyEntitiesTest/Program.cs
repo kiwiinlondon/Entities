@@ -21,10 +21,10 @@ namespace Odey.Framework.KeeleyEntitiesTest
             using (var context = new KeeleyModel(SecurityCallStackContext.Current))
             {
 
-                var ab = context.Instruments.FirstOrDefault(a => a.InstrumentID == 2536);
-                ab.Name = null;
+                var ab = context.Charges.FirstOrDefault(a => a.ChargeId == 1);
+                ab.ChargeTypeId = 9;
                // EntityPropertyOverrideUtilities.ApplyOverrides(ab, context);
-                EntityPropertyOverrideUtilities.CreateOrUpdateOverrides(context, new EntityPropertyIds[] {EntityPropertyIds.Instrument_Name,EntityPropertyIds.Instrument_LongName}  );
+                EntityPropertyOverrideUtilities.CreateOrUpdateOverrides(context, new EntityPropertyIds[] {EntityPropertyIds.LegalEntity_Name,EntityPropertyIds.LegalEntity_LongName}  );
                // var d = context.GetOriginalValues()[ab]["Name"];
                 context.SaveChanges();
               //  d = d;
