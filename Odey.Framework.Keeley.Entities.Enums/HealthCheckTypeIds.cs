@@ -17,6 +17,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         MISSING_BETA_VALUE = 4,
+
+        [EnumMember]
+        FX_COLLECTED = 5,
     }
 }
 
