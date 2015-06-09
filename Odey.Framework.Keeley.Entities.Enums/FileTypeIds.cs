@@ -86,5 +86,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         PulseTradesInitialLoad = 37,
         [EnumMember]
         ManagerPriceTarget = 38,
+        [EnumMember]
+        ClientNomineeAccount = 39
     }
 }
