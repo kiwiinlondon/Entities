@@ -27,6 +27,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         CandidaLahaise = 106,
         [EnumMember]
         [Description("Andrew Sandler")]
-        AndrewSandler = 105
+        AndrewSandler = 105,
+        [EnumMember]
+        [Description("Lodewijk Van Moorsel")]
+        LodewijkVanMoorsel = 141
     }
 }
