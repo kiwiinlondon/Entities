@@ -35,7 +35,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MSCI_Daily_TR_Net_Europe_Ex_UK = 9917,
         
         [EnumMember]
-        MSCI_World_Net_TR_World = 9920,
+        MSCI_Daily_TR_Net_World = 9920,
         
         [EnumMember]
         MSCI_Europe_Index = 9915,
