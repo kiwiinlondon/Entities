@@ -14,32 +14,22 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class Position
+    public partial class ClosedPosition
     {
+    	[DataMember]
+        public int ClosedPositionID { get; set; }
     	[DataMember]
         public int PositionId { get; set; }
     	[DataMember]
-        public int AccountID { get; set; }
+        public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public int BookID { get; set; }
-    	[DataMember]
-        public int InstrumentMarketID { get; set; }
-    	[DataMember]
-        public int CurrencyID { get; set; }
-    	[DataMember]
-        public int EntityRankingSchemeId { get; set; }
-    	[DataMember]
-        public bool IsAccrual { get; set; }
     
         [DataMember]
-        public virtual InstrumentMarket InstrumentMarket { get; set; }
-        [DataMember]
-        public virtual Book Book { get; set; }
+        public virtual Position Position { get; set; }
     }
 }

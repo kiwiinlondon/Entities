@@ -141,6 +141,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ManagerPriceTarget> ManagerPriceTargets { get; set; }
         public DbSet<ManagerPriceTargetIssuer> ManagerPriceTargetIssuers { get; set; }
         public DbSet<EntityType> EntityTypes { get; set; }
+        public DbSet<ClosedPosition> ClosedPositions { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

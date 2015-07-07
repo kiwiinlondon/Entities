@@ -84,6 +84,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsVoting { get; set; }
     	[DataMember]
         public System.DateTime ClientLoadDate { get; set; }
+    	[DataMember]
+        public bool IsDistributing { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
