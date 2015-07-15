@@ -19,7 +19,6 @@ namespace Odey.Framework.Keeley.Entities
     	
         public PortfolioAggregationLevel()
         {
-            this.PortfolioEvents = new List<PortfolioEvent>();
             this.PortfolioRollDates = new List<PortfolioRollDate>();
         }
     
@@ -34,8 +33,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     
-        [DataMember]
-        public virtual List<PortfolioEvent> PortfolioEvents { get; set; }
         [DataMember]
         public virtual List<PortfolioRollDate> PortfolioRollDates { get; set; }
     }
