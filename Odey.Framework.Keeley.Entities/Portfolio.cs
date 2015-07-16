@@ -142,6 +142,26 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> IndexRatioID { get; set; }
     	[DataMember]
         public decimal DisclosedNetPosition { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationDeltaNetCostBookCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTodayDeltaNetCostChangeBookCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTodayDeltaNetCostChangeInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTodayFxPnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTodayPricePnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTomorrowDeltaNetCostChangeBookCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTomorrowDeltaNetCostChangeInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTomorrowRealisedFxPnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTomorrowRealisedPricePnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationDeltaMarketValue { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
