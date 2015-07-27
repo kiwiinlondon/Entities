@@ -471,5 +471,18 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("Beta_Roll", updateUserIdParameter);
         }
+    
+        public virtual int Fund_UpdateClientLoadDate(Nullable<int> fundId, Nullable<System.DateTime> loadDate)
+        {
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
+            var loadDateParameter = loadDate.HasValue ?
+                new ObjectParameter("LoadDate", loadDate) :
+                new ObjectParameter("LoadDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Fund_UpdateClientLoadDate", fundIdParameter, loadDateParameter);
+        }
     }
 }
