@@ -1763,6 +1763,32 @@
           <Property Name="ClosingComment" Type="varchar" MaxLength="4000" />
           <Property Name="RestrictedPerson" Type="varchar" MaxLength="4000" Nullable="false" />
         </EntityType>
+        <EntityType Name="SecurityGroup">
+          <Key>
+            <PropertyRef Name="SecurityGroupId" />
+          </Key>
+          <Property Name="SecurityGroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ADName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SecurityGroupFunctionPoint">
+          <Key>
+            <PropertyRef Name="SecurityGroupFunctionPointId" />
+          </Key>
+          <Property Name="SecurityGroupFunctionPointId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SecurityGroupId" Type="int" Nullable="false" />
+          <Property Name="FunctionPointId" Type="int" Nullable="false" />
+          <Property Name="CreatePermission" Type="bit" Nullable="false" />
+          <Property Name="ReadPermission" Type="bit" Nullable="false" />
+          <Property Name="UpdatePermission" Type="bit" Nullable="false" />
+          <Property Name="DeletePermission" Type="bit" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="TradeEvent">
           <Key>
             <PropertyRef Name="EventID" />
@@ -5848,6 +5874,42 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="SecurityGroupFunctionPointSecurityGroupFK">
+          <End Role="SecurityGroup" Type="Self.SecurityGroup" Multiplicity="1" />
+          <End Role="SecurityGroupFunctionPoint" Type="Self.SecurityGroupFunctionPoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SecurityGroup">
+              <PropertyRef Name="SecurityGroupId" />
+            </Principal>
+            <Dependent Role="SecurityGroupFunctionPoint">
+              <PropertyRef Name="SecurityGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SecurityGroupFunctionUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="SecurityGroupFunctionPoint" Type="Self.SecurityGroupFunctionPoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SecurityGroupFunctionPoint">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SecurityGroupUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="SecurityGroup" Type="Self.SecurityGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SecurityGroup">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="TradeEventBuySellReasonIdFK">
           <End Role="BuySellReason" Type="Self.BuySellReason" Multiplicity="1" />
           <End Role="TradeEvent" Type="Self.TradeEvent" Multiplicity="*" />
@@ -9006,6 +9068,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="RawPrice" EntityType="Self.RawPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RestrictedList" EntityType="Self.RestrictedList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SecurityGroup" EntityType="Self.SecurityGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SecurityGroupFunctionPoint" EntityType="Self.SecurityGroupFunctionPoint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TradeEvent" EntityType="Self.TradeEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransferEvent" EntityType="Self.TransferEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundCapitalChange" EntityType="Self.FundCapitalChange" store:Type="Views" store:Schema="dbo">
@@ -10358,6 +10422,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="RestrictedListUserIDFK" Association="Self.RestrictedListUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="RestrictedList" EntitySet="RestrictedList" />
+          </AssociationSet>
+          <AssociationSet Name="SecurityGroupFunctionPointSecurityGroupFK" Association="Self.SecurityGroupFunctionPointSecurityGroupFK">
+            <End Role="SecurityGroup" EntitySet="SecurityGroup" />
+            <End Role="SecurityGroupFunctionPoint" EntitySet="SecurityGroupFunctionPoint" />
+          </AssociationSet>
+          <AssociationSet Name="SecurityGroupFunctionUpdateUserIDFK" Association="Self.SecurityGroupFunctionUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="SecurityGroupFunctionPoint" EntitySet="SecurityGroupFunctionPoint" />
+          </AssociationSet>
+          <AssociationSet Name="SecurityGroupUpdateUserIDFK" Association="Self.SecurityGroupUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="SecurityGroup" EntitySet="SecurityGroup" />
           </AssociationSet>
           <AssociationSet Name="TradeEventBuySellReasonIdFK" Association="Self.TradeEventBuySellReasonIdFK">
             <End Role="BuySellReason" EntitySet="BuySellReason" />
@@ -12005,6 +12081,20 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <Parameter Name="FundId" Mode="In" Type="Int32" />
             <Parameter Name="LoadDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="SecurityGroups" EntityType="Odey.Framework.Keeley.Entities.SecurityGroup" />
+          <EntitySet Name="SecurityGroupFunctionPoints" EntityType="Odey.Framework.Keeley.Entities.SecurityGroupFunctionPoint" />
+          <AssociationSet Name="SecurityGroupFunctionUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.SecurityGroupFunctionUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="SecurityGroupFunctionPoint" EntitySet="SecurityGroupFunctionPoints" />
+          </AssociationSet>
+          <AssociationSet Name="SecurityGroupUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.SecurityGroupUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="SecurityGroup" EntitySet="SecurityGroups" />
+          </AssociationSet>
+          <AssociationSet Name="SecurityGroupFunctionPointSecurityGroupFK" Association="Odey.Framework.Keeley.Entities.SecurityGroupFunctionPointSecurityGroupFK">
+            <End Role="SecurityGroup" EntitySet="SecurityGroups" />
+            <End Role="SecurityGroupFunctionPoint" EntitySet="SecurityGroupFunctionPoints" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -18211,6 +18301,69 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="SecurityGroup">
+          <Key>
+            <PropertyRef Name="SecurityGroupId" />
+          </Key>
+          <Property Name="SecurityGroupId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ADName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
+        <EntityType Name="SecurityGroupFunctionPoint">
+          <Key>
+            <PropertyRef Name="SecurityGroupFunctionPointId" />
+          </Key>
+          <Property Name="SecurityGroupFunctionPointId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="SecurityGroupId" Type="Int32" Nullable="false" />
+          <Property Name="FunctionPointId" Type="Int32" Nullable="false" />
+          <Property Name="CreatePermission" Type="Boolean" Nullable="false" />
+          <Property Name="ReadPermission" Type="Boolean" Nullable="false" />
+          <Property Name="UpdatePermission" Type="Boolean" Nullable="false" />
+          <Property Name="DeletePermission" Type="Boolean" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="SecurityGroup" Relationship="Odey.Framework.Keeley.Entities.SecurityGroupFunctionPointSecurityGroupFK" FromRole="SecurityGroupFunctionPoint" ToRole="SecurityGroup" />
+        </EntityType>
+        <Association Name="SecurityGroupFunctionUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.SecurityGroupFunctionPoint" Role="SecurityGroupFunctionPoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SecurityGroupFunctionPoint">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SecurityGroupUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.SecurityGroup" Role="SecurityGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SecurityGroup">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SecurityGroupFunctionPointSecurityGroupFK">
+          <End Type="Odey.Framework.Keeley.Entities.SecurityGroup" Role="SecurityGroup" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.SecurityGroupFunctionPoint" Role="SecurityGroupFunctionPoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SecurityGroup">
+              <PropertyRef Name="SecurityGroupId" />
+            </Principal>
+            <Dependent Role="SecurityGroupFunctionPoint">
+              <PropertyRef Name="SecurityGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23377,6 +23530,34 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Fund_UpdateClientLoadDate" FunctionName="KeeleyModel.Store.Fund_UpdateClientLoadDate" />
+          <EntitySetMapping Name="SecurityGroups">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.SecurityGroup">
+              <MappingFragment StoreEntitySet="SecurityGroup">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="ADName" ColumnName="ADName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SecurityGroupId" ColumnName="SecurityGroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SecurityGroupFunctionPoints">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.SecurityGroupFunctionPoint">
+              <MappingFragment StoreEntitySet="SecurityGroupFunctionPoint">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="DeletePermission" ColumnName="DeletePermission" />
+                <ScalarProperty Name="UpdatePermission" ColumnName="UpdatePermission" />
+                <ScalarProperty Name="ReadPermission" ColumnName="ReadPermission" />
+                <ScalarProperty Name="CreatePermission" ColumnName="CreatePermission" />
+                <ScalarProperty Name="FunctionPointId" ColumnName="FunctionPointId" />
+                <ScalarProperty Name="SecurityGroupId" ColumnName="SecurityGroupId" />
+                <ScalarProperty Name="SecurityGroupFunctionPointId" ColumnName="SecurityGroupFunctionPointId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -23391,8 +23572,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     <edmx:Options>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
       </edmx:DesignerInfoPropertySet>
@@ -28147,49 +28328,43 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="23.489583333333332" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="23.322916666666668" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="23.114583333333332" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="22.947916666666668" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="22.286456833333332" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="22.119790166666668" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="21.67708133333333" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="21.510414666666666" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="19.989583333333332" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="19.822916666666668" PointY="21.82604246662752" />
-          <edmx:ConnectorPoint PointX="19.75" PointY="21.82604246662752" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="24.406666666666663" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="23.802086083333332" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="23.635419416666668" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="23.177083333333332" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="23.010416666666668" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="22.286456833333332" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="22.119790166666668" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="21.67708133333333" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="21.510414666666666" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="20.035520833333333" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="19.82104166666667" PointY="21.822676388141254" />
+          <edmx:ConnectorPoint PointX="19.75" PointY="21.822676388141254" />
           <edmx:ConnectorPoint PointX="19.75" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.504391025641024" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.337724358974359" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.24900641025641" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.082339743589745" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="19.055379352564103" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="18.58214743589744" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="19.489586333333332" PointY="22.826315104166664" />
+          <edmx:ConnectorPoint PointX="18.760417666666672" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="18.7488141025641" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="18.479166666666668" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="18.439871794871795" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="18.129839743589745" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="17.520833333333332" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="17.291666666666668" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="17.083335833333333" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="16.916669166666669" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="16.4096484375" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="16.242981770833335" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="15.708333333333334" PointY="22.826315104166664" />
           <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.489583333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.322916666666666" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="13.270833333333334" PointY="22.826315104166667" />
-          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.411458333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="22.826315104166667" />
+          <edmx:ConnectorPoint PointX="12.760416666666666" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="22.826315104166667" />
           <edmx:ConnectorPoint PointX="12.25" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.54166966677338" PointY="25.134095052083339" />
-          <edmx:ConnectorPoint PointX="11.54166966677338" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.541669666673336" PointY="25.134095052083339" />
+          <edmx:ConnectorPoint PointX="11.541669666673336" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -29183,6 +29358,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.DerivedAssetClass" Width="1.5" PointX="2.75" PointY="74.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.DerivedAssetClassUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentDerivedAssetClassIdFk" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.SecurityGroup" Width="1.5" PointX="3.25" PointY="77.875" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.SecurityGroupFunctionPoint" Width="1.5" PointX="7.5" PointY="43.25" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.SecurityGroupFunctionUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.SecurityGroupUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.SecurityGroupFunctionPointSecurityGroupFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
