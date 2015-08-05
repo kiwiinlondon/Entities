@@ -85,7 +85,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> IndexRatio { get; set; }
     	[DataMember]
-        public Nullable<System.DateTime> TradeDateAsDate { get; set; }
+        public System.DateTime TradeDateAsDate { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
