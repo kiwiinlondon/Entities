@@ -59,6 +59,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool Is13F { get; set; }
     	[DataMember]
         public string Cusip { get; set; }
+    	[DataMember]
+        public Nullable<int> ExposureCurrencyId { get; set; }
     
         [DataMember]
         public virtual InstrumentRelationship UnderlyingRelationship { get; set; }
