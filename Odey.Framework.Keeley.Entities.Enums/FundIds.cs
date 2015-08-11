@@ -367,6 +367,17 @@ namespace Odey.Framework.Keeley.Entities.Enums
         KELT_EUR_B = 6974,
         [EnumMember]
         KELT_EUR_A_Acc = 6978,
+        [EnumMember]
+        KELT_EUR_I = 7299,
+        [EnumMember]
+        KELT_GBP_I = 7302,
+        [EnumMember]
+        KELT_GBP_M = 7303,
+        [EnumMember]
+        KELT_USD_I = 7314,
+        
+
+
 
         [EnumMember]
         MW=6994,
