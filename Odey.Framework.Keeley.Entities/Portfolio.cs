@@ -109,17 +109,17 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> UnderlyingPriceToPositionFXRateId { get; set; }
     	[DataMember]
-        public decimal ValuationFXRate { get; set; }
+        public Nullable<decimal> ValuationFXRate { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationNetPosition { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationDeltaNetCostInstrumentCurrency { get; set; }
     	[DataMember]
-        public decimal ValuationPrice { get; set; }
+        public Nullable<decimal> ValuationPrice { get; set; }
     	[DataMember]
-        public decimal ValuationPriceToPositionFXRate { get; set; }
+        public Nullable<decimal> ValuationPriceToPositionFXRate { get; set; }
     	[DataMember]
-        public decimal ValuationMarketValue { get; set; }
+        public Nullable<decimal> ValuationMarketValue { get; set; }
     	[DataMember]
         public Nullable<decimal> HedgeRatio { get; set; }
     	[DataMember]
