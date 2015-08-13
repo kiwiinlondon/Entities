@@ -107,10 +107,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> BondNominalChange { get; set; }
     	[DataMember]
-        public decimal ValuationNetPosition { get; set; }
-    	[DataMember]
-        public decimal ValuationDeltaNetCostInstrumentCurrency { get; set; }
-    	[DataMember]
         public Nullable<decimal> CapitalChange { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayCapitalChange { get; set; }
@@ -118,18 +114,6 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FXRateId { get; set; }
     	[DataMember]
         public bool UseFXRateForDay { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ValuationDeltaNetCostBookCurrency { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ValuationTodayDeltaNetCostChangeBookCurrency { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ValuationTodayDeltaNetCostChangeInstrumentCurrency { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ValuationTodayRealisedFxPnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ValuationTodayRealisedPricePnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ValuationTodayRealisedPricePnlBookCurrency { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
