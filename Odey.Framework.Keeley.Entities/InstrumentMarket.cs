@@ -58,6 +58,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal UltimateUnderlyerPerOverlyer { get; set; }
     	[DataMember]
         public Nullable<bool> ResolveFromExternalSource { get; set; }
+    	[DataMember]
+        public int ExposureCurrencyId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
