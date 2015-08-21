@@ -27,7 +27,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public bool IsAccrual { get; set; }
     	[DataMember]
-        public int NetPosition { get; set; }
+        public decimal NetPosition { get; set; }
     	[DataMember]
         public decimal MarketValue { get; set; }
     	[DataMember]
@@ -50,6 +50,8 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public System.DateTime ReferenceDate { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
