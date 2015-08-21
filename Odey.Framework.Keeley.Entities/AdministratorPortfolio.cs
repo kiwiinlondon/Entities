@@ -52,6 +52,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> MaturityDate { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
