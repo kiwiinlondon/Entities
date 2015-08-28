@@ -40,5 +40,47 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodayManagementFee { get; set; }
     	[DataMember]
         public bool ValueIsForReferenceDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningGAV { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PercentageOfFund { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOfficialManagementFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOfficialPerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalOfficialPerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOfficialPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOfficialShareClassHedgingPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> NetAssetValueFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> GrossAssetValueFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOfficialManagementFeeFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOfficialPerformanceFeeFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalOfficialPerformanceFeeFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOfficialPNLFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOfficialShareClassHedgingPNLFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Subscriptions { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Redemptions { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SubscriptionsFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RedemptionsFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningGAVFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningNAVFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningNAV { get; set; }
     }
 }
