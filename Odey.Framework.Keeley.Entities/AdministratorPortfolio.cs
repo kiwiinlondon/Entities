@@ -56,10 +56,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> MaturityDate { get; set; }
     	[DataMember]
         public Nullable<decimal> ManagementPerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<int> CurrencyId { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
+        [DataMember]
+        public virtual Currency Currency { get; set; }
     }
 }
