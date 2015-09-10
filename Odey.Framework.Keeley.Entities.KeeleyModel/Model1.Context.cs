@@ -146,7 +146,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<SecurityGroup> SecurityGroups { get; set; }
         public DbSet<SecurityGroupFunctionPoint> SecurityGroupFunctionPoints { get; set; }
         public DbSet<AdministratorPortfolio> AdministratorPortfolios { get; set; }
-        public DbSet<AdministratorOpeningNAV> AdministratorOpeningNAVs { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
