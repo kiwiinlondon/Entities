@@ -48,7 +48,7 @@
             <PropertyRef Name="AdministratorPortfolioID" />
           </Key>
           <Property Name="AdministratorPortfolioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FundId" Type="int" />
+          <Property Name="FundId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="InstrumentMarketId" Type="int" />
           <Property Name="InstrumentName" Type="varchar" MaxLength="100" />
@@ -65,8 +65,9 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="ManagementPerformanceFee" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ManagementPerformanceFee" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="Cost" Type="numeric" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
         <EntityType Name="AnalystIdea">
           <Key>
@@ -2039,7 +2040,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           </ReferentialConstraint>
         </Association>
         <Association Name="AdministratorPortfolioFundIdFK">
-          <End Role="Fund" Type="Self.Fund" Multiplicity="0..1" />
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
           <End Role="AdministratorPortfolio" Type="Self.AdministratorPortfolio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fund">
@@ -6215,25 +6216,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
-        <Function Name="AdministratorOpeningNAV_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="AdministratorOpeningValueID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="AdministratorOpeningNAV_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="FundId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="Value" Type="numeric" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="AdministratorOpeningNAV_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="AdministratorOpeningValueID" Type="int" Mode="In" />
-          <Parameter Name="FundId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="Value" Type="numeric" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-        </Function>
         <Function Name="AdministratorPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AdministratorPortfolioID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -6257,6 +6239,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="ManagementPerformanceFee" Type="numeric" Mode="In" />
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
+          <Parameter Name="Cost" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AdministratorPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AdministratorPortfolioID" Type="int" Mode="In" />
@@ -6278,6 +6261,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="ManagementPerformanceFee" Type="numeric" Mode="In" />
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
+          <Parameter Name="Cost" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AnalystIdea_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalystIdeaId" Type="int" Mode="In" />
@@ -18632,7 +18616,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <PropertyRef Name="AdministratorPortfolioID" />
           </Key>
           <Property Name="AdministratorPortfolioID" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="FundId" Type="Int32" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
           <Property Name="InstrumentMarketId" Type="Int32" />
           <Property Name="InstrumentName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IsAccrual" Type="Boolean" Nullable="false" />
@@ -18651,12 +18635,13 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.AdministratorPortfolioFundIdFK" FromRole="AdministratorPortfolio" ToRole="Fund" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.AdministratorPortfolioInstrumentMarketIdFK" FromRole="AdministratorPortfolio" ToRole="InstrumentMarket" />
           <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ManagementPerformanceFee" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ManagementPerformanceFee" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CurrencyId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.FK__Administr__Curre__2D026F33" FromRole="AdministratorPortfolio" ToRole="Currency" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="AdministratorPortfolioFundIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.AdministratorPortfolio" Role="AdministratorPortfolio" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fund">
@@ -23945,6 +23930,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AdministratorPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdministratorPortfolio">
               <MappingFragment StoreEntitySet="AdministratorPortfolio">
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
                 <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
                 <ScalarProperty Name="ManagementPerformanceFee" ColumnName="ManagementPerformanceFee" />
                 <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
@@ -23970,6 +23956,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdministratorPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AdministratorPortfolio_Insert">
+                  <ScalarProperty Name="Cost" ParameterName="Cost" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
                   <ScalarProperty Name="ManagementPerformanceFee" ParameterName="ManagementPerformanceFee" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
@@ -23992,6 +23979,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AdministratorPortfolio_Update">
+                  <ScalarProperty Name="Cost" ParameterName="Cost" Version="Current" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
                   <ScalarProperty Name="ManagementPerformanceFee" ParameterName="ManagementPerformanceFee" Version="Current" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
@@ -24044,7 +24032,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="45">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="75">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />

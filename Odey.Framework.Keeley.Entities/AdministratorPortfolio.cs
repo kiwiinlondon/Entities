@@ -19,7 +19,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int AdministratorPortfolioID { get; set; }
     	[DataMember]
-        public Nullable<int> FundId { get; set; }
+        public int FundId { get; set; }
     	[DataMember]
         public Nullable<int> InstrumentMarketId { get; set; }
     	[DataMember]
@@ -53,9 +53,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public Nullable<decimal> ManagementPerformanceFee { get; set; }
+        public decimal ManagementPerformanceFee { get; set; }
     	[DataMember]
         public int CurrencyId { get; set; }
+    	[DataMember]
+        public decimal Cost { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
