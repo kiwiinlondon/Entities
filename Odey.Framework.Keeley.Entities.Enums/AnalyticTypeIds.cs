@@ -78,6 +78,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         PricingDistribution = 20,
+
+        [EnumMember]
+        VaR1DayMixedModel = 21,
     }
 }
 
