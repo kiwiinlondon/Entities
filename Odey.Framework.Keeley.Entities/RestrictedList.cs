@@ -36,6 +36,8 @@ namespace Odey.Framework.Keeley.Entities
         public string ClosingComment { get; set; }
     	[DataMember]
         public string RestrictedPerson { get; set; }
+    	[DataMember]
+        public bool WatchListOnly { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
