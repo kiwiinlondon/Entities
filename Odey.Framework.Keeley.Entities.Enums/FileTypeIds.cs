@@ -87,6 +87,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ManagerPriceTarget = 38,
         [EnumMember]
-        ClientNomineeAccount = 39
+        ClientNomineeAccount = 39,
+        [EnumMember]
+        PeerGroupRankings =   40
     }
 }
