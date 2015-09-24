@@ -953,11 +953,11 @@
             <PropertyRef Name="FundCountryHoldayId" />
           </Key>
           <Property Name="FundCountryHoldayId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FundId" Type="int" Nullable="false" />
           <Property Name="CountryId" Type="int" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="AdministratorId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="FundPerformance">
           <Key>
@@ -1869,6 +1869,8 @@
           <Property Name="OriginalInputDate" Type="datetime" Nullable="false" />
           <Property Name="IndexRatio" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TradeDateAsDate" Type="date" Nullable="false" />
+          <Property Name="RealisedPnlBookCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="RealisedPnlInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="TransferEvent">
           <Key>
@@ -3768,6 +3770,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__FundCount__Admin__21B3E574">
+          <End Role="Administrator" Type="Self.Administrator" Multiplicity="1" />
+          <End Role="FundCountryHoliday" Type="Self.FundCountryHoliday" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrator">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FundCountryHoliday">
+              <PropertyRef Name="AdministratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__FundWebsi__FundI__1AE9D794">
           <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
           <End Role="FundWebsiteCacheTime" Type="Self.FundWebsiteCacheTime" Multiplicity="0..1" />
@@ -3969,18 +3983,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="FundCountryHoliday">
               <PropertyRef Name="CountryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FundCountryHoldayFundIdFK">
-          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
-          <End Role="FundCountryHoliday" Type="Self.FundCountryHoliday" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Fund">
-              <PropertyRef Name="LegalEntityID" />
-            </Principal>
-            <Dependent Role="FundCountryHoliday">
-              <PropertyRef Name="FundId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9047,6 +9049,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="OriginalInputDate" Type="datetime" Mode="In" />
           <Parameter Name="IndexRatio" Type="numeric" Mode="In" />
           <Parameter Name="TradeDateAsDate" Type="date" Mode="In" />
+          <Parameter Name="RealisedPnlBookCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="RealisedPnlInstrumentCurrency" Type="numeric" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -9083,6 +9087,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="OriginalInputDate" Type="datetime" Mode="In" />
           <Parameter Name="IndexRatio" Type="numeric" Mode="In" />
           <Parameter Name="TradeDateAsDate" Type="date" Mode="In" />
+          <Parameter Name="RealisedPnlBookCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="RealisedPnlInstrumentCurrency" Type="numeric" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -9889,6 +9895,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Fund" EntitySet="Fund" />
             <End Role="Fund1" EntitySet="Fund" />
           </AssociationSet>
+          <AssociationSet Name="FK__FundCount__Admin__21B3E574" Association="Self.FK__FundCount__Admin__21B3E574">
+            <End Role="Administrator" EntitySet="Administrator" />
+            <End Role="FundCountryHoliday" EntitySet="FundCountryHoliday" />
+          </AssociationSet>
           <AssociationSet Name="FK__FundWebsi__FundI__1AE9D794" Association="Self.FK__FundWebsi__FundI__1AE9D794">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="FundWebsiteCacheTime" EntitySet="FundWebsiteCacheTime" />
@@ -9955,10 +9965,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="FundCountryHoldayCountryIdFK" Association="Self.FundCountryHoldayCountryIdFK">
             <End Role="Country" EntitySet="Country" />
-            <End Role="FundCountryHoliday" EntitySet="FundCountryHoliday" />
-          </AssociationSet>
-          <AssociationSet Name="FundCountryHoldayFundIdFK" Association="Self.FundCountryHoldayFundIdFK">
-            <End Role="Fund" EntitySet="Fund" />
             <End Role="FundCountryHoliday" EntitySet="FundCountryHoliday" />
           </AssociationSet>
           <AssociationSet Name="FundCountryHoldayUserIDFK" Association="Self.FundCountryHoldayUserIDFK">
@@ -12318,6 +12324,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Currency" EntitySet="Currencies" />
             <End Role="AdministratorPortfolio" EntitySet="AdministratorPortfolios" />
           </AssociationSet>
+          <AssociationSet Name="FK__FundCount__Admin__21B3E574" Association="Odey.Framework.Keeley.Entities.FK__FundCount__Admin__21B3E574">
+            <End Role="Administrator" EntitySet="Administrators" />
+            <End Role="FundCountryHoliday" EntitySet="FundCountryHolidays" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -13101,6 +13111,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="DateTime" Name="OriginalInputDate" Precision="3" Nullable="false" />
           <Property Type="Decimal" Name="IndexRatio" Precision="27" Scale="8" />
           <Property Name="TradeDateAsDate" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="RealisedPnlBookCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="RealisedPnlInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -15322,7 +15334,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="CountryId" Nullable="false" />
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
-          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />          
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Administrator" Relationship="Odey.Framework.Keeley.Entities.FK__FundCount__Admin__21B3E574" FromRole="FundCountryHoliday" ToRole="Administrator" />          
         </EntityType>
         <Association Name="FundCountryHoldayUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -18692,6 +18705,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__FundCount__Admin__21B3E574">
+          <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FundCountryHoliday" Role="FundCountryHoliday" Multiplicity="*" />
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -19562,6 +19579,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="RealisedPnlInstrumentCurrency" ColumnName="RealisedPnlInstrumentCurrency" />
+                <ScalarProperty Name="RealisedPnlBookCurrency" ColumnName="RealisedPnlBookCurrency" />
                 <ScalarProperty Name="TradeDateAsDate" ColumnName="TradeDateAsDate" />
                 <ScalarProperty Name="IndexRatio" ColumnName="IndexRatio" />
                 <ScalarProperty Name="OriginalInputDate" ColumnName="OriginalInputDate" />
@@ -19602,6 +19621,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="RealisedPnlInstrumentCurrency" ParameterName="RealisedPnlInstrumentCurrency" />
+                  <ScalarProperty Name="RealisedPnlBookCurrency" ParameterName="RealisedPnlBookCurrency" />
                   <ScalarProperty Name="TradeDateAsDate" ParameterName="TradeDateAsDate" />
                   <ScalarProperty Name="IndexRatio" ParameterName="IndexRatio" />
                   <ScalarProperty Name="OriginalInputDate" ParameterName="OriginalInputDate" />
@@ -19639,6 +19660,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="RealisedPnlInstrumentCurrency" ParameterName="RealisedPnlInstrumentCurrency" Version="Current" />
+                  <ScalarProperty Name="RealisedPnlBookCurrency" ParameterName="RealisedPnlBookCurrency" Version="Current" />
                   <ScalarProperty Name="TradeDateAsDate" ParameterName="TradeDateAsDate" Version="Current" />
                   <ScalarProperty Name="IndexRatio" ParameterName="IndexRatio" Version="Current" />
                   <ScalarProperty Name="OriginalInputDate" ParameterName="OriginalInputDate" Version="Current" />
@@ -21656,7 +21679,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
                 <ScalarProperty Name="CountryId" ColumnName="CountryId" />
-                <ScalarProperty Name="FundId" ColumnName="FundId" />
                 <ScalarProperty Name="FundCountryHoldayId" ColumnName="FundCountryHoldayId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -24017,6 +24039,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="FK__FundCount__Admin__21B3E574" TypeName="Odey.Framework.Keeley.Entities.FK__FundCount__Admin__21B3E574" StoreEntitySet="FundCountryHoliday">
+            <EndProperty Name="FundCountryHoliday">
+              <ScalarProperty Name="FundCountryHoldayId" ColumnName="FundCountryHoldayId" />
+            </EndProperty>
+            <EndProperty Name="Administrator">
+              <ScalarProperty Name="LegalEntityID" ColumnName="AdministratorId" />
+            </EndProperty>
+          </AssociationSetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -29844,6 +29874,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AdministratorPortfolioInstrumentMarketIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AdministratorPortfolioUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Administr__Curre__2D026F33" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundCount__Admin__21B3E574" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
