@@ -12,6 +12,10 @@ namespace Odey.Framework.Keeley.Entities
             LegalEntity = legalEntity;
         }
 
+        public Fund()
+        {
+        }
+
         public int? CountryID
         {
             get

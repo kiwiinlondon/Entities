@@ -89,7 +89,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<Industry> Industries { get; set; }
         public DbSet<IssuerIndustry> IssuerIndustries { get; set; }
         public DbSet<CountryHoliday> CountryHolidays { get; set; }
-        public DbSet<FundCountryHoliday> FundCountryHolidays { get; set; }
         public DbSet<FundPerformance> FundPerformances { get; set; }
         public DbSet<CollectiveInvestmentScheme> CollectiveInvestmentSchemes { get; set; }
         public DbSet<Periodicity> Periodicities { get; set; }
@@ -146,6 +145,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<SecurityGroup> SecurityGroups { get; set; }
         public DbSet<SecurityGroupFunctionPoint> SecurityGroupFunctionPoints { get; set; }
         public DbSet<AdministratorPortfolio> AdministratorPortfolios { get; set; }
+        public DbSet<FundCountryHoliday> FundCountryHolidays { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

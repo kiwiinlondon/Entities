@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Fund
     {
-    	
-        public Fund()
-        {
-            this.FundCountryHolidays = new List<FundCountryHoliday>();
-        }
-    
     	[DataMember]
         public int LegalEntityID { get; set; }
     	[DataMember]
@@ -93,8 +87,6 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket BenchmarkInstrumentMarket { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
-        [DataMember]
-        public virtual List<FundCountryHoliday> FundCountryHolidays { get; set; }
         [DataMember]
         public virtual LegalEntity LegalEntity { get; set; }
         [DataMember]

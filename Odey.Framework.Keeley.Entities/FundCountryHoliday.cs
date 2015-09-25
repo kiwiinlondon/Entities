@@ -19,8 +19,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int FundCountryHoldayId { get; set; }
     	[DataMember]
-        public int FundId { get; set; }
-    	[DataMember]
         public int CountryId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
@@ -28,8 +26,12 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public int AdministratorId { get; set; }
     
         [DataMember]
         public virtual Administrator Administrator { get; set; }
+        [DataMember]
+        public virtual Country Country { get; set; }
     }
 }
