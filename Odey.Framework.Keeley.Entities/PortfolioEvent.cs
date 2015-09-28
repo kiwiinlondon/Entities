@@ -118,6 +118,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> RealisedCash { get; set; }
     	[DataMember]
         public Nullable<decimal> ExternalRealisedPnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OriginalDeltaMarketCostBookCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OriginalDeltaMarketCostInstrumentCurrency { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

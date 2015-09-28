@@ -14,36 +14,24 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class ApplicationUser
+    public partial class CorporateAction
     {
-    	
-        public ApplicationUser()
-        {
-            this.CorporateActionTypes = new List<CorporateActionType>();
-        }
-    
     	[DataMember]
-        public int UserID { get; set; }
+        public int CorporateActionId { get; set; }
     	[DataMember]
-        public Nullable<int> FMPersID { get; set; }
+        public int CorporateActionTypeId { get; set; }
     	[DataMember]
-        public string Name { get; set; }
+        public Nullable<decimal> Multiplier { get; set; }
     	[DataMember]
-        public string Email { get; set; }
-    	[DataMember]
-        public string WindowsLogin { get; set; }
+        public System.DateTime InputDate { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public string Initials { get; set; }
-    	[DataMember]
-        public bool IsActive { get; set; }
     
         [DataMember]
-        public virtual List<CorporateActionType> CorporateActionTypes { get; set; }
+        public virtual CorporateActionType CorporateActionType { get; set; }
     }
 }
