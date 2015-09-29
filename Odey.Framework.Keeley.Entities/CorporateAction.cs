@@ -40,8 +40,6 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime PayDate { get; set; }
     
         [DataMember]
-        public virtual CorporateActionType CorporateActionType { get; set; }
-        [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }
