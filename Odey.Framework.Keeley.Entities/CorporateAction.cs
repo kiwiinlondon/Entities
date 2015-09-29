@@ -30,8 +30,18 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public int InstrumentMarketId { get; set; }
+    	[DataMember]
+        public System.DateTime AnnounceDate { get; set; }
+    	[DataMember]
+        public System.DateTime ExDate { get; set; }
+    	[DataMember]
+        public System.DateTime PayDate { get; set; }
     
         [DataMember]
         public virtual CorporateActionType CorporateActionType { get; set; }
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }

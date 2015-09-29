@@ -31,7 +31,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<int> ManagerId { get; set; }
+        public int ManagerId { get; set; }
     	[DataMember]
         public string EZEIdentifier { get; set; }
     	[DataMember]
