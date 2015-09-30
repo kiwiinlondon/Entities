@@ -11,29 +11,32 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
     public enum PADealingRejectionReasonsIds
     {
-        [Description("Restricted List")]
-        [EnumMember]
-        RestrictedList = 1,
-
         [Description("Focus List")]
         [EnumMember]
-        FocusList = 2,
-
+        FocusList = 1,
+        
         [Description("Negative Balance")]
         [EnumMember]
-        NegativeBalance = 3,
+        NegativeBalance = 2,
 
         [Description("Previous Holding")]
         [EnumMember]
-        PreviousHolding = 4,
+        PreviousHolding = 3,
 
         [Description("Expired")]
         [EnumMember]
-        Expired = 5,
+        Expired = 4,
 
         [Description("Other")]
         [EnumMember]
-        Other = 6,
+        Other = 5,
+
+        [Description("Invalid")]
+        [EnumMember]
+        Invalid = 6,
         
+        [Description("Restricted List")]
+        [EnumMember]
+        RestrictedList = 7,
     }
 }
