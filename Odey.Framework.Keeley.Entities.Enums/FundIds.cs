@@ -348,6 +348,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         CAMO = 6684,
+        [EnumMember]
+        CAMO_USD = 7383,
 
         [EnumMember]
         WSEG = 6823,
