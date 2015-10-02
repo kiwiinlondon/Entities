@@ -33,6 +33,8 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ApplyToInstrumentOnly" Type="bit" Nullable="false" />
+          <Property Name="CountryId" Type="int" />
+          <Property Name="MarketId" Type="int" />
         </EntityType>
         <EntityType Name="Administrator">
           <Key>
@@ -1620,6 +1622,10 @@
           <Property Name="ValuationDeltaMarketValue" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ValuationTodayUnrealisedFxPnl" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ValuationTodayUnrealisedPricePnl" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedPricePnl" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedFXPnl" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OriginalDeltaNetCostBookCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -1688,6 +1694,8 @@
           <Property Name="ExternalRealisedPnl" Type="numeric" Precision="27" Scale="8" />
           <Property Name="OriginalDeltaNetCostBookCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedPricePnl" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedFXPnl" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioEventType">
           <Key>
@@ -2898,6 +2906,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="CountryHoliday">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CountryIdAccountMappingFK">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="AccountMapping" Type="Self.AccountMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="AccountMapping">
+              <PropertyRef Name="CountryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5214,6 +5234,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="ManagerPriceTarget">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MarketIdAccountMappingFK">
+          <End Role="Market" Type="Self.Market" Multiplicity="0..1" />
+          <End Role="AccountMapping" Type="Self.AccountMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Market">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AccountMapping">
+              <PropertyRef Name="MarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8609,6 +8641,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationDeltaMarketValue" Type="numeric" Mode="In" />
           <Parameter Name="ValuationTodayUnrealisedFxPnl" Type="numeric" Mode="In" />
           <Parameter Name="ValuationTodayUnrealisedPricePnl" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedPricePnl" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedFXPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OriginalDeltaNetCostBookCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8685,6 +8721,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationDeltaMarketValue" Type="numeric" Mode="In" />
           <Parameter Name="ValuationTodayUnrealisedFxPnl" Type="numeric" Mode="In" />
           <Parameter Name="ValuationTodayUnrealisedPricePnl" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedPricePnl" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedFXPnl" Type="numeric" Mode="In" />
+          <Parameter Name="OriginalDeltaNetCostBookCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -8765,6 +8805,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ExternalRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="OriginalDeltaNetCostBookCurrency" Type="numeric" Mode="In" />
           <Parameter Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedPricePnl" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedFXPnl" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -8819,6 +8861,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ExternalRealisedPnl" Type="numeric" Mode="In" />
           <Parameter Name="OriginalDeltaNetCostBookCurrency" Type="numeric" Mode="In" />
           <Parameter Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedPricePnl" Type="numeric" Mode="In" />
+          <Parameter Name="ITDRealisedFXPnl" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEventType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventTypeId" Type="int" Mode="In" />
@@ -9684,6 +9728,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="CountryHoliday" EntitySet="CountryHoliday" />
           </AssociationSet>
+          <AssociationSet Name="CountryIdAccountMappingFK" Association="Self.CountryIdAccountMappingFK">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="AccountMapping" EntitySet="AccountMapping" />
+          </AssociationSet>
           <AssociationSet Name="CountryRegionIDFK" Association="Self.CountryRegionIDFK">
             <End Role="Region" EntitySet="Region" />
             <End Role="Country" EntitySet="Country" />
@@ -10455,6 +10503,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ManagerPriceTargetUserIDFK" Association="Self.ManagerPriceTargetUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ManagerPriceTarget" EntitySet="ManagerPriceTarget" />
+          </AssociationSet>
+          <AssociationSet Name="MarketIdAccountMappingFK" Association="Self.MarketIdAccountMappingFK">
+            <End Role="Market" EntitySet="Market" />
+            <End Role="AccountMapping" EntitySet="AccountMapping" />
           </AssociationSet>
           <AssociationSet Name="MarketLegalEntiyFK" Association="Self.MarketLegalEntiyFK">
             <End Role="LegalEntity" EntitySet="LegalEntity" />
@@ -12447,6 +12499,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="CorporateAction" EntitySet="CorporateActions" />
           </AssociationSet>
+          <AssociationSet Name="CountryIdAccountMappingFK" Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="AccountMapping" EntitySet="AccountMappings" />
+          </AssociationSet>
+          <AssociationSet Name="MarketIdAccountMappingFK" Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK">
+            <End Role="Market" EntitySet="Markets" />
+            <End Role="AccountMapping" EntitySet="AccountMappings" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -14127,6 +14187,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ExternalRealisedPnl" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OriginalDeltaNetCostBookCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OriginalDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedPricePnl" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedFXPnl" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioSettlementDate">
           <Key>
@@ -14377,6 +14439,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ValuationTodayRealisedPricePnl" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="ValuationTodayUnrealisedFxPnl" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="ValuationTodayUnrealisedPricePnl" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedPricePnl" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ITDRealisedFXPnl" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OriginalDeltaNetCostBookCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OriginalDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -15962,6 +16028,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Boolean" Name="ApplyToInstrumentOnly" Nullable="false" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="MarketId" Type="Int32" />
+          <NavigationProperty Name="Country" Relationship="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" FromRole="AccountMapping" ToRole="Country" />
+          <NavigationProperty Name="Market" Relationship="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" FromRole="AccountMapping" ToRole="Market" />
         </EntityType>
         <Association Name="AccountMappingAccountIdFK">
           <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
@@ -18904,6 +18974,30 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="CountryIdAccountMappingFK">
+          <End Type="Odey.Framework.Keeley.Entities.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AccountMapping" Role="AccountMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="AccountMapping">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MarketIdAccountMappingFK">
+          <End Type="Odey.Framework.Keeley.Entities.Market" Role="Market" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AccountMapping" Role="AccountMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Market">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AccountMapping">
+              <PropertyRef Name="MarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20558,6 +20652,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="ITDRealisedFXPnl" ColumnName="ITDRealisedFXPnl" />
+                <ScalarProperty Name="ITDRealisedPricePnl" ColumnName="ITDRealisedPricePnl" />
                 <ScalarProperty Name="OriginalDeltaNetCostInstrumentCurrency" ColumnName="OriginalDeltaNetCostInstrumentCurrency" />
                 <ScalarProperty Name="OriginalDeltaNetCostBookCurrency" ColumnName="OriginalDeltaNetCostBookCurrency" />
                 <ScalarProperty Name="ExternalRealisedPnl" ColumnName="ExternalRealisedPnl" />
@@ -20616,6 +20712,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="ITDRealisedFXPnl" ParameterName="ITDRealisedFXPnl" />
+                  <ScalarProperty Name="ITDRealisedPricePnl" ParameterName="ITDRealisedPricePnl" />
                   <ScalarProperty Name="OriginalDeltaNetCostInstrumentCurrency" ParameterName="OriginalDeltaNetCostInstrumentCurrency" />
                   <ScalarProperty Name="OriginalDeltaNetCostBookCurrency" ParameterName="OriginalDeltaNetCostBookCurrency" />
                   <ScalarProperty Name="ExternalRealisedPnl" ParameterName="ExternalRealisedPnl" />
@@ -20671,6 +20769,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="ITDRealisedFXPnl" ParameterName="ITDRealisedFXPnl" Version="Current" />
+                  <ScalarProperty Name="ITDRealisedPricePnl" ParameterName="ITDRealisedPricePnl" Version="Current" />
                   <ScalarProperty Name="OriginalDeltaNetCostInstrumentCurrency" ParameterName="OriginalDeltaNetCostInstrumentCurrency" Version="Current" />
                   <ScalarProperty Name="OriginalDeltaNetCostBookCurrency" ParameterName="OriginalDeltaNetCostBookCurrency" Version="Current" />
                   <ScalarProperty Name="ExternalRealisedPnl" ParameterName="ExternalRealisedPnl" Version="Current" />
@@ -20855,6 +20955,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="OriginalDeltaNetCostInstrumentCurrency" ColumnName="OriginalDeltaNetCostInstrumentCurrency" />
+                <ScalarProperty Name="OriginalDeltaNetCostBookCurrency" ColumnName="OriginalDeltaNetCostBookCurrency" />
+                <ScalarProperty Name="ITDRealisedFXPnl" ColumnName="ITDRealisedFXPnl" />
+                <ScalarProperty Name="ITDRealisedPricePnl" ColumnName="ITDRealisedPricePnl" />
                 <ScalarProperty Name="ValuationTodayUnrealisedPricePnl" ColumnName="ValuationTodayUnrealisedPricePnl" />
                 <ScalarProperty Name="ValuationTodayUnrealisedFxPnl" ColumnName="ValuationTodayUnrealisedFxPnl" />
                 <ScalarProperty Name="ValuationTodayRealisedPricePnl" ColumnName="ValuationTodayRealisedPricePnl" />
@@ -22161,6 +22265,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AccountMappings">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AccountMapping">
               <MappingFragment StoreEntitySet="AccountMapping">
+                <ScalarProperty Name="MarketId" ColumnName="MarketId" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
                 <ScalarProperty Name="ApplyToInstrumentOnly" ColumnName="ApplyToInstrumentOnly" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -28983,18 +29089,20 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="18.486666666666668" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.375" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.375" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="17.145833333333332" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.979166666666668" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.958333333333332" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.791666666666668" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.395833333333332" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.229166666666668" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="15.708333333333334" PointY="22.812499999999996" />
+          <edmx:ConnectorPoint PointX="15.692708333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.354166666666666" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.333333333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="13.442708333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.989583333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="12.645833333333334" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="12.479166666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.375" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.375" PointY="23.317047526041669" />
           <edmx:ConnectorPoint PointX="12" PointY="23.317047526041669" />
@@ -29989,6 +30097,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CorporateAction" Width="2.125" PointX="6.25" PointY="54.5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionInstrumentMarketIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

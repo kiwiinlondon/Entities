@@ -36,5 +36,14 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public bool ApplyToInstrumentOnly { get; set; }
+    	[DataMember]
+        public Nullable<int> CountryId { get; set; }
+    	[DataMember]
+        public Nullable<int> MarketId { get; set; }
+    
+        [DataMember]
+        public virtual Country Country { get; set; }
+        [DataMember]
+        public virtual Market Market { get; set; }
     }
 }

@@ -166,6 +166,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ValuationTodayUnrealisedFxPnl { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationTodayUnrealisedPricePnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDRealisedPricePnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDRealisedFXPnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OriginalDeltaNetCostBookCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OriginalDeltaNetCostInstrumentCurrency { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
