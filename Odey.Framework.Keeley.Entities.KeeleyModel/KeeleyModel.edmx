@@ -112,6 +112,39 @@
           <Property Name="Initials" Type="varchar" MaxLength="10" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Attribution">
+          <Key>
+            <PropertyRef Name="AttributionID" />
+          </Key>
+          <Property Name="AttributionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="FundAdministratorPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FundAdministratorFX" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FundAdministratorCarry" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FundAdministratorOther" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FundKeeleyPrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="FundKeeleyFX" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="FundKeeleyCarry" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="BookKeeleyPrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="BookKeeleyFX" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="BookKeeleyCarry" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="FundFactsetPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FundFactsetFX" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FundFactsetCarry" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BookFactsetPrice" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BookFactsetFX" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BookFactsetCarry" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FundPrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="FundFX" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="FundCarry" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="BookPrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="BookFX" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="BookCarry" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="Beta">
           <Key>
             <PropertyRef Name="BetaId" />
@@ -2234,6 +2267,30 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="TransferEvent">
               <PropertyRef Name="ApprovedByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AttributionPositionIdFK">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="Attribution" Type="Self.Attribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionId" />
+            </Principal>
+            <Dependent Role="Attribution">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AttributionUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="Attribution" Type="Self.Attribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Attribution">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6447,6 +6504,67 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Initials" Type="varchar" Mode="In" />
           <Parameter Name="IsActive" Type="bit" Mode="In" />
         </Function>
+        <Function Name="Attribution_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AttributionID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Attribution_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="FundAdministratorPrice" Type="numeric" Mode="In" />
+          <Parameter Name="FundAdministratorFX" Type="numeric" Mode="In" />
+          <Parameter Name="FundAdministratorCarry" Type="numeric" Mode="In" />
+          <Parameter Name="FundAdministratorOther" Type="numeric" Mode="In" />
+          <Parameter Name="FundKeeleyPrice" Type="numeric" Mode="In" />
+          <Parameter Name="FundKeeleyFX" Type="numeric" Mode="In" />
+          <Parameter Name="FundKeeleyCarry" Type="numeric" Mode="In" />
+          <Parameter Name="BookKeeleyPrice" Type="numeric" Mode="In" />
+          <Parameter Name="BookKeeleyFX" Type="numeric" Mode="In" />
+          <Parameter Name="BookKeeleyCarry" Type="numeric" Mode="In" />
+          <Parameter Name="FundFactsetPrice" Type="numeric" Mode="In" />
+          <Parameter Name="FundFactsetFX" Type="numeric" Mode="In" />
+          <Parameter Name="FundFactsetCarry" Type="numeric" Mode="In" />
+          <Parameter Name="BookFactsetPrice" Type="numeric" Mode="In" />
+          <Parameter Name="BookFactsetFX" Type="numeric" Mode="In" />
+          <Parameter Name="BookFactsetCarry" Type="numeric" Mode="In" />
+          <Parameter Name="FundPrice" Type="numeric" Mode="In" />
+          <Parameter Name="FundFX" Type="numeric" Mode="In" />
+          <Parameter Name="FundCarry" Type="numeric" Mode="In" />
+          <Parameter Name="BookPrice" Type="numeric" Mode="In" />
+          <Parameter Name="BookFX" Type="numeric" Mode="In" />
+          <Parameter Name="BookCarry" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Attribution_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AttributionID" Type="int" Mode="In" />
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="FundAdministratorPrice" Type="numeric" Mode="In" />
+          <Parameter Name="FundAdministratorFX" Type="numeric" Mode="In" />
+          <Parameter Name="FundAdministratorCarry" Type="numeric" Mode="In" />
+          <Parameter Name="FundAdministratorOther" Type="numeric" Mode="In" />
+          <Parameter Name="FundKeeleyPrice" Type="numeric" Mode="In" />
+          <Parameter Name="FundKeeleyFX" Type="numeric" Mode="In" />
+          <Parameter Name="FundKeeleyCarry" Type="numeric" Mode="In" />
+          <Parameter Name="BookKeeleyPrice" Type="numeric" Mode="In" />
+          <Parameter Name="BookKeeleyFX" Type="numeric" Mode="In" />
+          <Parameter Name="BookKeeleyCarry" Type="numeric" Mode="In" />
+          <Parameter Name="FundFactsetPrice" Type="numeric" Mode="In" />
+          <Parameter Name="FundFactsetFX" Type="numeric" Mode="In" />
+          <Parameter Name="FundFactsetCarry" Type="numeric" Mode="In" />
+          <Parameter Name="BookFactsetPrice" Type="numeric" Mode="In" />
+          <Parameter Name="BookFactsetFX" Type="numeric" Mode="In" />
+          <Parameter Name="BookFactsetCarry" Type="numeric" Mode="In" />
+          <Parameter Name="FundPrice" Type="numeric" Mode="In" />
+          <Parameter Name="FundFX" Type="numeric" Mode="In" />
+          <Parameter Name="FundCarry" Type="numeric" Mode="In" />
+          <Parameter Name="BookPrice" Type="numeric" Mode="In" />
+          <Parameter Name="BookFX" Type="numeric" Mode="In" />
+          <Parameter Name="BookCarry" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="Beta_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BetaId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -9284,6 +9402,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="AnalystIdea" EntityType="Self.AnalystIdea" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Analytic" EntityType="Self.Analytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApplicationUser" EntityType="Self.ApplicationUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Attribution" EntityType="Self.Attribution" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Beta" EntityType="Self.Beta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bond" EntityType="Self.Bond" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
@@ -9503,6 +9622,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ApprovedByTransferEventFK" Association="Self.ApprovedByTransferEventFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="TransferEvent" EntitySet="TransferEvent" />
+          </AssociationSet>
+          <AssociationSet Name="AttributionPositionIdFK" Association="Self.AttributionPositionIdFK">
+            <End Role="Position" EntitySet="Position" />
+            <End Role="Attribution" EntitySet="Attribution" />
+          </AssociationSet>
+          <AssociationSet Name="AttributionUpdateUserIDFK" Association="Self.AttributionUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Attribution" EntitySet="Attribution" />
           </AssociationSet>
           <AssociationSet Name="BetaCurrencyIdFK" Association="Self.BetaCurrencyIdFK">
             <End Role="Currency" EntitySet="Currency" />
@@ -12506,6 +12633,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="MarketIdAccountMappingFK" Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK">
             <End Role="Market" EntitySet="Markets" />
             <End Role="AccountMapping" EntitySet="AccountMappings" />
+          </AssociationSet>
+          <EntitySet Name="Attributions" EntityType="Odey.Framework.Keeley.Entities.Attribution" />
+          <AssociationSet Name="AttributionUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.AttributionUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Attribution" EntitySet="Attributions" />
+          </AssociationSet>
+          <AssociationSet Name="AttributionPositionIdFK" Association="Odey.Framework.Keeley.Entities.AttributionPositionIdFK">
+            <End Role="Position" EntitySet="Positions" />
+            <End Role="Attribution" EntitySet="Attributions" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -18999,6 +19135,63 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Attribution">
+          <Key>
+            <PropertyRef Name="AttributionID" />
+          </Key>
+          <Property Name="AttributionID" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="PositionId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FundAdministratorPrice" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FundAdministratorFX" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FundAdministratorCarry" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FundAdministratorOther" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FundKeeleyPrice" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="FundKeeleyFX" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="FundKeeleyCarry" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="BookKeeleyPrice" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="BookKeeleyFX" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="BookKeeleyCarry" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="FundFactsetPrice" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FundFactsetFX" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FundFactsetCarry" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="BookFactsetPrice" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="BookFactsetFX" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="BookFactsetCarry" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FundPrice" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="FundFX" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="FundCarry" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="BookPrice" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="BookFX" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="BookCarry" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
+        <Association Name="AttributionUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Attribution" Role="Attribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Attribution">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AttributionPositionIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Attribution" Role="Attribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionId" />
+            </Principal>
+            <Dependent Role="Attribution">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -24391,6 +24584,110 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Attributions">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Attribution">
+              <MappingFragment StoreEntitySet="Attribution">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="BookCarry" ColumnName="BookCarry" />
+                <ScalarProperty Name="BookFX" ColumnName="BookFX" />
+                <ScalarProperty Name="BookPrice" ColumnName="BookPrice" />
+                <ScalarProperty Name="FundCarry" ColumnName="FundCarry" />
+                <ScalarProperty Name="FundFX" ColumnName="FundFX" />
+                <ScalarProperty Name="FundPrice" ColumnName="FundPrice" />
+                <ScalarProperty Name="BookFactsetCarry" ColumnName="BookFactsetCarry" />
+                <ScalarProperty Name="BookFactsetFX" ColumnName="BookFactsetFX" />
+                <ScalarProperty Name="BookFactsetPrice" ColumnName="BookFactsetPrice" />
+                <ScalarProperty Name="FundFactsetCarry" ColumnName="FundFactsetCarry" />
+                <ScalarProperty Name="FundFactsetFX" ColumnName="FundFactsetFX" />
+                <ScalarProperty Name="FundFactsetPrice" ColumnName="FundFactsetPrice" />
+                <ScalarProperty Name="BookKeeleyCarry" ColumnName="BookKeeleyCarry" />
+                <ScalarProperty Name="BookKeeleyFX" ColumnName="BookKeeleyFX" />
+                <ScalarProperty Name="BookKeeleyPrice" ColumnName="BookKeeleyPrice" />
+                <ScalarProperty Name="FundKeeleyCarry" ColumnName="FundKeeleyCarry" />
+                <ScalarProperty Name="FundKeeleyFX" ColumnName="FundKeeleyFX" />
+                <ScalarProperty Name="FundKeeleyPrice" ColumnName="FundKeeleyPrice" />
+                <ScalarProperty Name="FundAdministratorOther" ColumnName="FundAdministratorOther" />
+                <ScalarProperty Name="FundAdministratorCarry" ColumnName="FundAdministratorCarry" />
+                <ScalarProperty Name="FundAdministratorFX" ColumnName="FundAdministratorFX" />
+                <ScalarProperty Name="FundAdministratorPrice" ColumnName="FundAdministratorPrice" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="AttributionID" ColumnName="AttributionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Attribution">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.Attribution_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="BookCarry" ParameterName="BookCarry" />
+                  <ScalarProperty Name="BookFX" ParameterName="BookFX" />
+                  <ScalarProperty Name="BookPrice" ParameterName="BookPrice" />
+                  <ScalarProperty Name="FundCarry" ParameterName="FundCarry" />
+                  <ScalarProperty Name="FundFX" ParameterName="FundFX" />
+                  <ScalarProperty Name="FundPrice" ParameterName="FundPrice" />
+                  <ScalarProperty Name="BookFactsetCarry" ParameterName="BookFactsetCarry" />
+                  <ScalarProperty Name="BookFactsetFX" ParameterName="BookFactsetFX" />
+                  <ScalarProperty Name="BookFactsetPrice" ParameterName="BookFactsetPrice" />
+                  <ScalarProperty Name="FundFactsetCarry" ParameterName="FundFactsetCarry" />
+                  <ScalarProperty Name="FundFactsetFX" ParameterName="FundFactsetFX" />
+                  <ScalarProperty Name="FundFactsetPrice" ParameterName="FundFactsetPrice" />
+                  <ScalarProperty Name="BookKeeleyCarry" ParameterName="BookKeeleyCarry" />
+                  <ScalarProperty Name="BookKeeleyFX" ParameterName="BookKeeleyFX" />
+                  <ScalarProperty Name="BookKeeleyPrice" ParameterName="BookKeeleyPrice" />
+                  <ScalarProperty Name="FundKeeleyCarry" ParameterName="FundKeeleyCarry" />
+                  <ScalarProperty Name="FundKeeleyFX" ParameterName="FundKeeleyFX" />
+                  <ScalarProperty Name="FundKeeleyPrice" ParameterName="FundKeeleyPrice" />
+                  <ScalarProperty Name="FundAdministratorOther" ParameterName="FundAdministratorOther" />
+                  <ScalarProperty Name="FundAdministratorCarry" ParameterName="FundAdministratorCarry" />
+                  <ScalarProperty Name="FundAdministratorFX" ParameterName="FundAdministratorFX" />
+                  <ScalarProperty Name="FundAdministratorPrice" ParameterName="FundAdministratorPrice" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="PositionId" ParameterName="PositionId" />
+                  <ResultBinding Name="AttributionID" ColumnName="AttributionId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.Attribution_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="BookCarry" ParameterName="BookCarry" Version="Current" />
+                  <ScalarProperty Name="BookFX" ParameterName="BookFX" Version="Current" />
+                  <ScalarProperty Name="BookPrice" ParameterName="BookPrice" Version="Current" />
+                  <ScalarProperty Name="FundCarry" ParameterName="FundCarry" Version="Current" />
+                  <ScalarProperty Name="FundFX" ParameterName="FundFX" Version="Current" />
+                  <ScalarProperty Name="FundPrice" ParameterName="FundPrice" Version="Current" />
+                  <ScalarProperty Name="BookFactsetCarry" ParameterName="BookFactsetCarry" Version="Current" />
+                  <ScalarProperty Name="BookFactsetFX" ParameterName="BookFactsetFX" Version="Current" />
+                  <ScalarProperty Name="BookFactsetPrice" ParameterName="BookFactsetPrice" Version="Current" />
+                  <ScalarProperty Name="FundFactsetCarry" ParameterName="FundFactsetCarry" Version="Current" />
+                  <ScalarProperty Name="FundFactsetFX" ParameterName="FundFactsetFX" Version="Current" />
+                  <ScalarProperty Name="FundFactsetPrice" ParameterName="FundFactsetPrice" Version="Current" />
+                  <ScalarProperty Name="BookKeeleyCarry" ParameterName="BookKeeleyCarry" Version="Current" />
+                  <ScalarProperty Name="BookKeeleyFX" ParameterName="BookKeeleyFX" Version="Current" />
+                  <ScalarProperty Name="BookKeeleyPrice" ParameterName="BookKeeleyPrice" Version="Current" />
+                  <ScalarProperty Name="FundKeeleyCarry" ParameterName="FundKeeleyCarry" Version="Current" />
+                  <ScalarProperty Name="FundKeeleyFX" ParameterName="FundKeeleyFX" Version="Current" />
+                  <ScalarProperty Name="FundKeeleyPrice" ParameterName="FundKeeleyPrice" Version="Current" />
+                  <ScalarProperty Name="FundAdministratorOther" ParameterName="FundAdministratorOther" Version="Current" />
+                  <ScalarProperty Name="FundAdministratorCarry" ParameterName="FundAdministratorCarry" Version="Current" />
+                  <ScalarProperty Name="FundAdministratorFX" ParameterName="FundAdministratorFX" Version="Current" />
+                  <ScalarProperty Name="FundAdministratorPrice" ParameterName="FundAdministratorPrice" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
+                  <ScalarProperty Name="AttributionID" ParameterName="AttributionID" Version="Current" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.Attribution_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="AttributionID" ParameterName="AttributionID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -24405,15 +24702,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     <edmx:Options>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="66">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -29075,7 +29372,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25.75" PointY="23.884095052083335" />
           <edmx:ConnectorPoint PointX="25.75" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="25.020833333333332" PointY="24.134095052083335" />
-          <edmx:ConnectorPoint PointX="24.354166666666668" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="24.291666666666668" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="23.281247499999996" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="23.114580833333331" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="23" PointY="24.134095052083339" />
@@ -29086,32 +29383,34 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="22.322916666666668" PointY="22.625" />
           <edmx:ConnectorPoint PointX="22.083333333333332" PointY="22.625" />
           <edmx:ConnectorPoint PointX="21.916666666666668" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="21.020833333333332" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="20.958333333333332" PointY="22.625" />
           <edmx:ConnectorPoint PointX="20.666666666666668" PointY="22.625" />
           <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.625" />
           <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.625" />
           <edmx:ConnectorPoint PointX="19.5" PointY="22.625" />
           <edmx:ConnectorPoint PointX="19.5" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="19.035833333333333" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="18.869166666666668" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="18.653333333333332" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="18.486666666666668" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.976987179487178" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.810320512820514" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.741602564102564" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.5749358974359" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.5650641025641" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.398397435897436" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.375" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.375" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="17.145833333333332" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.979166666666668" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="16.958333333333332" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="16.791666666666668" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.645833333333332" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.479166666666668" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.395833333333332" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.229166666666668" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="15.692708333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="15.354166666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="15.333333333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="13.520833333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="13.442708333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="12.989583333333334" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.802083333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.635416666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.375" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.375" PointY="23.317047526041669" />
           <edmx:ConnectorPoint PointX="12" PointY="23.317047526041669" />
@@ -30108,6 +30407,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionInstrumentMarketIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Attribution" Width="1.5" PointX="39" PointY="12" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionPositionIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
