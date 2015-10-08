@@ -22,6 +22,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [Description("Swap")]
         [EnumMember]
         Swap = 3,
-       
+
+        [Description("Futures & Options")]
+        [EnumMember]
+        FuturesAndOptions = 4,
+
     }
 }
