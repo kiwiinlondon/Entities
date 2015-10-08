@@ -23,54 +23,113 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public Nullable<decimal> FundAdministratorPrice { get; set; }
+        public Nullable<decimal> ITDFundAdministratorPrice { get; set; }
     	[DataMember]
-        public Nullable<decimal> FundAdministratorFX { get; set; }
+        public Nullable<decimal> ITDFundAdministratorFX { get; set; }
     	[DataMember]
-        public Nullable<decimal> FundAdministratorCarry { get; set; }
+        public Nullable<decimal> ITDFundAdministratorCarry { get; set; }
     	[DataMember]
-        public Nullable<decimal> FundAdministratorOther { get; set; }
+        public Nullable<decimal> ITDFundAdministratorOther { get; set; }
     	[DataMember]
-        public decimal FundKeeleyPrice { get; set; }
+        public decimal ITDFundKeeleyPrice { get; set; }
     	[DataMember]
-        public decimal FundKeeleyFX { get; set; }
+        public decimal ITDFundKeeleyFX { get; set; }
     	[DataMember]
-        public decimal FundKeeleyCarry { get; set; }
+        public decimal ITDFundKeeleyCarry { get; set; }
     	[DataMember]
-        public decimal BookKeeleyPrice { get; set; }
+        public decimal ITDBookKeeleyPrice { get; set; }
     	[DataMember]
-        public decimal BookKeeleyFX { get; set; }
+        public decimal ITDBookKeeleyFX { get; set; }
     	[DataMember]
-        public decimal BookKeeleyCarry { get; set; }
+        public decimal ITDBookKeeleyCarry { get; set; }
     	[DataMember]
-        public Nullable<decimal> FundFactsetPrice { get; set; }
+        public Nullable<decimal> ITDFundValuationPrice { get; set; }
     	[DataMember]
-        public Nullable<decimal> FundFactsetFX { get; set; }
+        public Nullable<decimal> ITDFundValuationFX { get; set; }
     	[DataMember]
-        public Nullable<decimal> FundFactsetCarry { get; set; }
+        public Nullable<decimal> ITDFundValuationCarry { get; set; }
     	[DataMember]
-        public Nullable<decimal> BookFactsetPrice { get; set; }
+        public Nullable<decimal> ITDFundFactsetPrice { get; set; }
     	[DataMember]
-        public Nullable<decimal> BookFactsetFX { get; set; }
+        public Nullable<decimal> ITDFundFactsetFX { get; set; }
     	[DataMember]
-        public Nullable<decimal> BookFactsetCarry { get; set; }
+        public Nullable<decimal> ITDFundFactsetCarry { get; set; }
     	[DataMember]
-        public decimal FundPrice { get; set; }
+        public Nullable<decimal> ITDBookFactsetPrice { get; set; }
     	[DataMember]
-        public decimal FundFX { get; set; }
+        public Nullable<decimal> ITDBookFactsetFX { get; set; }
     	[DataMember]
-        public decimal FundCarry { get; set; }
+        public Nullable<decimal> ITDBookFactsetCarry { get; set; }
     	[DataMember]
-        public decimal BookPrice { get; set; }
+        public decimal ITDFundPrice { get; set; }
     	[DataMember]
-        public decimal BookFX { get; set; }
+        public decimal ITDFundFX { get; set; }
     	[DataMember]
-        public decimal BookCarry { get; set; }
+        public decimal ITDFundCarry { get; set; }
+    	[DataMember]
+        public decimal ITDBookPrice { get; set; }
+    	[DataMember]
+        public decimal ITDBookFX { get; set; }
+    	[DataMember]
+        public decimal ITDBookCarry { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdministratorPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdministratorFX { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdministratorCarry { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdministratorOther { get; set; }
+    	[DataMember]
+        public decimal TodayFundKeeleyPrice { get; set; }
+    	[DataMember]
+        public decimal TodayFundKeeleyFX { get; set; }
+    	[DataMember]
+        public decimal TodayFundKeeleyCarry { get; set; }
+    	[DataMember]
+        public decimal TodayBookKeeleyPrice { get; set; }
+    	[DataMember]
+        public decimal TodayBookKeeleyFX { get; set; }
+    	[DataMember]
+        public decimal TodayBookKeeleyCarry { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundValuationPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundValuationFX { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundValuationCarry { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundFactsetPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundFactsetFX { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundFactsetCarry { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayBookFactsetPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayBookFactsetFX { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayBookFactsetCarry { get; set; }
+    	[DataMember]
+        public decimal TodayFundPrice { get; set; }
+    	[DataMember]
+        public decimal TodayFundFX { get; set; }
+    	[DataMember]
+        public decimal TodayFundCarry { get; set; }
+    	[DataMember]
+        public decimal TodayBookPrice { get; set; }
+    	[DataMember]
+        public decimal TodayBookFX { get; set; }
+    	[DataMember]
+        public decimal TodayBookCarry { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    
+        [DataMember]
+        public virtual Position Position { get; set; }
     }
 }
