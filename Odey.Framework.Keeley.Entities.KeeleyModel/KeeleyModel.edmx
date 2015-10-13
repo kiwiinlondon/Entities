@@ -76,12 +76,12 @@
             <PropertyRef Name="AnalystIdeaId" />
           </Key>
           <Property Name="AnalystIdeaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="AnalystId" Type="int" Nullable="false" />
           <Property Name="ResearchNoteLastReceived" Type="datetime" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="IssuerId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Analytic">
           <Key>
@@ -2214,15 +2214,15 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="AnalystIdeaInstrumentMarketIdFK">
-          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+        <Association Name="AnalystIdeaIssuerIDFK">
+          <End Role="Issuer" Type="Self.Issuer" Multiplicity="1" />
           <End Role="AnalystIdea" Type="Self.AnalystIdea" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="InstrumentMarket">
-              <PropertyRef Name="InstrumentMarketID" />
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
             </Principal>
             <Dependent Role="AnalystIdea">
-              <PropertyRef Name="InstrumentMarketId" />
+              <PropertyRef Name="IssuerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6468,18 +6468,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="AnalystIdea_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="AnalystId" Type="int" Mode="In" />
           <Parameter Name="ResearchNoteLastReceived" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IssuerId" Type="int" Mode="In" />
         </Function>
         <Function Name="AnalystIdea_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalystIdeaId" Type="int" Mode="In" />
-          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="AnalystId" Type="int" Mode="In" />
           <Parameter Name="ResearchNoteLastReceived" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IssuerId" Type="int" Mode="In" />
         </Function>
         <Function Name="Analytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalyticId" Type="int" Mode="In" />
@@ -9679,8 +9679,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="AnalystIdea" EntitySet="AnalystIdea" />
           </AssociationSet>
-          <AssociationSet Name="AnalystIdeaInstrumentMarketIdFK" Association="Self.AnalystIdeaInstrumentMarketIdFK">
-            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+          <AssociationSet Name="AnalystIdeaIssuerIDFK" Association="Self.AnalystIdeaIssuerIDFK">
+            <End Role="Issuer" EntitySet="Issuer" />
             <End Role="AnalystIdea" EntitySet="AnalystIdea" />
           </AssociationSet>
           <AssociationSet Name="AnalystIdeaUserIDFK" Association="Self.AnalystIdeaUserIDFK">
@@ -12508,19 +12508,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Price" EntitySet="Prices" />
             <End Role="PADealingBalance" EntitySet="PADealingBalances" />
           </AssociationSet>
-          <EntitySet Name="AnalystIdeas" EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" />
-          <AssociationSet Name="AnalystIdeaAnalystIDFK" Association="Odey.Framework.Keeley.Entities.AnalystIdeaAnalystIDFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
-          </AssociationSet>
-          <AssociationSet Name="AnalystIdeaInstrumentMarketIdFK" Association="Odey.Framework.Keeley.Entities.AnalystIdeaInstrumentMarketIdFK">
-            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
-            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
-          </AssociationSet>
-          <AssociationSet Name="AnalystIdeaUserIDFK" Association="Odey.Framework.Keeley.Entities.AnalystIdeaUserIDFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
-          </AssociationSet>
           <AssociationSet Name="PADealingInputUserIdFK" Association="Odey.Framework.Keeley.Entities.PADealingInputUserIdFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="PADealing" EntitySet="PADealings" />
@@ -12726,6 +12713,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="AttributionPositionIdFK" Association="Odey.Framework.Keeley.Entities.AttributionPositionIdFK">
             <End Role="Position" EntitySet="Positions" />
             <End Role="Attribution" EntitySet="Attributions" />
+          </AssociationSet>
+          <EntitySet Name="AnalystIdeas" EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" />
+          <AssociationSet Name="AnalystIdeaAnalystIDFK" Association="Odey.Framework.Keeley.Entities.AnalystIdeaAnalystIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
+          </AssociationSet>
+          <AssociationSet Name="AnalystIdeaIssuerIDFK" Association="Odey.Framework.Keeley.Entities.AnalystIdeaIssuerIDFK">
+            <End Role="Issuer" EntitySet="Issuers" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
+          </AssociationSet>
+          <AssociationSet Name="AnalystIdeaUserIDFK" Association="Odey.Framework.Keeley.Entities.AnalystIdeaUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -18431,56 +18431,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="AnalystIdea">
-          <Key>
-            <PropertyRef Name="AnalystIdeaId" />
-          </Key>
-          <Property Name="AnalystIdeaId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="InstrumentMarketId" Type="Int32" Nullable="false" />
-          <Property Name="AnalystId" Type="Int32" Nullable="false" />
-          <Property Name="ResearchNoteLastReceived" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
-          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="Analyst" Relationship="Odey.Framework.Keeley.Entities.AnalystIdeaAnalystIDFK" FromRole="AnalystIdea" ToRole="ApplicationUser" />
-          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.AnalystIdeaInstrumentMarketIdFK" FromRole="AnalystIdea" ToRole="InstrumentMarket" />
-        </EntityType>
-        <Association Name="AnalystIdeaAnalystIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="AnalystIdea">
-              <PropertyRef Name="AnalystId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="AnalystIdeaInstrumentMarketIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstrumentMarket">
-              <PropertyRef Name="InstrumentMarketID" />
-            </Principal>
-            <Dependent Role="AnalystIdea">
-              <PropertyRef Name="InstrumentMarketId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="AnalystIdeaUserIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="AnalystIdea">
-              <PropertyRef Name="UpdateUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="PADealingInputUserIdFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.PADealing" Role="PADealing" Multiplicity="*" />
@@ -19302,6 +19252,56 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="Attribution">
               <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AnalystIdea">
+          <Key>
+            <PropertyRef Name="AnalystIdeaId" />
+          </Key>
+          <Property Name="AnalystIdeaId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="AnalystId" Type="Int32" Nullable="false" />
+          <Property Name="ResearchNoteLastReceived" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="IssuerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Analyst" Relationship="Odey.Framework.Keeley.Entities.AnalystIdeaAnalystIDFK" FromRole="AnalystIdea" ToRole="ApplicationUser" />
+          <NavigationProperty Name="Issuer" Relationship="Odey.Framework.Keeley.Entities.AnalystIdeaIssuerIDFK" FromRole="AnalystIdea" ToRole="Issuer" />
+        </EntityType>
+        <Association Name="AnalystIdeaAnalystIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="AnalystId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AnalystIdeaIssuerIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.Issuer" Role="Issuer" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="IssuerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AnalystIdeaUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -24276,47 +24276,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AnalystIdeas">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea">
-              <MappingFragment StoreEntitySet="AnalystIdea">
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="ResearchNoteLastReceived" ColumnName="ResearchNoteLastReceived" />
-                <ScalarProperty Name="AnalystId" ColumnName="AnalystId" />
-                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
-                <ScalarProperty Name="AnalystIdeaId" ColumnName="AnalystIdeaId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.AnalystIdea_Insert">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="ResearchNoteLastReceived" ParameterName="ResearchNoteLastReceived" />
-                  <ScalarProperty Name="AnalystId" ParameterName="AnalystId" />
-                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
-                  <ResultBinding Name="AnalystIdeaId" ColumnName="AnalystIdeaId" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="KeeleyModel.Store.AnalystIdea_Update">
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="ResearchNoteLastReceived" ParameterName="ResearchNoteLastReceived" Version="Current" />
-                  <ScalarProperty Name="AnalystId" ParameterName="AnalystId" Version="Current" />
-                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
-                  <ScalarProperty Name="AnalystIdeaId" ParameterName="AnalystIdeaId" Version="Current" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.AnalystIdea_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="AnalystIdeaId" ParameterName="AnalystIdeaId" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="TransferEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TransferEvent">
               <MappingFragment StoreEntitySet="TransferEvent">
@@ -24885,6 +24844,47 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AnalystIdeas">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea">
+              <MappingFragment StoreEntitySet="AnalystIdea">
+                <ScalarProperty Name="IssuerId" ColumnName="IssuerId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="ResearchNoteLastReceived" ColumnName="ResearchNoteLastReceived" />
+                <ScalarProperty Name="AnalystId" ColumnName="AnalystId" />
+                <ScalarProperty Name="AnalystIdeaId" ColumnName="AnalystIdeaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.AnalystIdea_Insert">
+                  <ScalarProperty Name="IssuerId" ParameterName="IssuerId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="ResearchNoteLastReceived" ParameterName="ResearchNoteLastReceived" />
+                  <ScalarProperty Name="AnalystId" ParameterName="AnalystId" />
+                  <ResultBinding Name="AnalystIdeaId" ColumnName="AnalystIdeaId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.AnalystIdea_Update">
+                  <ScalarProperty Name="IssuerId" ParameterName="IssuerId" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="ResearchNoteLastReceived" ParameterName="ResearchNoteLastReceived" Version="Current" />
+                  <ScalarProperty Name="AnalystId" ParameterName="AnalystId" Version="Current" />
+                  <ScalarProperty Name="AnalystIdeaId" ParameterName="AnalystIdeaId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="Startdt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.AnalystIdea_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="AnalystIdeaId" ParameterName="AnalystIdeaId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -24907,7 +24907,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="66">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="98">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -29568,30 +29568,30 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
           <edmx:ConnectorPoint PointX="25.75" PointY="23.884095052083335" />
           <edmx:ConnectorPoint PointX="25.75" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="25.020833333333332" PointY="24.134095052083335" />
-          <edmx:ConnectorPoint PointX="24.291666666666668" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="25.020833333333332" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="24.489583333333332" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="24.322916666666668" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="23.281247499999996" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="23.114580833333331" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="23" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="23" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="22.791666666666668" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="22.489583333333332" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="22.322916666666668" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="22.083333333333332" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="21.916666666666668" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="20.958333333333332" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="20.666666666666668" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="19.5" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="23" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="22.791666666666668" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="22.489583333333332" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="22.322916666666668" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="22.083333333333332" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="21.916666666666668" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="20.958333333333332" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="20.666666666666668" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.5" />
+          <edmx:ConnectorPoint PointX="19.5" PointY="22.5" />
           <edmx:ConnectorPoint PointX="19.5" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="19.458333333333332" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="19.291666666666668" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="18.976987179487178" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="18.810320512820514" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="18.741602564102564" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="18.5749358974359" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="19.035833333333333" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.869166666666668" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.653333333333332" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.486666666666668" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.375" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.375" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="17.145833333333332" PointY="22.8125" />
@@ -29600,14 +29600,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="16.479166666666668" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.395833333333332" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.229166666666668" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="15.354166666666666" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="15.333333333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.661458333333334" PointY="22.812499999999996" />
           <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="13.442708333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="13.427083333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="12.802083333333334" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="12.635416666666666" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.927083333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.760416666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.375" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.375" PointY="23.317047526041669" />
           <edmx:ConnectorPoint PointX="12" PointY="23.317047526041669" />
@@ -30545,10 +30543,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FMPortfolio" Width="1.5" PointX="2.875" PointY="60" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FMPortfolioUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingBalanceCurrentPriceIdFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="27.375" PointY="21.375" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaAnalystIDFK" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaInstrumentMarketIdFK" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PADealingInputUserIdFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.TransferEvent" Width="1.5" PointX="33.625" PointY="2.25" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.TransferEventFromAccountIdFK" />
@@ -30607,6 +30601,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Attribution" Width="1.5" PointX="39.25" PointY="9.625" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionPositionIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.75" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaAnalystIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaIssuerIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaUserIDFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

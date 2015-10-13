@@ -134,7 +134,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<PADealingBalance> PADealingBalances { get; set; }
         public DbSet<PADealing> PADealings { get; set; }
         public DbSet<FMPortfolio> FMPortfolios { get; set; }
-        public DbSet<AnalystIdea> AnalystIdeas { get; set; }
         public DbSet<TransferEvent> TransferEvents { get; set; }
         public DbSet<PADealingBroker> PADealingBrokers { get; set; }
         public DbSet<ManagerPriceTarget> ManagerPriceTargets { get; set; }
@@ -149,6 +148,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<CorporateAction> CorporateActions { get; set; }
         public DbSet<CorporateActionType> CorporateActionTypes { get; set; }
         public DbSet<Attribution> Attributions { get; set; }
+        public DbSet<AnalystIdea> AnalystIdeas { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

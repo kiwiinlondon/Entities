@@ -19,8 +19,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int AnalystIdeaId { get; set; }
     	[DataMember]
-        public int InstrumentMarketId { get; set; }
-    	[DataMember]
         public int AnalystId { get; set; }
     	[DataMember]
         public System.DateTime ResearchNoteLastReceived { get; set; }
@@ -30,10 +28,12 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public int IssuerId { get; set; }
     
         [DataMember]
         public virtual ApplicationUser Analyst { get; set; }
         [DataMember]
-        public virtual InstrumentMarket InstrumentMarket { get; set; }
+        public virtual Issuer Issuer { get; set; }
     }
 }
