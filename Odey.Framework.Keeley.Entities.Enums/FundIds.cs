@@ -196,7 +196,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OF_EUR_R = 5914,
         [EnumMember]
-        OF_GBP_I = 5906,
+        OF_GBP_IR = 5906,
         [EnumMember]
         OF_GBP_B = 5907,
         [EnumMember]
