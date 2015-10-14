@@ -38,5 +38,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [Description("Restricted List")]
         [EnumMember]
         RestrictedList = 7,
+
+
+        [Description("Research Note within 5 days")]
+        [EnumMember]
+        ResearchNoteWithin5Days = 7,
     }
 }
