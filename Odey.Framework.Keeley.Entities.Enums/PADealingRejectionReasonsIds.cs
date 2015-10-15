@@ -42,6 +42,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [Description("Research Note within 5 days")]
         [EnumMember]
-        ResearchNoteWithin5Days = 7,
+        ResearchNoteWithin5Days = 8,
     }
 }
