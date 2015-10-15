@@ -11,13 +11,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
     public enum RiskAnalyticTypeIds
     {
-        [Description("Portfolio Total Risk")]
+        [Description("Total Risk")]
         [EnumMember]
         PortfolioTotalRisk = 1,
         
-        [Description("% systematic Portfolio Total Risk")]
+        [Description("% Systematic Total Risk")]
         [EnumMember]
-        PercentSystematicPortfolioTotalRisk = 2,
+        PercentSystematicTotalRisk = 2,
         
         [Description("Tracking Error")]
         [EnumMember]
