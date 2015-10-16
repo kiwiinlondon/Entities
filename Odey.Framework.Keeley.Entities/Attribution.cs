@@ -31,17 +31,17 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ITDFundAdministratorOther { get; set; }
     	[DataMember]
-        public decimal ITDFundKeeleyPrice { get; set; }
+        public Nullable<decimal> ITDFundKeeleyPrice { get; set; }
     	[DataMember]
-        public decimal ITDFundKeeleyFX { get; set; }
+        public Nullable<decimal> ITDFundKeeleyFX { get; set; }
     	[DataMember]
-        public decimal ITDFundKeeleyCarry { get; set; }
+        public Nullable<decimal> ITDFundKeeleyCarry { get; set; }
     	[DataMember]
-        public decimal ITDBookKeeleyPrice { get; set; }
+        public Nullable<decimal> ITDBookKeeleyPrice { get; set; }
     	[DataMember]
-        public decimal ITDBookKeeleyFX { get; set; }
+        public Nullable<decimal> ITDBookKeeleyFX { get; set; }
     	[DataMember]
-        public decimal ITDBookKeeleyCarry { get; set; }
+        public Nullable<decimal> ITDBookKeeleyCarry { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDFundValuationPrice { get; set; }
     	[DataMember]
@@ -67,11 +67,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal ITDFundCarry { get; set; }
     	[DataMember]
-        public decimal ITDBookPrice { get; set; }
+        public Nullable<decimal> ITDBookPrice { get; set; }
     	[DataMember]
-        public decimal ITDBookFX { get; set; }
+        public Nullable<decimal> ITDBookFX { get; set; }
     	[DataMember]
-        public decimal ITDBookCarry { get; set; }
+        public Nullable<decimal> ITDBookCarry { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayFundAdministratorPrice { get; set; }
     	[DataMember]
@@ -87,11 +87,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal TodayFundKeeleyCarry { get; set; }
     	[DataMember]
-        public decimal TodayBookKeeleyPrice { get; set; }
+        public Nullable<decimal> TodayBookKeeleyPrice { get; set; }
     	[DataMember]
-        public decimal TodayBookKeeleyFX { get; set; }
+        public Nullable<decimal> TodayBookKeeleyFX { get; set; }
     	[DataMember]
-        public decimal TodayBookKeeleyCarry { get; set; }
+        public Nullable<decimal> TodayBookKeeleyCarry { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayFundValuationPrice { get; set; }
     	[DataMember]
@@ -117,19 +117,23 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal TodayFundCarry { get; set; }
     	[DataMember]
-        public decimal TodayBookPrice { get; set; }
+        public Nullable<decimal> TodayBookPrice { get; set; }
     	[DataMember]
-        public decimal TodayBookFX { get; set; }
+        public Nullable<decimal> TodayBookFX { get; set; }
     	[DataMember]
-        public decimal TodayBookCarry { get; set; }
+        public Nullable<decimal> TodayBookCarry { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public Nullable<int> PortfolioId { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
+        [DataMember]
+        public virtual Portfolio Portfolio { get; set; }
     }
 }
