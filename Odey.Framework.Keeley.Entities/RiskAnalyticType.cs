@@ -14,36 +14,19 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class RiskAnalytic
+    public partial class RiskAnalyticType
     {
-    	[DataMember]
-        public int RiskAnalyticId { get; set; }
-    	[DataMember]
-        public int InstrumentMarketId { get; set; }
     	[DataMember]
         public int RiskAnalyticTypeId { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
-    	[DataMember]
-        public Nullable<int> CurrencyId { get; set; }
-    	[DataMember]
-        public Nullable<decimal> Value1Day { get; set; }
-    	[DataMember]
-        public Nullable<decimal> Value20Day { get; set; }
-    	[DataMember]
-        public Nullable<decimal> Value1DayMixedModel { get; set; }
+        public string Name { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    
-        [DataMember]
-        public virtual Currency Currency { get; set; }
-        [DataMember]
-        public virtual InstrumentMarket InstrumentMarket { get; set; }
-        [DataMember]
-        public virtual RiskAnalyticType RiskAnalyticType { get; set; }
+    	[DataMember]
+        public string FileColumnName { get; set; }
     }
 }

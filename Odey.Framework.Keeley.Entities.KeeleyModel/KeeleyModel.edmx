@@ -1920,6 +1920,17 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="RiskAnalyticType">
+          <Key>
+            <PropertyRef Name="RiskAnalyticTypeId" />
+          </Key>
+          <Property Name="RiskAnalyticTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="160" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="FileColumnName" Type="varchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="SecurityGroup">
           <Key>
             <PropertyRef Name="SecurityGroupId" />
@@ -6214,6 +6225,30 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="RiskAnalyticsRiskAnalyticsTyoeIdFK">
+          <End Role="RiskAnalyticType" Type="Self.RiskAnalyticType" Multiplicity="1" />
+          <End Role="RiskAnalytic" Type="Self.RiskAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RiskAnalyticType">
+              <PropertyRef Name="RiskAnalyticTypeId" />
+            </Principal>
+            <Dependent Role="RiskAnalytic">
+              <PropertyRef Name="RiskAnalyticTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RiskAnalyticsTypeUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="RiskAnalyticType" Type="Self.RiskAnalyticType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RiskAnalyticType">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="RiskAnalyticsUpdateUserIDFK">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
           <End Role="RiskAnalytic" Type="Self.RiskAnalytic" Multiplicity="*" />
@@ -9645,6 +9680,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RestrictedList" EntityType="Self.RestrictedList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RiskAnalytic" EntityType="Self.RiskAnalytic" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RiskAnalyticType" EntityType="Self.RiskAnalyticType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SecurityGroup" EntityType="Self.SecurityGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SecurityGroupFunctionPoint" EntityType="Self.SecurityGroupFunctionPoint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TradeEvent" EntityType="Self.TradeEvent" Schema="dbo" store:Type="Tables" />
@@ -11059,6 +11095,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="RiskAnalyticsInstrumentMarketIdFK" Association="Self.RiskAnalyticsInstrumentMarketIdFK">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
             <End Role="RiskAnalytic" EntitySet="RiskAnalytic" />
+          </AssociationSet>
+          <AssociationSet Name="RiskAnalyticsRiskAnalyticsTyoeIdFK" Association="Self.RiskAnalyticsRiskAnalyticsTyoeIdFK">
+            <End Role="RiskAnalyticType" EntitySet="RiskAnalyticType" />
+            <End Role="RiskAnalytic" EntitySet="RiskAnalytic" />
+          </AssociationSet>
+          <AssociationSet Name="RiskAnalyticsTypeUpdateUserIDFK" Association="Self.RiskAnalyticsTypeUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="RiskAnalyticType" EntitySet="RiskAnalyticType" />
           </AssociationSet>
           <AssociationSet Name="RiskAnalyticsUpdateUserIDFK" Association="Self.RiskAnalyticsUpdateUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -12803,6 +12847,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="RiskAnalyticsInstrumentMarketIdFK" Association="Odey.Framework.Keeley.Entities.RiskAnalyticsInstrumentMarketIdFK">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="RiskAnalytic" EntitySet="RiskAnalytics" />
+          </AssociationSet>
+          <EntitySet Name="RiskAnalyticTypes" EntityType="Odey.Framework.Keeley.Entities.RiskAnalyticType" />
+          <AssociationSet Name="RiskAnalyticsTypeUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.RiskAnalyticsTypeUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="RiskAnalyticType" EntitySet="RiskAnalyticTypes" />
+          </AssociationSet>
+          <AssociationSet Name="RiskAnalyticsRiskAnalyticsTyoeIdFK" Association="Odey.Framework.Keeley.Entities.RiskAnalyticsRiskAnalyticsTyoeIdFK">
+            <End Role="RiskAnalyticType" EntitySet="RiskAnalyticTypes" />
             <End Role="RiskAnalytic" EntitySet="RiskAnalytics" />
           </AssociationSet>
           </EntityContainer>
@@ -19400,6 +19453,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.RiskAnalyticsCurrencyIdFK" FromRole="RiskAnalytic" ToRole="Currency" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.RiskAnalyticsInstrumentMarketIdFK" FromRole="RiskAnalytic" ToRole="InstrumentMarket" />
+          <NavigationProperty Name="RiskAnalyticType" Relationship="Odey.Framework.Keeley.Entities.RiskAnalyticsRiskAnalyticsTyoeIdFK" FromRole="RiskAnalytic" ToRole="RiskAnalyticType" />
         </EntityType>
         <Association Name="RiskAnalyticsUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19434,6 +19488,41 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="RiskAnalytic">
               <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RiskAnalyticType">
+          <Key>
+            <PropertyRef Name="RiskAnalyticTypeId" />
+          </Key>
+          <Property Name="RiskAnalyticTypeId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="160" FixedLength="false" Unicode="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FileColumnName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="RiskAnalyticsTypeUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RiskAnalyticType" Role="RiskAnalyticType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RiskAnalyticType">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RiskAnalyticsRiskAnalyticsTyoeIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.RiskAnalyticType" Role="RiskAnalyticType" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RiskAnalytic" Role="RiskAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RiskAnalyticType">
+              <PropertyRef Name="RiskAnalyticTypeId" />
+            </Principal>
+            <Dependent Role="RiskAnalytic">
+              <PropertyRef Name="RiskAnalyticTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -25034,6 +25123,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RiskAnalyticTypes">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RiskAnalyticType">
+              <MappingFragment StoreEntitySet="RiskAnalyticType">
+                <ScalarProperty Name="FileColumnName" ColumnName="FileColumnName" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RiskAnalyticTypeId" ColumnName="RiskAnalyticTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -29717,48 +29818,48 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
           <edmx:ConnectorPoint PointX="25.75" PointY="23.884095052083335" />
           <edmx:ConnectorPoint PointX="25.75" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="25.020833333333332" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="24.854166666666668" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="24.769333333333332" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="24.354166666666668" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="23.375" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="23.375" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="22.791666666666668" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="22.302083333333332" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="22.135416666666668" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="21.895833833333331" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="21.729167166666667" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="20.833333333333332" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="20.541666666666668" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="19.5" PointY="22.734375" />
-          <edmx:ConnectorPoint PointX="19.5" PointY="23.016663411458332" />
-          <edmx:ConnectorPoint PointX="18.800448717948719" PointY="23.016663411458332" />
-          <edmx:ConnectorPoint PointX="18.633782051282054" PointY="23.016663411458332" />
-          <edmx:ConnectorPoint PointX="18.550352564102564" PointY="23.016663411458332" />
-          <edmx:ConnectorPoint PointX="18.3836858974359" PointY="23.016663411458332" />
-          <edmx:ConnectorPoint PointX="18.375" PointY="23.016663411458332" />
-          <edmx:ConnectorPoint PointX="18.375" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="17.145833333333332" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="16.979166666666668" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="16.645833333333332" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="16.479166666666668" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="16.411458333333332" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="16.244791666666668" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="15.354166666666666" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="15.333333333333334" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="13.442708333333334" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="13.276041666666666" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="12.958333333333334" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="12.625" PointY="22.828125" />
-          <edmx:ConnectorPoint PointX="12.625" PointY="23.317047526041669" />
-          <edmx:ConnectorPoint PointX="12.583333333333334" PointY="23.317047526041669" />
-          <edmx:ConnectorPoint PointX="12.416666666666666" PointY="23.317047526041669" />
+          <edmx:ConnectorPoint PointX="25.020833333333332" PointY="24.134095052083335" />
+          <edmx:ConnectorPoint PointX="24.479166666666668" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="24.458333333333332" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="24.291666666666668" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="23.177083333333332" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="22.916666666666668" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="22.875" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="22.875" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="22.489583333333332" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="22.322916666666668" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="22.083333333333332" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="21.916666666666668" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="21.083333333333332" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="20.666666666666668" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="20.020833333333332" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="19.854166666666668" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="19.5" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="19.5" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="19.035833333333333" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.869166666666668" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.653333333333332" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.486666666666668" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.375" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.375" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="17.145833333333332" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.979166666666668" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.645833333333332" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.479166666666668" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.395833333333332" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.229166666666668" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.354166666666666" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.333333333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="13.442708333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.958333333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.375" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.375" PointY="23.317047526041669" />
           <edmx:ConnectorPoint PointX="12" PointY="23.317047526041669" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
@@ -30760,6 +30861,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RiskAnalyticsUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RiskAnalyticsCurrencyIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RiskAnalyticsInstrumentMarketIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RiskAnalyticType" Width="1.5" PointX="2.75" PointY="81.625" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RiskAnalyticsTypeUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RiskAnalyticsRiskAnalyticsTyoeIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
