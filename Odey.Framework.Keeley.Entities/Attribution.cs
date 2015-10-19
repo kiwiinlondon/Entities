@@ -141,11 +141,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> AdministratorOpeningNav { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationNav { get; set; }
-    	[DataMember]
-        public Nullable<decimal> CapitalChangeValuation { get; set; }
-    	[DataMember]
         public Nullable<decimal> TotalContributionSinceLastValuation { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningValuationNav { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
