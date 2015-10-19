@@ -493,5 +493,104 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Fund_UpdateClientLoadDate", fundIdParameter, loadDateParameter);
         }
+    
+        public virtual int RiskAnalytic_Delete(Nullable<int> riskAnalyticId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var riskAnalyticIdParameter = riskAnalyticId.HasValue ?
+                new ObjectParameter("RiskAnalyticId", riskAnalyticId) :
+                new ObjectParameter("RiskAnalyticId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Delete", riskAnalyticIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int RiskAnalytic_Insert(Nullable<int> instrumentMarketId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> currencyId, Nullable<decimal> value1Day, Nullable<decimal> value20Day, Nullable<decimal> value1DayMixedModel, Nullable<int> updateUserID)
+        {
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var riskAnalyticTypeIdParameter = riskAnalyticTypeId.HasValue ?
+                new ObjectParameter("RiskAnalyticTypeId", riskAnalyticTypeId) :
+                new ObjectParameter("RiskAnalyticTypeId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var currencyIdParameter = currencyId.HasValue ?
+                new ObjectParameter("CurrencyId", currencyId) :
+                new ObjectParameter("CurrencyId", typeof(int));
+    
+            var value1DayParameter = value1Day.HasValue ?
+                new ObjectParameter("Value1Day", value1Day) :
+                new ObjectParameter("Value1Day", typeof(decimal));
+    
+            var value20DayParameter = value20Day.HasValue ?
+                new ObjectParameter("Value20Day", value20Day) :
+                new ObjectParameter("Value20Day", typeof(decimal));
+    
+            var value1DayMixedModelParameter = value1DayMixedModel.HasValue ?
+                new ObjectParameter("Value1DayMixedModel", value1DayMixedModel) :
+                new ObjectParameter("Value1DayMixedModel", typeof(decimal));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Insert", instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter);
+        }
+    
+        public virtual int RiskAnalytic_Update(Nullable<int> riskAnalyticId, Nullable<int> instrumentMarketId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> currencyId, Nullable<decimal> value1Day, Nullable<decimal> value20Day, Nullable<decimal> value1DayMixedModel, Nullable<int> updateUserID, byte[] dataVersion)
+        {
+            var riskAnalyticIdParameter = riskAnalyticId.HasValue ?
+                new ObjectParameter("RiskAnalyticId", riskAnalyticId) :
+                new ObjectParameter("RiskAnalyticId", typeof(int));
+    
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var riskAnalyticTypeIdParameter = riskAnalyticTypeId.HasValue ?
+                new ObjectParameter("RiskAnalyticTypeId", riskAnalyticTypeId) :
+                new ObjectParameter("RiskAnalyticTypeId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var currencyIdParameter = currencyId.HasValue ?
+                new ObjectParameter("CurrencyId", currencyId) :
+                new ObjectParameter("CurrencyId", typeof(int));
+    
+            var value1DayParameter = value1Day.HasValue ?
+                new ObjectParameter("Value1Day", value1Day) :
+                new ObjectParameter("Value1Day", typeof(decimal));
+    
+            var value20DayParameter = value20Day.HasValue ?
+                new ObjectParameter("Value20Day", value20Day) :
+                new ObjectParameter("Value20Day", typeof(decimal));
+    
+            var value1DayMixedModelParameter = value1DayMixedModel.HasValue ?
+                new ObjectParameter("Value1DayMixedModel", value1DayMixedModel) :
+                new ObjectParameter("Value1DayMixedModel", typeof(decimal));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Update", riskAnalyticIdParameter, instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter, dataVersionParameter);
+        }
     }
 }
