@@ -130,6 +130,22 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<int> PortfolioId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningBookNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CapitalChangeBook { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningFundNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CapitalChangeFund { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AdministratorOpeningNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CapitalChangeValuation { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalContributionSinceLastValuation { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
