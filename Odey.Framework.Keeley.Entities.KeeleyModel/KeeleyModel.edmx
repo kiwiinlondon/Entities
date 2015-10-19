@@ -2030,6 +2030,20 @@
           <Property Name="InputUserId" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'Keeley.dbo.BookNetAssetValue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BookNetAssetValue">
+          <Key>
+            <PropertyRef Name="BookId" />
+            <PropertyRef Name="ReferenceDate" />
+          </Key>
+          <Property Name="BookId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="MarketValue" Type="numeric" Precision="38" Scale="8" />
+          <Property Name="ValautionMarketValue" Type="numeric" Precision="38" Scale="8" />
+          <Property Name="TodayCapitalChange" Type="numeric" Precision="38" Scale="8" />
+          <Property Name="PositionCount" Type="bigint" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'Keeley.dbo.FundCapitalChange' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="FundCapitalChange">
           <Key>
@@ -9724,6 +9738,16 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="SecurityGroupFunctionPoint" EntityType="Self.SecurityGroupFunctionPoint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TradeEvent" EntityType="Self.TradeEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransferEvent" EntityType="Self.TransferEvent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookNetAssetValue" EntityType="Self.BookNetAssetValue" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[BookNetAssetValue].[BookId] AS [BookId], 
+[BookNetAssetValue].[ReferenceDate] AS [ReferenceDate], 
+[BookNetAssetValue].[MarketValue] AS [MarketValue], 
+[BookNetAssetValue].[ValautionMarketValue] AS [ValautionMarketValue], 
+[BookNetAssetValue].[TodayCapitalChange] AS [TodayCapitalChange], 
+[BookNetAssetValue].[PositionCount] AS [PositionCount]
+FROM [dbo].[BookNetAssetValue] AS [BookNetAssetValue]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="FundCapitalChange" EntityType="Self.FundCapitalChange" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
 [FundCapitalChange].[FundId] AS [FundId], 
@@ -12905,6 +12929,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Portfolio" EntitySet="Portfolios" />
             <End Role="Attribution" EntitySet="Attributions" />
           </AssociationSet>
+          <EntitySet Name="BookNetAssetValues" EntityType="Odey.Framework.Keeley.Entities.BookNetAssetValue" />
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -19596,6 +19621,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="BookNetAssetValue">
+          <Key>
+            <PropertyRef Name="BookId" />
+            <PropertyRef Name="ReferenceDate" />
+          </Key>
+          <Property Name="BookId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MarketValue" Type="Decimal" Precision="38" Scale="8" />
+          <Property Name="ValautionMarketValue" Type="Decimal" Precision="38" Scale="8" />
+          <Property Name="TodayCapitalChange" Type="Decimal" Precision="38" Scale="8" />
+          <Property Name="PositionCount" Type="Int64" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -25232,6 +25269,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BookNetAssetValues">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BookNetAssetValue">
+              <MappingFragment StoreEntitySet="BookNetAssetValue">
+                <ScalarProperty Name="PositionCount" ColumnName="PositionCount" />
+                <ScalarProperty Name="TodayCapitalChange" ColumnName="TodayCapitalChange" />
+                <ScalarProperty Name="ValautionMarketValue" ColumnName="ValautionMarketValue" />
+                <ScalarProperty Name="MarketValue" ColumnName="MarketValue" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -29915,46 +29964,52 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
           <edmx:ConnectorPoint PointX="25.75" PointY="23.884095052083335" />
           <edmx:ConnectorPoint PointX="25.75" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="25.020833333333332" PointY="24.134095052083335" />
+          <edmx:ConnectorPoint PointX="24.958333333333332" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="24.479166666666668" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="24.458333333333332" PointY="24.134095052083339" />
           <edmx:ConnectorPoint PointX="24.291666666666668" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="23.177083333333332" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="22.916666666666668" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="22.875" PointY="24.134095052083339" />
-          <edmx:ConnectorPoint PointX="22.875" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="23.458333333333332" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="23.291666666666668" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="23.239580833333331" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="23.072914166666667" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="23" PointY="24.134095052083339" />
+          <edmx:ConnectorPoint PointX="23" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="22.791666666666668" PointY="22.625" />
           <edmx:ConnectorPoint PointX="22.489583333333332" PointY="22.625" />
           <edmx:ConnectorPoint PointX="22.322916666666668" PointY="22.625" />
           <edmx:ConnectorPoint PointX="22.083333333333332" PointY="22.625" />
           <edmx:ConnectorPoint PointX="21.916666666666668" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="21.083333333333332" PointY="22.625" />
+          <edmx:ConnectorPoint PointX="20.958333333333332" PointY="22.625" />
           <edmx:ConnectorPoint PointX="20.666666666666668" PointY="22.625" />
           <edmx:ConnectorPoint PointX="20.270833333333332" PointY="22.625" />
           <edmx:ConnectorPoint PointX="20.104166666666668" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="20.020833333333332" PointY="22.625" />
-          <edmx:ConnectorPoint PointX="19.854166666666668" PointY="22.625" />
           <edmx:ConnectorPoint PointX="19.5" PointY="22.625" />
           <edmx:ConnectorPoint PointX="19.5" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="19.035833333333333" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.869166666666668" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.653333333333332" PointY="23.268616536458332" />
-          <edmx:ConnectorPoint PointX="18.486666666666668" PointY="23.268616536458332" />
+          <edmx:ConnectorPoint PointX="18.412257733974361" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.375" PointY="23.268616536458332" />
           <edmx:ConnectorPoint PointX="18.375" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="17.145833333333332" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.979166666666668" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.958333333333332" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.791666666666668" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.645833333333332" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.479166666666668" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.395833333333332" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="16.229166666666668" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="15.354166666666666" PointY="22.8125" />
-          <edmx:ConnectorPoint PointX="15.333333333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="16.13020508333333" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.963538416666664" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="22.812499999999996" />
           <edmx:ConnectorPoint PointX="15.104166666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="13.442708333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="13.166666666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.958333333333334" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.583333333333334" PointY="22.8125" />
+          <edmx:ConnectorPoint PointX="12.416666666666666" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.375" PointY="22.8125" />
           <edmx:ConnectorPoint PointX="12.375" PointY="23.317047526041669" />
           <edmx:ConnectorPoint PointX="12" PointY="23.317047526041669" />
@@ -30962,6 +31017,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RiskAnalyticsTypeUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RiskAnalyticsRiskAnalyticsTyoeIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Portf__6659833C" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BookNetAssetValue" Width="1.5" PointX="9.125" PointY="6.5" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
