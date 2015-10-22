@@ -40,6 +40,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> CountryId { get; set; }
     	[DataMember]
         public Nullable<int> MarketId { get; set; }
+    	[DataMember]
+        public bool SendAlertOnly { get; set; }
     
         [DataMember]
         public virtual Country Country { get; set; }
