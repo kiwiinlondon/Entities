@@ -592,5 +592,14 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Update", riskAnalyticIdParameter, instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter, dataVersionParameter);
         }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> Attribution_Roll(Nullable<int> updateUserId)
+        {
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("Attribution_Roll", updateUserIdParameter);
+        }
     }
 }

@@ -41,5 +41,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual Book Book { get; set; }
+        [DataMember]
+        public virtual Account Account { get; set; }
     }
 }

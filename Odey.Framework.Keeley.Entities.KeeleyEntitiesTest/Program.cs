@@ -20,7 +20,8 @@ namespace Odey.Framework.KeeleyEntitiesTest
         {
             using (var context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-
+               // context.FundPortfolioChanges.Add(new FundPortfolioChange() { FundId = 741, ReferenceDate = DateTime.Today, UpdateUserID = 1, StartDt = DateTime.Today, });
+              //  context.SaveChanges();
                 var ab = context.Charges.FirstOrDefault(a => a.ChargeId == 1);
                 ab.ChargeTypeId = 9;
                // EntityPropertyOverrideUtilities.ApplyOverrides(ab, context);
