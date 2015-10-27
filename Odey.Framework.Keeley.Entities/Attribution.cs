@@ -144,10 +144,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TotalContributionSinceLastValuation { get; set; }
     	[DataMember]
         public Nullable<decimal> OpeningValuationNav { get; set; }
+    	[DataMember]
+        public Nullable<int> AttributionSourceId { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
+        [DataMember]
+        public virtual AttributionSource AttributionSource { get; set; }
     }
 }

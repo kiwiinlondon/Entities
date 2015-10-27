@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class AttributionSource
     {
+    	
+        public AttributionSource()
+        {
+            this.Attributions = new List<Attribution>();
+        }
+    
     	[DataMember]
         public int AttributionSourceID { get; set; }
     	[DataMember]
@@ -36,5 +42,8 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    
+        [DataMember]
+        public virtual List<Attribution> Attributions { get; set; }
     }
 }
