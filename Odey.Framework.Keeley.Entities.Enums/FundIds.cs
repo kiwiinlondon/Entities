@@ -384,6 +384,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MW=6994,
         [EnumMember]
-        DAMI=6995
+        DAMI=6995,
+
+        [EnumMember]
+        FDXC = 7492,
+
+        [EnumMember]
+        FDXH = 7493,
     }
 }
