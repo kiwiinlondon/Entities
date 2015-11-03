@@ -474,17 +474,6 @@
           <Property Name="CostUSD" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CostGBP" Type="numeric" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
-        <EntityType Name="ClosedPosition">
-          <Key>
-            <PropertyRef Name="ClosedPositionID" />
-          </Key>
-          <Property Name="ClosedPositionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PositionId" Type="int" Nullable="false" />
-          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
-          <Property Name="StartDt" Type="datetime" Nullable="false" />
-          <Property Name="UpdateUserID" Type="int" Nullable="false" />
-          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
         <EntityType Name="CollectiveInvestmentScheme">
           <Key>
             <PropertyRef Name="InstrumentID" />
@@ -1347,6 +1336,7 @@
           <Property Name="UltimateUnderlyerPerOverlyer" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ResolveFromExternalSource" Type="bit" />
           <Property Name="ExposureCurrencyId" Type="int" Nullable="false" />
+          <Property Name="AdministratorId" Type="int" />
         </EntityType>
         <EntityType Name="InstrumentRelationship">
           <Key>
@@ -2936,30 +2926,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="ClientTrade">
-              <PropertyRef Name="UpdateUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ClosedPositionPositionIDFK">
-          <End Role="Position" Type="Self.Position" Multiplicity="1" />
-          <End Role="ClosedPosition" Type="Self.ClosedPosition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Position">
-              <PropertyRef Name="PositionId" />
-            </Principal>
-            <Dependent Role="ClosedPosition">
-              <PropertyRef Name="PositionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ClosedPositionUserIDFK">
-          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
-          <End Role="ClosedPosition" Type="Self.ClosedPosition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="ClosedPosition">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -8469,6 +8435,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UltimateUnderlyerPerOverlyer" Type="numeric" Mode="In" />
           <Parameter Name="ResolveFromExternalSource" Type="bit" Mode="In" />
           <Parameter Name="ExposureCurrencyId" Type="int" Mode="In" />
+          <Parameter Name="AdministratorId" Type="int" Mode="In" />
         </Function>
         <Function Name="InstrumentMarket_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
@@ -8492,6 +8459,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UltimateUnderlyerPerOverlyer" Type="numeric" Mode="In" />
           <Parameter Name="ResolveFromExternalSource" Type="bit" Mode="In" />
           <Parameter Name="ExposureCurrencyId" Type="int" Mode="In" />
+          <Parameter Name="AdministratorId" Type="int" Mode="In" />
         </Function>
         <Function Name="InstrumentRelationship_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OverlyingInstrumentID" Type="int" Mode="In" />
@@ -9750,7 +9718,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="ClientPortfolioBridge" EntityType="Self.ClientPortfolioBridge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientSubAccountAdministratorMapping" EntityType="Self.ClientSubAccountAdministratorMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientTrade" EntityType="Self.ClientTrade" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ClosedPosition" EntityType="Self.ClosedPosition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CollectiveInvestmentScheme" EntityType="Self.CollectiveInvestmentScheme" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CorporateAction" EntityType="Self.CorporateAction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CorporateActionType" EntityType="Self.CorporateActionType" Schema="dbo" store:Type="Tables" />
@@ -10158,14 +10125,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ClientTradeUserIDFK" Association="Self.ClientTradeUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientTrade" EntitySet="ClientTrade" />
-          </AssociationSet>
-          <AssociationSet Name="ClosedPositionPositionIDFK" Association="Self.ClosedPositionPositionIDFK">
-            <End Role="Position" EntitySet="Position" />
-            <End Role="ClosedPosition" EntitySet="ClosedPosition" />
-          </AssociationSet>
-          <AssociationSet Name="ClosedPositionUserIDFK" Association="Self.ClosedPositionUserIDFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
-            <End Role="ClosedPosition" EntitySet="ClosedPosition" />
           </AssociationSet>
           <AssociationSet Name="CollectiveInvestmentSchemeDealingFrequencyFK" Association="Self.CollectiveInvestmentSchemeDealingFrequencyFK">
             <End Role="Periodicity" EntitySet="Periodicity" />
@@ -15327,6 +15286,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="UltimateUnderlyerPerOverlyer" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ResolveFromExternalSource" Type="Boolean" />
           <Property Name="ExposureCurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="AdministratorId" Type="Int32" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -22302,6 +22262,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="InstrumentMarkets">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <MappingFragment StoreEntitySet="InstrumentMarket">
+                <ScalarProperty Name="AdministratorId" ColumnName="AdministratorId" />
                 <ScalarProperty Name="ExposureCurrencyId" ColumnName="ExposureCurrencyId" />
                 <ScalarProperty Name="ResolveFromExternalSource" ColumnName="ResolveFromExternalSource" />
                 <ScalarProperty Name="UltimateUnderlyerPerOverlyer" ColumnName="UltimateUnderlyerPerOverlyer" />
@@ -25002,16 +24963,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClosedPositions">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClosedPosition">
-              <MappingFragment StoreEntitySet="ClosedPosition">
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
-                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
-                <ScalarProperty Name="ClosedPositionID" ColumnName="ClosedPositionID" />
-              </MappingFragment>
-            </EntityTypeMapping>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClosedPosition">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClosedPosition_Insert">

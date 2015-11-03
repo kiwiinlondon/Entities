@@ -60,6 +60,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> ResolveFromExternalSource { get; set; }
     	[DataMember]
         public int ExposureCurrencyId { get; set; }
+    	[DataMember]
+        public Nullable<int> AdministratorId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

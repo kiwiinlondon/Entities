@@ -73,6 +73,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GICSCode = 34,
         [EnumMember]
-        KeeleyGuid = 35
+        KeeleyGuid = 35,
+
+        [EnumMember]
+        AdministratorId = 36
     }
 }
