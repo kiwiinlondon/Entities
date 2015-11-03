@@ -14,7 +14,7 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class ClosedPosition
+    public partial class OpenedClosedPosition
     {
     	[DataMember]
         public int ClosedPositionID { get; set; }
@@ -28,6 +28,8 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsOpened { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
