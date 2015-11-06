@@ -89,6 +89,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ClientNomineeAccount = 39,
         [EnumMember]
-        PeerGroupRankings =   40
+        PeerGroupRankings =   40,
+        [EnumMember]
+        FacsetMonthlyContribution = 41
     }
 }
