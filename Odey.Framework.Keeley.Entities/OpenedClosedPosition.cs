@@ -29,7 +29,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public bool IsOpened { get; set; }
+        public Nullable<bool> IsOpened { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
