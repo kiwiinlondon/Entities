@@ -64,6 +64,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Right=88,
         [EnumMember]
-        FXOption=87
+        FXOption=87,
+        [EnumMember]
+        CommodityOption = 89,
     }
 }
