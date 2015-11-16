@@ -94,7 +94,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OCE_GBP_I_ACC = 5522,
         [EnumMember]
         OCE_GBP_I_INC = 5521,
-        
+        [EnumMember]
+        OCE_GBP_M = 7412,
+
+
         [EnumMember]
         PORT = 5330,
         [EnumMember]
@@ -103,7 +106,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         PORT_GBP_R_ACC = 5533,
         [EnumMember]
         PORT_GBP_R_INC = 5534,
-        
+        [EnumMember]
+        PORT_GBP_M = 7413,
+
         [EnumMember]
         VITR = 5333,
        
@@ -290,6 +295,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SWAN_EUR_IR = 6293,
         [EnumMember]
         SWAN_AUD_I = 6568,
+        [EnumMember]
+        SWAN_NOK_I = 7510,
+
 
         [EnumMember]
         DEVM = 6253,
@@ -377,7 +385,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         KELT_GBP_M = 7303,
         [EnumMember]
         KELT_USD_I = 7314,
-        
+        [EnumMember]
+        KELT_GBP_R = 7497,
+
 
 
 
@@ -391,5 +401,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         FDXH = 7493,
+
+        [EnumMember]
+        DEFF = 7505,
+
+        [EnumMember]
+        ARFF = 7504,
     }
 }
