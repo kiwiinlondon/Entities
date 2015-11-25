@@ -38,6 +38,8 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Value20DaysMixedModel { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
