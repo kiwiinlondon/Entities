@@ -91,6 +91,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PeerGroupRankings =   40,
         [EnumMember]
-        FacsetMonthlyContribution = 41
+        FactsetMonthlyContribution = 41
     }
 }
