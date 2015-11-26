@@ -81,12 +81,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         VaR1DayMixedModel = 21,
-
         [EnumMember]
         FundPeerGroupRanking1Y = 22,
 
         [EnumMember]
-        FundPeerGroupRanking3Y=23
+        FundPeerGroupRanking3Y=23,
+
+        [EnumMember]
+        VaR20DaysMixedModel = 24,
+
     }
 }
 

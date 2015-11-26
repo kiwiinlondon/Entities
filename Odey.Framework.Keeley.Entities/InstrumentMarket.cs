@@ -62,6 +62,8 @@ namespace Odey.Framework.Keeley.Entities
         public int ExposureCurrencyId { get; set; }
     	[DataMember]
         public string AdministratorId { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsReverse { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
