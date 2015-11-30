@@ -407,5 +407,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         ARFF = 7504,
+        [EnumMember]
+        ARFF_GBP_IRL = 7553,
+        [EnumMember]
+        ARFF_GBP_M_IRL = 7555,
     }
 }
