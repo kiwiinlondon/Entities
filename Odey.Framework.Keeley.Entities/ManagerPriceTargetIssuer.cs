@@ -32,6 +32,14 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public Nullable<decimal> StopLossContraToEurRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> StopLossBaseToEurRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TargetContraToEurRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TargetBaseToEurRate { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ManagerUser { get; set; }
