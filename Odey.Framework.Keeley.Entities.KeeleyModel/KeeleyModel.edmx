@@ -1529,15 +1529,15 @@
         </EntityType>
         <EntityType Name="OpenedClosedPosition">
           <Key>
-            <PropertyRef Name="ClosedPositionID" />
+            <PropertyRef Name="PortfolioId" />
           </Key>
-          <Property Name="ClosedPositionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PositionId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="IsOpened" Type="bit" />
+          <Property Name="PortfolioId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PADealing">
           <Key>
@@ -4110,6 +4110,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="LegalEntity1">
               <PropertyRef Name="ParentLegalEntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OpenedClo__Portf__64D093F0">
+          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="1" />
+          <End Role="OpenedClosedPosition" Type="Self.OpenedClosedPosition" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Portfolio">
+              <PropertyRef Name="PortfolioId" />
+            </Principal>
+            <Dependent Role="OpenedClosedPosition">
+              <PropertyRef Name="PortfolioId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7406,7 +7418,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
         <Function Name="ClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ClosedPositionID" Type="int" Mode="In" />
+          <Parameter Name="PortfolioID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
@@ -7416,7 +7428,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="ClosedPosition_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ClosedPositionID" Type="int" Mode="In" />
+          <Parameter Name="PortfolioID" Type="int" Mode="In" />
           <Parameter Name="PositionId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
@@ -8878,7 +8890,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="OpeningNAV" Type="numeric" Mode="In" />
         </Function>
         <Function Name="OpenedClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ClosedPositionID" Type="int" Mode="In" />
+          <Parameter Name="PortfolioId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
@@ -8887,14 +8899,15 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="IsOpened" Type="bit" Mode="In" />
+          <Parameter Name="PortfolioId" Type="int" Mode="In" />
         </Function>
         <Function Name="OpenedClosedPosition_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ClosedPositionID" Type="int" Mode="In" />
           <Parameter Name="PositionId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="IsOpened" Type="bit" Mode="In" />
+          <Parameter Name="PortfolioId" Type="int" Mode="In" />
         </Function>
         <Function Name="PADealing_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PADealingID" Type="int" Mode="In" />
@@ -10580,6 +10593,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__LegalEnti__Paren__21E80B97" Association="Self.FK__LegalEnti__Paren__21E80B97">
             <End Role="LegalEntity" EntitySet="LegalEntity" />
             <End Role="LegalEntity1" EntitySet="LegalEntity" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OpenedClo__Portf__64D093F0" Association="Self.FK__OpenedClo__Portf__64D093F0">
+            <End Role="Portfolio" EntitySet="Portfolio" />
+            <End Role="OpenedClosedPosition" EntitySet="OpenedClosedPosition" />
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__FXRat__7213CCE8" Association="Self.FK__Portfolio__FXRat__7213CCE8">
             <End Role="FXRate" EntitySet="FXRate" />
@@ -13129,6 +13146,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Position" EntitySet="Positions" />
             <End Role="OpenedClosedPosition" EntitySet="OpenedClosedPositions" />
           </AssociationSet>
+          <AssociationSet Name="FK__OpenedClo__Portf__64D093F0" Association="Odey.Framework.Keeley.Entities.FK__OpenedClo__Portf__64D093F0">
+            <End Role="Portfolio" EntitySet="Portfolios" />
+            <End Role="OpenedClosedPosition" EntitySet="OpenedClosedPositions" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -15069,6 +15090,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="OriginalDeltaNetCostBookCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OriginalDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
           <NavigationProperty Name="Attributions" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Portf__6659833C" FromRole="Portfolio" ToRole="Attribution" />
+          <NavigationProperty Name="OpenedClosedPosition" Relationship="Odey.Framework.Keeley.Entities.FK__OpenedClo__Portf__64D093F0" FromRole="Portfolio" ToRole="OpenedClosedPosition" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19861,9 +19883,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         </Association>
         <EntityType Name="OpenedClosedPosition">
           <Key>
-            <PropertyRef Name="ClosedPositionID" />
+            <PropertyRef Name="PortfolioId" />
           </Key>
-          <Property Name="ClosedPositionID" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="PositionId" Type="Int32" Nullable="false" />
           <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
@@ -19871,6 +19892,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="IsOpened" Type="Boolean" />
           <NavigationProperty Name="Position" Relationship="Odey.Framework.Keeley.Entities.ClosedPositionPositionIDFK" FromRole="OpenedClosedPosition" ToRole="Position" />
+          <Property Name="PortfolioId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Portfolio" Relationship="Odey.Framework.Keeley.Entities.FK__OpenedClo__Portf__64D093F0" FromRole="OpenedClosedPosition" ToRole="Portfolio" />
         </EntityType>
         <Association Name="ClosedPositionUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19893,6 +19916,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="OpenedClosedPosition">
               <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OpenedClo__Portf__64D093F0">
+          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.OpenedClosedPosition" Role="OpenedClosedPosition" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Portfolio">
+              <PropertyRef Name="PortfolioId" />
+            </Principal>
+            <Dependent Role="OpenedClosedPosition">
+              <PropertyRef Name="PortfolioId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -25614,40 +25649,40 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="OpenedClosedPositions">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OpenedClosedPosition">
               <MappingFragment StoreEntitySet="OpenedClosedPosition">
+                <ScalarProperty Name="PortfolioId" ColumnName="PortfolioId" />
                 <ScalarProperty Name="IsOpened" ColumnName="IsOpened" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
                 <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
                 <ScalarProperty Name="PositionId" ColumnName="PositionId" />
-                <ScalarProperty Name="ClosedPositionID" ColumnName="ClosedPositionID" />
               </MappingFragment>
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OpenedClosedPosition">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OpenedClosedPosition_Insert">
+                  <ScalarProperty Name="PortfolioId" ParameterName="PortfolioId" />
                   <ScalarProperty Name="IsOpened" ParameterName="IsOpened" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
                   <ScalarProperty Name="PositionId" ParameterName="PositionId" />
-                  <ResultBinding Name="ClosedPositionID" ColumnName="ClosedPositionId" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OpenedClosedPosition_Update">
+                  <ScalarProperty Name="PortfolioId" ParameterName="PortfolioId" Version="Current" />
                   <ScalarProperty Name="IsOpened" ParameterName="IsOpened" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
                   <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
-                  <ScalarProperty Name="ClosedPositionID" ParameterName="ClosedPositionID" Version="Current" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </UpdateFunction>
                 <DeleteFunction FunctionName="KeeleyModel.Store.OpenedClosedPosition_Delete">
+                  <ScalarProperty Name="PortfolioId" ParameterName="PortfolioId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="ClosedPositionID" ParameterName="ClosedPositionID" />
                 </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
@@ -30333,25 +30368,35 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="23.884095052083335" />
-          <edmx:ConnectorPoint PointX="24.767497317558195" PointY="24.966736250612321" />
-          <edmx:ConnectorPoint PointX="24.732502682441805" PointY="25.129687633824766" />
-          <edmx:ConnectorPoint PointX="24.704997317558195" PointY="25.257765473146129" />
+          <edmx:ConnectorPoint PointX="25" PointY="22.320375736727954" />
+          <edmx:ConnectorPoint PointX="24.885311683120335" PointY="23.240100283096954" />
+          <edmx:ConnectorPoint PointX="24.864688316879665" PointY="23.405486058007252" />
+          <edmx:ConnectorPoint PointX="24.822811683120335" PointY="23.741309000009043" />
+          <edmx:ConnectorPoint PointX="24.802188316879665" PointY="23.906694774919341" />
+          <edmx:ConnectorPoint PointX="24.729061683120335" PointY="24.49312207537719" />
+          <edmx:ConnectorPoint PointX="24.708438316879665" PointY="24.658507850287489" />
+          <edmx:ConnectorPoint PointX="24.670002682441805" PointY="24.966736250612321" />
           <edmx:ConnectorPoint PointX="24.670002682441805" PointY="25.420716856358574" />
-          <edmx:ConnectorPoint PointX="24.579997317558195" PointY="25.839823918213732" />
+          <edmx:ConnectorPoint PointX="24.545002682441805" PointY="25.839823918213732" />
           <edmx:ConnectorPoint PointX="24.545002682441805" PointY="26.002775301426176" />
-          <edmx:ConnectorPoint PointX="21.642497317558195" PointY="39.518197377302435" />
+          <edmx:ConnectorPoint PointX="21.767698815692214" PointY="38.78113580936963" />
+          <edmx:ConnectorPoint PointX="21.732301184307786" PointY="38.944000125504715" />
+          <edmx:ConnectorPoint PointX="21.607502682441805" PointY="39.518197377302435" />
           <edmx:ConnectorPoint PointX="21.607502682441805" PointY="39.68114876051488" />
-          <edmx:ConnectorPoint PointX="19.454997317558195" PointY="49.704220165985511" />
+          <edmx:ConnectorPoint PointX="19.502143947830575" PointY="49.327850900464441" />
+          <edmx:ConnectorPoint PointX="19.435356052169425" PointY="49.633871402056585" />
+          <edmx:ConnectorPoint PointX="19.420002682441805" PointY="49.704220165985511" />
           <edmx:ConnectorPoint PointX="19.420002682441805" PointY="49.867171549197955" />
+          <edmx:ConnectorPoint PointX="19.408122317558195" PointY="49.922492082885874" />
+          <edmx:ConnectorPoint PointX="19.373127682441805" PointY="50.085443466098319" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="50.367754302659343" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="16.606751302083335" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="16.440084635416671" PointY="23.023417968750003" />
-          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="23.02341796875" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="23.02341796875" />
           <edmx:ConnectorPoint PointX="15.104166666666666" PointY="23.023417968750003" />
-          <edmx:ConnectorPoint PointX="13.442708333333334" PointY="23.023417968750003" />
-          <edmx:ConnectorPoint PointX="13.276041666666666" PointY="23.023417968750003" />
+          <edmx:ConnectorPoint PointX="13.427083333333334" PointY="23.023417968750003" />
+          <edmx:ConnectorPoint PointX="13.260416666666666" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="13.145833333333334" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.979166666666666" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.958333333333334" PointY="23.023417968750003" />
@@ -31371,6 +31416,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.OpenedClosedPosition" Width="1.5" PointX="30.25" PointY="14.375" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClosedPositionUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClosedPositionPositionIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__OpenedClo__Portf__64D093F0" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

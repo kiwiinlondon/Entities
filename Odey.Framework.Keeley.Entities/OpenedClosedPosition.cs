@@ -17,8 +17,6 @@ namespace Odey.Framework.Keeley.Entities
     public partial class OpenedClosedPosition
     {
     	[DataMember]
-        public int ClosedPositionID { get; set; }
-    	[DataMember]
         public int PositionId { get; set; }
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
@@ -30,8 +28,12 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<bool> IsOpened { get; set; }
+    	[DataMember]
+        public int PortfolioId { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
+        [DataMember]
+        public virtual Portfolio Portfolio { get; set; }
     }
 }
