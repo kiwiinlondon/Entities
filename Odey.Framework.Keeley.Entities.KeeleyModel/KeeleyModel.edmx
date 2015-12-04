@@ -149,9 +149,9 @@
           <Property Name="TodayFundAdministratorFX" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayFundAdministratorCarry" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayFundAdministratorOther" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="TodayFundKeeleyPrice" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="TodayFundKeeleyFX" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="TodayFundKeeleyCarry" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TodayFundKeeleyPrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="TodayFundKeeleyFX" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="TodayFundKeeleyCarry" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="TodayBookKeeleyPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayBookKeeleyFX" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayBookKeeleyCarry" Type="numeric" Precision="27" Scale="8" />
@@ -7418,7 +7418,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
         <Function Name="ClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PortfolioID" Type="int" Mode="In" />
+          <Parameter Name="ClosedPositionID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
@@ -7428,7 +7428,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="ClosedPosition_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PortfolioID" Type="int" Mode="In" />
+          <Parameter Name="ClosedPositionID" Type="int" Mode="In" />
           <Parameter Name="PositionId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
@@ -9604,6 +9604,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Value1DayMixedModel" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="Value20DaysMixedModel" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="RiskAnalytic_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
         </Function>
         <Function Name="RiskAnalytic_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RiskAnalyticId" Type="int" Mode="In" />
@@ -13150,6 +13153,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Portfolio" EntitySet="Portfolios" />
             <End Role="OpenedClosedPosition" EntitySet="OpenedClosedPositions" />
           </AssociationSet>
+          <FunctionImport Name="RiskAnalytic_Roll" ReturnType="Collection(DateTime)">
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -19603,9 +19609,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="TodayFundAdministratorFX" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TodayFundAdministratorCarry" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TodayFundAdministratorOther" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="TodayFundKeeleyPrice" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="TodayFundKeeleyFX" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="TodayFundKeeleyCarry" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TodayFundKeeleyPrice" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="TodayFundKeeleyFX" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="TodayFundKeeleyCarry" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="TodayBookKeeleyPrice" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TodayBookKeeleyFX" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TodayBookKeeleyCarry" Type="Decimal" Precision="27" Scale="8" />
@@ -25687,6 +25693,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RiskAnalytic_Roll" FunctionName="KeeleyModel.Store.RiskAnalytic_Roll" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -25702,7 +25709,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
       </edmx:DesignerInfoPropertySet>
