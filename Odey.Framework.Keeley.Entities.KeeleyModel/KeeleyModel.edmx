@@ -1952,6 +1952,7 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Value20DaysMixedModel" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IsRollValue" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="RiskAnalyticType">
           <Key>
@@ -9604,6 +9605,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Value1DayMixedModel" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="Value20DaysMixedModel" Type="numeric" Mode="In" />
+          <Parameter Name="IsRollValue" Type="bit" Mode="In" />
         </Function>
         <Function Name="RiskAnalytic_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9620,6 +9622,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="Value20DaysMixedModel" Type="numeric" Mode="In" />
+          <Parameter Name="IsRollValue" Type="bit" Mode="In" />
         </Function>
         <Function Name="Strategy_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="StrategyID" Type="int" Mode="In" />
@@ -13110,6 +13113,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <Parameter Name="Value1DayMixedModel" Mode="In" Type="Decimal" />
             <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
             <Parameter Name="Value20DaysMixedModel" Mode="In" Type="Decimal" />
+            <Parameter Name="IsRollValue" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="RiskAnalytic_Update">
             <Parameter Name="RiskAnalyticId" Mode="In" Type="Int32" />
@@ -13123,6 +13127,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
             <Parameter Name="DataVersion" Mode="In" Type="Binary" />
             <Parameter Name="Value20DaysMixedModel" Mode="In" Type="Decimal" />
+            <Parameter Name="IsRollValue" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="Attribution_Roll" ReturnType="Collection(DateTime)">
           <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
@@ -13154,7 +13159,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="OpenedClosedPosition" EntitySet="OpenedClosedPositions" />
           </AssociationSet>
           <FunctionImport Name="RiskAnalytic_Roll" ReturnType="Collection(DateTime)">
-            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -19739,6 +19744,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.RiskAnalyticsInstrumentMarketIdFK" FromRole="RiskAnalytic" ToRole="InstrumentMarket" />
           <NavigationProperty Name="RiskAnalyticType" Relationship="Odey.Framework.Keeley.Entities.RiskAnalyticsRiskAnalyticsTyoeIdFK" FromRole="RiskAnalytic" ToRole="RiskAnalyticType" />
           <Property Name="Value20DaysMixedModel" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="IsRollValue" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="RiskAnalyticsUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25521,6 +25527,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="RiskAnalytics">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RiskAnalytic">
               <MappingFragment StoreEntitySet="RiskAnalytic">
+                <ScalarProperty Name="IsRollValue" ColumnName="IsRollValue" />
                 <ScalarProperty Name="Value20DaysMixedModel" ColumnName="Value20DaysMixedModel" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -25538,6 +25545,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RiskAnalytic">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.RiskAnalytic_Insert">
+                  <ScalarProperty Name="IsRollValue" ParameterName="IsRollValue" />
                   <ScalarProperty Name="Value20DaysMixedModel" ParameterName="Value20DaysMixedModel" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Value1DayMixedModel" ParameterName="Value1DayMixedModel" />
@@ -25552,6 +25560,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.RiskAnalytic_Update">
+                  <ScalarProperty Name="IsRollValue" ParameterName="IsRollValue" Version="Current" />
                   <ScalarProperty Name="Value20DaysMixedModel" ParameterName="Value20DaysMixedModel" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />

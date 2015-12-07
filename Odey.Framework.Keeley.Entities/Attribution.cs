@@ -81,11 +81,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> TodayFundAdministratorOther { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayFundKeeleyPrice { get; set; }
+        public decimal TodayFundKeeleyPrice { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayFundKeeleyFX { get; set; }
+        public decimal TodayFundKeeleyFX { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayFundKeeleyCarry { get; set; }
+        public decimal TodayFundKeeleyCarry { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayBookKeeleyPrice { get; set; }
     	[DataMember]

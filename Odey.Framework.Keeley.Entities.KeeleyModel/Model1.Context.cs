@@ -512,7 +512,7 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Delete", riskAnalyticIdParameter, dataVersionParameter, updateUserIDParameter);
         }
     
-        public virtual int RiskAnalytic_Insert(Nullable<int> instrumentMarketId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> currencyId, Nullable<decimal> value1Day, Nullable<decimal> value20Day, Nullable<decimal> value1DayMixedModel, Nullable<int> updateUserID, Nullable<decimal> value20DaysMixedModel)
+        public virtual int RiskAnalytic_Insert(Nullable<int> instrumentMarketId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> currencyId, Nullable<decimal> value1Day, Nullable<decimal> value20Day, Nullable<decimal> value1DayMixedModel, Nullable<int> updateUserID, Nullable<decimal> value20DaysMixedModel, Nullable<bool> isRollValue)
         {
             var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
                 new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
@@ -550,10 +550,14 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("Value20DaysMixedModel", value20DaysMixedModel) :
                 new ObjectParameter("Value20DaysMixedModel", typeof(decimal));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Insert", instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter, value20DaysMixedModelParameter);
+            var isRollValueParameter = isRollValue.HasValue ?
+                new ObjectParameter("IsRollValue", isRollValue) :
+                new ObjectParameter("IsRollValue", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Insert", instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter, value20DaysMixedModelParameter, isRollValueParameter);
         }
     
-        public virtual int RiskAnalytic_Update(Nullable<int> riskAnalyticId, Nullable<int> instrumentMarketId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> currencyId, Nullable<decimal> value1Day, Nullable<decimal> value20Day, Nullable<decimal> value1DayMixedModel, Nullable<int> updateUserID, byte[] dataVersion, Nullable<decimal> value20DaysMixedModel)
+        public virtual int RiskAnalytic_Update(Nullable<int> riskAnalyticId, Nullable<int> instrumentMarketId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> currencyId, Nullable<decimal> value1Day, Nullable<decimal> value20Day, Nullable<decimal> value1DayMixedModel, Nullable<int> updateUserID, byte[] dataVersion, Nullable<decimal> value20DaysMixedModel, Nullable<bool> isRollValue)
         {
             var riskAnalyticIdParameter = riskAnalyticId.HasValue ?
                 new ObjectParameter("RiskAnalyticId", riskAnalyticId) :
@@ -599,7 +603,11 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("Value20DaysMixedModel", value20DaysMixedModel) :
                 new ObjectParameter("Value20DaysMixedModel", typeof(decimal));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Update", riskAnalyticIdParameter, instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter, dataVersionParameter, value20DaysMixedModelParameter);
+            var isRollValueParameter = isRollValue.HasValue ?
+                new ObjectParameter("IsRollValue", isRollValue) :
+                new ObjectParameter("IsRollValue", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Update", riskAnalyticIdParameter, instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter, dataVersionParameter, value20DaysMixedModelParameter, isRollValueParameter);
         }
     
         public virtual ObjectResult<Nullable<System.DateTime>> Attribution_Roll(Nullable<int> updateUserId)
