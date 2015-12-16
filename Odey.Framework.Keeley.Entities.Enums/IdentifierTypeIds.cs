@@ -76,6 +76,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         KeeleyGuid = 35,
 
         [EnumMember]
-        AdministratorId = 36
+        AdministratorId = 36,
+
+        [EnumMember]
+        Cusip = 37
     }
 }
