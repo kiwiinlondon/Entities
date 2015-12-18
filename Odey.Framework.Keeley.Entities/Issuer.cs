@@ -35,7 +35,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int GicsLevel3IndustryID { get; set; }
     	[DataMember]
-        public Nullable<int> IssuerTypeId { get; set; }
+        public int IssuerTypeId { get; set; }
     
         [DataMember]
         public virtual LegalEntity LegalEntity { get; set; }
