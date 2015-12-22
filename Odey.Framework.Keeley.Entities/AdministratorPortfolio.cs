@@ -58,6 +58,8 @@ namespace Odey.Framework.Keeley.Entities
         public int CurrencyId { get; set; }
     	[DataMember]
         public decimal Cost { get; set; }
+    	[DataMember]
+        public bool IsShareClassSpecific { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
