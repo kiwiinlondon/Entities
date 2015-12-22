@@ -91,6 +91,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PeerGroupRankings =   40,
         [EnumMember]
-        FactsetMonthlyContribution = 41
+        FactsetMonthlyContribution = 41,
+        [EnumMember]
+        QuintillionPositionFilePortfolioLoadOnly=42
     }
 }
