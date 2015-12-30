@@ -638,5 +638,30 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("IssuerAnalytic_Roll", updateUserIdParameter);
         }
+    
+        public virtual ObjectResult<RawIssuerAnalytic_Getlatest_Result> RawIssuerAnalytic_Getlatest(Nullable<int> issuerId, Nullable<int> analyticTypeID, Nullable<System.DateTime> referenceDate, Nullable<int> entityRankingSchemeId, Nullable<int> rawIssuerAnalyticIdToIgnore)
+        {
+            var issuerIdParameter = issuerId.HasValue ?
+                new ObjectParameter("IssuerId", issuerId) :
+                new ObjectParameter("IssuerId", typeof(int));
+    
+            var analyticTypeIDParameter = analyticTypeID.HasValue ?
+                new ObjectParameter("AnalyticTypeID", analyticTypeID) :
+                new ObjectParameter("AnalyticTypeID", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var entityRankingSchemeIdParameter = entityRankingSchemeId.HasValue ?
+                new ObjectParameter("EntityRankingSchemeId", entityRankingSchemeId) :
+                new ObjectParameter("EntityRankingSchemeId", typeof(int));
+    
+            var rawIssuerAnalyticIdToIgnoreParameter = rawIssuerAnalyticIdToIgnore.HasValue ?
+                new ObjectParameter("RawIssuerAnalyticIdToIgnore", rawIssuerAnalyticIdToIgnore) :
+                new ObjectParameter("RawIssuerAnalyticIdToIgnore", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RawIssuerAnalytic_Getlatest_Result>("RawIssuerAnalytic_Getlatest", issuerIdParameter, analyticTypeIDParameter, referenceDateParameter, entityRankingSchemeIdParameter, rawIssuerAnalyticIdToIgnoreParameter);
+        }
     }
 }

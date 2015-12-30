@@ -36,8 +36,6 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> RawIssuerAnalyticId { get; set; }
     
         [DataMember]
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        [DataMember]
         public virtual Issuer Issuer { get; set; }
         [DataMember]
         public virtual RawIssuerAnalytic RawIssuerAnalytic { get; set; }
