@@ -45,9 +45,5 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual List<IssuerAnalytic> IssuerAnalytics { get; set; }
-        [DataMember]
-        public virtual EntityRankingSchemeItem EntityRankingSchemeItem { get; set; }
-        [DataMember]
-        public virtual Issuer Issuer { get; set; }
     }
 }
