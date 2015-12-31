@@ -77,8 +77,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Account = 41,
         [EnumMember]
         Client = 44,
-        [EnumMember]
-        IssuerAnalytic = 45
+        
     }
 }
 
