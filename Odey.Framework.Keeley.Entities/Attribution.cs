@@ -146,6 +146,72 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> OpeningValuationNav { get; set; }
     	[DataMember]
         public Nullable<int> AttributionSourceId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDAdministratorPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDAdministratorFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDAdministratorFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDAdministratorFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDAdministratorCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDAdministratorFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDAdministratorOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDAdministratorFundAdjustedOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDKeeleyPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDKeeleyFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDKeeleyFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDKeeleyFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDKeeleyCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDKeeleyFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFactsetPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFactsetFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFactsetFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFactsetFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFactsetCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFactsetFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFactsetOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFactsetFundAdjustedOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDBookAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDBookAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDBookAdjustedCarryPNL { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
