@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class AttributionFund
     {
+    	
+        public AttributionFund()
+        {
+            this.Attributions = new List<Attribution>();
+        }
+    
     	[DataMember]
         public int AttributionFundId { get; set; }
     	[DataMember]
@@ -41,11 +47,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> AdministratorOpeningAdjustedNav { get; set; }
     	[DataMember]
-        public Nullable<bool> AdministratorSourced { get; set; }
+        public bool AdministratorSourced { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> AdministratorPrevious { get; set; }
     	[DataMember]
-        public Nullable<bool> FactsetSourced { get; set; }
+        public bool FactsetSourced { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> FactsetPrevious { get; set; }
     	[DataMember]
@@ -60,5 +66,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<decimal> PercentageOfFund { get; set; }
+    
+        [DataMember]
+        public virtual List<Attribution> Attributions { get; set; }
     }
 }

@@ -23,129 +23,75 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDFundAdministratorPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundAdministratorFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundAdministratorCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundAdministratorOther { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundKeeleyPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundKeeleyFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundKeeleyCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookKeeleyPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookKeeleyFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookKeeleyCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundValuationPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundValuationFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundValuationCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundFactsetPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundFactsetFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDFundFactsetCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookFactsetPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookFactsetFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookFactsetCarry { get; set; }
-    	[DataMember]
-        public decimal ITDFundPrice { get; set; }
-    	[DataMember]
-        public decimal ITDFundFX { get; set; }
-    	[DataMember]
-        public decimal ITDFundCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ITDBookCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundAdministratorPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundAdministratorFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundAdministratorCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundAdministratorOther { get; set; }
-    	[DataMember]
-        public decimal TodayFundKeeleyPrice { get; set; }
-    	[DataMember]
-        public decimal TodayFundKeeleyFX { get; set; }
-    	[DataMember]
-        public decimal TodayFundKeeleyCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookKeeleyPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookKeeleyFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookKeeleyCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundValuationPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundValuationFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundValuationCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundFactsetPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundFactsetFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFundFactsetCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookFactsetPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookFactsetFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookFactsetCarry { get; set; }
-    	[DataMember]
-        public decimal TodayFundPrice { get; set; }
-    	[DataMember]
-        public decimal TodayFundFX { get; set; }
-    	[DataMember]
-        public decimal TodayFundCarry { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookPrice { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookFX { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayBookCarry { get; set; }
-    	[DataMember]
-        public System.DateTime StartDt { get; set; }
-    	[DataMember]
-        public int UpdateUserID { get; set; }
-    	[DataMember]
-        public byte[] DataVersion { get; set; }
-    	[DataMember]
         public Nullable<int> PortfolioId { get; set; }
     	[DataMember]
-        public Nullable<decimal> OpeningBookNav { get; set; }
+        public Nullable<int> AttributionFundId { get; set; }
     	[DataMember]
-        public Nullable<decimal> CapitalChangeBook { get; set; }
+        public Nullable<decimal> TodayAdministratorPricePNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> OpeningFundNav { get; set; }
+        public Nullable<decimal> TodayAdministratorFundAdjustedPricePNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> CapitalChangeFund { get; set; }
+        public Nullable<decimal> TodayAdministratorFXPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> AdministratorOpeningNav { get; set; }
+        public Nullable<decimal> TodayAdministratorFundAdjustedFXPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> TotalContributionSinceLastValuation { get; set; }
+        public Nullable<decimal> TodayAdministratorCarryPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> OpeningValuationNav { get; set; }
+        public Nullable<decimal> TodayAdministratorFundAdjustedCarryPNL { get; set; }
     	[DataMember]
-        public Nullable<int> AttributionSourceId { get; set; }
+        public Nullable<decimal> TodayAdministratorOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayAdministratorFundAdjustedOtherPNL { get; set; }
+    	[DataMember]
+        public decimal TodayPricePNL { get; set; }
+    	[DataMember]
+        public decimal TodayFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public decimal TodayFXPNL { get; set; }
+    	[DataMember]
+        public decimal TodayFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public decimal TodayCarryPNL { get; set; }
+    	[DataMember]
+        public decimal TodayFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdjustedOtherPNL { get; set; }
+    	[DataMember]
+        public decimal TodayKeeleyPricePNL { get; set; }
+    	[DataMember]
+        public decimal TodayKeeleyFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public decimal TodayKeeleyFXPNL { get; set; }
+    	[DataMember]
+        public decimal TodayKeeleyFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public decimal TodayKeeleyCarryPNL { get; set; }
+    	[DataMember]
+        public decimal TodayKeeleyFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFactsetPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFactsetFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFactsetFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFactsetFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFactsetCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFactsetFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFactsetOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFactsetFundAdjustedOtherPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayBookAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayBookAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayBookAdjustedCarryPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDAdministratorPricePNL { get; set; }
     	[DataMember]
@@ -163,33 +109,33 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ITDAdministratorFundAdjustedOtherPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDPricePNL { get; set; }
+        public decimal ITDPricePNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDFundAdjustedPricePNL { get; set; }
+        public decimal ITDFundAdjustedPricePNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDFXPNL { get; set; }
+        public decimal ITDFXPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDFundAdjustedFXPNL { get; set; }
+        public decimal ITDFundAdjustedFXPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDCarryPNL { get; set; }
+        public decimal ITDCarryPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDFundAdjustedCarryPNL { get; set; }
+        public decimal ITDFundAdjustedCarryPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDOtherPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDFundAdjustedOtherPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDKeeleyPricePNL { get; set; }
+        public decimal ITDKeeleyPricePNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDKeeleyFundAdjustedPricePNL { get; set; }
+        public decimal ITDKeeleyFundAdjustedPricePNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDKeeleyFXPNL { get; set; }
+        public decimal ITDKeeleyFXPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDKeeleyFundAdjustedFXPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDKeeleyCarryPNL { get; set; }
+        public decimal ITDKeeleyCarryPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDKeeleyFundAdjustedCarryPNL { get; set; }
+        public decimal ITDKeeleyFundAdjustedCarryPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDFactsetPricePNL { get; set; }
     	[DataMember]
@@ -212,12 +158,16 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ITDBookAdjustedFXPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDBookAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public System.DateTime StartDt { get; set; }
+    	[DataMember]
+        public int UpdateUserID { get; set; }
+    	[DataMember]
+        public byte[] DataVersion { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
         [DataMember]
-        public virtual Portfolio Portfolio { get; set; }
-        [DataMember]
-        public virtual AttributionSource AttributionSource { get; set; }
+        public virtual AttributionFund AttributionFund { get; set; }
     }
 }
