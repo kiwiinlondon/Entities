@@ -131,7 +131,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal ITDKeeleyFXPNL { get; set; }
     	[DataMember]
-        public Nullable<decimal> ITDKeeleyFundAdjustedFXPNL { get; set; }
+        public decimal ITDKeeleyFundAdjustedFXPNL { get; set; }
     	[DataMember]
         public decimal ITDKeeleyCarryPNL { get; set; }
     	[DataMember]
@@ -170,6 +170,30 @@ namespace Odey.Framework.Keeley.Entities
         public decimal AdministratorAdjustmentFactor { get; set; }
     	[DataMember]
         public decimal KeeleyAdjustmentFactor { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayValuationPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayValuationFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayValuationFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayValuationFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayValuationCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayValuationFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDValuationPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDValuationFundAdjustedPricePNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDValuationFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDValuationFundAdjustedFXPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDValuationCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDValuationFundAdjustedCarryPNL { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
