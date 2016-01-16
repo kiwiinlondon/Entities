@@ -164,6 +164,12 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public decimal AdjustmentFactor { get; set; }
+    	[DataMember]
+        public decimal AdministratorAdjustmentFactor { get; set; }
+    	[DataMember]
+        public decimal KeeleyAdjustmentFactor { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
