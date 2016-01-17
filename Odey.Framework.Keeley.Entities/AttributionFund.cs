@@ -65,7 +65,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<decimal> PercentageOfFund { get; set; }
+        public decimal PercentageOfFund { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationAdjustmentFactor { get; set; }
     	[DataMember]
