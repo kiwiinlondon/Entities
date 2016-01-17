@@ -20,7 +20,6 @@ namespace Odey.Framework.Keeley.Entities
         public Portfolio()
         {
             this.Exposures = new List<Exposure>();
-            this.Attributions = new List<Attribution>();
         }
     
     	[DataMember]
@@ -185,6 +184,6 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual OpenedClosedPosition OpenedClosedPosition { get; set; }
         [DataMember]
-        public virtual List<Attribution> Attributions { get; set; }
+        public virtual Attribution Attribution { get; set; }
     }
 }

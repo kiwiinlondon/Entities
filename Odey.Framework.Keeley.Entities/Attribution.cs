@@ -17,13 +17,11 @@ namespace Odey.Framework.Keeley.Entities
     public partial class Attribution
     {
     	[DataMember]
-        public int AttributionID { get; set; }
+        public int PortfolioId { get; set; }
     	[DataMember]
         public int PositionId { get; set; }
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
-    	[DataMember]
-        public Nullable<int> PortfolioId { get; set; }
     	[DataMember]
         public int AttributionFundId { get; set; }
     	[DataMember]
@@ -195,6 +193,8 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ITDValuationFundAdjustedCarryPNL { get; set; }
     
+        [DataMember]
+        public virtual Portfolio Portfolio { get; set; }
         [DataMember]
         public virtual Position Position { get; set; }
         [DataMember]
