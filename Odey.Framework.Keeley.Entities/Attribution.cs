@@ -194,6 +194,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ITDValuationFundAdjustedCarryPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationAdjustmentFactor { get; set; }
+    	[DataMember]
+        public decimal PercentageOfFund { get; set; }
+    	[DataMember]
+        public bool KeeleyIsMaster { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
