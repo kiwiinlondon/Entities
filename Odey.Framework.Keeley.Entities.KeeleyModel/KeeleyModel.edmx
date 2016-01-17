@@ -192,7 +192,7 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="AdjustmentFactor" Type="decimal" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="AdministratorAdjustmentFactor" Type="decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="AdministratorAdjustmentFactor" Type="numeric" Precision="27" Scale="8" />
           <Property Name="KeeleyAdjustmentFactor" Type="decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="TodayValuationPricePNL" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayValuationFundAdjustedPricePNL" Type="numeric" Precision="27" Scale="8" />
@@ -206,6 +206,7 @@
           <Property Name="ITDValuationFundAdjustedFXPNL" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ITDValuationCarryPNL" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ITDValuationFundAdjustedCarryPNL" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ValuationAdjustmentFactor" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="AttributionFund">
           <Key>
@@ -6950,7 +6951,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDBookAdjustedCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="AdjustmentFactor" Type="decimal" Mode="In" />
-          <Parameter Name="AdministratorAdjustmentFactor" Type="decimal" Mode="In" />
+          <Parameter Name="AdministratorAdjustmentFactor" Type="numeric" Mode="In" />
           <Parameter Name="KeeleyAdjustmentFactor" Type="decimal" Mode="In" />
           <Parameter Name="TodayValuationPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="TodayValuationFundAdjustedPricePNL" Type="numeric" Mode="In" />
@@ -6964,6 +6965,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDValuationFundAdjustedFXPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDValuationCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDValuationFundAdjustedCarryPNL" Type="numeric" Mode="In" />
+          <Parameter Name="ValuationAdjustmentFactor" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Attribution_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -7042,7 +7044,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="AdjustmentFactor" Type="decimal" Mode="In" />
-          <Parameter Name="AdministratorAdjustmentFactor" Type="decimal" Mode="In" />
+          <Parameter Name="AdministratorAdjustmentFactor" Type="numeric" Mode="In" />
           <Parameter Name="KeeleyAdjustmentFactor" Type="decimal" Mode="In" />
           <Parameter Name="TodayValuationPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="TodayValuationFundAdjustedPricePNL" Type="numeric" Mode="In" />
@@ -7056,6 +7058,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDValuationFundAdjustedFXPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDValuationCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDValuationFundAdjustedCarryPNL" Type="numeric" Mode="In" />
+          <Parameter Name="ValuationAdjustmentFactor" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionFund_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionFundId" Type="int" Mode="In" />
@@ -20384,7 +20387,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="AdjustmentFactor" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="AdministratorAdjustmentFactor" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="AdministratorAdjustmentFactor" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="KeeleyAdjustmentFactor" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
           <Property Name="TodayValuationPricePNL" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TodayValuationFundAdjustedPricePNL" Type="Decimal" Precision="27" Scale="8" />
@@ -20401,6 +20404,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Portfolio" Relationship="Odey.Framework.Keeley.Entities.AttributionPortfolioIdFK" FromRole="Attribution" ToRole="Portfolio" />
           <NavigationProperty Name="Position" Relationship="Odey.Framework.Keeley.Entities.AttributionPositionIdFK" FromRole="Attribution" ToRole="Position" />
           <NavigationProperty Name="AttributionFund" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Attri__5F2C2FA6" FromRole="Attribution" ToRole="AttributionFund" />
+          <Property Name="ValuationAdjustmentFactor" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="AttributionUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -26153,6 +26157,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Attributions">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Attribution">
               <MappingFragment StoreEntitySet="Attribution">
+                <ScalarProperty Name="ValuationAdjustmentFactor" ColumnName="ValuationAdjustmentFactor" />
                 <ScalarProperty Name="ITDValuationFundAdjustedCarryPNL" ColumnName="ITDValuationFundAdjustedCarryPNL" />
                 <ScalarProperty Name="ITDValuationCarryPNL" ColumnName="ITDValuationCarryPNL" />
                 <ScalarProperty Name="ITDValuationFundAdjustedFXPNL" ColumnName="ITDValuationFundAdjustedFXPNL" />
@@ -26246,6 +26251,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Attribution">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Attribution_Insert">
+                  <ScalarProperty Name="ValuationAdjustmentFactor" ParameterName="ValuationAdjustmentFactor" />
                   <ScalarProperty Name="ITDValuationFundAdjustedCarryPNL" ParameterName="ITDValuationFundAdjustedCarryPNL" />
                   <ScalarProperty Name="ITDValuationCarryPNL" ParameterName="ITDValuationCarryPNL" />
                   <ScalarProperty Name="ITDValuationFundAdjustedFXPNL" ParameterName="ITDValuationFundAdjustedFXPNL" />
@@ -26336,6 +26342,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Attribution_Update">
+                  <ScalarProperty Name="ValuationAdjustmentFactor" ParameterName="ValuationAdjustmentFactor" Version="Current" />
                   <ScalarProperty Name="ITDValuationFundAdjustedCarryPNL" ParameterName="ITDValuationFundAdjustedCarryPNL" Version="Current" />
                   <ScalarProperty Name="ITDValuationCarryPNL" ParameterName="ITDValuationCarryPNL" Version="Current" />
                   <ScalarProperty Name="ITDValuationFundAdjustedFXPNL" ParameterName="ITDValuationFundAdjustedFXPNL" Version="Current" />
@@ -26456,7 +26463,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="75">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="25">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />

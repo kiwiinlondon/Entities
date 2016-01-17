@@ -165,7 +165,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal AdjustmentFactor { get; set; }
     	[DataMember]
-        public decimal AdministratorAdjustmentFactor { get; set; }
+        public Nullable<decimal> AdministratorAdjustmentFactor { get; set; }
     	[DataMember]
         public decimal KeeleyAdjustmentFactor { get; set; }
     	[DataMember]
@@ -192,6 +192,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ITDValuationCarryPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDValuationFundAdjustedCarryPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationAdjustmentFactor { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
