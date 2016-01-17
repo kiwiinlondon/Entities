@@ -25,7 +25,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> PortfolioId { get; set; }
     	[DataMember]
-        public Nullable<int> AttributionFundId { get; set; }
+        public int AttributionFundId { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayAdministratorPricePNL { get; set; }
     	[DataMember]
