@@ -174,7 +174,7 @@
           <Property Name="ITDKeeleyPricePNL" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDKeeleyFundAdjustedPricePNL" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDKeeleyFXPNL" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="ITDKeeleyFundAdjustedFXPNL" Type="decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="ITDKeeleyFundAdjustedFXPNL" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDKeeleyCarryPNL" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDKeeleyFundAdjustedCarryPNL" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDFactsetPricePNL" Type="numeric" Precision="27" Scale="8" />
@@ -191,9 +191,9 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="AdjustmentFactor" Type="decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="AdjustmentFactor" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="AdministratorAdjustmentFactor" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="KeeleyAdjustmentFactor" Type="decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="KeeleyAdjustmentFactor" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="TodayValuationPricePNL" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayValuationFundAdjustedPricePNL" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayValuationFXPNL" Type="numeric" Precision="27" Scale="8" />
@@ -516,6 +516,20 @@
           <Property Name="CostEuro" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CostUSD" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CostGBP" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClientTrail">
+          <Key>
+            <PropertyRef Name="ClientTrailId" />
+          </Key>
+          <Property Name="ClientTrailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientAccountId" Type="int" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="Rate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="EffectiveStartDate" Type="datetime" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="CollectiveInvestmentScheme">
           <Key>
@@ -3031,6 +3045,42 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="ClientTrade">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientTrailClientAccountIdFK">
+          <End Role="ClientAccount" Type="Self.ClientAccount" Multiplicity="1" />
+          <End Role="ClientTrail" Type="Self.ClientTrail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientTrail">
+              <PropertyRef Name="ClientAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientTrailFundIdFK">
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
+          <End Role="ClientTrail" Type="Self.ClientTrail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientTrail">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientTrailUpdateUserIdFk">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ClientTrail" Type="Self.ClientTrail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientTrail">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -6937,7 +6987,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDKeeleyPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDKeeleyFundAdjustedPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDKeeleyFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFundAdjustedFXPNL" Type="decimal" Mode="In" />
+          <Parameter Name="ITDKeeleyFundAdjustedFXPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDKeeleyCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDKeeleyFundAdjustedCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDFactsetPricePNL" Type="numeric" Mode="In" />
@@ -6952,9 +7002,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDBookAdjustedFXPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDBookAdjustedCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="AdjustmentFactor" Type="decimal" Mode="In" />
+          <Parameter Name="AdjustmentFactor" Type="numeric" Mode="In" />
           <Parameter Name="AdministratorAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyAdjustmentFactor" Type="decimal" Mode="In" />
+          <Parameter Name="KeeleyAdjustmentFactor" Type="numeric" Mode="In" />
           <Parameter Name="TodayValuationPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="TodayValuationFundAdjustedPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="TodayValuationFXPNL" Type="numeric" Mode="In" />
@@ -7031,7 +7081,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDKeeleyPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDKeeleyFundAdjustedPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDKeeleyFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFundAdjustedFXPNL" Type="decimal" Mode="In" />
+          <Parameter Name="ITDKeeleyFundAdjustedFXPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDKeeleyCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDKeeleyFundAdjustedCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="ITDFactsetPricePNL" Type="numeric" Mode="In" />
@@ -7047,9 +7097,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDBookAdjustedCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="AdjustmentFactor" Type="decimal" Mode="In" />
+          <Parameter Name="AdjustmentFactor" Type="numeric" Mode="In" />
           <Parameter Name="AdministratorAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyAdjustmentFactor" Type="decimal" Mode="In" />
+          <Parameter Name="KeeleyAdjustmentFactor" Type="numeric" Mode="In" />
           <Parameter Name="TodayValuationPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="TodayValuationFundAdjustedPricePNL" Type="numeric" Mode="In" />
           <Parameter Name="TodayValuationFXPNL" Type="numeric" Mode="In" />
@@ -10098,6 +10148,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="ClientPortfolioBridge" EntityType="Self.ClientPortfolioBridge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientSubAccountAdministratorMapping" EntityType="Self.ClientSubAccountAdministratorMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientTrade" EntityType="Self.ClientTrade" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientTrail" EntityType="Self.ClientTrail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CollectiveInvestmentScheme" EntityType="Self.CollectiveInvestmentScheme" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CorporateAction" EntityType="Self.CorporateAction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CorporateActionType" EntityType="Self.CorporateActionType" Schema="dbo" store:Type="Tables" />
@@ -10512,6 +10563,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ClientTradeUserIDFK" Association="Self.ClientTradeUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientTrade" EntitySet="ClientTrade" />
+          </AssociationSet>
+          <AssociationSet Name="ClientTrailClientAccountIdFK" Association="Self.ClientTrailClientAccountIdFK">
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+            <End Role="ClientTrail" EntitySet="ClientTrail" />
+          </AssociationSet>
+          <AssociationSet Name="ClientTrailFundIdFK" Association="Self.ClientTrailFundIdFK">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="ClientTrail" EntitySet="ClientTrail" />
+          </AssociationSet>
+          <AssociationSet Name="ClientTrailUpdateUserIdFk" Association="Self.ClientTrailUpdateUserIdFk">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ClientTrail" EntitySet="ClientTrail" />
           </AssociationSet>
           <AssociationSet Name="ClosedPositionPositionIDFK" Association="Self.ClosedPositionPositionIDFK">
             <End Role="Position" EntitySet="Position" />
@@ -13520,6 +13583,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Attributi__Attri__5F2C2FA6" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Attri__5F2C2FA6">
             <End Role="AttributionFund" EntitySet="AttributionFunds" />
             <End Role="Attribution" EntitySet="Attributions" />
+          </AssociationSet>
+          <EntitySet Name="ClientTrails" EntityType="Odey.Framework.Keeley.Entities.ClientTrail" />
+          <AssociationSet Name="ClientTrailUpdateUserIdFk" Association="Odey.Framework.Keeley.Entities.ClientTrailUpdateUserIdFk">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ClientTrail" EntitySet="ClientTrails" />
+          </AssociationSet>
+          <AssociationSet Name="ClientTrailClientAccountIdFK" Association="Odey.Framework.Keeley.Entities.ClientTrailClientAccountIdFK">
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
+            <End Role="ClientTrail" EntitySet="ClientTrails" />
+          </AssociationSet>
+          <AssociationSet Name="ClientTrailFundIdFK" Association="Odey.Framework.Keeley.Entities.ClientTrailFundIdFK">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="ClientTrail" EntitySet="ClientTrails" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -20462,6 +20538,58 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ClientTrail">
+          <Key>
+            <PropertyRef Name="ClientTrailId" />
+          </Key>
+          <Property Name="ClientTrailId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ClientAccountId" Type="Int32" Nullable="false" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="Rate" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="Quantity" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="EffectiveStartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="ClientAccount" Relationship="Odey.Framework.Keeley.Entities.ClientTrailClientAccountIdFK" FromRole="ClientTrail" ToRole="ClientAccount" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.ClientTrailFundIdFK" FromRole="ClientTrail" ToRole="Fund" />
+        </EntityType>
+        <Association Name="ClientTrailUpdateUserIdFk">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientTrail" Role="ClientTrail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientTrail">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientTrailClientAccountIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientTrail" Role="ClientTrail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAccount">
+              <PropertyRef Name="ClientAccountId" />
+            </Principal>
+            <Dependent Role="ClientTrail">
+              <PropertyRef Name="ClientAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientTrailFundIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientTrail" Role="ClientTrail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ClientTrail">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -26455,6 +26583,21 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ClientTrails">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrail">
+              <MappingFragment StoreEntitySet="ClientTrail">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="EffectiveStartDate" ColumnName="EffectiveStartDate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="ClientAccountId" ColumnName="ClientAccountId" />
+                <ScalarProperty Name="ClientTrailId" ColumnName="ClientTrailId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -26477,7 +26620,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="25">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="79">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -31136,15 +31279,23 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="22.321417581018913" />
+          <edmx:ConnectorPoint PointX="25" PointY="22.32141459618121" />
           <edmx:ConnectorPoint PointX="24.782822445586948" PointY="22.851734448231976" />
           <edmx:ConnectorPoint PointX="24.782822445586948" PointY="23.529853100307157" />
-          <edmx:ConnectorPoint PointX="24.699358478678455" PointY="23.724631591173047" />
+          <edmx:ConnectorPoint PointX="24.82476470865355" PointY="23.585366306746508" />
+          <edmx:ConnectorPoint PointX="24.98773529134645" PointY="23.801068058132834" />
+          <edmx:ConnectorPoint PointX="25.118872682605129" PointY="23.974636591173148" />
+          <edmx:ConnectorPoint PointX="25.019848334863951" PointY="23.989998393618425" />
+          <edmx:ConnectorPoint PointX="24.636401665136049" PointY="24.049483077163696" />
           <edmx:ConnectorPoint PointX="24.628872682605131" PointY="24.050651060037527" />
+          <edmx:ConnectorPoint PointX="24.621496757774707" PointY="24.136642705926423" />
+          <edmx:ConnectorPoint PointX="24.607253242225298" PointY="24.302699624007456" />
           <edmx:ConnectorPoint PointX="24.444621757774705" PointY="26.198726134957273" />
           <edmx:ConnectorPoint PointX="24.430378242225295" PointY="26.364783053038305" />
           <edmx:ConnectorPoint PointX="24.417397132910232" PointY="26.516122306234198" />
-          <edmx:ConnectorPoint PointX="24.232085968842" PointY="27.261614421437038" />
+          <edmx:ConnectorPoint PointX="24.722085968842" PointY="27.511619421437139" />
+          <edmx:ConnectorPoint PointX="24.519543303319349" PointY="27.475560696306442" />
+          <edmx:ConnectorPoint PointX="24.355456696680651" PointY="27.446348313665258" />
           <edmx:ConnectorPoint PointX="24.232085968842" PointY="27.424384589860061" />
           <edmx:ConnectorPoint PointX="21.794585968841997" PointY="38.335400160441218" />
           <edmx:ConnectorPoint PointX="21.794585968841997" PointY="38.498170328864241" />
@@ -31159,6 +31310,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="21.232049660204446" PointY="41.220494517228346" />
           <edmx:ConnectorPoint PointX="21.232049660204446" PointY="41.383248684556477" />
           <edmx:ConnectorPoint PointX="19.502325339795554" PointY="49.224878555682125" />
+          <edmx:ConnectorPoint PointX="19.466424660204446" PointY="49.387632723010256" />
+          <edmx:ConnectorPoint PointX="19.455450339795554" PointY="49.437384326614534" />
           <edmx:ConnectorPoint PointX="19.403924660204446" PointY="49.670973750920126" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="50.085443466098319" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.023417968750003" />
@@ -31176,8 +31329,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.0625" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.0625" PointY="21.6875" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="21.6875" />
-          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="21.6875" />
           <edmx:ConnectorPoint PointX="10.718750499999999" PointY="21.6875" />
           <edmx:ConnectorPoint PointX="10.718750499999999" PointY="21.75" />
         </edmx:AssociationConnector>
@@ -32198,6 +32349,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionPortfolioIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionPositionIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Attri__5F2C2FA6" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientTrail" Width="1.5" PointX="28.25" PointY="36.375" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientTrailUpdateUserIdFk" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientTrailClientAccountIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ClientTrailFundIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
