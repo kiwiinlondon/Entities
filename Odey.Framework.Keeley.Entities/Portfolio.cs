@@ -174,6 +174,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> OriginalDeltaNetCostBookCurrency { get; set; }
     	[DataMember]
         public Nullable<decimal> OriginalDeltaNetCostInstrumentCurrency { get; set; }
+    	[DataMember]
+        public int FundId { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
@@ -185,5 +187,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual OpenedClosedPosition OpenedClosedPosition { get; set; }
         [DataMember]
         public virtual Attribution Attribution { get; set; }
+        [DataMember]
+        public virtual Fund Fund { get; set; }
     }
 }
