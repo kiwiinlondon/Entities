@@ -33,19 +33,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal AdjustedNav { get; set; }
     	[DataMember]
-        public decimal AdjustedOpeningNav { get; set; }
-    	[DataMember]
         public decimal KeeleyAdjustmentFactor { get; set; }
     	[DataMember]
         public decimal KeeleyAdjustedNav { get; set; }
     	[DataMember]
-        public decimal KeeleyAdjustedOpeningNav { get; set; }
-    	[DataMember]
         public Nullable<decimal> AdministratorAdjustmentFactor { get; set; }
     	[DataMember]
         public Nullable<decimal> AdministratorAdjustedNav { get; set; }
-    	[DataMember]
-        public Nullable<decimal> AdministratorOpeningAdjustedNav { get; set; }
     	[DataMember]
         public bool AdministratorSourced { get; set; }
     	[DataMember]
@@ -70,8 +64,6 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ValuationAdjustmentFactor { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationAdjustedNav { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ValuationOpeningAdjustedNav { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationUnadjustedNav { get; set; }
     
