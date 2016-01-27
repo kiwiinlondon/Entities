@@ -93,6 +93,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FactsetMonthlyContribution = 41,
         [EnumMember]
-        QuintillionPositionFilePortfolioLoadOnly=42
+        QuintillionPositionFilePortfolioLoadOnly=42,
+        [EnumMember]
+        ClientTrail=43
     }
 }
