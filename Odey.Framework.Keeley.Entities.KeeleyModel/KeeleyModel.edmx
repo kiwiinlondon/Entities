@@ -7689,6 +7689,29 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="CostUSD" Type="numeric" Mode="In" />
           <Parameter Name="CostGBP" Type="numeric" Mode="In" />
         </Function>
+        <Function Name="ClientTrail_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientTrailId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientTrail_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="Rate" Type="numeric" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="EffectiveStartDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientTrail_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientTrailId" Type="int" Mode="In" />
+          <Parameter Name="ClientAccountId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="Rate" Type="numeric" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="EffectiveStartDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="ClientType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientTypeId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -13608,6 +13631,29 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Fund" EntitySet="Funds" />
             <End Role="Portfolio" EntitySet="Portfolios" />
           </AssociationSet>
+          <FunctionImport Name="ClientTrail_Delete">
+            <Parameter Name="ClientTrailId" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ClientTrail_Insert">
+            <Parameter Name="ClientAccountId" Mode="In" Type="Int32" />
+            <Parameter Name="FundId" Mode="In" Type="Int32" />
+            <Parameter Name="Rate" Mode="In" Type="Decimal" />
+            <Parameter Name="Quantity" Mode="In" Type="Decimal" />
+            <Parameter Name="EffectiveStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ClientTrail_Update">
+            <Parameter Name="ClientTrailId" Mode="In" Type="Int32" />
+            <Parameter Name="ClientAccountId" Mode="In" Type="Int32" />
+            <Parameter Name="FundId" Mode="In" Type="Int32" />
+            <Parameter Name="Rate" Mode="In" Type="Decimal" />
+            <Parameter Name="Quantity" Mode="In" Type="Decimal" />
+            <Parameter Name="EffectiveStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -26609,7 +26655,42 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                 <ScalarProperty Name="ClientTrailId" ColumnName="ClientTrailId" />
               </MappingFragment>
             </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrail">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ClientTrail_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="EffectiveStartDate" ParameterName="EffectiveStartDate" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" />
+                  <ScalarProperty Name="Rate" ParameterName="Rate" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" />
+                  <ResultBinding Name="ClientTrailId" ColumnName="ClientTrailId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ClientTrail_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="EffectiveStartDate" ParameterName="EffectiveStartDate" Version="Current" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" Version="Current" />
+                  <ScalarProperty Name="Rate" ParameterName="Rate" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="ClientAccountId" ParameterName="ClientAccountId" Version="Current" />
+                  <ScalarProperty Name="ClientTrailId" ParameterName="ClientTrailId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ClientTrail_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ClientTrailId" ParameterName="ClientTrailId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ClientTrail_Delete" FunctionName="KeeleyModel.Store.ClientTrail_Delete" />
+          <FunctionImportMapping FunctionImportName="ClientTrail_Insert" FunctionName="KeeleyModel.Store.ClientTrail_Insert" />
+          <FunctionImportMapping FunctionImportName="ClientTrail_Update" FunctionName="KeeleyModel.Store.ClientTrail_Update" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

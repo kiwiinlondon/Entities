@@ -698,5 +698,88 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("AttributionFund_Roll", updateUserIdParameter);
         }
+    
+        public virtual int ClientTrail_Delete(Nullable<int> clientTrailId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var clientTrailIdParameter = clientTrailId.HasValue ?
+                new ObjectParameter("ClientTrailId", clientTrailId) :
+                new ObjectParameter("ClientTrailId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrail_Delete", clientTrailIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int ClientTrail_Insert(Nullable<int> clientAccountId, Nullable<int> fundId, Nullable<decimal> rate, Nullable<decimal> quantity, Nullable<System.DateTime> effectiveStartDate, Nullable<int> updateUserID)
+        {
+            var clientAccountIdParameter = clientAccountId.HasValue ?
+                new ObjectParameter("ClientAccountId", clientAccountId) :
+                new ObjectParameter("ClientAccountId", typeof(int));
+    
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
+            var rateParameter = rate.HasValue ?
+                new ObjectParameter("Rate", rate) :
+                new ObjectParameter("Rate", typeof(decimal));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("Quantity", quantity) :
+                new ObjectParameter("Quantity", typeof(decimal));
+    
+            var effectiveStartDateParameter = effectiveStartDate.HasValue ?
+                new ObjectParameter("EffectiveStartDate", effectiveStartDate) :
+                new ObjectParameter("EffectiveStartDate", typeof(System.DateTime));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrail_Insert", clientAccountIdParameter, fundIdParameter, rateParameter, quantityParameter, effectiveStartDateParameter, updateUserIDParameter);
+        }
+    
+        public virtual int ClientTrail_Update(Nullable<int> clientTrailId, Nullable<int> clientAccountId, Nullable<int> fundId, Nullable<decimal> rate, Nullable<decimal> quantity, Nullable<System.DateTime> effectiveStartDate, Nullable<int> updateUserID, byte[] dataVersion)
+        {
+            var clientTrailIdParameter = clientTrailId.HasValue ?
+                new ObjectParameter("ClientTrailId", clientTrailId) :
+                new ObjectParameter("ClientTrailId", typeof(int));
+    
+            var clientAccountIdParameter = clientAccountId.HasValue ?
+                new ObjectParameter("ClientAccountId", clientAccountId) :
+                new ObjectParameter("ClientAccountId", typeof(int));
+    
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
+            var rateParameter = rate.HasValue ?
+                new ObjectParameter("Rate", rate) :
+                new ObjectParameter("Rate", typeof(decimal));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("Quantity", quantity) :
+                new ObjectParameter("Quantity", typeof(decimal));
+    
+            var effectiveStartDateParameter = effectiveStartDate.HasValue ?
+                new ObjectParameter("EffectiveStartDate", effectiveStartDate) :
+                new ObjectParameter("EffectiveStartDate", typeof(System.DateTime));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrail_Update", clientTrailIdParameter, clientAccountIdParameter, fundIdParameter, rateParameter, quantityParameter, effectiveStartDateParameter, updateUserIDParameter, dataVersionParameter);
+        }
     }
 }
