@@ -80,6 +80,8 @@ namespace Odey.Framework.Keeley.Entities
         public int InputUserId { get; set; }
     	[DataMember]
         public Nullable<decimal> Cost { get; set; }
+    	[DataMember]
+        public string NextTraderToSendEmail { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ComplianceUser { get; set; }
