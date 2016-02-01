@@ -408,7 +408,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ARFF = 7504,
         [EnumMember]
-        ARFF_USD_IRL = 7553,
+        ARFF_USD_IRL = 7625,
         [EnumMember]
         ARFF_EUR_IRL = 7620,
         [EnumMember]
