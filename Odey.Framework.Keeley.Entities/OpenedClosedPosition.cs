@@ -30,6 +30,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> IsOpened { get; set; }
     	[DataMember]
         public int PortfolioId { get; set; }
+    	[DataMember]
+        public Nullable<bool> NetPositionWasLong { get; set; }
+    	[DataMember]
+        public Nullable<bool> ExposureWasLong { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
