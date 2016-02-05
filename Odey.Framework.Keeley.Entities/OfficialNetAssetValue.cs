@@ -82,5 +82,9 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> OpeningNAVFundCurrency { get; set; }
     	[DataMember]
         public Nullable<decimal> OpeningNAV { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BifurcatedCurrencyGainLoss { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FXRateToBase { get; set; }
     }
 }

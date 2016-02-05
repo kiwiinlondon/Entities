@@ -1595,6 +1595,8 @@
           <Property Name="OpeningGAVFundCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="OpeningNAVFundCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="OpeningNAV" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BifurcatedCurrencyGainLoss" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FXRateToBase" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="OpenedClosedPosition">
           <Key>
@@ -9192,6 +9194,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="OpeningGAVFundCurrency" Type="numeric" Mode="In" />
           <Parameter Name="OpeningNAVFundCurrency" Type="numeric" Mode="In" />
           <Parameter Name="OpeningNAV" Type="numeric" Mode="In" />
+          <Parameter Name="BifurcatedCurrencyGainLoss" Type="numeric" Mode="In" />
+          <Parameter Name="FXRateToBase" Type="numeric" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9230,6 +9234,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="OpeningGAVFundCurrency" Type="numeric" Mode="In" />
           <Parameter Name="OpeningNAVFundCurrency" Type="numeric" Mode="In" />
           <Parameter Name="OpeningNAV" Type="numeric" Mode="In" />
+          <Parameter Name="BifurcatedCurrencyGainLoss" Type="numeric" Mode="In" />
+          <Parameter Name="FXRateToBase" Type="numeric" Mode="In" />
         </Function>
         <Function Name="OpenedClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -18828,6 +18834,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="OpeningGAVFundCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OpeningNAVFundCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OpeningNAV" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="BifurcatedCurrencyGainLoss" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FXRateToBase" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25151,6 +25159,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="FXRateToBase" ColumnName="FXRateToBase" />
+                <ScalarProperty Name="BifurcatedCurrencyGainLoss" ColumnName="BifurcatedCurrencyGainLoss" />
                 <ScalarProperty Name="OpeningNAV" ColumnName="OpeningNAV" />
                 <ScalarProperty Name="OpeningNAVFundCurrency" ColumnName="OpeningNAVFundCurrency" />
                 <ScalarProperty Name="OpeningGAVFundCurrency" ColumnName="OpeningGAVFundCurrency" />
@@ -25189,6 +25199,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="FXRateToBase" ParameterName="FXRateToBase" />
+                  <ScalarProperty Name="BifurcatedCurrencyGainLoss" ParameterName="BifurcatedCurrencyGainLoss" />
                   <ScalarProperty Name="OpeningNAV" ParameterName="OpeningNAV" />
                   <ScalarProperty Name="OpeningNAVFundCurrency" ParameterName="OpeningNAVFundCurrency" />
                   <ScalarProperty Name="OpeningGAVFundCurrency" ParameterName="OpeningGAVFundCurrency" />
@@ -25229,6 +25241,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="FXRateToBase" ParameterName="FXRateToBase" Version="Current" />
+                  <ScalarProperty Name="BifurcatedCurrencyGainLoss" ParameterName="BifurcatedCurrencyGainLoss" Version="Current" />
                   <ScalarProperty Name="OpeningNAV" ParameterName="OpeningNAV" Version="Current" />
                   <ScalarProperty Name="OpeningNAVFundCurrency" ParameterName="OpeningNAVFundCurrency" Version="Current" />
                   <ScalarProperty Name="OpeningGAVFundCurrency" ParameterName="OpeningGAVFundCurrency" Version="Current" />
@@ -26737,7 +26751,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="62">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
