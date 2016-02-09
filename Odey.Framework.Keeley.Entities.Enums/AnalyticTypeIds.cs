@@ -90,6 +90,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         VaR20DaysMixedModel = 25,
 
+        [EnumMember]
+        LiquidityHaircutPercentValue = 26,
     }
 }
 
