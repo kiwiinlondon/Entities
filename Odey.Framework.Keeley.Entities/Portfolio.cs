@@ -176,6 +176,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> OriginalDeltaNetCostInstrumentCurrency { get; set; }
     	[DataMember]
         public int FundId { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsNetPositionLong { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsExposureLong { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsFlat { get; set; }
+    	[DataMember]
+        public Nullable<bool> ValuesExistToRollForward { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
