@@ -177,13 +177,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int FundId { get; set; }
     	[DataMember]
-        public Nullable<bool> IsNetPositionLong { get; set; }
+        public bool IsNetPositionLong { get; set; }
     	[DataMember]
-        public Nullable<bool> IsExposureLong { get; set; }
+        public bool IsExposureLong { get; set; }
     	[DataMember]
-        public Nullable<bool> IsFlat { get; set; }
+        public bool IsFlat { get; set; }
     	[DataMember]
-        public Nullable<bool> ValuesExistToRollForward { get; set; }
+        public bool ValuesExistToRollForward { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
