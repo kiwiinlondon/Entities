@@ -30,8 +30,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OEIMACGBPBSHARECLASS = 5513,
         [EnumMember]
-        OEIMACGBPBMSHARECLASS = 5905,        
-        
+        OEIMACGBPBMSHARECLASS = 5905,
+        [EnumMember]
+        OEIMAC_USD_M = 7650,
+
+
         [EnumMember]
         GIANO94 = 4849,
         [EnumMember]
