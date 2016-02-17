@@ -31,9 +31,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int PortfolioId { get; set; }
     	[DataMember]
-        public Nullable<bool> NetPositionWasLong { get; set; }
+        public bool IsNetPositionLong { get; set; }
     	[DataMember]
-        public Nullable<bool> ExposureWasLong { get; set; }
+        public bool IsExposureLong { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
