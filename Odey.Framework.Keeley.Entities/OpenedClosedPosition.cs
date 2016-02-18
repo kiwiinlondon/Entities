@@ -27,13 +27,19 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<bool> IsOpened { get; set; }
+        public bool IsOpened { get; set; }
     	[DataMember]
         public int PortfolioId { get; set; }
     	[DataMember]
         public bool IsNetPositionLong { get; set; }
     	[DataMember]
         public bool IsExposureLong { get; set; }
+    	[DataMember]
+        public bool IsNetPositionLongChanged { get; set; }
+    	[DataMember]
+        public bool IsExposureLongChanged { get; set; }
+    	[DataMember]
+        public bool IsClosed { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
