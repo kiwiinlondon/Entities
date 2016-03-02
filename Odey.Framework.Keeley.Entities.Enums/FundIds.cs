@@ -43,7 +43,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OUAR = 3609,
         [EnumMember]
-        OUAR_GBP_I = 5511,
+        OUAR_GBP_R = 5511,
         [EnumMember]
         OUAR_EUR = 5915,
         [EnumMember]
