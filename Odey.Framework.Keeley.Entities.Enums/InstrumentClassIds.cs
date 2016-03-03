@@ -68,6 +68,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CommodityOption = 89,
         [EnumMember]
-        CurrencyOptionFuture = 90,
+        OptionOnCurrencyFuture = 90,
     }
 }
