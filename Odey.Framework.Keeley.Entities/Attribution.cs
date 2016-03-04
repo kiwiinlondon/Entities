@@ -198,6 +198,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal PercentageOfFund { get; set; }
     	[DataMember]
         public bool KeeleyIsMaster { get; set; }
+    	[DataMember]
+        public Nullable<int> PreviousAttributionId { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
