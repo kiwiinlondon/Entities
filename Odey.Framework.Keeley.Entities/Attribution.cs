@@ -207,5 +207,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Position Position { get; set; }
         [DataMember]
         public virtual AttributionFund AttributionFund { get; set; }
+        [DataMember]
+        public virtual Attribution PreviousAttribution { get; set; }
     }
 }
