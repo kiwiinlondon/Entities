@@ -30,6 +30,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         AndrewSandler = 105,
         [EnumMember]
         [Description("Lodewijk Van Moorsel")]
-        LodewijkVanMoorsel = 141
+        LodewijkVanMoorsel = 141,
+        [EnumMember]
+        [Description("James Kostoris")]
+        JamesKostoris = 135,
     }
 }
