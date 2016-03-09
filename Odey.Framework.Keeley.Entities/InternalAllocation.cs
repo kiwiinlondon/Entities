@@ -50,6 +50,8 @@ namespace Odey.Framework.Keeley.Entities
         public int ParentEventId { get; set; }
     	[DataMember]
         public decimal EventToBookFXRate { get; set; }
+    	[DataMember]
+        public int StrategyId { get; set; }
     
         [DataMember]
         public virtual List<PortfolioEvent> PortfolioEvents { get; set; }
