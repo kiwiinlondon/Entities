@@ -1437,6 +1437,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ParentEventId" Type="int" Nullable="false" />
           <Property Name="EventToBookFXRate" Type="numeric" Precision="35" Scale="16" Nullable="false" />
+          <Property Name="StrategyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Issuer">
           <Key>
@@ -4244,6 +4245,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="FundWebsiteCacheTime">
               <PropertyRef Name="FundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InternalA__Strat__60F644FF">
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="InternalAllocation" Type="Self.InternalAllocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="StrategyId" />
+            </Principal>
+            <Dependent Role="InternalAllocation">
+              <PropertyRef Name="StrategyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8997,6 +9010,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="ParentEventId" Type="int" Mode="In" />
           <Parameter Name="EventToBookFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
         <Function Name="InternalAllocation_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -9012,6 +9026,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="ParentEventId" Type="int" Mode="In" />
           <Parameter Name="EventToBookFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
         <Function Name="Issuer_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -11057,6 +11072,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__FundWebsi__FundI__1AE9D794" Association="Self.FK__FundWebsi__FundI__1AE9D794">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="FundWebsiteCacheTime" EntitySet="FundWebsiteCacheTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InternalA__Strat__60F644FF" Association="Self.FK__InternalA__Strat__60F644FF">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="InternalAllocation" EntitySet="InternalAllocation" />
           </AssociationSet>
           <AssociationSet Name="FK__LegalEnti__Paren__21E80B97" Association="Self.FK__LegalEnti__Paren__21E80B97">
             <End Role="LegalEntity" EntitySet="LegalEntity" />
@@ -13747,6 +13766,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="Strategy" EntitySet="Strategies" />
           </AssociationSet>
+          <AssociationSet Name="FK__InternalA__Strat__60F644FF" Association="Odey.Framework.Keeley.Entities.FK__InternalA__Strat__60F644FF">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="InternalAllocation" EntitySet="InternalAllocations" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -14817,6 +14840,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.InternalAllocationEventFK" FromRole="InternalAllocation" ToRole="Event" />
           <Property Type="Decimal" Name="EventToBookFXRate" Nullable="false" Precision="35" Scale="16" />
           <NavigationProperty Name="Book" Relationship="Odey.Framework.Keeley.Entities.InternalAllocationBookIDFK" FromRole="InternalAllocation" ToRole="Book" />
+          <Property Name="StrategyId" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="InternalAllocationAccountIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
@@ -20800,6 +20824,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__InternalA__Strat__60F644FF">
+          <End Type="Odey.Framework.Keeley.Entities.Strategy" Role="Strategy" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.InternalAllocation" Role="InternalAllocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="StrategyId" />
+            </Principal>
+            <Dependent Role="InternalAllocation">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22018,6 +22054,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="InternalAllocations">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InternalAllocation">
               <MappingFragment StoreEntitySet="InternalAllocation">
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
                 <ScalarProperty Name="EventToBookFXRate" ColumnName="EventToBookFXRate" />
                 <ScalarProperty Name="ParentEventId" ColumnName="ParentEventId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -22037,6 +22074,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InternalAllocation">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InternalAllocation_Insert">
+                  <ScalarProperty Name="StrategyId" ParameterName="StrategyId" />
                   <ScalarProperty Name="EventToBookFXRate" ParameterName="EventToBookFXRate" />
                   <ScalarProperty Name="ParentEventId" ParameterName="ParentEventId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -22053,6 +22091,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InternalAllocation_Update">
+                  <ScalarProperty Name="StrategyId" ParameterName="StrategyId" Version="Current" />
                   <ScalarProperty Name="EventToBookFXRate" ParameterName="EventToBookFXRate" Version="Current" />
                   <ScalarProperty Name="ParentEventId" ParameterName="ParentEventId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
@@ -26893,7 +26932,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="Name" ParameterName="Name" />
                   <ResultBinding Name="StrategyId" ColumnName="StrategyId" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                  <ResultBinding Name="StrategyId" ColumnName="StartDt" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Strategy_Update">
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
@@ -32668,6 +32707,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PreviousAttributionFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Strategy" Width="1.5" PointX="2.75" PointY="84.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.StrategUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InternalA__Strat__60F644FF" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
