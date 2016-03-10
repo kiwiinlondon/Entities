@@ -1930,6 +1930,7 @@
           <Property Name="CurrencyID" Type="int" Nullable="false" />
           <Property Name="EntityRankingSchemeId" Type="int" Nullable="false" />
           <Property Name="IsAccrual" Type="bit" Nullable="false" />
+          <Property Name="StrategyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Price">
           <Key>
@@ -6312,6 +6313,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="positionstrategyfk">
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="Position" Type="Self.Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="StrategyId" />
+            </Principal>
+            <Dependent Role="Position">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PreviousAttributionFK">
           <End Role="Attribution" Type="Self.Attribution" Multiplicity="0..1" />
           <End Role="Attribution1" Type="Self.Attribution" Multiplicity="*" />
@@ -9830,6 +9843,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="CurrencyID" Type="int" Mode="In" />
           <Parameter Name="EntityRankingSchemeId" Type="int" Mode="In" />
           <Parameter Name="IsAccrual" Type="bit" Mode="In" />
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
         <Function Name="Position_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PositionId" Type="int" Mode="In" />
@@ -9841,6 +9855,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="CurrencyID" Type="int" Mode="In" />
           <Parameter Name="EntityRankingSchemeId" Type="int" Mode="In" />
           <Parameter Name="IsAccrual" Type="bit" Mode="In" />
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
         <Function Name="Price_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PriceId" Type="int" Mode="In" />
@@ -11759,6 +11774,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="PositionEntityRankingSchemeIDFK" Association="Self.PositionEntityRankingSchemeIDFK">
             <End Role="EntityRankingScheme" EntitySet="EntityRankingScheme" />
+            <End Role="Position" EntitySet="Position" />
+          </AssociationSet>
+          <AssociationSet Name="positionstrategyfk" Association="Self.positionstrategyfk">
+            <End Role="Strategy" EntitySet="Strategy" />
             <End Role="Position" EntitySet="Position" />
           </AssociationSet>
           <AssociationSet Name="PreviousAttributionFK" Association="Self.PreviousAttributionFK">
@@ -13770,6 +13789,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="InternalAllocation" EntitySet="InternalAllocations" />
           </AssociationSet>
+          <AssociationSet Name="positionstrategyfk" Association="Odey.Framework.Keeley.Entities.positionstrategyfk">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="Position" EntitySet="Positions" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -15555,6 +15578,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Book" Relationship="Odey.Framework.Keeley.Entities.PositionAccountBookIDFK" FromRole="Position" ToRole="Book" />
           <Property Type="Boolean" Name="IsAccrual" Nullable="false" />
           <NavigationProperty Name="Account" Relationship="Odey.Framework.Keeley.Entities.PositionAccountAccountIDFK" FromRole="Position" ToRole="Account" />
+          <Property Name="StrategyId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Strategy" Relationship="Odey.Framework.Keeley.Entities.positionstrategyfk" FromRole="Position" ToRole="Strategy" />
         </EntityType>
         <Association Name="PositionAccountAccountIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
@@ -20836,6 +20861,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="positionstrategyfk">
+          <End Type="Odey.Framework.Keeley.Entities.Strategy" Role="Strategy" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="StrategyId" />
+            </Principal>
+            <Dependent Role="Position">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22750,6 +22787,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Positions">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Position">
               <MappingFragment StoreEntitySet="Position">
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
                 <ScalarProperty Name="IsAccrual" ColumnName="IsAccrual" />
                 <ScalarProperty Name="EntityRankingSchemeId" ColumnName="EntityRankingSchemeId" />
                 <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
@@ -22765,6 +22803,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Position">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Position_Insert">
+                  <ScalarProperty Name="StrategyId" ParameterName="StrategyId" />
                   <ScalarProperty Name="IsAccrual" ParameterName="IsAccrual" />
                   <ScalarProperty Name="EntityRankingSchemeId" ParameterName="EntityRankingSchemeId" />
                   <ScalarProperty Name="CurrencyID" ParameterName="CurrencyID" />
@@ -22777,6 +22816,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Position_Update">
+                  <ScalarProperty Name="StrategyId" ParameterName="StrategyId" Version="Current" />
                   <ScalarProperty Name="IsAccrual" ParameterName="IsAccrual" Version="Current" />
                   <ScalarProperty Name="EntityRankingSchemeId" ParameterName="EntityRankingSchemeId" Version="Current" />
                   <ScalarProperty Name="CurrencyID" ParameterName="CurrencyID" Version="Current" />
@@ -32708,6 +32748,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Strategy" Width="1.5" PointX="2.75" PointY="84.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.StrategUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InternalA__Strat__60F644FF" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.positionstrategyfk" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

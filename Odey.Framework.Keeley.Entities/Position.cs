@@ -36,6 +36,8 @@ namespace Odey.Framework.Keeley.Entities
         public int EntityRankingSchemeId { get; set; }
     	[DataMember]
         public bool IsAccrual { get; set; }
+    	[DataMember]
+        public int StrategyId { get; set; }
     
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
@@ -43,5 +45,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Book Book { get; set; }
         [DataMember]
         public virtual Account Account { get; set; }
+        [DataMember]
+        public virtual Strategy Strategy { get; set; }
     }
 }
