@@ -7,7 +7,7 @@ namespace Odey.Framework.Keeley.Entities.Caches
 {
     public class ApplicationUserByLoginCache : OdeyCache<string, ApplicationUser>
     {
-        protected override Dictionary<string, ApplicationUser> GetAll()
+        public override Dictionary<string, ApplicationUser> GetAll()
         {
             using (KeeleyModel context = new KeeleyModel())
             {

@@ -8,7 +8,7 @@ namespace Odey.Framework.Keeley.Entities.Caches
     {        
         protected abstract Dictionary<K, T> CreateCache(KeeleyModel context);
 
-        protected override Dictionary<K, T> GetAll()
+        public override Dictionary<K, T> GetAll()
         {
             using (KeeleyModel context = new KeeleyModel())
             {
