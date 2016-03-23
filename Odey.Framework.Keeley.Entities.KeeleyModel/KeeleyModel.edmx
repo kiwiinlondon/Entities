@@ -1057,6 +1057,17 @@
           <Property Name="AdjustmentFactorYTD" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RelativeCurrentPriceDate" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="FocusListPrices">
+          <Key>
+            <PropertyRef Name="FocusListPriceId" />
+          </Key>
+          <Property Name="FocusListPriceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FocusListId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="Price" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="AdjustmentFactor" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="RelativePrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+        </EntityType>
         <EntityType Name="ForwardFX">
           <Key>
             <PropertyRef Name="InstrumentId" />
@@ -4390,6 +4401,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="FocusList">
               <PropertyRef Name="CurrentPriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FocusListIdFK">
+          <End Role="FocusList" Type="Self.FocusList" Multiplicity="1" />
+          <End Role="FocusListPrices" Type="Self.FocusListPrices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FocusList">
+              <PropertyRef Name="FocusListId" />
+            </Principal>
+            <Dependent Role="FocusListPrices">
+              <PropertyRef Name="FocusListId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10318,6 +10341,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="FMPortfolio" EntityType="Self.FMPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FMTradeBridgeLastProcessed" EntityType="Self.FMTradeBridgeLastProcessed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FocusList" EntityType="Self.FocusList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FocusListPrices" EntityType="Self.FocusListPrices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ForwardFX" EntityType="Self.ForwardFX" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fund" EntityType="Self.Fund" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundCountryHoliday" EntityType="Self.FundCountryHoliday" Schema="dbo" store:Type="Tables" />
@@ -11135,6 +11159,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FocusListCurrentPriceIdFK" Association="Self.FocusListCurrentPriceIdFK">
             <End Role="Price" EntitySet="Price" />
             <End Role="FocusList" EntitySet="FocusList" />
+          </AssociationSet>
+          <AssociationSet Name="FocusListIdFK" Association="Self.FocusListIdFK">
+            <End Role="FocusList" EntitySet="FocusList" />
+            <End Role="FocusListPrices" EntitySet="FocusListPrices" />
           </AssociationSet>
           <AssociationSet Name="FocusListInstrumentMarketIdFK" Association="Self.FocusListInstrumentMarketIdFK">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
@@ -13792,6 +13820,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="positionstrategyfk" Association="Odey.Framework.Keeley.Entities.positionstrategyfk">
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="Position" EntitySet="Positions" />
+          </AssociationSet>
+          <EntitySet Name="FocusListPrices" EntityType="Odey.Framework.Keeley.Entities.FocusListPrice" />
+          <AssociationSet Name="FocusListIdFK" Association="Odey.Framework.Keeley.Entities.FocusListIdFK">
+            <End Role="FocusList" EntitySet="FocusLists" />
+            <End Role="FocusListPrice" EntitySet="FocusListPrices" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -19116,6 +19149,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Decimal" Name="AdjustmentFactorITD" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="AdjustmentFactorYTD" Precision="27" Scale="8" />
           <Property Type="DateTime" Name="RelativeCurrentPriceDate" Precision="3" Nullable="false" />
+          <NavigationProperty Name="FocusListPrices" Relationship="Odey.Framework.Keeley.Entities.FocusListIdFK" FromRole="FocusList" ToRole="FocusListPrice" />
           </EntityType>
         <Association Name="FocusListAnalystIdFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20870,6 +20904,30 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="Position">
               <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FocusListPrice">
+          <Key>
+            <PropertyRef Name="FocusListPriceId" />
+          </Key>
+          <Property Name="FocusListPriceId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FocusListId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="AdjustmentFactor" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="RelativePrice" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <NavigationProperty Name="FocusList" Relationship="Odey.Framework.Keeley.Entities.FocusListIdFK" FromRole="FocusListPrice" ToRole="FocusList" />
+        </EntityType>
+        <Association Name="FocusListIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FocusListPrice" Role="FocusListPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FocusList">
+              <PropertyRef Name="FocusListId" />
+            </Principal>
+            <Dependent Role="FocusListPrice">
+              <PropertyRef Name="FocusListId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -26991,6 +27049,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FocusListPrices">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusListPrice">
+              <MappingFragment StoreEntitySet="FocusListPrices">
+                <ScalarProperty Name="RelativePrice" ColumnName="RelativePrice" />
+                <ScalarProperty Name="AdjustmentFactor" ColumnName="AdjustmentFactor" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FocusListId" ColumnName="FocusListId" />
+                <ScalarProperty Name="FocusListPriceId" ColumnName="FocusListPriceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -31672,26 +31742,24 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="22.32043760118918" />
+          <edmx:ConnectorPoint PointX="25" PointY="22.320437601190765" />
           <edmx:ConnectorPoint PointX="24.830474189423754" PointY="22.620326822925289" />
           <edmx:ConnectorPoint PointX="24.830474189423754" PointY="23.594398820608312" />
-          <edmx:ConnectorPoint PointX="24.89297418942375" PointY="23.693275082580982" />
-          <edmx:ConnectorPoint PointX="24.98202581057625" PointY="23.834156545335631" />
+          <edmx:ConnectorPoint PointX="24.888570256731441" PointY="23.686307972139467" />
+          <edmx:ConnectorPoint PointX="24.982025810576246" PointY="23.834156545335631" />
           <edmx:ConnectorPoint PointX="25.118872682605129" PointY="24.050651060037527" />
           <edmx:ConnectorPoint PointX="25.020833333333332" PointY="24.050651060037527" />
           <edmx:ConnectorPoint PointX="24.604166666666668" PointY="24.050651060037527" />
           <edmx:ConnectorPoint PointX="24.568898225238026" PointY="24.050651060037527" />
           <edmx:ConnectorPoint PointX="24.442611121123736" PointY="26.105799436694522" />
-          <edmx:ConnectorPoint PointX="24.432388878876264" PointY="26.272152325281443" />
+          <edmx:ConnectorPoint PointX="24.427984946183951" PointY="26.343820253586419" />
           <edmx:ConnectorPoint PointX="24.417397132910232" PointY="26.516122306234198" />
           <edmx:ConnectorPoint PointX="24.722085968842" PointY="26.869660436979316" />
           <edmx:ConnectorPoint PointX="24.722085968842" PointY="27.424384589860061" />
           <edmx:ConnectorPoint PointX="24.520833333333332" PointY="27.424384589860061" />
           <edmx:ConnectorPoint PointX="24.354166666666668" PointY="27.424384589860061" />
           <edmx:ConnectorPoint PointX="24.232085968842" PointY="27.424384589860061" />
-          <edmx:ConnectorPoint PointX="21.83256503487549" PointY="37.096791174974072" />
-          <edmx:ConnectorPoint PointX="21.79243496512451" PointY="37.258554444227514" />
-          <edmx:ConnectorPoint PointX="21.733459300100655" PointY="37.496283818730291" />
+          <edmx:ConnectorPoint PointX="21.733459300100655" PointY="37.096791174974072" />
           <edmx:ConnectorPoint PointX="21.733459300100655" PointY="38.590625072015833" />
           <edmx:ConnectorPoint PointX="21.607502682441805" PointY="38.78113580936963" />
           <edmx:ConnectorPoint PointX="21.607502682441805" PointY="39.68114876051488" />
@@ -31699,26 +31767,22 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="21.357049660204446" PointY="40.816566628736737" />
           <edmx:ConnectorPoint PointX="21.232049660204446" PointY="41.220494517228346" />
           <edmx:ConnectorPoint PointX="21.232049660204446" PointY="41.383248684556477" />
-          <edmx:ConnectorPoint PointX="19.504509155047703" PointY="48.321539506537832" />
-          <edmx:ConnectorPoint PointX="19.432990844952297" PointY="48.608777248898946" />
-          <edmx:ConnectorPoint PointX="19.403924660204446" PointY="48.725515260114335" />
+          <edmx:ConnectorPoint PointX="19.473565024947852" PointY="48.333528868900473" />
+          <edmx:ConnectorPoint PointX="19.417059975052148" PointY="48.556860890535205" />
+          <edmx:ConnectorPoint PointX="19.403924660204446" PointY="48.608777248898946" />
           <edmx:ConnectorPoint PointX="19.403924660204446" PointY="49.670973750920126" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="50.085443466098319" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="16.606751302083335" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="16.440084635416671" PointY="23.023417968750003" />
-          <edmx:ConnectorPoint PointX="15.802083333333334" PointY="23.023417968750003" />
-          <edmx:ConnectorPoint PointX="15.354166666666666" PointY="23.023417968750003" />
-          <edmx:ConnectorPoint PointX="15.333333333333334" PointY="23.023417968750003" />
-          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="23.023417968750003" />
+          <edmx:ConnectorPoint PointX="15.953929400641027" PointY="23.02341796875" />
+          <edmx:ConnectorPoint PointX="15.104166666666668" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="13.270833333333334" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.979166666666666" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.958333333333334" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.0625" PointY="23.023417968750003" />
           <edmx:ConnectorPoint PointX="12.0625" PointY="21.6875" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="21.6875" />
-          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="21.6875" />
           <edmx:ConnectorPoint PointX="10.718750499999999" PointY="21.6875" />
           <edmx:ConnectorPoint PointX="10.718750499999999" PointY="21.75" />
         </edmx:AssociationConnector>
@@ -32749,6 +32813,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.StrategUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InternalA__Strat__60F644FF" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.positionstrategyfk" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FocusListPrice" Width="1.5" PointX="9.625" PointY="50.125" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

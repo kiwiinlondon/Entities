@@ -157,6 +157,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<Attribution> Attributions { get; set; }
         public DbSet<ClientTrail> ClientTrails { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
+        public DbSet<FocusListPrice> FocusListPrices { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
