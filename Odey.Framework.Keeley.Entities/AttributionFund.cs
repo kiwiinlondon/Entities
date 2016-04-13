@@ -71,9 +71,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> AdministratorTodayCapitalChange { get; set; }
     	[DataMember]
-        public Nullable<decimal> MasterFundAdjustedITDOpeningNAV { get; set; }
-    	[DataMember]
         public Nullable<decimal> AdministratorUnadjustedNav { get; set; }
+    	[DataMember]
+        public decimal FundAdjustedITDOpeningNAV { get; set; }
     
         [DataMember]
         public virtual List<Attribution> Attributions { get; set; }

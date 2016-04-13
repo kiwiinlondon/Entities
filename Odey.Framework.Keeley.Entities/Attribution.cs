@@ -203,15 +203,15 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> FactsetContribution { get; set; }
     	[DataMember]
-        public Nullable<bool> FactsetIsMaster { get; set; }
+        public bool FactsetIsMaster { get; set; }
     	[DataMember]
-        public Nullable<bool> AdministratorIsMaster { get; set; }
+        public bool AdministratorIsMaster { get; set; }
     	[DataMember]
         public Nullable<bool> IsPrimary { get; set; }
     	[DataMember]
-        public Nullable<decimal> MasterFundAdjustedITDOpeningNAV { get; set; }
-    	[DataMember]
         public Nullable<bool> NeedsRebuild { get; set; }
+    	[DataMember]
+        public decimal FundAdjustedITDOpeningNAV { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
