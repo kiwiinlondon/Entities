@@ -211,7 +211,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<bool> NeedsRebuild { get; set; }
     	[DataMember]
-        public decimal FundAdjustedITDOpeningNAV { get; set; }
+        public Nullable<int> ITDOpeningAttributionFundId { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
@@ -221,5 +221,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual AttributionFund AttributionFund { get; set; }
         [DataMember]
         public virtual Attribution PreviousAttribution { get; set; }
+        [DataMember]
+        public virtual AttributionFund ITDOpeningAttributionFund { get; set; }
     }
 }
