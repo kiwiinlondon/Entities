@@ -68,6 +68,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ValuationUnadjustedNav { get; set; }
     	[DataMember]
         public bool UseKeeleyAdjustmentFactor { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AdministratorTodayCapitalChange { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MasterFundAdjustedITDOpeningNAV { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AdministratorUnadjustedNav { get; set; }
     
         [DataMember]
         public virtual List<Attribution> Attributions { get; set; }
