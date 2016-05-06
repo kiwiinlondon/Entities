@@ -70,6 +70,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AdjustmentFactorYTD { get; set; }
     	[DataMember]
         public System.DateTime RelativeCurrentPriceDate { get; set; }
+    	[DataMember]
+        public int IssuerId { get; set; }
     
         [DataMember]
         public virtual List<FocusListPrice> FocusListPrices { get; set; }

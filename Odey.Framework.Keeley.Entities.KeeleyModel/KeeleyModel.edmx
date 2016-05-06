@@ -1067,6 +1067,7 @@
           <Property Name="AdjustmentFactorITD" Type="numeric" Precision="27" Scale="8" />
           <Property Name="AdjustmentFactorYTD" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RelativeCurrentPriceDate" Type="datetime" Nullable="false" />
+          <Property Name="IssuerId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="FocusListPrices">
           <Key>
@@ -4208,6 +4209,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="FileToBeCollected">
               <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FocusList__Issue__30FBB436">
+          <End Role="Issuer" Type="Self.Issuer" Multiplicity="1" />
+          <End Role="FocusList" Type="Self.FocusList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FocusList">
+              <PropertyRef Name="IssuerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8453,6 +8466,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="AdjustmentFactorITD" Type="numeric" Mode="In" />
           <Parameter Name="AdjustmentFactorYTD" Type="numeric" Mode="In" />
           <Parameter Name="RelativeCurrentPriceDate" Type="datetime" Mode="In" />
+          <Parameter Name="IssuerId" Type="int" Mode="In" />
         </Function>
         <Function Name="FocusList_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FocusListId" Type="int" Mode="In" />
@@ -8478,6 +8492,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="AdjustmentFactorITD" Type="numeric" Mode="In" />
           <Parameter Name="AdjustmentFactorYTD" Type="numeric" Mode="In" />
           <Parameter Name="RelativeCurrentPriceDate" Type="datetime" Mode="In" />
+          <Parameter Name="IssuerId" Type="int" Mode="In" />
         </Function>
         <Function Name="ForwardFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -11148,6 +11163,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__FileToBeC__FundI__4DFC994F" Association="Self.FK__FileToBeC__FundI__4DFC994F">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="FileToBeCollected" EntitySet="FileToBeCollected" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FocusList__Issue__30FBB436" Association="Self.FK__FocusList__Issue__30FBB436">
+            <End Role="Issuer" EntitySet="Issuer" />
+            <End Role="FocusList" EntitySet="FocusList" />
           </AssociationSet>
           <AssociationSet Name="FK__ForwardFX__Instr__2AB62B09" Association="Self.FK__ForwardFX__Instr__2AB62B09">
             <End Role="Instrument" EntitySet="Instrument" />
@@ -13898,6 +13917,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Attributi__ITDOp__3E741437" Association="Odey.Framework.Keeley.Entities.FK__Attributi__ITDOp__3E741437">
             <End Role="AttributionFund" EntitySet="AttributionFunds" />
             <End Role="AttributionFund1" EntitySet="AttributionFunds" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FocusList__Issue__30FBB436" Association="Odey.Framework.Keeley.Entities.FK__FocusList__Issue__30FBB436">
+            <End Role="Issuer" EntitySet="Issuers" />
+            <End Role="FocusList" EntitySet="FocusLists" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -19223,6 +19246,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Decimal" Name="AdjustmentFactorYTD" Precision="27" Scale="8" />
           <Property Type="DateTime" Name="RelativeCurrentPriceDate" Precision="3" Nullable="false" />
           <NavigationProperty Name="FocusListPrices" Relationship="Odey.Framework.Keeley.Entities.FocusListIdFK" FromRole="FocusList" ToRole="FocusListPrice" />
+          <Property Name="IssuerId" Type="Int32" Nullable="false" />
           </EntityType>
         <Association Name="FocusListAnalystIdFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -21037,6 +21061,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="AttributionFund1">
               <PropertyRef Name="ITDOpeningAttributionFundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FocusList__Issue__30FBB436">
+          <End Type="Odey.Framework.Keeley.Entities.Issuer" Role="Issuer" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FocusList">
+              <PropertyRef Name="IssuerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -25677,6 +25713,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="FocusLists">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusList">
               <MappingFragment StoreEntitySet="FocusList">
+                <ScalarProperty Name="IssuerId" ColumnName="IssuerId" />
                 <ScalarProperty Name="RelativeCurrentPriceDate" ColumnName="RelativeCurrentPriceDate" />
                 <ScalarProperty Name="AdjustmentFactorYTD" ColumnName="AdjustmentFactorYTD" />
                 <ScalarProperty Name="AdjustmentFactorITD" ColumnName="AdjustmentFactorITD" />
@@ -25706,6 +25743,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusList">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.FocusList_Insert">
+                  <ScalarProperty Name="IssuerId" ParameterName="IssuerId" />
                   <ScalarProperty Name="RelativeCurrentPriceDate" ParameterName="RelativeCurrentPriceDate" />
                   <ScalarProperty Name="AdjustmentFactorYTD" ParameterName="AdjustmentFactorYTD" />
                   <ScalarProperty Name="AdjustmentFactorITD" ParameterName="AdjustmentFactorITD" />
@@ -25732,6 +25770,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.FocusList_Update">
+                  <ScalarProperty Name="IssuerId" ParameterName="IssuerId" Version="Current" />
                   <ScalarProperty Name="RelativeCurrentPriceDate" ParameterName="RelativeCurrentPriceDate" Version="Current" />
                   <ScalarProperty Name="AdjustmentFactorYTD" ParameterName="AdjustmentFactorYTD" Version="Current" />
                   <ScalarProperty Name="AdjustmentFactorITD" ParameterName="AdjustmentFactorITD" Version="Current" />
@@ -27225,7 +27264,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="29">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="68">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.5" PointY="13.375" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -31884,11 +31923,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="22.31927583099559" />
+          <edmx:ConnectorPoint PointX="25" PointY="22.31927756040664" />
           <edmx:ConnectorPoint PointX="24.888570256731441" PointY="22.620326822925289" />
           <edmx:ConnectorPoint PointX="24.888570256731441" PointY="23.686307972139467" />
           <edmx:ConnectorPoint PointX="25.118872682605129" PointY="24.050651060037527" />
-          <edmx:ConnectorPoint PointX="24.864583333333332" PointY="24.050651060037527" />
+          <edmx:ConnectorPoint PointX="24.895833333333332" PointY="24.050651060037527" />
           <edmx:ConnectorPoint PointX="24.604166666666668" PointY="24.050651060037527" />
           <edmx:ConnectorPoint PointX="24.568898225238026" PointY="24.050651060037527" />
           <edmx:ConnectorPoint PointX="24.442611121123736" PointY="26.105799436694522" />
@@ -31899,7 +31938,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="24.520833333333332" PointY="27.424384589860061" />
           <edmx:ConnectorPoint PointX="24.354166666666668" PointY="27.424384589860061" />
           <edmx:ConnectorPoint PointX="24.232085968842" PointY="27.424384589860061" />
-          <edmx:ConnectorPoint PointX="21.733459300100655" PointY="37.096791174974072" />
+          <edmx:ConnectorPoint PointX="21.896653284883559" PointY="36.103648425678166" />
+          <edmx:ConnectorPoint PointX="21.853346715116441" PointY="36.264590399049887" />
+          <edmx:ConnectorPoint PointX="21.733459300100655" PointY="36.710132894307151" />
           <edmx:ConnectorPoint PointX="21.733459300100655" PointY="38.590625072015833" />
           <edmx:ConnectorPoint PointX="21.607502682441805" PointY="38.78113580936963" />
           <edmx:ConnectorPoint PointX="21.607502682441805" PointY="39.68114876051488" />
@@ -31907,9 +31948,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="21.357049660204446" PointY="40.816566628736737" />
           <edmx:ConnectorPoint PointX="21.232049660204446" PointY="41.220494517228346" />
           <edmx:ConnectorPoint PointX="21.232049660204446" PointY="41.383248684556477" />
-          <edmx:ConnectorPoint PointX="19.505573057005034" PointY="47.947075624153278" />
-          <edmx:ConnectorPoint PointX="19.431926942994966" PointY="48.227068035426086" />
-          <edmx:ConnectorPoint PointX="19.403924660204446" PointY="48.333528868900473" />
+          <edmx:ConnectorPoint PointX="19.506685355132902" PointY="47.5925509732236" />
+          <edmx:ConnectorPoint PointX="19.430814644867095" PointY="47.8655971777333" />
+          <edmx:ConnectorPoint PointX="19.403924660204446" PointY="47.962369808775463" />
           <edmx:ConnectorPoint PointX="19.403924660204446" PointY="49.670973750920126" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="50.085443466098319" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.023417968750003" />
@@ -32937,7 +32978,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IssuerAnalyticRawIssuerAnalyticIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RawIssuerAnalyticEntityRankingSchemeIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RawIssuerAnalyticIssuerIDFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionFund" Width="1.5" PointX="32.75" PointY="29.625" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionFund" Width="2.125" PointX="32.75" PointY="29.625" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionFundUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionFundAdjustmentFactorFundIdFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Attribution" Width="1.5" PointX="40.875" PointY="13.125" />
@@ -32959,6 +33000,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__ITDOp__3F683870" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__ITDOp__3E741437" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FocusList__Issue__30FBB436" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
