@@ -212,6 +212,54 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> NeedsRebuild { get; set; }
     	[DataMember]
         public Nullable<int> ITDOpeningAttributionFundId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayPerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdjustedPerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDPerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedPerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayManagementFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdjustedManagementFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDManagementFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedManagementFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayUnmatchedInstrumentPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdjustedUnmatchedInstrumentPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDUnmatchedInstrumentPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedUnmatchedInstrumentPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFXPNLGBP { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFXPNLEUR { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFXPNLUSD { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdjustedFXPNLGBP { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdjustedFXPNLEUR { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayFundAdjustedFXPNLUSD { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedFXPNLGBP { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedFXPNLEUR { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFundAdjustedFXPNLUSD { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFXPNLGBP { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFXPNLEUR { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ITDFXPNLUSD { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
