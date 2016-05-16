@@ -86,5 +86,9 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> BifurcatedCurrencyGainLoss { get; set; }
     	[DataMember]
         public Nullable<decimal> FXRateToBase { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalOfficialManagementFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalOfficialManagementFeeFundCurrency { get; set; }
     }
 }
