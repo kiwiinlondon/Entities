@@ -18,17 +18,18 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
+            
             using (var context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-               // context.FundPortfolioChanges.Add(new FundPortfolioChange() { FundId = 741, ReferenceDate = DateTime.Today, UpdateUserID = 1, StartDt = DateTime.Today, });
-              //file  context.SaveChanges();
-                var ab = context.Charges.FirstOrDefault(a => a.ChargeId == 1);
-                ab.ChargeTypeId = 9;
-               // EntityPropertyOverrideUtilities.ApplyOverrides(ab, context);
-                EntityPropertyOverrideUtilities.CreateOrUpdateOverrides(context, new EntityPropertyIds[] {EntityPropertyIds.LegalEntity_Name,EntityPropertyIds.LegalEntity_LongName}  );
-               // var d = context.GetOriginalValues()[ab]["Name"];
+                context.FactsetPortfolios.Add(new FactsetPortfolio()
+                {
+                    FundId = 7504,
+                    CurrencyId = (int)CurrencyIds.GBP,
+                    ReferenceDate = DateTime.Today,
+                    StartDt = DateTime.UtcNow,
+                    UpdateUserId = context.ApplicationUserId.Value
+                });
                 context.SaveChanges();
-              //  d = d;
             }
         }
 
@@ -96,24 +97,19 @@ namespace Odey.Framework.KeeleyEntitiesTest
             Instrument i = null;
             using (var context = new KeeleyModel(null))
             {
-                i = context.Instruments.Include("UnderlyingRelationship.Underlyer.InstrumentMarkets").Include("InstrumentMarkets").Include("Bond").Include("InstrumentClass.ParentInstrumentClassRelationships")
-                    .Where(a => a.InstrumentID == 29351).FirstOrDefault();
-                
+                i = context.Instruments.Include("UnderlyingRelationship.Underlyer.InstrumentMarkets").Include("InstrumentMarkets").Include("Bond").Include("InstrumentClass.ParentInstrumentClassRelationships").Where(a => a.InstrumentID == 29351).FirstOrDefault();                
             }
 
             InstrumentClient instrumentClient = new InstrumentClient();
-
             Instrument instrument = instrumentClient.GetForIdentifierSettingUpIfNotPresent(IdentifierTypeIds.BBGlobalId, "BBG000BD84L8", false, 4);
 
             using (var context = new KeeleyModel(null))
             {
-                InstrumentMarket im = new InstrumentMarket();
-              
+                InstrumentMarket im = new InstrumentMarket();              
                 context.InstrumentMarkets.Add(im);
                 im.Instrument = instrument;
                 context.SaveChanges();
             }
-
         }
 
         static void Update()

@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class ApplicationUser
     {
+    	
+        public ApplicationUser()
+        {
+            this.FactsetPortfolios = new List<FactsetPortfolio>();
+        }
+    
     	[DataMember]
         public int UserID { get; set; }
     	[DataMember]
@@ -36,5 +42,8 @@ namespace Odey.Framework.Keeley.Entities
         public string Initials { get; set; }
     	[DataMember]
         public bool IsActive { get; set; }
+    
+        [DataMember]
+        public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
     }
 }

@@ -7,12 +7,6 @@ namespace Odey.Framework.Keeley.Entities
 {
     partial class InstrumentMarket
     {
-
-        public InstrumentMarket()
-        {
-        }
-        
-
         public InstrumentMarket(Instrument instrument)
             : this()
         {
