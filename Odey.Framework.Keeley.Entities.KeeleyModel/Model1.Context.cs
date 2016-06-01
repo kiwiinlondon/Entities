@@ -158,6 +158,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ClientTrail> ClientTrails { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
         public DbSet<FocusListPrice> FocusListPrices { get; set; }
+        public DbSet<FundAnalytic> FundAnalytics { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -500,121 +501,6 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Fund_UpdateClientLoadDate", fundIdParameter, loadDateParameter);
         }
     
-        public virtual int RiskAnalytic_Delete(Nullable<int> riskAnalyticId, byte[] dataVersion, Nullable<int> updateUserID)
-        {
-            var riskAnalyticIdParameter = riskAnalyticId.HasValue ?
-                new ObjectParameter("RiskAnalyticId", riskAnalyticId) :
-                new ObjectParameter("RiskAnalyticId", typeof(int));
-    
-            var dataVersionParameter = dataVersion != null ?
-                new ObjectParameter("DataVersion", dataVersion) :
-                new ObjectParameter("DataVersion", typeof(byte[]));
-    
-            var updateUserIDParameter = updateUserID.HasValue ?
-                new ObjectParameter("UpdateUserID", updateUserID) :
-                new ObjectParameter("UpdateUserID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Delete", riskAnalyticIdParameter, dataVersionParameter, updateUserIDParameter);
-        }
-    
-        public virtual int RiskAnalytic_Insert(Nullable<int> instrumentMarketId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> currencyId, Nullable<decimal> value1Day, Nullable<decimal> value20Day, Nullable<decimal> value1DayMixedModel, Nullable<int> updateUserID, Nullable<decimal> value20DaysMixedModel, Nullable<bool> isRollValue)
-        {
-            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
-                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
-                new ObjectParameter("InstrumentMarketId", typeof(int));
-    
-            var riskAnalyticTypeIdParameter = riskAnalyticTypeId.HasValue ?
-                new ObjectParameter("RiskAnalyticTypeId", riskAnalyticTypeId) :
-                new ObjectParameter("RiskAnalyticTypeId", typeof(int));
-    
-            var referenceDateParameter = referenceDate.HasValue ?
-                new ObjectParameter("ReferenceDate", referenceDate) :
-                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
-    
-            var currencyIdParameter = currencyId.HasValue ?
-                new ObjectParameter("CurrencyId", currencyId) :
-                new ObjectParameter("CurrencyId", typeof(int));
-    
-            var value1DayParameter = value1Day.HasValue ?
-                new ObjectParameter("Value1Day", value1Day) :
-                new ObjectParameter("Value1Day", typeof(decimal));
-    
-            var value20DayParameter = value20Day.HasValue ?
-                new ObjectParameter("Value20Day", value20Day) :
-                new ObjectParameter("Value20Day", typeof(decimal));
-    
-            var value1DayMixedModelParameter = value1DayMixedModel.HasValue ?
-                new ObjectParameter("Value1DayMixedModel", value1DayMixedModel) :
-                new ObjectParameter("Value1DayMixedModel", typeof(decimal));
-    
-            var updateUserIDParameter = updateUserID.HasValue ?
-                new ObjectParameter("UpdateUserID", updateUserID) :
-                new ObjectParameter("UpdateUserID", typeof(int));
-    
-            var value20DaysMixedModelParameter = value20DaysMixedModel.HasValue ?
-                new ObjectParameter("Value20DaysMixedModel", value20DaysMixedModel) :
-                new ObjectParameter("Value20DaysMixedModel", typeof(decimal));
-    
-            var isRollValueParameter = isRollValue.HasValue ?
-                new ObjectParameter("IsRollValue", isRollValue) :
-                new ObjectParameter("IsRollValue", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Insert", instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter, value20DaysMixedModelParameter, isRollValueParameter);
-        }
-    
-        public virtual int RiskAnalytic_Update(Nullable<int> riskAnalyticId, Nullable<int> instrumentMarketId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> currencyId, Nullable<decimal> value1Day, Nullable<decimal> value20Day, Nullable<decimal> value1DayMixedModel, Nullable<int> updateUserID, byte[] dataVersion, Nullable<decimal> value20DaysMixedModel, Nullable<bool> isRollValue)
-        {
-            var riskAnalyticIdParameter = riskAnalyticId.HasValue ?
-                new ObjectParameter("RiskAnalyticId", riskAnalyticId) :
-                new ObjectParameter("RiskAnalyticId", typeof(int));
-    
-            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
-                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
-                new ObjectParameter("InstrumentMarketId", typeof(int));
-    
-            var riskAnalyticTypeIdParameter = riskAnalyticTypeId.HasValue ?
-                new ObjectParameter("RiskAnalyticTypeId", riskAnalyticTypeId) :
-                new ObjectParameter("RiskAnalyticTypeId", typeof(int));
-    
-            var referenceDateParameter = referenceDate.HasValue ?
-                new ObjectParameter("ReferenceDate", referenceDate) :
-                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
-    
-            var currencyIdParameter = currencyId.HasValue ?
-                new ObjectParameter("CurrencyId", currencyId) :
-                new ObjectParameter("CurrencyId", typeof(int));
-    
-            var value1DayParameter = value1Day.HasValue ?
-                new ObjectParameter("Value1Day", value1Day) :
-                new ObjectParameter("Value1Day", typeof(decimal));
-    
-            var value20DayParameter = value20Day.HasValue ?
-                new ObjectParameter("Value20Day", value20Day) :
-                new ObjectParameter("Value20Day", typeof(decimal));
-    
-            var value1DayMixedModelParameter = value1DayMixedModel.HasValue ?
-                new ObjectParameter("Value1DayMixedModel", value1DayMixedModel) :
-                new ObjectParameter("Value1DayMixedModel", typeof(decimal));
-    
-            var updateUserIDParameter = updateUserID.HasValue ?
-                new ObjectParameter("UpdateUserID", updateUserID) :
-                new ObjectParameter("UpdateUserID", typeof(int));
-    
-            var dataVersionParameter = dataVersion != null ?
-                new ObjectParameter("DataVersion", dataVersion) :
-                new ObjectParameter("DataVersion", typeof(byte[]));
-    
-            var value20DaysMixedModelParameter = value20DaysMixedModel.HasValue ?
-                new ObjectParameter("Value20DaysMixedModel", value20DaysMixedModel) :
-                new ObjectParameter("Value20DaysMixedModel", typeof(decimal));
-    
-            var isRollValueParameter = isRollValue.HasValue ?
-                new ObjectParameter("IsRollValue", isRollValue) :
-                new ObjectParameter("IsRollValue", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalytic_Update", riskAnalyticIdParameter, instrumentMarketIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, currencyIdParameter, value1DayParameter, value20DayParameter, value1DayMixedModelParameter, updateUserIDParameter, dataVersionParameter, value20DaysMixedModelParameter, isRollValueParameter);
-        }
-    
         public virtual ObjectResult<Nullable<System.DateTime>> Attribution_Roll(Nullable<int> updateUserId)
         {
             var updateUserIdParameter = updateUserId.HasValue ?
@@ -699,89 +585,6 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("UpdateUserId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("AttributionFund_Roll", updateUserIdParameter);
-        }
-    
-        public virtual int ClientTrail_Delete(Nullable<int> clientTrailId, byte[] dataVersion, Nullable<int> updateUserID)
-        {
-            var clientTrailIdParameter = clientTrailId.HasValue ?
-                new ObjectParameter("ClientTrailId", clientTrailId) :
-                new ObjectParameter("ClientTrailId", typeof(int));
-    
-            var dataVersionParameter = dataVersion != null ?
-                new ObjectParameter("DataVersion", dataVersion) :
-                new ObjectParameter("DataVersion", typeof(byte[]));
-    
-            var updateUserIDParameter = updateUserID.HasValue ?
-                new ObjectParameter("UpdateUserID", updateUserID) :
-                new ObjectParameter("UpdateUserID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrail_Delete", clientTrailIdParameter, dataVersionParameter, updateUserIDParameter);
-        }
-    
-        public virtual int ClientTrail_Insert(Nullable<int> clientAccountId, Nullable<int> fundId, Nullable<decimal> rate, Nullable<decimal> quantity, Nullable<System.DateTime> effectiveStartDate, Nullable<int> updateUserID)
-        {
-            var clientAccountIdParameter = clientAccountId.HasValue ?
-                new ObjectParameter("ClientAccountId", clientAccountId) :
-                new ObjectParameter("ClientAccountId", typeof(int));
-    
-            var fundIdParameter = fundId.HasValue ?
-                new ObjectParameter("FundId", fundId) :
-                new ObjectParameter("FundId", typeof(int));
-    
-            var rateParameter = rate.HasValue ?
-                new ObjectParameter("Rate", rate) :
-                new ObjectParameter("Rate", typeof(decimal));
-    
-            var quantityParameter = quantity.HasValue ?
-                new ObjectParameter("Quantity", quantity) :
-                new ObjectParameter("Quantity", typeof(decimal));
-    
-            var effectiveStartDateParameter = effectiveStartDate.HasValue ?
-                new ObjectParameter("EffectiveStartDate", effectiveStartDate) :
-                new ObjectParameter("EffectiveStartDate", typeof(System.DateTime));
-    
-            var updateUserIDParameter = updateUserID.HasValue ?
-                new ObjectParameter("UpdateUserID", updateUserID) :
-                new ObjectParameter("UpdateUserID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrail_Insert", clientAccountIdParameter, fundIdParameter, rateParameter, quantityParameter, effectiveStartDateParameter, updateUserIDParameter);
-        }
-    
-        public virtual int ClientTrail_Update(Nullable<int> clientTrailId, Nullable<int> clientAccountId, Nullable<int> fundId, Nullable<decimal> rate, Nullable<decimal> quantity, Nullable<System.DateTime> effectiveStartDate, Nullable<int> updateUserID, byte[] dataVersion)
-        {
-            var clientTrailIdParameter = clientTrailId.HasValue ?
-                new ObjectParameter("ClientTrailId", clientTrailId) :
-                new ObjectParameter("ClientTrailId", typeof(int));
-    
-            var clientAccountIdParameter = clientAccountId.HasValue ?
-                new ObjectParameter("ClientAccountId", clientAccountId) :
-                new ObjectParameter("ClientAccountId", typeof(int));
-    
-            var fundIdParameter = fundId.HasValue ?
-                new ObjectParameter("FundId", fundId) :
-                new ObjectParameter("FundId", typeof(int));
-    
-            var rateParameter = rate.HasValue ?
-                new ObjectParameter("Rate", rate) :
-                new ObjectParameter("Rate", typeof(decimal));
-    
-            var quantityParameter = quantity.HasValue ?
-                new ObjectParameter("Quantity", quantity) :
-                new ObjectParameter("Quantity", typeof(decimal));
-    
-            var effectiveStartDateParameter = effectiveStartDate.HasValue ?
-                new ObjectParameter("EffectiveStartDate", effectiveStartDate) :
-                new ObjectParameter("EffectiveStartDate", typeof(System.DateTime));
-    
-            var updateUserIDParameter = updateUserID.HasValue ?
-                new ObjectParameter("UpdateUserID", updateUserID) :
-                new ObjectParameter("UpdateUserID", typeof(int));
-    
-            var dataVersionParameter = dataVersion != null ?
-                new ObjectParameter("DataVersion", dataVersion) :
-                new ObjectParameter("DataVersion", typeof(byte[]));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClientTrail_Update", clientTrailIdParameter, clientAccountIdParameter, fundIdParameter, rateParameter, quantityParameter, effectiveStartDateParameter, updateUserIDParameter, dataVersionParameter);
         }
     }
 }
