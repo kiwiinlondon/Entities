@@ -18,19 +18,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            
-            using (var context = new KeeleyModel(SecurityCallStackContext.Current))
-            {
-                context.FactsetPortfolios.Add(new FactsetPortfolio()
-                {
-                    FundId = 7504,
-                    CurrencyId = (int)CurrencyIds.GBP,
-                    ReferenceDate = DateTime.Today,
-                    StartDt = DateTime.UtcNow,
-                    UpdateUserId = context.ApplicationUserId.Value
-                });
-                context.SaveChanges();
-            }
+
         }
 
         static void TestCache()

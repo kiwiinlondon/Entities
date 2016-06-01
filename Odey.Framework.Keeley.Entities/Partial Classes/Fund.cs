@@ -4,7 +4,12 @@ using Odey.Framework.Keeley.Entities.Enums;
 namespace Odey.Framework.Keeley.Entities
 {
     public partial class Fund
-    {        
+    {
+        public Fund()
+        {
+
+        }
+             
         public Fund(LegalEntity legalEntity)
             : this()
         {
