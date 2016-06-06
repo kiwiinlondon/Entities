@@ -679,6 +679,23 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="EntityAnalytic">
+          <Key>
+            <PropertyRef Name="EntityAnalyticId" />
+          </Key>
+          <Property Name="EntityAnalyticId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EntityAnalyticTypeId" Type="int" Nullable="false" />
+          <Property Name="EntityTypeId" Type="int" Nullable="false" />
+          <Property Name="EntityId" Type="int" Nullable="false" />
+          <Property Name="SubEntityTypeId" Type="int" />
+          <Property Name="SubEntityId" Type="int" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="Value" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="IsLast" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="EntityProperty">
           <Key>
             <PropertyRef Name="EntityPropertyID" />
@@ -3442,6 +3459,42 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="DerivedAssetClass">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EntityAnalyticEntityTypeIdFK">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="1" />
+          <End Role="EntityAnalytic" Type="Self.EntityAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityAnalytic">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EntityAnalyticSubEntityTypeIdFK">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="0..1" />
+          <End Role="EntityAnalytic" Type="Self.EntityAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityAnalytic">
+              <PropertyRef Name="SubEntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EntityAnalyticUserIdFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="EntityAnalytic" Type="Self.EntityAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="EntityAnalytic">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -8051,6 +8104,35 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="EntityAnalytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EntityAnalyticId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EntityAnalytic_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EntityAnalyticTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="int" Mode="In" />
+          <Parameter Name="SubEntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="SubEntityId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Value" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsLast" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="EntityAnalytic_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EntityAnalyticId" Type="int" Mode="In" />
+          <Parameter Name="EntityAnalyticTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="int" Mode="In" />
+          <Parameter Name="SubEntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="SubEntityId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Value" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsLast" Type="bit" Mode="In" />
+        </Function>
         <Function Name="EntityProperty_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EntityPropertyID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -10463,6 +10545,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="Custodian" EntityType="Self.Custodian" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DealingDateDefinition" EntityType="Self.DealingDateDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DerivedAssetClass" EntityType="Self.DerivedAssetClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EntityAnalytic" EntityType="Self.EntityAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EntityProperty" EntityType="Self.EntityProperty" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EntityPropertyOverride" EntityType="Self.EntityPropertyOverride" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EntityRankingScheme" EntityType="Self.EntityRankingScheme" Schema="dbo" store:Type="Tables" />
@@ -10977,6 +11060,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="DerivedAssetClassUserIDFK" Association="Self.DerivedAssetClassUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="DerivedAssetClass" EntitySet="DerivedAssetClass" />
+          </AssociationSet>
+          <AssociationSet Name="EntityAnalyticEntityTypeIdFK" Association="Self.EntityAnalyticEntityTypeIdFK">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="EntityAnalytic" EntitySet="EntityAnalytic" />
+          </AssociationSet>
+          <AssociationSet Name="EntityAnalyticSubEntityTypeIdFK" Association="Self.EntityAnalyticSubEntityTypeIdFK">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="EntityAnalytic" EntitySet="EntityAnalytic" />
+          </AssociationSet>
+          <AssociationSet Name="EntityAnalyticUserIdFK" Association="Self.EntityAnalyticUserIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="EntityAnalytic" EntitySet="EntityAnalytic" />
           </AssociationSet>
           <AssociationSet Name="EntityPropertyEntityTypeIDFK" Association="Self.EntityPropertyEntityTypeIDFK">
             <End Role="EntityType" EntitySet="EntityType" />
@@ -13942,6 +14037,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Issuer" EntitySet="Issuers" />
             <End Role="FocusList" EntitySet="FocusLists" />
           </AssociationSet>
+          <EntitySet Name="EntityAnalytics" EntityType="Odey.Framework.Keeley.Entities.EntityAnalytic" />
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -21109,6 +21205,23 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EntityAnalytic">
+          <Key>
+            <PropertyRef Name="EntityAnalyticId" />
+          </Key>
+          <Property Name="EntityAnalyticId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="EntityAnalyticTypeId" Type="Int32" Nullable="false" />
+          <Property Name="EntityTypeId" Type="Int32" Nullable="false" />
+          <Property Name="EntityId" Type="Int32" Nullable="false" />
+          <Property Name="SubEntityTypeId" Type="Int32" />
+          <Property Name="SubEntityId" Type="Int32" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Value" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="IsLast" Type="Boolean" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -27347,6 +27460,62 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="EntityAnalytics">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EntityAnalytic">
+              <MappingFragment StoreEntitySet="EntityAnalytic">
+                <ScalarProperty Name="IsLast" ColumnName="IsLast" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="SubEntityId" ColumnName="SubEntityId" />
+                <ScalarProperty Name="SubEntityTypeId" ColumnName="SubEntityTypeId" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
+                <ScalarProperty Name="EntityAnalyticTypeId" ColumnName="EntityAnalyticTypeId" />
+                <ScalarProperty Name="EntityAnalyticId" ColumnName="EntityAnalyticId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EntityAnalytic">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.EntityAnalytic_Insert">
+                  <ScalarProperty Name="IsLast" ParameterName="IsLast" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Value" ParameterName="Value" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="SubEntityId" ParameterName="SubEntityId" />
+                  <ScalarProperty Name="SubEntityTypeId" ParameterName="SubEntityTypeId" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" />
+                  <ScalarProperty Name="EntityAnalyticTypeId" ParameterName="EntityAnalyticTypeId" />
+                  <ResultBinding Name="EntityAnalyticId" ColumnName="EntityAnalyticId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.EntityAnalytic_Update">
+                  <ScalarProperty Name="IsLast" ParameterName="IsLast" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Value" ParameterName="Value" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="SubEntityId" ParameterName="SubEntityId" Version="Current" />
+                  <ScalarProperty Name="SubEntityTypeId" ParameterName="SubEntityTypeId" Version="Current" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" Version="Current" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" Version="Current" />
+                  <ScalarProperty Name="EntityAnalyticTypeId" ParameterName="EntityAnalyticTypeId" Version="Current" />
+                  <ScalarProperty Name="EntityAnalyticId" ParameterName="EntityAnalyticId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.EntityAnalytic_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="EntityAnalyticId" ParameterName="EntityAnalyticId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -27362,7 +27531,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
       </edmx:DesignerInfoPropertySet>
@@ -32038,31 +32207,29 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="23.052083333333332" PointY="21.230112997640106" />
           <edmx:ConnectorPoint PointX="22.885416666666668" PointY="21.230112997640106" />
           <edmx:ConnectorPoint PointX="22.708333333333332" PointY="21.230112997640106" />
-          <edmx:ConnectorPoint PointX="22.541666666666668" PointY="21.230112997640106" />
+          <edmx:ConnectorPoint PointX="22.439297197890777" PointY="21.230112997640106" />
           <edmx:ConnectorPoint PointX="21.333333333333332" PointY="21.230112997640106" />
           <edmx:ConnectorPoint PointX="21.166666666666668" PointY="21.230112997640106" />
-          <edmx:ConnectorPoint PointX="20.769871794871793" PointY="21.230112997640106" />
-          <edmx:ConnectorPoint PointX="20.603205128205129" PointY="21.230112997640106" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.230112997640106" />
-          <edmx:ConnectorPoint PointX="20.276041666666668" PointY="21.230112997640106" />
+          <edmx:ConnectorPoint PointX="20.497397083333333" PointY="21.230112997640106" />
+          <edmx:ConnectorPoint PointX="20.276041666666664" PointY="21.230112997640106" />
           <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.230112997640106" />
-          <edmx:ConnectorPoint PointX="19.432291666666668" PointY="21.230112997640106" />
+          <edmx:ConnectorPoint PointX="19.416666666666668" PointY="21.230112997640106" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="21.230112997640106" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.215719401041667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.215719401041667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="18.123717948717946" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.957051282051282" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.858910256410255" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.69224358974359" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.594102564102563" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.4274358974359" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.802083333333334" PointY="25.610087890625" />
-          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.6875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.6875" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="18.1875" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="18.064871794871795" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="17.898205128205131" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="17.697083333333332" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="17.530416666666667" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="15.802083333333334" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="15.604166666666666" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="12.666666666666666" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5625" />
           <edmx:ConnectorPoint PointX="11.5488310625" PointY="25.5625" />
           <edmx:ConnectorPoint PointX="11.5488310625" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
@@ -33097,6 +33264,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__ITDOp__3F683870" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__ITDOp__3E741437" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FocusList__Issue__30FBB436" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.EntityAnalytic" Width="1.5" PointX="14.25" PointY="49.625" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
