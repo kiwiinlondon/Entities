@@ -1,9 +1,10 @@
-﻿
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using TypeLite;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
- [DataContract]
+    [TsEnum]
+    [DataContract]
     public enum IndexTypeIds
     {
         
