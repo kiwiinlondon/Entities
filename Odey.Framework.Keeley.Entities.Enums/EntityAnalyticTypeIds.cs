@@ -5,7 +5,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
 {
     [TsEnum]
     [DataContract]
-    public enum FundAnalyticType
+    public enum EntityAnalyticTypeIds
     {
         [EnumMember]
         Fees = 1,
