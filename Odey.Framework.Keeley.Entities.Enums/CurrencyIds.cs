@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using TypeLite;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
@@ -7,7 +6,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
     /// Mirrors this SQL query:
     /// select * from DenormalisedCurrency
     /// </summary>
-    [TsEnum]
     [DataContract]
     public enum CurrencyIds
     {

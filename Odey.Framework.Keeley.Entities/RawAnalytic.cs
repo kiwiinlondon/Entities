@@ -13,8 +13,6 @@ namespace Odey.Framework.Keeley.Entities
     using System.Collections.Generic;
     
     using System.Runtime.Serialization;
-    using TypeLite;
-    [TsClass]
     [DataContract(IsReference = true)]
     public partial class RawAnalytic
     {
