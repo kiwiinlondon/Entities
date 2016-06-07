@@ -1,10 +1,9 @@
-﻿using System.Runtime.Serialization;
-using TypeLite;
+﻿
+using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
-    [TsEnum]
-    [DataContract]
+ [DataContract]
     public enum AnalyticTypeIds
     {
         [EnumMember]

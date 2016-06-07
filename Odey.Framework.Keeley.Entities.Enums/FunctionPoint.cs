@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.Serialization;
-using TypeLite;
+using System.Text;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
-    [TsEnum]
     [DataContract]
     public enum FunctionPointIds
     {
