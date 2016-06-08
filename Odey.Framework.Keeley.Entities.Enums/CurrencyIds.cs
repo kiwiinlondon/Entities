@@ -19,9 +19,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EUR = 2536,
 
         [EnumMember]
-        Euro = 2536,
-
-        [EnumMember]
         AUD = 2537,
 
         [EnumMember]
