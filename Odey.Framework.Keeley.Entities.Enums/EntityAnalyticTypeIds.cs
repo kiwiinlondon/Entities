@@ -30,6 +30,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         TransactionChargeEquity = 7,
 
+        /// <summary>
+        /// SubEntityId is CurrencyId of the FX currency that the cost is for
+        /// </summary>
         [EnumMember]
         FXCost = 8,
 
@@ -37,8 +40,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DividendIncome = 9,
 
         [EnumMember]
-        DividendExpense = 10
+        DividendExpense = 10,
 
+        /// <summary>
+        /// SubEntityId is CurrencyId of the entered value (usually USD)
+        /// </summary>
+        [EnumMember]
+        PrimeBrokerFee = 11,
     }
 
 }
