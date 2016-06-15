@@ -43,6 +43,18 @@ namespace Odey.Framework.Keeley.Entities.Enums
         /// Cost of Carry Analysis
         /// </summary>
         [EnumMember]
+        FinancingChargeStockLoan = 16,
+
+        /// <summary>
+        /// Cost of Carry Analysis
+        /// </summary>
+        [EnumMember]
+        FinancingChargePreBorrow = 17,
+
+        /// <summary>
+        /// Cost of Carry Analysis
+        /// </summary>
+        [EnumMember]
         TransactionChargeFutures = 6,
 
         /// <summary>
