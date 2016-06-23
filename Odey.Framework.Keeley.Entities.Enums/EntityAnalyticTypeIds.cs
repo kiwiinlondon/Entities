@@ -39,18 +39,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FinancingChargeShortSwap = 5,
 
-        /// <summary>
-        /// Cost of Carry Analysis By Fund
-        /// </summary>
-        [EnumMember]
-        FinancingChargeStockLoan = 16,
-
-        /// <summary>
-        /// Cost of Carry Analysis By Fund
-        /// </summary>
-        [EnumMember]
-        FinancingChargePreBorrow = 17,
-
+        
         /// <summary>
         /// Cost of Carry Analysis By Fund
         /// </summary>
@@ -115,11 +104,23 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MarketVolume = 15,
 
         /// <summary>
+        /// Cost of Carry Analysis By Fund
+        /// </summary>
+        [EnumMember]
+        FinancingChargeStockLoan = 16,
+
+        /// <summary>
+        /// Cost of Carry Analysis By Fund
+        /// </summary>
+        [EnumMember]
+        FinancingChargePreBorrow = 17,
+
+        /// <summary>
         /// Fees to Street Analysis By Counterparty
         /// SubEntityId is CurrencyId of the entered value (usually USD)
         /// </summary>
         [EnumMember]
-        FXTradingCost = 16,
+        BrokerFXTradingCost = 18,
 
     }
 
