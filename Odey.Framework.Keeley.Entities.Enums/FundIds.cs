@@ -420,6 +420,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ARFF_GBP_A_IRL = 7704,
         [EnumMember]
         ARFF_USD_A_IRL = 7743,
+        [EnumMember]
+        ARFF_USD_C_IRL = 7792,
 
 
         [EnumMember]
