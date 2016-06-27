@@ -992,6 +992,28 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="FactsetPortfolio">
+          <Key>
+            <PropertyRef Name="FactSetPortfolioId" />
+          </Key>
+          <Property Name="FactSetPortfolioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="InstrumentName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="OriginalIdentifier" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" />
+          <Property Name="InstrumentClassId" Type="int" />
+          <Property Name="FMContId" Type="int" />
+          <Property Name="ReturnContribution" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="PriceReturnContribution" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CurrencyReturnContribution" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CarryReturnContribution" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IsItd" Type="bit" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserId" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="FailedTrade">
           <Key>
             <PropertyRef Name="EventId" />
@@ -4468,6 +4490,54 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="TradeEvent">
               <PropertyRef Name="TradeEuroFXRateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactsetPortfolio_ApplicationUser">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="UpdateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactsetPortfolio_Fund">
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
+          <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactsetPortfolio_InstrumentClass">
+          <End Role="InstrumentClass" Type="Self.InstrumentClass" Multiplicity="0..1" />
+          <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentClass">
+              <PropertyRef Name="InstrumentClassID" />
+            </Principal>
+            <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="InstrumentClassId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactsetPortfolio_InstrumentMarket">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="0..1" />
+          <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8501,6 +8571,45 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="FilePath" Type="varchar" Mode="In" />
           <Parameter Name="RuntimeParameters" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="FactsetPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactSetPortfolioId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FactsetPortfolio_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentName" Type="varchar" Mode="In" />
+          <Parameter Name="OriginalIdentifier" Type="varchar" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentClassId" Type="int" Mode="In" />
+          <Parameter Name="FMContId" Type="int" Mode="In" />
+          <Parameter Name="ReturnContribution" Type="numeric" Mode="In" />
+          <Parameter Name="PriceReturnContribution" Type="numeric" Mode="In" />
+          <Parameter Name="CurrencyReturnContribution" Type="numeric" Mode="In" />
+          <Parameter Name="CarryReturnContribution" Type="numeric" Mode="In" />
+          <Parameter Name="IsItd" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FactsetPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactSetPortfolioId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentName" Type="varchar" Mode="In" />
+          <Parameter Name="OriginalIdentifier" Type="varchar" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentClassId" Type="int" Mode="In" />
+          <Parameter Name="FMContId" Type="int" Mode="In" />
+          <Parameter Name="ReturnContribution" Type="numeric" Mode="In" />
+          <Parameter Name="PriceReturnContribution" Type="numeric" Mode="In" />
+          <Parameter Name="CurrencyReturnContribution" Type="numeric" Mode="In" />
+          <Parameter Name="CarryReturnContribution" Type="numeric" Mode="In" />
+          <Parameter Name="IsItd" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="FailedTrade_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -10567,6 +10676,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="ExtractOutputType" EntityType="Self.ExtractOutputType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExtractRun" EntityType="Self.ExtractRun" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExtractType" EntityType="Self.ExtractType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactsetPortfolio" EntityType="Self.FactsetPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FailedTrade" EntityType="Self.FailedTrade" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileCollected" EntityType="Self.FileCollected" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileToBeCollected" EntityType="Self.FileToBeCollected" Schema="dbo" store:Type="Tables" />
@@ -11396,6 +11506,22 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__TradeEven__Trade__265B8A40" Association="Self.FK__TradeEven__Trade__265B8A40">
             <End Role="FXRate" EntitySet="FXRate" />
             <End Role="TradeEvent" EntitySet="TradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactsetPortfolio_ApplicationUser" Association="Self.FK_FactsetPortfolio_ApplicationUser">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactsetPortfolio_Fund" Association="Self.FK_FactsetPortfolio_Fund">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactsetPortfolio_InstrumentClass" Association="Self.FK_FactsetPortfolio_InstrumentClass">
+            <End Role="InstrumentClass" EntitySet="InstrumentClass" />
+            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactsetPortfolio_InstrumentMarket" Association="Self.FK_FactsetPortfolio_InstrumentMarket">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
           </AssociationSet>
           <AssociationSet Name="fkinstrumentmarketUltimateUnderlyingInstrumentMarketId" Association="Self.fkinstrumentmarketUltimateUnderlyingInstrumentMarketId">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
@@ -14050,6 +14176,23 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="EntityType" EntitySet="EntityTypes" />
             <End Role="EntityAnalytic" EntitySet="EntityAnalytics" />
           </AssociationSet>
+          <EntitySet Name="FactsetPortfolios" EntityType="Odey.Framework.Keeley.Entities.FactsetPortfolio" />
+          <AssociationSet Name="FK_FactsetPortfolio_ApplicationUser" Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_ApplicationUser">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactsetPortfolio_Fund" Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactsetPortfolio_InstrumentClass" Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass">
+            <End Role="InstrumentClass" EntitySet="InstrumentClasses" />
+            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FactsetPortfolio_InstrumentMarket" Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -14065,6 +14208,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="FactsetPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_ApplicationUser" FromRole="ApplicationUser" ToRole="FactsetPortfolio" />
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -14137,6 +14281,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="ParentInstrumentClassRelationships" Relationship="Odey.Framework.Keeley.Entities.InstrumentClassRelationshipInstrumentClassIDFK" FromRole="InstrumentClass" ToRole="InstrumentClassRelationship" a:GetterAccess="Public" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="FactsetPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass" FromRole="InstrumentClass" ToRole="FactsetPortfolio" />
         </EntityType>
         <EntityType Name="Market">
           <Key>
@@ -16297,6 +16442,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ExposureCurrencyId" Type="Int32" Nullable="false" />
           <Property Name="AdministratorId" Type="String" Unicode="false" FixedLength="false" MaxLength="150" />
           <Property Name="IsReverse" Type="Boolean" />
+          <NavigationProperty Name="FactsetPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket" FromRole="InstrumentMarket" ToRole="FactsetPortfolio" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -18095,6 +18241,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Boolean" Name="IsVoting" Nullable="false" />
           <Property Name="ClientLoadDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsDistributing" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="FactsetPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund" FromRole="Fund" ToRole="FactsetPortfolio" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -21267,6 +21414,80 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="EntityAnalytic">
               <PropertyRef Name="SubEntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FactsetPortfolio">
+          <Key>
+            <PropertyRef Name="FactSetPortfolioId" />
+          </Key>
+          <Property Name="FactSetPortfolioId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="OriginalIdentifier" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InstrumentMarketId" Type="Int32" />
+          <Property Name="InstrumentClassId" Type="Int32" />
+          <Property Name="FMContId" Type="Int32" />
+          <Property Name="ReturnContribution" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="PriceReturnContribution" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CurrencyReturnContribution" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CarryReturnContribution" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="IsItd" Type="Boolean" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserId" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_ApplicationUser" FromRole="FactsetPortfolio" ToRole="ApplicationUser" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund" FromRole="FactsetPortfolio" ToRole="Fund" />
+          <NavigationProperty Name="InstrumentClass" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass" FromRole="FactsetPortfolio" ToRole="InstrumentClass" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket" FromRole="FactsetPortfolio" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="FK_FactsetPortfolio_ApplicationUser">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactsetPortfolio" Role="FactsetPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="UpdateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactsetPortfolio_Fund">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactsetPortfolio" Role="FactsetPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactsetPortfolio_InstrumentClass">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentClass" Role="InstrumentClass" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactsetPortfolio" Role="FactsetPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentClass">
+              <PropertyRef Name="InstrumentClassID" />
+            </Principal>
+            <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="InstrumentClassId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FactsetPortfolio_InstrumentMarket">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactsetPortfolio" Role="FactsetPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -27564,6 +27785,77 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FactsetPortfolios">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactsetPortfolio">
+              <MappingFragment StoreEntitySet="FactsetPortfolio">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="IsItd" ColumnName="IsItd" />
+                <ScalarProperty Name="CarryReturnContribution" ColumnName="CarryReturnContribution" />
+                <ScalarProperty Name="CurrencyReturnContribution" ColumnName="CurrencyReturnContribution" />
+                <ScalarProperty Name="PriceReturnContribution" ColumnName="PriceReturnContribution" />
+                <ScalarProperty Name="ReturnContribution" ColumnName="ReturnContribution" />
+                <ScalarProperty Name="FMContId" ColumnName="FMContId" />
+                <ScalarProperty Name="InstrumentClassId" ColumnName="InstrumentClassId" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="OriginalIdentifier" ColumnName="OriginalIdentifier" />
+                <ScalarProperty Name="InstrumentName" ColumnName="InstrumentName" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="FactSetPortfolioId" ColumnName="FactSetPortfolioId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactsetPortfolio">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FactsetPortfolio_Insert">
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" />
+                  <ScalarProperty Name="IsItd" ParameterName="IsItd" />
+                  <ScalarProperty Name="CarryReturnContribution" ParameterName="CarryReturnContribution" />
+                  <ScalarProperty Name="CurrencyReturnContribution" ParameterName="CurrencyReturnContribution" />
+                  <ScalarProperty Name="PriceReturnContribution" ParameterName="PriceReturnContribution" />
+                  <ScalarProperty Name="ReturnContribution" ParameterName="ReturnContribution" />
+                  <ScalarProperty Name="FMContId" ParameterName="FMContId" />
+                  <ScalarProperty Name="InstrumentClassId" ParameterName="InstrumentClassId" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ScalarProperty Name="OriginalIdentifier" ParameterName="OriginalIdentifier" />
+                  <ScalarProperty Name="InstrumentName" ParameterName="InstrumentName" />
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ResultBinding Name="FactSetPortfolioId" ColumnName="FactSetPortfolioId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FactsetPortfolio_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" Version="Current" />
+                  <ScalarProperty Name="IsItd" ParameterName="IsItd" Version="Current" />
+                  <ScalarProperty Name="CarryReturnContribution" ParameterName="CarryReturnContribution" Version="Current" />
+                  <ScalarProperty Name="CurrencyReturnContribution" ParameterName="CurrencyReturnContribution" Version="Current" />
+                  <ScalarProperty Name="PriceReturnContribution" ParameterName="PriceReturnContribution" Version="Current" />
+                  <ScalarProperty Name="ReturnContribution" ParameterName="ReturnContribution" Version="Current" />
+                  <ScalarProperty Name="FMContId" ParameterName="FMContId" Version="Current" />
+                  <ScalarProperty Name="InstrumentClassId" ParameterName="InstrumentClassId" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="OriginalIdentifier" ParameterName="OriginalIdentifier" Version="Current" />
+                  <ScalarProperty Name="InstrumentName" ParameterName="InstrumentName" Version="Current" />
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="FactSetPortfolioId" ParameterName="FactSetPortfolioId" Version="Current" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FactsetPortfolio_Delete">
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FactSetPortfolioId" ParameterName="FactSetPortfolioId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -32245,45 +32537,37 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="24.760416666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="24.260416666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="23.052083333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="22.885416666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="22.708333333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="22.541666666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="22.103718836401271" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="21.937052169734606" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="21.333333333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="21.166666666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="20.166666666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="19.635416666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="19.630208333333332" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="19.463541666666668" PointY="21.221247934010968" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.221247934010968" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="24.760416666666668" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="24.276041666666668" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="23.052083333333332" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="22.885416666666668" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="22.708333333333332" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="22.541666666666668" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="21.426602064102564" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="21.2599353974359" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="20.276041666666668" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="19.463541666666668" PointY="21.217923535150042" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.217923535150042" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.215719401041667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.215719401041667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.947179487179486" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.780512820512822" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.638237179487177" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.471570512820513" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.708333333333334" PointY="25.562499999999996" />
-          <edmx:ConnectorPoint PointX="15.197916666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.145833333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="14.979166666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="12.666666666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.543460015625001" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.543460015625001" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.8000641025641" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.633397435897436" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="25.610087890625" />
+          <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.666666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.65625" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.54211725390625" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.54211725390625" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -33320,6 +33604,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityAnalyticUserIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityAnalyticEntityTypeIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityAnalyticSubEntityTypeIdFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FactsetPortfolio" Width="1.5" PointX="38.875" PointY="7.375" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_ApplicationUser" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
