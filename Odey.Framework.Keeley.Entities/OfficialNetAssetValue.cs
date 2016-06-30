@@ -90,5 +90,11 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TotalOfficialManagementFee { get; set; }
     	[DataMember]
         public Nullable<decimal> TotalOfficialManagementFeeFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ShareClassSpecificPNL { get; set; }
+    	[DataMember]
+        public Nullable<bool> ToBeLoaded { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ShareClassSpecificPNLFundCurrency { get; set; }
     }
 }
