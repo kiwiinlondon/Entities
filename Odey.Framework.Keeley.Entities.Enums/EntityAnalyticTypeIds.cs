@@ -122,6 +122,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BrokerFXTradingCost = 18,
 
+        /// <summary>
+        /// Fees to Street Analysis By Counterparty
+        /// Payout from CSA pot to broker. Entered Quarterly
+        /// </summary>
+        [EnumMember]
+        BrokerVotedResearch = 19,
+
     }
 
 }
