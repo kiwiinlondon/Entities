@@ -13,26 +13,37 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         [Description("Tom Trowbridge")]
         TomTrowbridge = 109,
+
         [EnumMember]
         [Description("Stefan Wey")]
         StefanWey = 108,
+
         [EnumMember]
         [Description("Peter Wyllie")]
         PeterWyllie = 107,
+
         [EnumMember]
         [Description("Orlando Montagu")]
         OrlandoMontagu = 94,
+
         [EnumMember]
         [Description("Candida Lahaise")]
         CandidaLahaise = 106,
+
         [EnumMember]
         [Description("Andrew Sandler")]
         AndrewSandler = 105,
+
         [EnumMember]
         [Description("Lodewijk Van Moorsel")]
         LodewijkVanMoorsel = 141,
+
         [EnumMember]
         [Description("James Kostoris")]
         JamesKostoris = 135,
+
+        [EnumMember]
+        [Description("Woody Stileman")]
+        WoodyStileman = 161,
     }
 }
