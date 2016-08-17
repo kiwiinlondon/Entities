@@ -100,6 +100,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> UncrystallisedPerformanceFeeChange { get; set; }
     	[DataMember]
         public Nullable<decimal> UncrystallisedPerformanceFeeChangeFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> GrossPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> GrossPNLFundCurrency { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
