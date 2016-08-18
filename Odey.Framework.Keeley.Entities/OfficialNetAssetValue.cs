@@ -104,6 +104,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> GrossPNL { get; set; }
     	[DataMember]
         public Nullable<decimal> GrossPNLFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MasterNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FeederNav { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
