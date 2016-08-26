@@ -20,6 +20,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         FX_COLLECTED = 5,
+
+        [EnumMember]
+        CLIENT_FILES_COLLECTED = 6,
     }
 }
 
