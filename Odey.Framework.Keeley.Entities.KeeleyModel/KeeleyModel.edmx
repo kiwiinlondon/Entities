@@ -72,6 +72,7 @@
           <Property Name="CurrencyId" Type="int" Nullable="false" />
           <Property Name="Cost" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="IsShareClassSpecific" Type="bit" Nullable="false" />
+          <Property Name="IsFeeder" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AnalystIdea">
           <Key>
@@ -1089,7 +1090,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="StrategyFMCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="StrategyFMCode" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="FMTradeBridgeLastProcessed">
           <Key>
@@ -1687,6 +1688,15 @@
           <Property Name="FXRateToBase" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TotalOfficialManagementFee" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TotalOfficialManagementFeeFundCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ShareClassSpecificPNL" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ToBeLoaded" Type="bit" />
+          <Property Name="ShareClassSpecificPNLFundCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="UncrystallisedPerformanceFeeChange" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="UncrystallisedPerformanceFeeChangeFundCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="GrossPNL" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="GrossPNLFundCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="MasterNav" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FeederNav" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="OpenedClosedPosition">
           <Key>
@@ -2185,7 +2195,7 @@
           </Key>
           <Property Name="StrategyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="FMCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="FMCode" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -7135,6 +7145,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
           <Parameter Name="IsShareClassSpecific" Type="bit" Mode="In" />
+          <Parameter Name="IsFeeder" Type="bit" Mode="In" />
         </Function>
         <Function Name="AdministratorPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AdministratorPortfolioID" Type="int" Mode="In" />
@@ -7158,6 +7169,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
           <Parameter Name="Cost" Type="numeric" Mode="In" />
           <Parameter Name="IsShareClassSpecific" Type="bit" Mode="In" />
+          <Parameter Name="IsFeeder" Type="bit" Mode="In" />
         </Function>
         <Function Name="AnalystIdea_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalystIdeaId" Type="int" Mode="In" />
@@ -9631,6 +9643,15 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="FXRateToBase" Type="numeric" Mode="In" />
           <Parameter Name="TotalOfficialManagementFee" Type="numeric" Mode="In" />
           <Parameter Name="TotalOfficialManagementFeeFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="ShareClassSpecificPNL" Type="numeric" Mode="In" />
+          <Parameter Name="ToBeLoaded" Type="bit" Mode="In" />
+          <Parameter Name="ShareClassSpecificPNLFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="UncrystallisedPerformanceFeeChange" Type="numeric" Mode="In" />
+          <Parameter Name="UncrystallisedPerformanceFeeChangeFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="GrossPNL" Type="numeric" Mode="In" />
+          <Parameter Name="GrossPNLFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="MasterNav" Type="numeric" Mode="In" />
+          <Parameter Name="FeederNav" Type="numeric" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9673,6 +9694,15 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="FXRateToBase" Type="numeric" Mode="In" />
           <Parameter Name="TotalOfficialManagementFee" Type="numeric" Mode="In" />
           <Parameter Name="TotalOfficialManagementFeeFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="ShareClassSpecificPNL" Type="numeric" Mode="In" />
+          <Parameter Name="ToBeLoaded" Type="bit" Mode="In" />
+          <Parameter Name="ShareClassSpecificPNLFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="UncrystallisedPerformanceFeeChange" Type="numeric" Mode="In" />
+          <Parameter Name="UncrystallisedPerformanceFeeChangeFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="GrossPNL" Type="numeric" Mode="In" />
+          <Parameter Name="GrossPNLFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="MasterNav" Type="numeric" Mode="In" />
+          <Parameter Name="FeederNav" Type="numeric" Mode="In" />
         </Function>
         <Function Name="OpenedClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -19359,6 +19389,16 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="FXRateToBase" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TotalOfficialManagementFee" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TotalOfficialManagementFeeFundCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ShareClassSpecificPNL" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ToBeLoaded" Type="Boolean" />
+          <Property Name="ShareClassSpecificPNLFundCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.OfficialNetAssetValueFundId" FromRole="OfficialNetAssetValue" ToRole="Fund" />
+          <Property Name="UncrystallisedPerformanceFeeChange" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="UncrystallisedPerformanceFeeChangeFundCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="GrossPNL" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="GrossPNLFundCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="MasterNav" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FeederNav" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19888,7 +19928,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="StrategyFMCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="StrategyFMCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FMPortfolioUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20423,6 +20463,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.FK__Administr__Curre__2D026F33" FromRole="AdministratorPortfolio" ToRole="Currency" />
           <Property Name="Cost" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
           <Property Name="IsShareClassSpecific" Type="Boolean" Nullable="false" />
+          <Property Name="IsFeeder" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="AdministratorPortfolioFundIdFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -21263,7 +21304,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </Key>
           <Property Name="StrategyId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="FMCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="FMCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
@@ -25989,6 +26030,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="FeederNav" ColumnName="FeederNav" />
+                <ScalarProperty Name="MasterNav" ColumnName="MasterNav" />
+                <ScalarProperty Name="GrossPNLFundCurrency" ColumnName="GrossPNLFundCurrency" />
+                <ScalarProperty Name="GrossPNL" ColumnName="GrossPNL" />
+                <ScalarProperty Name="UncrystallisedPerformanceFeeChangeFundCurrency" ColumnName="UncrystallisedPerformanceFeeChangeFundCurrency" />
+                <ScalarProperty Name="UncrystallisedPerformanceFeeChange" ColumnName="UncrystallisedPerformanceFeeChange" />
+                <ScalarProperty Name="ShareClassSpecificPNLFundCurrency" ColumnName="ShareClassSpecificPNLFundCurrency" />
+                <ScalarProperty Name="ToBeLoaded" ColumnName="ToBeLoaded" />
+                <ScalarProperty Name="ShareClassSpecificPNL" ColumnName="ShareClassSpecificPNL" />
                 <ScalarProperty Name="TotalOfficialManagementFeeFundCurrency" ColumnName="TotalOfficialManagementFeeFundCurrency" />
                 <ScalarProperty Name="TotalOfficialManagementFee" ColumnName="TotalOfficialManagementFee" />
                 <ScalarProperty Name="FXRateToBase" ColumnName="FXRateToBase" />
@@ -26031,6 +26081,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="FeederNav" ParameterName="FeederNav" />
+                  <ScalarProperty Name="MasterNav" ParameterName="MasterNav" />
+                  <ScalarProperty Name="GrossPNLFundCurrency" ParameterName="GrossPNLFundCurrency" />
+                  <ScalarProperty Name="GrossPNL" ParameterName="GrossPNL" />
+                  <ScalarProperty Name="UncrystallisedPerformanceFeeChangeFundCurrency" ParameterName="UncrystallisedPerformanceFeeChangeFundCurrency" />
+                  <ScalarProperty Name="UncrystallisedPerformanceFeeChange" ParameterName="UncrystallisedPerformanceFeeChange" />
+                  <ScalarProperty Name="ShareClassSpecificPNLFundCurrency" ParameterName="ShareClassSpecificPNLFundCurrency" />
+                  <ScalarProperty Name="ToBeLoaded" ParameterName="ToBeLoaded" />
+                  <ScalarProperty Name="ShareClassSpecificPNL" ParameterName="ShareClassSpecificPNL" />
                   <ScalarProperty Name="TotalOfficialManagementFeeFundCurrency" ParameterName="TotalOfficialManagementFeeFundCurrency" />
                   <ScalarProperty Name="TotalOfficialManagementFee" ParameterName="TotalOfficialManagementFee" />
                   <ScalarProperty Name="FXRateToBase" ParameterName="FXRateToBase" />
@@ -26075,6 +26134,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="FeederNav" ParameterName="FeederNav" Version="Current" />
+                  <ScalarProperty Name="MasterNav" ParameterName="MasterNav" Version="Current" />
+                  <ScalarProperty Name="GrossPNLFundCurrency" ParameterName="GrossPNLFundCurrency" Version="Current" />
+                  <ScalarProperty Name="GrossPNL" ParameterName="GrossPNL" Version="Current" />
+                  <ScalarProperty Name="UncrystallisedPerformanceFeeChangeFundCurrency" ParameterName="UncrystallisedPerformanceFeeChangeFundCurrency" Version="Current" />
+                  <ScalarProperty Name="UncrystallisedPerformanceFeeChange" ParameterName="UncrystallisedPerformanceFeeChange" Version="Current" />
+                  <ScalarProperty Name="ShareClassSpecificPNLFundCurrency" ParameterName="ShareClassSpecificPNLFundCurrency" Version="Current" />
+                  <ScalarProperty Name="ToBeLoaded" ParameterName="ToBeLoaded" Version="Current" />
+                  <ScalarProperty Name="ShareClassSpecificPNL" ParameterName="ShareClassSpecificPNL" Version="Current" />
                   <ScalarProperty Name="TotalOfficialManagementFeeFundCurrency" ParameterName="TotalOfficialManagementFeeFundCurrency" Version="Current" />
                   <ScalarProperty Name="TotalOfficialManagementFee" ParameterName="TotalOfficialManagementFee" Version="Current" />
                   <ScalarProperty Name="FXRateToBase" ParameterName="FXRateToBase" Version="Current" />
@@ -26741,6 +26809,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AdministratorPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdministratorPortfolio">
               <MappingFragment StoreEntitySet="AdministratorPortfolio">
+                <ScalarProperty Name="IsFeeder" ColumnName="IsFeeder" />
                 <ScalarProperty Name="IsShareClassSpecific" ColumnName="IsShareClassSpecific" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
                 <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
@@ -26768,6 +26837,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdministratorPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AdministratorPortfolio_Insert">
+                  <ScalarProperty Name="IsFeeder" ParameterName="IsFeeder" />
                   <ScalarProperty Name="IsShareClassSpecific" ParameterName="IsShareClassSpecific" />
                   <ScalarProperty Name="Cost" ParameterName="Cost" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
@@ -26792,6 +26862,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AdministratorPortfolio_Update">
+                  <ScalarProperty Name="IsFeeder" ParameterName="IsFeeder" Version="Current" />
                   <ScalarProperty Name="IsShareClassSpecific" ParameterName="IsShareClassSpecific" Version="Current" />
                   <ScalarProperty Name="Cost" ParameterName="Cost" Version="Current" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
@@ -27871,14 +27942,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="66">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="56">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -32537,37 +32608,43 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="24.760416666666668" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="24.276041666666668" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="23.052083333333332" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="22.885416666666668" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="22.708333333333332" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="22.541666666666668" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="21.426602064102564" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="21.2599353974359" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="20.276041666666668" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="19.463541666666668" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.217923535150042" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="23.215719401041667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="23.215719401041667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.8000641025641" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.633397435897436" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="25.610087890625" />
-          <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.666666666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.65625" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.54211725390625" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.54211725390625" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="24.760416666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="24.260416666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="23.052083333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="22.885416666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="22.708333333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="22.541666666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="21.333333333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="21.166666666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="20.769871794871793" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="20.603205128205129" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="20.276041666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="20.052083333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="19.885416666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="19.432291666666668" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.216676885577193" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="23.408020833333339" />
+          <edmx:ConnectorPoint PointX="18.1875" PointY="23.408020833333339" />
+          <edmx:ConnectorPoint PointX="18.1875" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="17.947179487179486" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="17.780512820512822" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="17.638237179487177" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="17.471570512820513" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="15.802083333333334" PointY="25.562499999999996" />
+          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.562499999999996" />
+          <edmx:ConnectorPoint PointX="12.635416666666666" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.541781563476564" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.541781563476564" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />

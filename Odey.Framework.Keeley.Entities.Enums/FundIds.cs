@@ -300,6 +300,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SWAN_AUD_I = 6568,
         [EnumMember]
         SWAN_NOK_I = 7510,
+        [EnumMember]
+        SWAN_USD_M = 7803,
 
 
         [EnumMember]
@@ -409,19 +411,24 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DEFF = 7505,
 
         [EnumMember]
-        ARFF = 7504,
+        ARFF = 7504,//Const Currency
         [EnumMember]
-        ARFF_USD_IRL = 7625,
-        [EnumMember]
-        ARFF_EUR_IRL = 7620,
+        
+        
+        ARFF_EUR_I_IRL = 7620,
         [EnumMember]
         ARFF_GBP_M_IRL = 7555,
         [EnumMember]
         ARFF_GBP_A_IRL = 7704,
         [EnumMember]
+        ARFF_GBP_I_IRL = 7553,
+        [EnumMember]
+        ARFF_USD_I_IRL = 7625,
+        [EnumMember]
         ARFF_USD_A_IRL = 7743,
         [EnumMember]
         ARFF_USD_C_IRL = 7792,
+        
 
 
         [EnumMember]
