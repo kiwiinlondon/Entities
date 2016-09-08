@@ -95,6 +95,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         QuintillionPositionFilePortfolioLoadOnly=42,
         [EnumMember]
-        ClientTrail=43
+        ClientTrail=43,
+        [EnumMember]
+        MarketDataControlFile=44
     }
 }
