@@ -69,14 +69,28 @@ namespace Odey.Framework.Keeley.Entities
 
         #region Constructor
         public KeeleyModel(SecurityCallStack securityCallStack)
-            : this(securityCallStack,null)
+            : this(securityCallStack,null,true)
         {
             
         }
 
+        public KeeleyModel(SecurityCallStack securityCallStack,bool populateChangedEntities)
+            : this(securityCallStack, null, populateChangedEntities)
+        {
+
+        }
+
         public KeeleyModel(SecurityCallStack securityCallStack, string applicationName)
+            : this(securityCallStack, applicationName, true)
+        {
+
+        }
+
+        private bool PopulateChangedEntities = true;
+        public KeeleyModel(SecurityCallStack securityCallStack, string applicationName, bool populateChangedEntities)
             : this()
         {
+            PopulateChangedEntities = populateChangedEntities;
             if (applicationName == null)
             {
                 applicationName = ConfigurationManager.AppSettings["ApplicationName"];
@@ -88,6 +102,7 @@ namespace Odey.Framework.Keeley.Entities
                 this.Database.Connection.ConnectionString = builder.ConnectionString;
             }
             _securityCallStack = securityCallStack;
+
             ((IObjectContextAdapter)this).ObjectContext
                 .ObjectMaterialized += (sender, args) =>
                 {
@@ -236,8 +251,11 @@ namespace Odey.Framework.Keeley.Entities
             Dictionary<DbEntityEntry, ChangedEntity>  changedEntitiesByEntry = new Dictionary<DbEntityEntry, ChangedEntity>();
 
             foreach (DbEntityEntry entry in this.ChangeTracker.Entries().Where(p => p.State == System.Data.EntityState.Added || p.State == System.Data.EntityState.Deleted || p.State == System.Data.EntityState.Modified))
-            {                
-                AddToChangedEntities(entry, changedEntitiesByEntry);
+            {
+                if (PopulateChangedEntities)
+                {
+                    AddToChangedEntities(entry, changedEntitiesByEntry);
+                }
                 SetUpdateuserId(entry);
             }
             return changedEntitiesByEntry;

@@ -265,11 +265,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Portfolio Portfolio { get; set; }
         [DataMember]
         public virtual Position Position { get; set; }
-        [DataMember]
-        public virtual AttributionFund AttributionFund { get; set; }
-        [DataMember]
-        public virtual Attribution PreviousAttribution { get; set; }
-        [DataMember]
-        public virtual AttributionFund ITDOpeningAttributionFund { get; set; }
     }
 }
