@@ -11,5 +11,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
     {
         [EnumMember]
         Client=1,
+        [EnumMember]
+        Simple=3
     }
 }

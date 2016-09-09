@@ -97,6 +97,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ClientTrail=43,
         [EnumMember]
-        CSAVotedResearchPayments = 44,
+        MarketDataControlFile=44
     }
 }
