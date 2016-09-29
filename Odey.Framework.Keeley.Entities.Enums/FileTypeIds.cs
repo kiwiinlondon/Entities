@@ -98,8 +98,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ClientTrail=43,
         [EnumMember]
         MarketDataControlFile=44,
-
         [EnumMember]
         CSAVotedResearchPayments = 45,
+        [EnumMember]
+        BloombergCfdReconciliation = 46,
     }
 }
