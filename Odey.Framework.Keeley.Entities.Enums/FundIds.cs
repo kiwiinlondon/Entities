@@ -437,5 +437,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         RAFO_GBP_M = 7594,
         [EnumMember]
         RAFO_GBP_I = 7644,
+
+        [EnumMember]
+        BVFF = 7894,
     }
 }
