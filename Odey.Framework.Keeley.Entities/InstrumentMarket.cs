@@ -20,6 +20,7 @@ namespace Odey.Framework.Keeley.Entities
         public InstrumentMarket()
         {
             this.FactsetPortfolios = new List<FactsetPortfolio>();
+            this.BloombergIdentifiers = new List<BloombergIdentifier>();
         }
     
     	[DataMember]
@@ -81,5 +82,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket UltimateUnderlyingInstrumentMarket { get; set; }
         [DataMember]
         public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
+        [DataMember]
+        public virtual List<BloombergIdentifier> BloombergIdentifiers { get; set; }
     }
 }

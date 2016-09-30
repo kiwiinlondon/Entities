@@ -11,7 +11,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EuropeanFundAdministration=2,
         EndOfPreviousMonth=3,
         PreviousWorkingDay=4,
-        TMinus2WorkingDays = 5,
-        NoResolution = 6,
+        TMinus2WorkingDays=5,
+        NoResolution=6,
+        BloombergExtractResponse=7
     }
 }

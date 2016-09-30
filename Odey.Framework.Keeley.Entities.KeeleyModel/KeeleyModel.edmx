@@ -290,6 +290,18 @@
           <Property Name="UpdateDate" Type="datetime" Nullable="false" />
           <Property Name="UpdatedOnReferenceDay" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="BloombergIdentifier">
+          <Key>
+            <PropertyRef Name="BloombergIdentifierId" />
+          </Key>
+          <Property Name="BloombergIdentifierId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="Id509" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="Bond">
           <Key>
             <PropertyRef Name="InstrumentId" />
@@ -836,6 +848,7 @@
           <Property Name="ChangeInterestRateExposure" Type="numeric" Precision="27" Scale="8" />
           <Property Name="BetaLongTerm" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="BetaShortTerm" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="HedgeRatio" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Extract">
           <Key>
@@ -4224,6 +4237,42 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="AttributionFund1">
               <PropertyRef Name="ITDOpeningAttributionFundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bloomberg__Curre__16BEEB52">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="BloombergIdentifier" Type="Self.BloombergIdentifier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="BloombergIdentifier">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bloomberg__Instr__15CAC719">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="BloombergIdentifier" Type="Self.BloombergIdentifier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="BloombergIdentifier">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bloomberg__Updat__17B30F8B">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="BloombergIdentifier" Type="Self.BloombergIdentifier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="BloombergIdentifier">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8406,6 +8455,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ChangeInterestRateExposure" Type="numeric" Mode="In" />
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
+          <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Exposure_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8437,6 +8487,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ChangeInterestRateExposure" Type="numeric" Mode="In" />
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
+          <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Extract_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractID" Type="int" Mode="In" />
@@ -10661,6 +10712,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="Attribution" EntityType="Self.Attribution" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttributionFund" EntityType="Self.AttributionFund" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Beta" EntityType="Self.Beta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BloombergIdentifier" EntityType="Self.BloombergIdentifier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bond" EntityType="Self.Bond" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BuySellReason" EntityType="Self.BuySellReason" Schema="dbo" store:Type="Tables" />
@@ -11446,6 +11498,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Attributi__ITDOp__7B697493" Association="Self.FK__Attributi__ITDOp__7B697493">
             <End Role="AttributionFund" EntitySet="AttributionFund" />
             <End Role="AttributionFund1" EntitySet="AttributionFund" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bloomberg__Curre__16BEEB52" Association="Self.FK__Bloomberg__Curre__16BEEB52">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="BloombergIdentifier" EntitySet="BloombergIdentifier" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bloomberg__Instr__15CAC719" Association="Self.FK__Bloomberg__Instr__15CAC719">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="BloombergIdentifier" EntitySet="BloombergIdentifier" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bloomberg__Updat__17B30F8B" Association="Self.FK__Bloomberg__Updat__17B30F8B">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="BloombergIdentifier" EntitySet="BloombergIdentifier" />
           </AssociationSet>
           <AssociationSet Name="FK__Book__ManagerId__43CBF196" Association="Self.FK__Book__ManagerId__43CBF196">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -14225,6 +14289,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
           </AssociationSet>
+          <EntitySet Name="BloombergIdentifiers" EntityType="Odey.Framework.Keeley.Entities.BloombergIdentifier" />
+          <AssociationSet Name="FK__Bloomberg__Updat__17B30F8B" Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="BloombergIdentifier" EntitySet="BloombergIdentifiers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bloomberg__Curre__16BEEB52" Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="BloombergIdentifier" EntitySet="BloombergIdentifiers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bloomberg__Instr__15CAC719" Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="BloombergIdentifier" EntitySet="BloombergIdentifiers" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -14241,6 +14318,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="FactsetPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_ApplicationUser" FromRole="ApplicationUser" ToRole="FactsetPortfolio" />
+          <NavigationProperty Name="BloombergIdentifiers" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B" FromRole="ApplicationUser" ToRole="BloombergIdentifier" />
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -14769,6 +14847,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Instrument" a:GetterAccess="Private" a:SetterAccess="Private" Relationship="Odey.Framework.Keeley.Entities.CurrencyInstrumentIDFK" FromRole="Currency" ToRole="Instrument" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Type="Int32" Name="Ordering" />
+          <NavigationProperty Name="BloombergIdentifiers" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" FromRole="Currency" ToRole="BloombergIdentifier" />
           </EntityType>
         <Association Name="CurrencyUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -16475,6 +16554,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="AdministratorId" Type="String" Unicode="false" FixedLength="false" MaxLength="150" />
           <Property Name="IsReverse" Type="Boolean" />
           <NavigationProperty Name="FactsetPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket" FromRole="InstrumentMarket" ToRole="FactsetPortfolio" />
+          <NavigationProperty Name="BloombergIdentifiers" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719" FromRole="InstrumentMarket" ToRole="BloombergIdentifier" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -18476,6 +18556,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Decimal" Name="ChangeInterestRateExposure" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="BetaLongTerm" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="BetaShortTerm" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="HedgeRatio" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <EntityType Name="IndexConstituent">
           <Key>
@@ -21527,6 +21608,57 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               <PropertyRef Name="InstrumentMarketID" />
             </Principal>
             <Dependent Role="FactsetPortfolio">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="BloombergIdentifier">
+          <Key>
+            <PropertyRef Name="BloombergIdentifierId" />
+          </Key>
+          <Property Name="BloombergIdentifierId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="InstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="Id509" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B" FromRole="BloombergIdentifier" ToRole="ApplicationUser" />
+          <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" FromRole="BloombergIdentifier" ToRole="Currency" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719" FromRole="BloombergIdentifier" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="FK__Bloomberg__Updat__17B30F8B">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.BloombergIdentifier" Role="BloombergIdentifier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="BloombergIdentifier">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bloomberg__Curre__16BEEB52">
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.BloombergIdentifier" Role="BloombergIdentifier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="BloombergIdentifier">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bloomberg__Instr__15CAC719">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.BloombergIdentifier" Role="BloombergIdentifier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="BloombergIdentifier">
               <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
@@ -25228,6 +25360,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Exposures">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <MappingFragment StoreEntitySet="Exposure">
+                <ScalarProperty Name="HedgeRatio" ColumnName="HedgeRatio" />
                 <ScalarProperty Name="BetaShortTerm" ColumnName="BetaShortTerm" />
                 <ScalarProperty Name="BetaLongTerm" ColumnName="BetaLongTerm" />
                 <ScalarProperty Name="ChangeInterestRateExposure" ColumnName="ChangeInterestRateExposure" />
@@ -25260,6 +25393,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Exposure_Insert">
+                  <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" />
                   <ScalarProperty Name="BetaShortTerm" ParameterName="BetaShortTerm" />
                   <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" />
                   <ScalarProperty Name="ChangeInterestRateExposure" ParameterName="ChangeInterestRateExposure" />
@@ -25289,6 +25423,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Exposure_Update">
+                  <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" Version="Current" />
                   <ScalarProperty Name="BetaShortTerm" ParameterName="BetaShortTerm" Version="Current" />
                   <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" Version="Current" />
                   <ScalarProperty Name="ChangeInterestRateExposure" ParameterName="ChangeInterestRateExposure" Version="Current" />
@@ -27928,6 +28063,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BloombergIdentifiers">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BloombergIdentifier">
+              <MappingFragment StoreEntitySet="BloombergIdentifier">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Id509" ColumnName="Id509" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="BloombergIdentifierId" ColumnName="BloombergIdentifierId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -27943,7 +28091,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
       </edmx:DesignerInfoPropertySet>
@@ -32609,43 +32757,39 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="24.760416666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="24.260416666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="23.052083333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="22.885416666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="22.708333333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="22.541666666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="21.333333333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="21.166666666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="20.769871794871793" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="20.603205128205129" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="20.276041666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="20.052083333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="19.635416666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="19.598958333333332" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="19.432291666666668" PointY="21.216209391987377" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.216209391987377" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="24.760416666666668" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="24.260416666666668" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="23.052083333333332" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="22.885416666666668" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="22.708333333333332" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="22.541666666666668" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="21.333333333333332" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="21.166666666666668" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="20.260416666666668" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="19.463541666666668" PointY="21.216034081891195" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.216034081891195" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.408020833333339" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.408020833333339" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.947179487179486" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.780512820512822" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.638237179487177" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.471570512820513" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="25.562499999999996" />
-          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.562499999999996" />
-          <edmx:ConnectorPoint PointX="12.635416666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.541697640869142" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.541697640869142" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="18.064871794871795" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.898205128205131" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.697083333333332" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.530416666666667" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="25.610087890625" />
+          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.697916666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.6875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.6875" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.541676660217288" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.541676660217288" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -33687,6 +33831,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BloombergIdentifier" Width="1.5" PointX="27" PointY="32" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -6,11 +6,7 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities
 {
     partial class Currency
-    {
-        public Currency()
-        {
-        }
-
+    {        
         public Currency(Instrument instrument)
             : this()
         {

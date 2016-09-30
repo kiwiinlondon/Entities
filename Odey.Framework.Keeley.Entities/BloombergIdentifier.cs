@@ -14,39 +14,28 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class ApplicationUser
+    public partial class BloombergIdentifier
     {
-    	
-        public ApplicationUser()
-        {
-            this.FactsetPortfolios = new List<FactsetPortfolio>();
-            this.BloombergIdentifiers = new List<BloombergIdentifier>();
-        }
-    
     	[DataMember]
-        public int UserID { get; set; }
+        public int BloombergIdentifierId { get; set; }
     	[DataMember]
-        public Nullable<int> FMPersID { get; set; }
+        public int InstrumentMarketId { get; set; }
     	[DataMember]
-        public string Name { get; set; }
+        public int CurrencyId { get; set; }
     	[DataMember]
-        public string Email { get; set; }
-    	[DataMember]
-        public string WindowsLogin { get; set; }
+        public string Id509 { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public string Initials { get; set; }
-    	[DataMember]
-        public bool IsActive { get; set; }
     
         [DataMember]
-        public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
         [DataMember]
-        public virtual List<BloombergIdentifier> BloombergIdentifiers { get; set; }
+        public virtual Currency Currency { get; set; }
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }

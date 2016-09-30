@@ -70,6 +70,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal BetaLongTerm { get; set; }
     	[DataMember]
         public decimal BetaShortTerm { get; set; }
+    	[DataMember]
+        public Nullable<decimal> HedgeRatio { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
