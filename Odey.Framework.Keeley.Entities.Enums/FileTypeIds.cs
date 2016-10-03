@@ -101,6 +101,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CSAVotedResearchPayments = 45,
         [EnumMember]
-        BloombergCfdReconciliation = 46,
+        BloombergCfdError = 46,
+        [EnumMember]
+        BloombergPositionError = 47,
+        [EnumMember]
+        BloombergPositionReconciliation = 48,
     }
 }
