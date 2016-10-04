@@ -74,11 +74,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         GICSCode = 34,
         [EnumMember]
         KeeleyGuid = 35,
-
         [EnumMember]
         AdministratorId = 36,
-
         [EnumMember]
-        Cusip = 37
+        Cusip = 37,
+        [EnumMember]
+        ID509 = 38
     }
 }
