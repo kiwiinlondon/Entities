@@ -440,5 +440,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         BVFF = 7894,
+        [EnumMember]
+        BVFF_EUR = 7901,
     }
 }

@@ -43,5 +43,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MSCI_World_Index = 9919,
 
+
+        [EnumMember]
+        MSCI_TR_Net_World_Hedged_To_EUR = 24730,
     }
 }
