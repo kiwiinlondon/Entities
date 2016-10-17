@@ -23,6 +23,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         CLIENT_FILES_COLLECTED = 6,
+
+        [EnumMember]
+        PRICE_COLLECTED = 7,
     }
 }
 
