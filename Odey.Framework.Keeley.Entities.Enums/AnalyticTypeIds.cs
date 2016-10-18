@@ -93,26 +93,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         LiquidityHaircutPercentValue = 26,
 
-        /// <summary>
-        /// stored in EntityAnalytic
-        /// under EntityType counterparty, sub entity type instrumenet market with reference date being trade date (no time)
-        /// </summary>
-        [EnumMember]
-        IntervalVolumePercent = 27,
-
-        /// <summary>
-        /// stored in EntityAnalytic
-        /// under EntityType counterparty, sub entity type instrumenet market with reference date being trade date (no time)
-        /// </summary>
-        [EnumMember]
-        ArrivalPrice = 28,
-
-        /// <summary>
-        /// stored in EntityAnalytic
-        /// under EntityType counterparty, sub entity type instrumenet market with reference date being trade date (no time)
-        /// </summary>
-        [EnumMember]
-        IntervalVWAP = 29,
+      
     }
 }
 
