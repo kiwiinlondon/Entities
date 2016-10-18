@@ -126,6 +126,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ITDRealisedPricePnl { get; set; }
     	[DataMember]
         public decimal ITDRealisedFXPnl { get; set; }
+    	[DataMember]
+        public bool ResetCost { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

@@ -1465,7 +1465,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="FmCnevSubType" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="FmCnevSubType" Type="varchar" MaxLength="70" />
         </EntityType>
         <EntityType Name="InstrumentMarket">
           <Key>
@@ -1986,6 +1986,7 @@
           <Property Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ITDRealisedPricePnl" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDRealisedFXPnl" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="ResetCost" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PortfolioEventType">
           <Key>
@@ -10168,6 +10169,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="ITDRealisedPricePnl" Type="numeric" Mode="In" />
           <Parameter Name="ITDRealisedFXPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ResetCost" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -10224,6 +10226,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="OriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="ITDRealisedPricePnl" Type="numeric" Mode="In" />
           <Parameter Name="ITDRealisedFXPnl" Type="numeric" Mode="In" />
+          <Parameter Name="ResetCost" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioEventType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventTypeId" Type="int" Mode="In" />
@@ -14697,7 +14700,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="String" Name="FmCnevSubType" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FmCnevSubType" MaxLength="70" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="AccountCustodianIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Custodian" Role="Custodian" Multiplicity="1" />
@@ -15999,6 +16002,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="OriginalDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="ITDRealisedPricePnl" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDRealisedFXPnl" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="ResetCost" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PortfolioSettlementDate">
           <Key>
@@ -23338,6 +23342,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="ResetCost" ColumnName="ResetCost" />
                 <ScalarProperty Name="ITDRealisedFXPnl" ColumnName="ITDRealisedFXPnl" />
                 <ScalarProperty Name="ITDRealisedPricePnl" ColumnName="ITDRealisedPricePnl" />
                 <ScalarProperty Name="OriginalDeltaNetCostInstrumentCurrency" ColumnName="OriginalDeltaNetCostInstrumentCurrency" />
@@ -23398,6 +23403,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="ResetCost" ParameterName="ResetCost" />
                   <ScalarProperty Name="ITDRealisedFXPnl" ParameterName="ITDRealisedFXPnl" />
                   <ScalarProperty Name="ITDRealisedPricePnl" ParameterName="ITDRealisedPricePnl" />
                   <ScalarProperty Name="OriginalDeltaNetCostInstrumentCurrency" ParameterName="OriginalDeltaNetCostInstrumentCurrency" />
@@ -23455,6 +23461,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="ResetCost" ParameterName="ResetCost" Version="Current" />
                   <ScalarProperty Name="ITDRealisedFXPnl" ParameterName="ITDRealisedFXPnl" Version="Current" />
                   <ScalarProperty Name="ITDRealisedPricePnl" ParameterName="ITDRealisedPricePnl" Version="Current" />
                   <ScalarProperty Name="OriginalDeltaNetCostInstrumentCurrency" ParameterName="OriginalDeltaNetCostInstrumentCurrency" Version="Current" />
