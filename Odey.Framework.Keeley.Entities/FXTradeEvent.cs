@@ -71,7 +71,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime OriginalInputDate { get; set; }
     	[DataMember]
-        public Nullable<decimal> PayAmountCostOverride { get; set; }
+        public Nullable<decimal> ReceiveToBookFXRateOverride { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PayToBookFXRateOverride { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }

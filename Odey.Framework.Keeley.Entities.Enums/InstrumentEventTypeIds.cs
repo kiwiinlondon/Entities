@@ -13,6 +13,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ForwardFXMaturity = 3,
         [EnumMember]
-        Coupon = 4
+        Coupon = 4,
+        [EnumMember]
+        CostReset = 30
     }
 }
