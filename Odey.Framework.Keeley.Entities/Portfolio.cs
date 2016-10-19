@@ -184,6 +184,14 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsFlat { get; set; }
     	[DataMember]
         public bool ValuesExistToRollForward { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayAmortisation { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalAmortisation { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalUnrealisedPNLInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalUnrealisedPNLBookCurrency { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
