@@ -315,6 +315,8 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="InDefault" Type="bit" Nullable="false" />
+          <Property Name="MaturityDate" Type="datetime" Nullable="false" />
+          <Property Name="ParAmount" Type="numeric" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -7652,6 +7654,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Coupon" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="InDefault" Type="bit" Mode="In" />
+          <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
+          <Parameter Name="ParAmount" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Bond_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -7662,6 +7666,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="InDefault" Type="bit" Mode="In" />
+          <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
+          <Parameter Name="ParAmount" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Book_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BookID" Type="int" Mode="In" />
@@ -18261,6 +18267,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Boolean" Name="InDefault" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="Odey.Framework.Keeley.Entities.BondInstrumentIdFK" FromRole="Bond" ToRole="Instrument" />
+          <Property Name="MaturityDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ParAmount" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="BondUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25173,6 +25181,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Bonds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Bond">
               <MappingFragment StoreEntitySet="Bond">
+                <ScalarProperty Name="ParAmount" ColumnName="ParAmount" />
+                <ScalarProperty Name="MaturityDate" ColumnName="MaturityDate" />
                 <ScalarProperty Name="InDefault" ColumnName="InDefault" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -25187,6 +25197,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Bond">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Bond_Insert">
+                  <ScalarProperty Name="ParAmount" ParameterName="ParAmount" />
+                  <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" />
                   <ScalarProperty Name="InDefault" ParameterName="InDefault" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Coupon" ParameterName="Coupon" />
@@ -25198,6 +25210,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Bond_Update">
+                  <ScalarProperty Name="ParAmount" ParameterName="ParAmount" Version="Current" />
+                  <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" Version="Current" />
                   <ScalarProperty Name="InDefault" ParameterName="InDefault" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />

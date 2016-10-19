@@ -34,6 +34,10 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public bool InDefault { get; set; }
+    	[DataMember]
+        public System.DateTime MaturityDate { get; set; }
+    	[DataMember]
+        public decimal ParAmount { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
