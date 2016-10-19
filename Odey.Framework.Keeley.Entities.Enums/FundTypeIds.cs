@@ -31,5 +31,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Virtual=12,
         [EnumMember]
         WealthSegregated=13,
+        [EnumMember]
+        LongShortSegregated = 14,
     }
 }
