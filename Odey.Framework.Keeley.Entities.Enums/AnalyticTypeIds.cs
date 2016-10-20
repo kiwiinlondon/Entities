@@ -93,7 +93,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         LiquidityHaircutPercentValue = 26,
 
-      
+        [EnumMember]
+        Yield = 30,
+
     }
 }
 
