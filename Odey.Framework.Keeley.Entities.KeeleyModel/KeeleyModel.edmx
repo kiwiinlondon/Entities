@@ -1929,7 +1929,6 @@
           <Property Name="ValuationTotalUnrealisedPNLInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ValuationTotalUnrealisedPNLBookCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="Yield" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="YieldId" Type="int" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2001,6 +2000,8 @@
           <Property Name="ITDRealisedPricePnl" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDRealisedFXPnl" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ResetCost" Type="bit" Nullable="false" />
+          <Property Name="Yield" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BlendedYield" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioEventType">
           <Key>
@@ -2272,6 +2273,7 @@
           <Property Name="RealisedPnlBookCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RealisedPnlInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="CostPriceOverride" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Yield" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="TransferEvent">
           <Key>
@@ -4542,18 +4544,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="Portfolio">
               <PropertyRef Name="IndexRatioID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Portfolio__Yield__7C5FFAD1">
-          <End Role="Analytic" Type="Self.Analytic" Multiplicity="0..1" />
-          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Analytic">
-              <PropertyRef Name="AnalyticId" />
-            </Principal>
-            <Dependent Role="Portfolio">
-              <PropertyRef Name="YieldId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10047,7 +10037,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationTotalUnrealisedPNLInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="ValuationTotalUnrealisedPNLBookCurrency" Type="numeric" Mode="In" />
           <Parameter Name="Yield" Type="numeric" Mode="In" />
-          <Parameter Name="YieldId" Type="int" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -10140,7 +10129,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationTotalUnrealisedPNLInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="ValuationTotalUnrealisedPNLBookCurrency" Type="numeric" Mode="In" />
           <Parameter Name="Yield" Type="numeric" Mode="In" />
-          <Parameter Name="YieldId" Type="int" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -10224,6 +10212,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDRealisedPricePnl" Type="numeric" Mode="In" />
           <Parameter Name="ITDRealisedFXPnl" Type="numeric" Mode="In" />
           <Parameter Name="ResetCost" Type="bit" Mode="In" />
+          <Parameter Name="Yield" Type="numeric" Mode="In" />
+          <Parameter Name="BlendedYield" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -10281,6 +10271,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ITDRealisedPricePnl" Type="numeric" Mode="In" />
           <Parameter Name="ITDRealisedFXPnl" Type="numeric" Mode="In" />
           <Parameter Name="ResetCost" Type="bit" Mode="In" />
+          <Parameter Name="Yield" Type="numeric" Mode="In" />
+          <Parameter Name="BlendedYield" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEventType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventTypeId" Type="int" Mode="In" />
@@ -10669,6 +10661,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="RealisedPnlBookCurrency" Type="numeric" Mode="In" />
           <Parameter Name="RealisedPnlInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="CostPriceOverride" Type="numeric" Mode="In" />
+          <Parameter Name="Yield" Type="numeric" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -10708,6 +10701,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="RealisedPnlBookCurrency" Type="numeric" Mode="In" />
           <Parameter Name="RealisedPnlInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="CostPriceOverride" Type="numeric" Mode="In" />
+          <Parameter Name="Yield" Type="numeric" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -11655,10 +11649,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="PortfolioEvent" EntitySet="PortfolioEvent" />
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__Index__0844EA80" Association="Self.FK__Portfolio__Index__0844EA80">
-            <End Role="Analytic" EntitySet="Analytic" />
-            <End Role="Portfolio" EntitySet="Portfolio" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Portfolio__Yield__7C5FFAD1" Association="Self.FK__Portfolio__Yield__7C5FFAD1">
             <End Role="Analytic" EntitySet="Analytic" />
             <End Role="Portfolio" EntitySet="Portfolio" />
           </AssociationSet>
@@ -14368,11 +14358,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Bloomberg__Instr__15CAC719" Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="BloombergIdentifier" EntitySet="BloombergIdentifiers" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Portfolio__Yield__7C5FFAD1" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Yield__7C5FFAD1">
-            <End Role="Analytic" EntitySet="Analytics" />
-            <End Role="Portfolio" EntitySet="Portfolios" />
-          </AssociationSet>
+          </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -15165,6 +15151,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="RealisedPnlBookCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="RealisedPnlInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="CostPriceOverride" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Yield" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -16066,6 +16053,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ITDRealisedPricePnl" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ITDRealisedFXPnl" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ResetCost" Type="Boolean" Nullable="false" />
+          <Property Name="Yield" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="BlendedYield" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioSettlementDate">
           <Key>
@@ -16338,7 +16327,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ValuationTotalUnrealisedPNLInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="ValuationTotalUnrealisedPNLBookCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="Yield" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="YieldId" Type="Int32" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -21751,18 +21739,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Portfolio__Yield__7C5FFAD1">
-          <End Type="Odey.Framework.Keeley.Entities.Analytic" Role="Analytic" Multiplicity="0..1" />
-          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Analytic">
-              <PropertyRef Name="AnalyticId" />
-            </Principal>
-            <Dependent Role="Portfolio">
-              <PropertyRef Name="YieldId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22637,6 +22613,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="Yield" ColumnName="Yield" />
                 <ScalarProperty Name="CostPriceOverride" ColumnName="CostPriceOverride" />
                 <ScalarProperty Name="RealisedPnlInstrumentCurrency" ColumnName="RealisedPnlInstrumentCurrency" />
                 <ScalarProperty Name="RealisedPnlBookCurrency" ColumnName="RealisedPnlBookCurrency" />
@@ -22680,6 +22657,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="Yield" ParameterName="Yield" />
                   <ScalarProperty Name="CostPriceOverride" ParameterName="CostPriceOverride" />
                   <ScalarProperty Name="RealisedPnlInstrumentCurrency" ParameterName="RealisedPnlInstrumentCurrency" />
                   <ScalarProperty Name="RealisedPnlBookCurrency" ParameterName="RealisedPnlBookCurrency" />
@@ -22720,6 +22698,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="Yield" ParameterName="Yield" Version="Current" />
                   <ScalarProperty Name="CostPriceOverride" ParameterName="CostPriceOverride" Version="Current" />
                   <ScalarProperty Name="RealisedPnlInstrumentCurrency" ParameterName="RealisedPnlInstrumentCurrency" Version="Current" />
                   <ScalarProperty Name="RealisedPnlBookCurrency" ParameterName="RealisedPnlBookCurrency" Version="Current" />
@@ -23433,6 +23412,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="BlendedYield" ColumnName="BlendedYield" />
+                <ScalarProperty Name="Yield" ColumnName="Yield" />
                 <ScalarProperty Name="ResetCost" ColumnName="ResetCost" />
                 <ScalarProperty Name="ITDRealisedFXPnl" ColumnName="ITDRealisedFXPnl" />
                 <ScalarProperty Name="ITDRealisedPricePnl" ColumnName="ITDRealisedPricePnl" />
@@ -23494,6 +23475,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="BlendedYield" ParameterName="BlendedYield" />
+                  <ScalarProperty Name="Yield" ParameterName="Yield" />
                   <ScalarProperty Name="ResetCost" ParameterName="ResetCost" />
                   <ScalarProperty Name="ITDRealisedFXPnl" ParameterName="ITDRealisedFXPnl" />
                   <ScalarProperty Name="ITDRealisedPricePnl" ParameterName="ITDRealisedPricePnl" />
@@ -23552,6 +23535,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="BlendedYield" ParameterName="BlendedYield" Version="Current" />
+                  <ScalarProperty Name="Yield" ParameterName="Yield" Version="Current" />
                   <ScalarProperty Name="ResetCost" ParameterName="ResetCost" Version="Current" />
                   <ScalarProperty Name="ITDRealisedFXPnl" ParameterName="ITDRealisedFXPnl" Version="Current" />
                   <ScalarProperty Name="ITDRealisedPricePnl" ParameterName="ITDRealisedPricePnl" Version="Current" />
@@ -23742,7 +23727,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
-                <ScalarProperty Name="YieldId" ColumnName="YieldId" />
                 <ScalarProperty Name="Yield" ColumnName="Yield" />
                 <ScalarProperty Name="ValuationTotalUnrealisedPNLBookCurrency" ColumnName="ValuationTotalUnrealisedPNLBookCurrency" />
                 <ScalarProperty Name="ValuationTotalUnrealisedPNLInstrumentCurrency" ColumnName="ValuationTotalUnrealisedPNLInstrumentCurrency" />
@@ -23836,7 +23820,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
-                  <ScalarProperty Name="YieldId" ParameterName="YieldId" />
                   <ScalarProperty Name="Yield" ParameterName="Yield" />
                   <ScalarProperty Name="ValuationTotalUnrealisedPNLBookCurrency" ParameterName="ValuationTotalUnrealisedPNLBookCurrency" />
                   <ScalarProperty Name="ValuationTotalUnrealisedPNLInstrumentCurrency" ParameterName="ValuationTotalUnrealisedPNLInstrumentCurrency" />
@@ -23927,7 +23910,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
-                  <ScalarProperty Name="YieldId" ParameterName="YieldId" Version="Current" />
                   <ScalarProperty Name="Yield" ParameterName="Yield" Version="Current" />
                   <ScalarProperty Name="ValuationTotalUnrealisedPNLBookCurrency" ParameterName="ValuationTotalUnrealisedPNLBookCurrency" Version="Current" />
                   <ScalarProperty Name="ValuationTotalUnrealisedPNLInstrumentCurrency" ParameterName="ValuationTotalUnrealisedPNLInstrumentCurrency" Version="Current" />
@@ -28249,7 +28231,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="52">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="41">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -33996,7 +33978,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Yield__7C5FFAD1" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

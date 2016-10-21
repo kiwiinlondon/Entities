@@ -128,6 +128,10 @@ namespace Odey.Framework.Keeley.Entities
         public decimal ITDRealisedFXPnl { get; set; }
     	[DataMember]
         public bool ResetCost { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Yield { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BlendedYield { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

@@ -92,6 +92,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> RealisedPnlInstrumentCurrency { get; set; }
     	[DataMember]
         public Nullable<decimal> CostPriceOverride { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Yield { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
