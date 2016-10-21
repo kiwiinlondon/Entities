@@ -132,6 +132,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> Yield { get; set; }
     	[DataMember]
         public Nullable<decimal> BlendedYield { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeToTotalAmortization { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
