@@ -62,6 +62,12 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsShareClassSpecific { get; set; }
     	[DataMember]
         public bool IsFeeder { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalAmortisationBook { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalAmortisationLocal { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayAmortisationBook { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
