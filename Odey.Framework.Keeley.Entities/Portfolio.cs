@@ -198,6 +198,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ValuationTotalUnrealisedPNLBookCurrency { get; set; }
     	[DataMember]
         public Nullable<decimal> Yield { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayCarryPNL { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
