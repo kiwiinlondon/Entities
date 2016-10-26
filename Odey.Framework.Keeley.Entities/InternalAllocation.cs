@@ -52,6 +52,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal EventToBookFXRate { get; set; }
     	[DataMember]
         public int StrategyId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> EventToBookFXRateOverride { get; set; }
     
         [DataMember]
         public virtual List<PortfolioEvent> PortfolioEvents { get; set; }

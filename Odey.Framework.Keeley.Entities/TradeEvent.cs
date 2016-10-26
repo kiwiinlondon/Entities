@@ -94,6 +94,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CostPriceOverride { get; set; }
     	[DataMember]
         public Nullable<decimal> Yield { get; set; }
+    	[DataMember]
+        public string MarkitParentOrderId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ArrivalPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> IntervalVolumePercent { get; set; }
+    	[DataMember]
+        public Nullable<decimal> IntervalVWAP { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
