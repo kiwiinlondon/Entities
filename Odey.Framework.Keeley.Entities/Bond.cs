@@ -38,6 +38,10 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime MaturityDate { get; set; }
     	[DataMember]
         public decimal ParAmount { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> IssueDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> IssuePrice { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
