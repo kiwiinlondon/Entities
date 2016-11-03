@@ -96,6 +96,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Yield = 30,
 
+        [EnumMember]
+        InflationAssumption = 31
     }
 }
 

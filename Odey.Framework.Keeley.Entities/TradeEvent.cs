@@ -102,6 +102,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> IntervalVolumePercent { get; set; }
     	[DataMember]
         public Nullable<decimal> IntervalVWAP { get; set; }
+    	[DataMember]
+        public Nullable<decimal> InflationAssumption { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }

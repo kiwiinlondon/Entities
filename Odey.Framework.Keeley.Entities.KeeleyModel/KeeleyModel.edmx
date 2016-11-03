@@ -1931,6 +1931,7 @@
           <Property Name="TodayCarryPNL" Type="numeric" Precision="27" Scale="8" />
           <Property Name="AmortisationCost" Type="numeric" Precision="27" Scale="8" />
           <Property Name="AmortisationQuantity" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TodayAmortisationBook" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2283,6 +2284,7 @@
           <Property Name="ArrivalPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IntervalVolumePercent" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IntervalVWAP" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="InflationAssumption" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="TransferEvent">
           <Key>
@@ -10051,6 +10053,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TodayCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="AmortisationCost" Type="numeric" Mode="In" />
           <Parameter Name="AmortisationQuantity" Type="numeric" Mode="In" />
+          <Parameter Name="TodayAmortisationBook" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -10142,6 +10145,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TodayCarryPNL" Type="numeric" Mode="In" />
           <Parameter Name="AmortisationCost" Type="numeric" Mode="In" />
           <Parameter Name="AmortisationQuantity" Type="numeric" Mode="In" />
+          <Parameter Name="TodayAmortisationBook" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -10685,6 +10689,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ArrivalPrice" Type="numeric" Mode="In" />
           <Parameter Name="IntervalVolumePercent" Type="numeric" Mode="In" />
           <Parameter Name="IntervalVWAP" Type="numeric" Mode="In" />
+          <Parameter Name="InflationAssumption" Type="numeric" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -10729,6 +10734,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ArrivalPrice" Type="numeric" Mode="In" />
           <Parameter Name="IntervalVolumePercent" Type="numeric" Mode="In" />
           <Parameter Name="IntervalVWAP" Type="numeric" Mode="In" />
+          <Parameter Name="InflationAssumption" Type="numeric" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -15183,6 +15189,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ArrivalPrice" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="IntervalVolumePercent" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="IntervalVWAP" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="InflationAssumption" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -16361,6 +16368,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="TodayCarryPNL" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="AmortisationCost" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="AmortisationQuantity" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TodayAmortisationBook" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -22649,6 +22657,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="InflationAssumption" ColumnName="InflationAssumption" />
                 <ScalarProperty Name="IntervalVWAP" ColumnName="IntervalVWAP" />
                 <ScalarProperty Name="IntervalVolumePercent" ColumnName="IntervalVolumePercent" />
                 <ScalarProperty Name="ArrivalPrice" ColumnName="ArrivalPrice" />
@@ -22697,6 +22706,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="InflationAssumption" ParameterName="InflationAssumption" />
                   <ScalarProperty Name="IntervalVWAP" ParameterName="IntervalVWAP" />
                   <ScalarProperty Name="IntervalVolumePercent" ParameterName="IntervalVolumePercent" />
                   <ScalarProperty Name="ArrivalPrice" ParameterName="ArrivalPrice" />
@@ -22742,6 +22752,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="InflationAssumption" ParameterName="InflationAssumption" Version="Current" />
                   <ScalarProperty Name="IntervalVWAP" ParameterName="IntervalVWAP" Version="Current" />
                   <ScalarProperty Name="IntervalVolumePercent" ParameterName="IntervalVolumePercent" Version="Current" />
                   <ScalarProperty Name="ArrivalPrice" ParameterName="ArrivalPrice" Version="Current" />
@@ -23787,6 +23798,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="TodayAmortisationBook" ColumnName="TodayAmortisationBook" />
                 <ScalarProperty Name="AmortisationQuantity" ColumnName="AmortisationQuantity" />
                 <ScalarProperty Name="AmortisationCost" ColumnName="AmortisationCost" />
                 <ScalarProperty Name="TodayCarryPNL" ColumnName="TodayCarryPNL" />
@@ -23879,6 +23891,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="TodayAmortisationBook" ParameterName="TodayAmortisationBook" />
                   <ScalarProperty Name="AmortisationQuantity" ParameterName="AmortisationQuantity" />
                   <ScalarProperty Name="AmortisationCost" ParameterName="AmortisationCost" />
                   <ScalarProperty Name="TodayCarryPNL" ParameterName="TodayCarryPNL" />
@@ -23968,6 +23981,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="TodayAmortisationBook" ParameterName="TodayAmortisationBook" Version="Current" />
                   <ScalarProperty Name="AmortisationQuantity" ParameterName="AmortisationQuantity" Version="Current" />
                   <ScalarProperty Name="AmortisationCost" ParameterName="AmortisationCost" Version="Current" />
                   <ScalarProperty Name="TodayCarryPNL" ParameterName="TodayCarryPNL" Version="Current" />
