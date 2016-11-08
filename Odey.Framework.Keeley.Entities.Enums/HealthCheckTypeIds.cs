@@ -26,6 +26,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         PRICE_COLLECTED = 7,
+
+        [EnumMember]
+        ANALYTIC_COLLECTED = 8,
+
+        [EnumMember]
+        FUND_COST_ENTERED = 9,
     }
 }
 
