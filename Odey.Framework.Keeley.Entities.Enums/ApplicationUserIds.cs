@@ -63,5 +63,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         NeilPalan = 36,
         [EnumMember]
         IanAldous = 68,
+        [EnumMember]
+        MilesDempster = 99,
     }
 }
