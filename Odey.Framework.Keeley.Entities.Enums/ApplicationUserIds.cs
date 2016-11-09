@@ -55,6 +55,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SurenPatel = 20,
         [EnumMember]
         TimBond = 56,
-        
+        [EnumMember]
+        PaulSheath = 53,
+        [EnumMember]
+        AdrianNorman = 114,
+        [EnumMember]
+        NeilPalan = 36,
+        [EnumMember]
+        IanAldous = 68,
     }
 }
