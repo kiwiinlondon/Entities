@@ -138,6 +138,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AmortisationQuantity { get; set; }
     	[DataMember]
         public Nullable<decimal> TotalAmortisationQuantity { get; set; }
+    	[DataMember]
+        public Nullable<decimal> InflationAssumption { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BlendedInflationAssumption { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
