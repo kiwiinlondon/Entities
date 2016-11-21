@@ -200,6 +200,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodayAmortisationBook { get; set; }
     	[DataMember]
         public Nullable<decimal> InflationAssumption { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayRealisedAmortisation { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
