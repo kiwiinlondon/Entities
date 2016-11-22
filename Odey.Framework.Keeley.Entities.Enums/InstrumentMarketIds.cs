@@ -6,6 +6,9 @@ using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
+    /// <summary>
+    /// some useful instrument market ids
+    /// </summary>
     public enum InstrumentMarketIds
     {
         [EnumMember]
@@ -26,5 +29,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OBID = 9908,
         [EnumMember]
         BEST = 9902,
+
+        [EnumMember]
+        GBP = 35,
+        [EnumMember]
+        USD = 41,
+        [EnumMember]
+        EUR = 36,
+        [EnumMember]
+        JPY = 51,
+
     }
 }
