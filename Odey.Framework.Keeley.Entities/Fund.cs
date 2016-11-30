@@ -20,6 +20,7 @@ namespace Odey.Framework.Keeley.Entities
         public Fund()
         {
             this.FactsetPortfolios = new List<FactsetPortfolio>();
+            this.FactorExposures = new List<FactorExposure>();
         }
     
     	[DataMember]
@@ -101,5 +102,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Currency Currency { get; set; }
         [DataMember]
         public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
+        [DataMember]
+        public virtual List<FactorExposure> FactorExposures { get; set; }
     }
 }

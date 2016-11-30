@@ -161,6 +161,9 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<EntityAnalytic> EntityAnalytics { get; set; }
         public DbSet<FactsetPortfolio> FactsetPortfolios { get; set; }
         public DbSet<BloombergIdentifier> BloombergIdentifiers { get; set; }
+        public DbSet<FactorExposure> FactorExposures { get; set; }
+        public DbSet<FactorHierarchy> FactorHierarchies { get; set; }
+        public DbSet<FactorRelationship> FactorRelationships { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -587,6 +590,247 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("UpdateUserId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("AttributionFund_Roll", updateUserIdParameter);
+        }
+    
+        public virtual int FactorExposure_Delete(Nullable<int> factorExposureId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var factorExposureIdParameter = factorExposureId.HasValue ?
+                new ObjectParameter("FactorExposureId", factorExposureId) :
+                new ObjectParameter("FactorExposureId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorExposure_Delete", factorExposureIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int FactorExposure_Insert(Nullable<int> factorRelationshipId, Nullable<System.DateTime> referenceDate, Nullable<int> fundId, Nullable<int> instrumentMarketId, Nullable<decimal> riskContribution, Nullable<decimal> risk, Nullable<decimal> exposure, Nullable<int> updateUserId)
+        {
+            var factorRelationshipIdParameter = factorRelationshipId.HasValue ?
+                new ObjectParameter("FactorRelationshipId", factorRelationshipId) :
+                new ObjectParameter("FactorRelationshipId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var riskContributionParameter = riskContribution.HasValue ?
+                new ObjectParameter("RiskContribution", riskContribution) :
+                new ObjectParameter("RiskContribution", typeof(decimal));
+    
+            var riskParameter = risk.HasValue ?
+                new ObjectParameter("Risk", risk) :
+                new ObjectParameter("Risk", typeof(decimal));
+    
+            var exposureParameter = exposure.HasValue ?
+                new ObjectParameter("Exposure", exposure) :
+                new ObjectParameter("Exposure", typeof(decimal));
+    
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorExposure_Insert", factorRelationshipIdParameter, referenceDateParameter, fundIdParameter, instrumentMarketIdParameter, riskContributionParameter, riskParameter, exposureParameter, updateUserIdParameter);
+        }
+    
+        public virtual int FactorExposure_Update(Nullable<int> factorExposureId, Nullable<int> factorRelationshipId, Nullable<System.DateTime> referenceDate, Nullable<int> fundId, Nullable<int> instrumentMarketId, Nullable<decimal> riskContribution, Nullable<decimal> risk, Nullable<decimal> exposure, Nullable<int> updateUserId, byte[] dataVersion)
+        {
+            var factorExposureIdParameter = factorExposureId.HasValue ?
+                new ObjectParameter("FactorExposureId", factorExposureId) :
+                new ObjectParameter("FactorExposureId", typeof(int));
+    
+            var factorRelationshipIdParameter = factorRelationshipId.HasValue ?
+                new ObjectParameter("FactorRelationshipId", factorRelationshipId) :
+                new ObjectParameter("FactorRelationshipId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var riskContributionParameter = riskContribution.HasValue ?
+                new ObjectParameter("RiskContribution", riskContribution) :
+                new ObjectParameter("RiskContribution", typeof(decimal));
+    
+            var riskParameter = risk.HasValue ?
+                new ObjectParameter("Risk", risk) :
+                new ObjectParameter("Risk", typeof(decimal));
+    
+            var exposureParameter = exposure.HasValue ?
+                new ObjectParameter("Exposure", exposure) :
+                new ObjectParameter("Exposure", typeof(decimal));
+    
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorExposure_Update", factorExposureIdParameter, factorRelationshipIdParameter, referenceDateParameter, fundIdParameter, instrumentMarketIdParameter, riskContributionParameter, riskParameter, exposureParameter, updateUserIdParameter, dataVersionParameter);
+        }
+    
+        public virtual int FactorHierarchy_Delete(Nullable<int> factorHierarchyId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var factorHierarchyIdParameter = factorHierarchyId.HasValue ?
+                new ObjectParameter("FactorHierarchyId", factorHierarchyId) :
+                new ObjectParameter("FactorHierarchyId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorHierarchy_Delete", factorHierarchyIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int FactorHierarchy_Insert(string hierarchyName, Nullable<int> updateUserId)
+        {
+            var hierarchyNameParameter = hierarchyName != null ?
+                new ObjectParameter("HierarchyName", hierarchyName) :
+                new ObjectParameter("HierarchyName", typeof(string));
+    
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorHierarchy_Insert", hierarchyNameParameter, updateUserIdParameter);
+        }
+    
+        public virtual int FactorHierarchy_Update(Nullable<int> factorHierarchyId, string hierarchyName, Nullable<int> updateUserId, byte[] dataVersion)
+        {
+            var factorHierarchyIdParameter = factorHierarchyId.HasValue ?
+                new ObjectParameter("FactorHierarchyId", factorHierarchyId) :
+                new ObjectParameter("FactorHierarchyId", typeof(int));
+    
+            var hierarchyNameParameter = hierarchyName != null ?
+                new ObjectParameter("HierarchyName", hierarchyName) :
+                new ObjectParameter("HierarchyName", typeof(string));
+    
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorHierarchy_Update", factorHierarchyIdParameter, hierarchyNameParameter, updateUserIdParameter, dataVersionParameter);
+        }
+    
+        public virtual int FactorRelationship_Delete(Nullable<int> factorRelationshipId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var factorRelationshipIdParameter = factorRelationshipId.HasValue ?
+                new ObjectParameter("FactorRelationshipId", factorRelationshipId) :
+                new ObjectParameter("FactorRelationshipId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorRelationship_Delete", factorRelationshipIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int FactorRelationship_Insert(Nullable<int> factorHierarchyId, string factorName, string bloombergFactorName, Nullable<int> parentFactorRelationshipId, Nullable<int> entityTypeId, Nullable<int> entityId, Nullable<int> updateUserId)
+        {
+            var factorHierarchyIdParameter = factorHierarchyId.HasValue ?
+                new ObjectParameter("FactorHierarchyId", factorHierarchyId) :
+                new ObjectParameter("FactorHierarchyId", typeof(int));
+    
+            var factorNameParameter = factorName != null ?
+                new ObjectParameter("FactorName", factorName) :
+                new ObjectParameter("FactorName", typeof(string));
+    
+            var bloombergFactorNameParameter = bloombergFactorName != null ?
+                new ObjectParameter("BloombergFactorName", bloombergFactorName) :
+                new ObjectParameter("BloombergFactorName", typeof(string));
+    
+            var parentFactorRelationshipIdParameter = parentFactorRelationshipId.HasValue ?
+                new ObjectParameter("ParentFactorRelationshipId", parentFactorRelationshipId) :
+                new ObjectParameter("ParentFactorRelationshipId", typeof(int));
+    
+            var entityTypeIdParameter = entityTypeId.HasValue ?
+                new ObjectParameter("EntityTypeId", entityTypeId) :
+                new ObjectParameter("EntityTypeId", typeof(int));
+    
+            var entityIdParameter = entityId.HasValue ?
+                new ObjectParameter("EntityId", entityId) :
+                new ObjectParameter("EntityId", typeof(int));
+    
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorRelationship_Insert", factorHierarchyIdParameter, factorNameParameter, bloombergFactorNameParameter, parentFactorRelationshipIdParameter, entityTypeIdParameter, entityIdParameter, updateUserIdParameter);
+        }
+    
+        public virtual int FactorRelationship_Update(Nullable<int> factorRelationshipId, Nullable<int> factorHierarchyId, string factorName, string bloombergFactorName, Nullable<int> parentFactorRelationshipId, Nullable<int> entityTypeId, Nullable<int> entityId, Nullable<int> updateUserId, byte[] dataVersion)
+        {
+            var factorRelationshipIdParameter = factorRelationshipId.HasValue ?
+                new ObjectParameter("FactorRelationshipId", factorRelationshipId) :
+                new ObjectParameter("FactorRelationshipId", typeof(int));
+    
+            var factorHierarchyIdParameter = factorHierarchyId.HasValue ?
+                new ObjectParameter("FactorHierarchyId", factorHierarchyId) :
+                new ObjectParameter("FactorHierarchyId", typeof(int));
+    
+            var factorNameParameter = factorName != null ?
+                new ObjectParameter("FactorName", factorName) :
+                new ObjectParameter("FactorName", typeof(string));
+    
+            var bloombergFactorNameParameter = bloombergFactorName != null ?
+                new ObjectParameter("BloombergFactorName", bloombergFactorName) :
+                new ObjectParameter("BloombergFactorName", typeof(string));
+    
+            var parentFactorRelationshipIdParameter = parentFactorRelationshipId.HasValue ?
+                new ObjectParameter("ParentFactorRelationshipId", parentFactorRelationshipId) :
+                new ObjectParameter("ParentFactorRelationshipId", typeof(int));
+    
+            var entityTypeIdParameter = entityTypeId.HasValue ?
+                new ObjectParameter("EntityTypeId", entityTypeId) :
+                new ObjectParameter("EntityTypeId", typeof(int));
+    
+            var entityIdParameter = entityId.HasValue ?
+                new ObjectParameter("EntityId", entityId) :
+                new ObjectParameter("EntityId", typeof(int));
+    
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorRelationship_Update", factorRelationshipIdParameter, factorHierarchyIdParameter, factorNameParameter, bloombergFactorNameParameter, parentFactorRelationshipIdParameter, entityTypeIdParameter, entityIdParameter, updateUserIdParameter, dataVersionParameter);
         }
     }
 }

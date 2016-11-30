@@ -1013,6 +1013,47 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="FactorExposure">
+          <Key>
+            <PropertyRef Name="FactorExposureId" />
+          </Key>
+          <Property Name="FactorExposureId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FactorRelationshipId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" />
+          <Property Name="RiskContribution" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="Risk" Type="numeric" Precision="9" Scale="2" />
+          <Property Name="Exposure" Type="numeric" Precision="28" Scale="2" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserId" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FactorHierarchy">
+          <Key>
+            <PropertyRef Name="FactorHierarchyId" />
+          </Key>
+          <Property Name="FactorHierarchyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HierarchyName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserId" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FactorRelationship">
+          <Key>
+            <PropertyRef Name="FactorRelationshipId" />
+          </Key>
+          <Property Name="FactorRelationshipId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FactorHierarchyId" Type="int" Nullable="false" />
+          <Property Name="FactorName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="BloombergFactorName" Type="varchar" MaxLength="256" />
+          <Property Name="ParentFactorRelationshipId" Type="int" />
+          <Property Name="EntityTypeId" Type="int" />
+          <Property Name="EntityId" Type="int" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserId" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="FactsetPortfolio">
           <Key>
             <PropertyRef Name="FactSetPortfolioId" />
@@ -4586,6 +4627,54 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_factor_exposure_fund_id">
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
+          <End Role="FactorExposure" Type="Self.FactorExposure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FactorExposure">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_factor_exposure_relationship">
+          <End Role="FactorRelationship" Type="Self.FactorRelationship" Multiplicity="1" />
+          <End Role="FactorExposure" Type="Self.FactorExposure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactorRelationship">
+              <PropertyRef Name="FactorRelationshipId" />
+            </Principal>
+            <Dependent Role="FactorExposure">
+              <PropertyRef Name="FactorRelationshipId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_factor_relationship_entity_type">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="0..1" />
+          <End Role="FactorRelationship" Type="Self.FactorRelationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="FactorRelationship">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_factor_relationship_hierarchy">
+          <End Role="FactorHierarchy" Type="Self.FactorHierarchy" Multiplicity="1" />
+          <End Role="FactorRelationship" Type="Self.FactorRelationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactorHierarchy">
+              <PropertyRef Name="FactorHierarchyId" />
+            </Principal>
+            <Dependent Role="FactorRelationship">
+              <PropertyRef Name="FactorHierarchyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FactsetPortfolio_ApplicationUser">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
           <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
@@ -4631,6 +4720,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="FactsetPortfolio">
               <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_parent_factor_relationship">
+          <End Role="FactorRelationship" Type="Self.FactorRelationship" Multiplicity="0..1" />
+          <End Role="FactorRelationship1" Type="Self.FactorRelationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactorRelationship">
+              <PropertyRef Name="FactorRelationshipId" />
+            </Principal>
+            <Dependent Role="FactorRelationship1">
+              <PropertyRef Name="ParentFactorRelationshipId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8682,6 +8783,73 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="FilePath" Type="varchar" Mode="In" />
           <Parameter Name="RuntimeParameters" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="FactorExposure_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactorExposureId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FactorExposure_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactorRelationshipId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="RiskContribution" Type="numeric" Mode="In" />
+          <Parameter Name="Risk" Type="numeric" Mode="In" />
+          <Parameter Name="Exposure" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FactorExposure_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactorExposureId" Type="int" Mode="In" />
+          <Parameter Name="FactorRelationshipId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="RiskContribution" Type="numeric" Mode="In" />
+          <Parameter Name="Risk" Type="numeric" Mode="In" />
+          <Parameter Name="Exposure" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
+        <Function Name="FactorHierarchy_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactorHierarchyId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FactorHierarchy_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="HierarchyName" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FactorHierarchy_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactorHierarchyId" Type="int" Mode="In" />
+          <Parameter Name="HierarchyName" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
+        <Function Name="FactorRelationship_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactorRelationshipId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FactorRelationship_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactorHierarchyId" Type="int" Mode="In" />
+          <Parameter Name="FactorName" Type="varchar" Mode="In" />
+          <Parameter Name="BloombergFactorName" Type="varchar" Mode="In" />
+          <Parameter Name="ParentFactorRelationshipId" Type="int" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FactorRelationship_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FactorRelationshipId" Type="int" Mode="In" />
+          <Parameter Name="FactorHierarchyId" Type="int" Mode="In" />
+          <Parameter Name="FactorName" Type="varchar" Mode="In" />
+          <Parameter Name="BloombergFactorName" Type="varchar" Mode="In" />
+          <Parameter Name="ParentFactorRelationshipId" Type="int" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="FactsetPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FactSetPortfolioId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -10862,6 +11030,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="ExtractOutputType" EntityType="Self.ExtractOutputType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExtractRun" EntityType="Self.ExtractRun" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExtractType" EntityType="Self.ExtractType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactorExposure" EntityType="Self.FactorExposure" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactorHierarchy" EntityType="Self.FactorHierarchy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactorRelationship" EntityType="Self.FactorRelationship" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FactsetPortfolio" EntityType="Self.FactsetPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FailedTrade" EntityType="Self.FailedTrade" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileCollected" EntityType="Self.FileCollected" Schema="dbo" store:Type="Tables" />
@@ -11705,6 +11876,22 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="FXRate" EntitySet="FXRate" />
             <End Role="TradeEvent" EntitySet="TradeEvent" />
           </AssociationSet>
+          <AssociationSet Name="fk_factor_exposure_fund_id" Association="Self.fk_factor_exposure_fund_id">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="FactorExposure" EntitySet="FactorExposure" />
+          </AssociationSet>
+          <AssociationSet Name="fk_factor_exposure_relationship" Association="Self.fk_factor_exposure_relationship">
+            <End Role="FactorRelationship" EntitySet="FactorRelationship" />
+            <End Role="FactorExposure" EntitySet="FactorExposure" />
+          </AssociationSet>
+          <AssociationSet Name="fk_factor_relationship_entity_type" Association="Self.fk_factor_relationship_entity_type">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="FactorRelationship" EntitySet="FactorRelationship" />
+          </AssociationSet>
+          <AssociationSet Name="fk_factor_relationship_hierarchy" Association="Self.fk_factor_relationship_hierarchy">
+            <End Role="FactorHierarchy" EntitySet="FactorHierarchy" />
+            <End Role="FactorRelationship" EntitySet="FactorRelationship" />
+          </AssociationSet>
           <AssociationSet Name="FK_FactsetPortfolio_ApplicationUser" Association="Self.FK_FactsetPortfolio_ApplicationUser">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
@@ -11720,6 +11907,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK_FactsetPortfolio_InstrumentMarket" Association="Self.FK_FactsetPortfolio_InstrumentMarket">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
             <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="fk_parent_factor_relationship" Association="Self.fk_parent_factor_relationship">
+            <End Role="FactorRelationship" EntitySet="FactorRelationship" />
+            <End Role="FactorRelationship1" EntitySet="FactorRelationship" />
           </AssociationSet>
           <AssociationSet Name="fkinstrumentmarketUltimateUnderlyingInstrumentMarketId" Association="Self.fkinstrumentmarketUltimateUnderlyingInstrumentMarketId">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
@@ -14403,7 +14594,97 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Bloomberg__Instr__15CAC719" Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="BloombergIdentifier" EntitySet="BloombergIdentifiers" />
-          </AssociationSet>          
+          </AssociationSet>
+          <EntitySet Name="FactorExposures" EntityType="Odey.Framework.Keeley.Entities.FactorExposure" />
+          <EntitySet Name="FactorHierarchies" EntityType="Odey.Framework.Keeley.Entities.FactorHierarchy" />
+          <EntitySet Name="FactorRelationships" EntityType="Odey.Framework.Keeley.Entities.FactorRelationship" />
+          <AssociationSet Name="fk_factor_relationship_entity_type" Association="Odey.Framework.Keeley.Entities.fk_factor_relationship_entity_type">
+            <End Role="EntityType" EntitySet="EntityTypes" />
+            <End Role="FactorRelationship" EntitySet="FactorRelationships" />
+          </AssociationSet>
+          <AssociationSet Name="fk_factor_exposure_fund_id" Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_fund_id">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="FactorExposure" EntitySet="FactorExposures" />
+          </AssociationSet>
+          <AssociationSet Name="fk_factor_exposure_relationship" Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_relationship">
+            <End Role="FactorRelationship" EntitySet="FactorRelationships" />
+            <End Role="FactorExposure" EntitySet="FactorExposures" />
+          </AssociationSet>
+          <AssociationSet Name="fk_factor_relationship_hierarchy" Association="Odey.Framework.Keeley.Entities.fk_factor_relationship_hierarchy">
+            <End Role="FactorHierarchy" EntitySet="FactorHierarchies" />
+            <End Role="FactorRelationship" EntitySet="FactorRelationships" />
+          </AssociationSet>
+          <AssociationSet Name="fk_parent_factor_relationship" Association="Odey.Framework.Keeley.Entities.fk_parent_factor_relationship">
+            <End Role="FactorRelationship" EntitySet="FactorRelationships" />
+            <End Role="FactorRelationship1" EntitySet="FactorRelationships" />
+          </AssociationSet>
+          <FunctionImport Name="FactorExposure_Delete">
+            <Parameter Name="FactorExposureId" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FactorExposure_Insert">
+            <Parameter Name="FactorRelationshipId" Mode="In" Type="Int32" />
+            <Parameter Name="ReferenceDate" Mode="In" Type="DateTime" />
+            <Parameter Name="FundId" Mode="In" Type="Int32" />
+            <Parameter Name="InstrumentMarketId" Mode="In" Type="Int32" />
+            <Parameter Name="RiskContribution" Mode="In" Type="Decimal" />
+            <Parameter Name="Risk" Mode="In" Type="Decimal" />
+            <Parameter Name="Exposure" Mode="In" Type="Decimal" />
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FactorExposure_Update">
+            <Parameter Name="FactorExposureId" Mode="In" Type="Int32" />
+            <Parameter Name="FactorRelationshipId" Mode="In" Type="Int32" />
+            <Parameter Name="ReferenceDate" Mode="In" Type="DateTime" />
+            <Parameter Name="FundId" Mode="In" Type="Int32" />
+            <Parameter Name="InstrumentMarketId" Mode="In" Type="Int32" />
+            <Parameter Name="RiskContribution" Mode="In" Type="Decimal" />
+            <Parameter Name="Risk" Mode="In" Type="Decimal" />
+            <Parameter Name="Exposure" Mode="In" Type="Decimal" />
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="FactorHierarchy_Delete">
+            <Parameter Name="FactorHierarchyId" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FactorHierarchy_Insert">
+            <Parameter Name="HierarchyName" Mode="In" Type="String" />
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FactorHierarchy_Update">
+            <Parameter Name="FactorHierarchyId" Mode="In" Type="Int32" />
+            <Parameter Name="HierarchyName" Mode="In" Type="String" />
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="FactorRelationship_Delete">
+            <Parameter Name="FactorRelationshipId" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FactorRelationship_Insert">
+            <Parameter Name="FactorHierarchyId" Mode="In" Type="Int32" />
+            <Parameter Name="FactorName" Mode="In" Type="String" />
+            <Parameter Name="BloombergFactorName" Mode="In" Type="String" />
+            <Parameter Name="ParentFactorRelationshipId" Mode="In" Type="Int32" />
+            <Parameter Name="EntityTypeId" Mode="In" Type="Int32" />
+            <Parameter Name="EntityId" Mode="In" Type="Int32" />
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FactorRelationship_Update">
+            <Parameter Name="FactorRelationshipId" Mode="In" Type="Int32" />
+            <Parameter Name="FactorHierarchyId" Mode="In" Type="Int32" />
+            <Parameter Name="FactorName" Mode="In" Type="String" />
+            <Parameter Name="BloombergFactorName" Mode="In" Type="String" />
+            <Parameter Name="ParentFactorRelationshipId" Mode="In" Type="Int32" />
+            <Parameter Name="EntityTypeId" Mode="In" Type="Int32" />
+            <Parameter Name="EntityId" Mode="In" Type="Int32" />
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+          </FunctionImport>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -18487,6 +18768,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ClientLoadDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsDistributing" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="FactsetPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund" FromRole="Fund" ToRole="FactsetPortfolio" />
+          <NavigationProperty Name="FactorExposures" Relationship="Odey.Framework.Keeley.Entities.fk_factor_exposure_fund_id" FromRole="Fund" ToRole="FactorExposure" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -20480,6 +20762,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="FullyQualifiedName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="EntityProperties" Relationship="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK" FromRole="EntityType" ToRole="EntityProperty" />
+          <NavigationProperty Name="FactorRelationships" Relationship="Odey.Framework.Keeley.Entities.fk_factor_relationship_entity_type" FromRole="EntityType" ToRole="FactorRelationship" />
           </EntityType>
         <Association Name="EntityTypeUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -21796,6 +22079,115 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="BloombergIdentifier">
               <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FactorExposure">
+          <Key>
+            <PropertyRef Name="FactorExposureId" />
+          </Key>
+          <Property Name="FactorExposureId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FactorRelationshipId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="Int32" />
+          <Property Name="RiskContribution" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="Risk" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Exposure" Type="Decimal" Precision="28" Scale="2" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserId" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.fk_factor_exposure_fund_id" FromRole="FactorExposure" ToRole="Fund" />
+          <NavigationProperty Name="FactorRelationship" Relationship="Odey.Framework.Keeley.Entities.fk_factor_exposure_relationship" FromRole="FactorExposure" ToRole="FactorRelationship" />
+        </EntityType>
+        <EntityType Name="FactorHierarchy">
+          <Key>
+            <PropertyRef Name="FactorHierarchyId" />
+          </Key>
+          <Property Name="FactorHierarchyId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="HierarchyName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserId" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="FactorRelationships" Relationship="Odey.Framework.Keeley.Entities.fk_factor_relationship_hierarchy" FromRole="FactorHierarchy" ToRole="FactorRelationship" />
+        </EntityType>
+        <EntityType Name="FactorRelationship">
+          <Key>
+            <PropertyRef Name="FactorRelationshipId" />
+          </Key>
+          <Property Name="FactorRelationshipId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FactorHierarchyId" Type="Int32" Nullable="false" />
+          <Property Name="FactorName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="BloombergFactorName" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="ParentFactorRelationshipId" Type="Int32" />
+          <Property Name="EntityTypeId" Type="Int32" />
+          <Property Name="EntityId" Type="Int32" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserId" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="EntityType" Relationship="Odey.Framework.Keeley.Entities.fk_factor_relationship_entity_type" FromRole="FactorRelationship" ToRole="EntityType" />
+          <NavigationProperty Name="FactorExposures" Relationship="Odey.Framework.Keeley.Entities.fk_factor_exposure_relationship" FromRole="FactorRelationship" ToRole="FactorExposure" />
+          <NavigationProperty Name="FactorHierarchy" Relationship="Odey.Framework.Keeley.Entities.fk_factor_relationship_hierarchy" FromRole="FactorRelationship" ToRole="FactorHierarchy" />
+          <NavigationProperty Name="FactorRelationship1" Relationship="Odey.Framework.Keeley.Entities.fk_parent_factor_relationship" FromRole="FactorRelationship" ToRole="FactorRelationship1" />
+          <NavigationProperty Name="FactorRelationship2" Relationship="Odey.Framework.Keeley.Entities.fk_parent_factor_relationship" FromRole="FactorRelationship1" ToRole="FactorRelationship" />
+        </EntityType>
+        <Association Name="fk_factor_relationship_entity_type">
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactorRelationship" Role="FactorRelationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="FactorRelationship">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_factor_exposure_fund_id">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactorExposure" Role="FactorExposure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FactorExposure">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_factor_exposure_relationship">
+          <End Type="Odey.Framework.Keeley.Entities.FactorRelationship" Role="FactorRelationship" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactorExposure" Role="FactorExposure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactorRelationship">
+              <PropertyRef Name="FactorRelationshipId" />
+            </Principal>
+            <Dependent Role="FactorExposure">
+              <PropertyRef Name="FactorRelationshipId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_factor_relationship_hierarchy">
+          <End Type="Odey.Framework.Keeley.Entities.FactorHierarchy" Role="FactorHierarchy" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactorRelationship" Role="FactorRelationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactorHierarchy">
+              <PropertyRef Name="FactorHierarchyId" />
+            </Principal>
+            <Dependent Role="FactorRelationship">
+              <PropertyRef Name="FactorHierarchyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_parent_factor_relationship">
+          <End Type="Odey.Framework.Keeley.Entities.FactorRelationship" Role="FactorRelationship" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.FactorRelationship" Role="FactorRelationship1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactorRelationship">
+              <PropertyRef Name="FactorRelationshipId" />
+            </Principal>
+            <Dependent Role="FactorRelationship1">
+              <PropertyRef Name="ParentFactorRelationshipId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -28314,6 +28706,138 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FactorExposures">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactorExposure">
+              <MappingFragment StoreEntitySet="FactorExposure">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Exposure" ColumnName="Exposure" />
+                <ScalarProperty Name="Risk" ColumnName="Risk" />
+                <ScalarProperty Name="RiskContribution" ColumnName="RiskContribution" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FactorRelationshipId" ColumnName="FactorRelationshipId" />
+                <ScalarProperty Name="FactorExposureId" ColumnName="FactorExposureId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactorExposure">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FactorExposure_Insert">
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" />
+                  <ScalarProperty Name="Exposure" ParameterName="Exposure" />
+                  <ScalarProperty Name="Risk" ParameterName="Risk" />
+                  <ScalarProperty Name="RiskContribution" ParameterName="RiskContribution" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="FactorRelationshipId" ParameterName="FactorRelationshipId" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FactorExposure_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" Version="Current" />
+                  <ScalarProperty Name="Exposure" ParameterName="Exposure" Version="Current" />
+                  <ScalarProperty Name="Risk" ParameterName="Risk" Version="Current" />
+                  <ScalarProperty Name="RiskContribution" ParameterName="RiskContribution" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="FactorRelationshipId" ParameterName="FactorRelationshipId" Version="Current" />
+                  <ScalarProperty Name="FactorExposureId" ParameterName="FactorExposureId" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FactorExposure_Delete">
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FactorExposureId" ParameterName="FactorExposureId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactorHierarchies">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactorHierarchy">
+              <MappingFragment StoreEntitySet="FactorHierarchy">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="HierarchyName" ColumnName="HierarchyName" />
+                <ScalarProperty Name="FactorHierarchyId" ColumnName="FactorHierarchyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactorHierarchy">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FactorHierarchy_Insert">
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" />
+                  <ScalarProperty Name="HierarchyName" ParameterName="HierarchyName" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FactorHierarchy_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" Version="Current" />
+                  <ScalarProperty Name="HierarchyName" ParameterName="HierarchyName" Version="Current" />
+                  <ScalarProperty Name="FactorHierarchyId" ParameterName="FactorHierarchyId" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FactorHierarchy_Delete">
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FactorHierarchyId" ParameterName="FactorHierarchyId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactorRelationships">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactorRelationship">
+              <MappingFragment StoreEntitySet="FactorRelationship">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
+                <ScalarProperty Name="ParentFactorRelationshipId" ColumnName="ParentFactorRelationshipId" />
+                <ScalarProperty Name="BloombergFactorName" ColumnName="BloombergFactorName" />
+                <ScalarProperty Name="FactorName" ColumnName="FactorName" />
+                <ScalarProperty Name="FactorHierarchyId" ColumnName="FactorHierarchyId" />
+                <ScalarProperty Name="FactorRelationshipId" ColumnName="FactorRelationshipId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactorRelationship">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FactorRelationship_Insert">
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" />
+                  <ScalarProperty Name="ParentFactorRelationshipId" ParameterName="ParentFactorRelationshipId" />
+                  <ScalarProperty Name="BloombergFactorName" ParameterName="BloombergFactorName" />
+                  <ScalarProperty Name="FactorName" ParameterName="FactorName" />
+                  <ScalarProperty Name="FactorHierarchyId" ParameterName="FactorHierarchyId" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FactorRelationship_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" Version="Current" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" Version="Current" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" Version="Current" />
+                  <ScalarProperty Name="ParentFactorRelationshipId" ParameterName="ParentFactorRelationshipId" Version="Current" />
+                  <ScalarProperty Name="BloombergFactorName" ParameterName="BloombergFactorName" Version="Current" />
+                  <ScalarProperty Name="FactorName" ParameterName="FactorName" Version="Current" />
+                  <ScalarProperty Name="FactorHierarchyId" ParameterName="FactorHierarchyId" Version="Current" />
+                  <ScalarProperty Name="FactorRelationshipId" ParameterName="FactorRelationshipId" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FactorRelationship_Delete">
+                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FactorRelationshipId" ParameterName="FactorRelationshipId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="FactorExposure_Delete" FunctionName="KeeleyModel.Store.FactorExposure_Delete" />
+          <FunctionImportMapping FunctionImportName="FactorExposure_Insert" FunctionName="KeeleyModel.Store.FactorExposure_Insert" />
+          <FunctionImportMapping FunctionImportName="FactorExposure_Update" FunctionName="KeeleyModel.Store.FactorExposure_Update" />
+          <FunctionImportMapping FunctionImportName="FactorHierarchy_Delete" FunctionName="KeeleyModel.Store.FactorHierarchy_Delete" />
+          <FunctionImportMapping FunctionImportName="FactorHierarchy_Insert" FunctionName="KeeleyModel.Store.FactorHierarchy_Insert" />
+          <FunctionImportMapping FunctionImportName="FactorHierarchy_Update" FunctionName="KeeleyModel.Store.FactorHierarchy_Update" />
+          <FunctionImportMapping FunctionImportName="FactorRelationship_Delete" FunctionName="KeeleyModel.Store.FactorRelationship_Delete" />
+          <FunctionImportMapping FunctionImportName="FactorRelationship_Insert" FunctionName="KeeleyModel.Store.FactorRelationship_Insert" />
+          <FunctionImportMapping FunctionImportName="FactorRelationship_Update" FunctionName="KeeleyModel.Store.FactorRelationship_Update" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -32995,39 +33519,37 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="24.760416666666668" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="24.260418166666671" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="23.083332083333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="22.916665416666667" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="22.833333333333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="22.666666666666668" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="21.333333333333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="21.166666666666668" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="20.505208333333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="20.104166666666668" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="19.635416666666668" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="19.416666666666668" PointY="21.293945456306602" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.293945456306602" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="24.997394583333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="24.807289166666664" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="24.260416666666668" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="24.083333333333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="23.916666666666668" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="23.083332083333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="22.916665416666667" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="22.833333333333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="22.666666666666668" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="21.333333333333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="21.166666666666668" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="20.166666666666668" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="19.635416666666668" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="19.416666666666668" PointY="21.313935106010902" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.313935106010902" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.600322265625003" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.600322265625003" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.858910256410255" PointY="25.610087890625" />
-          <edmx:ConnectorPoint PointX="17.353878205128204" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="25.610087890625" />
-          <edmx:ConnectorPoint PointX="15.041666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.708333333333334" PointY="25.610087890625" />
+          <edmx:ConnectorPoint PointX="15.072916666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.71875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.71875" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.541669693985224" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.541669693985224" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="12.697916666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.6875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.6875" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.541669673496308" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.541669673496308" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -34073,6 +34595,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FactorExposure" Width="1.5" PointX="34.875" PointY="38" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FactorHierarchy" Width="1.5" PointX="30.375" PointY="39.125" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FactorRelationship" Width="1.5" PointX="32.625" PointY="51.5" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_factor_relationship_entity_type" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_fund_id" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_relationship" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_factor_relationship_hierarchy" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_parent_factor_relationship" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
