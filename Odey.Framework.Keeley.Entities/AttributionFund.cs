@@ -68,6 +68,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AdministratorUnadjustedNav { get; set; }
     	[DataMember]
         public Nullable<int> ITDOpeningAttributionFundId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SumNetAssetValue { get; set; }
+    	[DataMember]
+        public Nullable<int> NumberOfDays { get; set; }
     
         [DataMember]
         public virtual AttributionFund ITDOpeningAttributionFund { get; set; }

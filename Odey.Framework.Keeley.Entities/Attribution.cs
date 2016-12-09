@@ -260,6 +260,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ITDFXPNLEUR { get; set; }
     	[DataMember]
         public Nullable<decimal> ITDFXPNLUSD { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SumExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SumMarketValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Exposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarketValue { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
