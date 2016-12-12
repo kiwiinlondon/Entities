@@ -69,9 +69,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> ITDOpeningAttributionFundId { get; set; }
     	[DataMember]
-        public Nullable<decimal> SumNetAssetValue { get; set; }
+        public decimal SumNetAssetValue { get; set; }
     	[DataMember]
-        public Nullable<int> NumberOfDays { get; set; }
+        public int NumberOfDays { get; set; }
     
         [DataMember]
         public virtual AttributionFund ITDOpeningAttributionFund { get; set; }
