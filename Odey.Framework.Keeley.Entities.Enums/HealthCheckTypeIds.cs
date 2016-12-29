@@ -32,6 +32,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         FUND_COST_ENTERED = 9,
+
+        [EnumMember]
+        FOCUS_LIST_ISSUER_CHECK = 10,
+
+        [EnumMember]
+        ATTRIBUTION_REBUILD_POSITION = 11,
     }
 }
 
