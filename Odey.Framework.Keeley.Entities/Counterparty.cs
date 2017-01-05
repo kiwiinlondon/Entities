@@ -32,6 +32,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> UbsCsaRateOverride { get; set; }
     	[DataMember]
         public string CsaIdentifier { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CsaRateOverrideSwaps { get; set; }
     
         [DataMember]
         private LegalEntity LegalEntity { get; set; }
