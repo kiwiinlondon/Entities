@@ -106,5 +106,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         BloombergPositionError = 47,
         [EnumMember]
         BloombergPositionReconciliation = 48,
+        [EnumMember]
+        BonyPositionFile = 49,
     }
 }
