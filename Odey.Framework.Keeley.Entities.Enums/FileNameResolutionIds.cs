@@ -13,6 +13,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         PreviousWorkingDay=4,
         TMinus2WorkingDays=5,
         NoResolution=6,
-        BloombergExtractResponse=7
+        BloombergExtractResponse=7,
+        BloombergPORTReconciliation=8
     }
 }
