@@ -99,6 +99,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OCE_GBP_I_INC = 5521,
         [EnumMember]
         OCE_GBP_M = 7412,
+        [EnumMember]
+        OCE_GBP_P_I = 7549,
+        [EnumMember]
+        OCE_GBP_P_R = 7548,
 
 
         [EnumMember]
