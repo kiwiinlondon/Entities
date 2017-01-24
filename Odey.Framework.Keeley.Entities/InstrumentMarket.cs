@@ -86,7 +86,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
         [DataMember]
         public virtual List<BloombergIdentifier> BloombergIdentifiers { get; set; }
-        [DataMember]
-        public virtual Instrument Instrument1 { get; set; }
     }
 }

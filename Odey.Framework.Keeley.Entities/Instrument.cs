@@ -20,7 +20,6 @@ namespace Odey.Framework.Keeley.Entities
         public Instrument()
         {
             this.OverlyingRelationships = new List<InstrumentRelationship>();
-            this.InstrumentMarkets1 = new List<InstrumentMarket>();
         }
     
     	[DataMember]
@@ -74,7 +73,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Bond Bond { get; set; }
         [DataMember]
         public virtual Issuer Issuer { get; set; }
-        [DataMember]
-        public virtual List<InstrumentMarket> InstrumentMarkets1 { get; set; }
     }
 }
