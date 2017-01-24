@@ -14,6 +14,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         TMinus2WorkingDays=5,
         NoResolution=6,
         BloombergExtractResponse=7,
-        BloombergPORTReconciliation=8
+        BloombergPORT=8
     }
 }

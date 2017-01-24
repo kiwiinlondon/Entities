@@ -72,6 +72,14 @@ namespace Odey.Framework.Keeley.Entities
         public decimal SumNetAssetValue { get; set; }
     	[DataMember]
         public int NumberOfDays { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningAdjustedNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningKeeleyAdjustedNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningAdministratorAdjustedNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningValuationAdjustedNav { get; set; }
     
         [DataMember]
         public virtual AttributionFund ITDOpeningAttributionFund { get; set; }

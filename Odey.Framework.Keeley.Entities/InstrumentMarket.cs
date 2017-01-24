@@ -71,6 +71,8 @@ namespace Odey.Framework.Keeley.Entities
         public string AdministratorId { get; set; }
     	[DataMember]
         public Nullable<bool> IsReverse { get; set; }
+    	[DataMember]
+        public int RiskCurrencyId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
@@ -84,5 +86,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
         [DataMember]
         public virtual List<BloombergIdentifier> BloombergIdentifiers { get; set; }
+        [DataMember]
+        public virtual Instrument Instrument1 { get; set; }
     }
 }
