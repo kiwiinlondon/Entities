@@ -42,5 +42,7 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> ParentLegalEntityId { get; set; }
     	[DataMember]
         public string PulseIdentifier { get; set; }
+    	[DataMember]
+        public int CompanySizeId { get; set; }
     }
 }

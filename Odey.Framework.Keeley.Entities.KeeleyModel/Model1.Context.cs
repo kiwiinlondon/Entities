@@ -164,6 +164,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FactorExposure> FactorExposures { get; set; }
         public DbSet<FactorHierarchy> FactorHierarchies { get; set; }
         public DbSet<FactorRelationship> FactorRelationships { get; set; }
+        public DbSet<CompanySize> CompanySizes { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -609,7 +610,7 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorExposure_Delete", factorExposureIdParameter, dataVersionParameter, updateUserIDParameter);
         }
     
-        public virtual int FactorExposure_Insert(Nullable<int> factorRelationshipId, Nullable<System.DateTime> referenceDate, Nullable<int> fundId, Nullable<int> instrumentMarketId, Nullable<decimal> volatilityContribution, Nullable<decimal> volatility, Nullable<decimal> exposure, Nullable<int> updateUserId)
+        public virtual int FactorExposure_Insert(Nullable<int> factorRelationshipId, Nullable<System.DateTime> referenceDate, Nullable<int> fundId, Nullable<int> instrumentMarketId, Nullable<decimal> volatility, Nullable<decimal> exposure, Nullable<decimal> marginalX100, Nullable<int> updateUserId)
         {
             var factorRelationshipIdParameter = factorRelationshipId.HasValue ?
                 new ObjectParameter("FactorRelationshipId", factorRelationshipId) :
@@ -627,10 +628,6 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
                 new ObjectParameter("InstrumentMarketId", typeof(int));
     
-            var volatilityContributionParameter = volatilityContribution.HasValue ?
-                new ObjectParameter("VolatilityContribution", volatilityContribution) :
-                new ObjectParameter("VolatilityContribution", typeof(decimal));
-    
             var volatilityParameter = volatility.HasValue ?
                 new ObjectParameter("Volatility", volatility) :
                 new ObjectParameter("Volatility", typeof(decimal));
@@ -639,14 +636,18 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("Exposure", exposure) :
                 new ObjectParameter("Exposure", typeof(decimal));
     
+            var marginalX100Parameter = marginalX100.HasValue ?
+                new ObjectParameter("MarginalX100", marginalX100) :
+                new ObjectParameter("MarginalX100", typeof(decimal));
+    
             var updateUserIdParameter = updateUserId.HasValue ?
                 new ObjectParameter("UpdateUserId", updateUserId) :
                 new ObjectParameter("UpdateUserId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorExposure_Insert", factorRelationshipIdParameter, referenceDateParameter, fundIdParameter, instrumentMarketIdParameter, volatilityContributionParameter, volatilityParameter, exposureParameter, updateUserIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorExposure_Insert", factorRelationshipIdParameter, referenceDateParameter, fundIdParameter, instrumentMarketIdParameter, volatilityParameter, exposureParameter, marginalX100Parameter, updateUserIdParameter);
         }
     
-        public virtual int FactorExposure_Update(Nullable<int> factorExposureId, Nullable<int> factorRelationshipId, Nullable<System.DateTime> referenceDate, Nullable<int> fundId, Nullable<int> instrumentMarketId, Nullable<decimal> volatilityContribution, Nullable<decimal> volatility, Nullable<decimal> exposure, Nullable<int> updateUserId, byte[] dataVersion)
+        public virtual int FactorExposure_Update(Nullable<int> factorExposureId, Nullable<int> factorRelationshipId, Nullable<System.DateTime> referenceDate, Nullable<int> fundId, Nullable<int> instrumentMarketId, Nullable<decimal> volatility, Nullable<decimal> exposure, Nullable<decimal> marginalX100, Nullable<int> updateUserId, byte[] dataVersion)
         {
             var factorExposureIdParameter = factorExposureId.HasValue ?
                 new ObjectParameter("FactorExposureId", factorExposureId) :
@@ -668,10 +669,6 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
                 new ObjectParameter("InstrumentMarketId", typeof(int));
     
-            var volatilityContributionParameter = volatilityContribution.HasValue ?
-                new ObjectParameter("VolatilityContribution", volatilityContribution) :
-                new ObjectParameter("VolatilityContribution", typeof(decimal));
-    
             var volatilityParameter = volatility.HasValue ?
                 new ObjectParameter("Volatility", volatility) :
                 new ObjectParameter("Volatility", typeof(decimal));
@@ -679,6 +676,10 @@ namespace Odey.Framework.Keeley.Entities
             var exposureParameter = exposure.HasValue ?
                 new ObjectParameter("Exposure", exposure) :
                 new ObjectParameter("Exposure", typeof(decimal));
+    
+            var marginalX100Parameter = marginalX100.HasValue ?
+                new ObjectParameter("MarginalX100", marginalX100) :
+                new ObjectParameter("MarginalX100", typeof(decimal));
     
             var updateUserIdParameter = updateUserId.HasValue ?
                 new ObjectParameter("UpdateUserId", updateUserId) :
@@ -688,7 +689,7 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("DataVersion", dataVersion) :
                 new ObjectParameter("DataVersion", typeof(byte[]));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorExposure_Update", factorExposureIdParameter, factorRelationshipIdParameter, referenceDateParameter, fundIdParameter, instrumentMarketIdParameter, volatilityContributionParameter, volatilityParameter, exposureParameter, updateUserIdParameter, dataVersionParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorExposure_Update", factorExposureIdParameter, factorRelationshipIdParameter, referenceDateParameter, fundIdParameter, instrumentMarketIdParameter, volatilityParameter, exposureParameter, marginalX100Parameter, updateUserIdParameter, dataVersionParameter);
         }
     
         public virtual int FactorHierarchy_Delete(Nullable<int> factorHierarchyId, byte[] dataVersion, Nullable<int> updateUserID)

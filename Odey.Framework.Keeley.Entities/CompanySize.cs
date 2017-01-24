@@ -14,34 +14,19 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class FactorExposure
+    public partial class CompanySize
     {
     	[DataMember]
-        public int FactorExposureId { get; set; }
+        public int CompanySizeId { get; set; }
     	[DataMember]
-        public int FactorRelationshipId { get; set; }
+        public string Name { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
-    	[DataMember]
-        public int FundId { get; set; }
-    	[DataMember]
-        public Nullable<int> InstrumentMarketId { get; set; }
-    	[DataMember]
-        public Nullable<decimal> Exposure { get; set; }
+        public Nullable<decimal> MarketCapUSD { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
-        public int UpdateUserId { get; set; }
+        public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public Nullable<decimal> Volatility { get; set; }
-    	[DataMember]
-        public Nullable<decimal> MarginalX100 { get; set; }
-    
-        [DataMember]
-        public virtual Fund Fund { get; set; }
-        [DataMember]
-        public virtual FactorRelationship FactorRelationship { get; set; }
     }
 }
