@@ -37,7 +37,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> Volatility { get; set; }
     	[DataMember]
-        public Nullable<decimal> MarginalX100 { get; set; }
+        public Nullable<decimal> VolatilityContribution { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
