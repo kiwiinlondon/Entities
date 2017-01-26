@@ -82,8 +82,8 @@
             <PropertyRef Name="AnalystIdeaId" />
           </Key>
           <Property Name="AnalystIdeaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AnalystId" Type="int" Nullable="false" />
-          <Property Name="ResearchNoteLastReceived" Type="datetime" Nullable="false" />
+          <Property Name="AnalystId" Type="int" />
+          <Property Name="ResearchNoteLastReceived" Type="datetime" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -91,6 +91,7 @@
           <Property Name="ExternalOriginatorId" Type="int" />
           <Property Name="InternalOriginatorId" Type="int" />
           <Property Name="InternalOriginatorId2" Type="int" />
+          <Property Name="OriginatingDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Analytic">
           <Key>
@@ -882,6 +883,17 @@
           <Property Name="BetaLongTerm" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="BetaShortTerm" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="HedgeRatio" Type="numeric" Precision="27" Scale="8" />
+        </EntityType>
+        <EntityType Name="ExternalPerson">
+          <Key>
+            <PropertyRef Name="ExternalPersonId" />
+          </Key>
+          <Property Name="ExternalPersonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ExternalEntityId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="Extract">
           <Key>
@@ -2609,7 +2621,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           </ReferentialConstraint>
         </Association>
         <Association Name="AnalystIdeaAnalystIDFK">
-          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
           <End Role="AnalystIdea" Type="Self.AnalystIdea" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ApplicationUser">
@@ -3916,6 +3928,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ExternalPersonUpdateUserIDFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ExternalPerson" Type="Self.ExternalPerson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ExternalPerson">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ExtractEntityEntityTypeIdFK">
           <End Role="EntityType" Type="Self.EntityType" Multiplicity="1" />
           <End Role="ExtractEntity" Type="Self.ExtractEntity" Multiplicity="*" />
@@ -4324,6 +4348,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__AnalystId__Exter__490B3F54">
+          <End Role="ExternalPerson" Type="Self.ExternalPerson" Multiplicity="0..1" />
+          <End Role="AnalystIdea" Type="Self.AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExternalPerson">
+              <PropertyRef Name="ExternalPersonId" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="ExternalOriginatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__AnalystId__Inter__49FF638D">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
           <End Role="AnalystIdea" Type="Self.AnalystIdea" Multiplicity="*" />
@@ -4477,6 +4513,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="ClientTrade1">
               <PropertyRef Name="RelatedTradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ExternalP__Exter__4722F6E2">
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="1" />
+          <End Role="ExternalPerson" Type="Self.ExternalPerson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ExternalPerson">
+              <PropertyRef Name="ExternalEntityId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7488,6 +7536,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ResearchNoteLastReceived" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="IssuerId" Type="int" Mode="In" />
+          <Parameter Name="ExternalOriginatorId" Type="int" Mode="In" />
+          <Parameter Name="InternalOriginatorId" Type="int" Mode="In" />
+          <Parameter Name="InternalOriginatorId2" Type="int" Mode="In" />
+          <Parameter Name="OriginatingDate" Type="datetime" Mode="In" />
         </Function>
         <Function Name="AnalystIdea_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalystIdeaId" Type="int" Mode="In" />
@@ -7496,6 +7548,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="IssuerId" Type="int" Mode="In" />
+          <Parameter Name="ExternalOriginatorId" Type="int" Mode="In" />
+          <Parameter Name="InternalOriginatorId" Type="int" Mode="In" />
+          <Parameter Name="InternalOriginatorId2" Type="int" Mode="In" />
+          <Parameter Name="OriginatingDate" Type="datetime" Mode="In" />
         </Function>
         <Function Name="Analytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalyticId" Type="int" Mode="In" />
@@ -7536,6 +7592,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="Initials" Type="varchar" Mode="In" />
           <Parameter Name="IsActive" Type="bit" Mode="In" />
+          <Parameter Name="UserTypeFlags" Type="int" Mode="In" />
         </Function>
         <Function Name="ApplicationUser_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="int" Mode="In" />
@@ -7547,6 +7604,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="Initials" Type="varchar" Mode="In" />
           <Parameter Name="IsActive" Type="bit" Mode="In" />
+          <Parameter Name="UserTypeFlags" Type="int" Mode="In" />
         </Function>
         <Function Name="Attribution_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -8780,6 +8838,23 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="ExternalPerson_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExternalPersonId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ExternalPerson_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="ExternalEntityId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ExternalPerson_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExternalPersonId" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="ExternalEntityId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
         <Function Name="Extract_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractID" Type="int" Mode="In" />
@@ -11177,6 +11252,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="EventIdToRepull" EntityType="Self.EventIdToRepull" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EventType" EntityType="Self.EventType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Exposure" EntityType="Self.Exposure" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExternalPerson" EntityType="Self.ExternalPerson" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Extract" EntityType="Self.Extract" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExtractConfiguration" EntityType="Self.ExtractConfiguration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExtractEntity" EntityType="Self.ExtractEntity" Schema="dbo" store:Type="Tables" />
@@ -11786,6 +11862,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Exposure" EntitySet="Exposure" />
           </AssociationSet>
+          <AssociationSet Name="ExternalPersonUpdateUserIDFK" Association="Self.ExternalPersonUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ExternalPerson" EntitySet="ExternalPerson" />
+          </AssociationSet>
           <AssociationSet Name="ExtractEntityEntityTypeIdFK" Association="Self.ExtractEntityEntityTypeIdFK">
             <End Role="EntityType" EntitySet="EntityType" />
             <End Role="ExtractEntity" EntitySet="ExtractEntity" />
@@ -11922,6 +12002,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="LegalEntity" EntitySet="LegalEntity" />
             <End Role="Administrator" EntitySet="Administrator" />
           </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Exter__490B3F54" Association="Self.FK__AnalystId__Exter__490B3F54">
+            <End Role="ExternalPerson" EntitySet="ExternalPerson" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdea" />
+          </AssociationSet>
           <AssociationSet Name="FK__AnalystId__Inter__49FF638D" Association="Self.FK__AnalystId__Inter__49FF638D">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="AnalystIdea" EntitySet="AnalystIdea" />
@@ -11973,6 +12057,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__ClientTra__Relat__41A398E8" Association="Self.FK__ClientTra__Relat__41A398E8">
             <End Role="ClientTrade" EntitySet="ClientTrade" />
             <End Role="ClientTrade1" EntitySet="ClientTrade" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ExternalP__Exter__4722F6E2" Association="Self.FK__ExternalP__Exter__4722F6E2">
+            <End Role="LegalEntity" EntitySet="LegalEntity" />
+            <End Role="ExternalPerson" EntitySet="ExternalPerson" />
           </AssociationSet>
           <AssociationSet Name="FK__FilesToBe__Updat__085E450E" Association="Self.FK__FilesToBe__Updat__085E450E">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -14905,6 +14993,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__AnalystId__Inter__4AF387C6" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
+          </AssociationSet>
+          <EntitySet Name="ExternalPersons" EntityType="Odey.Framework.Keeley.Entities.ExternalPerson" />
+          <AssociationSet Name="FK__AnalystId__Exter__490B3F54" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Exter__490B3F54">
+            <End Role="ExternalPerson" EntitySet="ExternalPersons" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
+          </AssociationSet>
+          <AssociationSet Name="ExternalPersonUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.ExternalPersonUpdateUserIDFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ExternalPerson" EntitySet="ExternalPersons" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ExternalP__Exter__4722F6E2" Association="Odey.Framework.Keeley.Entities.FK__ExternalP__Exter__4722F6E2">
+            <End Role="LegalEntity" EntitySet="LegalEntities" />
+            <End Role="ExternalPerson" EntitySet="ExternalPersons" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -14922,8 +15023,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="UserTypeFlags" Type="Int32" />
-          <NavigationProperty Name="AnalystIdeas2" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__49FF638D" FromRole="ApplicationUser" ToRole="AnalystIdea" />
-          <NavigationProperty Name="AnalystIdeas3" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6" FromRole="ApplicationUser" ToRole="AnalystIdea" />
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -21396,8 +21495,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <PropertyRef Name="AnalystIdeaId" />
           </Key>
           <Property Name="AnalystIdeaId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="AnalystId" Type="Int32" Nullable="false" />
-          <Property Name="ResearchNoteLastReceived" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AnalystId" Type="Int32" />
+          <Property Name="ResearchNoteLastReceived" Type="DateTime" Precision="3" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
@@ -21407,11 +21506,13 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ExternalOriginatorId" Type="Int32" />
           <Property Name="InternalOriginatorId" Type="Int32" />
           <Property Name="InternalOriginatorId2" Type="Int32" />
-          <NavigationProperty Name="ApplicationUser2" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__49FF638D" FromRole="AnalystIdea" ToRole="ApplicationUser" />
-          <NavigationProperty Name="ApplicationUser3" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6" FromRole="AnalystIdea" ToRole="ApplicationUser" />
+          <NavigationProperty Name="InternalOriginator" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__49FF638D" FromRole="AnalystIdea" ToRole="ApplicationUser" />
+          <NavigationProperty Name="InternalOriginator2" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6" FromRole="AnalystIdea" ToRole="ApplicationUser" />
+          <Property Name="OriginatingDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ExternalOriginator" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Exter__490B3F54" FromRole="AnalystIdea" ToRole="ExternalPerson" />
         </EntityType>
         <Association Name="AnalystIdeaAnalystIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
           <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ApplicationUser">
@@ -22531,6 +22632,54 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ExternalPerson">
+          <Key>
+            <PropertyRef Name="ExternalPersonId" />
+          </Key>
+          <Property Name="ExternalPersonId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ExternalEntityId" Type="Int32" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.FK__ExternalP__Exter__4722F6E2" FromRole="ExternalPerson" ToRole="LegalEntity" />
+        </EntityType>
+        <Association Name="FK__AnalystId__Exter__490B3F54">
+          <End Type="Odey.Framework.Keeley.Entities.ExternalPerson" Role="ExternalPerson" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExternalPerson">
+              <PropertyRef Name="ExternalPersonId" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="ExternalOriginatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExternalPersonUpdateUserIDFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ExternalPerson" Role="ExternalPerson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ExternalPerson">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ExternalP__Exter__4722F6E2">
+          <End Type="Odey.Framework.Keeley.Entities.LegalEntity" Role="LegalEntity" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ExternalPerson" Role="ExternalPerson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ExternalPerson">
+              <PropertyRef Name="ExternalEntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22553,6 +22702,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ApplicationUser">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ApplicationUser_Insert">
+                  <ScalarProperty Name="UserTypeFlags" ParameterName="UserTypeFlags" />
                   <ScalarProperty Name="IsActive" ParameterName="IsActive" />
                   <ScalarProperty Name="Initials" ParameterName="Initials" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -22565,6 +22715,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="UserID" ColumnName="UserID" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ApplicationUser_Update">
+                  <ScalarProperty Name="UserTypeFlags" ParameterName="UserTypeFlags" Version="Current" />
                   <ScalarProperty Name="IsActive" ParameterName="IsActive" Version="Current" />
                   <ScalarProperty Name="Initials" ParameterName="Initials" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
@@ -28065,6 +28216,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AnalystIdeas">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea">
               <MappingFragment StoreEntitySet="AnalystIdea">
+                <ScalarProperty Name="OriginatingDate" ColumnName="OriginatingDate" />
                 <ScalarProperty Name="InternalOriginatorId2" ColumnName="InternalOriginatorId2" />
                 <ScalarProperty Name="InternalOriginatorId" ColumnName="InternalOriginatorId" />
                 <ScalarProperty Name="ExternalOriginatorId" ColumnName="ExternalOriginatorId" />
@@ -28080,6 +28232,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AnalystIdea_Insert">
+                  <ScalarProperty Name="OriginatingDate" ParameterName="OriginatingDate" />
+                  <ScalarProperty Name="InternalOriginatorId2" ParameterName="InternalOriginatorId2" />
+                  <ScalarProperty Name="InternalOriginatorId" ParameterName="InternalOriginatorId" />
+                  <ScalarProperty Name="ExternalOriginatorId" ParameterName="ExternalOriginatorId" />
                   <ScalarProperty Name="IssuerId" ParameterName="IssuerId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="ResearchNoteLastReceived" ParameterName="ResearchNoteLastReceived" />
@@ -28089,6 +28245,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AnalystIdea_Update">
+                  <ScalarProperty Name="OriginatingDate" ParameterName="OriginatingDate" Version="Current" />
+                  <ScalarProperty Name="InternalOriginatorId2" ParameterName="InternalOriginatorId2" Version="Current" />
+                  <ScalarProperty Name="InternalOriginatorId" ParameterName="InternalOriginatorId" Version="Current" />
+                  <ScalarProperty Name="ExternalOriginatorId" ParameterName="ExternalOriginatorId" Version="Current" />
                   <ScalarProperty Name="IssuerId" ParameterName="IssuerId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
@@ -29267,6 +29427,44 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ExternalPersons">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExternalPerson">
+              <MappingFragment StoreEntitySet="ExternalPerson">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="ExternalEntityId" ColumnName="ExternalEntityId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ExternalPersonId" ColumnName="ExternalPersonId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExternalPerson">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ExternalPerson_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="ExternalEntityId" ParameterName="ExternalEntityId" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ResultBinding Name="ExternalPersonId" ColumnName="ExternalPersonId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ExternalPerson_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="ExternalEntityId" ParameterName="ExternalEntityId" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="ExternalPersonId" ParameterName="ExternalPersonId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ExternalPerson_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ExternalPersonId" ParameterName="ExternalPersonId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -29289,7 +29487,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="101">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="83">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -33948,43 +34146,39 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="24.822916666666668" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="24.197918166666671" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="20.208333333333332" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="20.041666666666668" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="19.635416666666668" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="19.416666666666668" PointY="21.515144838954669" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="24.760416666666668" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="24.197918166666671" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="20.208333333333332" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="19.98416666666667" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="19.416666666666668" PointY="21.521884874503929" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.521884874503929" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="17.976602564102564" PointY="25.610087890625" />
           <edmx:ConnectorPoint PointX="17.383301282051278" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="15.708333333333334" PointY="25.610087890625" />
-          <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.135416666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.619791666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.747395833333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.580729166666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.083333333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.6875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.6875" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.776041666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.541669666693345" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.541669666693345" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="12.71875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.71875" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="12.005208333333334" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.541669666673336" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.541669666673336" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -34970,7 +35164,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionInstrumentMarketIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.75" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.625" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaAnalystIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaIssuerIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalystIdeaUserIDFK" />
@@ -35046,6 +35240,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__LegalEnti__Compa__1A50506B" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__49FF638D" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExternalPerson" Width="1.5" PointX="18.25" PointY="7" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Exter__490B3F54" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExternalPersonUpdateUserIDFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ExternalP__Exter__4722F6E2" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

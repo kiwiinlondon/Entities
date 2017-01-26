@@ -19,9 +19,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int AnalystIdeaId { get; set; }
     	[DataMember]
-        public int AnalystId { get; set; }
+        public Nullable<int> AnalystId { get; set; }
     	[DataMember]
-        public System.DateTime ResearchNoteLastReceived { get; set; }
+        public Nullable<System.DateTime> ResearchNoteLastReceived { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -36,14 +36,18 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> InternalOriginatorId { get; set; }
     	[DataMember]
         public Nullable<int> InternalOriginatorId2 { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> OriginatingDate { get; set; }
     
         [DataMember]
         public virtual ApplicationUser Analyst { get; set; }
         [DataMember]
         public virtual Issuer Issuer { get; set; }
         [DataMember]
-        public virtual ApplicationUser ApplicationUser2 { get; set; }
+        public virtual ApplicationUser InternalOriginator { get; set; }
         [DataMember]
-        public virtual ApplicationUser ApplicationUser3 { get; set; }
+        public virtual ApplicationUser InternalOriginator2 { get; set; }
+        [DataMember]
+        public virtual ExternalPerson ExternalOriginator { get; set; }
     }
 }
