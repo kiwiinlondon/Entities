@@ -24,16 +24,16 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Admin = 1 << 4,
         [EnumMember]
-        ClientServices = 1 << 5,
+        Marketing = 1 << 5,
         [EnumMember]
-        Marketing = 1 << 6,
+        Compliance = 1 << 6,
         [EnumMember]
-        Compliance = 1 << 7,
+        Wealth = 1 << 7,
         [EnumMember]
-        Wealth = 1 << 8,
+        Trading = 1 << 8,
         [EnumMember]
-        Trading = 1 << 9,
+        Accounts = 1 << 9,
         [EnumMember]
-        Accounts = 1 << 10
+        Treasury = 1 << 10,
     }
 }
