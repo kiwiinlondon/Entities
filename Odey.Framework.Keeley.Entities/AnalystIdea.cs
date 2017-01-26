@@ -30,10 +30,20 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int IssuerId { get; set; }
+    	[DataMember]
+        public Nullable<int> ExternalOriginatorId { get; set; }
+    	[DataMember]
+        public Nullable<int> InternalOriginatorId { get; set; }
+    	[DataMember]
+        public Nullable<int> InternalOriginatorId2 { get; set; }
     
         [DataMember]
         public virtual ApplicationUser Analyst { get; set; }
         [DataMember]
         public virtual Issuer Issuer { get; set; }
+        [DataMember]
+        public virtual ApplicationUser ApplicationUser2 { get; set; }
+        [DataMember]
+        public virtual ApplicationUser ApplicationUser3 { get; set; }
     }
 }

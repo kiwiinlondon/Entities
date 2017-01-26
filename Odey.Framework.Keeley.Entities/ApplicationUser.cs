@@ -16,6 +16,13 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class ApplicationUser
     {
+    	
+        public ApplicationUser()
+        {
+            this.AnalystIdeas2 = new List<AnalystIdea>();
+            this.AnalystIdeas3 = new List<AnalystIdea>();
+        }
+    
     	[DataMember]
         public int UserID { get; set; }
     	[DataMember]
@@ -36,5 +43,12 @@ namespace Odey.Framework.Keeley.Entities
         public string Initials { get; set; }
     	[DataMember]
         public bool IsActive { get; set; }
+    	[DataMember]
+        public Nullable<int> UserTypeFlags { get; set; }
+    
+        [DataMember]
+        public virtual List<AnalystIdea> AnalystIdeas2 { get; set; }
+        [DataMember]
+        public virtual List<AnalystIdea> AnalystIdeas3 { get; set; }
     }
 }

@@ -27,8 +27,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> InstrumentMarketId { get; set; }
     	[DataMember]
-        public Nullable<decimal> Exposure { get; set; }
-    	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserId { get; set; }
@@ -38,6 +36,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> Volatility { get; set; }
     	[DataMember]
         public Nullable<decimal> VolatilityContribution { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ActiveExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginalX100 { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FactorVolatility { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalActiveVolatility { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

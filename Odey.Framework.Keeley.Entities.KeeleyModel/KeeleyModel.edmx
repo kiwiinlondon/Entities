@@ -88,6 +88,9 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="IssuerId" Type="int" Nullable="false" />
+          <Property Name="ExternalOriginatorId" Type="int" />
+          <Property Name="InternalOriginatorId" Type="int" />
+          <Property Name="InternalOriginatorId2" Type="int" />
         </EntityType>
         <EntityType Name="Analytic">
           <Key>
@@ -117,6 +120,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Initials" Type="varchar" MaxLength="10" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="UserTypeFlags" Type="int" />
         </EntityType>
         <EntityType Name="Attribution">
           <Key>
@@ -1045,7 +1049,10 @@
           <Property Name="FundId" Type="int" Nullable="false" />
           <Property Name="InstrumentMarketId" Type="int" />
           <Property Name="Volatility" Type="numeric" Precision="16" Scale="4" />
-          <Property Name="Exposure" Type="numeric" Precision="16" Scale="4" />
+          <Property Name="ActiveExposure" Type="numeric" Precision="16" Scale="4" />
+          <Property Name="MarginalX100" Type="numeric" Precision="16" Scale="4" />
+          <Property Name="FactorVolatility" Type="numeric" Precision="16" Scale="4" />
+          <Property Name="TotalActiveVolatility" Type="numeric" Precision="16" Scale="4" />
           <Property Name="VolatilityContribution" Type="numeric" Precision="16" Scale="4" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserId" Type="int" Nullable="false" />
@@ -4314,6 +4321,30 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="Administrator">
               <PropertyRef Name="LegalEntityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Inter__49FF638D">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="AnalystIdea" Type="Self.AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="InternalOriginatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Inter__4AF387C6">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="AnalystIdea" Type="Self.AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="InternalOriginatorId2" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8906,7 +8937,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="Volatility" Type="numeric" Mode="In" />
-          <Parameter Name="Exposure" Type="numeric" Mode="In" />
+          <Parameter Name="ActiveExposure" Type="numeric" Mode="In" />
+          <Parameter Name="MarginalX100" Type="numeric" Mode="In" />
+          <Parameter Name="FactorVolatility" Type="numeric" Mode="In" />
+          <Parameter Name="TotalActiveVolatility" Type="numeric" Mode="In" />
           <Parameter Name="VolatilityContribution" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
         </Function>
@@ -8917,7 +8951,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="Volatility" Type="numeric" Mode="In" />
-          <Parameter Name="Exposure" Type="numeric" Mode="In" />
+          <Parameter Name="ActiveExposure" Type="numeric" Mode="In" />
+          <Parameter Name="MarginalX100" Type="numeric" Mode="In" />
+          <Parameter Name="FactorVolatility" Type="numeric" Mode="In" />
+          <Parameter Name="TotalActiveVolatility" Type="numeric" Mode="In" />
           <Parameter Name="VolatilityContribution" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -11885,6 +11922,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="LegalEntity" EntitySet="LegalEntity" />
             <End Role="Administrator" EntitySet="Administrator" />
           </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Inter__49FF638D" Association="Self.FK__AnalystId__Inter__49FF638D">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdea" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Inter__4AF387C6" Association="Self.FK__AnalystId__Inter__4AF387C6">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdea" />
+          </AssociationSet>
           <AssociationSet Name="FK__Attributi__Attri__788D07E8" Association="Self.FK__Attributi__Attri__788D07E8">
             <End Role="AttributionFund" EntitySet="AttributionFund" />
             <End Role="Attribution" EntitySet="Attribution" />
@@ -14770,7 +14815,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <Parameter Name="FundId" Mode="In" Type="Int32" />
             <Parameter Name="InstrumentMarketId" Mode="In" Type="Int32" />
             <Parameter Name="Volatility" Mode="In" Type="Decimal" />
-            <Parameter Name="Exposure" Mode="In" Type="Decimal" />
+            <Parameter Name="ActiveExposure" Mode="In" Type="Decimal" />
+            <Parameter Name="MarginalX100" Mode="In" Type="Decimal" />
+            <Parameter Name="FactorVolatility" Mode="In" Type="Decimal" />
+            <Parameter Name="TotalActiveVolatility" Mode="In" Type="Decimal" />
             <Parameter Name="VolatilityContribution" Mode="In" Type="Decimal" />
             <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -14781,7 +14829,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <Parameter Name="FundId" Mode="In" Type="Int32" />
             <Parameter Name="InstrumentMarketId" Mode="In" Type="Int32" />
             <Parameter Name="Volatility" Mode="In" Type="Decimal" />
-            <Parameter Name="Exposure" Mode="In" Type="Decimal" />
+            <Parameter Name="ActiveExposure" Mode="In" Type="Decimal" />
+            <Parameter Name="MarginalX100" Mode="In" Type="Decimal" />
+            <Parameter Name="FactorVolatility" Mode="In" Type="Decimal" />
+            <Parameter Name="TotalActiveVolatility" Mode="In" Type="Decimal" />
             <Parameter Name="VolatilityContribution" Mode="In" Type="Decimal" />
             <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
             <Parameter Name="DataVersion" Mode="In" Type="Binary" />
@@ -14846,6 +14897,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__LegalEnti__Compa__1A50506B" Association="Odey.Framework.Keeley.Entities.FK__LegalEnti__Compa__1A50506B">
             <End Role="CompanySize" EntitySet="CompanySizes" />
             <End Role="LegalEntity" EntitySet="LegalEntities" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Inter__49FF638D" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__49FF638D">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Inter__4AF387C6" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="AnalystIdea" EntitySet="AnalystIdeas" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -14862,6 +14921,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="UserTypeFlags" Type="Int32" />
+          <NavigationProperty Name="AnalystIdeas2" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__49FF638D" FromRole="ApplicationUser" ToRole="AnalystIdea" />
+          <NavigationProperty Name="AnalystIdeas3" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6" FromRole="ApplicationUser" ToRole="AnalystIdea" />
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -21342,6 +21404,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="IssuerId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Analyst" Relationship="Odey.Framework.Keeley.Entities.AnalystIdeaAnalystIDFK" FromRole="AnalystIdea" ToRole="ApplicationUser" />
           <NavigationProperty Name="Issuer" Relationship="Odey.Framework.Keeley.Entities.AnalystIdeaIssuerIDFK" FromRole="AnalystIdea" ToRole="Issuer" />
+          <Property Name="ExternalOriginatorId" Type="Int32" />
+          <Property Name="InternalOriginatorId" Type="Int32" />
+          <Property Name="InternalOriginatorId2" Type="Int32" />
+          <NavigationProperty Name="ApplicationUser2" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__49FF638D" FromRole="AnalystIdea" ToRole="ApplicationUser" />
+          <NavigationProperty Name="ApplicationUser3" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6" FromRole="AnalystIdea" ToRole="ApplicationUser" />
         </EntityType>
         <Association Name="AnalystIdeaAnalystIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -22266,7 +22333,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="FundId" Type="Int32" Nullable="false" />
           <Property Name="InstrumentMarketId" Type="Int32" />
-          <Property Name="Exposure" Type="Decimal" Precision="16" Scale="4" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserId" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
@@ -22274,6 +22340,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="FactorRelationship" Relationship="Odey.Framework.Keeley.Entities.fk_factor_exposure_relationship" FromRole="FactorExposure" ToRole="FactorRelationship" />
           <Property Name="Volatility" Type="Decimal" Precision="16" Scale="4" />
           <Property Name="VolatilityContribution" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="ActiveExposure" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="MarginalX100" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="FactorVolatility" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="TotalActiveVolatility" Type="Decimal" Precision="16" Scale="4" />
         </EntityType>
         <EntityType Name="FactorHierarchy">
           <Key>
@@ -22437,6 +22507,30 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__AnalystId__Inter__49FF638D">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="InternalOriginatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Inter__4AF387C6">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea" Role="AnalystIdea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea">
+              <PropertyRef Name="InternalOriginatorId2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22444,7 +22538,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="KeeleyModelStoreContainer" CdmEntityContainer="KeeleyModel">
           <EntitySetMapping Name="ApplicationUsers"><EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ApplicationUser"><MappingFragment StoreEntitySet="ApplicationUser">
-            <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+            <ScalarProperty Name="UserTypeFlags" ColumnName="UserTypeFlags" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Initials" ColumnName="Initials" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
             <ScalarProperty Name="FMPersID" ColumnName="FMPersID" />
@@ -27970,6 +28065,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AnalystIdeas">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea">
               <MappingFragment StoreEntitySet="AnalystIdea">
+                <ScalarProperty Name="InternalOriginatorId2" ColumnName="InternalOriginatorId2" />
+                <ScalarProperty Name="InternalOriginatorId" ColumnName="InternalOriginatorId" />
+                <ScalarProperty Name="ExternalOriginatorId" ColumnName="ExternalOriginatorId" />
                 <ScalarProperty Name="IssuerId" ColumnName="IssuerId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -29004,12 +29102,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="FactorExposures">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactorExposure">
               <MappingFragment StoreEntitySet="FactorExposure">
+                <ScalarProperty Name="TotalActiveVolatility" ColumnName="TotalActiveVolatility" />
+                <ScalarProperty Name="FactorVolatility" ColumnName="FactorVolatility" />
+                <ScalarProperty Name="MarginalX100" ColumnName="MarginalX100" />
+                <ScalarProperty Name="ActiveExposure" ColumnName="ActiveExposure" />
                 <ScalarProperty Name="VolatilityContribution" ColumnName="VolatilityContribution" />
                 <ScalarProperty Name="Volatility" ColumnName="Volatility" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="Exposure" ColumnName="Exposure" />
                 <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
                 <ScalarProperty Name="FundId" ColumnName="FundId" />
                 <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
@@ -29020,10 +29121,13 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactorExposure">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.FactorExposure_Insert">
+                  <ScalarProperty Name="TotalActiveVolatility" ParameterName="TotalActiveVolatility" />
+                  <ScalarProperty Name="FactorVolatility" ParameterName="FactorVolatility" />
+                  <ScalarProperty Name="MarginalX100" ParameterName="MarginalX100" />
+                  <ScalarProperty Name="ActiveExposure" ParameterName="ActiveExposure" />
                   <ScalarProperty Name="VolatilityContribution" ParameterName="VolatilityContribution" />
                   <ScalarProperty Name="Volatility" ParameterName="Volatility" />
                   <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" />
-                  <ScalarProperty Name="Exposure" ParameterName="Exposure" />
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
                   <ScalarProperty Name="FundId" ParameterName="FundId" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
@@ -29033,11 +29137,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.FactorExposure_Update">
+                  <ScalarProperty Name="TotalActiveVolatility" ParameterName="TotalActiveVolatility" Version="Current" />
+                  <ScalarProperty Name="FactorVolatility" ParameterName="FactorVolatility" Version="Current" />
+                  <ScalarProperty Name="MarginalX100" ParameterName="MarginalX100" Version="Current" />
+                  <ScalarProperty Name="ActiveExposure" ParameterName="ActiveExposure" Version="Current" />
                   <ScalarProperty Name="VolatilityContribution" ParameterName="VolatilityContribution" Version="Current" />
                   <ScalarProperty Name="Volatility" ParameterName="Volatility" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" Version="Current" />
-                  <ScalarProperty Name="Exposure" ParameterName="Exposure" Version="Current" />
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
@@ -33841,41 +33948,43 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="24.822916666666668" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="24.197918166666671" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="20.208333333333332" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="20.041666666666668" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="19.635416666666668" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="19.416666666666668" PointY="21.497171410823306" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.497171410823306" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="24.822916666666668" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="24.516333333333332" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="24.197918166666671" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="20.208333333333332" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="20.041666666666668" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="19.802083333333332" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="19.635416666666668" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="19.416666666666668" PointY="21.515144838954669" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.515144838954669" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="17.976602564102564" PointY="25.610087890625" />
           <edmx:ConnectorPoint PointX="17.383301282051278" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="15.708333333333334" PointY="25.610087890625" />
-          <edmx:ConnectorPoint PointX="15.041666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.619791666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.747395833333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.580729166666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.083333333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.71875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.71875" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.942708333333334" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.776041666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.54166966677338" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.54166966677338" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="12.6875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.6875" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.776041666666666" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.541669666693345" PointY="25.5625" />
+          <edmx:ConnectorPoint PointX="11.541669666693345" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -34935,6 +35044,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CompanySize" Width="1.5" PointX="3" PointY="88.5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CompanySizeUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__LegalEnti__Compa__1A50506B" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__49FF638D" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Inter__4AF387C6" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
