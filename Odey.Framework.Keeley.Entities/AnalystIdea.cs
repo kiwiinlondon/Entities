@@ -38,6 +38,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> InternalOriginatorId2 { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> OriginatingDate { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsOriginatedLong { get; set; }
     
         [DataMember]
         public virtual ApplicationUser Analyst { get; set; }
