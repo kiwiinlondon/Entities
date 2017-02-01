@@ -115,6 +115,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         PORT_GBP_R_INC = 5534,
         [EnumMember]
         PORT_GBP_M = 7413,
+        [EnumMember]
+        PORT_GBP_P_I_ACC = 6720,
+        [EnumMember]
+        PORT_GBP_P_R_ACC = 6721,
 
         [EnumMember]
         VITR = 5333,
