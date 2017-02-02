@@ -16,13 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Fund
     {
-    	
-        public Fund()
-        {
-            this.FactsetPortfolios = new List<FactsetPortfolio>();
-            this.FactorExposures = new List<FactorExposure>();
-        }
-    
     	[DataMember]
         public int LegalEntityID { get; set; }
     	[DataMember]
@@ -100,9 +93,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket RiskFreeInstrumentMarket { get; set; }
         [DataMember]
         public virtual Currency Currency { get; set; }
-        [DataMember]
-        public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
-        [DataMember]
-        public virtual List<FactorExposure> FactorExposures { get; set; }
     }
 }

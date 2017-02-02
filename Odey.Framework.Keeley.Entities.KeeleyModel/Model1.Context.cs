@@ -166,6 +166,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FactorRelationship> FactorRelationships { get; set; }
         public DbSet<CompanySize> CompanySizes { get; set; }
         public DbSet<ExternalPerson> ExternalPersons { get; set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<FundPortfolioChange> FundPortfolioChanges { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

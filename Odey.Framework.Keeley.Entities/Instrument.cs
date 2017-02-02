@@ -73,5 +73,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Bond Bond { get; set; }
         [DataMember]
         public virtual Issuer Issuer { get; set; }
+        [DataMember]
+        public virtual Option Option { get; set; }
     }
 }
