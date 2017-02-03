@@ -14,24 +14,26 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class Option
+    public partial class FactorBenchmark
     {
+    	
+        public FactorBenchmark()
+        {
+            this.FactorExposures = new List<FactorExposure>();
+        }
+    
     	[DataMember]
-        public int InstrumentId { get; set; }
+        public int FactorBenchmarkId { get; set; }
     	[DataMember]
-        public bool IsPut { get; set; }
-    	[DataMember]
-        public decimal StrikePrice { get; set; }
-    	[DataMember]
-        public System.DateTime ExpiryDate { get; set; }
+        public string BenchmarkName { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
-        public int UpdateUserID { get; set; }
+        public int UpdateUserId { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
     
         [DataMember]
-        public virtual Instrument Instrument { get; set; }
+        public virtual List<FactorExposure> FactorExposures { get; set; }
     }
 }

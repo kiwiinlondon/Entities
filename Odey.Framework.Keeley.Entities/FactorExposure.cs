@@ -21,21 +21,19 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int FactorRelationshipId { get; set; }
     	[DataMember]
+        public Nullable<int> FactorBenchmarkId { get; set; }
+    	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
         public int FundId { get; set; }
     	[DataMember]
         public Nullable<int> InstrumentMarketId { get; set; }
     	[DataMember]
-        public System.DateTime StartDt { get; set; }
+        public Nullable<decimal> PortfolioVolatility { get; set; }
     	[DataMember]
-        public int UpdateUserId { get; set; }
+        public Nullable<decimal> BenchmarkVolatility { get; set; }
     	[DataMember]
-        public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public Nullable<decimal> Volatility { get; set; }
-    	[DataMember]
-        public Nullable<decimal> VolatilityContribution { get; set; }
+        public Nullable<decimal> TrackingError { get; set; }
     	[DataMember]
         public Nullable<decimal> ActiveExposure { get; set; }
     	[DataMember]
@@ -44,9 +42,15 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> FactorVolatility { get; set; }
     	[DataMember]
         public Nullable<decimal> TotalActiveVolatility { get; set; }
+    	[DataMember]
+        public Nullable<decimal> VolatilityContribution { get; set; }
+    	[DataMember]
+        public System.DateTime StartDt { get; set; }
+    	[DataMember]
+        public int UpdateUserId { get; set; }
+    	[DataMember]
+        public byte[] DataVersion { get; set; }
     
-        [DataMember]
-        public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual FactorRelationship FactorRelationship { get; set; }
     }

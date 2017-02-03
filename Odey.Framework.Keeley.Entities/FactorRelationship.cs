@@ -19,8 +19,8 @@ namespace Odey.Framework.Keeley.Entities
     	
         public FactorRelationship()
         {
-            this.FactorExposures = new List<FactorExposure>();
             this.FactorRelationship1 = new List<FactorRelationship>();
+            this.FactorExposures = new List<FactorExposure>();
         }
     
     	[DataMember]
@@ -47,12 +47,12 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual EntityType EntityType { get; set; }
         [DataMember]
-        public virtual List<FactorExposure> FactorExposures { get; set; }
-        [DataMember]
         public virtual FactorHierarchy FactorHierarchy { get; set; }
         [DataMember]
         public virtual List<FactorRelationship> FactorRelationship1 { get; set; }
         [DataMember]
         public virtual FactorRelationship FactorRelationship2 { get; set; }
+        [DataMember]
+        public virtual List<FactorExposure> FactorExposures { get; set; }
     }
 }
