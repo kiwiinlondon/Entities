@@ -1367,6 +1367,16 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="Future">
+          <Key>
+            <PropertyRef Name="InstrumentId" />
+          </Key>
+          <Property Name="InstrumentId" Type="int" Nullable="false" />
+          <Property Name="MaturityDate" Type="datetime" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="FXRate">
           <Key>
             <PropertyRef Name="FXRateId" />
@@ -4719,6 +4729,30 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="FundWebsiteCacheTime">
               <PropertyRef Name="FundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Future__Instrume__79796C85">
+          <End Role="Instrument" Type="Self.Instrument" Multiplicity="1" />
+          <End Role="Future" Type="Self.Future" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Instrument">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="Future">
+              <PropertyRef Name="InstrumentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Future__UpdateUs__7A6D90BE">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="Future" Type="Self.Future" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Future">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9540,6 +9574,22 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="Future_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InstrumentId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Future_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InstrumentId" Type="int" Mode="In" />
+          <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Future_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InstrumentId" Type="int" Mode="In" />
+          <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="FXRate_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FXRateId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -11428,6 +11478,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="FundPerformance" EntityType="Self.FundPerformance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundPortfolioChange" EntityType="Self.FundPortfolioChange" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundWebsiteCacheTime" EntityType="Self.FundWebsiteCacheTime" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Future" EntityType="Self.Future" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FXRate" EntityType="Self.FXRate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FXTradeEvent" EntityType="Self.FXTradeEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HealthCheck" EntityType="Self.HealthCheck" Schema="dbo" store:Type="Tables" />
@@ -12261,6 +12312,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__FundWebsi__FundI__1AE9D794" Association="Self.FK__FundWebsi__FundI__1AE9D794">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="FundWebsiteCacheTime" EntitySet="FundWebsiteCacheTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Future__Instrume__79796C85" Association="Self.FK__Future__Instrume__79796C85">
+            <End Role="Instrument" EntitySet="Instrument" />
+            <End Role="Future" EntitySet="Future" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Future__UpdateUs__7A6D90BE" Association="Self.FK__Future__UpdateUs__7A6D90BE">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Future" EntitySet="Future" />
           </AssociationSet>
           <AssociationSet Name="FK__FXTradeEv__PNLIn__26412604" Association="Self.FK__FXTradeEv__PNLIn__26412604">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
@@ -15203,6 +15262,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="fk_factor_exposure_relationship" Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_relationship">
             <End Role="FactorRelationship" EntitySet="FactorRelationships" />
             <End Role="FactorExposure" EntitySet="FactorExposures" />
+          </AssociationSet>
+          <EntitySet Name="Futures" EntityType="Odey.Framework.Keeley.Entities.Future" />
+          <AssociationSet Name="FK__Future__UpdateUs__7A6D90BE" Association="Odey.Framework.Keeley.Entities.FK__Future__UpdateUs__7A6D90BE">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Future" EntitySet="Futures" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Future__Instrume__79796C85" Association="Odey.Framework.Keeley.Entities.FK__Future__Instrume__79796C85">
+            <End Role="Instrument" EntitySet="Instruments" />
+            <End Role="Future" EntitySet="Futures" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -15281,6 +15349,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Bond" Relationship="Odey.Framework.Keeley.Entities.BondInstrumentIdFK" FromRole="Instrument" ToRole="Bond" />
           <NavigationProperty Name="Issuer" Relationship="Odey.Framework.Keeley.Entities.InstrumentIssuerIDFK" FromRole="Instrument" ToRole="Issuer" />
           <NavigationProperty Name="Option" Relationship="Odey.Framework.Keeley.Entities.FK__Options__Instrum__431D5BD4" FromRole="Instrument" ToRole="Options" />
+          <NavigationProperty Name="Future" Relationship="Odey.Framework.Keeley.Entities.FK__Future__Instrume__79796C85" FromRole="Instrument" ToRole="Future" />
           </EntityType>
         <EntityType Name="InstrumentClass">
           <Key>
@@ -22975,6 +23044,40 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Future">
+          <Key>
+            <PropertyRef Name="InstrumentId" />
+          </Key>
+          <Property Name="InstrumentId" Type="Int32" Nullable="false" />
+          <Property Name="MaturityDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
+        <Association Name="FK__Future__UpdateUs__7A6D90BE">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Future" Role="Future" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Future">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Future__Instrume__79796C85">
+          <End Type="Odey.Framework.Keeley.Entities.Instrument" Role="Instrument" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Future" Role="Future" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Instrument">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="Future">
+              <PropertyRef Name="InstrumentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -29865,6 +29968,41 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Futures">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Future">
+              <MappingFragment StoreEntitySet="Future">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="MaturityDate" ColumnName="MaturityDate" />
+                <ScalarProperty Name="InstrumentId" ColumnName="InstrumentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Future">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.Future_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" />
+                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.Future_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" Version="Current" />
+                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.Future_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -34546,33 +34684,51 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="24.741666666666671" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="22.927083333333332" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="20.166666666666668" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.618562227421165" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.618562227421165" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="19.979166666666668" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="19.533333333333331" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="19.366666666666667" PointY="21.501049462452492" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.501049462452492" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="25.562499999999996" />
-          <edmx:ConnectorPoint PointX="15.135416666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="14.619791666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.562499999999996" />
-          <edmx:ConnectorPoint PointX="12.604166666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.54166966666677" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.54166966666677" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.947179487179486" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.780512820512822" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.638237179487177" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.471570512820513" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.895833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.729166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.135416666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.572916666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.979166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.958333333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.71875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.71875" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="12.690833333333334" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="12.524166666666666" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.723958333333334" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.557291666666666" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.541669666666692" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.541669666666692" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -35646,6 +35802,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactorExposure_FactorBenchmark" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_fund_id" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_relationship" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Future" Width="1.5" PointX="18.875" PointY="26.875" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Future__UpdateUs__7A6D90BE" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Future__Instrume__79796C85" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

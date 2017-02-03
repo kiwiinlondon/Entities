@@ -75,5 +75,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Issuer Issuer { get; set; }
         [DataMember]
         public virtual Option Option { get; set; }
+        [DataMember]
+        public virtual Future Future { get; set; }
     }
 }
