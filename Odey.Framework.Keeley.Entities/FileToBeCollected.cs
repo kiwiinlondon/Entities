@@ -44,5 +44,7 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FileToBeCollectedGroupId { get; set; }
     	[DataMember]
         public Nullable<int> FundId { get; set; }
+    	[DataMember]
+        public Nullable<bool> DeleteFromServer { get; set; }
     }
 }
