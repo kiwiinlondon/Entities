@@ -20,6 +20,7 @@ namespace Odey.Framework.Keeley.Entities
         public Issuer()
         {
             this.IssuerIndustries = new List<IssuerIndustry>();
+            this.Instruments = new List<Instrument>();
         }
     
     	[DataMember]
@@ -41,5 +42,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual LegalEntity LegalEntity { get; set; }
         [DataMember]
         public virtual List<IssuerIndustry> IssuerIndustries { get; set; }
+        [DataMember]
+        public virtual List<Instrument> Instruments { get; set; }
     }
 }
