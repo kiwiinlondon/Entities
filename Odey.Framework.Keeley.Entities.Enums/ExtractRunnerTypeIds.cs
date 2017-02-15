@@ -10,6 +10,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         AllFunds = 1,
         [EnumMember]
-        Standard = 2
+        FundPortfolioChange = 3
     }
 }
