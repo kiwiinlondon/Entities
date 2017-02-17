@@ -2295,6 +2295,15 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="ResearchBroker">
+          <Key>
+            <PropertyRef Name="LegalEntityId" />
+          </Key>
+          <Property Name="LegalEntityId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="RestrictedList">
           <Key>
             <PropertyRef Name="RestrictedListId" />
@@ -7254,6 +7263,30 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ResearchBrokerLegalEntityIdFK">
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="1" />
+          <End Role="ResearchBroker" Type="Self.ResearchBroker" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ResearchBroker">
+              <PropertyRef Name="LegalEntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ResearchBrokerUpdateUserIdFK">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ResearchBroker" Type="Self.ResearchBroker" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ResearchBroker">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="RestrictedListInstrumentIdFK">
           <End Role="Instrument" Type="Self.Instrument" Multiplicity="1" />
           <End Role="RestrictedList" Type="Self.RestrictedList" Multiplicity="*" />
@@ -11530,6 +11563,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="RawIssuerAnalytic" EntityType="Self.RawIssuerAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RawPrice" EntityType="Self.RawPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResearchBroker" EntityType="Self.ResearchBroker" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RestrictedList" EntityType="Self.RestrictedList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RiskAnalytic" EntityType="Self.RiskAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RiskAnalyticType" EntityType="Self.RiskAnalyticType" Schema="dbo" store:Type="Tables" />
@@ -13154,6 +13188,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="RelativeIndexInstrumentMarketIdFK" Association="Self.RelativeIndexInstrumentMarketIdFK">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
             <End Role="Beta" EntitySet="Beta" />
+          </AssociationSet>
+          <AssociationSet Name="ResearchBrokerLegalEntityIdFK" Association="Self.ResearchBrokerLegalEntityIdFK">
+            <End Role="LegalEntity" EntitySet="LegalEntity" />
+            <End Role="ResearchBroker" EntitySet="ResearchBroker" />
+          </AssociationSet>
+          <AssociationSet Name="ResearchBrokerUpdateUserIdFK" Association="Self.ResearchBrokerUpdateUserIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ResearchBroker" EntitySet="ResearchBroker" />
           </AssociationSet>
           <AssociationSet Name="RestrictedListInstrumentIdFK" Association="Self.RestrictedListInstrumentIdFK">
             <End Role="Instrument" EntitySet="Instrument" />
@@ -15273,6 +15315,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Future__Instrume__79796C85" Association="Odey.Framework.Keeley.Entities.FK__Future__Instrume__79796C85">
             <End Role="Instrument" EntitySet="Instruments" />
             <End Role="Future" EntitySet="Futures" />
+          </AssociationSet>
+          <EntitySet Name="ResearchBrokers" EntityType="Odey.Framework.Keeley.Entities.ResearchBroker" />
+          <AssociationSet Name="ResearchBrokerUpdateUserIdFK" Association="Odey.Framework.Keeley.Entities.ResearchBrokerUpdateUserIdFK">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ResearchBroker" EntitySet="ResearchBrokers" />
+          </AssociationSet>
+          <AssociationSet Name="ResearchBrokerLegalEntityIdFK" Association="Odey.Framework.Keeley.Entities.ResearchBrokerLegalEntityIdFK">
+            <End Role="LegalEntity" EntitySet="LegalEntities" />
+            <End Role="ResearchBroker" EntitySet="ResearchBrokers" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -23084,6 +23135,41 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ResearchBroker">
+          <Key>
+            <PropertyRef Name="LegalEntityId" />
+          </Key>
+          <Property Name="LegalEntityId" Type="Int32" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.ResearchBrokerUpdateUserIdFK" FromRole="ResearchBroker" ToRole="ApplicationUser" />
+          <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.ResearchBrokerLegalEntityIdFK" FromRole="ResearchBroker" ToRole="LegalEntity" />
+        </EntityType>
+        <Association Name="ResearchBrokerUpdateUserIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ResearchBroker">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ResearchBrokerLegalEntityIdFK">
+          <End Type="Odey.Framework.Keeley.Entities.LegalEntity" Role="LegalEntity" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="ResearchBroker">
+              <PropertyRef Name="LegalEntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -30011,6 +30097,16 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ResearchBrokers">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ResearchBroker">
+              <MappingFragment StoreEntitySet="ResearchBroker">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="LegalEntityId" ColumnName="LegalEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -34692,51 +34788,45 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="22.927083333333332" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="20.817708333333332" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="20.651041666666668" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="19.979166666666668" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="19.533333333333331" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="19.366666666666667" PointY="21.577858714435187" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.577858714435187" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="19.979166666666668" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="19.533333333333331" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="19.366666666666667" PointY="21.495843193424591" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.495843193424591" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="18.035448717948718" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.868782051282054" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.8000641025641" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.633397435897436" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.564679487179486" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="17.398012820512822" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="16.020833333333332" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.854166666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="14.572916666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="12.979166666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="12.958333333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.723958333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.557291666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.541669666666675" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.541669666666675" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="18.035448717948718" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.868782051282054" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.8000641025641" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.633397435897436" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.564679487179486" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.398012820512822" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.895833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.729166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.197916666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.755208333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.510416666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.65625" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.580731854166668" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.580731854166668" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -35813,6 +35903,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Future" Width="1.5" PointX="18.875" PointY="26.875" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Future__UpdateUs__7A6D90BE" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Future__Instrume__79796C85" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchBroker" Width="1.5" PointX="25.25" PointY="0.75" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ResearchBrokerUpdateUserIdFK" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ResearchBrokerLegalEntityIdFK" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
