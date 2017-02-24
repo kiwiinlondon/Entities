@@ -32,6 +32,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<int> Ordering { get; set; }
+    	[DataMember]
+        public bool IsDeliverable { get; set; }
     
         [DataMember]
         private Instrument Instrument { get; set; }
