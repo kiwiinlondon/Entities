@@ -75,7 +75,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> OpeningAdjustedNav { get; set; }
     	[DataMember]
-        public Nullable<decimal> OpeningKeeleyAdjustedNav { get; set; }
+        public decimal OpeningKeeleyAdjustedNav { get; set; }
     	[DataMember]
         public Nullable<decimal> OpeningAdministratorAdjustedNav { get; set; }
     	[DataMember]

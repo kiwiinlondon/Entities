@@ -7,7 +7,7 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum FundPortfolioChangeIds
+    public enum FundPortfolioChangeTypeIds
     {
         [EnumMember]
         Factset = 1

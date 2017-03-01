@@ -288,7 +288,7 @@
           <Property Name="SumNetAssetValue" Type="numeric" Precision="27" Scale="0" Nullable="false" />
           <Property Name="NumberOfDays" Type="int" Nullable="false" />
           <Property Name="OpeningAdjustedNav" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="OpeningKeeleyAdjustedNav" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OpeningKeeleyAdjustedNav" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="OpeningAdministratorAdjustedNav" Type="numeric" Precision="27" Scale="8" />
           <Property Name="OpeningValuationAdjustedNav" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
@@ -693,6 +693,7 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Ordering" Type="int" />
+          <Property Name="IsDeliverable" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Custodian">
           <Key>
@@ -1274,6 +1275,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="IsDeliverable" Type="bit" />
         </EntityType>
         <EntityType Name="Fund">
           <Key>
@@ -9449,6 +9451,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="IsProp" Type="bit" Mode="In" />
           <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsDeliverable" Type="bit" Mode="In" />
         </Function>
         <Function Name="ForwardFX_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -9458,6 +9461,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsDeliverable" Type="bit" Mode="In" />
         </Function>
         <Function Name="Fund_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -15874,6 +15878,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Instrument" a:GetterAccess="Private" a:SetterAccess="Private" Relationship="Odey.Framework.Keeley.Entities.CurrencyInstrumentIDFK" FromRole="Currency" ToRole="Instrument" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Type="Int32" Name="Ordering" />
           <NavigationProperty Name="BloombergIdentifiers" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" FromRole="Currency" ToRole="BloombergIdentifier" />
+          <Property Name="IsDeliverable" Type="Boolean" Nullable="false" />
           </EntityType>
         <Association Name="CurrencyUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19085,6 +19090,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="BaseCurrency" Relationship="Odey.Framework.Keeley.Entities.Currency1InstrumentIDFK" FromRole="ForwardFX" ToRole="Currency" />
           <NavigationProperty Name="ContraCurrency" Relationship="Odey.Framework.Keeley.Entities.Currency2InstrumentIDFK" FromRole="ForwardFX" ToRole="Currency" />
+          <Property Name="IsDeliverable" Type="Boolean" />
         </EntityType>
         <Association Name="ForwardFXUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -22178,7 +22184,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="SumNetAssetValue" Type="Decimal" Precision="27" Scale="0" Nullable="false" />
           <Property Name="NumberOfDays" Type="Int32" Nullable="false" />
           <Property Name="OpeningAdjustedNav" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="OpeningKeeleyAdjustedNav" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OpeningKeeleyAdjustedNav" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="OpeningAdministratorAdjustedNav" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OpeningValuationAdjustedNav" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
@@ -23877,6 +23883,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Currencies">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Currency">
               <MappingFragment StoreEntitySet="Currency">
+                <ScalarProperty Name="IsDeliverable" ColumnName="IsDeliverable" />
                 <ScalarProperty Name="Ordering" ColumnName="Ordering" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -26617,6 +26624,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="ForwardFXes">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ForwardFX">
               <MappingFragment StoreEntitySet="ForwardFX">
+                <ScalarProperty Name="IsDeliverable" ColumnName="IsDeliverable" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -26630,6 +26638,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ForwardFX">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ForwardFX_Insert">
+                  <ScalarProperty Name="IsDeliverable" ParameterName="IsDeliverable" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" />
                   <ScalarProperty Name="IsProp" ParameterName="IsProp" />
@@ -26640,6 +26649,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ForwardFX_Update">
+                  <ScalarProperty Name="IsDeliverable" ParameterName="IsDeliverable" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" Version="Current" />
