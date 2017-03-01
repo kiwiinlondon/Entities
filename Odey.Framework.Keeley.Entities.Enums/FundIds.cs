@@ -310,7 +310,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SWAN_NOK_I = 7510,
         [EnumMember]
         SWAN_USD_M = 7803,
-
+        [EnumMember]
+        SWAN_EUR_G = 8007,
 
         [EnumMember]
         DEVM = 6253,

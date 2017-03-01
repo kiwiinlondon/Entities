@@ -162,7 +162,24 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         PortfolioVaRWithoutDerivPrimary = 52,
-        
+
+        [EnumMember]
+        BloombergVaRMC99 = 54,
+
+        [EnumMember]
+        BloombergWeight = 55,
+
+        [EnumMember]
+        BloombergPartialVaRMC99 = 56,
+
+        [EnumMember]
+        BloombergCVaRMC99 = 57,
+
+        [EnumMember]
+        BloombergComponentVaRMC99 = 58,
+
+        [EnumMember]
+        BloombergVaRContributionMC99 = 59,
     }
 }
 

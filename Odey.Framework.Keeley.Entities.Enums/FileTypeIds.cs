@@ -112,5 +112,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         BloombergFactorExposures = 53,
         [EnumMember]
         BloombergFactorContribution = 54,
+        [EnumMember]
+        BloombergVaR = 55,
     }
 }
