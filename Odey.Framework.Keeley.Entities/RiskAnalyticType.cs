@@ -28,5 +28,7 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public string FileColumnName { get; set; }
+    	[DataMember]
+        public int DataSourceId { get; set; }
     }
 }

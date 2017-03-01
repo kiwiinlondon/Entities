@@ -33,7 +33,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<bool> IsDeliverable { get; set; }
+        public bool IsDeliverable { get; set; }
     
         [DataMember]
         public virtual Currency BaseCurrency { get; set; }

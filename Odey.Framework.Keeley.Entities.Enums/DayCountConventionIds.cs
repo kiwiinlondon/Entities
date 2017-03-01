@@ -21,5 +21,5 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ACT360=4,
         [EnumMember]
         ACT365=5
-    }    
+    }
 }

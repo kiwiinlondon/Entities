@@ -180,6 +180,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         BloombergVaRContributionMC99 = 59,
+
+        [EnumMember]
+        BloombergIndexVaRMC99 = 60,
+
+        [EnumMember]
+        BloombergIndexCVaRMC99 = 61,
     }
 }
 
