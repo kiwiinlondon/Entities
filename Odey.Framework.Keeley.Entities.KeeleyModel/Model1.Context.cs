@@ -171,6 +171,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FactorExposure> FactorExposures { get; set; }
         public DbSet<Future> Futures { get; set; }
         public DbSet<ResearchBroker> ResearchBrokers { get; set; }
+        public DbSet<RiskAnalyticPosition> RiskAnalyticPositions { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -886,6 +887,89 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("DataVersion", typeof(byte[]));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FactorRelationship_Update", factorRelationshipIdParameter, factorHierarchyIdParameter, factorNameParameter, bloombergFactorNameParameter, parentFactorRelationshipIdParameter, entityTypeIdParameter, entityIdParameter, updateUserIdParameter, dataVersionParameter);
+        }
+    
+        public virtual int RiskAnalyticPosition_Delete(Nullable<int> riskAnalyticPositionId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var riskAnalyticPositionIdParameter = riskAnalyticPositionId.HasValue ?
+                new ObjectParameter("RiskAnalyticPositionId", riskAnalyticPositionId) :
+                new ObjectParameter("RiskAnalyticPositionId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalyticPosition_Delete", riskAnalyticPositionIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int RiskAnalyticPosition_Insert(Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> instrumentMarketId, Nullable<int> fundId, Nullable<decimal> value1d, Nullable<int> updateUserID)
+        {
+            var riskAnalyticTypeIdParameter = riskAnalyticTypeId.HasValue ?
+                new ObjectParameter("RiskAnalyticTypeId", riskAnalyticTypeId) :
+                new ObjectParameter("RiskAnalyticTypeId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
+            var value1dParameter = value1d.HasValue ?
+                new ObjectParameter("Value1d", value1d) :
+                new ObjectParameter("Value1d", typeof(decimal));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalyticPosition_Insert", riskAnalyticTypeIdParameter, referenceDateParameter, instrumentMarketIdParameter, fundIdParameter, value1dParameter, updateUserIDParameter);
+        }
+    
+        public virtual int RiskAnalyticPosition_Update(Nullable<int> riskAnalyticPositionId, Nullable<int> riskAnalyticTypeId, Nullable<System.DateTime> referenceDate, Nullable<int> instrumentMarketId, Nullable<int> fundId, Nullable<decimal> value1d, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var riskAnalyticPositionIdParameter = riskAnalyticPositionId.HasValue ?
+                new ObjectParameter("RiskAnalyticPositionId", riskAnalyticPositionId) :
+                new ObjectParameter("RiskAnalyticPositionId", typeof(int));
+    
+            var riskAnalyticTypeIdParameter = riskAnalyticTypeId.HasValue ?
+                new ObjectParameter("RiskAnalyticTypeId", riskAnalyticTypeId) :
+                new ObjectParameter("RiskAnalyticTypeId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
+            var value1dParameter = value1d.HasValue ?
+                new ObjectParameter("Value1d", value1d) :
+                new ObjectParameter("Value1d", typeof(decimal));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalyticPosition_Update", riskAnalyticPositionIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, instrumentMarketIdParameter, fundIdParameter, value1dParameter, dataVersionParameter, updateUserIDParameter);
         }
     }
 }
