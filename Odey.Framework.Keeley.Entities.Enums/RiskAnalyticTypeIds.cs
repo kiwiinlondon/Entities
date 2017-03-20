@@ -186,6 +186,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         BloombergIndexCVaRMC99 = 61,
+
+	    [EnumMember]
+	    BloombergBetaExAnte = 65,
+
+        [EnumMember]
+        BloombergTotalRisk = 66
     }
 }
 
