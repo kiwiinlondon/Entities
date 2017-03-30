@@ -210,6 +210,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ValuationTomorrowDeltaNetCostInstrumentCurrency { get; set; }
     	[DataMember]
         public Nullable<decimal> AdministratorPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AdministratorMarketValue { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
