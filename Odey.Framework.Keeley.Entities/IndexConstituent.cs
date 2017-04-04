@@ -32,5 +32,9 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Price { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalReturn { get; set; }
     }
 }
