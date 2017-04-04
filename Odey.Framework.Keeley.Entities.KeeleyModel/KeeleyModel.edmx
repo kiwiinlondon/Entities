@@ -1487,6 +1487,8 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Price" Type="numeric" Precision="28" Scale="8" />
+          <Property Name="TotalReturn" Type="numeric" Precision="28" Scale="8" />
         </EntityType>
         <EntityType Name="Industry">
           <Key>
@@ -2077,6 +2079,7 @@
           <Property Name="ValuationTomorrowDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="AdministratorPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="AdministratorMarketValue" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="AdministratorFXRate" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -9818,6 +9821,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="Weighting" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="TotalReturn" Type="numeric" Mode="In" />
         </Function>
         <Function Name="IndexConstituent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IndexConstituentId" Type="int" Mode="In" />
@@ -9827,6 +9832,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Weighting" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="TotalReturn" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Industry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IndustryID" Type="int" Mode="In" />
@@ -10756,6 +10763,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationTomorrowDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="AdministratorPrice" Type="numeric" Mode="In" />
           <Parameter Name="AdministratorMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="AdministratorFXRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -10855,6 +10863,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationTomorrowDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="AdministratorPrice" Type="numeric" Mode="In" />
           <Parameter Name="AdministratorMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="AdministratorFXRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -17464,6 +17473,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ValuationTomorrowDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="AdministratorPrice" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="AdministratorMarketValue" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="AdministratorFXRate" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19785,6 +19795,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Price" Type="Decimal" Precision="28" Scale="8" />
+          <Property Name="TotalReturn" Type="Decimal" Precision="28" Scale="8" />
         </EntityType>
         <Association Name="ExposurePositionIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="1" />
@@ -25416,6 +25428,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="AdministratorFXRate" ColumnName="AdministratorFXRate" />
                 <ScalarProperty Name="AdministratorMarketValue" ColumnName="AdministratorMarketValue" />
                 <ScalarProperty Name="AdministratorPrice" ColumnName="AdministratorPrice" />
                 <ScalarProperty Name="ValuationTomorrowDeltaNetCostInstrumentCurrency" ColumnName="ValuationTomorrowDeltaNetCostInstrumentCurrency" />
@@ -25516,6 +25529,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="AdministratorFXRate" ParameterName="AdministratorFXRate" />
                   <ScalarProperty Name="AdministratorMarketValue" ParameterName="AdministratorMarketValue" />
                   <ScalarProperty Name="AdministratorPrice" ParameterName="AdministratorPrice" />
                   <ScalarProperty Name="ValuationTomorrowDeltaNetCostInstrumentCurrency" ParameterName="ValuationTomorrowDeltaNetCostInstrumentCurrency" />
@@ -25613,6 +25627,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="AdministratorFXRate" ParameterName="AdministratorFXRate" Version="Current" />
                   <ScalarProperty Name="AdministratorMarketValue" ParameterName="AdministratorMarketValue" Version="Current" />
                   <ScalarProperty Name="AdministratorPrice" ParameterName="AdministratorPrice" Version="Current" />
                   <ScalarProperty Name="ValuationTomorrowDeltaNetCostInstrumentCurrency" ParameterName="ValuationTomorrowDeltaNetCostInstrumentCurrency" Version="Current" />
@@ -27311,6 +27326,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="IndexConstituents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IndexConstituent">
               <MappingFragment StoreEntitySet="IndexConstituent">
+                <ScalarProperty Name="TotalReturn" ColumnName="TotalReturn" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -27324,6 +27341,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IndexConstituent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.IndexConstituent_Insert">
+                  <ScalarProperty Name="TotalReturn" ParameterName="TotalReturn" />
+                  <ScalarProperty Name="Price" ParameterName="Price" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Weighting" ParameterName="Weighting" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
@@ -27334,6 +27353,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.IndexConstituent_Update">
+                  <ScalarProperty Name="TotalReturn" ParameterName="TotalReturn" Version="Current" />
+                  <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="Weighting" ParameterName="Weighting" Version="Current" />
