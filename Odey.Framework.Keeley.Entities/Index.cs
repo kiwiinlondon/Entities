@@ -26,6 +26,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int IndexTypeId { get; set; }
+    	[DataMember]
+        public bool CollectWeights { get; set; }
     
         [DataMember]
         public virtual ApplicationUser ApplicationUser { get; set; }
