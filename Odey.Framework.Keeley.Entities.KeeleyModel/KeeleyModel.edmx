@@ -1481,7 +1481,7 @@
           </Key>
           <Property Name="IndexConstituentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InstrumentId" Type="int" Nullable="false" />
-          <Property Name="ConstituentInstrumentId" Type="int" Nullable="false" />
+          <Property Name="ConstituentInstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="Weighting" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
@@ -1489,6 +1489,8 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Price" Type="numeric" Precision="28" Scale="8" />
           <Property Name="TotalReturn" Type="numeric" Precision="28" Scale="8" />
+          <Property Name="BloombergTicker" Type="varchar" MaxLength="50" />
+          <Property Name="RebasedPrice" Type="numeric" Precision="28" Scale="16" />
         </EntityType>
         <EntityType Name="Industry">
           <Key>
@@ -5643,18 +5645,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="IdentifierType">
               <PropertyRef Name="UpdateUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="IndexConstituentConstituentInstrumentIDFK">
-          <End Role="Instrument" Type="Self.Instrument" Multiplicity="1" />
-          <End Role="IndexConstituent" Type="Self.IndexConstituent" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Instrument">
-              <PropertyRef Name="InstrumentID" />
-            </Principal>
-            <Dependent Role="IndexConstituent">
-              <PropertyRef Name="ConstituentInstrumentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9818,23 +9808,27 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
         </Function>
         <Function Name="IndexConstituent_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
-          <Parameter Name="ConstituentInstrumentId" Type="int" Mode="In" />
+          <Parameter Name="ConstituentInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="Weighting" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
           <Parameter Name="TotalReturn" Type="numeric" Mode="In" />
+          <Parameter Name="BloombergTicker" Type="varchar" Mode="In" />
+          <Parameter Name="RebasedPrice" Type="numeric" Mode="In" />
         </Function>
         <Function Name="IndexConstituent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IndexConstituentId" Type="int" Mode="In" />
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
-          <Parameter Name="ConstituentInstrumentId" Type="int" Mode="In" />
+          <Parameter Name="ConstituentInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
           <Parameter Name="Weighting" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
           <Parameter Name="TotalReturn" Type="numeric" Mode="In" />
+          <Parameter Name="BloombergTicker" Type="varchar" Mode="In" />
+          <Parameter Name="RebasedPrice" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Industry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IndustryID" Type="int" Mode="In" />
@@ -12748,10 +12742,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="IdentifierType" EntitySet="IdentifierType" />
           </AssociationSet>
-          <AssociationSet Name="IndexConstituentConstituentInstrumentIDFK" Association="Self.IndexConstituentConstituentInstrumentIDFK">
-            <End Role="Instrument" EntitySet="Instrument" />
-            <End Role="IndexConstituent" EntitySet="IndexConstituent" />
-          </AssociationSet>
           <AssociationSet Name="IndexConstituentIDFK" Association="Self.IndexConstituentIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="IndexConstituent" EntitySet="IndexConstituent" />
@@ -14498,10 +14488,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="ExposurePositionIDFK" Association="Odey.Framework.Keeley.Entities.ExposurePositionIDFK">
             <End Role="Position" EntitySet="Positions" />
             <End Role="Exposure" EntitySet="Exposures" />
-          </AssociationSet>
-          <AssociationSet Name="IndexConstituentConstituentInstrumentIDFK" Association="Odey.Framework.Keeley.Entities.IndexConstituentConstituentInstrumentIDFK">
-            <End Role="Instrument" EntitySet="Instruments" />
-            <End Role="IndexConstituent" EntitySet="IndexConstituents" />
           </AssociationSet>
           <AssociationSet Name="IndexConstituentInstrumentIDFK" Association="Odey.Framework.Keeley.Entities.IndexConstituentInstrumentIDFK">
             <End Role="Instrument" EntitySet="Instruments" />
@@ -19790,7 +19776,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </Key>
           <Property Type="Int32" Name="IndexConstituentId" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="InstrumentId" Nullable="false" />
-          <Property Type="Int32" Name="ConstituentInstrumentId" Nullable="false" />
           <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
           <Property Type="Decimal" Name="Weighting" Nullable="false" Precision="27" Scale="8" />
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
@@ -19798,6 +19783,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Price" Type="Decimal" Precision="28" Scale="8" />
           <Property Name="TotalReturn" Type="Decimal" Precision="28" Scale="8" />
+          <Property Name="BloombergTicker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RebasedPrice" Type="Decimal" Precision="28" Scale="16" />
+          <Property Name="ConstituentInstrumentMarketId" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="ExposurePositionIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="1" />
@@ -19808,18 +19796,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="Exposure">
               <PropertyRef Name="PositionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="IndexConstituentConstituentInstrumentIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Instrument" Role="Instrument" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.IndexConstituent" Role="IndexConstituent" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Instrument">
-              <PropertyRef Name="InstrumentID" />
-            </Principal>
-            <Dependent Role="IndexConstituent">
-              <PropertyRef Name="ConstituentInstrumentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -27328,6 +27304,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="IndexConstituents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IndexConstituent">
               <MappingFragment StoreEntitySet="IndexConstituent">
+                <ScalarProperty Name="ConstituentInstrumentMarketId" ColumnName="ConstituentInstrumentMarketId" />
+                <ScalarProperty Name="RebasedPrice" ColumnName="RebasedPrice" />
+                <ScalarProperty Name="BloombergTicker" ColumnName="BloombergTicker" />
                 <ScalarProperty Name="TotalReturn" ColumnName="TotalReturn" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -27335,7 +27314,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
                 <ScalarProperty Name="Weighting" ColumnName="Weighting" />
                 <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
-                <ScalarProperty Name="ConstituentInstrumentId" ColumnName="ConstituentInstrumentId" />
                 <ScalarProperty Name="InstrumentId" ColumnName="InstrumentId" />
                 <ScalarProperty Name="IndexConstituentId" ColumnName="IndexConstituentId" />
               </MappingFragment>
@@ -27343,25 +27321,29 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IndexConstituent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.IndexConstituent_Insert">
+                  <ScalarProperty Name="RebasedPrice" ParameterName="RebasedPrice" />
+                  <ScalarProperty Name="BloombergTicker" ParameterName="BloombergTicker" />
+                  <ScalarProperty Name="ConstituentInstrumentMarketId" ParameterName="ConstituentInstrumentMarketId" />
                   <ScalarProperty Name="TotalReturn" ParameterName="TotalReturn" />
                   <ScalarProperty Name="Price" ParameterName="Price" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Weighting" ParameterName="Weighting" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
-                  <ScalarProperty Name="ConstituentInstrumentId" ParameterName="ConstituentInstrumentId" />
                   <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" />
                   <ResultBinding Name="IndexConstituentId" ColumnName="IndexConstituentId" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.IndexConstituent_Update">
+                  <ScalarProperty Name="RebasedPrice" ParameterName="RebasedPrice" Version="Current" />
+                  <ScalarProperty Name="BloombergTicker" ParameterName="BloombergTicker" Version="Current" />
+                  <ScalarProperty Name="ConstituentInstrumentMarketId" ParameterName="ConstituentInstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="TotalReturn" ParameterName="TotalReturn" Version="Current" />
                   <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="Weighting" ParameterName="Weighting" Version="Current" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
-                  <ScalarProperty Name="ConstituentInstrumentId" ParameterName="ConstituentInstrumentId" Version="Current" />
                   <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" Version="Current" />
                   <ScalarProperty Name="IndexConstituentId" ParameterName="IndexConstituentId" Version="Current" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
@@ -30430,7 +30412,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="52">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="67">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -35089,39 +35071,49 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="24.989583333333332" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="23.158084252800386" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="22.977974145214" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="22.966148333333333" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="22.799481666666669" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="22.661784430473947" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="22.495117763807283" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="21.070049825861517" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="20.903383159194853" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="20.854108927406486" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="20.687442260739822" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="20.586724257782244" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="20.420057591115579" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="19.815104166666668" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="19.366666666666671" PointY="21.575906363549894" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.575906363549894" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="22.927083333333332" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="20.692708333333332" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="20.526041666666668" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="19.979166666666668" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="19.533333333333331" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="19.366666666666667" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.605930052346714" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="16.020833333333332" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.854166666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="25.562499999999996" />
-          <edmx:ConnectorPoint PointX="15.041666666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.582684963541666" PointY="25.5625" />
-          <edmx:ConnectorPoint PointX="11.582684963541666" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="18.035448717948718" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.868782051282054" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.8000641025641" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.633397435897436" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.564679487179486" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.398012820512822" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="16.020833333333332" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.854166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.755208333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.510416666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.71875" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.71875" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="12.677083333333334" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="12.510416666666666" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.583173240885419" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.583173240885419" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -35793,19 +35785,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="29.385416666666668" PointY="22.689646809895834" />
           <edmx:ConnectorPoint PointX="29.552083333333332" PointY="22.689646809895834" />
           <edmx:ConnectorPoint PointX="30" PointY="22.689646809895834" />
-        </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexConstituentConstituentInstrumentIDFK">
-          <edmx:ConnectorPoint PointX="9.9531276875" PointY="24.701315104166667" />
-          <edmx:ConnectorPoint PointX="9.9531276875" PointY="28.875" />
-          <edmx:ConnectorPoint PointX="10.166666666666666" PointY="28.875" />
-          <edmx:ConnectorPoint PointX="10.333333333333334" PointY="28.875" />
-          <edmx:ConnectorPoint PointX="10.875" PointY="28.875" />
-          <edmx:ConnectorPoint PointX="10.875" PointY="35.125" />
-          <edmx:ConnectorPoint PointX="10.833333333333334" PointY="35.125" />
-          <edmx:ConnectorPoint PointX="10.666666666666666" PointY="35.125" />
-          <edmx:ConnectorPoint PointX="10.5625" PointY="35.125" />
-          <edmx:ConnectorPoint PointX="10.5625" PointY="37.541513433251112" />
-          <edmx:ConnectorPoint PointX="10.875" PointY="37.541513433251112" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IndexConstituentInstrumentIDFK">
           <edmx:ConnectorPoint PointX="9.359373187500001" PointY="24.701315104166667" />

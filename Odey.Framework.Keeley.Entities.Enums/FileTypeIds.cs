@@ -114,5 +114,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         BloombergFactorContribution = 54,
         [EnumMember]
         BloombergVaR = 55,
+        [EnumMember]
+        BloombergWeights = 56
     }
 }

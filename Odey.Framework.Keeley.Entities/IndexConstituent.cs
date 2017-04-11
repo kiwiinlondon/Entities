@@ -21,8 +21,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int InstrumentId { get; set; }
     	[DataMember]
-        public int ConstituentInstrumentId { get; set; }
-    	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
         public decimal Weighting { get; set; }
@@ -36,5 +34,11 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> Price { get; set; }
     	[DataMember]
         public Nullable<decimal> TotalReturn { get; set; }
+    	[DataMember]
+        public string BloombergTicker { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RebasedPrice { get; set; }
+    	[DataMember]
+        public int ConstituentInstrumentMarketId { get; set; }
     }
 }
