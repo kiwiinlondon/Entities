@@ -457,5 +457,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         BVFF = 7894,
         [EnumMember]
         BVFF_EUR = 7901,
+        [EnumMember]
+        RAFO_USD_M = 8809
     }
 }

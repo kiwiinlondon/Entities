@@ -1483,14 +1483,30 @@
           <Property Name="InstrumentId" Type="int" Nullable="false" />
           <Property Name="ConstituentInstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
-          <Property Name="Weighting" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="OpenWeight" Type="numeric" Precision="19" Scale="16" Nullable="false" />
+          <Property Name="CumulativeOpenWeight" Type="numeric" Precision="19" Scale="16" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="Price" Type="numeric" Precision="28" Scale="8" />
           <Property Name="TotalReturn" Type="numeric" Precision="28" Scale="8" />
-          <Property Name="BloombergTicker" Type="varchar" MaxLength="50" />
-          <Property Name="RebasedPrice" Type="numeric" Precision="28" Scale="16" />
+          <Property Name="RebasedTotalReturn" Type="numeric" Precision="28" Scale="16" />
+          <Property Name="RebasedFxReturnEUR" Type="numeric" Precision="28" Scale="16" />
+          <Property Name="RebasedFxReturnGBP" Type="numeric" Precision="28" Scale="16" />
+          <Property Name="RebasedFxReturnUSD" Type="numeric" Precision="28" Scale="16" />
+        </EntityType>
+        <EntityType Name="IndexConstituentOpenClose">
+          <Key>
+            <PropertyRef Name="IndexConstituentOpenCloseId" />
+          </Key>
+          <Property Name="IndexConstituentOpenCloseId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="IndexInstrumentId" Type="int" Nullable="false" />
+          <Property Name="IsOpen" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="IsClose" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Industry">
           <Key>
@@ -9810,25 +9826,52 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
           <Parameter Name="ConstituentInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="Weighting" Type="numeric" Mode="In" />
+          <Parameter Name="OpenWeight" Type="numeric" Mode="In" />
+          <Parameter Name="CumulativeOpenWeight" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="Price" Type="numeric" Mode="In" />
           <Parameter Name="TotalReturn" Type="numeric" Mode="In" />
-          <Parameter Name="BloombergTicker" Type="varchar" Mode="In" />
-          <Parameter Name="RebasedPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RebasedTotalReturn" Type="numeric" Mode="In" />
+          <Parameter Name="RebasedFxReturnEUR" Type="numeric" Mode="In" />
+          <Parameter Name="RebasedFxReturnGBP" Type="numeric" Mode="In" />
+          <Parameter Name="RebasedFxReturnUSD" Type="numeric" Mode="In" />
         </Function>
         <Function Name="IndexConstituent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IndexConstituentId" Type="int" Mode="In" />
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
           <Parameter Name="ConstituentInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="Weighting" Type="numeric" Mode="In" />
+          <Parameter Name="OpenWeight" Type="numeric" Mode="In" />
+          <Parameter Name="CumulativeOpenWeight" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="Price" Type="numeric" Mode="In" />
           <Parameter Name="TotalReturn" Type="numeric" Mode="In" />
-          <Parameter Name="BloombergTicker" Type="varchar" Mode="In" />
-          <Parameter Name="RebasedPrice" Type="numeric" Mode="In" />
+          <Parameter Name="RebasedTotalReturn" Type="numeric" Mode="In" />
+          <Parameter Name="RebasedFxReturnEUR" Type="numeric" Mode="In" />
+          <Parameter Name="RebasedFxReturnGBP" Type="numeric" Mode="In" />
+          <Parameter Name="RebasedFxReturnUSD" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="IndexConstituentOpenClose_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IndexConstituentOpenCloseId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="IndexConstituentOpenClose_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="IndexInstrumentId" Type="int" Mode="In" />
+          <Parameter Name="IsOpen" Type="nchar" Mode="In" />
+          <Parameter Name="IsClose" Type="nchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="IndexConstituentOpenClose_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IndexConstituentOpenCloseId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="IndexInstrumentId" Type="int" Mode="In" />
+          <Parameter Name="IsOpen" Type="nchar" Mode="In" />
+          <Parameter Name="IsClose" Type="nchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
         <Function Name="Industry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IndustryID" Type="int" Mode="In" />
@@ -11620,6 +11663,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="IdentifierMapping" EntityType="Self.IdentifierMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IdentifierType" EntityType="Self.IdentifierType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IndexConstituent" EntityType="Self.IndexConstituent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IndexConstituentOpenClose" EntityType="Self.IndexConstituentOpenClose" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Industry" EntityType="Self.Industry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Indx" EntityType="Self.Indx" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instrument" EntityType="Self.Instrument" Schema="dbo" store:Type="Tables" />
@@ -15465,6 +15509,30 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <Parameter Name="Value1d" Mode="In" Type="Decimal" />
             <Parameter Name="DataVersion" Mode="In" Type="Binary" />
             <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="IndexConstituentOpenCloses" EntityType="Odey.Framework.Keeley.Entities.IndexConstituentOpenClose" />
+          <FunctionImport Name="IndexConstituentOpenClose_Delete">
+            <Parameter Name="IndexConstituentOpenCloseId" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="IndexConstituentOpenClose_Insert">
+            <Parameter Name="ReferenceDate" Mode="In" Type="DateTime" />
+            <Parameter Name="InstrumentMarketId" Mode="In" Type="Int32" />
+            <Parameter Name="IndexInstrumentId" Mode="In" Type="Int32" />
+            <Parameter Name="IsOpen" Mode="In" Type="String" />
+            <Parameter Name="IsClose" Mode="In" Type="String" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="IndexConstituentOpenClose_Update">
+            <Parameter Name="IndexConstituentOpenCloseId" Mode="In" Type="Int32" />
+            <Parameter Name="ReferenceDate" Mode="In" Type="DateTime" />
+            <Parameter Name="InstrumentMarketId" Mode="In" Type="Int32" />
+            <Parameter Name="IndexInstrumentId" Mode="In" Type="Int32" />
+            <Parameter Name="IsOpen" Mode="In" Type="String" />
+            <Parameter Name="IsClose" Mode="In" Type="String" />
+            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
+            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
           </FunctionImport>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -19777,15 +19845,17 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="IndexConstituentId" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="InstrumentId" Nullable="false" />
           <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
-          <Property Type="Decimal" Name="Weighting" Nullable="false" Precision="27" Scale="8" />
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="Price" Type="Decimal" Precision="28" Scale="8" />
           <Property Name="TotalReturn" Type="Decimal" Precision="28" Scale="8" />
-          <Property Name="BloombergTicker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RebasedPrice" Type="Decimal" Precision="28" Scale="16" />
           <Property Name="ConstituentInstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="OpenWeight" Type="Decimal" Nullable="false" Precision="19" Scale="16" />
+          <Property Name="CumulativeOpenWeight" Type="Decimal" Precision="19" Scale="16" />
+          <Property Name="RebasedTotalReturn" Type="Decimal" Precision="28" Scale="16" />
+          <Property Name="RebasedFxReturnEUR" Type="Decimal" Precision="28" Scale="16" />
+          <Property Name="RebasedFxReturnGBP" Type="Decimal" Precision="28" Scale="16" />
+          <Property Name="RebasedFxReturnUSD" Type="Decimal" Precision="28" Scale="16" />
         </EntityType>
         <Association Name="ExposurePositionIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="1" />
@@ -23364,6 +23434,20 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="IndexConstituentOpenClose">
+          <Key>
+            <PropertyRef Name="IndexConstituentOpenCloseId" />
+          </Key>
+          <Property Name="IndexConstituentOpenCloseId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="InstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="IndexInstrumentId" Type="Int32" Nullable="false" />
+          <Property Name="IsOpen" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="IsClose" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -27304,45 +27388,35 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="IndexConstituents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IndexConstituent">
               <MappingFragment StoreEntitySet="IndexConstituent">
+                <ScalarProperty Name="RebasedFxReturnUSD" ColumnName="RebasedFxReturnUSD" />
+                <ScalarProperty Name="RebasedFxReturnGBP" ColumnName="RebasedFxReturnGBP" />
+                <ScalarProperty Name="RebasedFxReturnEUR" ColumnName="RebasedFxReturnEUR" />
+                <ScalarProperty Name="RebasedTotalReturn" ColumnName="RebasedTotalReturn" />
+                <ScalarProperty Name="CumulativeOpenWeight" ColumnName="CumulativeOpenWeight" />
+                <ScalarProperty Name="OpenWeight" ColumnName="OpenWeight" />
                 <ScalarProperty Name="ConstituentInstrumentMarketId" ColumnName="ConstituentInstrumentMarketId" />
-                <ScalarProperty Name="RebasedPrice" ColumnName="RebasedPrice" />
-                <ScalarProperty Name="BloombergTicker" ColumnName="BloombergTicker" />
                 <ScalarProperty Name="TotalReturn" ColumnName="TotalReturn" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="Weighting" ColumnName="Weighting" />
                 <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
                 <ScalarProperty Name="InstrumentId" ColumnName="InstrumentId" />
                 <ScalarProperty Name="IndexConstituentId" ColumnName="IndexConstituentId" />
               </MappingFragment>
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IndexConstituent">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.IndexConstituent_Insert">
-                  <ScalarProperty Name="RebasedPrice" ParameterName="RebasedPrice" />
-                  <ScalarProperty Name="BloombergTicker" ParameterName="BloombergTicker" />
-                  <ScalarProperty Name="ConstituentInstrumentMarketId" ParameterName="ConstituentInstrumentMarketId" />
-                  <ScalarProperty Name="TotalReturn" ParameterName="TotalReturn" />
-                  <ScalarProperty Name="Price" ParameterName="Price" />
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="Weighting" ParameterName="Weighting" />
-                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
-                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" />
-                  <ResultBinding Name="IndexConstituentId" ColumnName="IndexConstituentId" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </InsertFunction>
+              <ModificationFunctionMapping>                
                 <UpdateFunction FunctionName="KeeleyModel.Store.IndexConstituent_Update">
-                  <ScalarProperty Name="RebasedPrice" ParameterName="RebasedPrice" Version="Current" />
-                  <ScalarProperty Name="BloombergTicker" ParameterName="BloombergTicker" Version="Current" />
+                  <ScalarProperty Name="RebasedFxReturnUSD" ParameterName="RebasedFxReturnUSD" Version="Current" />
+                  <ScalarProperty Name="RebasedFxReturnGBP" ParameterName="RebasedFxReturnGBP" Version="Current" />
+                  <ScalarProperty Name="RebasedFxReturnEUR" ParameterName="RebasedFxReturnEUR" Version="Current" />
+                  <ScalarProperty Name="RebasedTotalReturn" ParameterName="RebasedTotalReturn" Version="Current" />
+                  <ScalarProperty Name="CumulativeOpenWeight" ParameterName="CumulativeOpenWeight" Version="Current" />
+                  <ScalarProperty Name="OpenWeight" ParameterName="OpenWeight" Version="Current" />
                   <ScalarProperty Name="ConstituentInstrumentMarketId" ParameterName="ConstituentInstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="TotalReturn" ParameterName="TotalReturn" Version="Current" />
-                  <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="Weighting" ParameterName="Weighting" Version="Current" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
                   <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" Version="Current" />
                   <ScalarProperty Name="IndexConstituentId" ParameterName="IndexConstituentId" Version="Current" />
@@ -27354,6 +27428,22 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
                   <ScalarProperty Name="IndexConstituentId" ParameterName="IndexConstituentId" />
                 </DeleteFunction>
+                <InsertFunction FunctionName="KeeleyModel.Store.IndexConstituent_Insert">
+                  <ScalarProperty Name="RebasedFxReturnUSD" ParameterName="RebasedFxReturnUSD" />
+                  <ScalarProperty Name="RebasedFxReturnGBP" ParameterName="RebasedFxReturnGBP" />
+                  <ScalarProperty Name="RebasedFxReturnEUR" ParameterName="RebasedFxReturnEUR" />
+                  <ScalarProperty Name="RebasedTotalReturn" ParameterName="RebasedTotalReturn" />
+                  <ScalarProperty Name="TotalReturn" ParameterName="TotalReturn" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="CumulativeOpenWeight" ParameterName="CumulativeOpenWeight" />
+                  <ScalarProperty Name="OpenWeight" ParameterName="OpenWeight" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="ConstituentInstrumentMarketId" ParameterName="ConstituentInstrumentMarketId" />
+                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" />
+                  <ResultBinding Name="IndexConstituentId" ColumnName="IndexConstituentId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </InsertFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -30390,6 +30480,56 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <FunctionImportMapping FunctionImportName="RiskAnalyticPosition_Delete" FunctionName="KeeleyModel.Store.RiskAnalyticPosition_Delete" />
           <FunctionImportMapping FunctionImportName="RiskAnalyticPosition_Insert" FunctionName="KeeleyModel.Store.RiskAnalyticPosition_Insert" />
           <FunctionImportMapping FunctionImportName="RiskAnalyticPosition_Update" FunctionName="KeeleyModel.Store.RiskAnalyticPosition_Update" />
+          <EntitySetMapping Name="IndexConstituentOpenCloses">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IndexConstituentOpenClose">
+              <MappingFragment StoreEntitySet="IndexConstituentOpenClose">
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="IsClose" ColumnName="IsClose" />
+                <ScalarProperty Name="IsOpen" ColumnName="IsOpen" />
+                <ScalarProperty Name="IndexInstrumentId" ColumnName="IndexInstrumentId" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="IndexConstituentOpenCloseId" ColumnName="IndexConstituentOpenCloseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.IndexConstituentOpenClose">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.IndexConstituentOpenClose_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="IsClose" ParameterName="IsClose" />
+                  <ScalarProperty Name="IsOpen" ParameterName="IsOpen" />
+                  <ScalarProperty Name="IndexInstrumentId" ParameterName="IndexInstrumentId" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ResultBinding Name="IndexConstituentOpenCloseId" ColumnName="IndexConstituentOpenCloseId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.IndexConstituentOpenClose_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="IsClose" ParameterName="IsClose" Version="Current" />
+                  <ScalarProperty Name="IsOpen" ParameterName="IsOpen" Version="Current" />
+                  <ScalarProperty Name="IndexInstrumentId" ParameterName="IndexInstrumentId" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="IndexConstituentOpenCloseId" ParameterName="IndexConstituentOpenCloseId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.IndexConstituentOpenClose_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="IndexConstituentOpenCloseId" ParameterName="IndexConstituentOpenCloseId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IndexConstituentOpenClose_Delete" FunctionName="KeeleyModel.Store.IndexConstituentOpenClose_Delete" />
+          <FunctionImportMapping FunctionImportName="IndexConstituentOpenClose_Insert" FunctionName="KeeleyModel.Store.IndexConstituentOpenClose_Insert" />
+          <FunctionImportMapping FunctionImportName="IndexConstituentOpenClose_Update" FunctionName="KeeleyModel.Store.IndexConstituentOpenClose_Update" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -35071,35 +35211,33 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="22.927083333333332" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="20.692708333333332" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="20.526041666666668" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="19.979166666666668" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="19.533333333333331" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="19.366666666666667" PointY="21.605930052346714" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.605930052346714" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="22.927083333333332" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="20.817708333333332" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="20.651041666666668" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="19.979166666666668" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="19.533333333333331" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="19.366666666666667" PointY="21.575786248212033" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.575786248212033" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="18.035448717948718" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.868782051282054" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.8000641025641" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.633397435897436" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.564679487179486" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.398012820512822" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="18.123717948717946" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.957051282051282" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.858910256410255" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.69224358974359" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="16.020833333333332" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="15.854166666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
@@ -35107,13 +35245,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="14.755208333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.510416666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.71875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.71875" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="12.677083333333334" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="12.510416666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583173240885419" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583173240885419" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.65625" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.58332582755534" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.58332582755534" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -36184,6 +36320,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_RiskAnalyticType" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_Fund" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_InstrumentMarket" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.IndexConstituentOpenClose" Width="1.5" PointX="25" PointY="36.25" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

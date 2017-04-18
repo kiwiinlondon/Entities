@@ -172,6 +172,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<Future> Futures { get; set; }
         public DbSet<ResearchBroker> ResearchBrokers { get; set; }
         public DbSet<RiskAnalyticPosition> RiskAnalyticPositions { get; set; }
+        public DbSet<IndexConstituentOpenClose> IndexConstituentOpenCloses { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -970,6 +971,89 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("UpdateUserID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RiskAnalyticPosition_Update", riskAnalyticPositionIdParameter, riskAnalyticTypeIdParameter, referenceDateParameter, instrumentMarketIdParameter, fundIdParameter, value1dParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int IndexConstituentOpenClose_Delete(Nullable<int> indexConstituentOpenCloseId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var indexConstituentOpenCloseIdParameter = indexConstituentOpenCloseId.HasValue ?
+                new ObjectParameter("IndexConstituentOpenCloseId", indexConstituentOpenCloseId) :
+                new ObjectParameter("IndexConstituentOpenCloseId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("IndexConstituentOpenClose_Delete", indexConstituentOpenCloseIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int IndexConstituentOpenClose_Insert(Nullable<System.DateTime> referenceDate, Nullable<int> instrumentMarketId, Nullable<int> indexInstrumentId, string isOpen, string isClose, Nullable<int> updateUserID)
+        {
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var indexInstrumentIdParameter = indexInstrumentId.HasValue ?
+                new ObjectParameter("IndexInstrumentId", indexInstrumentId) :
+                new ObjectParameter("IndexInstrumentId", typeof(int));
+    
+            var isOpenParameter = isOpen != null ?
+                new ObjectParameter("IsOpen", isOpen) :
+                new ObjectParameter("IsOpen", typeof(string));
+    
+            var isCloseParameter = isClose != null ?
+                new ObjectParameter("IsClose", isClose) :
+                new ObjectParameter("IsClose", typeof(string));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("IndexConstituentOpenClose_Insert", referenceDateParameter, instrumentMarketIdParameter, indexInstrumentIdParameter, isOpenParameter, isCloseParameter, updateUserIDParameter);
+        }
+    
+        public virtual int IndexConstituentOpenClose_Update(Nullable<int> indexConstituentOpenCloseId, Nullable<System.DateTime> referenceDate, Nullable<int> instrumentMarketId, Nullable<int> indexInstrumentId, string isOpen, string isClose, Nullable<int> updateUserID, byte[] dataVersion)
+        {
+            var indexConstituentOpenCloseIdParameter = indexConstituentOpenCloseId.HasValue ?
+                new ObjectParameter("IndexConstituentOpenCloseId", indexConstituentOpenCloseId) :
+                new ObjectParameter("IndexConstituentOpenCloseId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var indexInstrumentIdParameter = indexInstrumentId.HasValue ?
+                new ObjectParameter("IndexInstrumentId", indexInstrumentId) :
+                new ObjectParameter("IndexInstrumentId", typeof(int));
+    
+            var isOpenParameter = isOpen != null ?
+                new ObjectParameter("IsOpen", isOpen) :
+                new ObjectParameter("IsOpen", typeof(string));
+    
+            var isCloseParameter = isClose != null ?
+                new ObjectParameter("IsClose", isClose) :
+                new ObjectParameter("IsClose", typeof(string));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("IndexConstituentOpenClose_Update", indexConstituentOpenCloseIdParameter, referenceDateParameter, instrumentMarketIdParameter, indexInstrumentIdParameter, isOpenParameter, isCloseParameter, updateUserIDParameter, dataVersionParameter);
         }
     }
 }

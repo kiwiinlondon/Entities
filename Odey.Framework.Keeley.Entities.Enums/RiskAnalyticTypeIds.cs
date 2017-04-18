@@ -191,7 +191,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
 	    BloombergBetaExAnte = 65,
 
         [EnumMember]
-        BloombergTotalRisk = 66
+        BloombergTotalRisk = 66,
+
+        [EnumMember]
+        PortfolioCVaRWithDerivPrimary = 67
     }
 }
 

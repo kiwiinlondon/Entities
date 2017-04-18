@@ -23,22 +23,26 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public decimal Weighting { get; set; }
-    	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<decimal> Price { get; set; }
-    	[DataMember]
         public Nullable<decimal> TotalReturn { get; set; }
     	[DataMember]
-        public string BloombergTicker { get; set; }
-    	[DataMember]
-        public Nullable<decimal> RebasedPrice { get; set; }
-    	[DataMember]
         public int ConstituentInstrumentMarketId { get; set; }
+    	[DataMember]
+        public decimal OpenWeight { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CumulativeOpenWeight { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RebasedTotalReturn { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RebasedFxReturnEUR { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RebasedFxReturnGBP { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RebasedFxReturnUSD { get; set; }
     }
 }
