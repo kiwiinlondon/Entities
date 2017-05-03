@@ -25,9 +25,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int IndexInstrumentId { get; set; }
     	[DataMember]
-        public string IsOpen { get; set; }
+        public bool IsOpen { get; set; }
     	[DataMember]
-        public string IsClose { get; set; }
+        public bool IsClose { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
