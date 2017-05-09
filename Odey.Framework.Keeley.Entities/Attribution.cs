@@ -269,9 +269,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal MarketValue { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayWeight { get; set; }
+        public decimal TodayWeight { get; set; }
     	[DataMember]
-        public Nullable<decimal> SumWeight { get; set; }
+        public decimal SumWeight { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
