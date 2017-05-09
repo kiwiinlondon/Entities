@@ -15,5 +15,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ArffAC = 177,
         [EnumMember]
         BvffAC = 189,
+        [EnumMember]
+        DevmAC = 197,
+        [EnumMember]
+        FdxhAC = 198,
     }
 }
