@@ -44,5 +44,11 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> RebasedFxReturnGBP { get; set; }
     	[DataMember]
         public Nullable<decimal> RebasedFxReturnUSD { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FxReturnEUR { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FxReturnGBP { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FxReturnUSD { get; set; }
     }
 }

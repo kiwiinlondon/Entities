@@ -990,7 +990,7 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("IndexConstituentOpenClose_Delete", indexConstituentOpenCloseIdParameter, dataVersionParameter, updateUserIDParameter);
         }
     
-        public virtual int IndexConstituentOpenClose_Insert(Nullable<System.DateTime> referenceDate, Nullable<int> instrumentMarketId, Nullable<int> indexInstrumentId, string isOpen, string isClose, Nullable<int> updateUserID)
+        public virtual int IndexConstituentOpenClose_Insert(Nullable<System.DateTime> referenceDate, Nullable<int> instrumentMarketId, Nullable<int> indexInstrumentId, Nullable<bool> isOpen, Nullable<bool> isClose, Nullable<int> updateUserID)
         {
             var referenceDateParameter = referenceDate.HasValue ?
                 new ObjectParameter("ReferenceDate", referenceDate) :
@@ -1004,13 +1004,13 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("IndexInstrumentId", indexInstrumentId) :
                 new ObjectParameter("IndexInstrumentId", typeof(int));
     
-            var isOpenParameter = isOpen != null ?
+            var isOpenParameter = isOpen.HasValue ?
                 new ObjectParameter("IsOpen", isOpen) :
-                new ObjectParameter("IsOpen", typeof(string));
+                new ObjectParameter("IsOpen", typeof(bool));
     
-            var isCloseParameter = isClose != null ?
+            var isCloseParameter = isClose.HasValue ?
                 new ObjectParameter("IsClose", isClose) :
-                new ObjectParameter("IsClose", typeof(string));
+                new ObjectParameter("IsClose", typeof(bool));
     
             var updateUserIDParameter = updateUserID.HasValue ?
                 new ObjectParameter("UpdateUserID", updateUserID) :
@@ -1019,7 +1019,7 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("IndexConstituentOpenClose_Insert", referenceDateParameter, instrumentMarketIdParameter, indexInstrumentIdParameter, isOpenParameter, isCloseParameter, updateUserIDParameter);
         }
     
-        public virtual int IndexConstituentOpenClose_Update(Nullable<int> indexConstituentOpenCloseId, Nullable<System.DateTime> referenceDate, Nullable<int> instrumentMarketId, Nullable<int> indexInstrumentId, string isOpen, string isClose, Nullable<int> updateUserID, byte[] dataVersion)
+        public virtual int IndexConstituentOpenClose_Update(Nullable<int> indexConstituentOpenCloseId, Nullable<System.DateTime> referenceDate, Nullable<int> instrumentMarketId, Nullable<int> indexInstrumentId, Nullable<bool> isOpen, Nullable<bool> isClose, Nullable<int> updateUserID, byte[] dataVersion)
         {
             var indexConstituentOpenCloseIdParameter = indexConstituentOpenCloseId.HasValue ?
                 new ObjectParameter("IndexConstituentOpenCloseId", indexConstituentOpenCloseId) :
@@ -1037,13 +1037,13 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("IndexInstrumentId", indexInstrumentId) :
                 new ObjectParameter("IndexInstrumentId", typeof(int));
     
-            var isOpenParameter = isOpen != null ?
+            var isOpenParameter = isOpen.HasValue ?
                 new ObjectParameter("IsOpen", isOpen) :
-                new ObjectParameter("IsOpen", typeof(string));
+                new ObjectParameter("IsOpen", typeof(bool));
     
-            var isCloseParameter = isClose != null ?
+            var isCloseParameter = isClose.HasValue ?
                 new ObjectParameter("IsClose", isClose) :
-                new ObjectParameter("IsClose", typeof(string));
+                new ObjectParameter("IsClose", typeof(bool));
     
             var updateUserIDParameter = updateUserID.HasValue ?
                 new ObjectParameter("UpdateUserID", updateUserID) :
