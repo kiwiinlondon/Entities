@@ -81,9 +81,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> OpeningValuationAdjustedNav { get; set; }
     	[DataMember]
-        public Nullable<decimal> OpeningNav { get; set; }
+        public decimal OpeningNav { get; set; }
     	[DataMember]
-        public Nullable<decimal> OpeningKeeleyNav { get; set; }
+        public decimal OpeningKeeleyNav { get; set; }
     	[DataMember]
         public Nullable<decimal> OpeningAdministratorNav { get; set; }
     	[DataMember]
