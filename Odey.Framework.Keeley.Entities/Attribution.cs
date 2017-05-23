@@ -272,6 +272,14 @@ namespace Odey.Framework.Keeley.Entities
         public decimal TodayWeight { get; set; }
     	[DataMember]
         public decimal SumWeight { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CumulativePriceLogReturn { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CumulativeFXLogReturn { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CumulativeCarryLogReturn { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CumulativeOtherLogReturn { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
