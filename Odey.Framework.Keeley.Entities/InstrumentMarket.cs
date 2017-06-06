@@ -73,6 +73,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> IsReverse { get; set; }
     	[DataMember]
         public int RiskCurrencyId { get; set; }
+    	[DataMember]
+        public Nullable<int> ValuationMethodologyId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
