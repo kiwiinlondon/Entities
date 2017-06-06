@@ -53,7 +53,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<System.DateTime> BenchmarkPriceValidUntil { get; set; }
     	[DataMember]
-        public Nullable<decimal> MaxFundPrice { get; set; }
+        public decimal MaxFundPrice { get; set; }
     
         [DataMember]
         public virtual Price BenchmarkPricePrice { get; set; }
