@@ -40,6 +40,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> OriginatingDate { get; set; }
     	[DataMember]
         public Nullable<bool> IsOriginatedLong { get; set; }
+    	[DataMember]
+        public Nullable<int> ExternalBrokerId { get; set; }
     
         [DataMember]
         public virtual ApplicationUser Analyst { get; set; }
@@ -51,5 +53,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual ApplicationUser InternalOriginator2 { get; set; }
         [DataMember]
         public virtual ExternalPerson ExternalOriginator { get; set; }
+        [DataMember]
+        public virtual ResearchBroker ResearchBroker { get; set; }
     }
 }

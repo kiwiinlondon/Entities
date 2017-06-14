@@ -12,7 +12,9 @@ namespace Odey.Framework.Keeley.Entities
         {
             Instrument = instrument;
         }
-
+        public InstrumentMarket() 
+        {
+        }
         public int IssuerID
         {
             get

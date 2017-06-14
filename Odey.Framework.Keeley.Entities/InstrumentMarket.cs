@@ -16,13 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class InstrumentMarket
     {
-    	
-        public InstrumentMarket()
-        {
-            this.FactsetPortfolios = new List<FactsetPortfolio>();
-            this.BloombergIdentifiers = new List<BloombergIdentifier>();
-        }
-    
     	[DataMember]
         public int InstrumentMarketID { get; set; }
     	[DataMember]
@@ -84,9 +77,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Index Index { get; set; }
         [DataMember]
         public virtual InstrumentMarket UltimateUnderlyingInstrumentMarket { get; set; }
-        [DataMember]
-        public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
-        [DataMember]
-        public virtual List<BloombergIdentifier> BloombergIdentifiers { get; set; }
     }
 }

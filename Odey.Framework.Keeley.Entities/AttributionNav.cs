@@ -14,31 +14,27 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class ResearchBroker
+    public partial class AttributionNav
     {
-    	
-        public ResearchBroker()
-        {
-            this.AnalystIdeas = new List<AnalystIdea>();
-            this.FocusLists = new List<FocusList>();
-        }
-    
     	[DataMember]
-        public int LegalEntityId { get; set; }
+        public int AttributionNavId { get; set; }
+    	[DataMember]
+        public int FundId { get; set; }
+    	[DataMember]
+        public System.DateTime ReferenceDate { get; set; }
+    	[DataMember]
+        public int AttributionSourceId { get; set; }
+    	[DataMember]
+        public decimal OpeningNAV { get; set; }
+    	[DataMember]
+        public decimal NAV { get; set; }
+    	[DataMember]
+        public decimal CapitalChange { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    
-        [DataMember]
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        [DataMember]
-        public virtual LegalEntity LegalEntity { get; set; }
-        [DataMember]
-        public virtual List<AnalystIdea> AnalystIdeas { get; set; }
-        [DataMember]
-        public virtual List<FocusList> FocusLists { get; set; }
     }
 }

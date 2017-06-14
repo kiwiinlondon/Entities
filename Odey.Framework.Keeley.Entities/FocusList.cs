@@ -72,8 +72,12 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime RelativeCurrentPriceDate { get; set; }
     	[DataMember]
         public int IssuerId { get; set; }
+    	[DataMember]
+        public Nullable<int> ExternalBrokerId { get; set; }
     
         [DataMember]
         public virtual List<FocusListPrice> FocusListPrices { get; set; }
+        [DataMember]
+        public virtual ResearchBroker ResearchBroker { get; set; }
     }
 }
