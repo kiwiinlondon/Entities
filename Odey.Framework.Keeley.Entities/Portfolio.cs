@@ -20,6 +20,7 @@ namespace Odey.Framework.Keeley.Entities
         public Portfolio()
         {
             this.Exposures = new List<Exposure>();
+            this.AttributionPNL = new List<AttributionPnl>();
         }
     
     	[DataMember]
@@ -227,5 +228,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Attribution Attribution { get; set; }
         [DataMember]
         public virtual Fund Fund { get; set; }
+        [DataMember]
+        public virtual List<AttributionPnl> AttributionPNL { get; set; }
     }
 }
