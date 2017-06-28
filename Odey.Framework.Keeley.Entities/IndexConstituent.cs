@@ -35,20 +35,10 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal OpenWeight { get; set; }
     	[DataMember]
-        public Nullable<decimal> CumulativeOpenWeight { get; set; }
+        public Nullable<decimal> PriceReturn { get; set; }
     	[DataMember]
-        public Nullable<decimal> RebasedTotalReturn { get; set; }
+        public int CurrencyId { get; set; }
     	[DataMember]
-        public Nullable<decimal> RebasedFxReturnEUR { get; set; }
-    	[DataMember]
-        public Nullable<decimal> RebasedFxReturnGBP { get; set; }
-    	[DataMember]
-        public Nullable<decimal> RebasedFxReturnUSD { get; set; }
-    	[DataMember]
-        public Nullable<decimal> FxReturnEUR { get; set; }
-    	[DataMember]
-        public Nullable<decimal> FxReturnGBP { get; set; }
-    	[DataMember]
-        public Nullable<decimal> FxReturnUSD { get; set; }
+        public Nullable<decimal> FxReturn { get; set; }
     }
 }
