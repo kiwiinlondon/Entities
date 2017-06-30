@@ -12,6 +12,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Master = 1,
         [EnumMember]
-        Administrator = 2
+        Valuation = 2
     }
 }
