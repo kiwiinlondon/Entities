@@ -28,6 +28,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<long> PositionCount { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayCapitalChange { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayTotalPNL { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
