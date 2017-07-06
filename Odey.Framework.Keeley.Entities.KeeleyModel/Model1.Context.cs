@@ -602,5 +602,23 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("AttributionFund_Roll", updateUserIdParameter);
         }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> AttributionNav_Roll(Nullable<int> updateUserId)
+        {
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("AttributionNav_Roll", updateUserIdParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> AttributionPnl_Roll(Nullable<int> updateUserId)
+        {
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("AttributionPnl_Roll", updateUserIdParameter);
+        }
     }
 }

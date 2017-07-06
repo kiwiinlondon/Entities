@@ -108,6 +108,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> MasterNav { get; set; }
     	[DataMember]
         public Nullable<decimal> FeederNav { get; set; }
+    	[DataMember]
+        public Nullable<bool> CalculateAttributionPNL { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

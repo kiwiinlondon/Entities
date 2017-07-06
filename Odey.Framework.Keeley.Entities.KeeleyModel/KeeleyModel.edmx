@@ -1931,6 +1931,7 @@
           <Property Name="GrossPNLFundCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MasterNav" Type="numeric" Precision="27" Scale="8" />
           <Property Name="FeederNav" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CalculateAttributionPNL" Type="bit" />
         </EntityType>
         <EntityType Name="OpenedClosedPosition">
           <Key>
@@ -8365,6 +8366,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="RebuildMasterAttribution" Type="bit" Mode="In" />
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
         </Function>
+        <Function Name="AttributionNav_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
+        </Function>
         <Function Name="AttributionNav_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionNavId" Type="int" Mode="In" />
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -8409,6 +8413,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="AttributionNavId" Type="int" Mode="In" />
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionPnlId" Type="int" Mode="In" />
@@ -10738,6 +10745,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="GrossPNLFundCurrency" Type="numeric" Mode="In" />
           <Parameter Name="MasterNav" Type="numeric" Mode="In" />
           <Parameter Name="FeederNav" Type="numeric" Mode="In" />
+          <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -10789,6 +10797,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="GrossPNLFundCurrency" Type="numeric" Mode="In" />
           <Parameter Name="MasterNav" Type="numeric" Mode="In" />
           <Parameter Name="FeederNav" Type="numeric" Mode="In" />
+          <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
         </Function>
         <Function Name="OpenedClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -15731,7 +15740,13 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__FocusList__Exter__22A66AA1" Association="Odey.Framework.Keeley.Entities.FK__FocusList__Exter__22A66AA1">
             <End Role="ResearchBroker" EntitySet="ResearchBrokers" />
             <End Role="FocusList" EntitySet="FocusLists" />
-          </AssociationSet>          
+          </AssociationSet>
+          <FunctionImport Name="AttributionNav_Roll" ReturnType="Collection(DateTime)">
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AttributionPnl_Roll" ReturnType="Collection(DateTime)">
+            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -20956,6 +20971,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="GrossPNLFundCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MasterNav" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="FeederNav" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CalculateAttributionPNL" Type="Boolean" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -28483,6 +28499,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="CalculateAttributionPNL" ColumnName="CalculateAttributionPNL" />
                 <ScalarProperty Name="FeederNav" ColumnName="FeederNav" />
                 <ScalarProperty Name="MasterNav" ColumnName="MasterNav" />
                 <ScalarProperty Name="GrossPNLFundCurrency" ColumnName="GrossPNLFundCurrency" />
@@ -28534,6 +28551,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="CalculateAttributionPNL" ParameterName="CalculateAttributionPNL" />
                   <ScalarProperty Name="FeederNav" ParameterName="FeederNav" />
                   <ScalarProperty Name="MasterNav" ParameterName="MasterNav" />
                   <ScalarProperty Name="GrossPNLFundCurrency" ParameterName="GrossPNLFundCurrency" />
@@ -28587,6 +28605,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="CalculateAttributionPNL" ParameterName="CalculateAttributionPNL" Version="Current" />
                   <ScalarProperty Name="FeederNav" ParameterName="FeederNav" Version="Current" />
                   <ScalarProperty Name="MasterNav" ParameterName="MasterNav" Version="Current" />
                   <ScalarProperty Name="GrossPNLFundCurrency" ParameterName="GrossPNLFundCurrency" Version="Current" />
@@ -31082,6 +31101,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AttributionNav_Roll" FunctionName="KeeleyModel.Store.AttributionNav_Roll" />
+          <FunctionImportMapping FunctionImportName="AttributionPnl_Roll" FunctionName="KeeleyModel.Store.AttributionPnl_Roll" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
