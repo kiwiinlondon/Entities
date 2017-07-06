@@ -215,8 +215,6 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AdministratorMarketValue { get; set; }
     	[DataMember]
         public Nullable<decimal> AdministratorFXRate { get; set; }
-    	[DataMember]
-        public Nullable<bool> RebuildMasterAttribution { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

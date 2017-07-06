@@ -44,5 +44,7 @@ namespace Odey.Framework.Keeley.Entities
         public string PulseIdentifier { get; set; }
     	[DataMember]
         public int CompanySizeId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarketCapUSD { get; set; }
     }
 }
