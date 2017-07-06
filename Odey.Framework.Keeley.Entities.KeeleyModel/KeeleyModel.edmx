@@ -320,6 +320,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="PercentageOfFund" Type="numeric" Precision="9" Scale="8" Nullable="false" />
           <Property Name="RebuildMasterAttribution" Type="bit" />
+          <Property Name="KeeleyIsMaster" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -8362,6 +8363,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
           <Parameter Name="RebuildMasterAttribution" Type="bit" Mode="In" />
+          <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
         </Function>
         <Function Name="AttributionNav_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionNavId" Type="int" Mode="In" />
@@ -8375,6 +8377,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
           <Parameter Name="RebuildMasterAttribution" Type="bit" Mode="In" />
+          <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionPnlId" Type="int" Mode="In" />
@@ -23677,6 +23680,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="PercentageOfFund" Type="Decimal" Nullable="false" Precision="9" Scale="8" />
           <Property Name="RebuildMasterAttribution" Type="Boolean" />
+          <Property Name="KeeleyIsMaster" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -30921,6 +30925,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionNavs">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <MappingFragment StoreEntitySet="AttributionNav">
+                <ScalarProperty Name="KeeleyIsMaster" ColumnName="KeeleyIsMaster" />
                 <ScalarProperty Name="RebuildMasterAttribution" ColumnName="RebuildMasterAttribution" />
                 <ScalarProperty Name="PercentageOfFund" ColumnName="PercentageOfFund" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -30938,6 +30943,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionNav_Insert">
+                  <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" />
                   <ScalarProperty Name="RebuildMasterAttribution" ParameterName="RebuildMasterAttribution" />
                   <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -30951,7 +30957,13 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.AttributionNav_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" />
+                </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionNav_Update">
+                  <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" Version="Current" />
                   <ScalarProperty Name="RebuildMasterAttribution" ParameterName="RebuildMasterAttribution" Version="Current" />
                   <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
@@ -30966,11 +30978,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.AttributionNav_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" />
-                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>

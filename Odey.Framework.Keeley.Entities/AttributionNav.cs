@@ -40,5 +40,7 @@ namespace Odey.Framework.Keeley.Entities
         public decimal PercentageOfFund { get; set; }
     	[DataMember]
         public Nullable<bool> RebuildMasterAttribution { get; set; }
+    	[DataMember]
+        public bool KeeleyIsMaster { get; set; }
     }
 }
