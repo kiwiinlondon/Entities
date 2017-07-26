@@ -18,12 +18,21 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
+            TestFailedReportSubscriptions();
             using (var context = new KeeleyModel())
             {
                 var r = context.AnalystIdeas.Include("Issuer.Instruments.InstrumentMarkets").ToList();
                 //context.RollPortfolioSettlementDate(
                 // context.PortfolioPositionAccountMovementRollForward();
                 Region region = context.Regions.Where(a => a.IsoCode == "GX").FirstOrDefault();
+            }
+        }
+
+        static void TestFailedReportSubscriptions()
+        {
+            using (var context = new KeeleyModel())
+            {
+                var r = context.ReportServer_GetFailedSubscriptions().ToArray();               
             }
         }
 

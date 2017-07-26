@@ -38,6 +38,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         ATTRIBUTION_REBUILD_POSITION = 11,
+
+        [EnumMember]
+        REPORT_SUBSCRIPTIONS = 12,
     }
 }
 

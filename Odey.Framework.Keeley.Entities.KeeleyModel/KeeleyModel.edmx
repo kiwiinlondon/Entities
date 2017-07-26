@@ -1709,7 +1709,7 @@
           <Property Name="AdministratorId" Type="varchar" MaxLength="150" />
           <Property Name="IsReverse" Type="bit" />
           <Property Name="RiskCurrencyId" Type="int" Nullable="false" />
-          <Property Name="ValuationMethodologyId" Type="int" />
+          <Property Name="ValuationMethodologyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="InstrumentRelationship">
           <Key>
@@ -11593,6 +11593,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="ReportServer_GetFailedSubscriptions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="RestrictedList_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RestrictedListId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -15743,7 +15744,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </FunctionImport>
           <FunctionImport Name="AttributionPnl_Roll" ReturnType="Collection(DateTime)">
           <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
-          </FunctionImport>          
+          </FunctionImport>
+          <FunctionImport Name="ReportServer_GetFailedSubscriptions" ReturnType="Collection(Odey.Framework.Keeley.Entities.ReportServer_GetFailedSubscription_Result)" />          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -18039,7 +18041,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="AdministratorId" Type="String" Unicode="false" FixedLength="false" MaxLength="150" />
           <Property Name="IsReverse" Type="Boolean" />
           <Property Name="RiskCurrencyId" Type="Int32" Nullable="false" />
-          <Property Name="ValuationMethodologyId" Type="Int32" />
+          <Property Name="ValuationMethodologyId" Type="Int32" Nullable="false" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -23829,6 +23831,17 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <ComplexType Name="AttributionPnl_Update_Result">
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="23" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="ReportServer_GetFailedSubscription_Result" >
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="Guid" Name="ScheduleId" Nullable="false" />
+          <Property Type="String" Name="UserName" Nullable="false" />
+          <Property Type="String" Name="Recipients" Nullable="false" />
+          <Property Type="String" Name="LastStatus" Nullable="false" />
+          <Property Type="String" Name="Path" Nullable="false" />
+          <Property Type="DateTime" Name="LastRunTime" Nullable="false" />
+          <Property Type="String" Name="Parameter" Nullable="false" />
+          <Property Type="String" Name="JobName" Nullable="false" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -31096,6 +31109,20 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AttributionNav_Roll" FunctionName="KeeleyModel.Store.AttributionNav_Roll" />
           <FunctionImportMapping FunctionImportName="AttributionPnl_Roll" FunctionName="KeeleyModel.Store.AttributionPnl_Roll" />
+          <FunctionImportMapping FunctionImportName="ReportServer_GetFailedSubscriptions" FunctionName="KeeleyModel.Store.ReportServer_GetFailedSubscriptions" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Odey.Framework.Keeley.Entities.ReportServer_GetFailedSubscription_Result">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ScheduleId" ColumnName="ScheduleId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Recipients" ColumnName="Recipients" />
+                <ScalarProperty Name="LastStatus" ColumnName="LastStatus" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="LastRunTime" ColumnName="LastRunTime" />
+                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

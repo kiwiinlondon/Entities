@@ -67,7 +67,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int RiskCurrencyId { get; set; }
     	[DataMember]
-        public Nullable<int> ValuationMethodologyId { get; set; }
+        public int ValuationMethodologyId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

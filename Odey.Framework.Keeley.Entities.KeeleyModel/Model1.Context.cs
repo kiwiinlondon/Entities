@@ -620,5 +620,10 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("AttributionPnl_Roll", updateUserIdParameter);
         }
+    
+        public virtual ObjectResult<ReportServer_GetFailedSubscription_Result> ReportServer_GetFailedSubscriptions()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportServer_GetFailedSubscription_Result>("ReportServer_GetFailedSubscriptions");
+        }
     }
 }
