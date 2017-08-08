@@ -16,7 +16,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DepositoryReceipt = 28,
         [EnumMember]
-        CollectiveInvestmentScheme = 29,
+        CollectiveInvestmentSchemeOpen = 29,
+        [EnumMember]
+        CollectiveInvestmentSchemeClose = 91,
         [EnumMember]
         Bond = 31,
         [EnumMember]
