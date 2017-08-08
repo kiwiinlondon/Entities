@@ -38,6 +38,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsPrimary { get; set; }
     	[DataMember]
         public bool IsActive { get; set; }
+    	[DataMember]
+        public Nullable<bool> NavIsNotUsable { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

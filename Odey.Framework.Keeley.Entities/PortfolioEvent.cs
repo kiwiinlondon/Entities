@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class PortfolioEvent
     {
+    	
+        public PortfolioEvent()
+        {
+            this.PortfolioEventFXs = new List<PortfolioEventFX>();
+        }
+    
     	[DataMember]
         public int PortfolioEventID { get; set; }
     	[DataMember]
@@ -147,5 +153,7 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual Position Position { get; set; }
+        [DataMember]
+        public virtual List<PortfolioEventFX> PortfolioEventFXs { get; set; }
     }
 }
