@@ -18,7 +18,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CollectiveInvestmentSchemeOpen = 29,
         [EnumMember]
-        CollectiveInvestmentSchemeClose = 91,
+        CollectiveInvestmentSchemeClosed = 91,
         [EnumMember]
         Bond = 31,
         [EnumMember]
