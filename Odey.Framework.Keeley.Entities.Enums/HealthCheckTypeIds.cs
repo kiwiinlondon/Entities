@@ -41,6 +41,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         REPORT_SUBSCRIPTIONS = 12,
+
+        [EnumMember]
+        BLOOMBERG_REPORTS_LOADED = 13,
     }
 }
 
