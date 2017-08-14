@@ -14,28 +14,22 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class AttributionNav
+    public partial class AttributionSundry
     {
-    	
-        public AttributionNav()
-        {
-            this.AttributionSundries = new List<AttributionSundry>();
-        }
-    
     	[DataMember]
-        public int AttributionNavId { get; set; }
+        public int AttributionSundryId { get; set; }
+    	[DataMember]
+        public int PortfolioId { get; set; }
     	[DataMember]
         public int FundId { get; set; }
+    	[DataMember]
+        public int PositionID { get; set; }
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
         public int AttributionSourceId { get; set; }
     	[DataMember]
-        public decimal OpeningNAV { get; set; }
-    	[DataMember]
-        public decimal NAV { get; set; }
-    	[DataMember]
-        public decimal CapitalChange { get; set; }
+        public decimal Value { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -43,11 +37,8 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public decimal PercentageOfFund { get; set; }
+        public int AttributionNavId { get; set; }
     	[DataMember]
-        public bool KeeleyIsMaster { get; set; }
-    
-        [DataMember]
-        public virtual List<AttributionSundry> AttributionSundries { get; set; }
+        public int SundryTypeId { get; set; }
     }
 }

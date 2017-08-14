@@ -21,6 +21,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             this.Exposures = new List<Exposure>();
             this.AttributionPnls = new List<AttributionPnl>();
+            this.AttributionSundries = new List<AttributionSundry>();
         }
     
     	[DataMember]
@@ -230,5 +231,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual List<AttributionPnl> AttributionPnls { get; set; }
+        [DataMember]
+        public virtual List<AttributionSundry> AttributionSundries { get; set; }
     }
 }
