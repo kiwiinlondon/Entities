@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Currency
     {
-    	
-        public Currency()
-        {
-            this.BloombergIdentifiers = new List<BloombergIdentifier>();
-        }
-    
     	[DataMember]
         public int InstrumentID { get; set; }
     	[DataMember]
@@ -37,7 +31,5 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         private Instrument Instrument { get; set; }
-        [DataMember]
-        public virtual List<BloombergIdentifier> BloombergIdentifiers { get; set; }
     }
 }

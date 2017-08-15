@@ -43,23 +43,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal TodayPricePnl { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayFxPnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFXGBPPnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFXUSDPnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayFXEURPnl { get; set; }
+        public decimal TodayFxPnl { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayCarryPnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayManagementFeePnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayPerformanceFeePnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayUnmatchedInstrumentPnl { get; set; }
-    	[DataMember]
-        public Nullable<decimal> TodayOtherItemsPnl { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -69,11 +55,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int AttributionNavId { get; set; }
     	[DataMember]
-        public decimal PercentageOfFund { get; set; }
+        public int CurrencyId { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }
-        [DataMember]
-        public virtual Position Position { get; set; }
     }
 }

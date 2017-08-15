@@ -40,5 +40,9 @@ namespace Odey.Framework.Keeley.Entities
         public int AttributionNavId { get; set; }
     	[DataMember]
         public int SundryTypeId { get; set; }
+    	[DataMember]
+        public decimal PercentageOfFund { get; set; }
+    	[DataMember]
+        public int CurrencyId { get; set; }
     }
 }

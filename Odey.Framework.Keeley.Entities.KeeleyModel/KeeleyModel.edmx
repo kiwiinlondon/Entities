@@ -320,6 +320,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="PercentageOfFund" Type="numeric" Precision="9" Scale="8" Nullable="false" />
           <Property Name="KeeleyIsMaster" Type="bit" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -338,20 +339,13 @@
           <Property Name="Exposure" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="ExposureDelta" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="TodayPricePnl" Type="numeric" Precision="15" Scale="2" Nullable="false" />
-          <Property Name="TodayFxPnl" Type="numeric" Precision="15" Scale="2" />
-          <Property Name="TodayFXGBPPnl" Type="numeric" Precision="15" Scale="2" />
-          <Property Name="TodayFXUSDPnl" Type="numeric" Precision="15" Scale="2" />
-          <Property Name="TodayFXEURPnl" Type="numeric" Precision="15" Scale="2" />
+          <Property Name="TodayFxPnl" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="TodayCarryPnl" Type="numeric" Precision="15" Scale="2" />
-          <Property Name="TodayManagementFeePnl" Type="numeric" Precision="15" Scale="2" />
-          <Property Name="TodayPerformanceFeePnl" Type="numeric" Precision="15" Scale="2" />
-          <Property Name="TodayUnmatchedInstrumentPnl" Type="numeric" Precision="15" Scale="2" />
-          <Property Name="TodayOtherItemsPnl" Type="numeric" Precision="15" Scale="2" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="AttributionNavId" Type="int" Nullable="false" />
-          <Property Name="PercentageOfFund" Type="numeric" Precision="9" Scale="8" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionSundry">
           <Key>
@@ -369,6 +363,8 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="AttributionNavId" Type="int" Nullable="false" />
           <Property Name="SundryTypeId" Type="int" Nullable="false" />
+          <Property Name="PercentageOfFund" Type="numeric" Precision="9" Scale="8" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -4636,6 +4632,42 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Attributi__Curre__69ADE467">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="AttributionPnl" Type="Self.AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__Curre__6E729984">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="AttributionNav" Type="Self.AttributionNav" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="AttributionNav">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__Curre__6F66BDBD">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="AttributionSundry" Type="Self.AttributionSundry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="AttributionSundry">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Attributi__FundI__53BEA348">
           <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
           <End Role="AttributionSundry" Type="Self.AttributionSundry" Multiplicity="*" />
@@ -4741,6 +4773,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="AttributionPnl">
               <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__Updat__5D480D82">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="AttributionSundry" Type="Self.AttributionSundry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AttributionSundry">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8482,6 +8526,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionNav_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8498,6 +8543,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionPnlId" Type="int" Mode="In" />
@@ -8518,17 +8564,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ExposureDelta" Type="numeric" Mode="In" />
           <Parameter Name="TodayPricePnl" Type="numeric" Mode="In" />
           <Parameter Name="TodayFxPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXGBPPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXUSDPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXEURPnl" Type="numeric" Mode="In" />
           <Parameter Name="TodayCarryPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayManagementFeePnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayPerformanceFeePnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayUnmatchedInstrumentPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayOtherItemsPnl" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="AttributionNavId" Type="int" Mode="In" />
-          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8548,18 +8587,11 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ExposureDelta" Type="numeric" Mode="In" />
           <Parameter Name="TodayPricePnl" Type="numeric" Mode="In" />
           <Parameter Name="TodayFxPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXGBPPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXUSDPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXEURPnl" Type="numeric" Mode="In" />
           <Parameter Name="TodayCarryPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayManagementFeePnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayPerformanceFeePnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayUnmatchedInstrumentPnl" Type="numeric" Mode="In" />
-          <Parameter Name="TodayOtherItemsPnl" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="AttributionNavId" Type="int" Mode="In" />
-          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -8575,6 +8607,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="Value" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="AttributionNavId" Type="int" Mode="In" />
+          <Parameter Name="SundryTypeId" Type="int" Mode="In" />
+          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -8587,6 +8622,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="AttributionNavId" Type="int" Mode="In" />
+          <Parameter Name="SundryTypeId" Type="int" Mode="In" />
+          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
         </Function>
         <Function Name="Beta_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BetaId" Type="int" Mode="In" />
@@ -12859,6 +12897,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="AttributionNav" EntitySet="AttributionNav" />
             <End Role="AttributionPnl" EntitySet="AttributionPnl" />
           </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Curre__69ADE467" Association="Self.FK__Attributi__Curre__69ADE467">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnl" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Curre__6E729984" Association="Self.FK__Attributi__Curre__6E729984">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="AttributionNav" EntitySet="AttributionNav" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Curre__6F66BDBD" Association="Self.FK__Attributi__Curre__6F66BDBD">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="AttributionSundry" EntitySet="AttributionSundry" />
+          </AssociationSet>
           <AssociationSet Name="FK__Attributi__FundI__53BEA348" Association="Self.FK__Attributi__FundI__53BEA348">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="AttributionSundry" EntitySet="AttributionSundry" />
@@ -12894,6 +12944,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Attributi__Posit__71CE291C" Association="Self.FK__Attributi__Posit__71CE291C">
             <End Role="Position" EntitySet="Position" />
             <End Role="AttributionPnl" EntitySet="AttributionPnl" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Updat__5D480D82" Association="Self.FK__Attributi__Updat__5D480D82">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="AttributionSundry" EntitySet="AttributionSundry" />
           </AssociationSet>
           <AssociationSet Name="FK__Bloomberg__Curre__16BEEB52" Association="Self.FK__Bloomberg__Curre__16BEEB52">
             <End Role="Currency" EntitySet="Currency" />
@@ -15965,6 +16019,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="PortfolioEventFX" EntitySet="PortfolioEventFXes" />
           </AssociationSet>
           <EntitySet Name="AttributionSundries" EntityType="Odey.Framework.Keeley.Entities.AttributionSundry" />
+          <AssociationSet Name="FK__Attributi__Updat__5D480D82" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Updat__5D480D82">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="AttributionSundry" EntitySet="AttributionSundries" />
+          </AssociationSet>
           <AssociationSet Name="FK__Attributi__Attri__52CA7F0F" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Attri__52CA7F0F">
             <End Role="AttributionNav" EntitySet="AttributionNavs" />
             <End Role="AttributionSundry" EntitySet="AttributionSundries" />
@@ -15980,7 +16038,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Attributi__Posit__55A6EBBA" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Posit__55A6EBBA">
             <End Role="Position" EntitySet="Positions" />
             <End Role="AttributionSundry" EntitySet="AttributionSundries" />
-          </AssociationSet>          
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Curre__69ADE467" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Curre__69ADE467">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Curre__6E7299841" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Curre__6E7299841">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="AttributionNav" EntitySet="AttributionNavs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Curre__6F66BDBD1" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Curre__6F66BDBD1">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="AttributionSundry" EntitySet="AttributionSundries" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -16530,7 +16600,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Instrument" a:GetterAccess="Private" a:SetterAccess="Private" Relationship="Odey.Framework.Keeley.Entities.CurrencyInstrumentIDFK" FromRole="Currency" ToRole="Instrument" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Type="Int32" Name="Ordering" />
-          <NavigationProperty Name="BloombergIdentifiers" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" FromRole="Currency" ToRole="BloombergIdentifier" />
           <Property Name="IsDeliverable" Type="Boolean" Nullable="false" />
           </EntityType>
         <Association Name="CurrencyUpdateUserIDFK">
@@ -23933,7 +24002,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="PercentageOfFund" Type="Decimal" Nullable="false" Precision="9" Scale="8" />
           <Property Name="KeeleyIsMaster" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AttributionSundries" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Attri__52CA7F0F" FromRole="AttributionNav" ToRole="AttributionSundry" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -23952,22 +24021,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="Exposure" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
           <Property Name="ExposureDelta" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
           <Property Name="TodayPricePnl" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
-          <Property Name="TodayFxPnl" Type="Decimal" Precision="15" Scale="2" />
-          <Property Name="TodayFXGBPPnl" Type="Decimal" Precision="15" Scale="2" />
-          <Property Name="TodayFXUSDPnl" Type="Decimal" Precision="15" Scale="2" />
-          <Property Name="TodayFXEURPnl" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="TodayFxPnl" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
           <Property Name="TodayCarryPnl" Type="Decimal" Precision="15" Scale="2" />
-          <Property Name="TodayManagementFeePnl" Type="Decimal" Precision="15" Scale="2" />
-          <Property Name="TodayPerformanceFeePnl" Type="Decimal" Precision="15" Scale="2" />
-          <Property Name="TodayUnmatchedInstrumentPnl" Type="Decimal" Precision="15" Scale="2" />
-          <Property Name="TodayOtherItemsPnl" Type="Decimal" Precision="15" Scale="2" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="AttributionNavId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AttributionNav" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Attri__73B6718E" FromRole="AttributionPnl" ToRole="AttributionNav" />
-          <Property Name="PercentageOfFund" Type="Decimal" Nullable="false" Precision="9" Scale="8" />
-          <NavigationProperty Name="Position" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Posit__71CE291C" FromRole="AttributionPnl" ToRole="Position" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -24151,7 +24212,21 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="AttributionNavId" Type="Int32" Nullable="false" />
           <Property Name="SundryTypeId" Type="Int32" Nullable="false" />
+          <Property Name="PercentageOfFund" Type="Decimal" Nullable="false" Precision="9" Scale="8" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
         </EntityType>
+        <Association Name="FK__Attributi__Updat__5D480D82">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionSundry" Role="AttributionSundry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AttributionSundry">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Attributi__Attri__52CA7F0F">
           <End Type="Odey.Framework.Keeley.Entities.AttributionNav" Role="AttributionNav" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.AttributionSundry" Role="AttributionSundry" Multiplicity="*" />
@@ -24197,6 +24272,42 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="AttributionSundry">
               <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__Curre__69ADE467">
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionPnl" Role="AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__Curre__6E7299841">
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionNav" Role="AttributionNav" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="AttributionNav">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__Curre__6F66BDBD1">
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionSundry" Role="AttributionSundry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="AttributionSundry">
+              <PropertyRef Name="CurrencyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -31311,6 +31422,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionNavs">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <MappingFragment StoreEntitySet="AttributionNav">
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
                 <ScalarProperty Name="KeeleyIsMaster" ColumnName="KeeleyIsMaster" />
                 <ScalarProperty Name="PercentageOfFund" ColumnName="PercentageOfFund" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -31328,6 +31440,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionNav_Insert">
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" />
                   <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -31347,6 +31460,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionNav_Update">
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" Version="Current" />
                   <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
@@ -31367,19 +31481,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
-                <ScalarProperty Name="PercentageOfFund" ColumnName="PercentageOfFund" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
                 <ScalarProperty Name="AttributionNavId" ColumnName="AttributionNavId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="TodayOtherItemsPnl" ColumnName="TodayOtherItemsPnl" />
-                <ScalarProperty Name="TodayUnmatchedInstrumentPnl" ColumnName="TodayUnmatchedInstrumentPnl" />
-                <ScalarProperty Name="TodayPerformanceFeePnl" ColumnName="TodayPerformanceFeePnl" />
-                <ScalarProperty Name="TodayManagementFeePnl" ColumnName="TodayManagementFeePnl" />
                 <ScalarProperty Name="TodayCarryPnl" ColumnName="TodayCarryPnl" />
-                <ScalarProperty Name="TodayFXEURPnl" ColumnName="TodayFXEURPnl" />
-                <ScalarProperty Name="TodayFXUSDPnl" ColumnName="TodayFXUSDPnl" />
-                <ScalarProperty Name="TodayFXGBPPnl" ColumnName="TodayFXGBPPnl" />
                 <ScalarProperty Name="TodayFxPnl" ColumnName="TodayFxPnl" />
                 <ScalarProperty Name="TodayPricePnl" ColumnName="TodayPricePnl" />
                 <ScalarProperty Name="ExposureDelta" ColumnName="ExposureDelta" />
@@ -31399,17 +31506,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
-                  <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" />
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
                   <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="TodayOtherItemsPnl" ParameterName="TodayOtherItemsPnl" />
-                  <ScalarProperty Name="TodayUnmatchedInstrumentPnl" ParameterName="TodayUnmatchedInstrumentPnl" />
-                  <ScalarProperty Name="TodayPerformanceFeePnl" ParameterName="TodayPerformanceFeePnl" />
-                  <ScalarProperty Name="TodayManagementFeePnl" ParameterName="TodayManagementFeePnl" />
                   <ScalarProperty Name="TodayCarryPnl" ParameterName="TodayCarryPnl" />
-                  <ScalarProperty Name="TodayFXEURPnl" ParameterName="TodayFXEURPnl" />
-                  <ScalarProperty Name="TodayFXUSDPnl" ParameterName="TodayFXUSDPnl" />
-                  <ScalarProperty Name="TodayFXGBPPnl" ParameterName="TodayFXGBPPnl" />
                   <ScalarProperty Name="TodayFxPnl" ParameterName="TodayFxPnl" />
                   <ScalarProperty Name="TodayPricePnl" ParameterName="TodayPricePnl" />
                   <ScalarProperty Name="ExposureDelta" ParameterName="ExposureDelta" />
@@ -31428,18 +31528,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
-                  <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" Version="Current" />
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
                   <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="TodayOtherItemsPnl" ParameterName="TodayOtherItemsPnl" Version="Current" />
-                  <ScalarProperty Name="TodayUnmatchedInstrumentPnl" ParameterName="TodayUnmatchedInstrumentPnl" Version="Current" />
-                  <ScalarProperty Name="TodayPerformanceFeePnl" ParameterName="TodayPerformanceFeePnl" Version="Current" />
-                  <ScalarProperty Name="TodayManagementFeePnl" ParameterName="TodayManagementFeePnl" Version="Current" />
                   <ScalarProperty Name="TodayCarryPnl" ParameterName="TodayCarryPnl" Version="Current" />
-                  <ScalarProperty Name="TodayFXEURPnl" ParameterName="TodayFXEURPnl" Version="Current" />
-                  <ScalarProperty Name="TodayFXUSDPnl" ParameterName="TodayFXUSDPnl" Version="Current" />
-                  <ScalarProperty Name="TodayFXGBPPnl" ParameterName="TodayFXGBPPnl" Version="Current" />
                   <ScalarProperty Name="TodayFxPnl" ParameterName="TodayFxPnl" Version="Current" />
                   <ScalarProperty Name="TodayPricePnl" ParameterName="TodayPricePnl" Version="Current" />
                   <ScalarProperty Name="ExposureDelta" ParameterName="ExposureDelta" Version="Current" />
@@ -31540,6 +31633,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionSundries">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionSundry">
               <MappingFragment StoreEntitySet="AttributionSundry">
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="PercentageOfFund" ColumnName="PercentageOfFund" />
                 <ScalarProperty Name="SundryTypeId" ColumnName="SundryTypeId" />
                 <ScalarProperty Name="AttributionNavId" ColumnName="AttributionNavId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -31557,6 +31652,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionSundry">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionSundry_Insert">
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
+                  <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" />
+                  <ScalarProperty Name="SundryTypeId" ParameterName="SundryTypeId" />
                   <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Value" ParameterName="Value" />
@@ -31566,10 +31664,13 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="FundId" ParameterName="FundId" />
                   <ScalarProperty Name="PortfolioId" ParameterName="PortfolioId" />
                   <ResultBinding Name="AttributionSundryId" ColumnName="AttributionSundryId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                  <ResultBinding Name="UpdateUserID" ColumnName="UpdateUserId" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionSundry_Update">
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
+                  <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" Version="Current" />
+                  <ScalarProperty Name="SundryTypeId" ParameterName="SundryTypeId" Version="Current" />
                   <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
@@ -31580,8 +31681,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
                   <ScalarProperty Name="PortfolioId" ParameterName="PortfolioId" Version="Current" />
                   <ScalarProperty Name="AttributionSundryId" ParameterName="AttributionSundryId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                  <ResultBinding Name="UpdateUserID" ColumnName="UpdateUserId" />
                 </UpdateFunction>
                 <DeleteFunction FunctionName="KeeleyModel.Store.AttributionSundry_Delete">
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -32106,7 +32207,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="21.968747999999998" PointY="29.75" />
           <edmx:ConnectorPoint PointX="21.968747999999998" PointY="26.903300781250003" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Currency" Width="1.5" PointX="5.375" PointY="18" Height="2.1725878906250031" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Currency" Width="2.75" PointX="5.375" PointY="18" Height="2.1725878906250031" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CurrencyUpdateUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="16.752399479073336" />
           <edmx:ConnectorPoint PointX="2.6666666666666665" PointY="16.752399479073336" />
@@ -36272,53 +36373,39 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="24.923333333333332" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="24.741666666666667" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="22.989580833333331" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="22.822914166666667" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="20.883333333333333" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="20.716666666666669" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="20.442708333333332" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="20.276041666666668" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="20.208333333333332" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="20.041666666666668" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.575944609088555" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.575944609088555" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="22.989580833333331" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="22.822914166666667" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="20.883333333333333" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="20.716666666666669" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="20.208333333333332" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="20.041666666666668" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.575937288303962" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.575937288303962" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.350322265625003" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.350322265625003" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.197916666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.197916666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.708333333333334" PointY="25.610087890625" />
+          <edmx:ConnectorPoint PointX="15.135416666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.572916666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="14.572916666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.770833333333334" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.604166666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583335999961196" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583335999961196" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.5833359999903" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.5833359999903" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -37403,11 +37490,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Updat__7EDE0B77" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Curre__7DE9E73E" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Portf__7CF5C305" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionSundry" Width="1.5" PointX="43.625" PointY="33.125" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionSundry" Width="1.5" PointX="45.625" PointY="33.75" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Updat__5D480D82" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Attri__52CA7F0F" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__FundI__53BEA348" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Portf__54B2C781" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Posit__55A6EBBA" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Curre__69ADE467" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Curre__6E7299841" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Curre__6F66BDBD1" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

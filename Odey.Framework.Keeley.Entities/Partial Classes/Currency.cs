@@ -8,7 +8,6 @@ namespace Odey.Framework.Keeley.Entities
     partial class Currency
     {        
         public Currency(Instrument instrument)
-            : this()
         {
             Instrument = instrument;
         }

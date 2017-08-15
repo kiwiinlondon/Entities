@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class AttributionNav
     {
-    	
-        public AttributionNav()
-        {
-            this.AttributionSundries = new List<AttributionSundry>();
-        }
-    
     	[DataMember]
         public int AttributionNavId { get; set; }
     	[DataMember]
@@ -46,8 +40,7 @@ namespace Odey.Framework.Keeley.Entities
         public decimal PercentageOfFund { get; set; }
     	[DataMember]
         public bool KeeleyIsMaster { get; set; }
-    
-        [DataMember]
-        public virtual List<AttributionSundry> AttributionSundries { get; set; }
+    	[DataMember]
+        public int CurrencyId { get; set; }
     }
 }
