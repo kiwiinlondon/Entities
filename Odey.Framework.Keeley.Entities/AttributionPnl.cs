@@ -56,6 +56,10 @@ namespace Odey.Framework.Keeley.Entities
         public int AttributionNavId { get; set; }
     	[DataMember]
         public int CurrencyId { get; set; }
+    	[DataMember]
+        public decimal TodayOtherPnl { get; set; }
+    	[DataMember]
+        public int PnlTypeId { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }
