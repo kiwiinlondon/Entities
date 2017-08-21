@@ -7,7 +7,7 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum SundryTypeIds
+    public enum PnlTypeIds
     {
         [EnumMember]
         ManagementFee = 1,
@@ -17,5 +17,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OtherGeneralLedger = 3,
         [EnumMember]
         UnmatchedInstrument = 4,
+        [EnumMember]
+        Default = 5
     }
 }
