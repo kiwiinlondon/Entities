@@ -21,7 +21,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             this.Exposures = new List<Exposure>();
             this.AttributionPnls = new List<AttributionPnl>();
-            this.AttributionSundries = new List<AttributionSundry>();
+            this.PortfolioFXes = new List<PortfolioFX>();
         }
     
     	[DataMember]
@@ -216,6 +216,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AdministratorMarketValue { get; set; }
     	[DataMember]
         public Nullable<decimal> AdministratorFXRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> NotionalValueInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarketValueInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
@@ -232,6 +236,6 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual List<AttributionPnl> AttributionPnls { get; set; }
         [DataMember]
-        public virtual List<AttributionSundry> AttributionSundries { get; set; }
+        public virtual List<PortfolioFX> PortfolioFXes { get; set; }
     }
 }

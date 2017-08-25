@@ -14,35 +14,39 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class AttributionSundry
+    public partial class PortfolioFX
     {
     	[DataMember]
-        public int AttributionSundryId { get; set; }
+        public int PortfolioFXId { get; set; }
     	[DataMember]
         public int PortfolioId { get; set; }
     	[DataMember]
-        public int FundId { get; set; }
+        public int CurrencyId { get; set; }
     	[DataMember]
-        public int PositionID { get; set; }
+        public decimal FXRate { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
+        public int FXRateId { get; set; }
     	[DataMember]
-        public int AttributionSourceId { get; set; }
+        public decimal NotionalCost { get; set; }
     	[DataMember]
-        public decimal Value { get; set; }
+        public decimal TodayRealisedFXPNL { get; set; }
+    	[DataMember]
+        public decimal TodayUnRealisedFXPNL { get; set; }
+    	[DataMember]
+        public decimal TodayRealisedPricePNL { get; set; }
+    	[DataMember]
+        public decimal TodayUnRealisedPricePNL { get; set; }
+    	[DataMember]
+        public decimal TodayCashBenefit { get; set; }
+    	[DataMember]
+        public decimal MarketValue { get; set; }
+    	[DataMember]
+        public decimal Exposure { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public int AttributionNavId { get; set; }
-    	[DataMember]
-        public int SundryTypeId { get; set; }
-    	[DataMember]
-        public decimal PercentageOfFund { get; set; }
-    	[DataMember]
-        public int CurrencyId { get; set; }
     }
 }
