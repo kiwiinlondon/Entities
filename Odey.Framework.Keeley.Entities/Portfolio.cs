@@ -217,9 +217,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> AdministratorFXRate { get; set; }
     	[DataMember]
-        public Nullable<decimal> NotionalValueInstrument { get; set; }
-    	[DataMember]
         public Nullable<decimal> MarketValueInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> DeltaMarketValueInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
