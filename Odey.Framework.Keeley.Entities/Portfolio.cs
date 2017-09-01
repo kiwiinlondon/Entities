@@ -220,6 +220,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> MarketValueInstrument { get; set; }
     	[DataMember]
         public Nullable<decimal> DeltaMarketValueInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayUnrealisedPricePNLInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

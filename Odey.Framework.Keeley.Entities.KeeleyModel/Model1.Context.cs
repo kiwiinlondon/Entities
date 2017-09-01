@@ -627,5 +627,14 @@ namespace Odey.Framework.Keeley.Entities
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportServer_GetFailedSubscription_Result>("ReportServer_GetFailedSubscriptions");
         }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> PortfolioFX_Roll(Nullable<int> updateUserId)
+        {
+            var updateUserIdParameter = updateUserId.HasValue ?
+                new ObjectParameter("UpdateUserId", updateUserId) :
+                new ObjectParameter("UpdateUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("PortfolioFX_Roll", updateUserIdParameter);
+        }
     }
 }
