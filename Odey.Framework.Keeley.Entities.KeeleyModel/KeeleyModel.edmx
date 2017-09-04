@@ -340,7 +340,7 @@
           <Property Name="ExposureDelta" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="TodayPricePnl" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="TodayFxPnl" Type="numeric" Precision="15" Scale="2" Nullable="false" />
-          <Property Name="TodayCarryPnl" Type="numeric" Precision="15" Scale="2" />
+          <Property Name="TodayCarryPnl" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -2601,6 +2601,23 @@
           <Property Name="Notes" Type="varchar" MaxLength="150" />
           <Property Name="ApprovedByUserId" Type="int" />
           <Property Name="InputUserId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Keeley.dbo.AttributionPNLNav' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AttributionPNLNav">
+          <Key>
+            <PropertyRef Name="FundId" />
+            <PropertyRef Name="ReferenceDate" />
+            <PropertyRef Name="CurrencyId" />
+            <PropertyRef Name="AttributionSourceId" />
+          </Key>
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="AttributionSourceId" Type="int" Nullable="false" />
+          <Property Name="Nav" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="TodayPNL" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="NumberOfPositions" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Keeley.dbo.BookNetAssetValue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -12259,6 +12276,17 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TradeEvent" EntityType="Self.TradeEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransferEvent" EntityType="Self.TransferEvent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttributionPNLNav" EntityType="Self.AttributionPNLNav" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[AttributionPNLNav].[FundId] AS [FundId], 
+[AttributionPNLNav].[ReferenceDate] AS [ReferenceDate], 
+[AttributionPNLNav].[CurrencyId] AS [CurrencyId], 
+[AttributionPNLNav].[AttributionSourceId] AS [AttributionSourceId], 
+[AttributionPNLNav].[Nav] AS [Nav], 
+[AttributionPNLNav].[TodayPNL] AS [TodayPNL], 
+[AttributionPNLNav].[NumberOfPositions] AS [NumberOfPositions]
+FROM [dbo].[AttributionPNLNav] AS [AttributionPNLNav]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="BookNetAssetValue" EntityType="Self.BookNetAssetValue" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
 [BookNetAssetValue].[BookId] AS [BookId], 
@@ -16109,8 +16137,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="PortfolioFX" EntitySet="PortfolioFXes" />
           </AssociationSet>
           <FunctionImport Name="PortfolioFX_Roll" ReturnType="Collection(DateTime)">
-            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="AttributionPNLNavs" EntityType="Odey.Framework.Keeley.Entities.AttributionPNLNav" />
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -24085,7 +24114,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ExposureDelta" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
           <Property Name="TodayPricePnl" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
           <Property Name="TodayFxPnl" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
-          <Property Name="TodayCarryPnl" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="TodayCarryPnl" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
@@ -24378,6 +24407,21 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AttributionPNLNav">
+          <Key>
+            <PropertyRef Name="FundId" />
+            <PropertyRef Name="ReferenceDate" />
+            <PropertyRef Name="CurrencyId" />
+            <PropertyRef Name="AttributionSourceId" />
+          </Key>
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="AttributionSourceId" Type="Int32" Nullable="false" />
+          <Property Name="Nav" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="TodayPNL" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="NumberOfPositions" Type="Int64" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -31781,6 +31825,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PortfolioFX_Roll" FunctionName="KeeleyModel.Store.PortfolioFX_Roll" />
+          <EntitySetMapping Name="AttributionPNLNavs">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPNLNav">
+              <MappingFragment StoreEntitySet="AttributionPNLNav">
+                <ScalarProperty Name="NumberOfPositions" ColumnName="NumberOfPositions" />
+                <ScalarProperty Name="TodayPNL" ColumnName="TodayPNL" />
+                <ScalarProperty Name="Nav" ColumnName="Nav" />
+                <ScalarProperty Name="AttributionSourceId" ColumnName="AttributionSourceId" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -37594,6 +37651,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Curre__60E3943C" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__FXRat__5C1EDF1F" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Portf__5EFB4BCA" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionPNLNav" Width="1.5" PointX="37.375" PointY="38.75" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

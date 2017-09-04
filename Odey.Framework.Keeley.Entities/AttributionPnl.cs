@@ -45,7 +45,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal TodayFxPnl { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayCarryPnl { get; set; }
+        public decimal TodayCarryPnl { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
