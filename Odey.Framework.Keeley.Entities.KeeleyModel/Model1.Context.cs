@@ -178,6 +178,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<PortfolioEventFX> PortfolioEventFXes { get; set; }
         public DbSet<PortfolioFX> PortfolioFXes { get; set; }
         public DbSet<AttributionPNLNav> AttributionPNLNavs { get; set; }
+        public DbSet<PositionToRebuild> PositionToRebuilds { get; set; }
+        public DbSet<PositionToRebuildManagement> PositionToRebuildManagements { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

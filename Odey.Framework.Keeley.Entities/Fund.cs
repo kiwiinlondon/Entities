@@ -80,6 +80,30 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime ClientLoadDate { get; set; }
     	[DataMember]
         public bool IsDistributing { get; set; }
+    	[DataMember]
+        public int FundStructureId { get; set; }
+    	[DataMember]
+        public bool HasUKReportingStatus { get; set; }
+    	[DataMember]
+        public bool IsClosedToNewInvestors { get; set; }
+    	[DataMember]
+        public bool IsClosedToExistingInvestors { get; set; }
+    	[DataMember]
+        public bool IsStaffOnly { get; set; }
+    	[DataMember]
+        public bool IsIsaEligible { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OtherCostRatio { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalCostRatio { get; set; }
+    	[DataMember]
+        public bool IsSynthetic { get; set; }
+    	[DataMember]
+        public int ClientMarketingTypeId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PercentageHedged { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsMainRetailShareClass { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
