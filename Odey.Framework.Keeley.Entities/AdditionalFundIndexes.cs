@@ -14,33 +14,26 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class AttributionNav
+    public partial class AdditionalFundIndexes
     {
     	[DataMember]
-        public int AttributionNavId { get; set; }
+        public int AdditionalFundIndexId { get; set; }
     	[DataMember]
         public int FundId { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
+        public int IndexId { get; set; }
     	[DataMember]
-        public int AttributionSourceId { get; set; }
-    	[DataMember]
-        public decimal OpeningNAV { get; set; }
-    	[DataMember]
-        public decimal NAV { get; set; }
+        public int FundIndexTypeId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public decimal PercentageOfFund { get; set; }
-    	[DataMember]
-        public bool KeeleyIsMaster { get; set; }
-    	[DataMember]
-        public int CurrencyId { get; set; }
-    	[DataMember]
-        public decimal TodayPNL { get; set; }
+    
+        [DataMember]
+        public virtual Fund Fund { get; set; }
+        [DataMember]
+        public virtual Index Index { get; set; }
     }
 }

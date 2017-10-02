@@ -37,6 +37,18 @@
           <Property Name="MarketId" Type="int" />
           <Property Name="SendAlertOnly" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="AdditionalFundIndex">
+          <Key>
+            <PropertyRef Name="AdditionalFundIndexId" />
+          </Key>
+          <Property Name="AdditionalFundIndexId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="IndexId" Type="int" Nullable="false" />
+          <Property Name="FundIndexTypeId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="Administrator">
           <Key>
             <PropertyRef Name="LegalEntityID" />
@@ -314,14 +326,13 @@
           <Property Name="AttributionSourceId" Type="int" Nullable="false" />
           <Property Name="OpeningNAV" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="NAV" Type="numeric" Precision="15" Scale="2" Nullable="false" />
-          <Property Name="CapitalChange" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="PercentageOfFund" Type="numeric" Precision="9" Scale="8" Nullable="false" />
           <Property Name="KeeleyIsMaster" Type="bit" Nullable="false" />
           <Property Name="CurrencyId" Type="int" Nullable="false" />
-          <Property Name="TodayPNL" Type="numeric" Precision="15" Scale="2" />
+          <Property Name="TodayPNL" Type="numeric" Precision="15" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -1385,6 +1396,7 @@
           <Property Name="ClientMarketingTypeId" Type="int" Nullable="false" />
           <Property Name="IsMainRetailShareClass" Type="bit" />
           <Property Name="PercentageHedged" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="LockInYears" Type="int" />
         </EntityType>
         <EntityType Name="FundCountryHoliday">
           <Key>
@@ -2172,9 +2184,9 @@
           <Property Name="AdministratorPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="AdministratorMarketValue" Type="numeric" Precision="27" Scale="8" />
           <Property Name="AdministratorFXRate" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="DeltaMarketValueInstrument" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="MarketValueInstrument" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="TodayUnrealisedPricePNLInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="DeltaMarketValueInstrument" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="MarketValueInstrument" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="TodayUnrealisedPricePNLInstrument" Type="numeric" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2645,6 +2657,7 @@ warning 6002: The table/view 'Keeley.dbo.AttributionPNLNav' does not have a prim
           <Property Name="AttributionSourceId" Type="int" Nullable="false" />
           <Property Name="Nav" Type="numeric" Precision="38" Scale="2" />
           <Property Name="TodayPNL" Type="numeric" Precision="38" Scale="10" />
+          <Property Name="TodayUnadjustedPNL" Type="numeric" Precision="38" Scale="2" />
           <Property Name="NumberOfPositions" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -4572,6 +4585,42 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="FileToBeCollected">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Additiona__FundI__76F2D0EC">
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
+          <End Role="AdditionalFundIndex" Type="Self.AdditionalFundIndex" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AdditionalFundIndex">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Additiona__Index__77E6F525">
+          <End Role="Indx" Type="Self.Indx" Multiplicity="1" />
+          <End Role="AdditionalFundIndex" Type="Self.AdditionalFundIndex" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indx">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Principal>
+            <Dependent Role="AdditionalFundIndex">
+              <PropertyRef Name="IndexId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Additiona__Updat__79CF3D97">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="AdditionalFundIndex" Type="Self.AdditionalFundIndex" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AdditionalFundIndex">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -8574,7 +8623,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="AttributionSourceId" Type="int" Mode="In" />
           <Parameter Name="OpeningNAV" Type="numeric" Mode="In" />
           <Parameter Name="NAV" Type="numeric" Mode="In" />
-          <Parameter Name="CapitalChange" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
@@ -8591,7 +8639,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="AttributionSourceId" Type="int" Mode="In" />
           <Parameter Name="OpeningNAV" Type="numeric" Mode="In" />
           <Parameter Name="NAV" Type="numeric" Mode="In" />
-          <Parameter Name="CapitalChange" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
@@ -12164,6 +12211,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
         <EntityContainer Name="KeeleyModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountMapping" EntityType="Self.AccountMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AdditionalFundIndex" EntityType="Self.AdditionalFundIndex" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Administrator" EntityType="Self.Administrator" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AdministratorPortfolio" EntityType="Self.AdministratorPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AnalystIdea" EntityType="Self.AnalystIdea" Schema="dbo" store:Type="Tables" />
@@ -12316,6 +12364,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
 [AttributionPNLNav].[AttributionSourceId] AS [AttributionSourceId], 
 [AttributionPNLNav].[Nav] AS [Nav], 
 [AttributionPNLNav].[TodayPNL] AS [TodayPNL], 
+[AttributionPNLNav].[TodayUnadjustedPNL] AS [TodayUnadjustedPNL], 
 [AttributionPNLNav].[NumberOfPositions] AS [NumberOfPositions]
 FROM [dbo].[AttributionPNLNav] AS [AttributionPNLNav]</DefiningQuery>
           </EntitySet>
@@ -12977,6 +13026,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FileToBeCollectedUserIDFK" Association="Self.FileToBeCollectedUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="FileToBeCollected" EntitySet="FileToBeCollected" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Additiona__FundI__76F2D0EC" Association="Self.FK__Additiona__FundI__76F2D0EC">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="AdditionalFundIndex" EntitySet="AdditionalFundIndex" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Additiona__Index__77E6F525" Association="Self.FK__Additiona__Index__77E6F525">
+            <End Role="Indx" EntitySet="Indx" />
+            <End Role="AdditionalFundIndex" EntitySet="AdditionalFundIndex" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Additiona__Updat__79CF3D97" Association="Self.FK__Additiona__Updat__79CF3D97">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="AdditionalFundIndex" EntitySet="AdditionalFundIndex" />
           </AssociationSet>
           <AssociationSet Name="FK__Administr__Curre__2D026F33" Association="Self.FK__Administr__Curre__2D026F33">
             <End Role="Currency" EntitySet="Currency" />
@@ -16174,6 +16235,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySet Name="AttributionPNLNavs" EntityType="Odey.Framework.Keeley.Entities.AttributionPNLNav" />
           <EntitySet Name="PositionToRebuilds" EntityType="Odey.Framework.Keeley.Entities.PositionToRebuild" />
           <EntitySet Name="PositionToRebuildManagements" EntityType="Odey.Framework.Keeley.Entities.PositionToRebuildManagement" />
+          <EntitySet Name="AdditionalFundIndexes1" EntityType="Odey.Framework.Keeley.Entities.AdditionalFundIndexes" />
+          <AssociationSet Name="FK__Additiona__FundI__76F2D0EC" Association="Odey.Framework.Keeley.Entities.FK__Additiona__FundI__76F2D0EC">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="AdditionalFundIndex" EntitySet="AdditionalFundIndexes1" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Additiona__Index__77E6F525" Association="Odey.Framework.Keeley.Entities.FK__Additiona__Index__77E6F525">
+            <End Role="Index" EntitySet="Indices" />
+            <End Role="AdditionalFundIndex" EntitySet="AdditionalFundIndexes1" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Additiona__Updat__79CF3D97" Association="Odey.Framework.Keeley.Entities.FK__Additiona__Updat__79CF3D97">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="AdditionalFundIndex" EntitySet="AdditionalFundIndexes1" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -18172,10 +18246,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="AdministratorMarketValue" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="AdministratorFXRate" Type="Decimal" Precision="27" Scale="8" />
           <NavigationProperty Name="AttributionPnls" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Portf__6FE5E0AA" FromRole="Portfolio" ToRole="AttributionPnl" />
-          <Property Name="MarketValueInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="MarketValueInstrument" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <NavigationProperty Name="PortfolioFXes" Relationship="Odey.Framework.Keeley.Entities.FK__Portfolio__Portf__5EFB4BCA" FromRole="Portfolio" ToRole="PortfolioFX" />
-          <Property Name="DeltaMarketValueInstrument" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="TodayUnrealisedPricePNLInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="DeltaMarketValueInstrument" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="TodayUnrealisedPricePNLInstrument" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20294,6 +20368,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ClientMarketingTypeId" Type="Int32" Nullable="false" />
           <Property Name="PercentageHedged" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="IsMainRetailShareClass" Type="Boolean" />
+          <Property Name="LockInYears" Type="Int32" />
+          <NavigationProperty Name="AdditionalFundIndexes" Relationship="Odey.Framework.Keeley.Entities.FK__Additiona__FundI__76F2D0EC" FromRole="Fund" ToRole="AdditionalFundIndex" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -21206,7 +21282,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="IndexTypeId" Nullable="false" />
-          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.IndexIDFK" FromRole="Indx" ToRole="ApplicationUser" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" FromRole="Indx" ToRole="InstrumentMarket" />
           <Property Name="CollectWeights" Type="Boolean" Nullable="false" />
         </EntityType>
@@ -23596,7 +23671,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B" FromRole="BloombergIdentifier" ToRole="ApplicationUser" />
           <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" FromRole="BloombergIdentifier" ToRole="Currency" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719" FromRole="BloombergIdentifier" ToRole="InstrumentMarket" />
         </EntityType>
@@ -24134,14 +24208,13 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="AttributionSourceId" Type="Int32" Nullable="false" />
           <Property Name="OpeningNAV" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
           <Property Name="NAV" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
-          <Property Name="CapitalChange" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="PercentageOfFund" Type="Decimal" Nullable="false" Precision="9" Scale="8" />
           <Property Name="KeeleyIsMaster" Type="Boolean" Nullable="false" />
           <Property Name="CurrencyId" Type="Int32" Nullable="false" />
-          <Property Name="TodayPNL" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="TodayPNL" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -24450,6 +24523,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="Nav" Type="Decimal" Precision="38" Scale="2" />
           <Property Name="TodayPNL" Type="Decimal" Precision="38" Scale="10" />
           <Property Name="NumberOfPositions" Type="Int64" />
+          <Property Name="TodayUnadjustedPNL" Type="Decimal" Precision="38" Scale="2" />
         </EntityType>
         <EntityType Name="PositionToRebuild">
           <Key>
@@ -24466,6 +24540,56 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </Key>
           <Property Name="FundId" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="AdditionalFundIndexes">
+          <Key>
+            <PropertyRef Name="AdditionalFundIndexId" />
+          </Key>
+          <Property Name="AdditionalFundIndexId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="IndexId" Type="Int32" Nullable="false" />
+          <Property Name="FundIndexTypeId" Type="Int32" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__Additiona__FundI__76F2D0EC" FromRole="AdditionalFundIndex" ToRole="Fund" />
+          <NavigationProperty Name="Index" Relationship="Odey.Framework.Keeley.Entities.FK__Additiona__Index__77E6F525" FromRole="AdditionalFundIndex" ToRole="Index" />
+        </EntityType>
+        <Association Name="FK__Additiona__FundI__76F2D0EC">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AdditionalFundIndexes" Role="AdditionalFundIndex" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AdditionalFundIndex">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Additiona__Index__77E6F525">
+          <End Type="Odey.Framework.Keeley.Entities.Index" Role="Index" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AdditionalFundIndexes" Role="AdditionalFundIndex" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Index">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Principal>
+            <Dependent Role="AdditionalFundIndex">
+              <PropertyRef Name="IndexId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Additiona__Updat__79CF3D97">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AdditionalFundIndexes" Role="AdditionalFundIndex" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AdditionalFundIndex">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -28207,6 +28331,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="LockInYears" ColumnName="LockInYears" />
                 <ScalarProperty Name="IsMainRetailShareClass" ColumnName="IsMainRetailShareClass" />
                 <ScalarProperty Name="PercentageHedged" ColumnName="PercentageHedged" />
                 <ScalarProperty Name="ClientMarketingTypeId" ColumnName="ClientMarketingTypeId" />
@@ -31605,7 +31730,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="CapitalChange" ColumnName="CapitalChange" />
                 <ScalarProperty Name="NAV" ColumnName="NAV" />
                 <ScalarProperty Name="OpeningNAV" ColumnName="OpeningNAV" />
                 <ScalarProperty Name="AttributionSourceId" ColumnName="AttributionSourceId" />
@@ -31622,7 +31746,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" />
                   <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="CapitalChange" ParameterName="CapitalChange" />
                   <ScalarProperty Name="NAV" ParameterName="NAV" />
                   <ScalarProperty Name="OpeningNAV" ParameterName="OpeningNAV" />
                   <ScalarProperty Name="AttributionSourceId" ParameterName="AttributionSourceId" />
@@ -31644,7 +31767,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="CapitalChange" ParameterName="CapitalChange" Version="Current" />
                   <ScalarProperty Name="NAV" ParameterName="NAV" Version="Current" />
                   <ScalarProperty Name="OpeningNAV" ParameterName="OpeningNAV" Version="Current" />
                   <ScalarProperty Name="AttributionSourceId" ParameterName="AttributionSourceId" Version="Current" />
@@ -31887,6 +32009,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionPNLNavs">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPNLNav">
               <MappingFragment StoreEntitySet="AttributionPNLNav">
+                <ScalarProperty Name="TodayUnadjustedPNL" ColumnName="TodayUnadjustedPNL" />
                 <ScalarProperty Name="NumberOfPositions" ColumnName="NumberOfPositions" />
                 <ScalarProperty Name="TodayPNL" ColumnName="TodayPNL" />
                 <ScalarProperty Name="Nav" ColumnName="Nav" />
@@ -31911,6 +32034,19 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PositionToRebuildManagement">
               <MappingFragment StoreEntitySet="PositionToRebuildManagement">
                 <ScalarProperty Name="FundId" ColumnName="FundId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdditionalFundIndexes1">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdditionalFundIndexes">
+              <MappingFragment StoreEntitySet="AdditionalFundIndex">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="FundIndexTypeId" ColumnName="FundIndexTypeId" />
+                <ScalarProperty Name="IndexId" ColumnName="IndexId" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="AdditionalFundIndexId" ColumnName="AdditionalFundIndexId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -36595,27 +36731,27 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="22.989580833333331" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="22.822914166666667" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="20.883333333333333" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="20.716666666666669" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="20.020833333333332" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.576443895217025" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.576443895217025" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="22.989580833333331" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="22.822914166666667" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="20.883333333333333" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="20.716666666666669" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="20.020833333333332" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.576004755121552" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.576004755121552" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.350322265625003" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.350322265625003" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625" />
+          <edmx:ConnectorPoint PointX="15.135416666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.572916666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
@@ -36624,8 +36760,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.58392600292969" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.58392600292969" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.583372875183107" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.583372875183107" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -37722,6 +37858,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionPNLNav" Width="1.5" PointX="37.375" PointY="38.75" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PositionToRebuild" Width="1.5" PointX="0.75" PointY="25.75" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PositionToRebuildManagement" Width="1.5" PointX="7.375" PointY="26.75" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AdditionalFundIndexes" Width="1.5" PointX="43.125" PointY="15.75" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Additiona__FundI__76F2D0EC" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Additiona__Index__77E6F525" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Additiona__Updat__79CF3D97" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -30,5 +30,7 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodayPNL { get; set; }
     	[DataMember]
         public Nullable<long> NumberOfPositions { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayUnadjustedPNL { get; set; }
     }
 }

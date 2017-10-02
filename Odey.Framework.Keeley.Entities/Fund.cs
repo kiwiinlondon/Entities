@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Fund
     {
+    	
+        public Fund()
+        {
+            this.AdditionalFundIndexes = new List<AdditionalFundIndexes>();
+        }
+    
     	[DataMember]
         public int LegalEntityID { get; set; }
     	[DataMember]
@@ -104,6 +110,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> PercentageHedged { get; set; }
     	[DataMember]
         public Nullable<bool> IsMainRetailShareClass { get; set; }
+    	[DataMember]
+        public Nullable<int> LockInYears { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
@@ -117,5 +125,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket RiskFreeInstrumentMarket { get; set; }
         [DataMember]
         public virtual Currency Currency { get; set; }
+        [DataMember]
+        public virtual List<AdditionalFundIndexes> AdditionalFundIndexes { get; set; }
     }
 }

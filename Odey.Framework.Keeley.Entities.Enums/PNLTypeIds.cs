@@ -20,6 +20,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Default = 5,
         [EnumMember]
-        OtherShareClassSpecific = 5
+        OtherShareClassSpecific = 6
     }
 }
