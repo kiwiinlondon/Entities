@@ -36,6 +36,10 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsEEA { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsOECD { get; set; }
     
         [DataMember]
         public virtual List<AccountMapping> AccountMappings { get; set; }

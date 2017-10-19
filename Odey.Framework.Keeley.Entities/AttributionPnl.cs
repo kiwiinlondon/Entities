@@ -60,6 +60,30 @@ namespace Odey.Framework.Keeley.Entities
         public decimal TodayOtherPnl { get; set; }
     	[DataMember]
         public int PnlTypeId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Price { get; set; }
+    	[DataMember]
+        public Nullable<int> PriceId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PriceToPositionFXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> PriceToPositionFXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> FXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BetaShortTerm { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BetaLongTerm { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayRealisedFXPnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayRealisedPricePnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayCashBenefit { get; set; }
+    	[DataMember]
+        public Nullable<decimal> NotionalCost { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

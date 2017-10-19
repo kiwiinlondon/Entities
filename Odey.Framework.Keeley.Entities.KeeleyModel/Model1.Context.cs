@@ -176,8 +176,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<AttributionNav> AttributionNavs { get; set; }
         public DbSet<AttributionPnl> AttributionPnls { get; set; }
         public DbSet<PortfolioEventFX> PortfolioEventFXes { get; set; }
-        public DbSet<PortfolioFX> PortfolioFXes { get; set; }
-        public DbSet<AttributionPNLNav> AttributionPNLNavs { get; set; }
         public DbSet<PositionToRebuild> PositionToRebuilds { get; set; }
         public DbSet<PositionToRebuildManagement> PositionToRebuildManagements { get; set; }
         public DbSet<AdditionalFundIndexes> AdditionalFundIndexes1 { get; set; }
@@ -630,15 +628,6 @@ namespace Odey.Framework.Keeley.Entities
         public virtual ObjectResult<ReportServer_GetFailedSubscription_Result> ReportServer_GetFailedSubscriptions()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportServer_GetFailedSubscription_Result>("ReportServer_GetFailedSubscriptions");
-        }
-    
-        public virtual ObjectResult<Nullable<System.DateTime>> PortfolioFX_Roll(Nullable<int> updateUserId)
-        {
-            var updateUserIdParameter = updateUserId.HasValue ?
-                new ObjectParameter("UpdateUserId", updateUserId) :
-                new ObjectParameter("UpdateUserId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("PortfolioFX_Roll", updateUserIdParameter);
         }
     }
 }

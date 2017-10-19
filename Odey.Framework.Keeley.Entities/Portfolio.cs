@@ -21,7 +21,6 @@ namespace Odey.Framework.Keeley.Entities
         {
             this.Exposures = new List<Exposure>();
             this.AttributionPnls = new List<AttributionPnl>();
-            this.PortfolioFXes = new List<PortfolioFX>();
         }
     
     	[DataMember]
@@ -222,6 +221,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal DeltaMarketValueInstrument { get; set; }
     	[DataMember]
         public decimal TodayUnrealisedPricePNLInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationMarketValueInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
@@ -237,7 +238,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual List<AttributionPnl> AttributionPnls { get; set; }
-        [DataMember]
-        public virtual List<PortfolioFX> PortfolioFXes { get; set; }
     }
 }
