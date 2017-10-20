@@ -53,7 +53,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int AttributionNavId { get; set; }
+        public Nullable<int> AttributionNavId { get; set; }
     	[DataMember]
         public int CurrencyId { get; set; }
     	[DataMember]
