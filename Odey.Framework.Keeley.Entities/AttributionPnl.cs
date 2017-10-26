@@ -61,11 +61,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int PnlTypeId { get; set; }
     	[DataMember]
-        public Nullable<decimal> Price { get; set; }
+        public decimal Price { get; set; }
     	[DataMember]
         public Nullable<int> PriceId { get; set; }
     	[DataMember]
-        public Nullable<decimal> PriceToPositionFXRate { get; set; }
+        public decimal PriceToPositionFXRate { get; set; }
     	[DataMember]
         public Nullable<int> PriceToPositionFXRateId { get; set; }
     	[DataMember]

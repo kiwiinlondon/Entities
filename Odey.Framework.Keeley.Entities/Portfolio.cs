@@ -223,6 +223,10 @@ namespace Odey.Framework.Keeley.Entities
         public decimal TodayUnrealisedPricePNLInstrument { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationMarketValueInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningTotalAmortisation { get; set; }
+    	[DataMember]
+        public Nullable<bool> ReValue { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
