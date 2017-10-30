@@ -79,8 +79,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Client = 44,
         [EnumMember]
         IndexConstituent = 46,
+        [EnumMember]
+        InterestRateSwapTradeEvent = 48
 
-        
     }
 }
 
