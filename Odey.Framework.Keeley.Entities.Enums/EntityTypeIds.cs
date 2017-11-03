@@ -80,8 +80,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         IndexConstituent = 46,
         [EnumMember]
-        InterestRateSwapTradeEvent = 48
-
+        DayCountConvention = 49,
+        [EnumMember]
+        RollConvention = 50
     }
 }
 
