@@ -46,5 +46,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         MSCI_TR_Net_World_Hedged_To_EUR = 24730,
+
+        [EnumMember]
+	    ARC_Balanced = 26996,
+
+        [EnumMember]
+	    IMA_Mixed_Investments_40_80_Shares = 26997
     }
 }
