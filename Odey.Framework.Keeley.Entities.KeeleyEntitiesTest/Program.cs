@@ -11,6 +11,7 @@ using Odey.Framework.Keeley.Entities.Interfaces;
 using Odey.StaticServices.Clients;
 using ServiceModelEx;
 using Odey.Framework.Keeley.Entities.EntityPropertyOverrides;
+using System.Transactions;
 
 namespace Odey.Framework.KeeleyEntitiesTest
 {
@@ -18,13 +19,26 @@ namespace Odey.Framework.KeeleyEntitiesTest
     {
         static void Main(string[] args)
         {
-            TestFailedReportSubscriptions();
-            using (var context = new KeeleyModel())
+
+            using (var context = new KeeleyModel(null, "GP"))
             {
-                var r = context.AnalystIdeas.Include("Issuer.Instruments.InstrumentMarkets").ToList();
-                //context.RollPortfolioSettlementDate(
-                // context.PortfolioPositionAccountMovementRollForward();
-                Region region = context.Regions.Where(a => a.IsoCode == "GX").FirstOrDefault();
+                var t = context.Instruments.FirstOrDefault(a => a.InstrumentID == 46353);
+                t.Name = t.Name + "11";
+                //Instrument t = new Instrument()
+                //{
+                //    InstrumentClassID = 4,
+                //    Name = "GP Test2",
+                //    LongName = "GP Test2",
+                //    IssuerID = 3611,
+                //    UnderlyingIssuerId = 3611,
+                //    IssueCurrencyID = 2541,
+                //    DerivedAssetClassId = 1
+                //};
+                //context.Instruments.Add(t);
+                //context.Instruments.Remove(t);
+                context._applicationUserIdOverride = 1;
+
+                context.SaveChanges();
             }
         }
 
@@ -95,25 +109,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
 
         }
 
-        static void CreateIssuer()
-        {
-            Instrument i = null;
-            using (var context = new KeeleyModel(null))
-            {
-                i = context.Instruments.Include("UnderlyingRelationship.Underlyer.InstrumentMarkets").Include("InstrumentMarkets").Include("Bond").Include("InstrumentClass.ParentInstrumentClassRelationships").Where(a => a.InstrumentID == 29351).FirstOrDefault();                
-            }
-
-            InstrumentClient instrumentClient = new InstrumentClient();
-            Instrument instrument = instrumentClient.GetForIdentifierSettingUpIfNotPresent(IdentifierTypeIds.BBGlobalId, "BBG000BD84L8", false, 4);
-
-            using (var context = new KeeleyModel(null))
-            {
-                InstrumentMarket im = new InstrumentMarket();              
-                context.InstrumentMarkets.Add(im);
-                im.Instrument = instrument;
-                context.SaveChanges();
-            }
-        }
+        
 
         static void Update()
         {

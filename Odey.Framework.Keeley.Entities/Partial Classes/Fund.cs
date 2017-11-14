@@ -50,6 +50,19 @@ namespace Odey.Framework.Keeley.Entities
                 return (PeriodicityIds)DealingDateDefinition.PeriodicityId;
             }
         }
+
+        public string FirstFourCharsOfAdministratorIdentifier
+        {
+            get
+            {
+                if (AdministratorIdentifier!=null && AdministratorIdentifier.Length>4)
+                {
+                    return AdministratorIdentifier.Substring(0, 4);
+                }
+                return AdministratorIdentifier;
+            }
+
+        }
     }
 }
 

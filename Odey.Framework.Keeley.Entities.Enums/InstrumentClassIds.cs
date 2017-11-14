@@ -71,5 +71,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         CommodityOption = 89,
         [EnumMember]
         InterestRateSwap = 92,
+        [EnumMember]
+        CreditSwaption = 93,
     }
 }

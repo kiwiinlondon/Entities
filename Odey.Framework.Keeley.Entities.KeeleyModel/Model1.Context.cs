@@ -631,5 +631,38 @@ namespace Odey.Framework.Keeley.Entities
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportServer_GetFailedSubscription_Result>("ReportServer_GetFailedSubscriptions");
         }
+    
+        public virtual int MessageQueue_Insert(Nullable<int> messageTypeId, string message, string changeType, string messageSource, string changedFields, string originalValues, string currentValues)
+        {
+            var messageTypeIdParameter = messageTypeId.HasValue ?
+                new ObjectParameter("MessageTypeId", messageTypeId) :
+                new ObjectParameter("MessageTypeId", typeof(int));
+    
+            var messageParameter = message != null ?
+                new ObjectParameter("Message", message) :
+                new ObjectParameter("Message", typeof(string));
+    
+            var changeTypeParameter = changeType != null ?
+                new ObjectParameter("ChangeType", changeType) :
+                new ObjectParameter("ChangeType", typeof(string));
+    
+            var messageSourceParameter = messageSource != null ?
+                new ObjectParameter("MessageSource", messageSource) :
+                new ObjectParameter("MessageSource", typeof(string));
+    
+            var changedFieldsParameter = changedFields != null ?
+                new ObjectParameter("ChangedFields", changedFields) :
+                new ObjectParameter("ChangedFields", typeof(string));
+    
+            var originalValuesParameter = originalValues != null ?
+                new ObjectParameter("OriginalValues", originalValues) :
+                new ObjectParameter("OriginalValues", typeof(string));
+    
+            var currentValuesParameter = currentValues != null ?
+                new ObjectParameter("CurrentValues", currentValues) :
+                new ObjectParameter("CurrentValues", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MessageQueue_Insert", messageTypeIdParameter, messageParameter, changeTypeParameter, messageSourceParameter, changedFieldsParameter, originalValuesParameter, currentValuesParameter);
+        }
     }
 }
