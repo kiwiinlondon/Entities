@@ -20,7 +20,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         FT_WLD_EUROPE_TRI_EUR = 22666,
         
         [EnumMember]
-        FTSE_WMA_Balanced = 9922,
+        MSCI_WMA_Balanced = 27008,
         
         [EnumMember]
         MSCI_Daily_TR_Gross_Europe = 9918,

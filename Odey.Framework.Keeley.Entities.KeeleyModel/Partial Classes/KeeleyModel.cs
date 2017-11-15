@@ -102,37 +102,37 @@ namespace Odey.Framework.Keeley.Entities
             }
             _securityCallStack = securityCallStack;
 
-            //((IObjectContextAdapter)this).ObjectContext.ObjectMaterialized += (sender, args) =>
-            //    {
-            //        var entity = args.Entity as IObjectWithState;
-            //        if (entity != null)
-            //        {
-            //            entity.State = State.Unchanged;
-            //            entity.OriginalValues = BuildOriginalValues(this.Entry(entity).OriginalValues);
-            //        }
-            //    };
+            ((IObjectContextAdapter)this).ObjectContext.ObjectMaterialized += (sender, args) =>
+                {
+                    var entity = args.Entity as IObjectWithState;
+                    if (entity != null)
+                    {
+                        entity.State = State.Unchanged;
+                        entity.OriginalValues = BuildOriginalValues(this.Entry(entity).OriginalValues);
+                    }
+                };
         }
 
 
 
-        //private static Dictionary<string, object> BuildOriginalValues(DbPropertyValues originalValues)
-        //{
-        //    var result = new Dictionary<string, object>();
+        private static Dictionary<string, object> BuildOriginalValues(DbPropertyValues originalValues)
+        {
+            var result = new Dictionary<string, object>();
 
-        //    foreach (var propertyName in originalValues.PropertyNames)
-        //    {
-        //        var value = originalValues[propertyName];
-        //        if (value is DbPropertyValues)
-        //        {
-        //            result[propertyName] = BuildOriginalValues((DbPropertyValues)value);
-        //        }
-        //        else
-        //        {
-        //            result[propertyName] = value;
-        //        }
-        //    }
-        //    return result;
-        //}
+            foreach (var propertyName in originalValues.PropertyNames)
+            {
+                var value = originalValues[propertyName];
+                if (value is DbPropertyValues)
+                {
+                    result[propertyName] = BuildOriginalValues((DbPropertyValues)value);
+                }
+                else
+                {
+                    result[propertyName] = value;
+                }
+            }
+            return result;
+        }
         #endregion
 
         #region Changed Entities
