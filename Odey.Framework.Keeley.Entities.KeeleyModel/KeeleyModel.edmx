@@ -2532,6 +2532,7 @@
           <Property Name="ClosingComment" Type="varchar" MaxLength="4000" />
           <Property Name="RestrictedPerson" Type="varchar" MaxLength="4000" Nullable="false" />
           <Property Name="WatchListOnly" Type="bit" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" />
         </EntityType>
         <EntityType Name="RiskAnalytic">
           <Key>
@@ -5432,6 +5433,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="PortfolioEventFX">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Restricte__Instr__37B76177">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="0..1" />
+          <End Role="RestrictedList" Type="Self.RestrictedList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="RestrictedList">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -12143,6 +12156,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ClosingComment" Type="varchar" Mode="In" />
           <Parameter Name="RestrictedPerson" Type="varchar" Mode="In" />
           <Parameter Name="WatchListOnly" Type="bit" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
         </Function>
         <Function Name="RestrictedList_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RestrictedListId" Type="int" Mode="In" />
@@ -12155,6 +12169,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ClosingComment" Type="varchar" Mode="In" />
           <Parameter Name="RestrictedPerson" Type="varchar" Mode="In" />
           <Parameter Name="WatchListOnly" Type="bit" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
         </Function>
         <Function Name="RiskAnalytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RiskAnalyticId" Type="int" Mode="In" />
@@ -13465,6 +13480,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Portfolio__Updat__7EDE0B77" Association="Self.FK__Portfolio__Updat__7EDE0B77">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PortfolioEventFX" EntitySet="PortfolioEventFX" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Restricte__Instr__37B76177" Association="Self.FK__Restricte__Instr__37B76177">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="RestrictedList" EntitySet="RestrictedList" />
           </AssociationSet>
           <AssociationSet Name="FK__TradeEven__Contr__6555CF79" Association="Self.FK__TradeEven__Contr__6555CF79">
             <End Role="TradeEvent" EntitySet="TradeEvent" />
@@ -16457,6 +16476,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <Parameter Name="OriginalValues" Mode="In" Type="String" />
             <Parameter Name="CurrentValues" Mode="In" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK__Restricte__Instr__37B76177" Association="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="RestrictedList" EntitySet="RestrictedLists" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -20514,6 +20537,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="String" Name="ClosingComment" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="RestrictedPerson" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="WatchListOnly" Type="Boolean" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="Int32" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177" FromRole="RestrictedList" ToRole="InstrumentMarket" />
         </EntityType>
         <Association Name="RestrictedListUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -24891,6 +24916,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Restricte__Instr__37B76177">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.RestrictedList" Role="RestrictedList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="RestrictedList">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -28618,6 +28655,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="RestrictedLists">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RestrictedList">
               <MappingFragment StoreEntitySet="RestrictedList">
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
                 <ScalarProperty Name="WatchListOnly" ColumnName="WatchListOnly" />
                 <ScalarProperty Name="RestrictedPerson" ColumnName="RestrictedPerson" />
                 <ScalarProperty Name="ClosingComment" ColumnName="ClosingComment" />
@@ -28634,6 +28672,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RestrictedList">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.RestrictedList_Insert">
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
                   <ScalarProperty Name="WatchListOnly" ParameterName="WatchListOnly" />
                   <ScalarProperty Name="RestrictedPerson" ParameterName="RestrictedPerson" />
                   <ScalarProperty Name="ClosingComment" ParameterName="ClosingComment" />
@@ -28647,6 +28686,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.RestrictedList_Update">
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="WatchListOnly" ParameterName="WatchListOnly" Version="Current" />
                   <ScalarProperty Name="RestrictedPerson" ParameterName="RestrictedPerson" Version="Current" />
                   <ScalarProperty Name="ClosingComment" ParameterName="ClosingComment" Version="Current" />
@@ -37143,22 +37183,22 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.769871794871793" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.603205128205129" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="19.366666666666671" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.502621543391765" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="24.933333333333334" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="24.020832833333333" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="23.854166166666669" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="22.958335833333333" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="22.760417916666672" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="20.801025641025639" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="20.634358974358975" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="20.626413333333332" PointY="21.578448244787527" />
+          <edmx:ConnectorPoint PointX="20.072916666666671" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.366666666666671" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.578448244787531" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
@@ -37167,15 +37207,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.802083333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="14.510416666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.354166666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583336009002732" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583336009002732" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.583336002250684" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.583336002250684" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -38280,6 +38320,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InterestR__Instr__624CB9C1" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InterestR__PayFl__67116EDE" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InterestR__Recei__6AE1FFC2" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
