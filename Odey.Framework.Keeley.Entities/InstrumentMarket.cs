@@ -68,6 +68,8 @@ namespace Odey.Framework.Keeley.Entities
         public int RiskCurrencyId { get; set; }
     	[DataMember]
         public int ValuationMethodologyId { get; set; }
+    	[DataMember]
+        public string CICCode { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

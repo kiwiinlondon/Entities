@@ -37,5 +37,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [Description("Interest Rate")]
         [EnumMember]
         InterestRate = 11,
+
+        [Description("Credit")]
+        [EnumMember]
+        Credit = 12,
     }
 }

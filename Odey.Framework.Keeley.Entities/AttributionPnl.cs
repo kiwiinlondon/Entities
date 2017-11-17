@@ -53,13 +53,37 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int AttributionNavId { get; set; }
+        public Nullable<int> AttributionNavId { get; set; }
     	[DataMember]
         public int CurrencyId { get; set; }
     	[DataMember]
         public decimal TodayOtherPnl { get; set; }
     	[DataMember]
         public int PnlTypeId { get; set; }
+    	[DataMember]
+        public decimal Price { get; set; }
+    	[DataMember]
+        public Nullable<int> PriceId { get; set; }
+    	[DataMember]
+        public decimal PriceToPositionFXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> PriceToPositionFXRateId { get; set; }
+    	[DataMember]
+        public decimal FXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> FXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BetaShortTerm { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BetaLongTerm { get; set; }
+    	[DataMember]
+        public decimal TodayRealisedFXPnl { get; set; }
+    	[DataMember]
+        public decimal TodayRealisedPricePnl { get; set; }
+    	[DataMember]
+        public decimal TodayCashBenefit { get; set; }
+    	[DataMember]
+        public decimal NotionalCost { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

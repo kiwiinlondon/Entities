@@ -12,8 +12,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         
         [EnumMember]
         CurrencyPair=2,
-      
-      
+
+        [EnumMember]
+        InterestRateSwap = 3,
+
     }
 }
 

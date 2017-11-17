@@ -18,6 +18,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         UnmatchedInstrument = 4,
         [EnumMember]
-        Default = 5
+        Default = 5,
+        [EnumMember]
+        OtherShareClassSpecific = 6
     }
 }

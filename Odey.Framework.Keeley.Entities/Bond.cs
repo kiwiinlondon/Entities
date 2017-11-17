@@ -42,6 +42,16 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> IssueDate { get; set; }
     	[DataMember]
         public Nullable<decimal> IssuePrice { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsFixed { get; set; }
+    	[DataMember]
+        public Nullable<int> BondMaturityTypeId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConversionPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MaturityValue { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsCovered { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

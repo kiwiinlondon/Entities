@@ -29,8 +29,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal NAV { get; set; }
     	[DataMember]
-        public decimal CapitalChange { get; set; }
-    	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
@@ -43,6 +41,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int CurrencyId { get; set; }
     	[DataMember]
-        public Nullable<decimal> TodayPNL { get; set; }
+        public decimal TodayPNL { get; set; }
     }
 }

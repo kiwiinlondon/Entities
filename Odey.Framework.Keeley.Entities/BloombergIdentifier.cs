@@ -32,8 +32,6 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     
         [DataMember]
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        [DataMember]
         public virtual Currency Currency { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }

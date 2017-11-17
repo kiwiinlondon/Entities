@@ -46,5 +46,11 @@ namespace Odey.Framework.Keeley.Entities
         public int CompanySizeId { get; set; }
     	[DataMember]
         public Nullable<decimal> MarketCapUSD { get; set; }
+    	[DataMember]
+        public string UltimateParentName { get; set; }
+    	[DataMember]
+        public string UltimateParentLEI { get; set; }
+    	[DataMember]
+        public string LEI { get; set; }
     }
 }

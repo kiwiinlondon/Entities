@@ -30,8 +30,6 @@ namespace Odey.Framework.Keeley.Entities
         public bool CollectWeights { get; set; }
     
         [DataMember]
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }

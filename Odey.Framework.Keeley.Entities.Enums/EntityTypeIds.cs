@@ -79,8 +79,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Client = 44,
         [EnumMember]
         IndexConstituent = 46,
-
-        
+        [EnumMember]
+        DayCountConvention = 49,
+        [EnumMember]
+        RollConvention = 50
     }
 }
 

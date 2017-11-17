@@ -16,6 +16,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Diagnostics;
+using System.Transactions;
 //using System.Data.Entity.Infrastructure;
 
 namespace Odey.Framework.Keeley.Entities
@@ -27,84 +28,81 @@ namespace Odey.Framework.Keeley.Entities
 
 
         #region Application User Id
-        public int? ApplicationUserId
+        
+
+
+        private int ApplicationUserId
         {
             get
             {
-                string updateUserName;
-                return GetApplicationUserId(out updateUserName);
-            }
-        }
+                if (!_applicationUserIdOverride.HasValue)
+                {
+                    if (_securityCallStack == null)
+                    {
+                        throw new ApplicationException("No Security call stack was provided in constructor so user cannot be authenticated");
+                    }
+                    SecurityCallFrame callFrame = _securityCallStack.OriginalCall;
+                    if (callFrame == null)
+                    {
+                        throw new ApplicationException("Original Call frame was not supplied so user cannot be authenticated");
+                    }
+                    string updateUserName = callFrame.IdentityName.ToUpper();
 
+                    if (string.IsNullOrWhiteSpace(updateUserName))
+                    {
+                        throw new ApplicationException("Unable to establish update user name");
+                    }
+                    ApplicationUserByLoginCache cache = new ApplicationUserByLoginCache();
+                    var user = cache.Get(updateUserName);
+                    if (user == null)
+                    {
+                        throw new ApplicationException($"User {updateUserName} is not authorised to make changes");
+                    }
+                    return user.UpdateUserID;
 
-        private int? GetApplicationUserId(out string updateUserName)
-        {
-            if (_securityCallStack == null)
-            {
-                throw new ApplicationException("No Security call stack was provided in constructor so user cannot be authenticated");
-            }
-            SecurityCallFrame callFrame = _securityCallStack.OriginalCall;
-            if (callFrame == null)
-            {
-                throw new ApplicationException("Original Call frame was not supplied so user cannot be authenticated");
-            }
-            updateUserName = callFrame.IdentityName.ToUpper();
-            ApplicationUser user = null;
-            if (updateUserName != null)
-            {
-                ApplicationUserByLoginCache cache = new ApplicationUserByLoginCache();
-                user = cache.Get(updateUserName);
-            }
-            if (user == null)
-            {
-                return null;
-            }
-            else
-            {
-                return user.UserID;
+                }
+                else
+                {
+                    return _applicationUserIdOverride.Value;
+                }
             }
         }
         #endregion
 
 
         #region Constructor
+
         public KeeleyModel(SecurityCallStack securityCallStack)
-            : this(securityCallStack,null,true)
-        {
-            
-        }
-
-        public KeeleyModel(SecurityCallStack securityCallStack,bool populateChangedEntities)
-            : this(securityCallStack, null, populateChangedEntities)
+            : this(securityCallStack,null)
         {
 
         }
+
+        public string _applicationName;
+        public int? _applicationUserIdOverride;
 
         public KeeleyModel(SecurityCallStack securityCallStack, string applicationName)
-            : this(securityCallStack, applicationName, true)
-        {
-
-        }
-
-        private bool PopulateChangedEntities = true;
-        public KeeleyModel(SecurityCallStack securityCallStack, string applicationName, bool populateChangedEntities)
             : this()
         {
-            PopulateChangedEntities = populateChangedEntities;
+            _changedEntityManager = new ChangedEntityManager();
             if (applicationName == null)
             {
                 applicationName = ConfigurationManager.AppSettings["ApplicationName"];
             }
             if (applicationName != null)
             {
+                _applicationName = applicationName;
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(this.Database.Connection.ConnectionString);
                 builder.ApplicationName = applicationName;
                 this.Database.Connection.ConnectionString = builder.ConnectionString;
             }
+            else
+            {
+                _applicationName = "Not Supplied";
+            }
             _securityCallStack = securityCallStack;
 
-            ((IObjectContextAdapter)this).ObjectContext
-                .ObjectMaterialized += (sender, args) =>
+            ((IObjectContextAdapter)this).ObjectContext.ObjectMaterialized += (sender, args) =>
                 {
                     var entity = args.Entity as IObjectWithState;
                     if (entity != null)
@@ -138,28 +136,19 @@ namespace Odey.Framework.Keeley.Entities
         #endregion
 
         #region Changed Entities
-        public List<ChangedEntity> ChangedEntities { get; set; }
 
-        //private static object ConvertDBNUll(object objectToTest)
+
+        //private void AddToChangedEntities(DbEntityEntry entry, Dictionary<DbEntityEntry, ChangedEntity> changedEntitiesByEntry)
         //{
-        //    if (objectToTest.GetType() == typeof(System.DBNull))
+
+        //    ChangedEntity changedEntity = new ChangedEntity(entry.Entity.GetType(), entry.State);
+        //    changedEntitiesByEntry.Add(entry, changedEntity);
+        //    if (entry.State == EntityState.Deleted)
         //    {
-        //        return null;
+        //        changedEntity.Key = GetPrimaryKeyValue(entry);
         //    }
-        //    return objectToTest;
+        //    AddUsefulFields(entry, changedEntity);
         //}
-
-        private void AddToChangedEntities(DbEntityEntry entry, Dictionary<DbEntityEntry, ChangedEntity> changedEntitiesByEntry)
-        {
-
-            ChangedEntity changedEntity = new ChangedEntity(entry.Entity.GetType(), entry.State);
-            changedEntitiesByEntry.Add(entry, changedEntity);
-            if (entry.State == EntityState.Deleted)
-            {
-                changedEntity.Key = GetPrimaryKeyValue(entry);
-            }
-            AddUsefulFields(entry, changedEntity);
-        }
 
         private EntityKeyMember[] GetPrimaryKeyValue(DbEntityEntry entry)
         {
@@ -167,71 +156,71 @@ namespace Odey.Framework.Keeley.Entities
             return objectStateEntry.EntityKey.EntityKeyValues;
         }
 
-        private void EnhanceChangedEntities(Dictionary<DbEntityEntry, ChangedEntity> addedEntities)
-        {
-            foreach (KeyValuePair<DbEntityEntry, ChangedEntity> change in addedEntities)
-            {
-                if (change.Value.EntityState != EntityState.Deleted)
-                {
-                    change.Value.Key = GetPrimaryKeyValue(change.Key);
-                }
-            }
+        //private void EnhanceChangedEntities(Dictionary<DbEntityEntry, ChangedEntity> addedEntities)
+        //{
+        //    foreach (KeyValuePair<DbEntityEntry, ChangedEntity> change in addedEntities)
+        //    {
+        //        if (change.Value.EntityState != EntityState.Deleted)
+        //        {
+        //            change.Value.Key = GetPrimaryKeyValue(change.Key);
+        //        }
+        //    }
 
-        }
+        //}
 
-        private void AddUsefulFields(DbEntityEntry entry, ChangedEntity changedEntity)
-        {
-            Type entityType = entry.Entity.GetType();
+        //private void AddUsefulFields(DbEntityEntry entry, ChangedEntity changedEntity)
+        //{
+        //    Type entityType = entry.Entity.GetType();
 
-            DbPropertyValues values;
-            if (entry.State == EntityState.Deleted)
-            {
-                values = entry.OriginalValues;
-            }
-            else
-            {
-                values = entry.CurrentValues;
-            }
+        //    DbPropertyValues values;
+        //    if (entry.State == EntityState.Deleted)
+        //    {
+        //        values = entry.OriginalValues;
+        //    }
+        //    else
+        //    {
+        //        values = entry.CurrentValues;
+        //    }
 
-            if (entityType == typeof(Portfolio))
-            {
-                AddValueToUsefulProperties(changedEntity, values, "PositionId");
-                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
-            }
-            else if (entityType == typeof(PortfolioEvent))
-            {
-                AddValueToUsefulProperties(changedEntity, values, "PositionId");
-                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
-            }
-            else if (entityType == typeof(Instrument))
-            {
-                AddValueToUsefulProperties(changedEntity, values, "InstrumentClassID");
-            }
-            else if (entityType == typeof(InstrumentMarket))
-            {
-                AddValueToUsefulPropertiesUsingReflection(entry, "InstrumentClassID", changedEntity);
-            }
-            else if (entityType == typeof(FundPerformance))
-            {
-                AddValueToUsefulPropertiesUsingReflection(entry, "FundId", changedEntity);
-            }
-            else if (entityType == typeof(Analytic))
-            {
-                AddValueToUsefulPropertiesUsingReflection(entry, "AnalyticTypeID", changedEntity);
-            }
-        }
+        //    if (entityType == typeof(Portfolio))
+        //    {
+        //        AddValueToUsefulProperties(changedEntity, values, "PositionId");
+        //        AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
+        //    }
+        //    else if (entityType == typeof(PortfolioEvent))
+        //    {
+        //        AddValueToUsefulProperties(changedEntity, values, "PositionId");
+        //        AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
+        //    }
+        //    else if (entityType == typeof(Instrument))
+        //    {
+        //        AddValueToUsefulProperties(changedEntity, values, "InstrumentClassID");
+        //    }
+        //    else if (entityType == typeof(InstrumentMarket))
+        //    {
+        //        AddValueToUsefulPropertiesUsingReflection(entry, "InstrumentClassID", changedEntity);
+        //    }
+        //    else if (entityType == typeof(FundPerformance))
+        //    {
+        //        AddValueToUsefulPropertiesUsingReflection(entry, "FundId", changedEntity);
+        //    }
+        //    else if (entityType == typeof(Analytic))
+        //    {
+        //        AddValueToUsefulPropertiesUsingReflection(entry, "AnalyticTypeID", changedEntity);
+        //    }
+        //}
 
-        private void AddValueToUsefulProperties(ChangedEntity changedEntity, DbPropertyValues currentValues, string key)
-        {
-            changedEntity.UsefulProperties.Add(key, currentValues[key]);
-        }
+        //private void AddValueToUsefulProperties(ChangedEntity changedEntity, DbPropertyValues currentValues, string key)
+        //{
+        //    changedEntity.UsefulProperties.Add(key, currentValues[key]);
+        //}
 
-        private void AddValueToUsefulPropertiesUsingReflection(DbEntityEntry entry, string key, ChangedEntity changedEntity)
-        {
-            PropertyInfo propInfo = entry.Entity.GetType().GetProperty(key);
-            object value = propInfo.GetValue(entry.Entity, null);
-            changedEntity.UsefulProperties.Add(key, value);
-        }
+        //private void AddValueToUsefulPropertiesUsingReflection(DbEntityEntry entry, string key, ChangedEntity changedEntity)
+        //{
+        //    PropertyInfo propInfo = entry.Entity.GetType().GetProperty(key);
+        //    object value = propInfo.GetValue(entry.Entity, null);
+        //    changedEntity.UsefulProperties.Add(key, value);
+        //}
 
         #endregion
 
@@ -246,22 +235,22 @@ namespace Odey.Framework.Keeley.Entities
             return originalValues;
         }
 
-        private Dictionary<DbEntityEntry, ChangedEntity> GetChangedEntites()
-        {
-            Dictionary<DbEntityEntry, ChangedEntity>  changedEntitiesByEntry = new Dictionary<DbEntityEntry, ChangedEntity>();
+        //private Dictionary<DbEntityEntry, ChangedEntity> GetChangedEntites()
+        //{
+        //    Dictionary<DbEntityEntry, ChangedEntity>  changedEntitiesByEntry = new Dictionary<DbEntityEntry, ChangedEntity>();
 
-            foreach (DbEntityEntry entry in this.ChangeTracker.Entries().Where(p => p.State == System.Data.EntityState.Added || p.State == System.Data.EntityState.Deleted || p.State == System.Data.EntityState.Modified))
-            {
-                if (PopulateChangedEntities)
-                {
-                    AddToChangedEntities(entry, changedEntitiesByEntry);
-                }
-                SetUpdateuserId(entry);
-            }
-            return changedEntitiesByEntry;
-        }
+        //    foreach (DbEntityEntry entry in this.ChangeTracker.Entries().Where(p => p.State == System.Data.EntityState.Added || p.State == System.Data.EntityState.Deleted || p.State == System.Data.EntityState.Modified))
+        //    {
+        //        if (PopulateChangedEntities)
+        //        {
+        //            AddToChangedEntities(entry, changedEntitiesByEntry);
+        //        }
+        //        SetUpdateUserId(entry);
+        //    }
+        //    return changedEntitiesByEntry;
+        //}
 
-        private void SetUpdateuserId(DbEntityEntry entry)
+        private void SetUpdateUserId(DbEntityEntry entry, int updateUserId)
         {
             if (entry.State != EntityState.Deleted)
             {
@@ -269,27 +258,36 @@ namespace Odey.Framework.Keeley.Entities
 
                 if (updateUserIdPropInfo != null)
                 {
-                    string updateUserName;
-                    int? userId = GetApplicationUserId(out updateUserName);
-                    if (userId == null)
-                    {
-                        throw new ApplicationException(String.Format("User {0} is not authorised to make changes to entity type {1}", updateUserName, entry.Entity.GetType().ToString()));
-                    }
-                    else
-                    {
-                        updateUserIdPropInfo.SetValue(entry.Entity, userId.Value, null);
-                    }
+                    updateUserIdPropInfo.SetValue(entry.Entity, updateUserId, null);
                 }
             }
         }
 
+        private ChangedEntityManager _changedEntityManager;
+        private void ProcessChangedEntities()
+        {
+            int userId = ApplicationUserId;
+            foreach (DbEntityEntry entry in this.ChangeTracker.Entries().Where(p => p.State == System.Data.EntityState.Added || p.State == System.Data.EntityState.Deleted || p.State == System.Data.EntityState.Modified))
+            {
+                _changedEntityManager.AddChangedEntity(this,entry);
+                SetUpdateUserId(entry, userId);
+            }
+        }
+
+        public List<ChangedEntity> ChangedEntities => _changedEntityManager.ChangedEntities;
+
         public override int SaveChanges()
         {
-            Dictionary<DbEntityEntry, ChangedEntity> changedEntitiesByEntry = GetChangedEntites();
-            ChangedEntities = changedEntitiesByEntry.Values.ToList();
-            int toReturn = base.SaveChanges();
-            EnhanceChangedEntities(changedEntitiesByEntry);
-            return toReturn;
+            ProcessChangedEntities();           
+            using (var scope = new TransactionScope())
+            {
+                int toReturn = base.SaveChanges();
+                _changedEntityManager.EnhanceChangedEntities(this);
+                _changedEntityManager.SendMessages(this,_applicationName);
+                scope.Complete();
+                return toReturn;
+            }
+            
         }
 
 

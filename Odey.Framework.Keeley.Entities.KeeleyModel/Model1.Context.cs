@@ -176,10 +176,11 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<AttributionNav> AttributionNavs { get; set; }
         public DbSet<AttributionPnl> AttributionPnls { get; set; }
         public DbSet<PortfolioEventFX> PortfolioEventFXes { get; set; }
-        public DbSet<PortfolioFX> PortfolioFXes { get; set; }
-        public DbSet<AttributionPNLNav> AttributionPNLNavs { get; set; }
         public DbSet<PositionToRebuild> PositionToRebuilds { get; set; }
         public DbSet<PositionToRebuildManagement> PositionToRebuildManagements { get; set; }
+        public DbSet<AdditionalFundIndexes> AdditionalFundIndexes1 { get; set; }
+        public DbSet<AttributionPNLNav> AttributionPNLNavs { get; set; }
+        public DbSet<InterestRateSwap> InterestRateSwaps { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -631,13 +632,37 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ReportServer_GetFailedSubscription_Result>("ReportServer_GetFailedSubscriptions");
         }
     
-        public virtual ObjectResult<Nullable<System.DateTime>> PortfolioFX_Roll(Nullable<int> updateUserId)
+        public virtual int MessageQueue_Insert(Nullable<int> messageTypeId, string message, string changeType, string messageSource, string changedFields, string originalValues, string currentValues)
         {
-            var updateUserIdParameter = updateUserId.HasValue ?
-                new ObjectParameter("UpdateUserId", updateUserId) :
-                new ObjectParameter("UpdateUserId", typeof(int));
+            var messageTypeIdParameter = messageTypeId.HasValue ?
+                new ObjectParameter("MessageTypeId", messageTypeId) :
+                new ObjectParameter("MessageTypeId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("PortfolioFX_Roll", updateUserIdParameter);
+            var messageParameter = message != null ?
+                new ObjectParameter("Message", message) :
+                new ObjectParameter("Message", typeof(string));
+    
+            var changeTypeParameter = changeType != null ?
+                new ObjectParameter("ChangeType", changeType) :
+                new ObjectParameter("ChangeType", typeof(string));
+    
+            var messageSourceParameter = messageSource != null ?
+                new ObjectParameter("MessageSource", messageSource) :
+                new ObjectParameter("MessageSource", typeof(string));
+    
+            var changedFieldsParameter = changedFields != null ?
+                new ObjectParameter("ChangedFields", changedFields) :
+                new ObjectParameter("ChangedFields", typeof(string));
+    
+            var originalValuesParameter = originalValues != null ?
+                new ObjectParameter("OriginalValues", originalValues) :
+                new ObjectParameter("OriginalValues", typeof(string));
+    
+            var currentValuesParameter = currentValues != null ?
+                new ObjectParameter("CurrentValues", currentValues) :
+                new ObjectParameter("CurrentValues", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MessageQueue_Insert", messageTypeIdParameter, messageParameter, changeTypeParameter, messageSourceParameter, changedFieldsParameter, originalValuesParameter, currentValuesParameter);
         }
     }
 }

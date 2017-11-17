@@ -7,13 +7,11 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum MessageTypeIds
+    public enum BondMaturityTypeIds
     {
         [EnumMember]
-        Portfolio =1,
+        Normal = 1,
         [EnumMember]
-        AttributionPnl=2,
-        [EnumMember]
-        PortfolioRollover=3
+        Convertible = 2,
     }
 }
