@@ -1,4 +1,5 @@
-﻿using Odey.Framework.Infrastructure.Contracts;
+﻿using Newtonsoft.Json;
+using Odey.Framework.Infrastructure.Contracts;
 using Odey.Framework.Keeley.Entities.Enums;
 using System;
 using System.Collections.Generic;
@@ -124,6 +125,11 @@ namespace Odey.Framework.Keeley.Entities
         {
             foreach (var changedEntity in _changedEntitiesForMessageQueue)
             {
+                foreach(var key in changedEntity.Item1.Key)
+                {
+                    changedEntity.Item1.UsefulProperties.Add(key.Key, key.Value);
+                }
+                
                 string properties = null;
                 string originalValues = null;
                 string currentValues = null;
@@ -133,7 +139,7 @@ namespace Odey.Framework.Keeley.Entities
                     originalValues = string.Join(",", changedEntity.Item1.ChangedProperties.Select(a => a.Value.OriginalValue));
                     currentValues = string.Join(",", changedEntity.Item1.ChangedProperties.Select(a => a.Value.CurrentValue));
                 }
-                context.MessageQueue_Insert((int)changedEntity.Item2, string.Join(",",changedEntity.Item1.Key.Select(a=>a.Value)),
+                context.MessageQueue_Insert((int)changedEntity.Item2, JsonConvert.SerializeObject(changedEntity.Item1.UsefulProperties).ToString(),
                     GetStateChar(changedEntity.Item1.EntityState), source, properties, originalValues, currentValues);
             }
         }
@@ -175,8 +181,20 @@ namespace Odey.Framework.Keeley.Entities
                 values = entry.CurrentValues;
             }
 
+            if (entityType == typeof(AttributionPnl))
+            {
+                AddValueToUsefulProperties(changedEntity, values, "FundId");
+                AddValueToUsefulProperties(changedEntity, values, "AttributionSourceId");
+                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
+                AddValueToUsefulProperties(changedEntity, values, "CurrencyId");
+                AddValueToUsefulProperties(changedEntity, values, "PositionID");
+                AddValueToUsefulProperties(changedEntity, values, "PnlTypeId");
+
+            }
+
             if (entityType == typeof(Portfolio))
             {
+                AddValueToUsefulProperties(changedEntity, values, "FundId");
                 AddValueToUsefulProperties(changedEntity, values, "PositionId");
                 AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
             }

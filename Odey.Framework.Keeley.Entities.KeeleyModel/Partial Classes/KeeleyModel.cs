@@ -79,7 +79,7 @@ namespace Odey.Framework.Keeley.Entities
         }
 
         public string _applicationName;
-        public int? _applicationUserIdOverride;
+        private int? _applicationUserIdOverride;
 
         public KeeleyModel(SecurityCallStack securityCallStack, string applicationName)
             : this()
