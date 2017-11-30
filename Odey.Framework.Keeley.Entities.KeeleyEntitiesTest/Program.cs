@@ -36,7 +36,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
                 //};
                 //context.Instruments.Add(t);
                 //context.Instruments.Remove(t);
-                //context._applicationUserIdOverride = 1;
+                context._applicationUserIdOverride = 1;
 
                 context.SaveChanges();
             }

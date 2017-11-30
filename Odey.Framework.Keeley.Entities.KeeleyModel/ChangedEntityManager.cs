@@ -35,6 +35,7 @@ namespace Odey.Framework.Keeley.Entities
         {
 
             var changedEntity = GetChangedEntity(context, entry);
+           
             _changedEntitiesByEntry.Add(entry, changedEntity);
             AddToMessageQueue(entry, changedEntity);
         }
@@ -127,7 +128,10 @@ namespace Odey.Framework.Keeley.Entities
             {
                 foreach(var key in changedEntity.Item1.Key)
                 {
-                    changedEntity.Item1.UsefulProperties.Add(key.Key, key.Value);
+                    if (!changedEntity.Item1.UsefulProperties.ContainsKey(key.Key))
+                    {
+                        changedEntity.Item1.UsefulProperties.Add(key.Key, key.Value);
+                    }
                 }
                 
                 string properties = null;

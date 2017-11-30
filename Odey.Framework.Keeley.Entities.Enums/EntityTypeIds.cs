@@ -82,7 +82,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DayCountConvention = 49,
         [EnumMember]
-        RollConvention = 50
+        RollConvention = 50,
+        [EnumMember]
+        KneipEventWrapper = 51
     }
 }
 

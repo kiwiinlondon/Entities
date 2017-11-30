@@ -1417,6 +1417,7 @@
           <Property Name="PercentageHedged" Type="numeric" Precision="27" Scale="8" />
           <Property Name="LockInYears" Type="int" />
           <Property Name="IsLongOnly" Type="bit" Nullable="false" />
+          <Property Name="IsMainPerformanceShareClass" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FundCountryHoliday">
           <Key>
@@ -2011,6 +2012,8 @@
           <Property Name="MasterNav" Type="numeric" Precision="27" Scale="8" />
           <Property Name="FeederNav" Type="numeric" Precision="27" Scale="8" />
           <Property Name="CalculateAttributionPNL" Type="bit" />
+          <Property Name="PreviousValuationDate" Type="datetime" Nullable="false" />
+          <Property Name="AdministratorPortfolioExists" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="OpenedClosedPosition">
           <Key>
@@ -11248,6 +11251,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="MasterNav" Type="numeric" Mode="In" />
           <Parameter Name="FeederNav" Type="numeric" Mode="In" />
           <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
+          <Parameter Name="PreviousValuationDate" Type="datetime" Mode="In" />
+          <Parameter Name="AdministratorPortfolioExists" Type="bit" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -11300,6 +11305,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="MasterNav" Type="numeric" Mode="In" />
           <Parameter Name="FeederNav" Type="numeric" Mode="In" />
           <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
+          <Parameter Name="PreviousValuationDate" Type="datetime" Mode="In" />
+          <Parameter Name="AdministratorPortfolioExists" Type="bit" Mode="In" />
         </Function>
         <Function Name="OpenedClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -20621,6 +20628,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="LockInYears" Type="Int32" />
           <NavigationProperty Name="AdditionalFundIndexes" Relationship="Odey.Framework.Keeley.Entities.FK__Additiona__FundI__76F2D0EC" FromRole="Fund" ToRole="AdditionalFundIndex" />
           <Property Name="IsLongOnly" Type="Boolean" Nullable="false" />
+          <Property Name="IsMainPerformanceShareClass" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -21742,6 +21750,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="MasterNav" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="FeederNav" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="CalculateAttributionPNL" Type="Boolean" />
+          <Property Name="PreviousValuationDate" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="AdministratorPortfolioExists" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -28711,6 +28721,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="IsMainPerformanceShareClass" ColumnName="IsMainPerformanceShareClass" />
                 <ScalarProperty Name="IsLongOnly" ColumnName="IsLongOnly" />
                 <ScalarProperty Name="LockInYears" ColumnName="LockInYears" />
                 <ScalarProperty Name="IsMainRetailShareClass" ColumnName="IsMainRetailShareClass" />
@@ -29659,6 +29670,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="AdministratorPortfolioExists" ColumnName="AdministratorPortfolioExists" />
+                <ScalarProperty Name="PreviousValuationDate" ColumnName="PreviousValuationDate" />
                 <ScalarProperty Name="CalculateAttributionPNL" ColumnName="CalculateAttributionPNL" />
                 <ScalarProperty Name="FeederNav" ColumnName="FeederNav" />
                 <ScalarProperty Name="MasterNav" ColumnName="MasterNav" />
@@ -29711,6 +29724,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="AdministratorPortfolioExists" ParameterName="AdministratorPortfolioExists" />
+                  <ScalarProperty Name="PreviousValuationDate" ParameterName="PreviousValuationDate" />
                   <ScalarProperty Name="CalculateAttributionPNL" ParameterName="CalculateAttributionPNL" />
                   <ScalarProperty Name="FeederNav" ParameterName="FeederNav" />
                   <ScalarProperty Name="MasterNav" ParameterName="MasterNav" />
@@ -29765,6 +29780,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="AdministratorPortfolioExists" ParameterName="AdministratorPortfolioExists" Version="Current" />
+                  <ScalarProperty Name="PreviousValuationDate" ParameterName="PreviousValuationDate" Version="Current" />
                   <ScalarProperty Name="CalculateAttributionPNL" ParameterName="CalculateAttributionPNL" Version="Current" />
                   <ScalarProperty Name="FeederNav" ParameterName="FeederNav" Version="Current" />
                   <ScalarProperty Name="MasterNav" ParameterName="MasterNav" Version="Current" />
@@ -32524,7 +32541,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="96">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="88">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />

@@ -114,6 +114,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> LockInYears { get; set; }
     	[DataMember]
         public bool IsLongOnly { get; set; }
+    	[DataMember]
+        public bool IsMainPerformanceShareClass { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
