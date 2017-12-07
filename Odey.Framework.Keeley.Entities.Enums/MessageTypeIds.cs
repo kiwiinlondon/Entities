@@ -42,6 +42,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         TransferEvent = 16,
         [EnumMember]
-        InternalAllocation = 17
+        InternalAllocation = 17,
+        [EnumMember]
+        AttributionNav = 18
     }
 }

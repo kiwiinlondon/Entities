@@ -19,12 +19,33 @@ namespace Odey.Framework.Keeley.Entities
         }
 
 
-        private static readonly Dictionary<Type, MessageQueueTypeConfiguration> _changedTypesForMessages
-            = new Dictionary<Type, MessageQueueTypeConfiguration>()
-            {
-                {typeof(AttributionPnl), new MessageQueueTypeConfiguration(typeof(AttributionPnl),null,MessageTypeIds.AttributionPnl) },
-                {typeof(Portfolio), new MessageQueueTypeConfiguration(typeof(Portfolio),null,MessageTypeIds.Portfolio) }
-            };
+        private static readonly Dictionary<Type, MessageTypeIds> _messageTypeMappings = new Dictionary<Type, MessageTypeIds>
+        {
+            {typeof( AttributionPnl), MessageTypeIds.AttributionPnl},
+            {typeof( Portfolio), MessageTypeIds.Portfolio},
+            {typeof( LegalEntity), MessageTypeIds.LegalEntity},
+            {typeof( IssuerIndustry), MessageTypeIds.IssuerIndustry},
+            {typeof( Instrument), MessageTypeIds.Instrument},
+            {typeof( InstrumentMarket), MessageTypeIds.InstrumentMarket},
+            {typeof( FXRate), MessageTypeIds.FXRate},
+            {typeof( Price), MessageTypeIds.Price},
+            {typeof( Analytic), MessageTypeIds.Analytic},
+            {typeof( TradeEvent), MessageTypeIds.TradeEvent},
+            {typeof( FXTradeEvent), MessageTypeIds.FXTradeEvent},
+            {typeof( CapitalEvent), MessageTypeIds.CapitalEvent},
+            {typeof( InstrumentEvent), MessageTypeIds.InstrumentEvent},
+            {typeof( TransferEvent), MessageTypeIds.TransferEvent},
+            {typeof( InternalAllocation), MessageTypeIds.InternalAllocation},
+            {typeof( AttributionNav), MessageTypeIds.AttributionNav}
+        };
+
+
+        //private static readonly Dictionary<Type, MessageQueueTypeConfiguration> _changedTypesForMessages
+        //    = new Dictionary<Type, MessageQueueTypeConfiguration>()
+        //    {
+        //        {typeof(AttributionPnl), new MessageQueueTypeConfiguration(typeof(AttributionPnl),null,MessageTypeIds.AttributionPnl) },
+        //        {typeof(Portfolio), new MessageQueueTypeConfiguration(typeof(Portfolio),null,MessageTypeIds.Portfolio) }
+        //    };
 
         Dictionary<DbEntityEntry, ChangedEntity> _changedEntitiesByEntry = new Dictionary<DbEntityEntry, ChangedEntity>();
         List<Tuple<ChangedEntity,MessageTypeIds>> _changedEntitiesForMessageQueue = new List<Tuple<ChangedEntity, MessageTypeIds>>();
@@ -43,26 +64,15 @@ namespace Odey.Framework.Keeley.Entities
         private void AddToMessageQueue(DbEntityEntry entry,ChangedEntity changedEntity)
         {
             bool add = false;
-            MessageQueueTypeConfiguration config;
-            if (_changedTypesForMessages.TryGetValue(entry.Entity.GetType(), out config))
+            MessageTypeIds messageTypeId;
+            if (_messageTypeMappings.TryGetValue(entry.Entity.GetType(), out messageTypeId))
             {
                 if (entry.State == System.Data.EntityState.Modified)
                 {
-                    IEnumerable<string> properties;
-                    if (config.Properties == null)
-                    {
-                        properties = entry.CurrentValues.PropertyNames;
-                    }
-                    else
-                    {
-                        properties = config.Properties;
-                    }
-
-                    foreach (var property in properties)
+                    foreach (var property in entry.CurrentValues.PropertyNames)
                     {                        
                         AddIfPropertyChanged(changedEntity, property, entry, ref add);
                     }
-
                 }
                 else
                 {
@@ -70,7 +80,7 @@ namespace Odey.Framework.Keeley.Entities
                 }
                 if (add)
                 {
-                    _changedEntitiesForMessageQueue.Add(new Tuple<ChangedEntity,MessageTypeIds>(changedEntity, config.MessageTypeId));
+                    _changedEntitiesForMessageQueue.Add(new Tuple<ChangedEntity,MessageTypeIds>(changedEntity, messageTypeId));
                 }
             }
         }
@@ -222,6 +232,13 @@ namespace Odey.Framework.Keeley.Entities
             else if (entityType == typeof(Analytic))
             {
                 AddValueToUsefulPropertiesUsingReflection(entry, "AnalyticTypeID", changedEntity);
+            }
+            else if (entityType == typeof(AttributionNav))
+            {
+                AddValueToUsefulProperties(changedEntity, values, "FundId");
+                AddValueToUsefulProperties(changedEntity, values, "AttributionSourceId");
+                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
+                AddValueToUsefulProperties(changedEntity, values, "CurrencyId");
             }
         }
         private void AddValueToUsefulProperties(ChangedEntity changedEntity, DbPropertyValues currentValues, string key)
