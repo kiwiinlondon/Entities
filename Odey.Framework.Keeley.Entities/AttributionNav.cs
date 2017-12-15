@@ -42,5 +42,7 @@ namespace Odey.Framework.Keeley.Entities
         public int CurrencyId { get; set; }
     	[DataMember]
         public decimal TodayPNL { get; set; }
+    	[DataMember]
+        public decimal KeeleyNav { get; set; }
     }
 }

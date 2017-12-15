@@ -333,6 +333,7 @@
           <Property Name="KeeleyIsMaster" Type="bit" Nullable="false" />
           <Property Name="CurrencyId" Type="int" Nullable="false" />
           <Property Name="TodayPNL" Type="numeric" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="KeeleyNav" Type="numeric" Precision="15" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -974,6 +975,8 @@
           <Property Name="BetaLongTerm" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="BetaShortTerm" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="HedgeRatio" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CreditExposure" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ChangeCreditExposure" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ExternalPerson">
           <Key>
@@ -8734,6 +8737,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
           <Parameter Name="TodayPNL" Type="numeric" Mode="In" />
+          <Parameter Name="KeeleyNav" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionNav_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8751,6 +8755,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
           <Parameter Name="TodayPNL" Type="numeric" Mode="In" />
+          <Parameter Name="KeeleyNav" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionPnlId" Type="int" Mode="In" />
@@ -9738,6 +9743,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
+          <Parameter Name="CreditExposure" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeCreditExposure" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Exposure_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9770,6 +9777,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
+          <Parameter Name="CreditExposure" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeCreditExposure" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ExternalPerson_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExternalPersonId" Type="int" Mode="In" />
@@ -20832,6 +20841,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Decimal" Name="BetaLongTerm" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="BetaShortTerm" Precision="27" Scale="8" Nullable="false" />
           <Property Name="HedgeRatio" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CreditExposure" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ChangeCreditExposure" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <EntityType Name="IndexConstituent">
           <Key>
@@ -24479,6 +24490,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="KeeleyIsMaster" Type="Boolean" Nullable="false" />
           <Property Name="CurrencyId" Type="Int32" Nullable="false" />
           <Property Name="TodayPNL" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="KeeleyNav" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -28851,6 +28863,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Exposures">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <MappingFragment StoreEntitySet="Exposure">
+                <ScalarProperty Name="ChangeCreditExposure" ColumnName="ChangeCreditExposure" />
+                <ScalarProperty Name="CreditExposure" ColumnName="CreditExposure" />
                 <ScalarProperty Name="HedgeRatio" ColumnName="HedgeRatio" />
                 <ScalarProperty Name="BetaShortTerm" ColumnName="BetaShortTerm" />
                 <ScalarProperty Name="BetaLongTerm" ColumnName="BetaLongTerm" />
@@ -28884,6 +28898,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Exposure_Insert">
+                  <ScalarProperty Name="ChangeCreditExposure" ParameterName="ChangeCreditExposure" />
+                  <ScalarProperty Name="CreditExposure" ParameterName="CreditExposure" />
                   <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" />
                   <ScalarProperty Name="BetaShortTerm" ParameterName="BetaShortTerm" />
                   <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" />
@@ -28914,6 +28930,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Exposure_Update">
+                  <ScalarProperty Name="ChangeCreditExposure" ParameterName="ChangeCreditExposure" Version="Current" />
+                  <ScalarProperty Name="CreditExposure" ParameterName="CreditExposure" Version="Current" />
                   <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" Version="Current" />
                   <ScalarProperty Name="BetaShortTerm" ParameterName="BetaShortTerm" Version="Current" />
                   <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" Version="Current" />
@@ -32128,6 +32146,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionNavs">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <MappingFragment StoreEntitySet="AttributionNav">
+                <ScalarProperty Name="KeeleyNav" ColumnName="KeeleyNav" />
                 <ScalarProperty Name="TodayPNL" ColumnName="TodayPNL" />
                 <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
                 <ScalarProperty Name="KeeleyIsMaster" ColumnName="KeeleyIsMaster" />
@@ -32146,6 +32165,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionNav_Insert">
+                  <ScalarProperty Name="KeeleyNav" ParameterName="KeeleyNav" />
                   <ScalarProperty Name="TodayPNL" ParameterName="TodayPNL" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" />
@@ -32166,6 +32186,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionNav_Update">
+                  <ScalarProperty Name="KeeleyNav" ParameterName="KeeleyNav" Version="Current" />
                   <ScalarProperty Name="TodayPNL" ParameterName="TodayPNL" Version="Current" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" Version="Current" />
