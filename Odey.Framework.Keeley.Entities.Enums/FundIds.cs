@@ -460,9 +460,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         BVFF_EUR = 7901,
         [EnumMember]
         RAFO_USD_M = 8809,
-
-        BNUA = 8906
-
+        [EnumMember]
+        BNUA = 8906,
+        [EnumMember]
+        LEGE = 8987
 
     }
 }
