@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -8,12 +9,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
     public enum MessageTypeIds
-    {
+    {        
         [EnumMember]
+        [Description("Portfolio")]
         Portfolio =1,
         [EnumMember]
-        AttributionPnl=2,
+        [Description("AttributionPnl")]
+        AttributionPnl =2,
         [EnumMember]
-        PortfolioRollover=3
+        [Description("Portfolio Rollover")]
+        PortfolioRollover =3
     }
 }
