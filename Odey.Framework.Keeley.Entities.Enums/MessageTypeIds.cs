@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -14,6 +15,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         AttributionPnl = 2,
         [EnumMember]
+        [Description("Portfolio Rollover")]
         PortfolioRollover = 3,
         [EnumMember]
         LegalEntity = 4,
