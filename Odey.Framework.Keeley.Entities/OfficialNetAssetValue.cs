@@ -110,6 +110,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> FeederNav { get; set; }
     	[DataMember]
         public Nullable<bool> CalculateAttributionPNL { get; set; }
+    	[DataMember]
+        public System.DateTime PreviousValuationDate { get; set; }
+    	[DataMember]
+        public bool AdministratorPortfolioExists { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

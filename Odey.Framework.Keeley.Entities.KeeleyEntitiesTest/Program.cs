@@ -22,8 +22,8 @@ namespace Odey.Framework.KeeleyEntitiesTest
 
             using (var context = new KeeleyModel(null, "GP"))
             {
-                var t = context.Instruments.FirstOrDefault(a => a.InstrumentID == 46353);
-                t.Name = t.Name + "11";
+                var t = context.AttributionPnls.FirstOrDefault(a=>a.AttributionPnlId == 26361798);
+                t.MarketValue = 0;
                 //Instrument t = new Instrument()
                 //{
                 //    InstrumentClassID = 4,

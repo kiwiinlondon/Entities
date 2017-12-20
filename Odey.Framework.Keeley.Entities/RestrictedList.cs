@@ -38,8 +38,12 @@ namespace Odey.Framework.Keeley.Entities
         public string RestrictedPerson { get; set; }
     	[DataMember]
         public bool WatchListOnly { get; set; }
+    	[DataMember]
+        public Nullable<int> InstrumentMarketId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }

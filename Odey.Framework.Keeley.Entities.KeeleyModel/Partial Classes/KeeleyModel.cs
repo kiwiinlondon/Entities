@@ -274,20 +274,27 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
-        public List<ChangedEntity> ChangedEntities => _changedEntityManager.ChangedEntities;
+        public List<ChangedEntity> ChangedEntities { get; private set; } 
 
         public override int SaveChanges()
         {
-            ProcessChangedEntities();           
-            using (var scope = new TransactionScope())
+            ProcessChangedEntities();
+            int toReturn = 0;
+            var transactionOptions = new TransactionOptions();
+            transactionOptions.IsolationLevel = System.Transactions.IsolationLevel.Snapshot;
+            transactionOptions.Timeout = TransactionManager.MaximumTimeout;
+
+            using (var scope = new TransactionScope(TransactionScopeOption.Required,transactionOptions))
             {
-                int toReturn = base.SaveChanges();
+                toReturn = base.SaveChanges();
                 _changedEntityManager.EnhanceChangedEntities(this);
-                _changedEntityManager.SendMessages(this,_applicationName);
-                scope.Complete();
-                return toReturn;
+                _changedEntityManager.SendMessages(this,_applicationName);                                
+                scope.Complete();                
             }
-            
+            ChangedEntities = _changedEntityManager.ChangedEntities;
+            _changedEntityManager = new ChangedEntityManager();
+            return toReturn;
+
         }
 
 

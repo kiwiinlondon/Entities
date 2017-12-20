@@ -420,7 +420,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DEFF = 7505,
 
         [EnumMember]
-        ARFF = 7504,//Const Currency
+        ARFF = 7504,//GBP I
         [EnumMember]
         
         
@@ -428,9 +428,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ARFF_GBP_M_IRL = 7555,
         [EnumMember]
-        ARFF_GBP_A_IRL = 7704,
+        ARFF_GBP_CONST = 7704,
         [EnumMember]
-        ARFF_GBP_I_IRL = 7553,
+        ARFF_GBP_A_IRL = 7553,
         [EnumMember]
         ARFF_USD_I_IRL = 7625,
         [EnumMember]
@@ -445,7 +445,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ARFF_GBP_C1116_IRL = 7993,
         [EnumMember]
         ARFF_GBP_C0217_IRL = 7999,
-
+        [EnumMember]
+        ARFF_GBP_C1117_IRL = 8986,
         [EnumMember]
         RAFO = 7577,
         [EnumMember]

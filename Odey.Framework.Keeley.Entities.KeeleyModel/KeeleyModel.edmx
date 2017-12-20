@@ -333,6 +333,7 @@
           <Property Name="KeeleyIsMaster" Type="bit" Nullable="false" />
           <Property Name="CurrencyId" Type="int" Nullable="false" />
           <Property Name="TodayPNL" Type="numeric" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="KeeleyNav" Type="numeric" Precision="15" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -974,6 +975,8 @@
           <Property Name="BetaLongTerm" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="BetaShortTerm" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="HedgeRatio" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CreditExposure" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ChangeCreditExposure" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ExternalPerson">
           <Key>
@@ -1417,6 +1420,7 @@
           <Property Name="PercentageHedged" Type="numeric" Precision="27" Scale="8" />
           <Property Name="LockInYears" Type="int" />
           <Property Name="IsLongOnly" Type="bit" Nullable="false" />
+          <Property Name="IsMainPerformanceShareClass" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FundCountryHoliday">
           <Key>
@@ -2011,6 +2015,8 @@
           <Property Name="MasterNav" Type="numeric" Precision="27" Scale="8" />
           <Property Name="FeederNav" Type="numeric" Precision="27" Scale="8" />
           <Property Name="CalculateAttributionPNL" Type="bit" />
+          <Property Name="PreviousValuationDate" Type="datetime" Nullable="false" />
+          <Property Name="AdministratorPortfolioExists" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="OpenedClosedPosition">
           <Key>
@@ -2532,6 +2538,7 @@
           <Property Name="ClosingComment" Type="varchar" MaxLength="4000" />
           <Property Name="RestrictedPerson" Type="varchar" MaxLength="4000" Nullable="false" />
           <Property Name="WatchListOnly" Type="bit" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" />
         </EntityType>
         <EntityType Name="RiskAnalytic">
           <Key>
@@ -5432,6 +5439,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="PortfolioEventFX">
               <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Restricte__Instr__37B76177">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="0..1" />
+          <End Role="RestrictedList" Type="Self.RestrictedList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="RestrictedList">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8718,6 +8737,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
           <Parameter Name="TodayPNL" Type="numeric" Mode="In" />
+          <Parameter Name="KeeleyNav" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionNav_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8735,6 +8755,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
           <Parameter Name="TodayPNL" Type="numeric" Mode="In" />
+          <Parameter Name="KeeleyNav" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionPnlId" Type="int" Mode="In" />
@@ -9722,6 +9743,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
+          <Parameter Name="CreditExposure" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeCreditExposure" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Exposure_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9754,6 +9777,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="BetaLongTerm" Type="numeric" Mode="In" />
           <Parameter Name="BetaShortTerm" Type="numeric" Mode="In" />
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
+          <Parameter Name="CreditExposure" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeCreditExposure" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ExternalPerson_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExternalPersonId" Type="int" Mode="In" />
@@ -11235,6 +11260,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="MasterNav" Type="numeric" Mode="In" />
           <Parameter Name="FeederNav" Type="numeric" Mode="In" />
           <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
+          <Parameter Name="PreviousValuationDate" Type="datetime" Mode="In" />
+          <Parameter Name="AdministratorPortfolioExists" Type="bit" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -11287,6 +11314,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="MasterNav" Type="numeric" Mode="In" />
           <Parameter Name="FeederNav" Type="numeric" Mode="In" />
           <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
+          <Parameter Name="PreviousValuationDate" Type="datetime" Mode="In" />
+          <Parameter Name="AdministratorPortfolioExists" Type="bit" Mode="In" />
         </Function>
         <Function Name="OpenedClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioId" Type="int" Mode="In" />
@@ -12143,6 +12172,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ClosingComment" Type="varchar" Mode="In" />
           <Parameter Name="RestrictedPerson" Type="varchar" Mode="In" />
           <Parameter Name="WatchListOnly" Type="bit" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
         </Function>
         <Function Name="RestrictedList_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RestrictedListId" Type="int" Mode="In" />
@@ -12155,6 +12185,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ClosingComment" Type="varchar" Mode="In" />
           <Parameter Name="RestrictedPerson" Type="varchar" Mode="In" />
           <Parameter Name="WatchListOnly" Type="bit" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
         </Function>
         <Function Name="RiskAnalytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RiskAnalyticId" Type="int" Mode="In" />
@@ -13465,6 +13496,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Portfolio__Updat__7EDE0B77" Association="Self.FK__Portfolio__Updat__7EDE0B77">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PortfolioEventFX" EntitySet="PortfolioEventFX" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Restricte__Instr__37B76177" Association="Self.FK__Restricte__Instr__37B76177">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="RestrictedList" EntitySet="RestrictedList" />
           </AssociationSet>
           <AssociationSet Name="FK__TradeEven__Contr__6555CF79" Association="Self.FK__TradeEven__Contr__6555CF79">
             <End Role="TradeEvent" EntitySet="TradeEvent" />
@@ -16457,6 +16492,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <Parameter Name="OriginalValues" Mode="In" Type="String" />
             <Parameter Name="CurrentValues" Mode="In" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK__Restricte__Instr__37B76177" Association="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="RestrictedList" EntitySet="RestrictedLists" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -20514,6 +20553,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="String" Name="ClosingComment" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="RestrictedPerson" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="WatchListOnly" Type="Boolean" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="Int32" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177" FromRole="RestrictedList" ToRole="InstrumentMarket" />
         </EntityType>
         <Association Name="RestrictedListUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20596,6 +20637,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="LockInYears" Type="Int32" />
           <NavigationProperty Name="AdditionalFundIndexes" Relationship="Odey.Framework.Keeley.Entities.FK__Additiona__FundI__76F2D0EC" FromRole="Fund" ToRole="AdditionalFundIndex" />
           <Property Name="IsLongOnly" Type="Boolean" Nullable="false" />
+          <Property Name="IsMainPerformanceShareClass" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -20799,6 +20841,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Decimal" Name="BetaLongTerm" Precision="27" Scale="8" Nullable="false" />
           <Property Type="Decimal" Name="BetaShortTerm" Precision="27" Scale="8" Nullable="false" />
           <Property Name="HedgeRatio" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CreditExposure" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ChangeCreditExposure" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <EntityType Name="IndexConstituent">
           <Key>
@@ -21717,6 +21761,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="MasterNav" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="FeederNav" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="CalculateAttributionPNL" Type="Boolean" />
+          <Property Name="PreviousValuationDate" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="AdministratorPortfolioExists" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -24444,6 +24490,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="KeeleyIsMaster" Type="Boolean" Nullable="false" />
           <Property Name="CurrencyId" Type="Int32" Nullable="false" />
           <Property Name="TodayPNL" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="KeeleyNav" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -24888,6 +24935,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="InterestRateSwap">
               <PropertyRef Name="ReceiveFloatingIndexInstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Restricte__Instr__37B76177">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.RestrictedList" Role="RestrictedList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="RestrictedList">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -28618,6 +28677,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="RestrictedLists">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RestrictedList">
               <MappingFragment StoreEntitySet="RestrictedList">
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
                 <ScalarProperty Name="WatchListOnly" ColumnName="WatchListOnly" />
                 <ScalarProperty Name="RestrictedPerson" ColumnName="RestrictedPerson" />
                 <ScalarProperty Name="ClosingComment" ColumnName="ClosingComment" />
@@ -28634,6 +28694,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RestrictedList">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.RestrictedList_Insert">
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
                   <ScalarProperty Name="WatchListOnly" ParameterName="WatchListOnly" />
                   <ScalarProperty Name="RestrictedPerson" ParameterName="RestrictedPerson" />
                   <ScalarProperty Name="ClosingComment" ParameterName="ClosingComment" />
@@ -28647,6 +28708,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.RestrictedList_Update">
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="WatchListOnly" ParameterName="WatchListOnly" Version="Current" />
                   <ScalarProperty Name="RestrictedPerson" ParameterName="RestrictedPerson" Version="Current" />
                   <ScalarProperty Name="ClosingComment" ParameterName="ClosingComment" Version="Current" />
@@ -28671,6 +28733,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="IsMainPerformanceShareClass" ColumnName="IsMainPerformanceShareClass" />
                 <ScalarProperty Name="IsLongOnly" ColumnName="IsLongOnly" />
                 <ScalarProperty Name="LockInYears" ColumnName="LockInYears" />
                 <ScalarProperty Name="IsMainRetailShareClass" ColumnName="IsMainRetailShareClass" />
@@ -28800,6 +28863,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Exposures">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <MappingFragment StoreEntitySet="Exposure">
+                <ScalarProperty Name="ChangeCreditExposure" ColumnName="ChangeCreditExposure" />
+                <ScalarProperty Name="CreditExposure" ColumnName="CreditExposure" />
                 <ScalarProperty Name="HedgeRatio" ColumnName="HedgeRatio" />
                 <ScalarProperty Name="BetaShortTerm" ColumnName="BetaShortTerm" />
                 <ScalarProperty Name="BetaLongTerm" ColumnName="BetaLongTerm" />
@@ -28833,6 +28898,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Exposure_Insert">
+                  <ScalarProperty Name="ChangeCreditExposure" ParameterName="ChangeCreditExposure" />
+                  <ScalarProperty Name="CreditExposure" ParameterName="CreditExposure" />
                   <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" />
                   <ScalarProperty Name="BetaShortTerm" ParameterName="BetaShortTerm" />
                   <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" />
@@ -28863,6 +28930,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Exposure_Update">
+                  <ScalarProperty Name="ChangeCreditExposure" ParameterName="ChangeCreditExposure" Version="Current" />
+                  <ScalarProperty Name="CreditExposure" ParameterName="CreditExposure" Version="Current" />
                   <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" Version="Current" />
                   <ScalarProperty Name="BetaShortTerm" ParameterName="BetaShortTerm" Version="Current" />
                   <ScalarProperty Name="BetaLongTerm" ParameterName="BetaLongTerm" Version="Current" />
@@ -29619,6 +29688,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="AdministratorPortfolioExists" ColumnName="AdministratorPortfolioExists" />
+                <ScalarProperty Name="PreviousValuationDate" ColumnName="PreviousValuationDate" />
                 <ScalarProperty Name="CalculateAttributionPNL" ColumnName="CalculateAttributionPNL" />
                 <ScalarProperty Name="FeederNav" ColumnName="FeederNav" />
                 <ScalarProperty Name="MasterNav" ColumnName="MasterNav" />
@@ -29671,6 +29742,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="AdministratorPortfolioExists" ParameterName="AdministratorPortfolioExists" />
+                  <ScalarProperty Name="PreviousValuationDate" ParameterName="PreviousValuationDate" />
                   <ScalarProperty Name="CalculateAttributionPNL" ParameterName="CalculateAttributionPNL" />
                   <ScalarProperty Name="FeederNav" ParameterName="FeederNav" />
                   <ScalarProperty Name="MasterNav" ParameterName="MasterNav" />
@@ -29725,6 +29798,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="AdministratorPortfolioExists" ParameterName="AdministratorPortfolioExists" Version="Current" />
+                  <ScalarProperty Name="PreviousValuationDate" ParameterName="PreviousValuationDate" Version="Current" />
                   <ScalarProperty Name="CalculateAttributionPNL" ParameterName="CalculateAttributionPNL" Version="Current" />
                   <ScalarProperty Name="FeederNav" ParameterName="FeederNav" Version="Current" />
                   <ScalarProperty Name="MasterNav" ParameterName="MasterNav" Version="Current" />
@@ -32071,6 +32146,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionNavs">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <MappingFragment StoreEntitySet="AttributionNav">
+                <ScalarProperty Name="KeeleyNav" ColumnName="KeeleyNav" />
                 <ScalarProperty Name="TodayPNL" ColumnName="TodayPNL" />
                 <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
                 <ScalarProperty Name="KeeleyIsMaster" ColumnName="KeeleyIsMaster" />
@@ -32089,6 +32165,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionNav_Insert">
+                  <ScalarProperty Name="KeeleyNav" ParameterName="KeeleyNav" />
                   <ScalarProperty Name="TodayPNL" ParameterName="TodayPNL" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" />
@@ -32109,6 +32186,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionNav_Update">
+                  <ScalarProperty Name="KeeleyNav" ParameterName="KeeleyNav" Version="Current" />
                   <ScalarProperty Name="TodayPNL" ParameterName="TodayPNL" Version="Current" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" Version="Current" />
@@ -32484,7 +32562,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="96">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="88">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -37143,22 +37221,22 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="23.958333333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="23.791666666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="22.958333333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.769871794871793" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.603205128205129" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.473958333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="20.145833333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="19.366666666666671" PointY="21.502621543391765" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.502621543391765" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="24.933333333333334" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="24.020832833333333" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="23.854166166666669" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="22.958335833333333" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="22.760417916666672" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="20.801025641025639" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="20.634358974358975" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="20.626413333333332" PointY="21.578448244787527" />
+          <edmx:ConnectorPoint PointX="20.072916666666671" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.366666666666671" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.578448244787531" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
@@ -37167,15 +37245,15 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.802083333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="14.510416666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.354166666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583336009002732" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583336009002732" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.583336002250684" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.583336002250684" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -38280,6 +38358,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InterestR__Instr__624CB9C1" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InterestR__PayFl__67116EDE" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InterestR__Recei__6AE1FFC2" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
