@@ -117,6 +117,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BloombergWeights = 56,
         [EnumMember]
-        PortIndexPrices = 57
+        PortIndexPrices = 57,
+        [EnumMember]
+        FactsetBenchmarkWeights = 58,
     }
 }
