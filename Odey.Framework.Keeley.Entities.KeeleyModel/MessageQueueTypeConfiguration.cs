@@ -53,7 +53,8 @@ namespace Odey.Framework.Keeley.Entities
             {typeof( InstrumentEvent), MessageTypeIds.InstrumentEvent},
             {typeof( TransferEvent), MessageTypeIds.TransferEvent},
             {typeof( InternalAllocation), MessageTypeIds.InternalAllocation},
-            {typeof( InternalAllocation), MessageTypeIds.AttributionNav}
+            {typeof( InternalAllocation), MessageTypeIds.AttributionNav},
+            {typeof( IndexConstituent), MessageTypeIds.IndexConstituent},
         };
     }
 }

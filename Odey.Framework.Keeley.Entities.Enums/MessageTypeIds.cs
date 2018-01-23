@@ -46,6 +46,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         InternalAllocation = 17,
         [EnumMember]
-        AttributionNav = 18
+        AttributionNav = 18,
+        [EnumMember]
+        IndexConstituent = 19
     }
 }

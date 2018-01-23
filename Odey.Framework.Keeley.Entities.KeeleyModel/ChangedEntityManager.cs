@@ -36,7 +36,8 @@ namespace Odey.Framework.Keeley.Entities
             {typeof( InstrumentEvent), MessageTypeIds.InstrumentEvent},
             {typeof( TransferEvent), MessageTypeIds.TransferEvent},
             {typeof( InternalAllocation), MessageTypeIds.InternalAllocation},
-            {typeof( AttributionNav), MessageTypeIds.AttributionNav}
+            {typeof( AttributionNav), MessageTypeIds.AttributionNav},
+            {typeof( IndexConstituent), MessageTypeIds.IndexConstituent},
         };
 
 
@@ -203,10 +204,16 @@ namespace Odey.Framework.Keeley.Entities
                 AddValueToUsefulProperties(changedEntity, values, "CurrencyId");
                 AddValueToUsefulProperties(changedEntity, values, "PositionID");
                 AddValueToUsefulProperties(changedEntity, values, "PnlTypeId");
-
             }
-
-            if (entityType == typeof(Portfolio))
+            else
+            if (entityType == typeof(IndexConstituent))
+            {
+                AddValueToUsefulProperties(changedEntity, values, "InstrumentId");
+                AddValueToUsefulProperties(changedEntity, values, "ConstituentInstrumentMarketId");
+                AddValueToUsefulProperties(changedEntity, values, "CurrencyId");
+            }
+            else
+            if(entityType == typeof(Portfolio))
             {
                 AddValueToUsefulProperties(changedEntity, values, "FundId");
                 AddValueToUsefulProperties(changedEntity, values, "PositionId");
