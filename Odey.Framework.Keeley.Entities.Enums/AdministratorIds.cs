@@ -29,8 +29,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         InvestmentFundsDirectFundPlatform = 6475,
         [EnumMember]
-        ValueTrack = 6557,
+        Pulse = 6557,
         [EnumMember]
         UniversalInvestment = 7893,
+        [EnumMember]
+        ValueTrac = 8936,
     }
 }

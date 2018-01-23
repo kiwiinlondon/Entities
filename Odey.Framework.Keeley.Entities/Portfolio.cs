@@ -227,6 +227,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> OpeningTotalAmortisation { get; set; }
     	[DataMember]
         public Nullable<bool> ReValue { get; set; }
+    	[DataMember]
+        public Nullable<int> PriceStatus { get; set; }
+    	[DataMember]
+        public Nullable<int> ValuationPriceStatus { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
