@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Odey.Framework.Keeley.Entities
 {
-    public class MessageQueueTypeConfiguration
+    public class MessageQueueTypeConfigurationOld
     {
-        public MessageQueueTypeConfiguration(Type type, List<string> properties, MessageTypeIds? messageTypeId)
+        public MessageQueueTypeConfigurationOld(Type type, List<string> properties, MessageTypeIds? messageTypeId)
         {
             Type = type;
             Properties = properties;
