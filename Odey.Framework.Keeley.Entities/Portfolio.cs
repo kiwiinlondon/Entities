@@ -228,9 +228,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<bool> ReValue { get; set; }
     	[DataMember]
-        public Nullable<int> PriceStatus { get; set; }
-    	[DataMember]
-        public Nullable<int> ValuationPriceStatus { get; set; }
+        public Nullable<int> MarketDataStatus { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

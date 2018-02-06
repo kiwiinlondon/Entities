@@ -373,6 +373,9 @@
           <Property Name="TodayRealisedPricePnl" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="TodayCashBenefit" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="NotionalCost" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="MarketDataStatus" Type="int" />
+          <Property Name="BetaShortTermId" Type="int" />
+          <Property Name="BetaLongTermId" Type="int" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -390,6 +393,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="UpdateDate" Type="datetime" Nullable="false" />
           <Property Name="UpdatedOnReferenceDay" Type="bit" Nullable="false" />
+          <Property Name="IsDummy" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="BloombergIdentifier">
           <Key>
@@ -2256,8 +2260,7 @@
           <Property Name="ValuationMarketValueInstrument" Type="numeric" Precision="27" Scale="8" />
           <Property Name="OpeningTotalAmortisation" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ReValue" Type="bit" />
-          <Property Name="PriceStatus" Type="int" />
-          <Property Name="ValuationPriceStatus" Type="int" />
+          <Property Name="MarketDataStatus" Type="int" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -4769,6 +4772,30 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="AttributionPnl">
               <PropertyRef Name="AttributionNavId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__BetaL__6AB7E290">
+          <End Role="Beta" Type="Self.Beta" Multiplicity="0..1" />
+          <End Role="AttributionPnl" Type="Self.AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beta">
+              <PropertyRef Name="BetaId" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="BetaLongTermId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__BetaS__69C3BE57">
+          <End Role="Beta" Type="Self.Beta" Multiplicity="0..1" />
+          <End Role="AttributionPnl" Type="Self.AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beta">
+              <PropertyRef Name="BetaId" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="BetaShortTermId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8796,6 +8823,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TodayRealisedPricePnl" Type="numeric" Mode="In" />
           <Parameter Name="TodayCashBenefit" Type="numeric" Mode="In" />
           <Parameter Name="NotionalCost" Type="numeric" Mode="In" />
+          <Parameter Name="MarketDataStatus" Type="int" Mode="In" />
+          <Parameter Name="BetaShortTermId" Type="int" Mode="In" />
+          <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8834,6 +8864,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TodayRealisedPricePnl" Type="numeric" Mode="In" />
           <Parameter Name="TodayCashBenefit" Type="numeric" Mode="In" />
           <Parameter Name="NotionalCost" Type="numeric" Mode="In" />
+          <Parameter Name="MarketDataStatus" Type="int" Mode="In" />
+          <Parameter Name="BetaShortTermId" Type="int" Mode="In" />
+          <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -8883,6 +8916,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdatedOnReferenceDay" Type="bit" Mode="In" />
+          <Parameter Name="IsDummy" Type="bit" Mode="In" />
         </Function>
         <Function Name="Beta_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8899,6 +8933,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdatedOnReferenceDay" Type="bit" Mode="In" />
+          <Parameter Name="IsDummy" Type="bit" Mode="In" />
         </Function>
         <Function Name="Bond_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -11600,8 +11635,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationMarketValueInstrument" Type="numeric" Mode="In" />
           <Parameter Name="OpeningTotalAmortisation" Type="numeric" Mode="In" />
           <Parameter Name="ReValue" Type="bit" Mode="In" />
-          <Parameter Name="PriceStatus" Type="int" Mode="In" />
-          <Parameter Name="ValuationPriceStatus" Type="int" Mode="In" />
+          <Parameter Name="MarketDataStatus" Type="int" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -11708,8 +11742,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationMarketValueInstrument" Type="numeric" Mode="In" />
           <Parameter Name="OpeningTotalAmortisation" Type="numeric" Mode="In" />
           <Parameter Name="ReValue" Type="bit" Mode="In" />
-          <Parameter Name="PriceStatus" Type="int" Mode="In" />
-          <Parameter Name="ValuationPriceStatus" Type="int" Mode="In" />
+          <Parameter Name="MarketDataStatus" Type="int" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -13277,6 +13310,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="FK__Attributi__Attri__7E340001" Association="Self.FK__Attributi__Attri__7E340001">
             <End Role="AttributionNav" EntitySet="AttributionNav" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnl" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__BetaL__6AB7E290" Association="Self.FK__Attributi__BetaL__6AB7E290">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnl" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__BetaS__69C3BE57" Association="Self.FK__Attributi__BetaS__69C3BE57">
+            <End Role="Beta" EntitySet="Beta" />
             <End Role="AttributionPnl" EntitySet="AttributionPnl" />
           </AssociationSet>
           <AssociationSet Name="FK__Attributi__Curre__69ADE467" Association="Self.FK__Attributi__Curre__69ADE467">
@@ -16502,6 +16543,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="RestrictedList" EntitySet="RestrictedLists" />
           </AssociationSet>
+          <AssociationSet Name="FK__Attributi__BetaL__6AB7E290" Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaL__6AB7E290">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Attributi__BetaS__69C3BE57" Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57">
+            <End Role="Beta" EntitySet="Beta" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnls" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -18514,8 +18563,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ValuationMarketValueInstrument" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OpeningTotalAmortisation" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="ReValue" Type="Boolean" />
-          <Property Name="PriceStatus" Type="Int32" />
-          <Property Name="ValuationPriceStatus" Type="Int32" />
+          <Property Name="MarketDataStatus" Type="Int32" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -21417,6 +21465,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="AnalyticTypeId" Nullable="false" />
           <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
           <Property Type="Boolean" Name="UpdatedOnReferenceDay" Nullable="false" />
+          <Property Name="IsDummy" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AttributionPnls" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__BetaL__6AB7E290" FromRole="Beta" ToRole="AttributionPnl" />
+          <NavigationProperty Name="AttributionPnls1" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57" FromRole="Beta" ToRole="AttributionPnl" />
         </EntityType>
         <Association Name="FK__Fund__Administra__0A2691EF">
           <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="1" />
@@ -24539,6 +24590,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="TodayRealisedPricePnl" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="TodayCashBenefit" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="NotionalCost" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="MarketDataStatus" Type="Int32" />
+          <Property Name="BetaShortTermId" Type="Int32" />
+          <Property Name="BetaLongTermId" Type="Int32" />
+          <NavigationProperty Name="Beta" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__BetaL__6AB7E290" FromRole="AttributionPnl" ToRole="Beta" />
+          <NavigationProperty Name="Beta1" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57" FromRole="AttributionPnl" ToRole="Beta" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -24955,6 +25011,30 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="RestrictedList">
               <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__BetaL__6AB7E290">
+          <End Type="Odey.Framework.Keeley.Entities.Beta" Role="Beta" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionPnl" Role="AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beta">
+              <PropertyRef Name="BetaId" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="BetaLongTermId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__BetaS__69C3BE57">
+          <End Type="Odey.Framework.Keeley.Entities.Beta" Role="Beta" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionPnl" Role="AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beta">
+              <PropertyRef Name="BetaId" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="BetaShortTermId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -27016,8 +27096,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
-                <ScalarProperty Name="ValuationPriceStatus" ColumnName="ValuationPriceStatus" />
-                <ScalarProperty Name="PriceStatus" ColumnName="PriceStatus" />
+                <ScalarProperty Name="MarketDataStatus" ColumnName="MarketDataStatus" />
                 <ScalarProperty Name="ReValue" ColumnName="ReValue" />
                 <ScalarProperty Name="OpeningTotalAmortisation" ColumnName="OpeningTotalAmortisation" />
                 <ScalarProperty Name="ValuationMarketValueInstrument" ColumnName="ValuationMarketValueInstrument" />
@@ -27125,8 +27204,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
-                  <ScalarProperty Name="ValuationPriceStatus" ParameterName="ValuationPriceStatus" />
-                  <ScalarProperty Name="PriceStatus" ParameterName="PriceStatus" />
+                  <ScalarProperty Name="MarketDataStatus" ParameterName="MarketDataStatus" />
                   <ScalarProperty Name="ReValue" ParameterName="ReValue" />
                   <ScalarProperty Name="OpeningTotalAmortisation" ParameterName="OpeningTotalAmortisation" />
                   <ScalarProperty Name="ValuationMarketValueInstrument" ParameterName="ValuationMarketValueInstrument" />
@@ -27231,8 +27309,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
-                  <ScalarProperty Name="ValuationPriceStatus" ParameterName="ValuationPriceStatus" Version="Current" />
-                  <ScalarProperty Name="PriceStatus" ParameterName="PriceStatus" Version="Current" />
+                  <ScalarProperty Name="MarketDataStatus" ParameterName="MarketDataStatus" Version="Current" />
                   <ScalarProperty Name="ReValue" ParameterName="ReValue" Version="Current" />
                   <ScalarProperty Name="OpeningTotalAmortisation" ParameterName="OpeningTotalAmortisation" Version="Current" />
                   <ScalarProperty Name="ValuationMarketValueInstrument" ParameterName="ValuationMarketValueInstrument" Version="Current" />
@@ -29544,6 +29621,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Beta">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
               <MappingFragment StoreEntitySet="Beta">
+                <ScalarProperty Name="IsDummy" ColumnName="IsDummy" />
                 <ScalarProperty Name="UpdatedOnReferenceDay" ColumnName="UpdatedOnReferenceDay" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="AnalyticTypeId" ColumnName="AnalyticTypeId" />
@@ -29561,6 +29639,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Beta_Insert">
+                  <ScalarProperty Name="IsDummy" ParameterName="IsDummy" />
                   <ScalarProperty Name="UpdatedOnReferenceDay" ParameterName="UpdatedOnReferenceDay" />
                   <ScalarProperty Name="UpdateDate" ParameterName="UpdateDate" />
                   <ScalarProperty Name="AnalyticTypeId" ParameterName="AnalyticTypeId" />
@@ -29572,6 +29651,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Beta_Update">
+                  <ScalarProperty Name="IsDummy" ParameterName="IsDummy" Version="Current" />
                   <ScalarProperty Name="UpdatedOnReferenceDay" ParameterName="UpdatedOnReferenceDay" Version="Current" />
                   <ScalarProperty Name="UpdateDate" ParameterName="UpdateDate" Version="Current" />
                   <ScalarProperty Name="AnalyticTypeId" ParameterName="AnalyticTypeId" Version="Current" />
@@ -32222,6 +32302,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
+                <ScalarProperty Name="BetaLongTermId" ColumnName="BetaLongTermId" />
+                <ScalarProperty Name="BetaShortTermId" ColumnName="BetaShortTermId" />
+                <ScalarProperty Name="MarketDataStatus" ColumnName="MarketDataStatus" />
                 <ScalarProperty Name="NotionalCost" ColumnName="NotionalCost" />
                 <ScalarProperty Name="TodayCashBenefit" ColumnName="TodayCashBenefit" />
                 <ScalarProperty Name="TodayRealisedPricePnl" ColumnName="TodayRealisedPricePnl" />
@@ -32261,6 +32344,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" />
+                  <ScalarProperty Name="BetaShortTermId" ParameterName="BetaShortTermId" />
+                  <ScalarProperty Name="MarketDataStatus" ParameterName="MarketDataStatus" />
                   <ScalarProperty Name="NotionalCost" ParameterName="NotionalCost" />
                   <ScalarProperty Name="TodayCashBenefit" ParameterName="TodayCashBenefit" />
                   <ScalarProperty Name="TodayRealisedPricePnl" ParameterName="TodayRealisedPricePnl" />
@@ -32297,6 +32383,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" Version="Current" />
+                  <ScalarProperty Name="BetaShortTermId" ParameterName="BetaShortTermId" Version="Current" />
+                  <ScalarProperty Name="MarketDataStatus" ParameterName="MarketDataStatus" Version="Current" />
                   <ScalarProperty Name="NotionalCost" ParameterName="NotionalCost" Version="Current" />
                   <ScalarProperty Name="TodayCashBenefit" ParameterName="TodayCashBenefit" Version="Current" />
                   <ScalarProperty Name="TodayRealisedPricePnl" ParameterName="TodayRealisedPricePnl" Version="Current" />
@@ -37235,39 +37324,41 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="24.933333333333334" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="24.020832833333333" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="23.854166166666669" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="22.958335833333333" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="22.760417916666672" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="20.801025641025639" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="20.634358974358975" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="20.626413333333332" PointY="21.578448244787527" />
-          <edmx:ConnectorPoint PointX="20.072916666666671" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="19.927083333333332" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="19.583333333333332" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="19.366666666666671" PointY="21.578448244787531" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.578448244787531" />
+          <edmx:ConnectorPoint PointX="25" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="24.207185487179487" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="24.040518820512823" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="22.927083333333332" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="20.583333333333332" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="20.020833333333332" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="19.533333333333331" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="19.366666666666667" PointY="21.606883257810942" />
+          <edmx:ConnectorPoint PointX="19.3125" PointY="21.606883257810942" />
           <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
           <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.947179487179486" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.780512820512822" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="18.064871794871795" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.898205128205131" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.697083333333332" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="17.530416666666667" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="14.802083333333334" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="14.354166666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.145833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.729166666666666" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="13.228875658380417" PointY="25.610087890625003" />
+          <edmx:ConnectorPoint PointX="12.729166666666664" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
           <edmx:ConnectorPoint PointX="12.65625" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5" />
           <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583336002250684" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583336002250684" PointY="24.884095052083335" />
+          <edmx:ConnectorPoint PointX="11.583336000562671" PointY="25.5" />
+          <edmx:ConnectorPoint PointX="11.583336000562671" PointY="24.884095052083335" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />
@@ -38373,6 +38464,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InterestR__PayFl__67116EDE" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InterestR__Recei__6AE1FFC2" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaL__6AB7E290" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -281,7 +281,7 @@ namespace Odey.Framework.Keeley.Entities
             ProcessChangedEntities();
             int toReturn = 0;
             var transactionOptions = new TransactionOptions();
-            transactionOptions.IsolationLevel = System.Transactions.IsolationLevel.Snapshot;
+            transactionOptions.IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
             transactionOptions.Timeout = TransactionManager.MaximumTimeout;
 
             using (var scope = new TransactionScope(TransactionScopeOption.Required,transactionOptions))

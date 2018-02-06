@@ -84,8 +84,18 @@ namespace Odey.Framework.Keeley.Entities
         public decimal TodayCashBenefit { get; set; }
     	[DataMember]
         public decimal NotionalCost { get; set; }
+    	[DataMember]
+        public Nullable<int> MarketDataStatus { get; set; }
+    	[DataMember]
+        public Nullable<int> BetaShortTermId { get; set; }
+    	[DataMember]
+        public Nullable<int> BetaLongTermId { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }
+        [DataMember]
+        public virtual Beta Beta { get; set; }
+        [DataMember]
+        public virtual Beta Beta1 { get; set; }
     }
 }
