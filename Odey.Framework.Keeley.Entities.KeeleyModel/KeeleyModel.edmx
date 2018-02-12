@@ -394,6 +394,7 @@
           <Property Name="UpdateDate" Type="datetime" Nullable="false" />
           <Property Name="UpdatedOnReferenceDay" Type="bit" Nullable="false" />
           <Property Name="IsDummy" Type="bit" Nullable="false" />
+          <Property Name="IsCalculated" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="BloombergIdentifier">
           <Key>
@@ -1425,6 +1426,8 @@
           <Property Name="LockInYears" Type="int" />
           <Property Name="IsLongOnly" Type="bit" Nullable="false" />
           <Property Name="IsMainPerformanceShareClass" Type="bit" Nullable="false" />
+          <Property Name="IsSolvencyII" Type="bit" Nullable="false" />
+          <Property Name="IsVAG" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FundCountryHoliday">
           <Key>
@@ -8917,6 +8920,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdatedOnReferenceDay" Type="bit" Mode="In" />
           <Parameter Name="IsDummy" Type="bit" Mode="In" />
+          <Parameter Name="IsCalculated" Type="bit" Mode="In" />
         </Function>
         <Function Name="Beta_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8934,6 +8938,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdatedOnReferenceDay" Type="bit" Mode="In" />
           <Parameter Name="IsDummy" Type="bit" Mode="In" />
+          <Parameter Name="IsCalculated" Type="bit" Mode="In" />
         </Function>
         <Function Name="Bond_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -17216,6 +17221,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="UltimateParentName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="UltimateParentLEI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="LEI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Country" Relationship="Odey.Framework.Keeley.Entities.LegalEntityCountryIDFK" FromRole="LegalEntity" ToRole="Country" />
         </EntityType>
         <Association Name="LegalEntityUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20694,6 +20700,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="AdditionalFundIndexes" Relationship="Odey.Framework.Keeley.Entities.FK__Additiona__FundI__76F2D0EC" FromRole="Fund" ToRole="AdditionalFundIndex" />
           <Property Name="IsLongOnly" Type="Boolean" Nullable="false" />
           <Property Name="IsMainPerformanceShareClass" Type="Boolean" Nullable="false" />
+          <Property Name="IsSolvencyII" Type="Boolean" Nullable="false" />
+          <Property Name="IsVAG" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -21466,8 +21474,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
           <Property Type="Boolean" Name="UpdatedOnReferenceDay" Nullable="false" />
           <Property Name="IsDummy" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AttributionPnls" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__BetaL__6AB7E290" FromRole="Beta" ToRole="AttributionPnl" />
-          <NavigationProperty Name="AttributionPnls1" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57" FromRole="Beta" ToRole="AttributionPnl" />
+          <Property Name="IsCalculated" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK__Fund__Administra__0A2691EF">
           <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="1" />
@@ -24593,8 +24600,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="MarketDataStatus" Type="Int32" />
           <Property Name="BetaShortTermId" Type="Int32" />
           <Property Name="BetaLongTermId" Type="Int32" />
-          <NavigationProperty Name="Beta" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__BetaL__6AB7E290" FromRole="AttributionPnl" ToRole="Beta" />
-          <NavigationProperty Name="Beta1" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57" FromRole="AttributionPnl" ToRole="Beta" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -28824,6 +28829,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="IsVAG" ColumnName="IsVAG" />
+                <ScalarProperty Name="IsSolvencyII" ColumnName="IsSolvencyII" />
                 <ScalarProperty Name="IsMainPerformanceShareClass" ColumnName="IsMainPerformanceShareClass" />
                 <ScalarProperty Name="IsLongOnly" ColumnName="IsLongOnly" />
                 <ScalarProperty Name="LockInYears" ColumnName="LockInYears" />
@@ -29621,6 +29628,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Beta">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
               <MappingFragment StoreEntitySet="Beta">
+                <ScalarProperty Name="IsCalculated" ColumnName="IsCalculated" />
                 <ScalarProperty Name="IsDummy" ColumnName="IsDummy" />
                 <ScalarProperty Name="UpdatedOnReferenceDay" ColumnName="UpdatedOnReferenceDay" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -29639,6 +29647,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Beta_Insert">
+                  <ScalarProperty Name="IsCalculated" ParameterName="IsCalculated" />
                   <ScalarProperty Name="IsDummy" ParameterName="IsDummy" />
                   <ScalarProperty Name="UpdatedOnReferenceDay" ParameterName="UpdatedOnReferenceDay" />
                   <ScalarProperty Name="UpdateDate" ParameterName="UpdateDate" />
@@ -29649,8 +29658,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
                   <ScalarProperty Name="RelativeIndexInstrumentMarketId" ParameterName="RelativeIndexInstrumentMarketId" />
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ResultBinding Name="BetaId" ColumnName="BetaId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Beta_Update">
+                  <ScalarProperty Name="IsCalculated" ParameterName="IsCalculated" Version="Current" />
                   <ScalarProperty Name="IsDummy" ParameterName="IsDummy" Version="Current" />
                   <ScalarProperty Name="UpdatedOnReferenceDay" ParameterName="UpdatedOnReferenceDay" Version="Current" />
                   <ScalarProperty Name="UpdateDate" ParameterName="UpdateDate" Version="Current" />
@@ -29663,6 +29676,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="RelativeIndexInstrumentMarketId" ParameterName="RelativeIndexInstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="BetaId" ParameterName="BetaId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </UpdateFunction>
                 <DeleteFunction FunctionName="KeeleyModel.Store.Beta_Delete">
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -32665,7 +32680,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="35">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="54">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -35492,7 +35507,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="20.069823875" PointY="11.424024309895827" />
           <edmx:ConnectorPoint PointX="20.625" PointY="11.424024309895827" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Charge" Width="1.5" PointX="10.5" PointY="21.75" Height="3.1340950520833353" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Charge" Width="1.5" PointX="10.75" PointY="22.75" Height="3.1340950520833353" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeUpdateUserIDFK">
           <edmx:ConnectorPoint PointX="1.4358084404839762" PointY="18.807190755208335" />
           <edmx:ConnectorPoint PointX="1.4358084404839762" PointY="24.813228636873692" />
@@ -37323,42 +37338,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="24.708333333333332" PointY="22.011666187733876" />
           <edmx:ConnectorPoint PointX="25" PointY="22.011666187733876" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="true">
-          <edmx:ConnectorPoint PointX="25" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="24.927083333333332" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="24.207185487179487" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="24.040518820512823" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="22.927083333333332" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="22.760416666666668" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="20.583333333333332" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="20.244791666666668" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="20.020833333333332" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="19.760416666666668" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="19.708333333333332" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="19.541666666666668" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="19.533333333333331" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="19.366666666666667" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="21.606883257810942" />
-          <edmx:ConnectorPoint PointX="19.3125" PointY="23.542623697916667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="23.542623697916667" />
-          <edmx:ConnectorPoint PointX="18.1875" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="18.064871794871795" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.898205128205131" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.697083333333332" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="17.530416666666667" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="15.166666666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="14.786458333333334" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="14.354166666666666" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="13.228875658380417" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.729166666666664" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.65625" PointY="25.610087890625003" />
-          <edmx:ConnectorPoint PointX="12.65625" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.958333333333334" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.791666666666666" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583336000562671" PointY="25.5" />
-          <edmx:ConnectorPoint PointX="11.583336000562671" PointY="24.884095052083335" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ChargeLegalEntityChargeScheduleIdFK" ManuallyRouted="false">
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioPreviousPortfolioIdFK">
           <edmx:ConnectorPoint PointX="31.656923076923075" PointY="19.951152343750003" />

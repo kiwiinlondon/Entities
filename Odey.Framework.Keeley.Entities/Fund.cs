@@ -116,6 +116,10 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsLongOnly { get; set; }
     	[DataMember]
         public bool IsMainPerformanceShareClass { get; set; }
+    	[DataMember]
+        public bool IsSolvencyII { get; set; }
+    	[DataMember]
+        public bool IsVAG { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }

@@ -16,13 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Beta
     {
-    	
-        public Beta()
-        {
-            this.AttributionPnls = new List<AttributionPnl>();
-            this.AttributionPnls1 = new List<AttributionPnl>();
-        }
-    
     	[DataMember]
         public int BetaId { get; set; }
     	[DataMember]
@@ -49,6 +42,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool UpdatedOnReferenceDay { get; set; }
     	[DataMember]
         public bool IsDummy { get; set; }
+    	[DataMember]
+        public bool IsCalculated { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
@@ -56,9 +51,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual InstrumentMarket RelativeIndexInstrumentMarket { get; set; }
-        [DataMember]
-        public virtual List<AttributionPnl> AttributionPnls { get; set; }
-        [DataMember]
-        public virtual List<AttributionPnl> AttributionPnls1 { get; set; }
     }
 }

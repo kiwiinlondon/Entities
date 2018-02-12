@@ -52,5 +52,8 @@ namespace Odey.Framework.Keeley.Entities
         public string UltimateParentLEI { get; set; }
     	[DataMember]
         public string LEI { get; set; }
+    
+        [DataMember]
+        public virtual Country Country { get; set; }
     }
 }

@@ -93,9 +93,5 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }
-        [DataMember]
-        public virtual Beta Beta { get; set; }
-        [DataMember]
-        public virtual Beta Beta1 { get; set; }
     }
 }
