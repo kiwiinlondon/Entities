@@ -73,5 +73,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         InterestRateSwap = 92,
         [EnumMember]
         CreditSwaption = 93,
+        [EnumMember]
+        OptionOnBondFuture =95
     }
 }
