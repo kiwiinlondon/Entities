@@ -28,6 +28,6 @@ namespace Odey.Framework.Keeley.Entities
         public string BBExchangeCode { get; set; }
     
         [DataMember]
-        private LegalEntity LegalEntity { get; set; }
+        public virtual LegalEntity LegalEntity { get; set; }
     }
 }

@@ -31,6 +31,14 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public Country Country
+        {
+            get
+            {
+                return LegalEntity.Country;
+            }
+        }
+
         public int? FMOrgID
         {
             get
