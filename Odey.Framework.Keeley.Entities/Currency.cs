@@ -30,6 +30,6 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsDeliverable { get; set; }
     
         [DataMember]
-        private Instrument Instrument { get; set; }
+        public virtual Instrument Instrument { get; set; }
     }
 }

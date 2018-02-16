@@ -81,5 +81,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket UltimateUnderlyingInstrumentMarket { get; set; }
         [DataMember]
         public virtual Market Market { get; set; }
+        [DataMember]
+        public virtual Currency PriceCurrency { get; set; }
     }
 }
