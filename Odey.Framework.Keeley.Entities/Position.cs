@@ -47,5 +47,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Account Account { get; set; }
         [DataMember]
         public virtual Strategy Strategy { get; set; }
+        [DataMember]
+        public virtual Currency Currency { get; set; }
     }
 }
