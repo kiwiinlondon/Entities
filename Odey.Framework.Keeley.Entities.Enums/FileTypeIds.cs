@@ -120,5 +120,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         PortIndexPrices = 57,
         [EnumMember]
         FactsetBenchmarkWeights = 58,
+        [EnumMember]
+        OfIndexPrices = 59
     }
 }
