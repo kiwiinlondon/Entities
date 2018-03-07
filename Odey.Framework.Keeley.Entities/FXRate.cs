@@ -53,5 +53,9 @@ namespace Odey.Framework.Keeley.Entities
         public virtual RawFXRate FromSecondRawFXRate { get; set; }
         [DataMember]
         public virtual RawFXRate ToSecondRawFXRate { get; set; }
+        [DataMember]
+        public virtual Currency FromCurrency { get; set; }
+        [DataMember]
+        public virtual Currency ToCurrency { get; set; }
     }
 }

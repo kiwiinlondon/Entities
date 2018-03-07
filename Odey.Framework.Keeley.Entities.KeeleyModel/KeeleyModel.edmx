@@ -448,60 +448,6 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="NavIsNotUsable" Type="bit" />
         </EntityType>
-        <EntityType Name="Bucket">
-          <Key>
-            <PropertyRef Name="BucketId" />
-          </Key>
-          <Property Name="BucketId" Type="int" Nullable="false" />
-          <Property Name="BucketSchemeId" Type="int" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IsDefaultBucket" Type="bit" Nullable="false" />
-          <Property Name="LimitValue" Type="numeric" Precision="28" Scale="16" />
-          <Property Name="IsLimitInclusive" Type="bit" />
-          <Property Name="StartDt" Type="datetime" Nullable="false" />
-          <Property Name="UpdateUserID" Type="int" Nullable="false" />
-          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BucketScheme">
-          <Key>
-            <PropertyRef Name="BucketSchemeId" />
-          </Key>
-          <Property Name="BucketSchemeId" Type="int" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="250" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="1000" />
-          <Property Name="EntityTypeId" Type="int" />
-          <Property Name="TypeCodeId" Type="int" Nullable="false" />
-          <Property Name="OwnerApplicationUserId" Type="int" Nullable="false" />
-          <Property Name="UpdateUserID" Type="int" Nullable="false" />
-          <Property Name="StartDt" Type="datetime" Nullable="false" />
-          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BucketSchemePermission">
-          <Key>
-            <PropertyRef Name="BucketSchemePermissionId" />
-          </Key>
-          <Property Name="BucketSchemePermissionId" Type="int" Nullable="false" />
-          <Property Name="BucketSchemeId" Type="int" Nullable="false" />
-          <Property Name="IsEditable" Type="bit" />
-          <Property Name="ApplicationUserId" Type="int" />
-          <Property Name="ADGroupName" Type="varchar" MaxLength="250" />
-          <Property Name="StartDt" Type="datetime" />
-          <Property Name="UpdateUserID" Type="int" />
-          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" />
-        </EntityType>
-        <EntityType Name="BucketValue">
-          <Key>
-            <PropertyRef Name="BucketValueId" />
-          </Key>
-          <Property Name="BucketValueId" Type="int" Nullable="false" />
-          <Property Name="BucketId" Type="int" Nullable="false" />
-          <Property Name="EntityId" Type="int" />
-          <Property Name="NumericValue" Type="numeric" Precision="28" Scale="16" />
-          <Property Name="TextValue" Type="varchar" MaxLength="50" />
-          <Property Name="StartDt" Type="datetime" Nullable="false" />
-          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="UpdateUserID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="BuySellReason">
           <Key>
             <PropertyRef Name="BuySellReasonID" />
@@ -5564,42 +5510,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Bucket_BucketScheme">
-          <End Role="BucketScheme" Type="Self.BucketScheme" Multiplicity="1" />
-          <End Role="Bucket" Type="Self.Bucket" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BucketScheme">
-              <PropertyRef Name="BucketSchemeId" />
-            </Principal>
-            <Dependent Role="Bucket">
-              <PropertyRef Name="BucketSchemeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BucketSchemePermission_BucketScheme">
-          <End Role="BucketScheme" Type="Self.BucketScheme" Multiplicity="1" />
-          <End Role="BucketSchemePermission" Type="Self.BucketSchemePermission" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BucketScheme">
-              <PropertyRef Name="BucketSchemeId" />
-            </Principal>
-            <Dependent Role="BucketSchemePermission">
-              <PropertyRef Name="BucketSchemeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BucketValue_Bucket">
-          <End Role="Bucket" Type="Self.Bucket" Multiplicity="1" />
-          <End Role="BucketValue" Type="Self.BucketValue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bucket">
-              <PropertyRef Name="BucketId" />
-            </Principal>
-            <Dependent Role="BucketValue">
-              <PropertyRef Name="BucketId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_factor_exposure_fund_id">
           <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
           <End Role="FactorExposure" Type="Self.FactorExposure" Multiplicity="*" />
@@ -9099,98 +9009,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="IsPrimary" Type="bit" Mode="In" />
           <Parameter Name="IsActive" Type="bit" Mode="In" />
         </Function>
-        <Function Name="Bucket_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketId" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="Bucket_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketId" Type="int" Mode="In" />
-          <Parameter Name="BucketSchemeId" Type="int" Mode="In" />
-          <Parameter Name="Name" Type="varchar" Mode="In" />
-          <Parameter Name="IsDefaultBucket" Type="bit" Mode="In" />
-          <Parameter Name="LimitValue" Type="numeric" Mode="In" />
-          <Parameter Name="IsLimitInclusive" Type="bit" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="Bucket_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketId" Type="int" Mode="In" />
-          <Parameter Name="BucketSchemeId" Type="int" Mode="In" />
-          <Parameter Name="Name" Type="varchar" Mode="In" />
-          <Parameter Name="IsDefaultBucket" Type="bit" Mode="In" />
-          <Parameter Name="LimitValue" Type="numeric" Mode="In" />
-          <Parameter Name="IsLimitInclusive" Type="bit" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-        </Function>
-        <Function Name="BucketScheme_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketSchemeId" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="BucketScheme_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketSchemeId" Type="int" Mode="In" />
-          <Parameter Name="Name" Type="varchar" Mode="In" />
-          <Parameter Name="Description" Type="varchar" Mode="In" />
-          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
-          <Parameter Name="TypeCodeId" Type="int" Mode="In" />
-          <Parameter Name="OwnerApplicationUserId" Type="int" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="BucketScheme_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketSchemeId" Type="int" Mode="In" />
-          <Parameter Name="Name" Type="varchar" Mode="In" />
-          <Parameter Name="Description" Type="varchar" Mode="In" />
-          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
-          <Parameter Name="TypeCodeId" Type="int" Mode="In" />
-          <Parameter Name="OwnerApplicationUserId" Type="int" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-        </Function>
-        <Function Name="BucketSchemePermission_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketSchemePermissionId" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="BucketSchemePermission_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketSchemePermissionId" Type="int" Mode="In" />
-          <Parameter Name="BucketSchemeId" Type="int" Mode="In" />
-          <Parameter Name="IsEditable" Type="bit" Mode="In" />
-          <Parameter Name="ApplicationUserId" Type="int" Mode="In" />
-          <Parameter Name="ADGroupName" Type="varchar" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="BucketSchemePermission_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketSchemePermissionId" Type="int" Mode="In" />
-          <Parameter Name="BucketSchemeId" Type="int" Mode="In" />
-          <Parameter Name="IsEditable" Type="bit" Mode="In" />
-          <Parameter Name="ApplicationUserId" Type="int" Mode="In" />
-          <Parameter Name="ADGroupName" Type="varchar" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-        </Function>
-        <Function Name="BucketValue_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketValueId" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="BucketValue_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketValueId" Type="int" Mode="In" />
-          <Parameter Name="BucketId" Type="int" Mode="In" />
-          <Parameter Name="EntityId" Type="int" Mode="In" />
-          <Parameter Name="NumericValue" Type="numeric" Mode="In" />
-          <Parameter Name="TextValue" Type="varchar" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="BucketValue_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BucketValueId" Type="int" Mode="In" />
-          <Parameter Name="BucketId" Type="int" Mode="In" />
-          <Parameter Name="EntityId" Type="int" Mode="In" />
-          <Parameter Name="NumericValue" Type="numeric" Mode="In" />
-          <Parameter Name="TextValue" Type="varchar" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
         <Function Name="BuySellReason_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BuySellReasonID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -12653,10 +12471,6 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="BloombergIdentifier" EntityType="Self.BloombergIdentifier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bond" EntityType="Self.Bond" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Bucket" EntityType="Self.Bucket" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BucketScheme" EntityType="Self.BucketScheme" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BucketSchemePermission" EntityType="Self.BucketSchemePermission" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BucketValue" EntityType="Self.BucketValue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BuySellReason" EntityType="Self.BuySellReason" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CacheInvalidation" EntityType="Self.CacheInvalidation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CapitalEvent" EntityType="Self.CapitalEvent" Schema="dbo" store:Type="Tables" />
@@ -13746,18 +13560,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__TradeEven__Trade__265B8A40" Association="Self.FK__TradeEven__Trade__265B8A40">
             <End Role="FXRate" EntitySet="FXRate" />
             <End Role="TradeEvent" EntitySet="TradeEvent" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Bucket_BucketScheme" Association="Self.FK_Bucket_BucketScheme">
-            <End Role="BucketScheme" EntitySet="BucketScheme" />
-            <End Role="Bucket" EntitySet="Bucket" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BucketSchemePermission_BucketScheme" Association="Self.FK_BucketSchemePermission_BucketScheme">
-            <End Role="BucketScheme" EntitySet="BucketScheme" />
-            <End Role="BucketSchemePermission" EntitySet="BucketSchemePermission" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BucketValue_Bucket" Association="Self.FK_BucketValue_Bucket">
-            <End Role="Bucket" EntitySet="Bucket" />
-            <End Role="BucketValue" EntitySet="BucketValue" />
           </AssociationSet>
           <AssociationSet Name="fk_factor_exposure_fund_id" Association="Self.fk_factor_exposure_fund_id">
             <End Role="Fund" EntitySet="Fund" />
@@ -16754,114 +16556,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="Beta" EntitySet="Beta" />
             <End Role="AttributionPnl" EntitySet="AttributionPnls" />
           </AssociationSet>
-          <EntitySet Name="Buckets" EntityType="Odey.Framework.Keeley.Entities.Bucket" />
-          <EntitySet Name="BucketSchemes" EntityType="Odey.Framework.Keeley.Entities.BucketScheme" />
-          <EntitySet Name="BucketSchemePermissions" EntityType="Odey.Framework.Keeley.Entities.BucketSchemePermission" />
-          <EntitySet Name="BucketValues" EntityType="Odey.Framework.Keeley.Entities.BucketValue" />
-          <AssociationSet Name="FK_Bucket_BucketScheme" Association="Odey.Framework.Keeley.Entities.FK_Bucket_BucketScheme">
-            <End Role="BucketScheme" EntitySet="BucketSchemes" />
-            <End Role="Bucket" EntitySet="Buckets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BucketValue_Bucket" Association="Odey.Framework.Keeley.Entities.FK_BucketValue_Bucket">
-            <End Role="Bucket" EntitySet="Buckets" />
-            <End Role="BucketValue" EntitySet="BucketValues" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BucketSchemePermission_BucketScheme" Association="Odey.Framework.Keeley.Entities.FK_BucketSchemePermission_BucketScheme">
-            <End Role="BucketScheme" EntitySet="BucketSchemes" />
-            <End Role="BucketSchemePermission" EntitySet="BucketSchemePermissions" />
-          </AssociationSet>
-          <FunctionImport Name="Bucket_Delete">
-            <Parameter Name="BucketId" Mode="In" Type="Int32" />
-            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="Bucket_Insert">
-            <Parameter Name="BucketId" Mode="In" Type="Int32" />
-            <Parameter Name="BucketSchemeId" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="IsDefaultBucket" Mode="In" Type="Boolean" />
-            <Parameter Name="LimitValue" Mode="In" Type="Decimal" />
-            <Parameter Name="IsLimitInclusive" Mode="In" Type="Boolean" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="Bucket_Update">
-            <Parameter Name="BucketId" Mode="In" Type="Int32" />
-            <Parameter Name="BucketSchemeId" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="IsDefaultBucket" Mode="In" Type="Boolean" />
-            <Parameter Name="LimitValue" Mode="In" Type="Decimal" />
-            <Parameter Name="IsLimitInclusive" Mode="In" Type="Boolean" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="BucketScheme_Delete">
-            <Parameter Name="BucketSchemeId" Mode="In" Type="Int32" />
-            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="BucketScheme_Insert">
-            <Parameter Name="BucketSchemeId" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Description" Mode="In" Type="String" />
-            <Parameter Name="EntityTypeId" Mode="In" Type="Int32" />
-            <Parameter Name="TypeCodeId" Mode="In" Type="Int32" />
-            <Parameter Name="OwnerApplicationUserId" Mode="In" Type="Int32" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="BucketScheme_Update">
-            <Parameter Name="BucketSchemeId" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Description" Mode="In" Type="String" />
-            <Parameter Name="EntityTypeId" Mode="In" Type="Int32" />
-            <Parameter Name="TypeCodeId" Mode="In" Type="Int32" />
-            <Parameter Name="OwnerApplicationUserId" Mode="In" Type="Int32" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="BucketSchemePermission_Delete">
-            <Parameter Name="BucketSchemePermissionId" Mode="In" Type="Int32" />
-            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="BucketSchemePermission_Insert">
-            <Parameter Name="BucketSchemePermissionId" Mode="In" Type="Int32" />
-            <Parameter Name="BucketSchemeId" Mode="In" Type="Int32" />
-            <Parameter Name="IsEditable" Mode="In" Type="Boolean" />
-            <Parameter Name="ApplicationUserId" Mode="In" Type="Int32" />
-            <Parameter Name="ADGroupName" Mode="In" Type="String" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="BucketSchemePermission_Update">
-            <Parameter Name="BucketSchemePermissionId" Mode="In" Type="Int32" />
-            <Parameter Name="BucketSchemeId" Mode="In" Type="Int32" />
-            <Parameter Name="IsEditable" Mode="In" Type="Boolean" />
-            <Parameter Name="ApplicationUserId" Mode="In" Type="Int32" />
-            <Parameter Name="ADGroupName" Mode="In" Type="String" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="BucketValue_Delete">
-            <Parameter Name="BucketValueId" Mode="In" Type="Int32" />
-            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="BucketValue_Insert">
-            <Parameter Name="BucketValueId" Mode="In" Type="Int32" />
-            <Parameter Name="BucketId" Mode="In" Type="Int32" />
-            <Parameter Name="EntityId" Mode="In" Type="Int32" />
-            <Parameter Name="NumericValue" Mode="In" Type="Decimal" />
-            <Parameter Name="TextValue" Mode="In" Type="String" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="BucketValue_Update">
-            <Parameter Name="BucketValueId" Mode="In" Type="Int32" />
-            <Parameter Name="BucketId" Mode="In" Type="Int32" />
-            <Parameter Name="EntityId" Mode="In" Type="Int32" />
-            <Parameter Name="NumericValue" Mode="In" Type="Decimal" />
-            <Parameter Name="TextValue" Mode="In" Type="String" />
-            <Parameter Name="DataVersion" Mode="In" Type="Binary" />
-            <Parameter Name="UpdateUserID" Mode="In" Type="Int32" />
-          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -18689,6 +18383,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Account" Relationship="Odey.Framework.Keeley.Entities.PositionAccountAccountIDFK" FromRole="Position" ToRole="Account" />
           <Property Name="StrategyId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Strategy" Relationship="Odey.Framework.Keeley.Entities.positionstrategyfk" FromRole="Position" ToRole="Strategy" />
+          <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.PositionAccountCurrencyIDFK" FromRole="Position" ToRole="Currency" />
         </EntityType>
         <Association Name="PositionAccountAccountIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
@@ -18947,6 +18642,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="ToSecondRawFXRateId" />
           <NavigationProperty Name="FromSecondRawFXRate" Relationship="Odey.Framework.Keeley.Entities.FXRateFromSecondRawFXRateIdFK" FromRole="FXRate" ToRole="RawFXRate" />
           <NavigationProperty Name="ToSecondRawFXRate" Relationship="Odey.Framework.Keeley.Entities.FXRateToSecondRawFXRateIdFK" FromRole="FXRate" ToRole="RawFXRate" />
+          <NavigationProperty Name="FromCurrency" Relationship="Odey.Framework.Keeley.Entities.FxRateFromCurrencyIDFK" FromRole="FXRate" ToRole="Currency" />
+          <NavigationProperty Name="ToCurrency" Relationship="Odey.Framework.Keeley.Entities.FxRateToCurrencyIDFK" FromRole="FXRate" ToRole="Currency" />
         </EntityType>
         <EntityType Name="RawFXRate">
           <Key>
@@ -25348,102 +25045,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Principal>
             <Dependent Role="AttributionPnl">
               <PropertyRef Name="BetaShortTermId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Bucket">
-          <Key>
-            <PropertyRef Name="BucketId" />
-          </Key>
-          <Property Name="BucketId" Type="Int32" Nullable="false" />
-          <Property Name="BucketSchemeId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsDefaultBucket" Type="Boolean" Nullable="false" />
-          <Property Name="LimitValue" Type="Decimal" Precision="28" Scale="16" />
-          <Property Name="IsLimitInclusive" Type="Boolean" />
-          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
-          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="BucketScheme" Relationship="Odey.Framework.Keeley.Entities.FK_Bucket_BucketScheme" FromRole="Bucket" ToRole="BucketScheme" />
-          <NavigationProperty Name="BucketValues" Relationship="Odey.Framework.Keeley.Entities.FK_BucketValue_Bucket" FromRole="Bucket" ToRole="BucketValue" />
-        </EntityType>
-        <EntityType Name="BucketScheme">
-          <Key>
-            <PropertyRef Name="BucketSchemeId" />
-          </Key>
-          <Property Name="BucketSchemeId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="EntityTypeId" Type="Int32" />
-          <Property Name="TypeCodeId" Type="Int32" Nullable="false" />
-          <Property Name="OwnerApplicationUserId" Type="Int32" Nullable="false" />
-          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
-          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="Buckets" Relationship="Odey.Framework.Keeley.Entities.FK_Bucket_BucketScheme" FromRole="BucketScheme" ToRole="Bucket" />
-          <NavigationProperty Name="BucketSchemePermissions" Relationship="Odey.Framework.Keeley.Entities.FK_BucketSchemePermission_BucketScheme" FromRole="BucketScheme" ToRole="BucketSchemePermission" />
-        </EntityType>
-        <EntityType Name="BucketSchemePermission">
-          <Key>
-            <PropertyRef Name="BucketSchemePermissionId" />
-          </Key>
-          <Property Name="BucketSchemePermissionId" Type="Int32" Nullable="false" />
-          <Property Name="BucketSchemeId" Type="Int32" Nullable="false" />
-          <Property Name="IsEditable" Type="Boolean" />
-          <Property Name="ApplicationUserId" Type="Int32" />
-          <Property Name="ADGroupName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="StartDt" Type="DateTime" Precision="3" />
-          <Property Name="UpdateUserID" Type="Int32" />
-          <Property Name="DataVersion" Type="Binary" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="BucketScheme" Relationship="Odey.Framework.Keeley.Entities.FK_BucketSchemePermission_BucketScheme" FromRole="BucketSchemePermission" ToRole="BucketScheme" />
-        </EntityType>
-        <EntityType Name="BucketValue">
-          <Key>
-            <PropertyRef Name="BucketValueId" />
-          </Key>
-          <Property Name="BucketValueId" Type="Int32" Nullable="false" />
-          <Property Name="BucketId" Type="Int32" Nullable="false" />
-          <Property Name="EntityId" Type="Int32" />
-          <Property Name="NumericValue" Type="Decimal" Precision="28" Scale="16" />
-          <Property Name="TextValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Bucket" Relationship="Odey.Framework.Keeley.Entities.FK_BucketValue_Bucket" FromRole="BucketValue" ToRole="Bucket" />
-        </EntityType>
-        <Association Name="FK_Bucket_BucketScheme">
-          <End Type="Odey.Framework.Keeley.Entities.BucketScheme" Role="BucketScheme" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.Bucket" Role="Bucket" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BucketScheme">
-              <PropertyRef Name="BucketSchemeId" />
-            </Principal>
-            <Dependent Role="Bucket">
-              <PropertyRef Name="BucketSchemeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BucketValue_Bucket">
-          <End Type="Odey.Framework.Keeley.Entities.Bucket" Role="Bucket" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.BucketValue" Role="BucketValue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bucket">
-              <PropertyRef Name="BucketId" />
-            </Principal>
-            <Dependent Role="BucketValue">
-              <PropertyRef Name="BucketId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BucketSchemePermission_BucketScheme">
-          <End Type="Odey.Framework.Keeley.Entities.BucketScheme" Role="BucketScheme" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.BucketSchemePermission" Role="BucketSchemePermission" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BucketScheme">
-              <PropertyRef Name="BucketSchemeId" />
-            </Principal>
-            <Dependent Role="BucketSchemePermission">
-              <PropertyRef Name="BucketSchemeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -33062,204 +32663,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="MessageQueue_Insert" FunctionName="KeeleyModel.Store.MessageQueue_Insert" />
-          <EntitySetMapping Name="Buckets">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Bucket">
-              <MappingFragment StoreEntitySet="Bucket">
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="IsLimitInclusive" ColumnName="IsLimitInclusive" />
-                <ScalarProperty Name="LimitValue" ColumnName="LimitValue" />
-                <ScalarProperty Name="IsDefaultBucket" ColumnName="IsDefaultBucket" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="BucketSchemeId" ColumnName="BucketSchemeId" />
-                <ScalarProperty Name="BucketId" ColumnName="BucketId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Bucket">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.Bucket_Insert">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="IsLimitInclusive" ParameterName="IsLimitInclusive" />
-                  <ScalarProperty Name="LimitValue" ParameterName="LimitValue" />
-                  <ScalarProperty Name="IsDefaultBucket" ParameterName="IsDefaultBucket" />
-                  <ScalarProperty Name="Name" ParameterName="Name" />
-                  <ScalarProperty Name="BucketSchemeId" ParameterName="BucketSchemeId" />
-                  <ScalarProperty Name="BucketId" ParameterName="BucketId" />
-                  <ResultBinding Name="BucketId" ColumnName="BucketId" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="KeeleyModel.Store.Bucket_Update">
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="IsLimitInclusive" ParameterName="IsLimitInclusive" Version="Current" />
-                  <ScalarProperty Name="LimitValue" ParameterName="LimitValue" Version="Current" />
-                  <ScalarProperty Name="IsDefaultBucket" ParameterName="IsDefaultBucket" Version="Current" />
-                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
-                  <ScalarProperty Name="BucketSchemeId" ParameterName="BucketSchemeId" Version="Current" />
-                  <ScalarProperty Name="BucketId" ParameterName="BucketId" Version="Current" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.Bucket_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="BucketId" ParameterName="BucketId" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BucketSchemes">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BucketScheme">
-              <MappingFragment StoreEntitySet="BucketScheme">
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
-                <ScalarProperty Name="OwnerApplicationUserId" ColumnName="OwnerApplicationUserId" />
-                <ScalarProperty Name="TypeCodeId" ColumnName="TypeCodeId" />
-                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="BucketSchemeId" ColumnName="BucketSchemeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BucketScheme">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.BucketScheme_Insert">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="OwnerApplicationUserId" ParameterName="OwnerApplicationUserId" />
-                  <ScalarProperty Name="TypeCodeId" ParameterName="TypeCodeId" />
-                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" />
-                  <ScalarProperty Name="Description" ParameterName="Description" />
-                  <ScalarProperty Name="Name" ParameterName="Name" />
-                  <ScalarProperty Name="BucketSchemeId" ParameterName="BucketSchemeId" />
-                  <ResultBinding Name="BucketSchemeId" ColumnName="BucketSchemeId" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="KeeleyModel.Store.BucketScheme_Update">
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="OwnerApplicationUserId" ParameterName="OwnerApplicationUserId" Version="Current" />
-                  <ScalarProperty Name="TypeCodeId" ParameterName="TypeCodeId" Version="Current" />
-                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" Version="Current" />
-                  <ScalarProperty Name="Description" ParameterName="Description" Version="Current" />
-                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
-                  <ScalarProperty Name="BucketSchemeId" ParameterName="BucketSchemeId" Version="Current" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.BucketScheme_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="BucketSchemeId" ParameterName="BucketSchemeId" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BucketSchemePermissions">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BucketSchemePermission">
-              <MappingFragment StoreEntitySet="BucketSchemePermission">
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="ADGroupName" ColumnName="ADGroupName" />
-                <ScalarProperty Name="ApplicationUserId" ColumnName="ApplicationUserId" />
-                <ScalarProperty Name="IsEditable" ColumnName="IsEditable" />
-                <ScalarProperty Name="BucketSchemeId" ColumnName="BucketSchemeId" />
-                <ScalarProperty Name="BucketSchemePermissionId" ColumnName="BucketSchemePermissionId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BucketSchemePermission">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.BucketSchemePermission_Insert">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="ADGroupName" ParameterName="ADGroupName" />
-                  <ScalarProperty Name="ApplicationUserId" ParameterName="ApplicationUserId" />
-                  <ScalarProperty Name="IsEditable" ParameterName="IsEditable" />
-                  <ScalarProperty Name="BucketSchemeId" ParameterName="BucketSchemeId" />
-                  <ScalarProperty Name="BucketSchemePermissionId" ParameterName="BucketSchemePermissionId" />
-                  <ResultBinding Name="BucketSchemePermissionId" ColumnName="BucketSchemePermissionId" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="KeeleyModel.Store.BucketSchemePermission_Update">
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="ADGroupName" ParameterName="ADGroupName" Version="Current" />
-                  <ScalarProperty Name="ApplicationUserId" ParameterName="ApplicationUserId" Version="Current" />
-                  <ScalarProperty Name="IsEditable" ParameterName="IsEditable" Version="Current" />
-                  <ScalarProperty Name="BucketSchemeId" ParameterName="BucketSchemeId" Version="Current" />
-                  <ScalarProperty Name="BucketSchemePermissionId" ParameterName="BucketSchemePermissionId" Version="Current" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.BucketSchemePermission_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="BucketSchemePermissionId" ParameterName="BucketSchemePermissionId" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BucketValues">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BucketValue">
-              <MappingFragment StoreEntitySet="BucketValue">
-                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="TextValue" ColumnName="TextValue" />
-                <ScalarProperty Name="NumericValue" ColumnName="NumericValue" />
-                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
-                <ScalarProperty Name="BucketId" ColumnName="BucketId" />
-                <ScalarProperty Name="BucketValueId" ColumnName="BucketValueId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BucketValue">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.BucketValue_Insert">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="TextValue" ParameterName="TextValue" />
-                  <ScalarProperty Name="NumericValue" ParameterName="NumericValue" />
-                  <ScalarProperty Name="EntityId" ParameterName="EntityId" />
-                  <ScalarProperty Name="BucketId" ParameterName="BucketId" />
-                  <ScalarProperty Name="BucketValueId" ParameterName="BucketValueId" />
-                  <ResultBinding Name="BucketValueId" ColumnName="BucketValueId" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="KeeleyModel.Store.BucketValue_Update">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
-                  <ScalarProperty Name="TextValue" ParameterName="TextValue" Version="Current" />
-                  <ScalarProperty Name="NumericValue" ParameterName="NumericValue" Version="Current" />
-                  <ScalarProperty Name="EntityId" ParameterName="EntityId" Version="Current" />
-                  <ScalarProperty Name="BucketId" ParameterName="BucketId" Version="Current" />
-                  <ScalarProperty Name="BucketValueId" ParameterName="BucketValueId" Version="Current" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.BucketValue_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="BucketValueId" ParameterName="BucketValueId" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="Bucket_Delete" FunctionName="KeeleyModel.Store.Bucket_Delete" />
-          <FunctionImportMapping FunctionImportName="Bucket_Insert" FunctionName="KeeleyModel.Store.Bucket_Insert" />
-          <FunctionImportMapping FunctionImportName="Bucket_Update" FunctionName="KeeleyModel.Store.Bucket_Update" />
-          <FunctionImportMapping FunctionImportName="BucketScheme_Delete" FunctionName="KeeleyModel.Store.BucketScheme_Delete" />
-          <FunctionImportMapping FunctionImportName="BucketScheme_Insert" FunctionName="KeeleyModel.Store.BucketScheme_Insert" />
-          <FunctionImportMapping FunctionImportName="BucketScheme_Update" FunctionName="KeeleyModel.Store.BucketScheme_Update" />
-          <FunctionImportMapping FunctionImportName="BucketSchemePermission_Delete" FunctionName="KeeleyModel.Store.BucketSchemePermission_Delete" />
-          <FunctionImportMapping FunctionImportName="BucketSchemePermission_Insert" FunctionName="KeeleyModel.Store.BucketSchemePermission_Insert" />
-          <FunctionImportMapping FunctionImportName="BucketSchemePermission_Update" FunctionName="KeeleyModel.Store.BucketSchemePermission_Update" />
-          <FunctionImportMapping FunctionImportName="BucketValue_Delete" FunctionName="KeeleyModel.Store.BucketValue_Delete" />
-          <FunctionImportMapping FunctionImportName="BucketValue_Insert" FunctionName="KeeleyModel.Store.BucketValue_Insert" />
-          <FunctionImportMapping FunctionImportName="BucketValue_Update" FunctionName="KeeleyModel.Store.BucketValue_Update" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -33282,7 +32685,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="54">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -38912,50 +38315,60 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionInstrumentMarketIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" ManuallyRouted="true" >
-          <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="22.358639750030704" />
+          <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.875" />
           <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.605639750030704" />
-          <edmx:ConnectorPoint PointX="5.625" PointY="21.632574732520112" />
+          <edmx:ConnectorPoint PointX="5.5158348152218384" PointY="21.552630392694343" />
+          <edmx:ConnectorPoint PointX="5.6091651847781616" PointY="21.414546288264258" />
+          <edmx:ConnectorPoint PointX="5.625" PointY="21.391118369901591" />
           <edmx:ConnectorPoint PointX="5.625" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="5.7422908604604332" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="5.9089575271270993" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="5.9166644166666673" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="6.0833310833333334" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="6.1354157916666674" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="6.3020824583333335" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="6.6979182916666673" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="6.8645849583333334" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="7.2083360833333332" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="7.3854205416666669" PointY="20.879574732520108" />
-          <edmx:ConnectorPoint PointX="8.2864583333333339" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="10.104166666666666" PointY="20.879574732520108" />
-          <edmx:ConnectorPoint PointX="10.692710833333335" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="10.791666666666666" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="10.958333333333334" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="13.020833333333334" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="13.291666666666666" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="13.489583333333334" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="15.041666666666666" PointY="20.879574732520108" />
-          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="16.057291666666668" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="16.223958333333332" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="18.94125" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="18.94125" PointY="138.1360559112548" />
-          <edmx:ConnectorPoint PointX="22.870374578919709" PointY="67.456590606133048" />
-          <edmx:ConnectorPoint PointX="22.879625421080291" PointY="67.290180871751019" />
-          <edmx:ConnectorPoint PointX="23.245374578919709" PointY="60.710864183605636" />
-          <edmx:ConnectorPoint PointX="23.254625421080291" PointY="60.544454449223608" />
-          <edmx:ConnectorPoint PointX="23.370374578919709" PointY="58.462288709429814" />
-          <edmx:ConnectorPoint PointX="23.379625421080291" PointY="58.295878975047785" />
-          <edmx:ConnectorPoint PointX="23.495374578919709" PointY="56.213713235253991" />
-          <edmx:ConnectorPoint PointX="23.504625421080291" PointY="56.047303500871962" />
-          <edmx:ConnectorPoint PointX="24.694704578919708" PointY="34.63944104770782" />
-          <edmx:ConnectorPoint PointX="24.703955421080291" PointY="34.473031313325791" />
-          <edmx:ConnectorPoint PointX="24.807874578919709" PointY="32.603670756407965" />
-          <edmx:ConnectorPoint PointX="24.817125421080291" PointY="32.437261022025936" />
-          <edmx:ConnectorPoint PointX="24.914124578919708" PointY="30.692381603358584" />
-          <edmx:ConnectorPoint PointX="24.923375421080291" PointY="30.525971868976555" />
+          <edmx:ConnectorPoint PointX="5.6510936245078582" PointY="20.87862121705977" />
+          <edmx:ConnectorPoint PointX="5.8176491254921423" PointY="20.8725349316859" />
+          <edmx:ConnectorPoint PointX="5.965547202632858" PointY="20.867130427491173" />
+          <edmx:ConnectorPoint PointX="6.4114013754921411" PointY="20.850837986142103" />
+          <edmx:ConnectorPoint PointX="6.4557838120078577" PointY="20.849216159347876" />
+          <edmx:ConnectorPoint PointX="6.6223393129921417" PointY="20.843129873974007" />
+          <edmx:ConnectorPoint PointX="6.6667217495078575" PointY="20.841508047179783" />
+          <edmx:ConnectorPoint PointX="6.8332772504921415" PointY="20.835421761805915" />
+          <edmx:ConnectorPoint PointX="6.9479744995078576" PointY="20.831230485114467" />
+          <edmx:ConnectorPoint PointX="7.1145300004921417" PointY="20.8251441997406" />
+          <edmx:ConnectorPoint PointX="7.1979744995078576" PointY="20.822094963714846" />
+          <edmx:ConnectorPoint PointX="7.3645300004921417" PointY="20.816008678340978" />
+          <edmx:ConnectorPoint PointX="7.4636008745078577" PointY="20.812388421982376" />
+          <edmx:ConnectorPoint PointX="7.6301563754921418" PointY="20.806302136608508" />
+          <edmx:ConnectorPoint PointX="7.822972249507858" PointY="20.799256242435476" />
+          <edmx:ConnectorPoint PointX="8.036402750492142" PointY="20.791457046799181" />
+          <edmx:ConnectorPoint PointX="8.088597249507858" PointY="20.789549750948375" />
+          <edmx:ConnectorPoint PointX="8.302027750492142" PointY="20.78175055531208" />
+          <edmx:ConnectorPoint PointX="8.385472249507858" PointY="20.778701319286323" />
+          <edmx:ConnectorPoint PointX="8.552027750492142" PointY="20.772615033912455" />
+          <edmx:ConnectorPoint PointX="10.072972249507858" PointY="20.717036549838856" />
+          <edmx:ConnectorPoint PointX="10.692655250492143" PointY="20.694392040572957" />
+          <edmx:ConnectorPoint PointX="10.791722249507858" PointY="20.690771925814943" />
+          <edmx:ConnectorPoint PointX="10.958277750492142" PointY="20.684685640441074" />
+          <edmx:ConnectorPoint PointX="11.557347249507858" PointY="20.662794391528593" />
+          <edmx:ConnectorPoint PointX="11.723902750492142" PointY="20.656708106154724" />
+          <edmx:ConnectorPoint PointX="11.791722249507858" PointY="20.654229840216445" />
+          <edmx:ConnectorPoint PointX="11.958277750492142" PointY="20.648143554842576" />
+          <edmx:ConnectorPoint PointX="12.604222249507858" PointY="20.624539395667668" />
+          <edmx:ConnectorPoint PointX="12.770777750492142" PointY="20.6184531102938" />
+          <edmx:ConnectorPoint PointX="12.791722249507858" PointY="20.61768775461795" />
+          <edmx:ConnectorPoint PointX="13.020777750492142" PointY="20.609317588894175" />
+          <edmx:ConnectorPoint PointX="13.291722249507858" PointY="20.5994167118187" />
+          <edmx:ConnectorPoint PointX="13.489527750492142" PointY="20.59218848626988" />
+          <edmx:ConnectorPoint PointX="14.510472249507858" PointY="20.554881044995529" />
+          <edmx:ConnectorPoint PointX="14.802027750492142" PointY="20.54422699892185" />
+          <edmx:ConnectorPoint PointX="15.182347249507858" PointY="20.530329331234039" />
+          <edmx:ConnectorPoint PointX="15.770777750492142" PointY="20.508826853498306" />
+          <edmx:ConnectorPoint PointX="19.41672224950786" PointY="20.375596437527911" />
+          <edmx:ConnectorPoint PointX="19.58327775049214" PointY="20.369510152154042" />
+          <edmx:ConnectorPoint PointX="19.66672224950786" PointY="20.366460916128283" />
+          <edmx:ConnectorPoint PointX="20.50515275049214" PointY="20.335822916992928" />
+          <edmx:ConnectorPoint PointX="20.644799172584783" PointY="20.330719945483295" />
+          <edmx:ConnectorPoint PointX="20.811354673569063" PointY="20.324633660109427" />
+          <edmx:ConnectorPoint PointX="22.41672224950786" PointY="20.26597018073242" />
+          <edmx:ConnectorPoint PointX="23.08327775049214" PointY="20.241612852559307" />
+          <edmx:ConnectorPoint PointX="24.72922224950786" PointY="20.181466607785897" />
+          <edmx:ConnectorPoint PointX="25.39577775049214" PointY="20.157109279612783" />
           <edmx:ConnectorPoint PointX="25.5" PointY="20.15330078125" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
@@ -39094,13 +38507,6 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaL__6AB7E290" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Bucket" Width="1.5" PointX="42.625" PointY="41.875" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BucketScheme" Width="1.5" PointX="40.375" PointY="43.625" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BucketSchemePermission" Width="1.5" PointX="42.625" PointY="45.75" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BucketValue" Width="1.5" PointX="44.875" PointY="42.125" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_Bucket_BucketScheme" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_BucketValue_Bucket" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_BucketSchemePermission_BucketScheme" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
