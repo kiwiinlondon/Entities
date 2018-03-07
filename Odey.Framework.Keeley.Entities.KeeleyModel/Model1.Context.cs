@@ -181,6 +181,10 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<AdditionalFundIndexes> AdditionalFundIndexes1 { get; set; }
         public DbSet<AttributionPNLNav> AttributionPNLNavs { get; set; }
         public DbSet<InterestRateSwap> InterestRateSwaps { get; set; }
+        public DbSet<Bucket> Buckets { get; set; }
+        public DbSet<BucketScheme> BucketSchemes { get; set; }
+        public DbSet<BucketSchemePermission> BucketSchemePermissions { get; set; }
+        public DbSet<BucketValue> BucketValues { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -663,6 +667,338 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("CurrentValues", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MessageQueue_Insert", messageTypeIdParameter, messageParameter, changeTypeParameter, messageSourceParameter, changedFieldsParameter, originalValuesParameter, currentValuesParameter);
+        }
+    
+        public virtual int Bucket_Delete(Nullable<int> bucketId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var bucketIdParameter = bucketId.HasValue ?
+                new ObjectParameter("BucketId", bucketId) :
+                new ObjectParameter("BucketId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Bucket_Delete", bucketIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int Bucket_Insert(Nullable<int> bucketId, Nullable<int> bucketSchemeId, string name, Nullable<bool> isDefaultBucket, Nullable<decimal> limitValue, Nullable<bool> isLimitInclusive, Nullable<int> updateUserID)
+        {
+            var bucketIdParameter = bucketId.HasValue ?
+                new ObjectParameter("BucketId", bucketId) :
+                new ObjectParameter("BucketId", typeof(int));
+    
+            var bucketSchemeIdParameter = bucketSchemeId.HasValue ?
+                new ObjectParameter("BucketSchemeId", bucketSchemeId) :
+                new ObjectParameter("BucketSchemeId", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var isDefaultBucketParameter = isDefaultBucket.HasValue ?
+                new ObjectParameter("IsDefaultBucket", isDefaultBucket) :
+                new ObjectParameter("IsDefaultBucket", typeof(bool));
+    
+            var limitValueParameter = limitValue.HasValue ?
+                new ObjectParameter("LimitValue", limitValue) :
+                new ObjectParameter("LimitValue", typeof(decimal));
+    
+            var isLimitInclusiveParameter = isLimitInclusive.HasValue ?
+                new ObjectParameter("IsLimitInclusive", isLimitInclusive) :
+                new ObjectParameter("IsLimitInclusive", typeof(bool));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Bucket_Insert", bucketIdParameter, bucketSchemeIdParameter, nameParameter, isDefaultBucketParameter, limitValueParameter, isLimitInclusiveParameter, updateUserIDParameter);
+        }
+    
+        public virtual int Bucket_Update(Nullable<int> bucketId, Nullable<int> bucketSchemeId, string name, Nullable<bool> isDefaultBucket, Nullable<decimal> limitValue, Nullable<bool> isLimitInclusive, Nullable<int> updateUserID, byte[] dataVersion)
+        {
+            var bucketIdParameter = bucketId.HasValue ?
+                new ObjectParameter("BucketId", bucketId) :
+                new ObjectParameter("BucketId", typeof(int));
+    
+            var bucketSchemeIdParameter = bucketSchemeId.HasValue ?
+                new ObjectParameter("BucketSchemeId", bucketSchemeId) :
+                new ObjectParameter("BucketSchemeId", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var isDefaultBucketParameter = isDefaultBucket.HasValue ?
+                new ObjectParameter("IsDefaultBucket", isDefaultBucket) :
+                new ObjectParameter("IsDefaultBucket", typeof(bool));
+    
+            var limitValueParameter = limitValue.HasValue ?
+                new ObjectParameter("LimitValue", limitValue) :
+                new ObjectParameter("LimitValue", typeof(decimal));
+    
+            var isLimitInclusiveParameter = isLimitInclusive.HasValue ?
+                new ObjectParameter("IsLimitInclusive", isLimitInclusive) :
+                new ObjectParameter("IsLimitInclusive", typeof(bool));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Bucket_Update", bucketIdParameter, bucketSchemeIdParameter, nameParameter, isDefaultBucketParameter, limitValueParameter, isLimitInclusiveParameter, updateUserIDParameter, dataVersionParameter);
+        }
+    
+        public virtual int BucketScheme_Delete(Nullable<int> bucketSchemeId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var bucketSchemeIdParameter = bucketSchemeId.HasValue ?
+                new ObjectParameter("BucketSchemeId", bucketSchemeId) :
+                new ObjectParameter("BucketSchemeId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketScheme_Delete", bucketSchemeIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int BucketScheme_Insert(Nullable<int> bucketSchemeId, string name, string description, Nullable<int> entityTypeId, Nullable<int> typeCodeId, Nullable<int> ownerApplicationUserId, Nullable<int> updateUserID)
+        {
+            var bucketSchemeIdParameter = bucketSchemeId.HasValue ?
+                new ObjectParameter("BucketSchemeId", bucketSchemeId) :
+                new ObjectParameter("BucketSchemeId", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var entityTypeIdParameter = entityTypeId.HasValue ?
+                new ObjectParameter("EntityTypeId", entityTypeId) :
+                new ObjectParameter("EntityTypeId", typeof(int));
+    
+            var typeCodeIdParameter = typeCodeId.HasValue ?
+                new ObjectParameter("TypeCodeId", typeCodeId) :
+                new ObjectParameter("TypeCodeId", typeof(int));
+    
+            var ownerApplicationUserIdParameter = ownerApplicationUserId.HasValue ?
+                new ObjectParameter("OwnerApplicationUserId", ownerApplicationUserId) :
+                new ObjectParameter("OwnerApplicationUserId", typeof(int));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketScheme_Insert", bucketSchemeIdParameter, nameParameter, descriptionParameter, entityTypeIdParameter, typeCodeIdParameter, ownerApplicationUserIdParameter, updateUserIDParameter);
+        }
+    
+        public virtual int BucketScheme_Update(Nullable<int> bucketSchemeId, string name, string description, Nullable<int> entityTypeId, Nullable<int> typeCodeId, Nullable<int> ownerApplicationUserId, Nullable<int> updateUserID, byte[] dataVersion)
+        {
+            var bucketSchemeIdParameter = bucketSchemeId.HasValue ?
+                new ObjectParameter("BucketSchemeId", bucketSchemeId) :
+                new ObjectParameter("BucketSchemeId", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var entityTypeIdParameter = entityTypeId.HasValue ?
+                new ObjectParameter("EntityTypeId", entityTypeId) :
+                new ObjectParameter("EntityTypeId", typeof(int));
+    
+            var typeCodeIdParameter = typeCodeId.HasValue ?
+                new ObjectParameter("TypeCodeId", typeCodeId) :
+                new ObjectParameter("TypeCodeId", typeof(int));
+    
+            var ownerApplicationUserIdParameter = ownerApplicationUserId.HasValue ?
+                new ObjectParameter("OwnerApplicationUserId", ownerApplicationUserId) :
+                new ObjectParameter("OwnerApplicationUserId", typeof(int));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketScheme_Update", bucketSchemeIdParameter, nameParameter, descriptionParameter, entityTypeIdParameter, typeCodeIdParameter, ownerApplicationUserIdParameter, updateUserIDParameter, dataVersionParameter);
+        }
+    
+        public virtual int BucketSchemePermission_Delete(Nullable<int> bucketSchemePermissionId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var bucketSchemePermissionIdParameter = bucketSchemePermissionId.HasValue ?
+                new ObjectParameter("BucketSchemePermissionId", bucketSchemePermissionId) :
+                new ObjectParameter("BucketSchemePermissionId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketSchemePermission_Delete", bucketSchemePermissionIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int BucketSchemePermission_Insert(Nullable<int> bucketSchemePermissionId, Nullable<int> bucketSchemeId, Nullable<bool> isEditable, Nullable<int> applicationUserId, string aDGroupName, Nullable<int> updateUserID)
+        {
+            var bucketSchemePermissionIdParameter = bucketSchemePermissionId.HasValue ?
+                new ObjectParameter("BucketSchemePermissionId", bucketSchemePermissionId) :
+                new ObjectParameter("BucketSchemePermissionId", typeof(int));
+    
+            var bucketSchemeIdParameter = bucketSchemeId.HasValue ?
+                new ObjectParameter("BucketSchemeId", bucketSchemeId) :
+                new ObjectParameter("BucketSchemeId", typeof(int));
+    
+            var isEditableParameter = isEditable.HasValue ?
+                new ObjectParameter("IsEditable", isEditable) :
+                new ObjectParameter("IsEditable", typeof(bool));
+    
+            var applicationUserIdParameter = applicationUserId.HasValue ?
+                new ObjectParameter("ApplicationUserId", applicationUserId) :
+                new ObjectParameter("ApplicationUserId", typeof(int));
+    
+            var aDGroupNameParameter = aDGroupName != null ?
+                new ObjectParameter("ADGroupName", aDGroupName) :
+                new ObjectParameter("ADGroupName", typeof(string));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketSchemePermission_Insert", bucketSchemePermissionIdParameter, bucketSchemeIdParameter, isEditableParameter, applicationUserIdParameter, aDGroupNameParameter, updateUserIDParameter);
+        }
+    
+        public virtual int BucketSchemePermission_Update(Nullable<int> bucketSchemePermissionId, Nullable<int> bucketSchemeId, Nullable<bool> isEditable, Nullable<int> applicationUserId, string aDGroupName, Nullable<int> updateUserID, byte[] dataVersion)
+        {
+            var bucketSchemePermissionIdParameter = bucketSchemePermissionId.HasValue ?
+                new ObjectParameter("BucketSchemePermissionId", bucketSchemePermissionId) :
+                new ObjectParameter("BucketSchemePermissionId", typeof(int));
+    
+            var bucketSchemeIdParameter = bucketSchemeId.HasValue ?
+                new ObjectParameter("BucketSchemeId", bucketSchemeId) :
+                new ObjectParameter("BucketSchemeId", typeof(int));
+    
+            var isEditableParameter = isEditable.HasValue ?
+                new ObjectParameter("IsEditable", isEditable) :
+                new ObjectParameter("IsEditable", typeof(bool));
+    
+            var applicationUserIdParameter = applicationUserId.HasValue ?
+                new ObjectParameter("ApplicationUserId", applicationUserId) :
+                new ObjectParameter("ApplicationUserId", typeof(int));
+    
+            var aDGroupNameParameter = aDGroupName != null ?
+                new ObjectParameter("ADGroupName", aDGroupName) :
+                new ObjectParameter("ADGroupName", typeof(string));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketSchemePermission_Update", bucketSchemePermissionIdParameter, bucketSchemeIdParameter, isEditableParameter, applicationUserIdParameter, aDGroupNameParameter, updateUserIDParameter, dataVersionParameter);
+        }
+    
+        public virtual int BucketValue_Delete(Nullable<int> bucketValueId, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var bucketValueIdParameter = bucketValueId.HasValue ?
+                new ObjectParameter("BucketValueId", bucketValueId) :
+                new ObjectParameter("BucketValueId", typeof(int));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketValue_Delete", bucketValueIdParameter, dataVersionParameter, updateUserIDParameter);
+        }
+    
+        public virtual int BucketValue_Insert(Nullable<int> bucketValueId, Nullable<int> bucketId, Nullable<int> entityId, Nullable<decimal> numericValue, string textValue, Nullable<int> updateUserID)
+        {
+            var bucketValueIdParameter = bucketValueId.HasValue ?
+                new ObjectParameter("BucketValueId", bucketValueId) :
+                new ObjectParameter("BucketValueId", typeof(int));
+    
+            var bucketIdParameter = bucketId.HasValue ?
+                new ObjectParameter("BucketId", bucketId) :
+                new ObjectParameter("BucketId", typeof(int));
+    
+            var entityIdParameter = entityId.HasValue ?
+                new ObjectParameter("EntityId", entityId) :
+                new ObjectParameter("EntityId", typeof(int));
+    
+            var numericValueParameter = numericValue.HasValue ?
+                new ObjectParameter("NumericValue", numericValue) :
+                new ObjectParameter("NumericValue", typeof(decimal));
+    
+            var textValueParameter = textValue != null ?
+                new ObjectParameter("TextValue", textValue) :
+                new ObjectParameter("TextValue", typeof(string));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketValue_Insert", bucketValueIdParameter, bucketIdParameter, entityIdParameter, numericValueParameter, textValueParameter, updateUserIDParameter);
+        }
+    
+        public virtual int BucketValue_Update(Nullable<int> bucketValueId, Nullable<int> bucketId, Nullable<int> entityId, Nullable<decimal> numericValue, string textValue, byte[] dataVersion, Nullable<int> updateUserID)
+        {
+            var bucketValueIdParameter = bucketValueId.HasValue ?
+                new ObjectParameter("BucketValueId", bucketValueId) :
+                new ObjectParameter("BucketValueId", typeof(int));
+    
+            var bucketIdParameter = bucketId.HasValue ?
+                new ObjectParameter("BucketId", bucketId) :
+                new ObjectParameter("BucketId", typeof(int));
+    
+            var entityIdParameter = entityId.HasValue ?
+                new ObjectParameter("EntityId", entityId) :
+                new ObjectParameter("EntityId", typeof(int));
+    
+            var numericValueParameter = numericValue.HasValue ?
+                new ObjectParameter("NumericValue", numericValue) :
+                new ObjectParameter("NumericValue", typeof(decimal));
+    
+            var textValueParameter = textValue != null ?
+                new ObjectParameter("TextValue", textValue) :
+                new ObjectParameter("TextValue", typeof(string));
+    
+            var dataVersionParameter = dataVersion != null ?
+                new ObjectParameter("DataVersion", dataVersion) :
+                new ObjectParameter("DataVersion", typeof(byte[]));
+    
+            var updateUserIDParameter = updateUserID.HasValue ?
+                new ObjectParameter("UpdateUserID", updateUserID) :
+                new ObjectParameter("UpdateUserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BucketValue_Update", bucketValueIdParameter, bucketIdParameter, entityIdParameter, numericValueParameter, textValueParameter, dataVersionParameter, updateUserIDParameter);
         }
     }
 }
