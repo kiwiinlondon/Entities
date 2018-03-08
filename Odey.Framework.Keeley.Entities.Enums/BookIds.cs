@@ -19,6 +19,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DevmAC = 197,
         [EnumMember]
         FdxhAC = 198,
-        OEI=5
+        [EnumMember]
+        OEI =5
     }
 }
