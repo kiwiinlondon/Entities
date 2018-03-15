@@ -38,6 +38,8 @@ namespace Odey.Framework.Keeley.Entities
             {typeof( InternalAllocation), MessageTypeIds.InternalAllocation},
             {typeof( AttributionNav), MessageTypeIds.AttributionNav},
             {typeof( IndexConstituent), MessageTypeIds.IndexConstituent},
+            {typeof( FocusList), MessageTypeIds.FocusList},
+            {typeof( AnalystIdea), MessageTypeIds.AnalystIdea},
         };
 
 

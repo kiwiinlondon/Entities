@@ -48,6 +48,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         AttributionNav = 18,
         [EnumMember]
-        IndexConstituent = 19
+        IndexConstituent = 19,
+        [EnumMember]
+        FocusList = 20,
+        [EnumMember]
+        AnalystIdea = 21
     }
 }
