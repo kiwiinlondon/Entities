@@ -1883,6 +1883,17 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="KeltPriorHolding">
+          <Key>
+            <PropertyRef Name="KeltPriorHoldingId" />
+          </Key>
+          <Property Name="KeltPriorHoldingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="Weighting" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="NumberOfShares" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="Price" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+        </EntityType>
         <EntityType Name="LegalEntity">
           <Key>
             <PropertyRef Name="LegalEntityID" />
@@ -5339,6 +5350,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="InternalAllocation">
               <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__KeltPrior__Instr__0556CA33">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="KeltPriorHolding" Type="Self.KeltPriorHolding" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="KeltPriorHolding">
+              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -12561,6 +12584,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="Issuer" EntityType="Self.Issuer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IssuerAnalytic" EntityType="Self.IssuerAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IssuerIndustry" EntityType="Self.IssuerIndustry" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KeltPriorHolding" EntityType="Self.KeltPriorHolding" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LegalEntity" EntityType="Self.LegalEntity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LegalEntityChargeSchedule" EntityType="Self.LegalEntityChargeSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ManagerPriceTarget" EntityType="Self.ManagerPriceTarget" Schema="dbo" store:Type="Tables" />
@@ -13504,6 +13528,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__InternalA__Strat__60F644FF" Association="Self.FK__InternalA__Strat__60F644FF">
             <End Role="Strategy" EntitySet="Strategy" />
             <End Role="InternalAllocation" EntitySet="InternalAllocation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__KeltPrior__Instr__0556CA33" Association="Self.FK__KeltPrior__Instr__0556CA33">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="KeltPriorHolding" EntitySet="KeltPriorHolding" />
           </AssociationSet>
           <AssociationSet Name="FK__LegalEnti__Compa__1A50506B" Association="Self.FK__LegalEnti__Compa__1A50506B">
             <End Role="CompanySize" EntitySet="CompanySize" />
@@ -16555,6 +16583,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Attributi__BetaS__69C3BE57" Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57">
             <End Role="Beta" EntitySet="Beta" />
             <End Role="AttributionPnl" EntitySet="AttributionPnls" />
+          </AssociationSet>
+          <EntitySet Name="KeltPriorHoldings" EntityType="Odey.Framework.Keeley.Entities.KeltPriorHolding" />
+          <AssociationSet Name="FK__KeltPrior__Instr__0556CA33" Association="Odey.Framework.Keeley.Entities.FK__KeltPrior__Instr__0556CA33">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="KeltPriorHolding" EntitySet="KeltPriorHoldings" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -25048,6 +25081,30 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="KeltPriorHolding">
+          <Key>
+            <PropertyRef Name="KeltPriorHoldingId" />
+          </Key>
+          <Property Name="KeltPriorHoldingId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="InstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Weighting" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="NumberOfShares" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__KeltPrior__Instr__0556CA33" FromRole="KeltPriorHolding" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="FK__KeltPrior__Instr__0556CA33">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.KeltPriorHolding" Role="KeltPriorHolding" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="KeltPriorHolding">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -32663,6 +32720,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="MessageQueue_Insert" FunctionName="KeeleyModel.Store.MessageQueue_Insert" />
+          <EntitySetMapping Name="KeltPriorHoldings">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.KeltPriorHolding">
+              <MappingFragment StoreEntitySet="KeltPriorHolding">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="NumberOfShares" ColumnName="NumberOfShares" />
+                <ScalarProperty Name="Weighting" ColumnName="Weighting" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="KeltPriorHoldingId" ColumnName="KeltPriorHoldingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -38316,60 +38385,52 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionInstrumentMarketIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" ManuallyRouted="true" >
           <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.875" />
-          <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.605639750030704" />
-          <edmx:ConnectorPoint PointX="5.5158348152218384" PointY="21.552630392694343" />
-          <edmx:ConnectorPoint PointX="5.6091651847781616" PointY="21.414546288264258" />
-          <edmx:ConnectorPoint PointX="5.625" PointY="21.391118369901591" />
-          <edmx:ConnectorPoint PointX="5.625" PointY="20.879574732520112" />
-          <edmx:ConnectorPoint PointX="5.6510936245078582" PointY="20.87862121705977" />
-          <edmx:ConnectorPoint PointX="5.8176491254921423" PointY="20.8725349316859" />
-          <edmx:ConnectorPoint PointX="5.965547202632858" PointY="20.867130427491173" />
-          <edmx:ConnectorPoint PointX="6.4114013754921411" PointY="20.850837986142103" />
-          <edmx:ConnectorPoint PointX="6.4557838120078577" PointY="20.849216159347876" />
-          <edmx:ConnectorPoint PointX="6.6223393129921417" PointY="20.843129873974007" />
-          <edmx:ConnectorPoint PointX="6.6667217495078575" PointY="20.841508047179783" />
-          <edmx:ConnectorPoint PointX="6.8332772504921415" PointY="20.835421761805915" />
-          <edmx:ConnectorPoint PointX="6.9479744995078576" PointY="20.831230485114467" />
-          <edmx:ConnectorPoint PointX="7.1145300004921417" PointY="20.8251441997406" />
-          <edmx:ConnectorPoint PointX="7.1979744995078576" PointY="20.822094963714846" />
-          <edmx:ConnectorPoint PointX="7.3645300004921417" PointY="20.816008678340978" />
-          <edmx:ConnectorPoint PointX="7.4636008745078577" PointY="20.812388421982376" />
-          <edmx:ConnectorPoint PointX="7.6301563754921418" PointY="20.806302136608508" />
-          <edmx:ConnectorPoint PointX="7.822972249507858" PointY="20.799256242435476" />
-          <edmx:ConnectorPoint PointX="8.036402750492142" PointY="20.791457046799181" />
-          <edmx:ConnectorPoint PointX="8.088597249507858" PointY="20.789549750948375" />
-          <edmx:ConnectorPoint PointX="8.302027750492142" PointY="20.78175055531208" />
-          <edmx:ConnectorPoint PointX="8.385472249507858" PointY="20.778701319286323" />
-          <edmx:ConnectorPoint PointX="8.552027750492142" PointY="20.772615033912455" />
-          <edmx:ConnectorPoint PointX="10.072972249507858" PointY="20.717036549838856" />
-          <edmx:ConnectorPoint PointX="10.692655250492143" PointY="20.694392040572957" />
-          <edmx:ConnectorPoint PointX="10.791722249507858" PointY="20.690771925814943" />
-          <edmx:ConnectorPoint PointX="10.958277750492142" PointY="20.684685640441074" />
-          <edmx:ConnectorPoint PointX="11.557347249507858" PointY="20.662794391528593" />
-          <edmx:ConnectorPoint PointX="11.723902750492142" PointY="20.656708106154724" />
-          <edmx:ConnectorPoint PointX="11.791722249507858" PointY="20.654229840216445" />
-          <edmx:ConnectorPoint PointX="11.958277750492142" PointY="20.648143554842576" />
-          <edmx:ConnectorPoint PointX="12.604222249507858" PointY="20.624539395667668" />
-          <edmx:ConnectorPoint PointX="12.770777750492142" PointY="20.6184531102938" />
-          <edmx:ConnectorPoint PointX="12.791722249507858" PointY="20.61768775461795" />
-          <edmx:ConnectorPoint PointX="13.020777750492142" PointY="20.609317588894175" />
-          <edmx:ConnectorPoint PointX="13.291722249507858" PointY="20.5994167118187" />
-          <edmx:ConnectorPoint PointX="13.489527750492142" PointY="20.59218848626988" />
-          <edmx:ConnectorPoint PointX="14.510472249507858" PointY="20.554881044995529" />
-          <edmx:ConnectorPoint PointX="14.802027750492142" PointY="20.54422699892185" />
-          <edmx:ConnectorPoint PointX="15.182347249507858" PointY="20.530329331234039" />
-          <edmx:ConnectorPoint PointX="15.770777750492142" PointY="20.508826853498306" />
-          <edmx:ConnectorPoint PointX="19.41672224950786" PointY="20.375596437527911" />
-          <edmx:ConnectorPoint PointX="19.58327775049214" PointY="20.369510152154042" />
-          <edmx:ConnectorPoint PointX="19.66672224950786" PointY="20.366460916128283" />
-          <edmx:ConnectorPoint PointX="20.50515275049214" PointY="20.335822916992928" />
-          <edmx:ConnectorPoint PointX="20.644799172584783" PointY="20.330719945483295" />
-          <edmx:ConnectorPoint PointX="20.811354673569063" PointY="20.324633660109427" />
-          <edmx:ConnectorPoint PointX="22.41672224950786" PointY="20.26597018073242" />
-          <edmx:ConnectorPoint PointX="23.08327775049214" PointY="20.241612852559307" />
-          <edmx:ConnectorPoint PointX="24.72922224950786" PointY="20.181466607785897" />
-          <edmx:ConnectorPoint PointX="25.39577775049214" PointY="20.157109279612783" />
-          <edmx:ConnectorPoint PointX="25.5" PointY="20.15330078125" />
+          <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.552630392694343" />
+          <edmx:ConnectorPoint PointX="5.5019030744463375" PointY="21.53195891685905" />
+          <edmx:ConnectorPoint PointX="5.6230969255536616" PointY="21.417548129642313" />
+          <edmx:ConnectorPoint PointX="5.6510936245078582" PointY="21.391118369901591" />
+          <edmx:ConnectorPoint PointX="5.6510936245078582" PointY="20.789549750948375" />
+          <edmx:ConnectorPoint PointX="5.6992323139565366" PointY="20.783581101321076" />
+          <edmx:ConnectorPoint PointX="6.6331775995830622" PointY="20.66778251509427" />
+          <edmx:ConnectorPoint PointX="6.6803462358930545" PointY="20.66193414101604" />
+          <edmx:ConnectorPoint PointX="6.8457463886148027" PointY="20.641426404490524" />
+          <edmx:ConnectorPoint PointX="7.20507557976609" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="20.576365937772223" />
+          <edmx:ConnectorPoint PointX="7.807924923639125" PointY="20.522127216659776" />
+          <edmx:ConnectorPoint PointX="8.2702000763608741" PointY="20.464810358855789" />
+          <edmx:ConnectorPoint PointX="8.3860499236391259" PointY="20.450446296275384" />
+          <edmx:ConnectorPoint PointX="8.5514500763608741" PointY="20.429938559749868" />
+          <edmx:ConnectorPoint PointX="10.073549923639126" PointY="20.241215501639857" />
+          <edmx:ConnectorPoint PointX="10.692077576360875" PointY="20.164525112138811" />
+          <edmx:ConnectorPoint PointX="10.792299923639126" PointY="20.152098681702505" />
+          <edmx:ConnectorPoint PointX="10.957700076360874" PointY="20.131590945176988" />
+          <edmx:ConnectorPoint PointX="11.557924923639126" PointY="20.057169895247497" />
+          <edmx:ConnectorPoint PointX="11.723325076360874" PointY="20.036662158721981" />
+          <edmx:ConnectorPoint PointX="11.792299923639126" PointY="20.028110062659231" />
+          <edmx:ConnectorPoint PointX="11.957700076360874" PointY="20.007602326133714" />
+          <edmx:ConnectorPoint PointX="12.604799923639126" PointY="19.927369309686572" />
+          <edmx:ConnectorPoint PointX="12.770200076360874" PointY="19.906861573161056" />
+          <edmx:ConnectorPoint PointX="12.792299923639126" PointY="19.904121443615956" />
+          <edmx:ConnectorPoint PointX="13.020200076360874" PointY="19.875864418400234" />
+          <edmx:ConnectorPoint PointX="13.292299923639126" PointY="19.842127134094319" />
+          <edmx:ConnectorPoint PointX="13.488950076360874" PointY="19.8177447532237" />
+          <edmx:ConnectorPoint PointX="14.511049923639126" PointY="19.691016004635326" />
+          <edmx:ConnectorPoint PointX="14.801450076360874" PointY="19.655009690729404" />
+          <edmx:ConnectorPoint PointX="15.182924923639126" PointY="19.607711151215625" />
+          <edmx:ConnectorPoint PointX="15.645200076360874" PointY="19.550394293411639" />
+          <edmx:ConnectorPoint PointX="19.417299923639124" PointY="19.082696842454261" />
+          <edmx:ConnectorPoint PointX="19.582700076360876" PointY="19.062189105928745" />
+          <edmx:ConnectorPoint PointX="19.729799923639124" PointY="19.04395039900324" />
+          <edmx:ConnectorPoint PointX="20.051450076360876" PointY="19.004069440752215" />
+          <edmx:ConnectorPoint PointX="20.0742230005622" PointY="19.001245857328911" />
+          <edmx:ConnectorPoint PointX="20.504575076360879" PointY="18.947887097748229" />
+          <edmx:ConnectorPoint PointX="20.645376846716047" PointY="18.930429280683043" />
+          <edmx:ConnectorPoint PointX="20.8107769994378" PointY="18.909921544157527" />
+          <edmx:ConnectorPoint PointX="22.417299923639124" PointY="18.710730985324435" />
+          <edmx:ConnectorPoint PointX="23.082700076360876" PointY="18.628228939277285" />
+          <edmx:ConnectorPoint PointX="24.667299923639124" PointY="18.431756592477068" />
+          <edmx:ConnectorPoint PointX="25.457700076360876" PointY="18.333755969049506" />
+          <edmx:ConnectorPoint PointX="25.5" PointY="18.328511259931858" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.625" />
@@ -38507,6 +38568,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Restricte__Instr__37B76177" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaL__6AB7E290" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__BetaS__69C3BE57" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.KeltPriorHolding" Width="1.5" PointX="20" PointY="45.125" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__KeltPrior__Instr__0556CA33" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

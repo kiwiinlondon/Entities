@@ -14,26 +14,22 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class BucketSchemePermission
+    public partial class KeltPriorHolding
     {
     	[DataMember]
-        public int BucketSchemePermissionId { get; set; }
+        public int KeltPriorHoldingId { get; set; }
     	[DataMember]
-        public int BucketSchemeId { get; set; }
+        public int InstrumentMarketId { get; set; }
     	[DataMember]
-        public Nullable<bool> IsEditable { get; set; }
+        public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public Nullable<int> ApplicationUserId { get; set; }
+        public decimal Weighting { get; set; }
     	[DataMember]
-        public string ADGroupName { get; set; }
+        public decimal NumberOfShares { get; set; }
     	[DataMember]
-        public Nullable<System.DateTime> StartDt { get; set; }
-    	[DataMember]
-        public Nullable<int> UpdateUserID { get; set; }
-    	[DataMember]
-        public byte[] DataVersion { get; set; }
+        public decimal Price { get; set; }
     
         [DataMember]
-        public virtual BucketScheme BucketScheme { get; set; }
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }
