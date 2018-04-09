@@ -13,5 +13,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Normal = 1,
         [EnumMember]
         Convertible = 2,
+        [EnumMember]
+        Perpetual = 3
     }
 }
