@@ -28,6 +28,8 @@ namespace Odey.Framework.Keeley.Entities
         public int IndexTypeId { get; set; }
     	[DataMember]
         public bool CollectWeights { get; set; }
+    	[DataMember]
+        public bool ConstituentsExist { get; set; }
     
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }

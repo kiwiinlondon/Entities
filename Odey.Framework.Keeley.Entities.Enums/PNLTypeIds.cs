@@ -20,6 +20,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Default = 5,
         [EnumMember]
-        OtherShareClassSpecific = 6
+        OtherShareClassSpecific = 6,
+        [EnumMember]
+        FXOptionExposure = 7
     }
 }

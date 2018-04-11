@@ -44,6 +44,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsDummy { get; set; }
     	[DataMember]
         public bool IsCalculated { get; set; }
+    	[DataMember]
+        public Nullable<bool> TryToResolve { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

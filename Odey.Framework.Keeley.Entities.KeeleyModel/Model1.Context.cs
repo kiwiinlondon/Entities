@@ -665,5 +665,10 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MessageQueue_Insert", messageTypeIdParameter, messageParameter, changeTypeParameter, messageSourceParameter, changedFieldsParameter, originalValuesParameter, currentValuesParameter);
         }
+    
+        public virtual ObjectResult<ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio_Result> ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio_Result>("ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio");
+        }
     }
 }

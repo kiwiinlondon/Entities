@@ -395,6 +395,7 @@
           <Property Name="UpdatedOnReferenceDay" Type="bit" Nullable="false" />
           <Property Name="IsDummy" Type="bit" Nullable="false" />
           <Property Name="IsCalculated" Type="bit" Nullable="false" />
+          <Property Name="TryToResolve" Type="bit" />
         </EntityType>
         <EntityType Name="BloombergIdentifier">
           <Key>
@@ -1646,6 +1647,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="IndexTypeId" Type="int" Nullable="false" />
           <Property Name="CollectWeights" Type="bit" Nullable="false" />
+          <Property Name="ConstituentsExist" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Instrument">
           <Key>
@@ -8957,6 +8959,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdatedOnReferenceDay" Type="bit" Mode="In" />
           <Parameter Name="IsDummy" Type="bit" Mode="In" />
           <Parameter Name="IsCalculated" Type="bit" Mode="In" />
+          <Parameter Name="TryToResolve" Type="bit" Mode="In" />
         </Function>
         <Function Name="Beta_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8975,6 +8978,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdatedOnReferenceDay" Type="bit" Mode="In" />
           <Parameter Name="IsDummy" Type="bit" Mode="In" />
           <Parameter Name="IsCalculated" Type="bit" Mode="In" />
+          <Parameter Name="TryToResolve" Type="bit" Mode="In" />
         </Function>
         <Function Name="Bond_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -9201,6 +9205,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
+        <Function Name="ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ClientPortfolio_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientAccountId" Type="int" Mode="In" />
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -16612,6 +16617,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="FXRate" EntitySet="FXRates" />
             <End Role="PortfolioEventFX" EntitySet="PortfolioEventFXes" />
           </AssociationSet>
+          <FunctionImport Name="ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio" ReturnType="Collection(Odey.Framework.Keeley.Entities.ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio_Result)" />
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -21536,6 +21542,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Boolean" Name="UpdatedOnReferenceDay" Nullable="false" />
           <Property Name="IsDummy" Type="Boolean" Nullable="false" />
           <Property Name="IsCalculated" Type="Boolean" Nullable="false" />
+          <Property Name="TryToResolve" Type="Boolean" />
         </EntityType>
         <Association Name="FK__Fund__Administra__0A2691EF">
           <End Type="Odey.Framework.Keeley.Entities.Administrator" Role="Administrator" Multiplicity="1" />
@@ -21681,6 +21688,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="IndexTypeId" Nullable="false" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.IndexInstrumentIDFK" FromRole="Indx" ToRole="InstrumentMarket" />
           <Property Name="CollectWeights" Type="Boolean" Nullable="false" />
+          <Property Name="ConstituentsExist" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="IndexIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25141,6 +25149,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio_Result">
+          <Property Type="Int32" Name="ClientAccountId" Nullable="false" />
+          <Property Type="Int32" Name="Fundid" Nullable="false" />
+          <Property Type="Decimal" Name="PortfolioQuantity" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TradeQuantity" Nullable="true" Precision="38" Scale="8" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -29726,6 +29740,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Beta">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
               <MappingFragment StoreEntitySet="Beta">
+                <ScalarProperty Name="TryToResolve" ColumnName="TryToResolve" />
                 <ScalarProperty Name="IsCalculated" ColumnName="IsCalculated" />
                 <ScalarProperty Name="IsDummy" ColumnName="IsDummy" />
                 <ScalarProperty Name="UpdatedOnReferenceDay" ColumnName="UpdatedOnReferenceDay" />
@@ -29745,6 +29760,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Beta">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Beta_Insert">
+                  <ScalarProperty Name="TryToResolve" ParameterName="TryToResolve" />
                   <ScalarProperty Name="IsCalculated" ParameterName="IsCalculated" />
                   <ScalarProperty Name="IsDummy" ParameterName="IsDummy" />
                   <ScalarProperty Name="UpdatedOnReferenceDay" ParameterName="UpdatedOnReferenceDay" />
@@ -29761,6 +29777,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Beta_Update">
+                  <ScalarProperty Name="TryToResolve" ParameterName="TryToResolve" Version="Current" />
                   <ScalarProperty Name="IsCalculated" ParameterName="IsCalculated" Version="Current" />
                   <ScalarProperty Name="IsDummy" ParameterName="IsDummy" Version="Current" />
                   <ScalarProperty Name="UpdatedOnReferenceDay" ParameterName="UpdatedOnReferenceDay" Version="Current" />
@@ -29802,6 +29819,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Indices">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Index">
               <MappingFragment StoreEntitySet="Indx">
+                <ScalarProperty Name="ConstituentsExist" ColumnName="ConstituentsExist" />
                 <ScalarProperty Name="CollectWeights" ColumnName="CollectWeights" />
                 <ScalarProperty Name="IndexTypeId" ColumnName="IndexTypeId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -32771,6 +32789,16 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio" FunctionName="KeeleyModel.Store.ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio_Result">
+                <ScalarProperty Name="ClientAccountId" ColumnName="ClientAccountId" />
+                <ScalarProperty Name="Fundid" ColumnName="Fundid" />
+                <ScalarProperty Name="PortfolioQuantity" ColumnName="PortfolioQuantity" />
+                <ScalarProperty Name="TradeQuantity" ColumnName="TradeQuantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
