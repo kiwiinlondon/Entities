@@ -670,5 +670,23 @@ namespace Odey.Framework.Keeley.Entities
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio_Result>("ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio");
         }
+    
+        public virtual ObjectResult<Portfolio> Portfolio_GetValuationPositionsToRoll(Nullable<System.DateTime> referenceDate)
+        {
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Portfolio>("Portfolio_GetValuationPositionsToRoll", referenceDateParameter);
+        }
+    
+        public virtual ObjectResult<Portfolio> Portfolio_GetValuationPositionsToRoll(Nullable<System.DateTime> referenceDate, MergeOption mergeOption)
+        {
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Portfolio>("Portfolio_GetValuationPositionsToRoll", mergeOption, referenceDateParameter);
+        }
     }
 }

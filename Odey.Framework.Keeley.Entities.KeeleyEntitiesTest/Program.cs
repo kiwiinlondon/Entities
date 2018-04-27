@@ -22,8 +22,9 @@ namespace Odey.Framework.KeeleyEntitiesTest
 
             using (var context = new KeeleyModel(null, "GP"))
             {
-                var t = context.AttributionPnls.FirstOrDefault(a=>a.AttributionPnlId == 26361798);
-                t.MarketValue = 0;
+                var t = context.Portfolio_GetValuationPositionsToRoll(DateTime.Today.AddDays(-1));
+                //var t = context.AttributionPnls.FirstOrDefault(a=>a.AttributionPnlId == 26361798);
+                //t.MarketValue = 0;
                 //Instrument t = new Instrument()
                 //{
                 //    InstrumentClassID = 4,

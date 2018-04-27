@@ -357,7 +357,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="AttributionNavId" Type="int" />
+          <Property Name="AttributionNavId" Type="int" Nullable="false" />
           <Property Name="CurrencyId" Type="int" Nullable="false" />
           <Property Name="TodayOtherPnl" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="PnlTypeId" Type="int" Nullable="false" />
@@ -376,6 +376,7 @@
           <Property Name="MarketDataStatus" Type="int" />
           <Property Name="BetaShortTermId" Type="int" />
           <Property Name="BetaLongTermId" Type="int" />
+          <Property Name="NavFXRate" Type="numeric" Precision="35" Scale="16" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -4781,7 +4782,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Attributi__Attri__7E340001">
-          <End Role="AttributionNav" Type="Self.AttributionNav" Multiplicity="0..1" />
+          <End Role="AttributionNav" Type="Self.AttributionNav" Multiplicity="1" />
           <End Role="AttributionPnl" Type="Self.AttributionPnl" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AttributionNav">
@@ -8867,6 +8868,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="MarketDataStatus" Type="int" Mode="In" />
           <Parameter Name="BetaShortTermId" Type="int" Mode="In" />
           <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
+          <Parameter Name="NavFXRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8908,6 +8910,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="MarketDataStatus" Type="int" Mode="In" />
           <Parameter Name="BetaShortTermId" Type="int" Mode="In" />
           <Parameter Name="BetaLongTermId" Type="int" Mode="In" />
+          <Parameter Name="NavFXRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -11581,6 +11584,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
         <Function Name="Portfolio_GetPositionIdsWherePortfolioEventBreak" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Portfolio_GetValuationPositionsToRoll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="Portfolio_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PositionId" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
@@ -16618,6 +16624,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="PortfolioEventFX" EntitySet="PortfolioEventFXes" />
           </AssociationSet>
           <FunctionImport Name="ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio" ReturnType="Collection(Odey.Framework.Keeley.Entities.ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio_Result)" />
+          <FunctionImport Name="Portfolio_GetValuationPositionsToRoll" EntitySet="Portfolios" ReturnType="Collection(Odey.Framework.Keeley.Entities.Portfolio)">
+          <Parameter Name="ReferenceDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -24649,7 +24658,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="AttributionNavId" Type="Int32" />
+          <Property Name="AttributionNavId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AttributionNav" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Attri__73B6718E" FromRole="AttributionPnl" ToRole="AttributionNav" />
           <Property Name="CurrencyId" Type="Int32" Nullable="false" />
           <Property Name="TodayOtherPnl" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
@@ -24669,6 +24678,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="MarketDataStatus" Type="Int32" />
           <Property Name="BetaShortTermId" Type="Int32" />
           <Property Name="BetaLongTermId" Type="Int32" />
+          <Property Name="NavFXRate" Type="Decimal" Precision="35" Scale="16" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -24683,7 +24693,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Attributi__Attri__73B6718E">
-          <End Type="Odey.Framework.Keeley.Entities.AttributionNav" Role="AttributionNav" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionNav" Role="AttributionNav" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.AttributionPnl" Role="AttributionPnl" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AttributionNav">
@@ -32433,6 +32443,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
+                <ScalarProperty Name="NavFXRate" ColumnName="NavFXRate" />
                 <ScalarProperty Name="BetaLongTermId" ColumnName="BetaLongTermId" />
                 <ScalarProperty Name="BetaShortTermId" ColumnName="BetaShortTermId" />
                 <ScalarProperty Name="MarketDataStatus" ColumnName="MarketDataStatus" />
@@ -32475,6 +32486,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="NavFXRate" ParameterName="NavFXRate" />
                   <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" />
                   <ScalarProperty Name="BetaShortTermId" ParameterName="BetaShortTermId" />
                   <ScalarProperty Name="MarketDataStatus" ParameterName="MarketDataStatus" />
@@ -32514,6 +32526,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="NavFXRate" ParameterName="NavFXRate" Version="Current" />
                   <ScalarProperty Name="BetaLongTermId" ParameterName="BetaLongTermId" Version="Current" />
                   <ScalarProperty Name="BetaShortTermId" ParameterName="BetaShortTermId" Version="Current" />
                   <ScalarProperty Name="MarketDataStatus" ParameterName="MarketDataStatus" Version="Current" />
@@ -32799,6 +32812,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Portfolio_GetValuationPositionsToRoll" FunctionName="KeeleyModel.Store.Portfolio_GetValuationPositionsToRoll" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
