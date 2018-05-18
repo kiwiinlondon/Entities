@@ -9,8 +9,11 @@ namespace Odey.Framework.Keeley.Entities
 {
     partial class Beta : IMarketDatum
     {
-        public int EntityRankingSchemeId => (int)EntityRankingSchemeIds.Default;        
+        public int EntityRankingSchemeId => (int)EntityRankingSchemeIds.Default;
 
-        public List<IRawMarketDatum> RawMarketData => throw new NotImplementedException();
+        public List<IRawMarketDatum> RawMarketData
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

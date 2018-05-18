@@ -33,7 +33,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int ConstituentInstrumentMarketId { get; set; }
     	[DataMember]
-        public Nullable<decimal> OpenWeight { get; set; }
+        public decimal OpenWeight { get; set; }
     	[DataMember]
         public decimal PriceReturn { get; set; }
     	[DataMember]
