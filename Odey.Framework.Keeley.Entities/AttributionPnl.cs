@@ -95,5 +95,9 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }
+        [DataMember]
+        public virtual Fund Fund { get; set; }
+        [DataMember]
+        public virtual Portfolio Portfolio { get; set; }
     }
 }

@@ -34,6 +34,11 @@ namespace Odey.Framework.Keeley.Entities
             
         }
 
+        public override string ToString()
+        {
+            return $"AnalyticId = {AnalyticId}: rawnalyicId {this.RawAnalyticId}";
+        }
+
         #endregion
     }
  

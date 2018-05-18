@@ -1602,10 +1602,10 @@
           <Property Name="ConstituentInstrumentMarketId" Type="int" Nullable="false" />
           <Property Name="CurrencyId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
-          <Property Name="OpenWeight" Type="numeric" Precision="19" Scale="16" Nullable="false" />
-          <Property Name="PriceReturn" Type="numeric" Precision="19" Scale="16" />
-          <Property Name="TotalReturn" Type="numeric" Precision="19" Scale="16" />
-          <Property Name="FxReturn" Type="numeric" Precision="19" Scale="16" />
+          <Property Name="OpenWeight" Type="numeric" Precision="25" Scale="19" />
+          <Property Name="PriceReturn" Type="numeric" Precision="25" Scale="19" Nullable="false" />
+          <Property Name="TotalReturn" Type="numeric" Precision="25" Scale="19" Nullable="false" />
+          <Property Name="FxReturn" Type="numeric" Precision="25" Scale="19" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -1847,6 +1847,10 @@
           <Property Name="EventToBookFXRate" Type="numeric" Precision="35" Scale="16" Nullable="false" />
           <Property Name="StrategyId" Type="int" Nullable="false" />
           <Property Name="EventToBookFXRateOverride" Type="numeric" Precision="35" Scale="16" />
+          <Property Name="EzeTradeId" Type="varchar" MaxLength="15" />
+          <Property Name="EzeTicket" Type="varchar" MaxLength="15" />
+          <Property Name="NetConsideration" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="GrossConsideration" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Issuer">
           <Key>
@@ -2692,6 +2696,7 @@
           <Property Name="IntervalVolumePercent" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IntervalVWAP" Type="numeric" Precision="27" Scale="8" />
           <Property Name="InflationAssumption" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="EzeParentTradeId" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="TransferEvent">
           <Key>
@@ -11069,6 +11074,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="EventToBookFXRate" Type="numeric" Mode="In" />
           <Parameter Name="StrategyId" Type="int" Mode="In" />
           <Parameter Name="EventToBookFXRateOverride" Type="numeric" Mode="In" />
+          <Parameter Name="EzeTradeId" Type="varchar" Mode="In" />
+          <Parameter Name="EzeTicket" Type="varchar" Mode="In" />
+          <Parameter Name="NetConsideration" Type="numeric" Mode="In" />
+          <Parameter Name="GrossConsideration" Type="numeric" Mode="In" />
         </Function>
         <Function Name="InternalAllocation_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -11086,6 +11095,10 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="EventToBookFXRate" Type="numeric" Mode="In" />
           <Parameter Name="StrategyId" Type="int" Mode="In" />
           <Parameter Name="EventToBookFXRateOverride" Type="numeric" Mode="In" />
+          <Parameter Name="EzeTradeId" Type="varchar" Mode="In" />
+          <Parameter Name="EzeTicket" Type="varchar" Mode="In" />
+          <Parameter Name="NetConsideration" Type="numeric" Mode="In" />
+          <Parameter Name="GrossConsideration" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Issuer_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -12402,6 +12415,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="IntervalVolumePercent" Type="numeric" Mode="In" />
           <Parameter Name="IntervalVWAP" Type="numeric" Mode="In" />
           <Parameter Name="InflationAssumption" Type="numeric" Mode="In" />
+          <Parameter Name="EzeParentTradeId" Type="varchar" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -12447,6 +12461,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="IntervalVolumePercent" Type="numeric" Mode="In" />
           <Parameter Name="IntervalVWAP" Type="numeric" Mode="In" />
           <Parameter Name="InflationAssumption" Type="numeric" Mode="In" />
+          <Parameter Name="EzeParentTradeId" Type="varchar" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -17440,6 +17455,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="IntervalVolumePercent" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="IntervalVWAP" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="InflationAssumption" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="EzeParentTradeId" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -17727,6 +17743,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Book" Relationship="Odey.Framework.Keeley.Entities.InternalAllocationBookIDFK" FromRole="InternalAllocation" ToRole="Book" />
           <Property Name="StrategyId" Type="Int32" Nullable="false" />
           <Property Name="EventToBookFXRateOverride" Type="Decimal" Precision="35" Scale="16" />
+          <Property Name="EzeTradeId" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="EzeTicket" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="NetConsideration" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="GrossConsideration" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="InternalAllocationAccountIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
@@ -20994,12 +21014,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="TotalReturn" Type="Decimal" Precision="19" Scale="16" />
+          <Property Name="TotalReturn" Type="Decimal" Precision="25" Scale="19" Nullable="false" />
           <Property Name="ConstituentInstrumentMarketId" Type="Int32" Nullable="false" />
-          <Property Name="OpenWeight" Type="Decimal" Nullable="false" Precision="19" Scale="16" />
-          <Property Name="PriceReturn" Type="Decimal" Precision="19" Scale="16" />
+          <Property Name="OpenWeight" Type="Decimal" Precision="25" Scale="19" />
+          <Property Name="PriceReturn" Type="Decimal" Precision="25" Scale="19" Nullable="false" />
           <Property Name="CurrencyId" Type="Int32" Nullable="false" />
-          <Property Name="FxReturn" Type="Decimal" Precision="19" Scale="16" />
+          <Property Name="FxReturn" Type="Decimal" Precision="25" Scale="19" Nullable="false" />
         </EntityType>
         <Association Name="ExposurePositionIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="1" />
@@ -24679,6 +24699,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="BetaShortTermId" Type="Int32" />
           <Property Name="BetaLongTermId" Type="Int32" />
           <Property Name="NavFXRate" Type="Decimal" Precision="35" Scale="16" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__FundI__70DA04E3" FromRole="AttributionPnl" ToRole="Fund" />
+          <NavigationProperty Name="Portfolio" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Portf__6FE5E0AA" FromRole="AttributionPnl" ToRole="Portfolio" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -26069,6 +26091,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="EzeParentTradeId" ColumnName="EzeParentTradeId" />
                 <ScalarProperty Name="InflationAssumption" ColumnName="InflationAssumption" />
                 <ScalarProperty Name="IntervalVWAP" ColumnName="IntervalVWAP" />
                 <ScalarProperty Name="IntervalVolumePercent" ColumnName="IntervalVolumePercent" />
@@ -26118,6 +26141,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="EzeParentTradeId" ParameterName="EzeParentTradeId" />
                   <ScalarProperty Name="InflationAssumption" ParameterName="InflationAssumption" />
                   <ScalarProperty Name="IntervalVWAP" ParameterName="IntervalVWAP" />
                   <ScalarProperty Name="IntervalVolumePercent" ParameterName="IntervalVolumePercent" />
@@ -26164,6 +26188,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="EzeParentTradeId" ParameterName="EzeParentTradeId" Version="Current" />
                   <ScalarProperty Name="InflationAssumption" ParameterName="InflationAssumption" Version="Current" />
                   <ScalarProperty Name="IntervalVWAP" ParameterName="IntervalVWAP" Version="Current" />
                   <ScalarProperty Name="IntervalVolumePercent" ParameterName="IntervalVolumePercent" Version="Current" />
@@ -26443,6 +26468,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="InternalAllocations">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InternalAllocation">
               <MappingFragment StoreEntitySet="InternalAllocation">
+                <ScalarProperty Name="GrossConsideration" ColumnName="GrossConsideration" />
+                <ScalarProperty Name="NetConsideration" ColumnName="NetConsideration" />
+                <ScalarProperty Name="EzeTicket" ColumnName="EzeTicket" />
+                <ScalarProperty Name="EzeTradeId" ColumnName="EzeTradeId" />
                 <ScalarProperty Name="EventToBookFXRateOverride" ColumnName="EventToBookFXRateOverride" />
                 <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
                 <ScalarProperty Name="EventToBookFXRate" ColumnName="EventToBookFXRate" />
@@ -26464,6 +26493,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InternalAllocation">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InternalAllocation_Insert">
+                  <ScalarProperty Name="GrossConsideration" ParameterName="GrossConsideration" />
+                  <ScalarProperty Name="NetConsideration" ParameterName="NetConsideration" />
+                  <ScalarProperty Name="EzeTicket" ParameterName="EzeTicket" />
+                  <ScalarProperty Name="EzeTradeId" ParameterName="EzeTradeId" />
                   <ScalarProperty Name="EventToBookFXRateOverride" ParameterName="EventToBookFXRateOverride" />
                   <ScalarProperty Name="StrategyId" ParameterName="StrategyId" />
                   <ScalarProperty Name="EventToBookFXRate" ParameterName="EventToBookFXRate" />
@@ -26482,6 +26515,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InternalAllocation_Update">
+                  <ScalarProperty Name="GrossConsideration" ParameterName="GrossConsideration" Version="Current" />
+                  <ScalarProperty Name="NetConsideration" ParameterName="NetConsideration" Version="Current" />
+                  <ScalarProperty Name="EzeTicket" ParameterName="EzeTicket" Version="Current" />
+                  <ScalarProperty Name="EzeTradeId" ParameterName="EzeTradeId" Version="Current" />
                   <ScalarProperty Name="EventToBookFXRateOverride" ParameterName="EventToBookFXRateOverride" Version="Current" />
                   <ScalarProperty Name="StrategyId" ParameterName="StrategyId" Version="Current" />
                   <ScalarProperty Name="EventToBookFXRate" ParameterName="EventToBookFXRate" Version="Current" />
@@ -38466,51 +38503,49 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionInstrumentMarketIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" ManuallyRouted="true" >
           <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.875" />
-          <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.53195891685905" />
-          <edmx:ConnectorPoint PointX="5.4923886134586448" PointY="21.524003816351247" />
-          <edmx:ConnectorPoint PointX="5.6326113865413552" PointY="21.433918569574804" />
-          <edmx:ConnectorPoint PointX="5.6992323139565366" PointY="21.391118369901591" />
-          <edmx:ConnectorPoint PointX="5.6992323139565366" PointY="20.783581101321076" />
-          <edmx:ConnectorPoint PointX="5.7550564354508147" PointY="20.772957688629649" />
-          <edmx:ConnectorPoint PointX="5.9187847854839886" PointY="20.741799942029612" />
+          <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.506894823932729" />
+          <edmx:ConnectorPoint PointX="5.49611050379172" PointY="21.494676925397119" />
+          <edmx:ConnectorPoint PointX="5.62888949620828" PointY="21.393942040919988" />
+          <edmx:ConnectorPoint PointX="5.6326113865413552" PointY="21.391118369901591" />
+          <edmx:ConnectorPoint PointX="5.7550564354508147" PointY="21.391118369901591" />
+          <edmx:ConnectorPoint PointX="5.7550564354508147" PointY="20.740782378142189" />
           <edmx:ConnectorPoint PointX="5.9241319005523341" PointY="20.740782378142189" />
-          <edmx:ConnectorPoint PointX="6.3191713785057209" PointY="20.665605782588703" />
-          <edmx:ConnectorPoint PointX="6.3556363249834131" PointY="20.658666449468285" />
-          <edmx:ConnectorPoint PointX="6.519364675016587" PointY="20.627508702868248" />
-          <edmx:ConnectorPoint PointX="6.6803462358930545" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.0787754443859567" PointY="20.689208047287178" />
+          <edmx:ConnectorPoint PointX="6.2368812027708005" PointY="20.636479052006298" />
+          <edmx:ConnectorPoint PointX="6.3556363249834131" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.5126279196763983" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.6792945863430644" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.8457463886148027" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="20.464810358855789" />
-          <edmx:ConnectorPoint PointX="7.8390638258922349" PointY="20.412105970324344" />
-          <edmx:ConnectorPoint PointX="8.2859361741077642" PointY="20.361844057578768" />
-          <edmx:ConnectorPoint PointX="8.385938825892234" PointY="20.350596271542354" />
-          <edmx:ConnectorPoint PointX="8.5515611741077642" PointY="20.331967918170374" />
-          <edmx:ConnectorPoint PointX="8.5544384987848261" PointY="20.331644291429004" />
-          <edmx:ConnectorPoint PointX="8.7200608470003562" PointY="20.313015938057024" />
-          <edmx:ConnectorPoint PointX="10.073438825892234" PointY="20.16079491530078" />
-          <edmx:ConnectorPoint PointX="10.957811174107764" PointY="20.061325243529609" />
-          <edmx:ConnectorPoint PointX="11.557813825892234" PointY="19.9938400186068" />
-          <edmx:ConnectorPoint PointX="11.723436174107764" PointY="19.97521166523482" />
-          <edmx:ConnectorPoint PointX="11.792188825892234" PointY="19.967478719128803" />
-          <edmx:ConnectorPoint PointX="11.957811174107764" PointY="19.948850365756822" />
-          <edmx:ConnectorPoint PointX="12.604688825892234" PointY="19.876092880938415" />
-          <edmx:ConnectorPoint PointX="12.770311174107764" PointY="19.857464527566435" />
-          <edmx:ConnectorPoint PointX="12.792188825892234" PointY="19.855003841356019" />
-          <edmx:ConnectorPoint PointX="13.020311174107764" PointY="19.829345808123239" />
-          <edmx:ConnectorPoint PointX="13.292188825892236" PointY="19.798766402469631" />
-          <edmx:ConnectorPoint PointX="13.489061174107764" PointY="19.776623209167248" />
-          <edmx:ConnectorPoint PointX="14.354688825892234" PointY="19.679261844836041" />
-          <edmx:ConnectorPoint PointX="14.801561174107764" PointY="19.628999932090466" />
-          <edmx:ConnectorPoint PointX="15.182813825892234" PointY="19.586118586680453" />
-          <edmx:ConnectorPoint PointX="15.770311174107766" PointY="19.520039894248079" />
-          <edmx:ConnectorPoint PointX="19.667188825892236" PointY="19.08173905666812" />
-          <edmx:ConnectorPoint PointX="20.504686174107764" PointY="18.987541644792547" />
-          <edmx:ConnectorPoint PointX="20.645265748969159" PointY="18.971729974292661" />
-          <edmx:ConnectorPoint PointX="20.810888097184687" PointY="18.95310162092068" />
-          <edmx:ConnectorPoint PointX="22.417188825892236" PointY="18.772433142792959" />
-          <edmx:ConnectorPoint PointX="23.082811174107764" PointY="18.697567350534584" />
-          <edmx:ConnectorPoint PointX="24.760938825892236" PointY="18.508820148012994" />
-          <edmx:ConnectorPoint PointX="25.457811174107764" PointY="18.430439515824222" />
-          <edmx:ConnectorPoint PointX="25.5" PointY="18.425694332788616" />
+          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="20.36220714922435" />
+          <edmx:ConnectorPoint PointX="7.8233928130782751" PointY="20.31358189372704" />
+          <edmx:ConnectorPoint PointX="8.2703571869217249" PointY="20.265595721847639" />
+          <edmx:ConnectorPoint PointX="10.073392813078275" PointY="20.072021507604461" />
+          <edmx:ConnectorPoint PointX="10.957857186921725" PointY="19.97706526064567" />
+          <edmx:ConnectorPoint PointX="11.385892813078275" PointY="19.931111282366295" />
+          <edmx:ConnectorPoint PointX="11.551607186921725" PointY="19.913320158752214" />
+          <edmx:ConnectorPoint PointX="11.557767813078275" PointY="19.912658752870822" />
+          <edmx:ConnectorPoint PointX="11.723482186921725" PointY="19.894867629256741" />
+          <edmx:ConnectorPoint PointX="11.792142813078275" PointY="19.887496212649719" />
+          <edmx:ConnectorPoint PointX="11.957857186921725" PointY="19.869705089035637" />
+          <edmx:ConnectorPoint PointX="12.604642813078275" PointY="19.800266073216566" />
+          <edmx:ConnectorPoint PointX="12.770357186921725" PointY="19.782474949602484" />
+          <edmx:ConnectorPoint PointX="12.792142813078275" PointY="19.780136041039686" />
+          <edmx:ConnectorPoint PointX="13.020357186921725" PointY="19.755634906699978" />
+          <edmx:ConnectorPoint PointX="13.292142813078275" PointY="19.726455955234666" />
+          <edmx:ConnectorPoint PointX="13.489107186921725" PointY="19.705309826257771" />
+          <edmx:ConnectorPoint PointX="14.354642813078275" PointY="19.612385772899003" />
+          <edmx:ConnectorPoint PointX="14.801607186921725" PointY="19.564399601019602" />
+          <edmx:ConnectorPoint PointX="15.182767813078275" PointY="19.523478130784444" />
+          <edmx:ConnectorPoint PointX="15.645357186921725" PointY="19.473814456223636" />
+          <edmx:ConnectorPoint PointX="19.667142813078275" PointY="19.042034861220696" />
+          <edmx:ConnectorPoint PointX="20.504732186921725" PointY="18.952111122306125" />
+          <edmx:ConnectorPoint PointX="20.645219736155198" PointY="18.937028354911345" />
+          <edmx:ConnectorPoint PointX="20.810934109998648" PointY="18.919237231297263" />
+          <edmx:ConnectorPoint PointX="22.417142813078275" PointY="18.746794389293097" />
+          <edmx:ConnectorPoint PointX="23.082857186921725" PointY="18.675323179874" />
+          <edmx:ConnectorPoint PointX="24.760892813078275" PointY="18.495168987082081" />
+          <edmx:ConnectorPoint PointX="25.457857186921725" PointY="18.42034277230017" />
+          <edmx:ConnectorPoint PointX="25.5" PointY="18.415818312655958" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.625" />

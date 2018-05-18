@@ -29,16 +29,16 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<decimal> TotalReturn { get; set; }
+        public decimal TotalReturn { get; set; }
     	[DataMember]
         public int ConstituentInstrumentMarketId { get; set; }
     	[DataMember]
-        public decimal OpenWeight { get; set; }
+        public Nullable<decimal> OpenWeight { get; set; }
     	[DataMember]
-        public Nullable<decimal> PriceReturn { get; set; }
+        public decimal PriceReturn { get; set; }
     	[DataMember]
         public int CurrencyId { get; set; }
     	[DataMember]
-        public Nullable<decimal> FxReturn { get; set; }
+        public decimal FxReturn { get; set; }
     }
 }

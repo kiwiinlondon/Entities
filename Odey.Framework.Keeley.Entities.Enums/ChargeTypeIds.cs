@@ -28,6 +28,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ClearingFees=12,
         [EnumMember]
-        ExchangeFees=13
+        ExchangeFees=13,
+        [EnumMember]
+        Research = 21
     }
 }

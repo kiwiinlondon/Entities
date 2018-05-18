@@ -54,6 +54,14 @@ namespace Odey.Framework.Keeley.Entities
         public int StrategyId { get; set; }
     	[DataMember]
         public Nullable<decimal> EventToBookFXRateOverride { get; set; }
+    	[DataMember]
+        public string EzeTradeId { get; set; }
+    	[DataMember]
+        public string EzeTicket { get; set; }
+    	[DataMember]
+        public Nullable<decimal> NetConsideration { get; set; }
+    	[DataMember]
+        public Nullable<decimal> GrossConsideration { get; set; }
     
         [DataMember]
         public virtual List<PortfolioEvent> PortfolioEvents { get; set; }
