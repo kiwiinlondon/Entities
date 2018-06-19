@@ -213,6 +213,7 @@ namespace Odey.Framework.Keeley.Entities
                 AddValueToUsefulProperties(changedEntity, values, "InstrumentId");
                 AddValueToUsefulProperties(changedEntity, values, "ConstituentInstrumentMarketId");
                 AddValueToUsefulProperties(changedEntity, values, "CurrencyId");
+                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
             }
             else
             if(entityType == typeof(Portfolio))
