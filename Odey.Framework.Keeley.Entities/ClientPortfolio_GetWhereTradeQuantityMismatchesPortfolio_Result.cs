@@ -14,8 +14,7 @@ namespace Odey.Framework.Keeley.Entities
     public partial class ClientPortfolio_GetWhereTradeQuantityMismatchesPortfolio_Result
     {
         public int ClientAccountId { get; set; }
-        public int Fundid { get; set; }
-        public decimal PortfolioQuantity { get; set; }
-        public Nullable<decimal> TradeQuantity { get; set; }
+        public int FundId { get; set; }
+        public Nullable<System.DateTime> ReferenceDate { get; set; }
     }
 }
