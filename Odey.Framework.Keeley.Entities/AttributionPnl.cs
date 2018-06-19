@@ -92,6 +92,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> BetaLongTermId { get; set; }
     	[DataMember]
         public Nullable<decimal> NavFXRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PricePnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FXPnl { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

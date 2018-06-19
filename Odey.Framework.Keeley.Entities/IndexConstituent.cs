@@ -42,5 +42,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal FxReturn { get; set; }
     	[DataMember]
         public Nullable<int> ConstituentCurrencyId { get; set; }
+    
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }
