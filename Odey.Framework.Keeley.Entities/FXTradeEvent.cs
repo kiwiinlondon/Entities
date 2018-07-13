@@ -76,6 +76,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> PayToBookFXRateOverride { get; set; }
     	[DataMember]
         public Nullable<int> PNLInstrumentMarketId { get; set; }
+    	[DataMember]
+        public Nullable<bool> RebuildTrade { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }

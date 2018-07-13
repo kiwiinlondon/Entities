@@ -15,6 +15,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Coupon = 4,
         [EnumMember]
-        CostReset = 30
+        CostReset = 30,
+        [EnumMember]
+        AdjustQuantity = 35
+
     }
 }

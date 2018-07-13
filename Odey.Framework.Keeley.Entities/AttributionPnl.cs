@@ -96,6 +96,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> PricePnl { get; set; }
     	[DataMember]
         public Nullable<decimal> FXPnl { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MaxExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OutOfBaseForwardFXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> OutOfBaseForwardFXRateId { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

@@ -24,5 +24,7 @@ namespace Odey.Framework.Keeley.Entities
         public int Ordering { get; set; }
     	[DataMember]
         public bool IsErrored { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> RebuildFromDate { get; set; }
     }
 }

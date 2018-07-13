@@ -229,6 +229,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> ReValue { get; set; }
     	[DataMember]
         public Nullable<int> MarketDataStatus { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayMaxDeltaNetCostInstrumentCurrency { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

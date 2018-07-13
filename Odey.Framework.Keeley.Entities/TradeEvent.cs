@@ -106,6 +106,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> InflationAssumption { get; set; }
     	[DataMember]
         public string EzeParentTradeId { get; set; }
+    	[DataMember]
+        public Nullable<bool> AdjustQuantityOnly { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
