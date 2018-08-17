@@ -70,6 +70,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodayAmortisationBook { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> MaturityDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CostLocal { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarketValueLocal { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PriceToPositionFXRate { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

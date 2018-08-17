@@ -154,6 +154,10 @@ namespace Odey.Framework.Keeley.Entities
         public bool AdjustQuantityOnly { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayMaxDeltaNetCostInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayMaxNetPosition { get; set; }
+    	[DataMember]
+        public Nullable<decimal> UnadjustedNetPosition { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

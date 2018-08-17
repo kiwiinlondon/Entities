@@ -97,11 +97,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> FXPnl { get; set; }
     	[DataMember]
-        public Nullable<decimal> MaxExposure { get; set; }
+        public decimal MaxExposure { get; set; }
     	[DataMember]
-        public Nullable<decimal> OutOfBaseForwardFXRate { get; set; }
+        public Nullable<decimal> ForwardFXRate { get; set; }
     	[DataMember]
-        public Nullable<int> OutOfBaseForwardFXRateId { get; set; }
+        public Nullable<int> ForwardFXRateId { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

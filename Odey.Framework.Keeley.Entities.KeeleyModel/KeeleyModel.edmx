@@ -89,6 +89,9 @@
           <Property Name="TotalAmortisationLocal" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TodayAmortisationBook" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MaturityDate" Type="datetime" />
+          <Property Name="CostLocal" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="MarketValueLocal" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="PriceToPositionFXRate" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="AnalystIdea">
           <Key>
@@ -379,9 +382,9 @@
           <Property Name="NavFXRate" Type="numeric" Precision="35" Scale="16" />
           <Property Name="PricePnl" Type="numeric" Precision="27" Scale="8" />
           <Property Name="FXPnl" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="MaxExposure" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="OutOfBaseForwardFXRate" Type="numeric" Precision="35" Scale="16" />
-          <Property Name="OutOfBaseForwardFXRateId" Type="int" />
+          <Property Name="MaxExposure" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="ForwardFXRate" Type="numeric" Precision="35" Scale="16" />
+          <Property Name="ForwardFXRateId" Type="int" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -1733,6 +1736,7 @@
           <Property Name="InputDate" Type="datetime" Nullable="false" />
           <Property Name="ExDate" Type="datetime" Nullable="false" />
           <Property Name="Price" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="EventDateOverride" Type="datetime" />
         </EntityType>
         <EntityType Name="InstrumentEventType">
           <Key>
@@ -2290,6 +2294,11 @@
           <Property Name="ReValue" Type="bit" />
           <Property Name="MarketDataStatus" Type="int" />
           <Property Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ValuationTodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TodayMaxNetPosition" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ForwardFXRate" Type="numeric" Precision="35" Scale="16" />
+          <Property Name="ForwardFXRateId" Type="int" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2371,6 +2380,8 @@
           <Property Name="AssociatedPositionId" Type="int" />
           <Property Name="AdjustQuantityOnly" Type="bit" Nullable="false" />
           <Property Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TodayMaxNetPosition" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="UnadjustedNetPosition" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioEventFX">
           <Key>
@@ -2709,6 +2720,7 @@
           <Property Name="InflationAssumption" Type="numeric" Precision="27" Scale="8" />
           <Property Name="EzeParentTradeId" Type="varchar" MaxLength="15" />
           <Property Name="AdjustQuantityOnly" Type="bit" />
+          <Property Name="TradeDateOverride" Type="datetime" />
         </EntityType>
         <EntityType Name="TransferEvent">
           <Key>
@@ -4926,7 +4938,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
               <PropertyRef Name="FXRateId" />
             </Principal>
             <Dependent Role="AttributionPnl">
-              <PropertyRef Name="OutOfBaseForwardFXRateId" />
+              <PropertyRef Name="ForwardFXRateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5491,6 +5503,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="PortfolioEventFX">
               <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__Forwa__14C3F64C">
+          <End Role="FXRate" Type="Self.FXRate" Multiplicity="0..1" />
+          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FXRate">
+              <PropertyRef Name="FXRateId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="ForwardFXRateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8369,6 +8393,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TotalAmortisationLocal" Type="numeric" Mode="In" />
           <Parameter Name="TodayAmortisationBook" Type="numeric" Mode="In" />
           <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
+          <Parameter Name="CostLocal" Type="numeric" Mode="In" />
+          <Parameter Name="MarketValueLocal" Type="numeric" Mode="In" />
+          <Parameter Name="PriceToPositionFXRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AdministratorPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AdministratorPortfolioID" Type="int" Mode="In" />
@@ -8397,6 +8424,9 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TotalAmortisationLocal" Type="numeric" Mode="In" />
           <Parameter Name="TodayAmortisationBook" Type="numeric" Mode="In" />
           <Parameter Name="MaturityDate" Type="datetime" Mode="In" />
+          <Parameter Name="CostLocal" Type="numeric" Mode="In" />
+          <Parameter Name="MarketValueLocal" Type="numeric" Mode="In" />
+          <Parameter Name="PriceToPositionFXRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AnalystIdea_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalystIdeaId" Type="int" Mode="In" />
@@ -8913,8 +8943,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="PricePnl" Type="numeric" Mode="In" />
           <Parameter Name="FXPnl" Type="numeric" Mode="In" />
           <Parameter Name="MaxExposure" Type="numeric" Mode="In" />
-          <Parameter Name="OutOfBaseForwardFXRate" Type="numeric" Mode="In" />
-          <Parameter Name="OutOfBaseForwardFXRateId" Type="int" Mode="In" />
+          <Parameter Name="ForwardFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="ForwardFXRateId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -8960,8 +8990,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="PricePnl" Type="numeric" Mode="In" />
           <Parameter Name="FXPnl" Type="numeric" Mode="In" />
           <Parameter Name="MaxExposure" Type="numeric" Mode="In" />
-          <Parameter Name="OutOfBaseForwardFXRate" Type="numeric" Mode="In" />
-          <Parameter Name="OutOfBaseForwardFXRateId" Type="int" Mode="In" />
+          <Parameter Name="ForwardFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="ForwardFXRateId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -10849,6 +10879,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="InputDate" Type="datetime" Mode="In" />
           <Parameter Name="ExDate" Type="datetime" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="EventDateOverride" Type="datetime" Mode="In" />
         </Function>
         <Function Name="InstrumentEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -10865,6 +10896,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="InputDate" Type="datetime" Mode="In" />
           <Parameter Name="ExDate" Type="datetime" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="EventDateOverride" Type="datetime" Mode="In" />
         </Function>
         <Function Name="InstrumentEventType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentEventTypeID" Type="int" Mode="In" />
@@ -11752,6 +11784,11 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ReValue" Type="bit" Mode="In" />
           <Parameter Name="MarketDataStatus" Type="int" Mode="In" />
           <Parameter Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="ValuationTodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="TodayMaxNetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="ForwardFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="ForwardFXRateId" Type="int" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -11860,6 +11897,11 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ReValue" Type="bit" Mode="In" />
           <Parameter Name="MarketDataStatus" Type="int" Mode="In" />
           <Parameter Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="ValuationTodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="TodayMaxNetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="ForwardFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="ForwardFXRateId" Type="int" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -11953,6 +11995,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="AssociatedPositionId" Type="int" Mode="In" />
           <Parameter Name="AdjustQuantityOnly" Type="bit" Mode="In" />
           <Parameter Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="TodayMaxNetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="UnadjustedNetPosition" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -12020,6 +12064,8 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="AssociatedPositionId" Type="int" Mode="In" />
           <Parameter Name="AdjustQuantityOnly" Type="bit" Mode="In" />
           <Parameter Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="TodayMaxNetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="UnadjustedNetPosition" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEventFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventFXId" Type="int" Mode="In" />
@@ -12473,6 +12519,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="InflationAssumption" Type="numeric" Mode="In" />
           <Parameter Name="EzeParentTradeId" Type="varchar" Mode="In" />
           <Parameter Name="AdjustQuantityOnly" Type="bit" Mode="In" />
+          <Parameter Name="TradeDateOverride" Type="datetime" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -12520,6 +12567,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="InflationAssumption" Type="numeric" Mode="In" />
           <Parameter Name="EzeParentTradeId" Type="varchar" Mode="In" />
           <Parameter Name="AdjustQuantityOnly" Type="bit" Mode="In" />
+          <Parameter Name="TradeDateOverride" Type="datetime" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -13667,6 +13715,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <AssociationSet Name="FK__Portfolio__Curre__7DE9E73E" Association="Self.FK__Portfolio__Curre__7DE9E73E">
             <End Role="Currency" EntitySet="Currency" />
             <End Role="PortfolioEventFX" EntitySet="PortfolioEventFX" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Forwa__14C3F64C" Association="Self.FK__Portfolio__Forwa__14C3F64C">
+            <End Role="FXRate" EntitySet="FXRate" />
+            <End Role="Portfolio" EntitySet="Portfolio" />
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__FXRat__4CA85CBC" Association="Self.FK__Portfolio__FXRat__4CA85CBC">
             <End Role="FXRate" EntitySet="FXRate" />
@@ -16716,6 +16768,14 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="FXRate" EntitySet="FXRates" />
             <End Role="AttributionPnl" EntitySet="AttributionPnls" />
           </AssociationSet>
+          <AssociationSet Name="FK__Attributi__OutOf__1A27C9E71" Association="Odey.Framework.Keeley.Entities.FK__Attributi__OutOf__1A27C9E71">
+            <End Role="FXRate" EntitySet="FXRates" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Forwa__14C3F64C" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Forwa__14C3F64C">
+            <End Role="FXRate" EntitySet="FXRates" />
+            <End Role="Portfolio" EntitySet="Portfolios" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -17104,6 +17164,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.InstrumentEventFK" FromRole="InstrumentEvent" ToRole="Event" />
           <Property Type="DateTime" Name="ExDate" Nullable="false" Precision="3" />
           <Property Name="Price" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="EventDateOverride" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="InstrumentEventType">
           <Key>
@@ -17531,6 +17592,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="InflationAssumption" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="EzeParentTradeId" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="AdjustQuantityOnly" Type="Boolean" />
+          <Property Name="TradeDateOverride" Type="DateTime" Precision="3" />
           </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -18451,6 +18513,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="PortfolioEventFXs" Relationship="Odey.Framework.Keeley.Entities.FK__Portfolio__Portf__7CF5C305" FromRole="PortfolioEvent" ToRole="PortfolioEventFX" />
           <Property Name="AdjustQuantityOnly" Type="Boolean" Nullable="false" />
           <Property Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TodayMaxNetPosition" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="UnadjustedNetPosition" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioSettlementDate">
           <Key>
@@ -18741,6 +18805,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ReValue" Type="Boolean" />
           <Property Name="MarketDataStatus" Type="Int32" />
           <Property Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ValuationTodayMaxDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TodayMaxNetPosition" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ForwardFXRate" Type="Decimal" Precision="35" Scale="16" />
+          <Property Name="ForwardFXRateId" Type="Int32" />
         </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -18814,7 +18883,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="ToSecondRawFXRate" Relationship="Odey.Framework.Keeley.Entities.FXRateToSecondRawFXRateIdFK" FromRole="FXRate" ToRole="RawFXRate" />
           <NavigationProperty Name="FromCurrency" Relationship="Odey.Framework.Keeley.Entities.FxRateFromCurrencyIDFK" FromRole="FXRate" ToRole="Currency" />
           <NavigationProperty Name="ToCurrency" Relationship="Odey.Framework.Keeley.Entities.FxRateToCurrencyIDFK" FromRole="FXRate" ToRole="Currency" />
-        </EntityType>
+          </EntityType>
         <EntityType Name="RawFXRate">
           <Key>
             <PropertyRef Name="RawFXRateId" />
@@ -23080,6 +23149,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="TotalAmortisationLocal" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TodayAmortisationBook" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MaturityDate" Type="DateTime" Precision="3" />
+          <Property Name="CostLocal" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="MarketValueLocal" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="PriceToPositionFXRate" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="AdministratorPortfolioFundIdFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -24784,9 +24856,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Portfolio" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__Portf__6FE5E0AA" FromRole="AttributionPnl" ToRole="Portfolio" />
           <Property Name="PricePnl" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="FXPnl" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="MaxExposure" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="OutOfBaseForwardFXRate" Type="Decimal" Precision="35" Scale="16" />
-          <Property Name="OutOfBaseForwardFXRateId" Type="Int32" />
+          <Property Name="MaxExposure" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="ForwardFXRate" Type="Decimal" Precision="35" Scale="16" />
+          <Property Name="ForwardFXRateId" Type="Int32" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -25293,7 +25365,31 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               <PropertyRef Name="FXRateId" />
             </Principal>
             <Dependent Role="AttributionPnl">
-              <PropertyRef Name="OutOfBaseForwardFXRateId" />
+              <PropertyRef Name="ForwardFXRateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Attributi__OutOf__1A27C9E71">
+          <End Type="Odey.Framework.Keeley.Entities.FXRate" Role="FXRate" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionPnl" Role="AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FXRate">
+              <PropertyRef Name="FXRateId" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="ForwardFXRateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__Forwa__14C3F64C">
+          <End Type="Odey.Framework.Keeley.Entities.FXRate" Role="FXRate" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FXRate">
+              <PropertyRef Name="FXRateId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="ForwardFXRateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -25905,6 +26001,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="InstrumentEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentEvent">
               <MappingFragment StoreEntitySet="InstrumentEvent">
+                <ScalarProperty Name="EventDateOverride" ColumnName="EventDateOverride" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="ExDate" ColumnName="ExDate" />
                 <ScalarProperty Name="InputDate" ColumnName="InputDate" />
@@ -25925,6 +26022,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InstrumentEvent_Insert">
+                  <ScalarProperty Name="EventDateOverride" ParameterName="EventDateOverride" />
                   <ScalarProperty Name="Price" ParameterName="Price" />
                   <ScalarProperty Name="ExDate" ParameterName="ExDate" />
                   <ScalarProperty Name="InputDate" ParameterName="InputDate" />
@@ -25942,6 +26040,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InstrumentEvent_Update">
+                  <ScalarProperty Name="EventDateOverride" ParameterName="EventDateOverride" Version="Current" />
                   <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
                   <ScalarProperty Name="ExDate" ParameterName="ExDate" Version="Current" />
                   <ScalarProperty Name="InputDate" ParameterName="InputDate" Version="Current" />
@@ -26201,6 +26300,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="TradeDateOverride" ColumnName="TradeDateOverride" />
                 <ScalarProperty Name="AdjustQuantityOnly" ColumnName="AdjustQuantityOnly" />
                 <ScalarProperty Name="EzeParentTradeId" ColumnName="EzeParentTradeId" />
                 <ScalarProperty Name="InflationAssumption" ColumnName="InflationAssumption" />
@@ -26252,6 +26352,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="TradeDateOverride" ParameterName="TradeDateOverride" />
                   <ScalarProperty Name="AdjustQuantityOnly" ParameterName="AdjustQuantityOnly" />
                   <ScalarProperty Name="EzeParentTradeId" ParameterName="EzeParentTradeId" />
                   <ScalarProperty Name="InflationAssumption" ParameterName="InflationAssumption" />
@@ -26300,6 +26401,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="TradeDateOverride" ParameterName="TradeDateOverride" Version="Current" />
                   <ScalarProperty Name="AdjustQuantityOnly" ParameterName="AdjustQuantityOnly" Version="Current" />
                   <ScalarProperty Name="EzeParentTradeId" ParameterName="EzeParentTradeId" Version="Current" />
                   <ScalarProperty Name="InflationAssumption" ParameterName="InflationAssumption" Version="Current" />
@@ -27043,6 +27145,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="UnadjustedNetPosition" ColumnName="UnadjustedNetPosition" />
+                <ScalarProperty Name="TodayMaxNetPosition" ColumnName="TodayMaxNetPosition" />
                 <ScalarProperty Name="TodayMaxDeltaNetCostInstrumentCurrency" ColumnName="TodayMaxDeltaNetCostInstrumentCurrency" />
                 <ScalarProperty Name="AdjustQuantityOnly" ColumnName="AdjustQuantityOnly" />
                 <ScalarProperty Name="AssociatedPositionId" ColumnName="AssociatedPositionId" />
@@ -27114,6 +27218,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="UnadjustedNetPosition" ParameterName="UnadjustedNetPosition" />
+                  <ScalarProperty Name="TodayMaxNetPosition" ParameterName="TodayMaxNetPosition" />
                   <ScalarProperty Name="TodayMaxDeltaNetCostInstrumentCurrency" ParameterName="TodayMaxDeltaNetCostInstrumentCurrency" />
                   <ScalarProperty Name="AdjustQuantityOnly" ParameterName="AdjustQuantityOnly" />
                   <ScalarProperty Name="AssociatedPositionId" ParameterName="AssociatedPositionId" />
@@ -27182,6 +27288,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="UnadjustedNetPosition" ParameterName="UnadjustedNetPosition" Version="Current" />
+                  <ScalarProperty Name="TodayMaxNetPosition" ParameterName="TodayMaxNetPosition" Version="Current" />
                   <ScalarProperty Name="TodayMaxDeltaNetCostInstrumentCurrency" ParameterName="TodayMaxDeltaNetCostInstrumentCurrency" Version="Current" />
                   <ScalarProperty Name="AdjustQuantityOnly" ParameterName="AdjustQuantityOnly" Version="Current" />
                   <ScalarProperty Name="AssociatedPositionId" ParameterName="AssociatedPositionId" Version="Current" />
@@ -27382,6 +27490,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="ForwardFXRateId" ColumnName="ForwardFXRateId" />
+                <ScalarProperty Name="ForwardFXRate" ColumnName="ForwardFXRate" />
+                <ScalarProperty Name="TodayMaxNetPosition" ColumnName="TodayMaxNetPosition" />
+                <ScalarProperty Name="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" ColumnName="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" />
+                <ScalarProperty Name="ValuationTodayMaxDeltaNetCostInstrumentCurrency" ColumnName="ValuationTodayMaxDeltaNetCostInstrumentCurrency" />
                 <ScalarProperty Name="TodayMaxDeltaNetCostInstrumentCurrency" ColumnName="TodayMaxDeltaNetCostInstrumentCurrency" />
                 <ScalarProperty Name="MarketDataStatus" ColumnName="MarketDataStatus" />
                 <ScalarProperty Name="ReValue" ColumnName="ReValue" />
@@ -27491,6 +27604,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="ForwardFXRateId" ParameterName="ForwardFXRateId" />
+                  <ScalarProperty Name="ForwardFXRate" ParameterName="ForwardFXRate" />
+                  <ScalarProperty Name="TodayMaxNetPosition" ParameterName="TodayMaxNetPosition" />
+                  <ScalarProperty Name="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" ParameterName="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" />
+                  <ScalarProperty Name="ValuationTodayMaxDeltaNetCostInstrumentCurrency" ParameterName="ValuationTodayMaxDeltaNetCostInstrumentCurrency" />
                   <ScalarProperty Name="TodayMaxDeltaNetCostInstrumentCurrency" ParameterName="TodayMaxDeltaNetCostInstrumentCurrency" />
                   <ScalarProperty Name="MarketDataStatus" ParameterName="MarketDataStatus" />
                   <ScalarProperty Name="ReValue" ParameterName="ReValue" />
@@ -27597,6 +27715,11 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="ForwardFXRateId" ParameterName="ForwardFXRateId" Version="Current" />
+                  <ScalarProperty Name="ForwardFXRate" ParameterName="ForwardFXRate" Version="Current" />
+                  <ScalarProperty Name="TodayMaxNetPosition" ParameterName="TodayMaxNetPosition" Version="Current" />
+                  <ScalarProperty Name="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" ParameterName="ValuationTomorrowMaxDeltaNetCostInstrumentCurrency" Version="Current" />
+                  <ScalarProperty Name="ValuationTodayMaxDeltaNetCostInstrumentCurrency" ParameterName="ValuationTodayMaxDeltaNetCostInstrumentCurrency" Version="Current" />
                   <ScalarProperty Name="TodayMaxDeltaNetCostInstrumentCurrency" ParameterName="TodayMaxDeltaNetCostInstrumentCurrency" Version="Current" />
                   <ScalarProperty Name="MarketDataStatus" ParameterName="MarketDataStatus" Version="Current" />
                   <ScalarProperty Name="ReValue" ParameterName="ReValue" Version="Current" />
@@ -30877,6 +31000,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AdministratorPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdministratorPortfolio">
               <MappingFragment StoreEntitySet="AdministratorPortfolio">
+                <ScalarProperty Name="PriceToPositionFXRate" ColumnName="PriceToPositionFXRate" />
+                <ScalarProperty Name="MarketValueLocal" ColumnName="MarketValueLocal" />
+                <ScalarProperty Name="CostLocal" ColumnName="CostLocal" />
                 <ScalarProperty Name="MaturityDate" ColumnName="MaturityDate" />
                 <ScalarProperty Name="TodayAmortisationBook" ColumnName="TodayAmortisationBook" />
                 <ScalarProperty Name="TotalAmortisationLocal" ColumnName="TotalAmortisationLocal" />
@@ -30909,6 +31035,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdministratorPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AdministratorPortfolio_Insert">
+                  <ScalarProperty Name="PriceToPositionFXRate" ParameterName="PriceToPositionFXRate" />
+                  <ScalarProperty Name="MarketValueLocal" ParameterName="MarketValueLocal" />
+                  <ScalarProperty Name="CostLocal" ParameterName="CostLocal" />
                   <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" />
                   <ScalarProperty Name="TodayAmortisationBook" ParameterName="TodayAmortisationBook" />
                   <ScalarProperty Name="TotalAmortisationLocal" ParameterName="TotalAmortisationLocal" />
@@ -30938,6 +31067,9 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AdministratorPortfolio_Update">
+                  <ScalarProperty Name="PriceToPositionFXRate" ParameterName="PriceToPositionFXRate" Version="Current" />
+                  <ScalarProperty Name="MarketValueLocal" ParameterName="MarketValueLocal" Version="Current" />
+                  <ScalarProperty Name="CostLocal" ParameterName="CostLocal" Version="Current" />
                   <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" Version="Current" />
                   <ScalarProperty Name="TodayAmortisationBook" ParameterName="TodayAmortisationBook" Version="Current" />
                   <ScalarProperty Name="TotalAmortisationLocal" ParameterName="TotalAmortisationLocal" Version="Current" />
@@ -32608,8 +32740,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
-                <ScalarProperty Name="OutOfBaseForwardFXRateId" ColumnName="OutOfBaseForwardFXRateId" />
-                <ScalarProperty Name="OutOfBaseForwardFXRate" ColumnName="OutOfBaseForwardFXRate" />
+                <ScalarProperty Name="ForwardFXRateId" ColumnName="ForwardFXRateId" />
+                <ScalarProperty Name="ForwardFXRate" ColumnName="ForwardFXRate" />
                 <ScalarProperty Name="MaxExposure" ColumnName="MaxExposure" />
                 <ScalarProperty Name="FXPnl" ColumnName="FXPnl" />
                 <ScalarProperty Name="PricePnl" ColumnName="PricePnl" />
@@ -32656,8 +32788,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
-                  <ScalarProperty Name="OutOfBaseForwardFXRateId" ParameterName="OutOfBaseForwardFXRateId" />
-                  <ScalarProperty Name="OutOfBaseForwardFXRate" ParameterName="OutOfBaseForwardFXRate" />
+                  <ScalarProperty Name="ForwardFXRateId" ParameterName="ForwardFXRateId" />
+                  <ScalarProperty Name="ForwardFXRate" ParameterName="ForwardFXRate" />
                   <ScalarProperty Name="MaxExposure" ParameterName="MaxExposure" />
                   <ScalarProperty Name="FXPnl" ParameterName="FXPnl" />
                   <ScalarProperty Name="PricePnl" ParameterName="PricePnl" />
@@ -32701,8 +32833,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
-                  <ScalarProperty Name="OutOfBaseForwardFXRateId" ParameterName="OutOfBaseForwardFXRateId" Version="Current" />
-                  <ScalarProperty Name="OutOfBaseForwardFXRate" ParameterName="OutOfBaseForwardFXRate" Version="Current" />
+                  <ScalarProperty Name="ForwardFXRateId" ParameterName="ForwardFXRateId" Version="Current" />
+                  <ScalarProperty Name="ForwardFXRate" ParameterName="ForwardFXRate" Version="Current" />
                   <ScalarProperty Name="MaxExposure" ParameterName="MaxExposure" Version="Current" />
                   <ScalarProperty Name="FXPnl" ParameterName="FXPnl" Version="Current" />
                   <ScalarProperty Name="PricePnl" ParameterName="PricePnl" Version="Current" />
@@ -33015,7 +33147,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="38">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="64">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -38650,43 +38782,51 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="5.6326113865413552" PointY="21.391118369901591" />
           <edmx:ConnectorPoint PointX="5.7550564354508147" PointY="21.391118369901591" />
           <edmx:ConnectorPoint PointX="5.7550564354508147" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="5.8898371726861294" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.337122909921443" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.4510753138234262" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.6177419804900923" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="5.87421229768613" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.0668998321703693" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.1392064932547781" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.3058731599214441" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.4042006888234262" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.5708673554900923" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.6691948843920743" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.83586155105874" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.8457463886148027" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="20.221531005037448" />
-          <edmx:ConnectorPoint PointX="7.8233272027131466" PointY="20.176413370686717" />
-          <edmx:ConnectorPoint PointX="8.2547977972868534" PointY="20.133425914977707" />
-          <edmx:ConnectorPoint PointX="10.073327202713147" PointY="19.9522456601598" />
-          <edmx:ConnectorPoint PointX="10.957922797286853" PointY="19.864113318303012" />
-          <edmx:ConnectorPoint PointX="11.385827202713147" PointY="19.821481162352438" />
-          <edmx:ConnectorPoint PointX="11.551672797286853" PointY="19.8049579502473" />
-          <edmx:ConnectorPoint PointX="11.557702202713147" PointY="19.804357240020522" />
-          <edmx:ConnectorPoint PointX="11.723547797286853" PointY="19.787834027915384" />
-          <edmx:ConnectorPoint PointX="11.792077202713147" PointY="19.781006436840634" />
-          <edmx:ConnectorPoint PointX="11.957922797286853" PointY="19.764483224735496" />
-          <edmx:ConnectorPoint PointX="12.604577202713147" PointY="19.700056985817028" />
-          <edmx:ConnectorPoint PointX="12.770422797286853" PointY="19.68353377371189" />
-          <edmx:ConnectorPoint PointX="12.792077202713147" PointY="19.681376343273122" />
-          <edmx:ConnectorPoint PointX="13.020422797286853" PointY="19.658626250320012" />
-          <edmx:ConnectorPoint PointX="13.292077202713147" PointY="19.631561296489362" />
-          <edmx:ConnectorPoint PointX="13.489172797286853" PointY="19.61192464396024" />
-          <edmx:ConnectorPoint PointX="14.354577202713147" PointY="19.525704322073874" />
-          <edmx:ConnectorPoint PointX="14.801672797286853" PointY="19.481160146152874" />
-          <edmx:ConnectorPoint PointX="15.182702202713147" PointY="19.443198150838274" />
-          <edmx:ConnectorPoint PointX="15.645422797286853" PointY="19.39709725470528" />
-          <edmx:ConnectorPoint PointX="19.417077202713145" PointY="19.021326973388327" />
-          <edmx:ConnectorPoint PointX="19.707922797286855" PointY="18.992349999587248" />
-          <edmx:ConnectorPoint PointX="19.729577202713145" PointY="18.99019256914848" />
-          <edmx:ConnectorPoint PointX="20.504797797286852" PointY="18.912957268775639" />
-          <edmx:ConnectorPoint PointX="20.645154125790068" PointY="18.898973554634065" />
-          <edmx:ConnectorPoint PointX="20.810999720363778" PointY="18.882450342528927" />
-          <edmx:ConnectorPoint PointX="22.417077202713145" PointY="18.722436692685779" />
-          <edmx:ConnectorPoint PointX="23.082922797286855" PointY="18.656098433796885" />
-          <edmx:ConnectorPoint PointX="24.760827202713145" PointY="18.488928660886913" />
-          <edmx:ConnectorPoint PointX="25.457922797286855" PointY="18.419476961574034" />
-          <edmx:ConnectorPoint PointX="25.5" PointY="18.415284805930664" />
+          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="20.1324212387161" />
+          <edmx:ConnectorPoint PointX="7.7920380746166957" PointY="20.0924867142337" />
+          <edmx:ConnectorPoint PointX="8.2860869253833052" PointY="20.045685555888284" />
+          <edmx:ConnectorPoint PointX="8.3186661934690242" PointY="20.042599327710459" />
+          <edmx:ConnectorPoint PointX="8.4845900442356346" PointY="20.026881391314166" />
+          <edmx:ConnectorPoint PointX="10.073288074616695" PointY="19.876384314015937" />
+          <edmx:ConnectorPoint PointX="10.957961925383305" PointY="19.792579320016795" />
+          <edmx:ConnectorPoint PointX="11.385788074616695" PointY="19.752051426219424" />
+          <edmx:ConnectorPoint PointX="11.551711925383305" PointY="19.736333489823132" />
+          <edmx:ConnectorPoint PointX="11.557663074616695" PointY="19.735769738531786" />
+          <edmx:ConnectorPoint PointX="11.723586925383305" PointY="19.720051802135494" />
+          <edmx:ConnectorPoint PointX="11.792038074616695" PointY="19.713567437139549" />
+          <edmx:ConnectorPoint PointX="11.957961925383305" PointY="19.697849500743256" />
+          <edmx:ConnectorPoint PointX="12.604538074616695" PointY="19.636599458979802" />
+          <edmx:ConnectorPoint PointX="12.770461925383305" PointY="19.62088152258351" />
+          <edmx:ConnectorPoint PointX="12.792038074616695" PointY="19.61883761786601" />
+          <edmx:ConnectorPoint PointX="13.020461925383305" PointY="19.597199067765125" />
+          <edmx:ConnectorPoint PointX="13.292038074616695" PointY="19.571472708229244" />
+          <edmx:ConnectorPoint PointX="13.489211925383305" PointY="19.552794464980657" />
+          <edmx:ConnectorPoint PointX="14.354538074616695" PointY="19.470822275251109" />
+          <edmx:ConnectorPoint PointX="14.801711925383305" PointY="19.428461577184137" />
+          <edmx:ConnectorPoint PointX="15.182663074616695" PointY="19.392374143665208" />
+          <edmx:ConnectorPoint PointX="15.645461925383305" PointY="19.348533292172089" />
+          <edmx:ConnectorPoint PointX="19.417038074616695" PointY="18.991252565178822" />
+          <edmx:ConnectorPoint PointX="19.707961925383305" PointY="18.963693401373341" />
+          <edmx:ConnectorPoint PointX="19.729538074616695" PointY="18.961649496655841" />
+          <edmx:ConnectorPoint PointX="20.504836925383305" PointY="18.888205576639741" />
+          <edmx:ConnectorPoint PointX="22.542038074616695" PointY="18.69522187994902" />
+          <edmx:ConnectorPoint PointX="22.707961925383305" PointY="18.679503943552728" />
+          <edmx:ConnectorPoint PointX="22.792038074616695" PointY="18.671539425130632" />
+          <edmx:ConnectorPoint PointX="23.082961925383305" PointY="18.643980261325151" />
+          <edmx:ConnectorPoint PointX="24.667038074616695" PointY="18.493921013992747" />
+          <edmx:ConnectorPoint PointX="25.020461925383305" PointY="18.460441236482669" />
+          <edmx:ConnectorPoint PointX="25.276413074616695" PointY="18.436195030372939" />
+          <edmx:ConnectorPoint PointX="25.442336925383305" PointY="18.420477093976647" />
+          <edmx:ConnectorPoint PointX="25.5" PointY="18.415014681339454" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.625" />
@@ -38713,7 +38853,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.IssuerAnalyticRawIssuerAnalyticIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RawIssuerAnalyticEntityRankingSchemeIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.RawIssuerAnalyticIssuerIDFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionFund" Width="2.125" PointX="32.625" PointY="30.75" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionFund" Width="2.125" PointX="32.625" PointY="32.125" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionFundUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AttributionFundAdjustmentFactorFundIdFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Attribution" Width="1.5" PointX="40.875" PointY="13.125" />
@@ -38829,6 +38969,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__FXRat__4CA85CBC" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__IndexCons__Const__5F71186D" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__OutOf__1A27C9E7" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__OutOf__1A27C9E71" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Forwa__14C3F64C" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

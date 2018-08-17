@@ -231,6 +231,16 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> MarketDataStatus { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayMaxDeltaNetCostInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTodayMaxDeltaNetCostInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationTomorrowMaxDeltaNetCostInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayMaxNetPosition { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ForwardFXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> ForwardFXRateId { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

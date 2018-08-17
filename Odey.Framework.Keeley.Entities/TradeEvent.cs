@@ -108,6 +108,8 @@ namespace Odey.Framework.Keeley.Entities
         public string EzeParentTradeId { get; set; }
     	[DataMember]
         public Nullable<bool> AdjustQuantityOnly { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> TradeDateOverride { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }

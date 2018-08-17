@@ -46,6 +46,8 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime ExDate { get; set; }
     	[DataMember]
         public Nullable<decimal> Price { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> EventDateOverride { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
