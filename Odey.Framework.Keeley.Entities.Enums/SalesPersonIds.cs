@@ -57,5 +57,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         [Description("Crispin Odey")]
         CrispinOdey = 43,
+
+        [EnumMember]
+        [Description("Staff")]
+        Staff = 220,
     }
 }
