@@ -45,5 +45,21 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         [Description("Woody Stileman")]
         WoodyStileman = 161,
+
+        [EnumMember]
+        [Description("OWM (UK)")]
+        OwmUk = 218,
+
+        [EnumMember]
+        [Description("OWM (CI)")]
+        OwmCi = 219,
+
+        [EnumMember]
+        [Description("Crispin Odey")]
+        CrispinOdey = 43,
+
+        [EnumMember]
+        [Description("Staff")]
+        Staff = 220,
     }
 }
