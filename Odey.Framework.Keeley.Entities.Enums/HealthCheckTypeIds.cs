@@ -44,6 +44,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         BLOOMBERG_REPORTS_LOADED = 13,
+
+        [EnumMember]
+        BLOOMBERG_INDEX_PRICE_CHECK = 14
     }
 }
 
