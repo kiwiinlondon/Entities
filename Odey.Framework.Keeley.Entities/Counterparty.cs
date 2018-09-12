@@ -36,6 +36,6 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CsaRateOverrideSwaps { get; set; }
     
         [DataMember]
-        private LegalEntity LegalEntity { get; set; }
+        public virtual LegalEntity LegalEntity { get; set; }
     }
 }

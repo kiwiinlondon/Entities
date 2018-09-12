@@ -84,7 +84,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         RollConvention = 50,
         [EnumMember]
-        KneipEventWrapper = 51
+        KneipEventWrapper = 51,
+        [EnumMember]
+        Administrator = 52
     }
 }
 

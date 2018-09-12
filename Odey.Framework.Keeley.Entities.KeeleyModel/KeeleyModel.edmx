@@ -865,6 +865,7 @@
           <Property Name="TypeCode" Type="int" Nullable="false" />
           <Property Name="IdentifierTypeId" Type="int" />
           <Property Name="IsPrimaryKey" Type="bit" Nullable="false" />
+          <Property Name="LookupEntityTypeId" Type="int" />
         </EntityType>
         <EntityType Name="EntityPropertyOverride">
           <Key>
@@ -5083,6 +5084,18 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
             </Principal>
             <Dependent Role="ClientTrade1">
               <PropertyRef Name="RelatedTradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EntityPro__Looku__254F63D0">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="0..1" />
+          <End Role="EntityProperty" Type="Self.EntityProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityProperty">
+              <PropertyRef Name="LookupEntityTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9995,6 +10008,25 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ExtractOutputContainerTypeID" Type="int" Mode="In" />
           <Parameter Name="ExtractResponseHandlerTypeId" Type="int" Mode="In" />
         </Function>
+        <Function Name="ExtractConfiguration_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExtractConfigurationId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ExtractConfiguration_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExtractId" Type="int" Mode="In" />
+          <Parameter Name="ConfigurationKey" Type="varchar" Mode="In" />
+          <Parameter Name="ConfigurationValue" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ExtractConfiguration_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExtractConfigurationId" Type="int" Mode="In" />
+          <Parameter Name="ExtractId" Type="int" Mode="In" />
+          <Parameter Name="ConfigurationKey" Type="varchar" Mode="In" />
+          <Parameter Name="ConfigurationValue" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="ExtractEntity_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractEntityID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -10056,6 +10088,35 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="PreviousBitValue" Type="bit" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
+        <Function Name="ExtractInputConfiguration_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExtractFieldConfigurationID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ExtractInputConfiguration_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExtractId" Type="int" Mode="In" />
+          <Parameter Name="EntityPropertyId" Type="int" Mode="In" />
+          <Parameter Name="IntValue" Type="int" Mode="In" />
+          <Parameter Name="StringValue" Type="varchar" Mode="In" />
+          <Parameter Name="DecimalValue" Type="numeric" Mode="In" />
+          <Parameter Name="DateTimeValue" Type="datetime" Mode="In" />
+          <Parameter Name="BitValue" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsNotEqual" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="ExtractInputConfiguration_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExtractFieldConfigurationID" Type="int" Mode="In" />
+          <Parameter Name="ExtractId" Type="int" Mode="In" />
+          <Parameter Name="EntityPropertyId" Type="int" Mode="In" />
+          <Parameter Name="IntValue" Type="int" Mode="In" />
+          <Parameter Name="StringValue" Type="varchar" Mode="In" />
+          <Parameter Name="DecimalValue" Type="numeric" Mode="In" />
+          <Parameter Name="DateTimeValue" Type="datetime" Mode="In" />
+          <Parameter Name="BitValue" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsNotEqual" Type="bit" Mode="In" />
         </Function>
         <Function Name="ExtractOutputConfiguration_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractOutputConfigurationID" Type="int" Mode="In" />
@@ -13576,6 +13637,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ClientTrade" EntitySet="ClientTrade" />
             <End Role="ClientTrade1" EntitySet="ClientTrade" />
           </AssociationSet>
+          <AssociationSet Name="FK__EntityPro__Looku__254F63D0" Association="Self.FK__EntityPro__Looku__254F63D0">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="EntityProperty" EntitySet="EntityProperty" />
+          </AssociationSet>
           <AssociationSet Name="FK__ExternalP__Exter__4722F6E2" Association="Self.FK__ExternalP__Exter__4722F6E2">
             <End Role="LegalEntity" EntitySet="LegalEntity" />
             <End Role="ExternalPerson" EntitySet="ExternalPerson" />
@@ -16776,6 +16841,10 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="FXRate" EntitySet="FXRates" />
             <End Role="Portfolio" EntitySet="Portfolios" />
           </AssociationSet>
+          <AssociationSet Name="FK__EntityPro__Looku__254F63D0" Association="Odey.Framework.Keeley.Entities.FK__EntityPro__Looku__254F63D0">
+            <End Role="EntityType" EntitySet="EntityTypes" />
+            <End Role="EntityProperty" EntitySet="EntityProperties" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -17401,7 +17470,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.CounterpartyLegalEntiyFK" FromRole="Counterparty" ToRole="LegalEntity" a:GetterAccess="Private" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.CounterpartyLegalEntiyFK" FromRole="Counterparty" ToRole="LegalEntity" a:GetterAccess="Public" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Type="Boolean" Name="IsElectronic" />
           <Property Type="String" Name="UbsCsaName" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Decimal" Name="UbsCsaRateOverride" Precision="27" Scale="8" />
@@ -18056,6 +18125,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Type="Int32" Name="IdentifierTypeId" />
           <Property Name="IsPrimaryKey" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="EntityType" Relationship="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK" FromRole="EntityProperty" ToRole="EntityType" />
+          <Property Name="LookupEntityTypeId" Type="Int32" />
+          <NavigationProperty Name="EntityType1" Relationship="Odey.Framework.Keeley.Entities.FK__EntityPro__Looku__254F63D0" FromRole="EntityProperty" ToRole="EntityType" />
         </EntityType>
         <EntityType Name="Extract">
           <Key>
@@ -22945,6 +23016,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="FullyQualifiedName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="EntityProperties" Relationship="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK" FromRole="EntityType" ToRole="EntityProperty" />
           <NavigationProperty Name="FactorRelationships" Relationship="Odey.Framework.Keeley.Entities.fk_factor_relationship_entity_type" FromRole="EntityType" ToRole="FactorRelationship" />
+          <NavigationProperty Name="EntityProperties1" Relationship="Odey.Framework.Keeley.Entities.FK__EntityPro__Looku__254F63D0" FromRole="EntityType" ToRole="EntityProperty" />
           </EntityType>
         <Association Name="EntityTypeUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25393,6 +25465,18 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__EntityPro__Looku__254F63D0">
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.EntityProperty" Role="EntityProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EntityProperty">
+              <PropertyRef Name="LookupEntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -26842,6 +26926,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="EntityProperties">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EntityProperty">
               <MappingFragment StoreEntitySet="EntityProperty">
+                <ScalarProperty Name="LookupEntityTypeId" ColumnName="LookupEntityTypeId" />
                 <ScalarProperty Name="IsPrimaryKey" ColumnName="IsPrimaryKey" />
                 <ScalarProperty Name="IdentifierTypeId" ColumnName="IdentifierTypeId" />
                 <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
@@ -26907,6 +26992,46 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                 <ScalarProperty Name="ExtractTypeId" ColumnName="ExtractTypeId" />
                 <ScalarProperty Name="ExtractID" ColumnName="ExtractID" />
               </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Extract">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.Extract_Insert">
+                  <ScalarProperty Name="ExtractResponseHandlerTypeId" ParameterName="ExtractResponseHandlerTypeId" />
+                  <ScalarProperty Name="ExtractOutputContainerTypeID" ParameterName="ExtractOutputContainerTypeID" />
+                  <ScalarProperty Name="SendIfEmpty" ParameterName="SendIfEmpty" />
+                  <ScalarProperty Name="ExtractDeliveryTypeID" ParameterName="ExtractDeliveryTypeID" />
+                  <ScalarProperty Name="ExtractInputTypeID" ParameterName="ExtractInputTypeID" />
+                  <ScalarProperty Name="ExtractRunnerTypeID" ParameterName="ExtractRunnerTypeID" />
+                  <ScalarProperty Name="ExtractOutputTypeID" ParameterName="ExtractOutputTypeID" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ScalarProperty Name="ExtractTypeId" ParameterName="ExtractTypeId" />
+                  <ResultBinding Name="ExtractID" ColumnName="ExtractId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.Extract_Update">
+                  <ScalarProperty Name="ExtractResponseHandlerTypeId" ParameterName="ExtractResponseHandlerTypeId" Version="Current" />
+                  <ScalarProperty Name="ExtractOutputContainerTypeID" ParameterName="ExtractOutputContainerTypeID" Version="Current" />
+                  <ScalarProperty Name="SendIfEmpty" ParameterName="SendIfEmpty" Version="Current" />
+                  <ScalarProperty Name="ExtractDeliveryTypeID" ParameterName="ExtractDeliveryTypeID" Version="Current" />
+                  <ScalarProperty Name="ExtractInputTypeID" ParameterName="ExtractInputTypeID" Version="Current" />
+                  <ScalarProperty Name="ExtractRunnerTypeID" ParameterName="ExtractRunnerTypeID" Version="Current" />
+                  <ScalarProperty Name="ExtractOutputTypeID" ParameterName="ExtractOutputTypeID" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="ExtractTypeId" ParameterName="ExtractTypeId" Version="Current" />
+                  <ScalarProperty Name="ExtractID" ParameterName="ExtractID" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.Extract_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ExtractID" ParameterName="ExtractID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ExtractEntities">
@@ -26975,6 +27100,44 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                 <ScalarProperty Name="ExtractId" ColumnName="ExtractId" />
                 <ScalarProperty Name="ExtractFieldConfigurationID" ColumnName="ExtractFieldConfigurationID" />
               </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractInputConfiguration">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ExtractInputConfiguration_Insert">
+                  <ScalarProperty Name="IsNotEqual" ParameterName="IsNotEqual" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="BitValue" ParameterName="BitValue" />
+                  <ScalarProperty Name="DateTimeValue" ParameterName="DateTimeValue" />
+                  <ScalarProperty Name="DecimalValue" ParameterName="DecimalValue" />
+                  <ScalarProperty Name="StringValue" ParameterName="StringValue" />
+                  <ScalarProperty Name="IntValue" ParameterName="IntValue" />
+                  <ScalarProperty Name="EntityPropertyId" ParameterName="EntityPropertyId" />
+                  <ScalarProperty Name="ExtractId" ParameterName="ExtractId" />
+                  <ResultBinding Name="ExtractFieldConfigurationID" ColumnName="ExtractFieldConfigurationId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ExtractInputConfiguration_Update">
+                  <ScalarProperty Name="IsNotEqual" ParameterName="IsNotEqual" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="BitValue" ParameterName="BitValue" Version="Current" />
+                  <ScalarProperty Name="DateTimeValue" ParameterName="DateTimeValue" Version="Current" />
+                  <ScalarProperty Name="DecimalValue" ParameterName="DecimalValue" Version="Current" />
+                  <ScalarProperty Name="StringValue" ParameterName="StringValue" Version="Current" />
+                  <ScalarProperty Name="IntValue" ParameterName="IntValue" Version="Current" />
+                  <ScalarProperty Name="EntityPropertyId" ParameterName="EntityPropertyId" Version="Current" />
+                  <ScalarProperty Name="ExtractId" ParameterName="ExtractId" Version="Current" />
+                  <ScalarProperty Name="ExtractFieldConfigurationID" ParameterName="ExtractFieldConfigurationID" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ExtractInputConfiguration_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ExtractFieldConfigurationID" ParameterName="ExtractFieldConfigurationID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ExtractRuns">
@@ -27140,6 +27303,34 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                 <ScalarProperty Name="ExtractId" ColumnName="ExtractId" />
                 <ScalarProperty Name="ExtractConfigurationId" ColumnName="ExtractConfigurationId" />
               </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractConfiguration">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ExtractConfiguration_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="ConfigurationValue" ParameterName="ConfigurationValue" />
+                  <ScalarProperty Name="ConfigurationKey" ParameterName="ConfigurationKey" />
+                  <ScalarProperty Name="ExtractId" ParameterName="ExtractId" />
+                  <ResultBinding Name="ExtractConfigurationId" ColumnName="ExtractConfigurationId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ExtractConfiguration_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="ConfigurationValue" ParameterName="ConfigurationValue" Version="Current" />
+                  <ScalarProperty Name="ConfigurationKey" ParameterName="ConfigurationKey" Version="Current" />
+                  <ScalarProperty Name="ExtractId" ParameterName="ExtractId" Version="Current" />
+                  <ScalarProperty Name="ExtractConfigurationId" ParameterName="ExtractConfigurationId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ExtractConfiguration_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ExtractConfigurationId" ParameterName="ExtractConfigurationId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PortfolioEvents">
@@ -28379,6 +28570,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="ExtractId" ParameterName="ExtractId" />
                   <ResultBinding Name="ExtractOutputConfigurationID" ColumnName="ExtractOutputConfigurationID" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ExtractOutputConfiguration_Update">
                   <ScalarProperty Name="Format" ParameterName="Format" Version="Current" />
@@ -28392,6 +28584,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ScalarProperty Name="ExtractId" ParameterName="ExtractId" Version="Current" />
                   <ScalarProperty Name="ExtractOutputConfigurationID" ParameterName="ExtractOutputConfigurationID" Version="Current" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </UpdateFunction>
                 <DeleteFunction FunctionName="KeeleyModel.Store.ExtractOutputConfiguration_Delete">
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -35854,7 +36047,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="13.2939470625" PointY="39.625" />
           <edmx:ConnectorPoint PointX="13.2939470625" PointY="40" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentMarket" Width="2.125" PointX="17.125" PointY="16.5" Height="4.8648079427083353" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentMarket" Width="2.125" PointX="17.625" PointY="17.375" Height="4.8648079427083353" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketUpdateUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.737975772705081" />
           <edmx:ConnectorPoint PointX="4.666666666666667" PointY="17.737975772705081" />
@@ -38782,51 +38975,45 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="5.6326113865413552" PointY="21.391118369901591" />
           <edmx:ConnectorPoint PointX="5.7550564354508147" PointY="21.391118369901591" />
           <edmx:ConnectorPoint PointX="5.7550564354508147" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="5.87421229768613" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.0668998321703693" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.1392064932547781" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.3058731599214441" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.4042006888234262" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.5708673554900923" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.6691948843920743" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.83586155105874" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="5.8898371726861294" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.067708333333333" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.0746512226028848" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.3030262986552845" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.3107657785391025" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.6177419804900923" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.8457463886148027" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="20.1324212387161" />
-          <edmx:ConnectorPoint PointX="7.7920380746166957" PointY="20.0924867142337" />
-          <edmx:ConnectorPoint PointX="8.2860869253833052" PointY="20.045685555888284" />
-          <edmx:ConnectorPoint PointX="8.3186661934690242" PointY="20.042599327710459" />
-          <edmx:ConnectorPoint PointX="8.4845900442356346" PointY="20.026881391314166" />
-          <edmx:ConnectorPoint PointX="10.073288074616695" PointY="19.876384314015937" />
-          <edmx:ConnectorPoint PointX="10.957961925383305" PointY="19.792579320016795" />
-          <edmx:ConnectorPoint PointX="11.385788074616695" PointY="19.752051426219424" />
-          <edmx:ConnectorPoint PointX="11.551711925383305" PointY="19.736333489823132" />
-          <edmx:ConnectorPoint PointX="11.557663074616695" PointY="19.735769738531786" />
-          <edmx:ConnectorPoint PointX="11.723586925383305" PointY="19.720051802135494" />
-          <edmx:ConnectorPoint PointX="11.792038074616695" PointY="19.713567437139549" />
-          <edmx:ConnectorPoint PointX="11.957961925383305" PointY="19.697849500743256" />
-          <edmx:ConnectorPoint PointX="12.604538074616695" PointY="19.636599458979802" />
-          <edmx:ConnectorPoint PointX="12.770461925383305" PointY="19.62088152258351" />
-          <edmx:ConnectorPoint PointX="12.792038074616695" PointY="19.61883761786601" />
-          <edmx:ConnectorPoint PointX="13.020461925383305" PointY="19.597199067765125" />
-          <edmx:ConnectorPoint PointX="13.292038074616695" PointY="19.571472708229244" />
-          <edmx:ConnectorPoint PointX="13.489211925383305" PointY="19.552794464980657" />
-          <edmx:ConnectorPoint PointX="14.354538074616695" PointY="19.470822275251109" />
-          <edmx:ConnectorPoint PointX="14.801711925383305" PointY="19.428461577184137" />
-          <edmx:ConnectorPoint PointX="15.182663074616695" PointY="19.392374143665208" />
-          <edmx:ConnectorPoint PointX="15.645461925383305" PointY="19.348533292172089" />
-          <edmx:ConnectorPoint PointX="19.417038074616695" PointY="18.991252565178822" />
-          <edmx:ConnectorPoint PointX="19.707961925383305" PointY="18.963693401373341" />
-          <edmx:ConnectorPoint PointX="19.729538074616695" PointY="18.961649496655841" />
-          <edmx:ConnectorPoint PointX="20.504836925383305" PointY="18.888205576639741" />
-          <edmx:ConnectorPoint PointX="22.542038074616695" PointY="18.69522187994902" />
-          <edmx:ConnectorPoint PointX="22.707961925383305" PointY="18.679503943552728" />
-          <edmx:ConnectorPoint PointX="22.792038074616695" PointY="18.671539425130632" />
-          <edmx:ConnectorPoint PointX="23.082961925383305" PointY="18.643980261325151" />
-          <edmx:ConnectorPoint PointX="24.667038074616695" PointY="18.493921013992747" />
-          <edmx:ConnectorPoint PointX="25.020461925383305" PointY="18.460441236482669" />
-          <edmx:ConnectorPoint PointX="25.276413074616695" PointY="18.436195030372939" />
-          <edmx:ConnectorPoint PointX="25.442336925383305" PointY="18.420477093976647" />
-          <edmx:ConnectorPoint PointX="25.5" PointY="18.415014681339454" />
+          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="20.042599327710459" />
+          <edmx:ConnectorPoint PointX="7.8388755844163684" PointY="20.000541159882488" />
+          <edmx:ConnectorPoint PointX="8.27049941558363" PointY="19.961785153758569" />
+          <edmx:ConnectorPoint PointX="10.073250584416368" PointY="19.799914028268951" />
+          <edmx:ConnectorPoint PointX="10.832999415583631" PointY="19.731695296523466" />
+          <edmx:ConnectorPoint PointX="11.385750584416369" PointY="19.68206312578268" />
+          <edmx:ConnectorPoint PointX="11.551749415583631" PointY="19.667157897542889" />
+          <edmx:ConnectorPoint PointX="11.557625584416369" PointY="19.666630269504719" />
+          <edmx:ConnectorPoint PointX="11.723624415583631" PointY="19.651725041264928" />
+          <edmx:ConnectorPoint PointX="11.792000584416369" PointY="19.645585465489312" />
+          <edmx:ConnectorPoint PointX="11.957999415583631" PointY="19.630680237249521" />
+          <edmx:ConnectorPoint PointX="12.604500584416369" PointY="19.572630144902572" />
+          <edmx:ConnectorPoint PointX="12.770499415583631" PointY="19.557724916662782" />
+          <edmx:ConnectorPoint PointX="12.792000584416368" PointY="19.555794301690248" />
+          <edmx:ConnectorPoint PointX="13.020499415583631" PointY="19.535277125713016" />
+          <edmx:ConnectorPoint PointX="13.167000584416369" PointY="19.522122615265598" />
+          <edmx:ConnectorPoint PointX="13.489249415583631" PointY="19.493187517682202" />
+          <edmx:ConnectorPoint PointX="14.354500584416368" PointY="19.415495608254211" />
+          <edmx:ConnectorPoint PointX="14.786124415583632" PointY="19.376739602130293" />
+          <edmx:ConnectorPoint PointX="15.182625584416368" PointY="19.341137300733109" />
+          <edmx:ConnectorPoint PointX="15.645499415583632" PointY="19.29957532074047" />
+          <edmx:ConnectorPoint PointX="19.729500584416368" PointY="18.932868102834245" />
+          <edmx:ConnectorPoint PointX="20.411124415583632" PointY="18.871664305760561" />
+          <edmx:ConnectorPoint PointX="20.562000584416367" PointY="18.858116958971525" />
+          <edmx:ConnectorPoint PointX="20.831845569429788" PointY="18.833887263721831" />
+          <edmx:ConnectorPoint PointX="22.604500584416368" PointY="18.674718506911933" />
+          <edmx:ConnectorPoint PointX="23.176749415583632" PointY="18.623335618378775" />
+          <edmx:ConnectorPoint PointX="24.667000584416368" PointY="18.489524231576368" />
+          <edmx:ConnectorPoint PointX="25.059561915583632" PointY="18.45427569278835" />
+          <edmx:ConnectorPoint PointX="25.276375584416368" PointY="18.434807741136314" />
+          <edmx:ConnectorPoint PointX="25.442374415583632" PointY="18.419902512896524" />
+          <edmx:ConnectorPoint PointX="25.5" PointY="18.414728244607176" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.625" />
@@ -38971,6 +39158,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__OutOf__1A27C9E7" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__OutOf__1A27C9E71" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Forwa__14C3F64C" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EntityPro__Looku__254F63D0" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

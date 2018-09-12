@@ -21,6 +21,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             this.EntityProperties = new List<EntityProperty>();
             this.FactorRelationships = new List<FactorRelationship>();
+            this.EntityProperties1 = new List<EntityProperty>();
         }
     
     	[DataMember]
@@ -40,5 +41,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<EntityProperty> EntityProperties { get; set; }
         [DataMember]
         public virtual List<FactorRelationship> FactorRelationships { get; set; }
+        [DataMember]
+        public virtual List<EntityProperty> EntityProperties1 { get; set; }
     }
 }

@@ -38,8 +38,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> IdentifierTypeId { get; set; }
     	[DataMember]
         public bool IsPrimaryKey { get; set; }
+    	[DataMember]
+        public Nullable<int> LookupEntityTypeId { get; set; }
     
         [DataMember]
         public virtual EntityType EntityType { get; set; }
+        [DataMember]
+        public virtual EntityType EntityType1 { get; set; }
     }
 }
