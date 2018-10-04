@@ -10,6 +10,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         File = 1,
         [EnumMember]
-        String = 2
+        String = 2,
+        [EnumMember]
+        EncryptedFile = 3,
+
     }
 }

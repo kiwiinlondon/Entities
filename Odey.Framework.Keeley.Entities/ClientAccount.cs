@@ -54,6 +54,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool ManualUpdate { get; set; }
     	[DataMember]
         public bool ClientHasChanged { get; set; }
+    	[DataMember]
+        public Nullable<int> ClientPlatformId { get; set; }
     
         [DataMember]
         public virtual Client Client { get; set; }

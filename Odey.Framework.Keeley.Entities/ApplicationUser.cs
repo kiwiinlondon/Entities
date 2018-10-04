@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class ApplicationUser
     {
-    	
-        public ApplicationUser()
-        {
-            this.InterestRateSwaps = new List<InterestRateSwap>();
-        }
-    
     	[DataMember]
         public int UserID { get; set; }
     	[DataMember]
@@ -44,8 +38,5 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsActive { get; set; }
     	[DataMember]
         public Nullable<int> UserTypeFlags { get; set; }
-    
-        [DataMember]
-        public virtual List<InterestRateSwap> InterestRateSwaps { get; set; }
     }
 }

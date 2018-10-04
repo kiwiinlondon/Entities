@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class LegalEntity
     {
+    	
+        public LegalEntity()
+        {
+            this.FundLegalEntityIdentifiers = new List<FundLegalEntityIdentifier>();
+        }
+    
     	[DataMember]
         public int LegalEntityID { get; set; }
     	[DataMember]
@@ -55,5 +61,7 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual Country Country { get; set; }
+        [DataMember]
+        public virtual List<FundLegalEntityIdentifier> FundLegalEntityIdentifiers { get; set; }
     }
 }

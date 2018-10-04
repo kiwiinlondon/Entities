@@ -79,6 +79,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Cusip = 37,
         [EnumMember]
-        ID509 = 38
+        CustodianId = 38,
+        [EnumMember]
+        CustodianFamilyId = 39
     }
 }

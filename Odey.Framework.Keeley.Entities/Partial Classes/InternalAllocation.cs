@@ -8,7 +8,6 @@ namespace Odey.Framework.Keeley.Entities
 {
     public partial class InternalAllocation
     {
-        #region Total Charges
         private decimal? _totalOfCharges = null;
         public decimal TotalOfCharges
         {
@@ -16,56 +15,62 @@ namespace Odey.Framework.Keeley.Entities
             {
                 if (!_totalOfCharges.HasValue)
                 {
-                    _totalOfCharges = 0;
-                    foreach (Charge charge in Event.Charges)
-                    {
-                        _totalOfCharges = _totalOfCharges + charge.Quantity;
-                    }
+                    _totalOfCharges = -Event.Charges.Sum(a => a.Quantity);
                 }
                 return _totalOfCharges.Value;
             }
         }
-        #endregion
 
-        #region Is Charge Type Commission
-        private bool ChargeIsCommission(Charge charge)
+
+        
+        private decimal? _commission = null;
+        public decimal Commission
         {
-            switch ((ChargeTypeIds)charge.ChargeTypeId)
+            get
             {
-                case ChargeTypeIds.Commission:
-                case ChargeTypeIds.CFDCommission:
-                    return true;
-                default:
-                    return false;
+                if (!_commission.HasValue)
+                {
+                    return -Event.Charges.Where(a => a.ChargeTypeId == (int)ChargeTypeIds.Commission).Sum(a => a.Quantity);
+                }
+                return _commission.Value;
             }
         }
-        #endregion 
+        private decimal? _research = null;
+        public decimal Research
+        {
+            get
+            {
+                if (!_research.HasValue)
+                {
+                    return -Event.Charges.Where(a => a.ChargeTypeId == (int)ChargeTypeIds.Research).Sum(a => a.Quantity);
+                }
+                return _research.Value;
+            }
+        }
+
+        private static readonly int[] _taxChargeTypeIds = new int[] { (int)ChargeTypeIds.PTMLevy, (int)ChargeTypeIds.Fees, (int)ChargeTypeIds.StampDuty };
+
+        public decimal Taxes
+        {
+            get
+            {
+                if (!_research.HasValue)
+                {
+                    return -Event.Charges.Where(a => _taxChargeTypeIds.Contains( a.ChargeTypeId)).Sum(a => a.Quantity);
+                }
+                return _research.Value;
+            }
+        }
 
 
-
-        #region Total Charges
-        private decimal? _totalCommission = null;
         public decimal TotalCommission
         {
             get
             {
-                if (!_totalCommission.HasValue)
-                {
-                    _totalCommission = 0;
-                    foreach (Charge charge in Event.Charges)
-                    {
-                        if (ChargeIsCommission(charge))
-                        {
-                            _totalCommission = _totalCommission + charge.Quantity;
-                        }
-                    }
-                }
-                return _totalCommission.Value;
+                return Research + Commission;
             }
         }
-        #endregion
 
-        #region Total Of Charges Without Commission
         public decimal TotalOfChargesWithoutCommission
         {
             get
@@ -73,6 +78,14 @@ namespace Odey.Framework.Keeley.Entities
                 return TotalOfCharges - TotalCommission;
             }
         }
-        #endregion
+
+        public decimal TotalOfChargesWithoutCommissionAndTaxes
+        {
+            get
+            {
+                return TotalOfCharges - TotalCommission - Taxes;
+            }
+        }
+
     }
 }

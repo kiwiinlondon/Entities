@@ -70,6 +70,8 @@ namespace Odey.Framework.Keeley.Entities
         public int ValuationMethodologyId { get; set; }
     	[DataMember]
         public string CICCode { get; set; }
+    	[DataMember]
+        public string BloombergCleanTicker { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

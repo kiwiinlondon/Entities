@@ -182,6 +182,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<AttributionPNLNav> AttributionPNLNavs { get; set; }
         public DbSet<InterestRateSwap> InterestRateSwaps { get; set; }
         public DbSet<KeltPriorHolding> KeltPriorHoldings { get; set; }
+        public DbSet<FundLegalEntityIdentifier> FundLegalEntityIdentifiers { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

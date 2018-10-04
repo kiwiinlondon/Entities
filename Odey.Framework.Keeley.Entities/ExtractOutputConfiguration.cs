@@ -38,10 +38,16 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> EntityPropertyToWriteId { get; set; }
     	[DataMember]
         public string Format { get; set; }
+    	[DataMember]
+        public Nullable<int> FXRateEntityPropertyToApply { get; set; }
+    	[DataMember]
+        public bool Absolute { get; set; }
     
         [DataMember]
         public virtual EntityProperty EntityProperty { get; set; }
         [DataMember]
         public virtual EntityProperty EntityPropertyToWrite { get; set; }
+        [DataMember]
+        public virtual EntityProperty EntityProperty2 { get; set; }
     }
 }

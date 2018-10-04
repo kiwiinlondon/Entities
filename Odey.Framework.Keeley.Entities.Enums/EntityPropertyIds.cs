@@ -198,6 +198,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Client_Name = 115,
         [EnumMember]
-        Client_ClientSubTypeId = 116
+        Client_ClientSubTypeId = 116,
+        [EnumMember]
+        FundLegalEntityIdentifier_Custodian = 180,
+        [EnumMember]
+        FundLegalEntityIdentifier_CustodianFamily = 181,
+        [EnumMember]
+        FundLegalEntityIdentifier_CustodianFamilyAndCurrency = 182
     }
 }

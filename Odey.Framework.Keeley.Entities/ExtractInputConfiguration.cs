@@ -40,6 +40,10 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public bool IsNotEqual { get; set; }
+    	[DataMember]
+        public string IntValues { get; set; }
+    	[DataMember]
+        public bool SendCancel { get; set; }
     
         [DataMember]
         public virtual EntityProperty EntityProperty { get; set; }

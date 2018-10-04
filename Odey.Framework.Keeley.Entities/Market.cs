@@ -26,6 +26,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public string BBExchangeCode { get; set; }
+    	[DataMember]
+        public string MicCode { get; set; }
     
         [DataMember]
         public virtual LegalEntity LegalEntity { get; set; }

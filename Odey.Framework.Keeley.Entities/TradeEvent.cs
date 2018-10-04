@@ -110,6 +110,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> AdjustQuantityOnly { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> TradeDateOverride { get; set; }
+    	[DataMember]
+        public System.DateTime OrderSentToBrokerDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> NetAmount { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }

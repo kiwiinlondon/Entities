@@ -86,7 +86,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         KneipEventWrapper = 51,
         [EnumMember]
-        Administrator = 52
+        Administrator = 52,
+        [EnumMember]
+        BuySellIndicator = 53,
+        [EnumMember]
+        FXType = 54,
+        [EnumMember]
+        FundLegalEntityIdentifier=55
     }
 }
 
