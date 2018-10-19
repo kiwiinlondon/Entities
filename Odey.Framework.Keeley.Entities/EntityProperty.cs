@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class EntityProperty
     {
-    	
-        public EntityProperty()
-        {
-            this.ExtractOutputConfigurations2 = new List<ExtractOutputConfiguration>();
-        }
-    
     	[DataMember]
         public int EntityPropertyID { get; set; }
     	[DataMember]
@@ -57,7 +51,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual EntityType EntityType { get; set; }
         [DataMember]
         public virtual EntityType LookUpEntityType { get; set; }
-        [DataMember]
-        public virtual List<ExtractOutputConfiguration> ExtractOutputConfigurations2 { get; set; }
     }
 }

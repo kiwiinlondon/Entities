@@ -42,5 +42,7 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<int> FXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OriginalNotionalCost { get; set; }
     }
 }

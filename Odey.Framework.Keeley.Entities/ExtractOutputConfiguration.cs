@@ -47,7 +47,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual EntityProperty EntityProperty { get; set; }
         [DataMember]
         public virtual EntityProperty EntityPropertyToWrite { get; set; }
-        [DataMember]
-        public virtual EntityProperty EntityProperty2 { get; set; }
     }
 }

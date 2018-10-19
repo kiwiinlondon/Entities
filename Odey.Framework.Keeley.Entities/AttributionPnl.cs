@@ -102,6 +102,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ForwardFXRate { get; set; }
     	[DataMember]
         public Nullable<int> ForwardFXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OriginalNotionalCost { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

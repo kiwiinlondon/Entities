@@ -100,6 +100,23 @@ namespace Odey.Framework.Keeley.Entities
                 return ContraCurrencyAmount / TradeCurrencyAmount ;
             }
         }
+
+        public decimal PayReceiveRate
+        {
+            get
+            {
+                return PayAmount / ReceiveAmount;
+            }
+        }
+
+        public decimal ReceivePayRate
+        {
+            get
+            {
+                return PayAmount / ReceiveAmount;
+            }
+        }
+
         #endregion
     }
 }

@@ -44,8 +44,12 @@ namespace Odey.Framework.Keeley.Entities
         public string IntValues { get; set; }
     	[DataMember]
         public bool SendCancel { get; set; }
+    	[DataMember]
+        public Nullable<int> EntityPropertyIdToLookup { get; set; }
     
         [DataMember]
         public virtual EntityProperty EntityProperty { get; set; }
+        [DataMember]
+        public virtual EntityProperty EntityPropertyToLookup { get; set; }
     }
 }
