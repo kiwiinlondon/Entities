@@ -34,5 +34,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         UniversalInvestment = 7893,
         [EnumMember]
         ValueTrac = 8936,
+        [EnumMember]
+        Attrax = 9821
+        
     }
 }
