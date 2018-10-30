@@ -121,6 +121,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FactsetBenchmarkWeights = 58,
         [EnumMember]
-        OfIndexPrices = 59
+        OfIndexPrices = 59,
+        [EnumMember]
+        AttraxClientHoldings = 60
     }
 }
