@@ -39,9 +39,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public bool IsActive { get; set; }
     	[DataMember]
-        public Nullable<bool> NavIsNotUsable { get; set; }
+        public bool NavIsNotUsable { get; set; }
+    	[DataMember]
+        public int SignOffManagerId { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
+        [DataMember]
+        public virtual ApplicationUser ApplicationUser2 { get; set; }
     }
 }
