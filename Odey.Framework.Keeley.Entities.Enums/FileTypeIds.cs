@@ -123,6 +123,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OfIndexPrices = 59,
         [EnumMember]
-        AttraxClientHoldings = 60
+        AttraxClientHoldings = 60,
+        [EnumMember]
+        OOFNeutralAAPrice = 62
     }
 }
