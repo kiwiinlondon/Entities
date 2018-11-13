@@ -125,6 +125,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         AttraxClientHoldings = 60,
         [EnumMember]
-        OOFNeutralAAPrice = 62
+        BloombergOOFReferenceAsset = 62
     }
 }
