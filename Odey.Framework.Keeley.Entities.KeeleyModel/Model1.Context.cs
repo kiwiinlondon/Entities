@@ -689,5 +689,48 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Portfolio>("Portfolio_GetValuationPositionsToRoll", mergeOption, referenceDateParameter);
         }
+    
+        public virtual int PortfolioMessageQueue_Delete(Nullable<int> lastMessageId)
+        {
+            var lastMessageIdParameter = lastMessageId.HasValue ?
+                new ObjectParameter("LastMessageId", lastMessageId) :
+                new ObjectParameter("LastMessageId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Delete", lastMessageIdParameter);
+        }
+    
+        public virtual ObjectResult<PortfolioMessageQueue_Get_Result> PortfolioMessageQueue_Get()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioMessageQueue_Get_Result>("PortfolioMessageQueue_Get");
+        }
+    
+        public virtual int PortfolioMessageQueue_Insert(Nullable<int> portfolioMessageTypeId, Nullable<int> positionId, Nullable<System.DateTime> referenceDate, Nullable<int> changeNumber, Nullable<int> entityId, string message)
+        {
+            var portfolioMessageTypeIdParameter = portfolioMessageTypeId.HasValue ?
+                new ObjectParameter("PortfolioMessageTypeId", portfolioMessageTypeId) :
+                new ObjectParameter("PortfolioMessageTypeId", typeof(int));
+    
+            var positionIdParameter = positionId.HasValue ?
+                new ObjectParameter("PositionId", positionId) :
+                new ObjectParameter("PositionId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var changeNumberParameter = changeNumber.HasValue ?
+                new ObjectParameter("ChangeNumber", changeNumber) :
+                new ObjectParameter("ChangeNumber", typeof(int));
+    
+            var entityIdParameter = entityId.HasValue ?
+                new ObjectParameter("EntityId", entityId) :
+                new ObjectParameter("EntityId", typeof(int));
+    
+            var messageParameter = message != null ?
+                new ObjectParameter("Message", message) :
+                new ObjectParameter("Message", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Insert", portfolioMessageTypeIdParameter, positionIdParameter, referenceDateParameter, changeNumberParameter, entityIdParameter, messageParameter);
+        }
     }
 }

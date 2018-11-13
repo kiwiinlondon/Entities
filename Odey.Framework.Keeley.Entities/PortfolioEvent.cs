@@ -158,6 +158,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodayMaxNetPosition { get; set; }
     	[DataMember]
         public Nullable<decimal> UnadjustedNetPosition { get; set; }
+    	[DataMember]
+        public Nullable<bool> Revalue { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

@@ -120,6 +120,10 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsSolvencyII { get; set; }
     	[DataMember]
         public bool IsVAG { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> TakeOnDate { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsAnalystPnl { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }

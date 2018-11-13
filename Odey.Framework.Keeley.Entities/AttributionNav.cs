@@ -47,15 +47,15 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> EURFXRateId { get; set; }
     	[DataMember]
-        public Nullable<decimal> EURFXRate { get; set; }
+        public decimal EURFXRate { get; set; }
     	[DataMember]
         public Nullable<int> USDFXRateId { get; set; }
     	[DataMember]
-        public Nullable<decimal> USDFXRate { get; set; }
+        public decimal USDFXRate { get; set; }
     	[DataMember]
         public Nullable<int> GBPFXRateId { get; set; }
     	[DataMember]
-        public Nullable<decimal> GBPFXRate { get; set; }
+        public decimal GBPFXRate { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
