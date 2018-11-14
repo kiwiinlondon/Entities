@@ -3,27 +3,27 @@ using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
- [DataContract]
+    [DataContract]
     public enum AnalyticTypeIds
     {
         [EnumMember]
-        None=0,
-        
+        None = 0,
+
         [EnumMember]
         BBVolumeAverage30D = 1,
-        
+
         [EnumMember]
-        LiquidityWeightedAverageNumberOfDays=2,
-        
+        LiquidityWeightedAverageNumberOfDays = 2,
+
         [EnumMember]
-        LiquidityNonLiquidatedPercentNAV=3,
-        
+        LiquidityNonLiquidatedPercentNAV = 3,
+
         [EnumMember]
-        LiquidityValueGreaterMaxDailyLimitPercentNAV=4,
-        
+        LiquidityValueGreaterMaxDailyLimitPercentNAV = 4,
+
         [EnumMember]
-        LiquidityHaircutPercentNAV=5,
-        
+        LiquidityHaircutPercentNAV = 5,
+
         [EnumMember]
         SharesOutstanding = 6,
 
@@ -31,28 +31,28 @@ namespace Odey.Framework.Keeley.Entities.Enums
         /// currently 60 day daily
         /// </summary>
         [EnumMember]
-        BetaShortTerm = 7, 
-        
+        BetaShortTerm = 7,
+
         [EnumMember]
-        IndicativeFundPerformance =8,
-        
+        IndicativeFundPerformance = 8,
+
         [EnumMember]
         OptionDelta = 9,
-        
+
         [EnumMember]
         HedgeRatio = 10,
-        
+
         [EnumMember]
         BBVolumeAverage30DValue = 11,
-        
+
         [EnumMember]
         VaR1Day = 12,
-        
+
         /// <summary>
         /// currently 2 year daily
         /// </summary>
         [EnumMember]
-        BetaLongTerm = 13, 
+        BetaLongTerm = 13,
 
         [EnumMember]
         BetaFundShortTermWeightedNetEquitiesOnly = 14,
@@ -85,7 +85,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         FundPeerGroupRanking1Y = 22,
 
         [EnumMember]
-        FundPeerGroupRanking3Y=23,
+        FundPeerGroupRanking3Y = 23,
 
         [EnumMember]
         VaR20DaysMixedModel = 25,
@@ -97,7 +97,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Yield = 30,
 
         [EnumMember]
-        InflationAssumption = 31
+        InflationAssumption = 31,
+
+        [EnumMember]
+        MarketCapitalisationUSD = 39
     }
 }
 

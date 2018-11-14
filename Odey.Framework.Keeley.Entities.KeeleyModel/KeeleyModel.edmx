@@ -1457,7 +1457,7 @@
           <Property Name="IsSolvencyII" Type="bit" Nullable="false" />
           <Property Name="IsVAG" Type="bit" Nullable="false" />
           <Property Name="TakeOnDate" Type="datetime" />
-          <Property Name="IsAnalystPnl" Type="bit" />
+          <Property Name="IsAnalystPnl" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FundCountryHoliday">
           <Key>
@@ -1612,6 +1612,28 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ErrorEmailSendTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="HistoricEzeCommissionRate">
+          <Key>
+            <PropertyRef Name="HistoricEzeCommissionRateId" />
+          </Key>
+          <Property Name="HistoricEzeCommissionRateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EzeBrokerCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Execution01Jan15" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Research01Jan15" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Execution01Feb16" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Research01Feb16" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Execution19Jul17" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Research19Jul17" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Execution05Sep17" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Research05Sep17" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Execution20Oct17" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Research20Oct17" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IsResearchUSTrade" Type="bit" Nullable="false" />
+          <Property Name="IsResearchAllCFDTrade" Type="bit" Nullable="false" />
+          <Property Name="IsResearchUSHKCNCFDTrade" Type="bit" Nullable="false" />
+          <Property Name="IsResearchUSHKCNCFDTrade2016" Type="bit" Nullable="false" />
+          <Property Name="IsResearchAllCFDTrade2016" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="IdentifierMapping">
           <Key>
@@ -2761,6 +2783,7 @@
           <Property Name="TradeDateOverride" Type="datetime" />
           <Property Name="OrderSentToBrokerDate" Type="datetime" Nullable="false" />
           <Property Name="NetAmount" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="RebuildTrade" Type="bit" />
         </EntityType>
         <EntityType Name="TransferEvent">
           <Key>
@@ -12790,6 +12813,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TradeDateOverride" Type="datetime" Mode="In" />
           <Parameter Name="OrderSentToBrokerDate" Type="datetime" Mode="In" />
           <Parameter Name="NetAmount" Type="numeric" Mode="In" />
+          <Parameter Name="RebuildTrade" Type="bit" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -12840,6 +12864,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="TradeDateOverride" Type="datetime" Mode="In" />
           <Parameter Name="OrderSentToBrokerDate" Type="datetime" Mode="In" />
           <Parameter Name="NetAmount" Type="numeric" Mode="In" />
+          <Parameter Name="RebuildTrade" Type="bit" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -12984,6 +13009,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <EntitySet Name="FXRate" EntityType="Self.FXRate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FXTradeEvent" EntityType="Self.FXTradeEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HealthCheck" EntityType="Self.HealthCheck" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HistoricEzeCommissionRate" EntityType="Self.HistoricEzeCommissionRate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IdentifierMapping" EntityType="Self.IdentifierMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IdentifierType" EntityType="Self.IdentifierType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IndexConstituent" EntityType="Self.IndexConstituent" Schema="dbo" store:Type="Tables" />
@@ -17150,6 +17176,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="Book" EntitySet="Books" />
           </AssociationSet>
+          <EntitySet Name="HistoricEzeCommissionRates" EntityType="Odey.Framework.Keeley.Entities.HistoricEzeCommissionRate" />
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -17973,6 +18000,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="TradeDateOverride" Type="DateTime" Precision="3" />
           <Property Name="OrderSentToBrokerDate" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="NetAmount" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="RebuildTrade" Type="Boolean" />
           </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -21341,7 +21369,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="IsSolvencyII" Type="Boolean" Nullable="false" />
           <Property Name="IsVAG" Type="Boolean" Nullable="false" />
           <Property Name="TakeOnDate" Type="DateTime" Precision="3" />
-          <Property Name="IsAnalystPnl" Type="Boolean" />
+          <Property Name="IsAnalystPnl" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -25958,6 +25986,28 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="HistoricEzeCommissionRate">
+          <Key>
+            <PropertyRef Name="HistoricEzeCommissionRateId" />
+          </Key>
+          <Property Name="HistoricEzeCommissionRateId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="EzeBrokerCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Execution01Jan15" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Research01Jan15" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Execution01Feb16" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Research01Feb16" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Execution19Jul17" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Research19Jul17" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Execution05Sep17" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Research05Sep17" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Execution20Oct17" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Research20Oct17" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="IsResearchUSTrade" Type="Boolean" Nullable="false" />
+          <Property Name="IsResearchAllCFDTrade" Type="Boolean" Nullable="false" />
+          <Property Name="IsResearchUSHKCNCFDTrade" Type="Boolean" Nullable="false" />
+          <Property Name="IsResearchUSHKCNCFDTrade2016" Type="Boolean" Nullable="false" />
+          <Property Name="IsResearchAllCFDTrade2016" Type="Boolean" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -26873,6 +26923,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="RebuildTrade" ColumnName="RebuildTrade" />
                 <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
                 <ScalarProperty Name="OrderSentToBrokerDate" ColumnName="OrderSentToBrokerDate" />
                 <ScalarProperty Name="TradeDateOverride" ColumnName="TradeDateOverride" />
@@ -26927,6 +26978,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="RebuildTrade" ParameterName="RebuildTrade" />
                   <ScalarProperty Name="NetAmount" ParameterName="NetAmount" />
                   <ScalarProperty Name="OrderSentToBrokerDate" ParameterName="OrderSentToBrokerDate" />
                   <ScalarProperty Name="TradeDateOverride" ParameterName="TradeDateOverride" />
@@ -26978,6 +27030,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="RebuildTrade" ParameterName="RebuildTrade" Version="Current" />
                   <ScalarProperty Name="NetAmount" ParameterName="NetAmount" Version="Current" />
                   <ScalarProperty Name="OrderSentToBrokerDate" ParameterName="OrderSentToBrokerDate" Version="Current" />
                   <ScalarProperty Name="TradeDateOverride" ParameterName="TradeDateOverride" Version="Current" />
@@ -33896,6 +33949,29 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="PortfolioMessageQueue_Insert" FunctionName="KeeleyModel.Store.PortfolioMessageQueue_Insert" />
+          <EntitySetMapping Name="HistoricEzeCommissionRates">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.HistoricEzeCommissionRate">
+              <MappingFragment StoreEntitySet="HistoricEzeCommissionRate">
+                <ScalarProperty Name="IsResearchAllCFDTrade2016" ColumnName="IsResearchAllCFDTrade2016" />
+                <ScalarProperty Name="IsResearchUSHKCNCFDTrade2016" ColumnName="IsResearchUSHKCNCFDTrade2016" />
+                <ScalarProperty Name="IsResearchUSHKCNCFDTrade" ColumnName="IsResearchUSHKCNCFDTrade" />
+                <ScalarProperty Name="IsResearchAllCFDTrade" ColumnName="IsResearchAllCFDTrade" />
+                <ScalarProperty Name="IsResearchUSTrade" ColumnName="IsResearchUSTrade" />
+                <ScalarProperty Name="Research20Oct17" ColumnName="Research20Oct17" />
+                <ScalarProperty Name="Execution20Oct17" ColumnName="Execution20Oct17" />
+                <ScalarProperty Name="Research05Sep17" ColumnName="Research05Sep17" />
+                <ScalarProperty Name="Execution05Sep17" ColumnName="Execution05Sep17" />
+                <ScalarProperty Name="Research19Jul17" ColumnName="Research19Jul17" />
+                <ScalarProperty Name="Execution19Jul17" ColumnName="Execution19Jul17" />
+                <ScalarProperty Name="Research01Feb16" ColumnName="Research01Feb16" />
+                <ScalarProperty Name="Execution01Feb16" ColumnName="Execution01Feb16" />
+                <ScalarProperty Name="Research01Jan15" ColumnName="Research01Jan15" />
+                <ScalarProperty Name="Execution01Jan15" ColumnName="Execution01Jan15" />
+                <ScalarProperty Name="EzeBrokerCode" ColumnName="EzeBrokerCode" />
+                <ScalarProperty Name="HistoricEzeCommissionRateId" ColumnName="HistoricEzeCommissionRateId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -33918,7 +33994,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="64">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="55">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -39556,10 +39632,12 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="5.9240833155097326" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.0907499821763986" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.1998100799607228" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.3664767466273888" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.3851650926417269" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.642203511078379" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.8457463886148027" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="19.808435415577531" />
-          <edmx:ConnectorPoint PointX="7.8075370620989419" PointY="19.774819723507516" />
+          <edmx:ConnectorPoint PointX="7.8544120620989419" PointY="19.771214427273271" />
           <edmx:ConnectorPoint PointX="8.2549629379010572" PointY="19.740406863237997" />
           <edmx:ConnectorPoint PointX="8.7919120620989428" PointY="19.699108502588341" />
           <edmx:ConnectorPoint PointX="8.9580879379010572" PointY="19.686327419724297" />
@@ -39576,7 +39654,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <edmx:ConnectorPoint PointX="12.604412062098943" PointY="19.40587774220295" />
           <edmx:ConnectorPoint PointX="12.770587937901057" PointY="19.393096659338905" />
           <edmx:ConnectorPoint PointX="12.791912062098943" PointY="19.391456557265961" />
-          <edmx:ConnectorPoint PointX="13.020587937901057" PointY="19.373868412756259" />
+          <edmx:ConnectorPoint PointX="13.145587937901057" PointY="19.364254289464931" />
           <edmx:ConnectorPoint PointX="13.166912062098943" PointY="19.362614187391991" />
           <edmx:ConnectorPoint PointX="13.489337937901057" PointY="19.337815450413792" />
           <edmx:ConnectorPoint PointX="14.354412062098943" PointY="19.271280016124408" />
@@ -39752,6 +39830,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__GBPFX__42CAB81E" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__USDFX__41D693E5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Book__SignOffMan__37E31557" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.HistoricEzeCommissionRate" Width="1.5" PointX="0.875" PointY="41.125" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
