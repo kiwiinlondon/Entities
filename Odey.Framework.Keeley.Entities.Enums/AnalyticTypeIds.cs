@@ -100,7 +100,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         InflationAssumption = 31,
 
         [EnumMember]
-        MarketCapitalisationUSD = 39
+        MarketCapitalisationUSD = 39,
+
+        [EnumMember]
+        OfficialSSRI = 40,
+
+        [EnumMember]
+        CalculatedSSRI = 41,
+
     }
 }
 
