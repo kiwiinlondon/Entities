@@ -80,6 +80,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> RebuildTrade { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> OrderSentToBrokerDate { get; set; }
+    	[DataMember]
+        public string EzeParentTradeId { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
