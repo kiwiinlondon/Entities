@@ -1201,6 +1201,7 @@
           <Property Name="ImpliedCommsFlag" Type="int" Nullable="false" />
           <Property Name="TradeEntrySource" Type="varchar" MaxLength="100" />
           <Property Name="EzeTradeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BrokerSettlementCurrency" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="FactorBenchmark">
           <Key>
@@ -1619,6 +1620,7 @@
           <Property Name="PNLInstrumentMarketId" Type="int" />
           <Property Name="RebuildTrade" Type="bit" />
           <Property Name="OrderSentToBrokerDate" Type="datetime" />
+          <Property Name="EzeParentTradeId" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="HealthCheck">
           <Key>
@@ -1860,6 +1862,7 @@
           <Property Name="ValuationMethodologyId" Type="int" Nullable="false" />
           <Property Name="CICCode" Type="varchar" MaxLength="4" />
           <Property Name="BloombergCleanTicker" Type="varchar" MaxLength="50" />
+          <Property Name="LocalExchangeSymbol" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="InstrumentRelationship">
           <Key>
@@ -2069,6 +2072,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="BBExchangeCode" Type="varchar" MaxLength="30" />
           <Property Name="MicCode" Type="varchar" MaxLength="10" />
+          <Property Name="FixedIncomeMicCode" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="MatchedStatus">
           <Key>
@@ -10936,6 +10940,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="PNLInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="RebuildTrade" Type="bit" Mode="In" />
           <Parameter Name="OrderSentToBrokerDate" Type="datetime" Mode="In" />
+          <Parameter Name="EzeParentTradeId" Type="varchar" Mode="In" />
         </Function>
         <Function Name="FXTradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -10969,6 +10974,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="PNLInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="RebuildTrade" Type="bit" Mode="In" />
           <Parameter Name="OrderSentToBrokerDate" Type="datetime" Mode="In" />
+          <Parameter Name="EzeParentTradeId" Type="varchar" Mode="In" />
         </Function>
         <Function Name="IdentifierType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdentifierTypeID" Type="int" Mode="In" />
@@ -11242,6 +11248,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationMethodologyId" Type="int" Mode="In" />
           <Parameter Name="CICCode" Type="varchar" Mode="In" />
           <Parameter Name="BloombergCleanTicker" Type="varchar" Mode="In" />
+          <Parameter Name="LocalExchangeSymbol" Type="varchar" Mode="In" />
         </Function>
         <Function Name="InstrumentMarket_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
@@ -11271,6 +11278,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="ValuationMethodologyId" Type="int" Mode="In" />
           <Parameter Name="CICCode" Type="varchar" Mode="In" />
           <Parameter Name="BloombergCleanTicker" Type="varchar" Mode="In" />
+          <Parameter Name="LocalExchangeSymbol" Type="varchar" Mode="In" />
         </Function>
         <Function Name="InstrumentRelationship_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OverlyingInstrumentID" Type="int" Mode="In" />
@@ -11657,6 +11665,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="BBExchangeCode" Type="varchar" Mode="In" />
           <Parameter Name="MicCode" Type="varchar" Mode="In" />
+          <Parameter Name="FixedIncomeMicCode" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Market_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -11664,6 +11673,7 @@ warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a prim
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="BBExchangeCode" Type="varchar" Mode="In" />
           <Parameter Name="MicCode" Type="varchar" Mode="In" />
+          <Parameter Name="FixedIncomeMicCode" Type="varchar" Mode="In" />
         </Function>
         <Function Name="MatchedStatus_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MatchedStatusID" Type="int" Mode="In" />
@@ -17314,6 +17324,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="LegalEntity" Relationship="Odey.Framework.Keeley.Entities.MarketLegalEntiyFK" FromRole="Market" ToRole="LegalEntity" a:GetterAccess="Public" a:SetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Type="String" Name="BBExchangeCode" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="MicCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="FixedIncomeMicCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Region">
           <Key>
@@ -18172,6 +18183,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="PNLInstrumentMarketId" Type="Int32" />
           <Property Name="RebuildTrade" Type="Boolean" />
           <Property Name="OrderSentToBrokerDate" Type="DateTime" Precision="3" />
+          <Property Name="EzeParentTradeId" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FXTradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19559,6 +19571,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <NavigationProperty Name="Market" Relationship="Odey.Framework.Keeley.Entities.InstrumentMarketMarketIDFK" FromRole="InstrumentMarket" ToRole="Market" />
           <NavigationProperty Name="PriceCurrency" Relationship="Odey.Framework.Keeley.Entities.InstrumentMarketPriceCurrencyIdFK" FromRole="InstrumentMarket" ToRole="Currency" />
           <Property Name="BloombergCleanTicker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocalExchangeSymbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -26045,7 +26058,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="OrderTimestamp" Type="DateTime" Precision="3" />
           <Property Name="TradeTimestamp" Type="DateTime" Precision="3" />
           <Property Name="Quantity" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="ResearchCommission" Type="Decimal" Nullable="false" />
+          <Property Name="ResearchCommission" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
           <Property Name="ExecutionCommission" Type="Double" />
           <Property Name="CFD_GrossPrice" Type="Double" />
           <Property Name="CFD_GrossMoney" Type="Double" />
@@ -26055,6 +26068,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <Property Name="ImpliedCommsFlag" Type="Int32" Nullable="false" />
           <Property Name="TradeEntrySource" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="EzeTradeId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="BrokerSettlementCurrency" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -26312,7 +26326,8 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Markets"><EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Market"><MappingFragment StoreEntitySet="Market">
-            <ScalarProperty Name="MicCode" ColumnName="MicCode" />
+            <ScalarProperty Name="FixedIncomeMicCode" ColumnName="FixedIncomeMicCode" />
+                <ScalarProperty Name="MicCode" ColumnName="MicCode" />
                 <ScalarProperty Name="BBExchangeCode" ColumnName="BBExchangeCode" />
                 <ScalarProperty Name="LegalEntityID" ColumnName="LegalEntityID" />
             <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -26322,6 +26337,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Market">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Market_Insert">
+                  <ScalarProperty Name="FixedIncomeMicCode" ParameterName="FixedIncomeMicCode" />
                   <ScalarProperty Name="MicCode" ParameterName="MicCode" />
                   <ScalarProperty Name="BBExchangeCode" ParameterName="BBExchangeCode" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -26330,6 +26346,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Market_Update">
+                  <ScalarProperty Name="FixedIncomeMicCode" ParameterName="FixedIncomeMicCode" Version="Current" />
                   <ScalarProperty Name="MicCode" ParameterName="MicCode" Version="Current" />
                   <ScalarProperty Name="BBExchangeCode" ParameterName="BBExchangeCode" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
@@ -27179,6 +27196,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="FXTradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FXTradeEvent">
               <MappingFragment StoreEntitySet="FXTradeEvent">
+                <ScalarProperty Name="EzeParentTradeId" ColumnName="EzeParentTradeId" />
                 <ScalarProperty Name="OrderSentToBrokerDate" ColumnName="OrderSentToBrokerDate" />
                 <ScalarProperty Name="RebuildTrade" ColumnName="RebuildTrade" />
                 <ScalarProperty Name="PNLInstrumentMarketId" ColumnName="PNLInstrumentMarketId" />
@@ -27216,6 +27234,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FXTradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.FXTradeEvent_Insert">
+                  <ScalarProperty Name="EzeParentTradeId" ParameterName="EzeParentTradeId" />
                   <ScalarProperty Name="OrderSentToBrokerDate" ParameterName="OrderSentToBrokerDate" />
                   <ScalarProperty Name="RebuildTrade" ParameterName="RebuildTrade" />
                   <ScalarProperty Name="PNLInstrumentMarketId" ParameterName="PNLInstrumentMarketId" />
@@ -27250,6 +27269,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.FXTradeEvent_Update">
+                  <ScalarProperty Name="EzeParentTradeId" ParameterName="EzeParentTradeId" Version="Current" />
                   <ScalarProperty Name="OrderSentToBrokerDate" ParameterName="OrderSentToBrokerDate" Version="Current" />
                   <ScalarProperty Name="RebuildTrade" ParameterName="RebuildTrade" Version="Current" />
                   <ScalarProperty Name="PNLInstrumentMarketId" ParameterName="PNLInstrumentMarketId" Version="Current" />
@@ -28886,6 +28906,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="InstrumentMarkets">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <MappingFragment StoreEntitySet="InstrumentMarket">
+                <ScalarProperty Name="LocalExchangeSymbol" ColumnName="LocalExchangeSymbol" />
                 <ScalarProperty Name="BloombergCleanTicker" ColumnName="BloombergCleanTicker" />
                 <ScalarProperty Name="CICCode" ColumnName="CICCode" />
                 <ScalarProperty Name="ValuationMethodologyId" ColumnName="ValuationMethodologyId" />
@@ -28919,6 +28940,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Insert">
+                  <ScalarProperty Name="LocalExchangeSymbol" ParameterName="LocalExchangeSymbol" />
                   <ScalarProperty Name="BloombergCleanTicker" ParameterName="BloombergCleanTicker" />
                   <ScalarProperty Name="CICCode" ParameterName="CICCode" />
                   <ScalarProperty Name="ValuationMethodologyId" ParameterName="ValuationMethodologyId" />
@@ -28949,6 +28971,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Update">
+                  <ScalarProperty Name="LocalExchangeSymbol" ParameterName="LocalExchangeSymbol" Version="Current" />
                   <ScalarProperty Name="BloombergCleanTicker" ParameterName="BloombergCleanTicker" Version="Current" />
                   <ScalarProperty Name="CICCode" ParameterName="CICCode" Version="Current" />
                   <ScalarProperty Name="ValuationMethodologyId" ParameterName="ValuationMethodologyId" Version="Current" />
@@ -34023,6 +34046,7 @@ FROM [dbo].[FundNetAssetValue] AS [FundNetAssetValue]</DefiningQuery>
           <EntitySetMapping Name="EzeTrades">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EzeTrade">
               <MappingFragment StoreEntitySet="EzeTrade">
+                <ScalarProperty Name="BrokerSettlementCurrency" ColumnName="BrokerSettlementCurrency" />
                 <ScalarProperty Name="EzeTradeId" ColumnName="EzeTradeId" />
                 <ScalarProperty Name="TradeEntrySource" ColumnName="TradeEntrySource" />
                 <ScalarProperty Name="ImpliedCommsFlag" ColumnName="ImpliedCommsFlag" />

@@ -34,5 +34,7 @@ namespace Odey.Framework.Keeley.Entities.Interfaces
         int ImpliedCommsFlag { get; set; }
 
         string TradeEntrySource { get; set; }
+
+        string BrokerSettlementCurrency { get; set; }
     }
 }
