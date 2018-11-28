@@ -185,6 +185,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FundLegalEntityIdentifier> FundLegalEntityIdentifiers { get; set; }
         public DbSet<HistoricEzeCommissionRate> HistoricEzeCommissionRates { get; set; }
         public DbSet<EzeTrade> EzeTrades { get; set; }
+        public DbSet<SimpleFundPrice> SimpleFundPrices { get; set; }
+        public DbSet<SimpleIndexPrice> SimpleIndexPrices { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
