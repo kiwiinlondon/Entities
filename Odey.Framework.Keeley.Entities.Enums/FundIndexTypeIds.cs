@@ -13,5 +13,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Relative = 1,
         [EnumMember]
         Beta = 2,
+        [EnumMember]
+        SRRI = 3,
     }
 }
