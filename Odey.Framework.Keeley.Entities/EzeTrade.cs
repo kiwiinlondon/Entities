@@ -54,5 +54,7 @@ namespace Odey.Framework.Keeley.Entities
         public int EzeTradeId { get; set; }
     	[DataMember]
         public string BrokerSettlementCurrency { get; set; }
+    	[DataMember]
+        public string Exchange { get; set; }
     }
 }

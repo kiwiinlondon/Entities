@@ -116,6 +116,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> NetAmount { get; set; }
     	[DataMember]
         public Nullable<bool> RebuildTrade { get; set; }
+    	[DataMember]
+        public string MICCode { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }

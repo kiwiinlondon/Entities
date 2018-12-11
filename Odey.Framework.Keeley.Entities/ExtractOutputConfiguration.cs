@@ -42,6 +42,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FXRateEntityPropertyToApply { get; set; }
     	[DataMember]
         public bool Absolute { get; set; }
+    	[DataMember]
+        public Nullable<bool> IncludeForInstrumentClassId { get; set; }
+    	[DataMember]
+        public string InstrumentClassIds { get; set; }
+    	[DataMember]
+        public Nullable<bool> IncludeForEntityStatusId { get; set; }
+    	[DataMember]
+        public string EntityStatusIds { get; set; }
     
         [DataMember]
         public virtual EntityProperty EntityProperty { get; set; }

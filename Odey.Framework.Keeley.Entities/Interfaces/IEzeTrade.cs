@@ -9,9 +9,10 @@ namespace Odey.Framework.Keeley.Entities.Interfaces
     {
         string ParentTradeID { get; set; }
         string TradeID { get; set; }
-        string LotID { get; set; }
+        string LotID { get; set; } 
         string FMID { get; set; }
         string BrokerCode { get; set; }
+        string Exchange { get; set; }
 
         Nullable<System.DateTime> OrderTimestamp { get; set; }
 

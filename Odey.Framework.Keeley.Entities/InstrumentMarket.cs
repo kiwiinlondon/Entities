@@ -74,6 +74,8 @@ namespace Odey.Framework.Keeley.Entities
         public string BloombergCleanTicker { get; set; }
     	[DataMember]
         public string LocalExchangeSymbol { get; set; }
+    	[DataMember]
+        public string MicCode { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

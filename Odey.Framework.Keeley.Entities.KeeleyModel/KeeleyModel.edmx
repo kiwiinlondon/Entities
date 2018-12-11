@@ -1143,6 +1143,10 @@
           <Property Name="Format" Type="varchar" MaxLength="1000" />
           <Property Name="FXRateEntityPropertyToApply" Type="int" />
           <Property Name="Absolute" Type="bit" Nullable="false" />
+          <Property Name="IncludeForInstrumentClassId" Type="bit" />
+          <Property Name="InstrumentClassIds" Type="varchar" MaxLength="50" />
+          <Property Name="IncludeForEntityStatusId" Type="bit" />
+          <Property Name="EntityStatusIds" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="ExtractOutputType">
           <Key>
@@ -1202,6 +1206,7 @@
           <Property Name="TradeEntrySource" Type="varchar" MaxLength="100" />
           <Property Name="EzeTradeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BrokerSettlementCurrency" Type="varchar" MaxLength="20" />
+          <Property Name="Exchange" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="FactorBenchmark">
           <Key>
@@ -1863,6 +1868,7 @@
           <Property Name="CICCode" Type="varchar" MaxLength="4" />
           <Property Name="BloombergCleanTicker" Type="varchar" MaxLength="50" />
           <Property Name="LocalExchangeSymbol" Type="varchar" MaxLength="50" />
+          <Property Name="MicCode" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="InstrumentRelationship">
           <Key>
@@ -2811,6 +2817,7 @@
           <Property Name="OrderSentToBrokerDate" Type="datetime" Nullable="false" />
           <Property Name="NetAmount" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RebuildTrade" Type="bit" />
+          <Property Name="MICCode" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="TransferEvent">
           <Key>
@@ -10406,6 +10413,10 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Format" Type="varchar" Mode="In" />
           <Parameter Name="FXRateEntityPropertyToApply" Type="int" Mode="In" />
           <Parameter Name="Absolute" Type="bit" Mode="In" />
+          <Parameter Name="IncludeForInstrumentClassId" Type="bit" Mode="In" />
+          <Parameter Name="InstrumentClassIds" Type="varchar" Mode="In" />
+          <Parameter Name="IncludeForEntityStatusId" Type="bit" Mode="In" />
+          <Parameter Name="EntityStatusIds" Type="varchar" Mode="In" />
         </Function>
         <Function Name="ExtractOutputConfiguration_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractOutputConfigurationID" Type="int" Mode="In" />
@@ -10420,6 +10431,10 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Format" Type="varchar" Mode="In" />
           <Parameter Name="FXRateEntityPropertyToApply" Type="int" Mode="In" />
           <Parameter Name="Absolute" Type="bit" Mode="In" />
+          <Parameter Name="IncludeForInstrumentClassId" Type="bit" Mode="In" />
+          <Parameter Name="InstrumentClassIds" Type="varchar" Mode="In" />
+          <Parameter Name="IncludeForEntityStatusId" Type="bit" Mode="In" />
+          <Parameter Name="EntityStatusIds" Type="varchar" Mode="In" />
         </Function>
         <Function Name="ExtractRun_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractRunId" Type="int" Mode="In" />
@@ -11288,6 +11303,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="CICCode" Type="varchar" Mode="In" />
           <Parameter Name="BloombergCleanTicker" Type="varchar" Mode="In" />
           <Parameter Name="LocalExchangeSymbol" Type="varchar" Mode="In" />
+          <Parameter Name="MicCode" Type="varchar" Mode="In" />
         </Function>
         <Function Name="InstrumentMarket_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
@@ -11318,6 +11334,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="CICCode" Type="varchar" Mode="In" />
           <Parameter Name="BloombergCleanTicker" Type="varchar" Mode="In" />
           <Parameter Name="LocalExchangeSymbol" Type="varchar" Mode="In" />
+          <Parameter Name="MicCode" Type="varchar" Mode="In" />
         </Function>
         <Function Name="InstrumentRelationship_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OverlyingInstrumentID" Type="int" Mode="In" />
@@ -12886,6 +12903,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="OrderSentToBrokerDate" Type="datetime" Mode="In" />
           <Parameter Name="NetAmount" Type="numeric" Mode="In" />
           <Parameter Name="RebuildTrade" Type="bit" Mode="In" />
+          <Parameter Name="MICCode" Type="varchar" Mode="In" />
         </Function>
         <Function Name="TradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -12937,6 +12955,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="OrderSentToBrokerDate" Type="datetime" Mode="In" />
           <Parameter Name="NetAmount" Type="numeric" Mode="In" />
           <Parameter Name="RebuildTrade" Type="bit" Mode="In" />
+          <Parameter Name="MICCode" Type="varchar" Mode="In" />
         </Function>
         <Function Name="TradeType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TradeTypeID" Type="int" Mode="In" />
@@ -18101,6 +18120,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="OrderSentToBrokerDate" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="NetAmount" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="RebuildTrade" Type="Boolean" />
+          <Property Name="MICCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           </EntityType>
         <Association Name="TradeEventTraderIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -19636,6 +19656,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="PriceCurrency" Relationship="Odey.Framework.Keeley.Entities.InstrumentMarketPriceCurrencyIdFK" FromRole="InstrumentMarket" ToRole="Currency" />
           <Property Name="BloombergCleanTicker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LocalExchangeSymbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MicCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20029,6 +20050,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="EntityPropertyToWrite" Relationship="Odey.Framework.Keeley.Entities.ExtractOutputConfigurationEntityPropertyIdToWriteFK" FromRole="ExtractOutputConfiguration" ToRole="EntityProperty" />
           <Property Name="FXRateEntityPropertyToApply" Type="Int32" />
           <Property Name="Absolute" Type="Boolean" Nullable="false" />
+          <Property Name="IncludeForInstrumentClassId" Type="Boolean" />
+          <Property Name="InstrumentClassIds" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IncludeForEntityStatusId" Type="Boolean" />
+          <Property Name="EntityStatusIds" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="ExtractFieldOutputConfigurationUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -26133,6 +26158,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="TradeEntrySource" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="EzeTradeId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="BrokerSettlementCurrency" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Exchange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SimpleFundPrice">
           <Key>
@@ -27087,6 +27113,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="TradeEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <MappingFragment StoreEntitySet="TradeEvent">
+                <ScalarProperty Name="MICCode" ColumnName="MICCode" />
                 <ScalarProperty Name="RebuildTrade" ColumnName="RebuildTrade" />
                 <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
                 <ScalarProperty Name="OrderSentToBrokerDate" ColumnName="OrderSentToBrokerDate" />
@@ -27142,6 +27169,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TradeEvent_Insert">
+                  <ScalarProperty Name="MICCode" ParameterName="MICCode" />
                   <ScalarProperty Name="RebuildTrade" ParameterName="RebuildTrade" />
                   <ScalarProperty Name="NetAmount" ParameterName="NetAmount" />
                   <ScalarProperty Name="OrderSentToBrokerDate" ParameterName="OrderSentToBrokerDate" />
@@ -27194,6 +27222,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TradeEvent_Update">
+                  <ScalarProperty Name="MICCode" ParameterName="MICCode" Version="Current" />
                   <ScalarProperty Name="RebuildTrade" ParameterName="RebuildTrade" Version="Current" />
                   <ScalarProperty Name="NetAmount" ParameterName="NetAmount" Version="Current" />
                   <ScalarProperty Name="OrderSentToBrokerDate" ParameterName="OrderSentToBrokerDate" Version="Current" />
@@ -29005,6 +29034,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="InstrumentMarkets">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <MappingFragment StoreEntitySet="InstrumentMarket">
+                <ScalarProperty Name="MicCode" ColumnName="MicCode" />
                 <ScalarProperty Name="LocalExchangeSymbol" ColumnName="LocalExchangeSymbol" />
                 <ScalarProperty Name="BloombergCleanTicker" ColumnName="BloombergCleanTicker" />
                 <ScalarProperty Name="CICCode" ColumnName="CICCode" />
@@ -29039,6 +29069,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Insert">
+                  <ScalarProperty Name="MicCode" ParameterName="MicCode" />
                   <ScalarProperty Name="LocalExchangeSymbol" ParameterName="LocalExchangeSymbol" />
                   <ScalarProperty Name="BloombergCleanTicker" ParameterName="BloombergCleanTicker" />
                   <ScalarProperty Name="CICCode" ParameterName="CICCode" />
@@ -29070,6 +29101,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Update">
+                  <ScalarProperty Name="MicCode" ParameterName="MicCode" Version="Current" />
                   <ScalarProperty Name="LocalExchangeSymbol" ParameterName="LocalExchangeSymbol" Version="Current" />
                   <ScalarProperty Name="BloombergCleanTicker" ParameterName="BloombergCleanTicker" Version="Current" />
                   <ScalarProperty Name="CICCode" ParameterName="CICCode" Version="Current" />
@@ -29281,6 +29313,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="ExtractOutputConfigurations">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration">
               <MappingFragment StoreEntitySet="ExtractOutputConfiguration">
+                <ScalarProperty Name="EntityStatusIds" ColumnName="EntityStatusIds" />
+                <ScalarProperty Name="IncludeForEntityStatusId" ColumnName="IncludeForEntityStatusId" />
+                <ScalarProperty Name="InstrumentClassIds" ColumnName="InstrumentClassIds" />
+                <ScalarProperty Name="IncludeForInstrumentClassId" ColumnName="IncludeForInstrumentClassId" />
                 <ScalarProperty Name="Absolute" ColumnName="Absolute" />
                 <ScalarProperty Name="FXRateEntityPropertyToApply" ColumnName="FXRateEntityPropertyToApply" />
                 <ScalarProperty Name="Format" ColumnName="Format" />
@@ -29299,6 +29335,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ExtractOutputConfiguration_Insert">
+                  <ScalarProperty Name="EntityStatusIds" ParameterName="EntityStatusIds" />
+                  <ScalarProperty Name="IncludeForEntityStatusId" ParameterName="IncludeForEntityStatusId" />
+                  <ScalarProperty Name="InstrumentClassIds" ParameterName="InstrumentClassIds" />
+                  <ScalarProperty Name="IncludeForInstrumentClassId" ParameterName="IncludeForInstrumentClassId" />
                   <ScalarProperty Name="Absolute" ParameterName="Absolute" />
                   <ScalarProperty Name="FXRateEntityPropertyToApply" ParameterName="FXRateEntityPropertyToApply" />
                   <ScalarProperty Name="Format" ParameterName="Format" />
@@ -29314,6 +29354,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ExtractOutputConfiguration_Update">
+                  <ScalarProperty Name="EntityStatusIds" ParameterName="EntityStatusIds" Version="Current" />
+                  <ScalarProperty Name="IncludeForEntityStatusId" ParameterName="IncludeForEntityStatusId" Version="Current" />
+                  <ScalarProperty Name="InstrumentClassIds" ParameterName="InstrumentClassIds" Version="Current" />
+                  <ScalarProperty Name="IncludeForInstrumentClassId" ParameterName="IncludeForInstrumentClassId" Version="Current" />
                   <ScalarProperty Name="Absolute" ParameterName="Absolute" Version="Current" />
                   <ScalarProperty Name="FXRateEntityPropertyToApply" ParameterName="FXRateEntityPropertyToApply" Version="Current" />
                   <ScalarProperty Name="Format" ParameterName="Format" Version="Current" />
@@ -34145,6 +34189,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="EzeTrades">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EzeTrade">
               <MappingFragment StoreEntitySet="EzeTrade">
+                <ScalarProperty Name="Exchange" ColumnName="Exchange" />
                 <ScalarProperty Name="BrokerSettlementCurrency" ColumnName="BrokerSettlementCurrency" />
                 <ScalarProperty Name="EzeTradeId" ColumnName="EzeTradeId" />
                 <ScalarProperty Name="TradeEntrySource" ColumnName="TradeEntrySource" />
@@ -34209,14 +34254,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
         <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
-        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="108">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="69">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -37423,7 +37468,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="31.603092619228732" PointY="7.7747200520833353" />
           <edmx:ConnectorPoint PointX="31.603092619228732" PointY="9.125" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration" Width="1.5" PointX="16.625" PointY="31.125" Height="3.5186979166666674" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ExtractOutputConfiguration" Width="1.5" PointX="16.75" PointY="30.5" Height="3.5186979166666674" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExtractFieldOutputConfigurationUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.694214982503258" />
           <edmx:ConnectorPoint PointX="6.3658844166666668" PointY="17.694214982503258" />
@@ -39855,35 +39900,47 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="6.0907499821763986" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.1998100799607228" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.3664767466273888" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.475536844411713" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.642203511078379" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.4378576532989653" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.6045243199656314" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.8457463886148027" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="19.737324505903835" />
-          <edmx:ConnectorPoint PointX="7.8075128391457849" PointY="19.705419759056578" />
-          <edmx:ConnectorPoint PointX="8.2549871608542151" PointY="19.67275307071991" />
-          <edmx:ConnectorPoint PointX="10.104387839145785" PointY="19.537742428462892" />
-          <edmx:ConnectorPoint PointX="10.270612160854215" PointY="19.5256076581581" />
-          <edmx:ConnectorPoint PointX="10.291887839145785" PointY="19.524054483108305" />
-          <edmx:ConnectorPoint PointX="11.020612160854215" PointY="19.470855876739755" />
-          <edmx:ConnectorPoint PointX="12.604387839145785" PointY="19.355236490401733" />
-          <edmx:ConnectorPoint PointX="13.145612160854215" PointY="19.31572582938777" />
-          <edmx:ConnectorPoint PointX="13.166887839145785" PointY="19.314172654337973" />
-          <edmx:ConnectorPoint PointX="13.489362160854215" PointY="19.290631262904363" />
-          <edmx:ConnectorPoint PointX="15.182512839145785" PointY="19.167027241776164" />
-          <edmx:ConnectorPoint PointX="15.770612160854215" PointY="19.124094594423557" />
-          <edmx:ConnectorPoint PointX="17.385636839145786" PointY="19.006193956862152" />
-          <edmx:ConnectorPoint PointX="17.645612160854217" PointY="18.987215140877691" />
-          <edmx:ConnectorPoint PointX="19.729387839145787" PointY="18.835094566927438" />
-          <edmx:ConnectorPoint PointX="20.504987160854213" PointY="18.778473974220244" />
-          <edmx:ConnectorPoint PointX="20.603426300684244" PointY="18.771287683197595" />
-          <edmx:ConnectorPoint PointX="20.769650622392678" PointY="18.759152912892805" />
-          <edmx:ConnectorPoint PointX="22.354387839145783" PointY="18.643463331963225" />
-          <edmx:ConnectorPoint PointX="23.098737160854213" PointY="18.589124063481794" />
-          <edmx:ConnectorPoint PointX="24.666887839145783" PointY="18.474645339256654" />
-          <edmx:ConnectorPoint PointX="25.270612160854217" PointY="18.430572029791161" />
-          <edmx:ConnectorPoint PointX="25.276262839145783" PointY="18.43015951685425" />
-          <edmx:ConnectorPoint PointX="25.442487160854217" PointY="18.41802474654946" />
-          <edmx:ConnectorPoint PointX="25.5" PointY="18.413826172685916" />
+          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="19.705419759056578" />
+          <edmx:ConnectorPoint PointX="7.8543773751924508" PointY="19.670942830059488" />
+          <edmx:ConnectorPoint PointX="8.25499762480755" PointY="19.642399517365661" />
+          <edmx:ConnectorPoint PointX="8.66687737519245" PointY="19.613053989977093" />
+          <edmx:ConnectorPoint PointX="8.83312262480755" PointY="19.601209381153186" />
+          <edmx:ConnectorPoint PointX="10.104377375192451" PointY="19.510635272908246" />
+          <edmx:ConnectorPoint PointX="10.270622624807549" PointY="19.498790664084339" />
+          <edmx:ConnectorPoint PointX="10.291877375192451" PointY="19.49727630981231" />
+          <edmx:ConnectorPoint PointX="11.020622624807549" PointY="19.445354811700593" />
+          <edmx:ConnectorPoint PointX="11.323127375192451" PointY="19.423802012784655" />
+          <edmx:ConnectorPoint PointX="11.489372624807549" PointY="19.411957403960749" />
+          <edmx:ConnectorPoint PointX="11.495002375192451" PointY="19.41155629661338" />
+          <edmx:ConnectorPoint PointX="11.754997624807549" PointY="19.393032206241504" />
+          <edmx:ConnectorPoint PointX="11.791877375192451" PointY="19.390404605044814" />
+          <edmx:ConnectorPoint PointX="11.958122624807549" PointY="19.378559996220908" />
+          <edmx:ConnectorPoint PointX="12.604377375192451" PointY="19.33251576496242" />
+          <edmx:ConnectorPoint PointX="12.770622624807549" PointY="19.320671156138513" />
+          <edmx:ConnectorPoint PointX="12.791877375192451" PointY="19.319156801866487" />
+          <edmx:ConnectorPoint PointX="13.020622624807549" PointY="19.302859205343932" />
+          <edmx:ConnectorPoint PointX="13.104377375192451" PointY="19.296891863373254" />
+          <edmx:ConnectorPoint PointX="13.489372624807549" PointY="19.269461797604087" />
+          <edmx:ConnectorPoint PointX="14.354377375192451" PointY="19.207832109400343" />
+          <edmx:ConnectorPoint PointX="14.676872624807549" PointY="19.184855031329821" />
+          <edmx:ConnectorPoint PointX="15.182502375192451" PointY="19.148830022393287" />
+          <edmx:ConnectorPoint PointX="15.645622624807549" PointY="19.115833722000815" />
+          <edmx:ConnectorPoint PointX="17.385626375192448" PointY="18.991862277263834" />
+          <edmx:ConnectorPoint PointX="17.551871624807546" PointY="18.980017668439928" />
+          <edmx:ConnectorPoint PointX="19.729377375192449" PointY="18.824875167316822" />
+          <edmx:ConnectorPoint PointX="20.489372624807547" PointY="18.770727175355781" />
+          <edmx:ConnectorPoint PointX="20.561877375192452" PointY="18.765561371170865" />
+          <edmx:ConnectorPoint PointX="20.863122624807545" PointY="18.744098308917881" />
+          <edmx:ConnectorPoint PointX="22.760627375192449" PointY="18.608905263932506" />
+          <edmx:ConnectorPoint PointX="22.958122624807551" PointY="18.594834161259275" />
+          <edmx:ConnectorPoint PointX="24.741877375192448" PointY="18.46774555388544" />
+          <edmx:ConnectorPoint PointX="25.145622624807555" PointY="18.438979591806678" />
+          <edmx:ConnectorPoint PointX="25.276252375192449" PointY="18.429672509062023" />
+          <edmx:ConnectorPoint PointX="25.442497624807551" PointY="18.417827900238116" />
+          <edmx:ConnectorPoint PointX="25.5" PointY="18.413730982328119" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.625" />
