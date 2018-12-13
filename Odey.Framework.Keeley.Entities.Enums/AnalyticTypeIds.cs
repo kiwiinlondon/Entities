@@ -103,10 +103,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MarketCapitalisationUSD = 39,
 
         [EnumMember]
-        OfficialSSRI = 40,
+        OfficialSRRI = 40,
 
         [EnumMember]
-        CalculatedSSRI = 41,
+        CalculatedSRRI = 41,
 
     }
 }
