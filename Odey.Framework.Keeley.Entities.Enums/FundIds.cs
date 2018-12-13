@@ -471,7 +471,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BNUA = 8906,
         [EnumMember]
-        LEGE = 8987
+        LEGE = 8987,
+
+        [EnumMember]
+        IAR =9838
 
     }
 }

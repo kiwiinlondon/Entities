@@ -20,6 +20,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FdxhAC = 198,
         [EnumMember]
-        OEI =5
+        OEI =5,
+        [EnumMember]
+        IARAC = 208
+
     }
 }
