@@ -20,7 +20,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OEIEURSHARECLASSMAC = 5584,
         [EnumMember]
-        OEIGBPAMANSHARECLASS = 5766,       
+        OEIGBPAMANSHARECLASS = 5766,
         [EnumMember]
         OEIEURMSHARECLASS = 6051,
         [EnumMember]
@@ -39,7 +39,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         GIANO94 = 4849,
         [EnumMember]
         GIANO94_GBP_R = 6807,
-        
+
         [EnumMember]
         OUAR = 3609,
         [EnumMember]
@@ -50,7 +50,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OUAR_GBP_M = 5510,
         [EnumMember]
         OUAR_USD = 6031,
-        
+
         [EnumMember]
         DYSS = 5591,
         [EnumMember]
@@ -65,8 +65,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DYSS_USD_R = 6239,
         [EnumMember]
         DYSS_EUR_R = 6244,
-        
-        
+
+
         [EnumMember]
         MR11 = 5590,
         [EnumMember]
@@ -122,49 +122,49 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         VITR = 5333,
-       
+
         [EnumMember]
         FEBT = 5084,
-        
+
         [EnumMember]
         FEBX = 5313,
-        
+
         [EnumMember]
         FGT = 5314,
-        
+
         [EnumMember]
         GARD = 5315,
-        
+
         [EnumMember]
         BARC = 4963,
-        
+
         [EnumMember]
         BARF = 4964,
-        
+
         [EnumMember]
         TPTL = 5332,
-        
+
         [EnumMember]
         BEST = 4965,
-        
+
         [EnumMember]
         OBID = 5325,
-        
+
         [EnumMember]
         CFNO = 4966,
-        
+
         [EnumMember]
         MMAG = 5987,
-        
+
         [EnumMember]
         OSYN = 5329,
-        
+
         [EnumMember]
         CAC = 2485,
-        
+
         [EnumMember]
         JLEG = 5732,
-        
+
         [EnumMember]
         ALEG = 4930,
         [EnumMember]
@@ -180,7 +180,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ALEGAUDSHARECLASS = 6354,
 
-        
+
         [EnumMember]
         OEAF = 5326,
         [EnumMember]
@@ -202,7 +202,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OEAF_EUR_CI = 6707,
 
-        
+
         [EnumMember]
         OF = 5592,
         [EnumMember]
@@ -231,14 +231,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OF_GBP_WM = 7010,
         [EnumMember]
         OF_GBP_RP = 7011,
-        
+
         [EnumMember]
         OPE = 5327,
         [EnumMember]
         OPE_GBP_R = 5531,
         [EnumMember]
-        OPE_EUR_R = 5955,  
-        
+        OPE_EUR_R = 5955,
+
         [EnumMember]
         ATLAS = 6053,//I S
         [EnumMember]
@@ -253,7 +253,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ATLAS_GBP_M = 6897,
         [EnumMember]
         ATLAS_GBP_R = 7033,
-        
+
         [EnumMember]
         ORION = 6121,
         [EnumMember]
@@ -266,7 +266,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ORION_GBP_R = 6128,
         [EnumMember]
         ORION_USD_I = 6129,
-        
+
         [EnumMember]
         NAVER = 6130,
         [EnumMember]
@@ -282,8 +282,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         NAVER_EUR_R = 6821,
 
-        
-        
+
+
         [EnumMember]
         SWAN = 6184,
         [EnumMember]
@@ -338,7 +338,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EAR_EUR_S = 6451,
         [EnumMember]
         EAR_EUR_I = 6458,
-         [EnumMember]
+        [EnumMember]
         EAR_EUR_M = 6520,
         [EnumMember]
         EAR_EUR_R = 6495,
@@ -352,7 +352,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EAR_USD_R = 6526,
         [EnumMember]
         EAR_GBP_MW = 6576,
-        
+
 
         [EnumMember]
         OTR = 6552,
@@ -366,7 +366,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OTR_USD_I = 6658,
         [EnumMember]
         OTR_EUR = 6739,
-        
+
 
         [EnumMember]
         CAMO = 6684,
@@ -406,9 +406,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
 
         [EnumMember]
-        MW=6994,
+        MW = 6994,
         [EnumMember]
-        DAMI=6995,
+        DAMI = 6995,
 
         [EnumMember]
         FDXC = 7492,
@@ -422,8 +422,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ARFF = 7504,//GBP I
         [EnumMember]
-        
-        
+
+
         ARFF_EUR_I_IRL = 7620,
         [EnumMember]
         ARFF_GBP_M_IRL = 7555,
@@ -474,7 +474,19 @@ namespace Odey.Framework.Keeley.Entities.Enums
         LEGE = 8987,
 
         [EnumMember]
-        IAR =9838
+        IAR = 9838,
+        [EnumMember]
+        IAR_GBP_M = 9854,
+        [EnumMember]
+        IAR_GBP_R = 9855,
+        [EnumMember]
+        IAR_EUR_I = 9856,
+        [EnumMember]
+        IAR_EUR_R = 9857,
+        [EnumMember]
+        IAR_USD_I = 9858,
+        [EnumMember]
+        IAR_USD_R = 9859
 
     }
 }
