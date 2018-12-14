@@ -49,7 +49,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         BLOOMBERG_INDEX_PRICE_CHECK = 14,
 
         [EnumMember]
-        OOF_REFERENCE_ASSET_LOADED = 15
+        OOF_REFERENCE_ASSET_LOADED = 15,
+
+        [EnumMember]
+        SRRI_CLASS_CHECK = 16
     }
 }
 
