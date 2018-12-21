@@ -276,6 +276,9 @@ namespace Odey.Framework.Keeley.Entities
 
         public List<ChangedEntity> ChangedEntities { get; private set; } 
 
+
+
+
         public override int SaveChanges()
         {
             ProcessChangedEntities();

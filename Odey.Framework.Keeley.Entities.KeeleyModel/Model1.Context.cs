@@ -694,13 +694,17 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Portfolio>("Portfolio_GetValuationPositionsToRoll", mergeOption, referenceDateParameter);
         }
     
-        public virtual int PortfolioMessageQueue_Delete(Nullable<int> lastMessageId)
+        public virtual int PortfolioMessageQueue_Delete(Nullable<int> fundId, Nullable<int> lastMessageId)
         {
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
             var lastMessageIdParameter = lastMessageId.HasValue ?
                 new ObjectParameter("LastMessageId", lastMessageId) :
                 new ObjectParameter("LastMessageId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Delete", lastMessageIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Delete", fundIdParameter, lastMessageIdParameter);
         }
     
         public virtual ObjectResult<PortfolioMessageQueue_Get_Result> PortfolioMessageQueue_Get()
@@ -708,33 +712,25 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioMessageQueue_Get_Result>("PortfolioMessageQueue_Get");
         }
     
-        public virtual int PortfolioMessageQueue_Insert(Nullable<int> portfolioMessageTypeId, Nullable<int> positionId, Nullable<System.DateTime> referenceDate, Nullable<int> changeNumber, Nullable<int> entityId, string message)
+        public virtual int PortfolioMessageQueue_Insert(Nullable<int> portfolioMessageTypeId, Nullable<int> fundId, Nullable<System.DateTime> referenceDate, string message)
         {
             var portfolioMessageTypeIdParameter = portfolioMessageTypeId.HasValue ?
                 new ObjectParameter("PortfolioMessageTypeId", portfolioMessageTypeId) :
                 new ObjectParameter("PortfolioMessageTypeId", typeof(int));
     
-            var positionIdParameter = positionId.HasValue ?
-                new ObjectParameter("PositionId", positionId) :
-                new ObjectParameter("PositionId", typeof(int));
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
     
             var referenceDateParameter = referenceDate.HasValue ?
                 new ObjectParameter("ReferenceDate", referenceDate) :
                 new ObjectParameter("ReferenceDate", typeof(System.DateTime));
     
-            var changeNumberParameter = changeNumber.HasValue ?
-                new ObjectParameter("ChangeNumber", changeNumber) :
-                new ObjectParameter("ChangeNumber", typeof(int));
-    
-            var entityIdParameter = entityId.HasValue ?
-                new ObjectParameter("EntityId", entityId) :
-                new ObjectParameter("EntityId", typeof(int));
-    
             var messageParameter = message != null ?
                 new ObjectParameter("Message", message) :
                 new ObjectParameter("Message", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Insert", portfolioMessageTypeIdParameter, positionIdParameter, referenceDateParameter, changeNumberParameter, entityIdParameter, messageParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Insert", portfolioMessageTypeIdParameter, fundIdParameter, referenceDateParameter, messageParameter);
         }
     }
 }

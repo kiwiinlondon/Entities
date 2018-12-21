@@ -13,14 +13,11 @@ namespace Odey.Framework.Keeley.Entities
     
     public partial class PortfolioMessageQueue_Get_Result
     {
-        public int fundid { get; set; }
         public int MessageId { get; set; }
         public int PortfolioMessageTypeId { get; set; }
-        public int PositionId { get; set; }
         public System.DateTime ReferenceDate { get; set; }
-        public int ChangeNumber { get; set; }
-        public int EntityId { get; set; }
         public string Message { get; set; }
         public System.DateTime StartDt { get; set; }
+        public int FundId { get; set; }
     }
 }
