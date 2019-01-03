@@ -47,6 +47,14 @@ namespace Odey.Framework.Keeley.Entities
             }
         }
 
+        public int ParentInstrumentClassID
+        {
+            get
+            {
+                return Instrument.ParentInstrumentClassId;
+            }
+        }
+
         public InstrumentClassIds InstrumentClassIdAsEnum
         {
             get
