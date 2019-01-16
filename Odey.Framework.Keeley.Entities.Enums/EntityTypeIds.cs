@@ -92,7 +92,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FXType = 54,
         [EnumMember]
-        FundLegalEntityIdentifier=55
+        FundLegalEntityIdentifier=55,
+        [EnumMember]
+        ListingStatus = 58
     }
 }
 
