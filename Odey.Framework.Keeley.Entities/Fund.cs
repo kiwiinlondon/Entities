@@ -124,6 +124,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> TakeOnDate { get; set; }
     	[DataMember]
         public bool IsAnalystPnl { get; set; }
+    	[DataMember]
+        public Nullable<int> CustodianId { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
