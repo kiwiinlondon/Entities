@@ -89,5 +89,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Market Market { get; set; }
         [DataMember]
         public virtual Currency PriceCurrency { get; set; }
+        [DataMember]
+        public virtual ListingStatus ListingStatus { get; set; }
     }
 }
