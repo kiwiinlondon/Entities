@@ -16,5 +16,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         GICSUnclassifiedSubIndustry = 849,
+
+        [EnumMember]
+        NaceUnclassifiedClass = 1341,
+
+        [EnumMember]
+        NaceUnclassifiedSector = 1340,
     }
 }

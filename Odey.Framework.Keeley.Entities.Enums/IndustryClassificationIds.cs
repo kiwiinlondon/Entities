@@ -12,6 +12,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Odey = 2,
         [EnumMember]
-        GICS = 3
+        GICS = 3,
+        [EnumMember]
+        NACE = 4
     }
 }

@@ -81,6 +81,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CustodianId = 38,
         [EnumMember]
-        CustodianFamilyId = 39
+        CustodianFamilyId = 39,
+        [EnumMember]
+        NaceCode = 40,
     }
 }
