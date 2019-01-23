@@ -94,7 +94,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FundLegalEntityIdentifier=55,
         [EnumMember]
-        ListingStatus = 58
+        ListingStatus = 58,
+        [EnumMember]
+        Beta = 59
     }
 }
 
