@@ -713,7 +713,7 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioMessageQueue_Get_Result>("PortfolioMessageQueue_Get");
         }
     
-        public virtual int PortfolioMessageQueue_Insert(Nullable<int> portfolioMessageTypeId, Nullable<int> fundId, Nullable<System.DateTime> referenceDate, string message)
+        public virtual int PortfolioMessageQueue_Insert(Nullable<int> portfolioMessageTypeId, Nullable<int> fundId, Nullable<System.DateTime> referenceDate, string message, Nullable<int> initiatingEntityTypeId, Nullable<int> initiatingEntityId)
         {
             var portfolioMessageTypeIdParameter = portfolioMessageTypeId.HasValue ?
                 new ObjectParameter("PortfolioMessageTypeId", portfolioMessageTypeId) :
@@ -731,7 +731,15 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("Message", message) :
                 new ObjectParameter("Message", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Insert", portfolioMessageTypeIdParameter, fundIdParameter, referenceDateParameter, messageParameter);
+            var initiatingEntityTypeIdParameter = initiatingEntityTypeId.HasValue ?
+                new ObjectParameter("InitiatingEntityTypeId", initiatingEntityTypeId) :
+                new ObjectParameter("InitiatingEntityTypeId", typeof(int));
+    
+            var initiatingEntityIdParameter = initiatingEntityId.HasValue ?
+                new ObjectParameter("InitiatingEntityId", initiatingEntityId) :
+                new ObjectParameter("InitiatingEntityId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Insert", portfolioMessageTypeIdParameter, fundIdParameter, referenceDateParameter, messageParameter, initiatingEntityTypeIdParameter, initiatingEntityIdParameter);
         }
     }
 }

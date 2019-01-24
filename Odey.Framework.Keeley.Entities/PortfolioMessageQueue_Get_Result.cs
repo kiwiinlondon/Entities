@@ -19,5 +19,7 @@ namespace Odey.Framework.Keeley.Entities
         public string Message { get; set; }
         public System.DateTime StartDt { get; set; }
         public int FundId { get; set; }
+        public Nullable<int> InitiatingEntityId { get; set; }
+        public Nullable<int> InitiatingEntityTypeId { get; set; }
     }
 }
