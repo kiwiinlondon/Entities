@@ -249,10 +249,6 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual List<Exposure> Exposures { get; set; }
         [DataMember]
-        public virtual OpenedClosedPosition OpenedClosedPosition { get; set; }
-        [DataMember]
-        public virtual Attribution Attribution { get; set; }
-        [DataMember]
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual List<AttributionPnl> AttributionPnls { get; set; }

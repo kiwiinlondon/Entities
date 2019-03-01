@@ -150,11 +150,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<RiskAnalytic> RiskAnalytics { get; set; }
         public DbSet<RiskAnalyticType> RiskAnalyticTypes { get; set; }
         public DbSet<BookNetAssetValue> BookNetAssetValues { get; set; }
-        public DbSet<OpenedClosedPosition> OpenedClosedPositions { get; set; }
         public DbSet<IssuerAnalytic> IssuerAnalytics { get; set; }
         public DbSet<RawIssuerAnalytic> RawIssuerAnalytics { get; set; }
-        public DbSet<AttributionFund> AttributionFunds { get; set; }
-        public DbSet<Attribution> Attributions { get; set; }
         public DbSet<ClientTrail> ClientTrails { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
         public DbSet<FocusListPrice> FocusListPrices { get; set; }
@@ -530,15 +527,6 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Fund_UpdateClientLoadDate", fundIdParameter, loadDateParameter);
         }
     
-        public virtual ObjectResult<Nullable<System.DateTime>> Attribution_Roll(Nullable<int> updateUserId)
-        {
-            var updateUserIdParameter = updateUserId.HasValue ?
-                new ObjectParameter("UpdateUserId", updateUserId) :
-                new ObjectParameter("UpdateUserId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("Attribution_Roll", updateUserIdParameter);
-        }
-    
         public virtual ObjectResult<Nullable<System.DateTime>> RiskAnalytic_Roll(Nullable<int> updateUserId)
         {
             var updateUserIdParameter = updateUserId.HasValue ?
@@ -605,15 +593,6 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("RawIssuerAnalyticIdToIgnore", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RawIssuerAnalytic>("RawIssuerAnalytic_Getlatest", mergeOption, issuerIdParameter, analyticTypeIDParameter, referenceDateParameter, entityRankingSchemeIdParameter, rawIssuerAnalyticIdToIgnoreParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<System.DateTime>> AttributionFund_Roll(Nullable<int> updateUserId)
-        {
-            var updateUserIdParameter = updateUserId.HasValue ?
-                new ObjectParameter("UpdateUserId", updateUserId) :
-                new ObjectParameter("UpdateUserId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("AttributionFund_Roll", updateUserIdParameter);
         }
     
         public virtual ObjectResult<Nullable<System.DateTime>> AttributionNav_Roll(Nullable<int> updateUserId)
@@ -740,6 +719,40 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("InitiatingEntityId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Insert", portfolioMessageTypeIdParameter, fundIdParameter, referenceDateParameter, messageParameter, initiatingEntityTypeIdParameter, initiatingEntityIdParameter);
+        }
+    
+        public virtual ObjectResult<PortfolioEvent> PortfolioEvent_GetMultipleByPositionAndChangeNumber(string positionIds, string changeNumbers, string portfolioAggregationLevelIds)
+        {
+            var positionIdsParameter = positionIds != null ?
+                new ObjectParameter("positionIds", positionIds) :
+                new ObjectParameter("positionIds", typeof(string));
+    
+            var changeNumbersParameter = changeNumbers != null ?
+                new ObjectParameter("changeNumbers", changeNumbers) :
+                new ObjectParameter("changeNumbers", typeof(string));
+    
+            var portfolioAggregationLevelIdsParameter = portfolioAggregationLevelIds != null ?
+                new ObjectParameter("portfolioAggregationLevelIds", portfolioAggregationLevelIds) :
+                new ObjectParameter("portfolioAggregationLevelIds", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioEvent>("PortfolioEvent_GetMultipleByPositionAndChangeNumber", positionIdsParameter, changeNumbersParameter, portfolioAggregationLevelIdsParameter);
+        }
+    
+        public virtual ObjectResult<PortfolioEvent> PortfolioEvent_GetMultipleByPositionAndChangeNumber(string positionIds, string changeNumbers, string portfolioAggregationLevelIds, MergeOption mergeOption)
+        {
+            var positionIdsParameter = positionIds != null ?
+                new ObjectParameter("positionIds", positionIds) :
+                new ObjectParameter("positionIds", typeof(string));
+    
+            var changeNumbersParameter = changeNumbers != null ?
+                new ObjectParameter("changeNumbers", changeNumbers) :
+                new ObjectParameter("changeNumbers", typeof(string));
+    
+            var portfolioAggregationLevelIdsParameter = portfolioAggregationLevelIds != null ?
+                new ObjectParameter("portfolioAggregationLevelIds", portfolioAggregationLevelIds) :
+                new ObjectParameter("portfolioAggregationLevelIds", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioEvent>("PortfolioEvent_GetMultipleByPositionAndChangeNumber", mergeOption, positionIdsParameter, changeNumbersParameter, portfolioAggregationLevelIdsParameter);
         }
     }
 }
