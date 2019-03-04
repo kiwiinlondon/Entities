@@ -163,7 +163,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<CompanySize> CompanySizes { get; set; }
         public DbSet<ExternalPerson> ExternalPersons { get; set; }
         public DbSet<Option> Options { get; set; }
-        public DbSet<FundPortfolioChange> FundPortfolioChanges { get; set; }
         public DbSet<FactorBenchmark> FactorBenchmarks { get; set; }
         public DbSet<FactorExposure> FactorExposures { get; set; }
         public DbSet<Future> Futures { get; set; }
