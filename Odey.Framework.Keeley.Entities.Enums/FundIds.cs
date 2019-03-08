@@ -486,7 +486,16 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         IAR_USD_I = 9858,
         [EnumMember]
-        IAR_USD_R = 9859
-
+        IAR_USD_R = 9859,
+        [EnumMember]
+        NAT = 9903,
+        [EnumMember]
+        NAT_EUR_I = 9904,
+        [EnumMember]
+        NAT_GBP_I = 9905,
+        [EnumMember]
+        NAT_GBP_M = 9906,
+        [EnumMember]
+        NAT_USD_M = 9908
     }
 }
