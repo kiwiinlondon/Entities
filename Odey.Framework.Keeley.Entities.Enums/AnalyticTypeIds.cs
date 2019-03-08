@@ -108,6 +108,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CalculatedSRRI = 41,
 
+        [EnumMember]
+        DailyRiskPerformanceAlertLimit = 42,
+
+        [EnumMember]
+        DailyRiskPerformanceTriggerLimit = 43,
     }
 }
 
