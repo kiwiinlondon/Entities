@@ -126,6 +126,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsAnalystPnl { get; set; }
     	[DataMember]
         public Nullable<int> CustodianId { get; set; }
+    	[DataMember]
+        public int ManagerId { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }

@@ -184,6 +184,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<SimpleFundPrice> SimpleFundPrices { get; set; }
         public DbSet<SimpleIndexPrice> SimpleIndexPrices { get; set; }
         public DbSet<ListingStatus> ListingStatus { get; set; }
+        public DbSet<Financing> Financings { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

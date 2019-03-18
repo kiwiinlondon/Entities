@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class ApplicationUser
     {
-    	
-        public ApplicationUser()
-        {
-            this.Books2 = new List<Book>();
-        }
-    
     	[DataMember]
         public int UserID { get; set; }
     	[DataMember]
@@ -44,8 +38,5 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsActive { get; set; }
     	[DataMember]
         public Nullable<int> UserTypeFlags { get; set; }
-    
-        [DataMember]
-        public virtual List<Book> Books2 { get; set; }
     }
 }

@@ -1166,6 +1166,29 @@
           <Property Name="FileGroupTypeId" Type="int" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="Financing">
+          <Key>
+            <PropertyRef Name="FinancingId" />
+          </Key>
+          <Property Name="FinancingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="CustodianId" Type="int" Nullable="false" />
+          <Property Name="NetPosition" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="Price" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="Notional" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="BenchmarkRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="Spread" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="AllInRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="BenchmarkAccrual" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="SpreadAccrual" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="AllInAccrual" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="FMPortfolio">
           <Key>
             <PropertyRef Name="FMPortfolioID" />
@@ -1310,6 +1333,7 @@
           <Property Name="TakeOnDate" Type="datetime" />
           <Property Name="IsAnalystPnl" Type="bit" Nullable="false" />
           <Property Name="CustodianId" Type="int" />
+          <Property Name="ManagerId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="FundCountryHoliday">
           <Key>
@@ -5038,6 +5062,66 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Financing__Curre__55D36AF1">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="Financing" Type="Self.Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Custo__56C78F2A">
+          <End Role="Custodian" Type="Self.Custodian" Multiplicity="1" />
+          <End Role="Financing" Type="Self.Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Custodian">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="CustodianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__FundI__53EB227F">
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
+          <End Role="Financing" Type="Self.Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Instr__54DF46B8">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="Financing" Type="Self.Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Updat__57BBB363">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="Financing" Type="Self.Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__FocusList__Exter__22A66AA1">
           <End Role="ResearchBroker" Type="Self.ResearchBroker" Multiplicity="0..1" />
           <End Role="FocusList" Type="Self.FocusList" Multiplicity="*" />
@@ -5119,6 +5203,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="Fund">
               <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fund__ManagerId__243C0F5D">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="Fund" Type="Self.Fund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Fund">
+              <PropertyRef Name="ManagerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8450,359 +8546,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsActive" Type="bit" Mode="In" />
           <Parameter Name="UserTypeFlags" Type="int" Mode="In" />
         </Function>
-        <Function Name="Attribution_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PortfolioId" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="Attribution_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PortfolioId" Type="int" Mode="In" />
-          <Parameter Name="PositionId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="AttributionFundId" Type="int" Mode="In" />
-          <Parameter Name="TodayAdministratorPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayBookAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayBookAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayBookAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDBookAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDBookAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDBookAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="AdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ValuationAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
-          <Parameter Name="PreviousAttributionId" Type="int" Mode="In" />
-          <Parameter Name="FactsetContribution" Type="numeric" Mode="In" />
-          <Parameter Name="FactsetIsMaster" Type="bit" Mode="In" />
-          <Parameter Name="AdministratorIsMaster" Type="bit" Mode="In" />
-          <Parameter Name="IsPrimary" Type="bit" Mode="In" />
-          <Parameter Name="NeedsRebuild" Type="bit" Mode="In" />
-          <Parameter Name="ITDOpeningAttributionFundId" Type="int" Mode="In" />
-          <Parameter Name="TodayPerformanceFee" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedPerformanceFee" Type="numeric" Mode="In" />
-          <Parameter Name="ITDPerformanceFee" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedPerformanceFee" Type="numeric" Mode="In" />
-          <Parameter Name="TodayManagementFee" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedManagementFee" Type="numeric" Mode="In" />
-          <Parameter Name="ITDManagementFee" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedManagementFee" Type="numeric" Mode="In" />
-          <Parameter Name="TodayUnmatchedInstrumentPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedUnmatchedInstrumentPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDUnmatchedInstrumentPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedUnmatchedInstrumentPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXPNLGBP" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXPNLEUR" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXPNLUSD" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedFXPNLGBP" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedFXPNLEUR" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedFXPNLUSD" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedFXPNLGBP" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedFXPNLEUR" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedFXPNLUSD" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFXPNLGBP" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFXPNLEUR" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFXPNLUSD" Type="numeric" Mode="In" />
-          <Parameter Name="SumExposure" Type="numeric" Mode="In" />
-          <Parameter Name="SumMarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="Exposure" Type="numeric" Mode="In" />
-          <Parameter Name="MarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="TodayWeight" Type="numeric" Mode="In" />
-          <Parameter Name="SumWeight" Type="numeric" Mode="In" />
-          <Parameter Name="CumulativePriceLogReturn" Type="numeric" Mode="In" />
-          <Parameter Name="CumulativeFXLogReturn" Type="numeric" Mode="In" />
-          <Parameter Name="CumulativeCarryLogReturn" Type="numeric" Mode="In" />
-          <Parameter Name="CumulativeOtherLogReturn" Type="numeric" Mode="In" />
-        </Function>
-        <Function Name="Attribution_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="Attribution_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PortfolioId" Type="int" Mode="In" />
-          <Parameter Name="PositionId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="AttributionFundId" Type="int" Mode="In" />
-          <Parameter Name="TodayAdministratorPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayAdministratorFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayKeeleyFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFactsetFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayBookAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayBookAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayBookAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDAdministratorFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDKeeleyFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFactsetFundAdjustedOtherPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDBookAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDBookAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDBookAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="AdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayValuationFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationFundAdjustedPricePNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationFundAdjustedFXPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDValuationFundAdjustedCarryPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ValuationAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
-          <Parameter Name="PreviousAttributionId" Type="int" Mode="In" />
-          <Parameter Name="FactsetContribution" Type="numeric" Mode="In" />
-          <Parameter Name="FactsetIsMaster" Type="bit" Mode="In" />
-          <Parameter Name="AdministratorIsMaster" Type="bit" Mode="In" />
-          <Parameter Name="IsPrimary" Type="bit" Mode="In" />
-          <Parameter Name="NeedsRebuild" Type="bit" Mode="In" />
-          <Parameter Name="ITDOpeningAttributionFundId" Type="int" Mode="In" />
-          <Parameter Name="TodayPerformanceFee" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedPerformanceFee" Type="numeric" Mode="In" />
-          <Parameter Name="ITDPerformanceFee" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedPerformanceFee" Type="numeric" Mode="In" />
-          <Parameter Name="TodayManagementFee" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedManagementFee" Type="numeric" Mode="In" />
-          <Parameter Name="ITDManagementFee" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedManagementFee" Type="numeric" Mode="In" />
-          <Parameter Name="TodayUnmatchedInstrumentPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedUnmatchedInstrumentPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDUnmatchedInstrumentPNL" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedUnmatchedInstrumentPNL" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXPNLGBP" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXPNLEUR" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFXPNLUSD" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedFXPNLGBP" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedFXPNLEUR" Type="numeric" Mode="In" />
-          <Parameter Name="TodayFundAdjustedFXPNLUSD" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedFXPNLGBP" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedFXPNLEUR" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFundAdjustedFXPNLUSD" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFXPNLGBP" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFXPNLEUR" Type="numeric" Mode="In" />
-          <Parameter Name="ITDFXPNLUSD" Type="numeric" Mode="In" />
-          <Parameter Name="SumExposure" Type="numeric" Mode="In" />
-          <Parameter Name="SumMarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="Exposure" Type="numeric" Mode="In" />
-          <Parameter Name="MarketValue" Type="numeric" Mode="In" />
-          <Parameter Name="TodayWeight" Type="numeric" Mode="In" />
-          <Parameter Name="SumWeight" Type="numeric" Mode="In" />
-          <Parameter Name="CumulativePriceLogReturn" Type="numeric" Mode="In" />
-          <Parameter Name="CumulativeFXLogReturn" Type="numeric" Mode="In" />
-          <Parameter Name="CumulativeCarryLogReturn" Type="numeric" Mode="In" />
-          <Parameter Name="CumulativeOtherLogReturn" Type="numeric" Mode="In" />
-        </Function>
-        <Function Name="AttributionFund_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="AttributionFundId" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="AttributionFund_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="FundId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="AdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="AdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorSourced" Type="bit" Mode="In" />
-          <Parameter Name="AdministratorPrevious" Type="datetime" Mode="In" />
-          <Parameter Name="FactsetSourced" Type="bit" Mode="In" />
-          <Parameter Name="FactsetPrevious" Type="datetime" Mode="In" />
-          <Parameter Name="KeeleyUnadjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyTodayCapitalChange" Type="numeric" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
-          <Parameter Name="ValuationAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="ValuationAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="ValuationUnadjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="UseKeeleyAdjustmentFactor" Type="bit" Mode="In" />
-          <Parameter Name="AdministratorUnadjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorTodayCapitalChange" Type="numeric" Mode="In" />
-          <Parameter Name="ITDOpeningAttributionFundId" Type="int" Mode="In" />
-          <Parameter Name="SumNetAssetValue" Type="numeric" Mode="In" />
-          <Parameter Name="NumberOfDays" Type="int" Mode="In" />
-          <Parameter Name="OpeningAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningKeeleyAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningAdministratorAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningValuationAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningKeeleyNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningAdministratorNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningValuationNav" Type="numeric" Mode="In" />
-        </Function>
-        <Function Name="AttributionFund_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UpdateUserId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="AttributionFund_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="AttributionFundId" Type="int" Mode="In" />
-          <Parameter Name="FundId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="AdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="AdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorSourced" Type="bit" Mode="In" />
-          <Parameter Name="AdministratorPrevious" Type="datetime" Mode="In" />
-          <Parameter Name="FactsetSourced" Type="bit" Mode="In" />
-          <Parameter Name="FactsetPrevious" Type="datetime" Mode="In" />
-          <Parameter Name="KeeleyUnadjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="KeeleyTodayCapitalChange" Type="numeric" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
-          <Parameter Name="ValuationAdjustmentFactor" Type="numeric" Mode="In" />
-          <Parameter Name="ValuationAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="ValuationUnadjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="UseKeeleyAdjustmentFactor" Type="bit" Mode="In" />
-          <Parameter Name="AdministratorUnadjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="AdministratorTodayCapitalChange" Type="numeric" Mode="In" />
-          <Parameter Name="ITDOpeningAttributionFundId" Type="int" Mode="In" />
-          <Parameter Name="SumNetAssetValue" Type="numeric" Mode="In" />
-          <Parameter Name="NumberOfDays" Type="int" Mode="In" />
-          <Parameter Name="OpeningAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningKeeleyAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningAdministratorAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningValuationAdjustedNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningKeeleyNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningAdministratorNav" Type="numeric" Mode="In" />
-          <Parameter Name="OpeningValuationNav" Type="numeric" Mode="In" />
-        </Function>
         <Function Name="AttributionNav_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionNavId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -10292,6 +10035,47 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="Financing_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FinancingId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Financing_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
+          <Parameter Name="CustodianId" Type="int" Mode="In" />
+          <Parameter Name="NetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="Notional" Type="numeric" Mode="In" />
+          <Parameter Name="BenchmarkRate" Type="numeric" Mode="In" />
+          <Parameter Name="Spread" Type="numeric" Mode="In" />
+          <Parameter Name="AllInRate" Type="numeric" Mode="In" />
+          <Parameter Name="BenchmarkAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="SpreadAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="AllInAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Financing_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FinancingId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
+          <Parameter Name="CustodianId" Type="int" Mode="In" />
+          <Parameter Name="NetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="Notional" Type="numeric" Mode="In" />
+          <Parameter Name="BenchmarkRate" Type="numeric" Mode="In" />
+          <Parameter Name="Spread" Type="numeric" Mode="In" />
+          <Parameter Name="AllInRate" Type="numeric" Mode="In" />
+          <Parameter Name="BenchmarkAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="SpreadAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="AllInAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="FMContractMapping_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FMContId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -10540,25 +10324,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="BenchmarkPriceExistsOnDay" Type="bit" Mode="In" />
           <Parameter Name="BenchmarkPriceValidUntil" Type="datetime" Mode="In" />
           <Parameter Name="MaxFundPrice" Type="numeric" Mode="In" />
-        </Function>
-        <Function Name="FundPortfolioChange_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="FundPortfolioChangeId" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="FundPortfolioChange_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="FundId" Type="int" Mode="In" />
-          <Parameter Name="FundPortfolioChangeTypeId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="FundPortfolioChange_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="FundPortfolioChangeId" Type="int" Mode="In" />
-          <Parameter Name="FundId" Type="int" Mode="In" />
-          <Parameter Name="FundPortfolioChangeTypeId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
         <Function Name="FundWebsiteCacheTime_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundID" Type="int" Mode="In" />
@@ -11535,36 +11300,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
           <Parameter Name="PreviousValuationDate" Type="datetime" Mode="In" />
           <Parameter Name="AdministratorPortfolioExists" Type="bit" Mode="In" />
-        </Function>
-        <Function Name="OpenedClosedPosition_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PortfolioId" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="OpenedClosedPosition_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PositionId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="IsOpened" Type="bit" Mode="In" />
-          <Parameter Name="PortfolioId" Type="int" Mode="In" />
-          <Parameter Name="IsNetPositionLong" Type="bit" Mode="In" />
-          <Parameter Name="IsExposureLong" Type="bit" Mode="In" />
-          <Parameter Name="IsNetPositionLongChanged" Type="bit" Mode="In" />
-          <Parameter Name="IsExposureLongChanged" Type="bit" Mode="In" />
-          <Parameter Name="IsClosed" Type="bit" Mode="In" />
-        </Function>
-        <Function Name="OpenedClosedPosition_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="PositionId" Type="int" Mode="In" />
-          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="IsOpened" Type="bit" Mode="In" />
-          <Parameter Name="PortfolioId" Type="int" Mode="In" />
-          <Parameter Name="IsNetPositionLong" Type="bit" Mode="In" />
-          <Parameter Name="IsExposureLong" Type="bit" Mode="In" />
-          <Parameter Name="IsNetPositionLongChanged" Type="bit" Mode="In" />
-          <Parameter Name="IsExposureLongChanged" Type="bit" Mode="In" />
-          <Parameter Name="IsClosed" Type="bit" Mode="In" />
         </Function>
         <Function Name="Options_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -12762,6 +12497,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="FileCollected" EntityType="Self.FileCollected" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileToBeCollected" EntityType="Self.FileToBeCollected" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileToBeCollectedGroup" EntityType="Self.FileToBeCollectedGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Financing" EntityType="Self.Financing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FMPortfolio" EntityType="Self.FMPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FMTradeBridgeLastProcessed" EntityType="Self.FMTradeBridgeLastProcessed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FocusList" EntityType="Self.FocusList" Schema="dbo" store:Type="Tables" />
@@ -13669,6 +13405,26 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Fund" EntitySet="Fund" />
             <End Role="FileToBeCollected" EntitySet="FileToBeCollected" />
           </AssociationSet>
+          <AssociationSet Name="FK__Financing__Curre__55D36AF1" Association="Self.FK__Financing__Curre__55D36AF1">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Financing" EntitySet="Financing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Custo__56C78F2A" Association="Self.FK__Financing__Custo__56C78F2A">
+            <End Role="Custodian" EntitySet="Custodian" />
+            <End Role="Financing" EntitySet="Financing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__FundI__53EB227F" Association="Self.FK__Financing__FundI__53EB227F">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="Financing" EntitySet="Financing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Instr__54DF46B8" Association="Self.FK__Financing__Instr__54DF46B8">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="Financing" EntitySet="Financing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Updat__57BBB363" Association="Self.FK__Financing__Updat__57BBB363">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Financing" EntitySet="Financing" />
+          </AssociationSet>
           <AssociationSet Name="FK__FocusList__Exter__22A66AA1" Association="Self.FK__FocusList__Exter__22A66AA1">
             <End Role="ResearchBroker" EntitySet="ResearchBroker" />
             <End Role="FocusList" EntitySet="FocusList" />
@@ -13695,6 +13451,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="FK__Fund__Instrument__357DD23F" Association="Self.FK__Fund__Instrument__357DD23F">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="Fund" EntitySet="Fund" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fund__ManagerId__243C0F5D" Association="Self.FK__Fund__ManagerId__243C0F5D">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Fund" EntitySet="Fund" />
           </AssociationSet>
           <AssociationSet Name="FK__Fund__ParentFund__37661AB1" Association="Self.FK__Fund__ParentFund__37661AB1">
@@ -16879,6 +16639,31 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <Parameter Name="changeNumbers" Mode="In" Type="String" />
             <Parameter Name="portfolioAggregationLevelIds" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Financings" EntityType="Odey.Framework.Keeley.Entities.Financing" />
+          <AssociationSet Name="FK__Financing__Updat__57BBB363" Association="Odey.Framework.Keeley.Entities.FK__Financing__Updat__57BBB363">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Financing" EntitySet="Financings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fund__ManagerId__243C0F5D" Association="Odey.Framework.Keeley.Entities.FK__Fund__ManagerId__243C0F5D">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Fund" EntitySet="Funds" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Curre__55D36AF1" Association="Odey.Framework.Keeley.Entities.FK__Financing__Curre__55D36AF1">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="Financing" EntitySet="Financings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Custo__56C78F2A" Association="Odey.Framework.Keeley.Entities.FK__Financing__Custo__56C78F2A">
+            <End Role="Custodian" EntitySet="Custodians" />
+            <End Role="Financing" EntitySet="Financings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__FundI__53EB227F" Association="Odey.Framework.Keeley.Entities.FK__Financing__FundI__53EB227F">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="Financing" EntitySet="Financings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Instr__54DF46B8" Association="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="Financing" EntitySet="Financings" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -16895,7 +16680,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="UserTypeFlags" Type="Int32" />
-          <NavigationProperty Name="Books2" Relationship="Odey.Framework.Keeley.Entities.FK__Book__SignOffMan__37E31557" FromRole="ApplicationUser" ToRole="Book" />
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -21082,6 +20866,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="TakeOnDate" Type="DateTime" Precision="3" />
           <Property Name="IsAnalystPnl" Type="Boolean" Nullable="false" />
           <Property Name="CustodianId" Type="Int32" />
+          <Property Name="ManagerId" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -25519,6 +25304,105 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Decimal" Name="UnadjustedNetPosition" Nullable="true" Precision="27" Scale="8" />
           <Property Type="Boolean" Name="Revalue" Nullable="true" />
         </ComplexType>
+        <EntityType Name="Financing">
+          <Key>
+            <PropertyRef Name="FinancingId" />
+          </Key>
+          <Property Name="FinancingId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="CustodianId" Type="Int32" Nullable="false" />
+          <Property Name="NetPosition" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="Notional" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="BenchmarkRate" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="Spread" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="AllInRate" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="BenchmarkAccrual" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="SpreadAccrual" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="AllInAccrual" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Currency" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Curre__55D36AF1" FromRole="Financing" ToRole="Currency" />
+          <NavigationProperty Name="Custodian" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Custo__56C78F2A" FromRole="Financing" ToRole="Custodian" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__FundI__53EB227F" FromRole="Financing" ToRole="Fund" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8" FromRole="Financing" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="FK__Financing__Updat__57BBB363">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Financing" Role="Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fund__ManagerId__243C0F5D">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Fund">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Curre__55D36AF1">
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Financing" Role="Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Custo__56C78F2A">
+          <End Type="Odey.Framework.Keeley.Entities.Custodian" Role="Custodian" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Financing" Role="Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Custodian">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="CustodianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__FundI__53EB227F">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Financing" Role="Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Instr__54DF46B8">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Financing" Role="Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -29540,6 +29424,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="CustodianId" ColumnName="CustodianId" />
                 <ScalarProperty Name="IsAnalystPnl" ColumnName="IsAnalystPnl" />
                 <ScalarProperty Name="TakeOnDate" ColumnName="TakeOnDate" />
@@ -32933,6 +32818,80 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PortfolioEvent_GetMultipleByPositionAndChangeNumber" FunctionName="KeeleyModel.Store.PortfolioEvent_GetMultipleByPositionAndChangeNumber">
           </FunctionImportMapping>
+          <EntitySetMapping Name="Financings">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
+              <MappingFragment StoreEntitySet="Financing">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="AllInAccrual" ColumnName="AllInAccrual" />
+                <ScalarProperty Name="SpreadAccrual" ColumnName="SpreadAccrual" />
+                <ScalarProperty Name="BenchmarkAccrual" ColumnName="BenchmarkAccrual" />
+                <ScalarProperty Name="AllInRate" ColumnName="AllInRate" />
+                <ScalarProperty Name="Spread" ColumnName="Spread" />
+                <ScalarProperty Name="BenchmarkRate" ColumnName="BenchmarkRate" />
+                <ScalarProperty Name="Notional" ColumnName="Notional" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="NetPosition" ColumnName="NetPosition" />
+                <ScalarProperty Name="CustodianId" ColumnName="CustodianId" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="FinancingId" ColumnName="FinancingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.Financing_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="AllInAccrual" ParameterName="AllInAccrual" />
+                  <ScalarProperty Name="SpreadAccrual" ParameterName="SpreadAccrual" />
+                  <ScalarProperty Name="BenchmarkAccrual" ParameterName="BenchmarkAccrual" />
+                  <ScalarProperty Name="AllInRate" ParameterName="AllInRate" />
+                  <ScalarProperty Name="Spread" ParameterName="Spread" />
+                  <ScalarProperty Name="BenchmarkRate" ParameterName="BenchmarkRate" />
+                  <ScalarProperty Name="Notional" ParameterName="Notional" />
+                  <ScalarProperty Name="Price" ParameterName="Price" />
+                  <ScalarProperty Name="NetPosition" ParameterName="NetPosition" />
+                  <ScalarProperty Name="CustodianId" ParameterName="CustodianId" />
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ResultBinding Name="FinancingId" ColumnName="FinancingId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.Financing_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="AllInAccrual" ParameterName="AllInAccrual" Version="Current" />
+                  <ScalarProperty Name="SpreadAccrual" ParameterName="SpreadAccrual" Version="Current" />
+                  <ScalarProperty Name="BenchmarkAccrual" ParameterName="BenchmarkAccrual" Version="Current" />
+                  <ScalarProperty Name="AllInRate" ParameterName="AllInRate" Version="Current" />
+                  <ScalarProperty Name="Spread" ParameterName="Spread" Version="Current" />
+                  <ScalarProperty Name="BenchmarkRate" ParameterName="BenchmarkRate" Version="Current" />
+                  <ScalarProperty Name="Notional" ParameterName="Notional" Version="Current" />
+                  <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
+                  <ScalarProperty Name="NetPosition" ParameterName="NetPosition" Version="Current" />
+                  <ScalarProperty Name="CustodianId" ParameterName="CustodianId" Version="Current" />
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="FinancingId" ParameterName="FinancingId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.Financing_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FinancingId" ParameterName="FinancingId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -32947,7 +32906,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     <edmx:Options>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
         <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
@@ -32955,7 +32914,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="76">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="74">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
@@ -36556,7 +36515,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="19.606730769230769" PointY="23.364807942708339" />
           <edmx:ConnectorPoint PointX="19.606730769230769" PointY="23.239807942708335" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CountryHoliday" Width="1.875" PointX="18.375" PointY="23.75" Height="2.3648893229166674" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CountryHoliday" Width="1.875" PointX="20" PointY="23.75" Height="2.3648893229166674" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryHolidayUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.398707112281997" />
           <edmx:ConnectorPoint PointX="2.6666666666666665" PointY="17.398707112281997" />
@@ -38590,43 +38549,41 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="5.6326113865413552" PointY="21.391118369901591" />
           <edmx:ConnectorPoint PointX="5.8235487210980184" PointY="21.391118369901591" />
           <edmx:ConnectorPoint PointX="5.8235487210980184" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="5.9497679226274327" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.1164345892940988" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.2218254574901808" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.3884921241568469" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.4938829923529289" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.6605496590195949" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="5.916666666666667" PointY="20.596873674297736" />
+          <edmx:ConnectorPoint PointX="6.429157894455872" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.4961793644289108" PointY="20.59687367429774" />
+          <edmx:ConnectorPoint PointX="6.7952588938320391" PointY="20.59687367429774" />
           <edmx:ConnectorPoint PointX="6.8457463886148027" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="19.465097725164302" />
-          <edmx:ConnectorPoint PointX="7.8074316320165851" PointY="19.439740536171243" />
-          <edmx:ConnectorPoint PointX="8.255068367983414" PointY="19.413763522641077" />
-          <edmx:ConnectorPoint PointX="10.104306632016586" PointY="19.306449525496625" />
-          <edmx:ConnectorPoint PointX="10.270693367983414" PointY="19.296793860212325" />
-          <edmx:ConnectorPoint PointX="10.291806632016586" PointY="19.295568626666039" />
-          <edmx:ConnectorPoint PointX="11.020693367983414" PointY="19.253270264890002" />
-          <edmx:ConnectorPoint PointX="12.604306632016586" PointY="19.161370874422207" />
-          <edmx:ConnectorPoint PointX="12.770693367983414" PointY="19.151715209137908" />
-          <edmx:ConnectorPoint PointX="12.791806632016586" PointY="19.150489975591626" />
-          <edmx:ConnectorPoint PointX="13.145693367983414" PointY="19.129953411476748" />
-          <edmx:ConnectorPoint PointX="13.166806632016586" PointY="19.128728177930459" />
-          <edmx:ConnectorPoint PointX="13.489443367983414" PointY="19.110005096954012" />
-          <edmx:ConnectorPoint PointX="15.182431632016586" PointY="19.011758515501707" />
-          <edmx:ConnectorPoint PointX="15.645693367983414" PointY="18.984874760402324" />
-          <edmx:ConnectorPoint PointX="16.291806632016584" PointY="18.947379864087438" />
-          <edmx:ConnectorPoint PointX="16.458193367983416" PointY="18.937724198803139" />
-          <edmx:ConnectorPoint PointX="17.385555632016583" PointY="18.883908012273842" />
-          <edmx:ConnectorPoint PointX="17.551942367983415" PointY="18.874252346989543" />
-          <edmx:ConnectorPoint PointX="19.729306632016584" PointY="18.747896718860112" />
-          <edmx:ConnectorPoint PointX="20.083193367983416" PointY="18.727360154745234" />
-          <edmx:ConnectorPoint PointX="20.123056632016585" PointY="18.725046831315886" />
-          <edmx:ConnectorPoint PointX="20.505068367983412" PointY="18.702878132376423" />
-          <edmx:ConnectorPoint PointX="22.760556632016584" PointY="18.57198885443238" />
-          <edmx:ConnectorPoint PointX="22.958193367983416" PointY="18.560519706009654" />
-          <edmx:ConnectorPoint PointX="24.698056632016584" PointY="18.459552899849704" />
-          <edmx:ConnectorPoint PointX="25.145693367983416" PointY="18.433575886319538" />
-          <edmx:ConnectorPoint PointX="25.276181632016584" PointY="18.426003461788746" />
-          <edmx:ConnectorPoint PointX="25.442568367983416" PointY="18.416347796504446" />
-          <edmx:ConnectorPoint PointX="25.5" PointY="18.413014955023659" />
+          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="19.439740536171243" />
+          <edmx:ConnectorPoint PointX="7.8543000021523435" PointY="19.412338187191523" />
+          <edmx:ConnectorPoint PointX="8.2706999978476556" PointY="19.388754545955194" />
+          <edmx:ConnectorPoint PointX="8.6668000021523444" PointY="19.366320635071904" />
+          <edmx:ConnectorPoint PointX="8.8331999978476556" PointY="19.356896240641614" />
+          <edmx:ConnectorPoint PointX="10.104300002152344" PointY="19.284904965937194" />
+          <edmx:ConnectorPoint PointX="10.989449997847656" PointY="19.234772736939551" />
+          <edmx:ConnectorPoint PointX="11.557425002152344" PointY="19.202604343877113" />
+          <edmx:ConnectorPoint PointX="11.755074997847656" PointY="19.191410043596065" />
+          <edmx:ConnectorPoint PointX="11.791800002152344" PointY="19.18933004999645" />
+          <edmx:ConnectorPoint PointX="11.958199997847656" PointY="19.179905655566159" />
+          <edmx:ConnectorPoint PointX="12.604300002152344" PointY="19.143312497876835" />
+          <edmx:ConnectorPoint PointX="13.020699997847656" PointY="19.119728856640506" />
+          <edmx:ConnectorPoint PointX="13.166800002152344" PointY="19.111454192563251" />
+          <edmx:ConnectorPoint PointX="13.489449997847656" PointY="19.093180268879188" />
+          <edmx:ConnectorPoint PointX="14.354300002152344" PointY="19.044197770234579" />
+          <edmx:ConnectorPoint PointX="14.676949997847656" PointY="19.025923846550516" />
+          <edmx:ConnectorPoint PointX="15.135550002152344" PointY="18.999950123965714" />
+          <edmx:ConnectorPoint PointX="15.676949997847656" PointY="18.969286859326367" />
+          <edmx:ConnectorPoint PointX="17.354297502152342" PointY="18.874286950154612" />
+          <edmx:ConnectorPoint PointX="17.520697497847657" PointY="18.864862555724322" />
+          <edmx:ConnectorPoint PointX="19.729300002152343" PointY="18.7397739639048" />
+          <edmx:ConnectorPoint PointX="20.145699997847657" PointY="18.716190322668471" />
+          <edmx:ConnectorPoint PointX="20.201175002152343" PointY="18.713048385558405" />
+          <edmx:ConnectorPoint PointX="20.489449997847654" PointY="18.696721358310171" />
+          <edmx:ConnectorPoint PointX="22.791803752152344" PointY="18.566322978142153" />
+          <edmx:ConnectorPoint PointX="23.083199997847661" PointY="18.549819172697546" />
+          <edmx:ConnectorPoint PointX="24.729300002152343" PointY="18.456589027784073" />
+          <edmx:ConnectorPoint PointX="24.90819999784766" PointY="18.446456671013479" />
+          <edmx:ConnectorPoint PointX="25.5" PointY="18.412938901852328" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.625" />
@@ -38773,6 +38730,13 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ListingStatusUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Fund__CustodianI__524CF2D0" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.InstrumentMarketListingStatusIDFK" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Financing" Width="1.5" PointX="30.125" PointY="15" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Updat__57BBB363" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Fund__ManagerId__243C0F5D" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Curre__55D36AF1" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Custo__56C78F2A" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__FundI__53EB227F" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
