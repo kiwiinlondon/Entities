@@ -113,6 +113,36 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         DailyRiskPerformanceTriggerLimit = 43,
+
+        [EnumMember]
+
+        Price = 44,
+        [EnumMember]
+        EnterpriseValue = 45,
+        [EnumMember]
+        FCFYield = 46,
+        [EnumMember]
+        ROIC = 47,
+        [EnumMember]
+        PB = 48,
+        [EnumMember]
+        EVSales = 49,
+        [EnumMember]
+        Debt = 50,
+        [EnumMember]
+        DividendYield = 51,
+        [EnumMember]
+        EBITMargin = 52,
+        [EnumMember]
+        EVEBIT =53,
+        [EnumMember]
+        PE =54,
+        [EnumMember]
+        GrossMargin =55,
+        [EnumMember]
+        EPSGrowth = 56,
+        [EnumMember]
+        ROE = 57,
     }
 }
 

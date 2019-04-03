@@ -2484,6 +2484,36 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="Research">
+          <Key>
+            <PropertyRef Name="ResearchId" />
+          </Key>
+          <Property Name="ResearchId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Subject" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="AnalystId" Type="int" Nullable="false" />
+          <Property Name="CodeRedId" Type="uniqueidentifier" />
+          <Property Name="Document" Type="varbinary(max)" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="CreatedDt" Type="datetime" Nullable="false" />
+          <Property Name="GicsSectorId" Type="int" />
+          <Property Name="CountryId" Type="int" />
+        </EntityType>
+        <EntityType Name="ResearchAttachment">
+          <Key>
+            <PropertyRef Name="ResearchAttachmentId" />
+          </Key>
+          <Property Name="ResearchAttachmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResearchId" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="FileExtensionTypeId" Type="int" Nullable="false" />
+          <Property Name="CodeRedId" Type="uniqueidentifier" />
+          <Property Name="Document" Type="varbinary(max)" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="ResearchBroker">
           <Key>
             <PropertyRef Name="LegalEntityId" />
@@ -2492,6 +2522,31 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResearchInstrumentMarket">
+          <Key>
+            <PropertyRef Name="ResearchInstrumentMarketId" />
+          </Key>
+          <Property Name="ResearchInstrumentMarketId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResearchId" Type="int" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="IsPrimary" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResearchInstrumentMarketAnalytic">
+          <Key>
+            <PropertyRef Name="ResearchInstrumentMarketAnalyticId" />
+          </Key>
+          <Property Name="ResearchInstrumentMarketAnalyticId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResearchInstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="AnalyticTypeId" Type="int" Nullable="false" />
+          <Property Name="Value" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="AsOfDt" Type="datetime" />
         </EntityType>
         <EntityType Name="RestrictedList">
           <Key>
@@ -5598,6 +5653,138 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="PortfolioEventFX">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Research__Analys__0088BECC">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="Research" Type="Self.Research" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Research">
+              <PropertyRef Name="AnalystId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Research__Countr__5569569D">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="Research" Type="Self.Research" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="Research">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Research__GicsSe__54753264">
+          <End Role="Industry" Type="Self.Industry" Multiplicity="0..1" />
+          <End Role="Research" Type="Self.Research" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Industry">
+              <PropertyRef Name="IndustryID" />
+            </Principal>
+            <Dependent Role="Research">
+              <PropertyRef Name="GicsSectorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Research__Update__017CE305">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="Research" Type="Self.Research" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Research">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchA__Resea__0A122906">
+          <End Role="Research" Type="Self.Research" Multiplicity="1" />
+          <End Role="ResearchAttachment" Type="Self.ResearchAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Research">
+              <PropertyRef Name="ResearchId" />
+            </Principal>
+            <Dependent Role="ResearchAttachment">
+              <PropertyRef Name="ResearchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchA__Updat__0BFA7178">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ResearchAttachment" Type="Self.ResearchAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ResearchAttachment">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Instr__1677FFEB">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="ResearchInstrumentMarket" Type="Self.ResearchInstrumentMarket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarket">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Resea__1583DBB2">
+          <End Role="Research" Type="Self.Research" Multiplicity="1" />
+          <End Role="ResearchInstrumentMarket" Type="Self.ResearchInstrumentMarket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Research">
+              <PropertyRef Name="ResearchId" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarket">
+              <PropertyRef Name="ResearchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Resea__36E4CF7D">
+          <End Role="ResearchInstrumentMarket" Type="Self.ResearchInstrumentMarket" Multiplicity="1" />
+          <End Role="ResearchInstrumentMarketAnalytic" Type="Self.ResearchInstrumentMarketAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResearchInstrumentMarket">
+              <PropertyRef Name="ResearchInstrumentMarketId" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarketAnalytic">
+              <PropertyRef Name="ResearchInstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Updat__176C2424">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ResearchInstrumentMarket" Type="Self.ResearchInstrumentMarket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarket">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Updat__38CD17EF">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ResearchInstrumentMarketAnalytic" Type="Self.ResearchInstrumentMarketAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarketAnalytic">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -12159,6 +12346,96 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
         <Function Name="ReportServer_GetFailedSubscriptions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Research_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Research_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Subject" Type="varchar" Mode="In" />
+          <Parameter Name="AnalystId" Type="int" Mode="In" />
+          <Parameter Name="CodeRedId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Document" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="CreatedDt" Type="datetime" Mode="In" />
+          <Parameter Name="GicsSectorId" Type="int" Mode="In" />
+          <Parameter Name="CountryId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Research_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchId" Type="int" Mode="In" />
+          <Parameter Name="Subject" Type="varchar" Mode="In" />
+          <Parameter Name="AnalystId" Type="int" Mode="In" />
+          <Parameter Name="CodeRedId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Document" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="CreatedDt" Type="datetime" Mode="In" />
+          <Parameter Name="GicsSectorId" Type="int" Mode="In" />
+          <Parameter Name="CountryId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ResearchAttachment_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchAttachmentId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ResearchAttachment_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchId" Type="int" Mode="In" />
+          <Parameter Name="FileName" Type="varchar" Mode="In" />
+          <Parameter Name="FileExtensionTypeId" Type="int" Mode="In" />
+          <Parameter Name="CodeRedId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Document" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ResearchAttachment_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchAttachmentId" Type="int" Mode="In" />
+          <Parameter Name="ResearchId" Type="int" Mode="In" />
+          <Parameter Name="FileName" Type="varchar" Mode="In" />
+          <Parameter Name="FileExtensionTypeId" Type="int" Mode="In" />
+          <Parameter Name="CodeRedId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Document" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
+        <Function Name="ResearchInstrumentMarket_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchInstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ResearchInstrumentMarket_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsPrimary" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="ResearchInstrumentMarket_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchInstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="ResearchId" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsPrimary" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="ResearchInstrumentMarketAnalytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchInstrumentMarketAnalyticId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ResearchInstrumentMarketAnalytic_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchInstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="AnalyticTypeId" Type="int" Mode="In" />
+          <Parameter Name="Value" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="AsOfDt" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="ResearchInstrumentMarketAnalytic_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ResearchInstrumentMarketAnalyticId" Type="int" Mode="In" />
+          <Parameter Name="ResearchInstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="AnalyticTypeId" Type="int" Mode="In" />
+          <Parameter Name="Value" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="AsOfDt" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="RestrictedList_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RestrictedListId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -12565,7 +12842,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="RawIssuerAnalytic" EntityType="Self.RawIssuerAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RawPrice" EntityType="Self.RawPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Research" EntityType="Self.Research" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResearchAttachment" EntityType="Self.ResearchAttachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResearchBroker" EntityType="Self.ResearchBroker" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResearchInstrumentMarket" EntityType="Self.ResearchInstrumentMarket" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResearchInstrumentMarketAnalytic" EntityType="Self.ResearchInstrumentMarketAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RestrictedList" EntityType="Self.RestrictedList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RiskAnalytic" EntityType="Self.RiskAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RiskAnalyticPosition" EntityType="Self.RiskAnalyticPosition" Schema="dbo" store:Type="Tables" />
@@ -13584,6 +13865,50 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Portfolio__Updat__7EDE0B77" Association="Self.FK__Portfolio__Updat__7EDE0B77">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PortfolioEventFX" EntitySet="PortfolioEventFX" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Research__Analys__0088BECC" Association="Self.FK__Research__Analys__0088BECC">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Research" EntitySet="Research" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Research__Countr__5569569D" Association="Self.FK__Research__Countr__5569569D">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Research" EntitySet="Research" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Research__GicsSe__54753264" Association="Self.FK__Research__GicsSe__54753264">
+            <End Role="Industry" EntitySet="Industry" />
+            <End Role="Research" EntitySet="Research" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Research__Update__017CE305" Association="Self.FK__Research__Update__017CE305">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Research" EntitySet="Research" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchA__Resea__0A122906" Association="Self.FK__ResearchA__Resea__0A122906">
+            <End Role="Research" EntitySet="Research" />
+            <End Role="ResearchAttachment" EntitySet="ResearchAttachment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchA__Updat__0BFA7178" Association="Self.FK__ResearchA__Updat__0BFA7178">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ResearchAttachment" EntitySet="ResearchAttachment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Instr__1677FFEB" Association="Self.FK__ResearchI__Instr__1677FFEB">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="ResearchInstrumentMarket" EntitySet="ResearchInstrumentMarket" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Resea__1583DBB2" Association="Self.FK__ResearchI__Resea__1583DBB2">
+            <End Role="Research" EntitySet="Research" />
+            <End Role="ResearchInstrumentMarket" EntitySet="ResearchInstrumentMarket" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Resea__36E4CF7D" Association="Self.FK__ResearchI__Resea__36E4CF7D">
+            <End Role="ResearchInstrumentMarket" EntitySet="ResearchInstrumentMarket" />
+            <End Role="ResearchInstrumentMarketAnalytic" EntitySet="ResearchInstrumentMarketAnalytic" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Updat__176C2424" Association="Self.FK__ResearchI__Updat__176C2424">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ResearchInstrumentMarket" EntitySet="ResearchInstrumentMarket" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Updat__38CD17EF" Association="Self.FK__ResearchI__Updat__38CD17EF">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ResearchInstrumentMarketAnalytic" EntitySet="ResearchInstrumentMarketAnalytic" />
           </AssociationSet>
           <AssociationSet Name="FK__Restricte__Instr__37B76177" Association="Self.FK__Restricte__Instr__37B76177">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
@@ -16663,6 +16988,54 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Financing__Instr__54DF46B8" Association="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="Financing" EntitySet="Financings" />
+          </AssociationSet>
+          <EntitySet Name="Researches" EntityType="Odey.Framework.Keeley.Entities.Research" />
+          <EntitySet Name="ResearchAttachments" EntityType="Odey.Framework.Keeley.Entities.ResearchAttachment" />
+          <EntitySet Name="ResearchInstrumentMarkets" EntityType="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" />
+          <AssociationSet Name="FK__Research__Analys__0088BECC" Association="Odey.Framework.Keeley.Entities.FK__Research__Analys__0088BECC">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Research" EntitySet="Researches" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Research__Update__017CE305" Association="Odey.Framework.Keeley.Entities.FK__Research__Update__017CE305">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Research" EntitySet="Researches" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchA__Updat__0BFA7178" Association="Odey.Framework.Keeley.Entities.FK__ResearchA__Updat__0BFA7178">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ResearchAttachment" EntitySet="ResearchAttachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Updat__176C2424" Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Updat__176C2424">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ResearchInstrumentMarket" EntitySet="ResearchInstrumentMarkets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Instr__1677FFEB" Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Instr__1677FFEB">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="ResearchInstrumentMarket" EntitySet="ResearchInstrumentMarkets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchA__Resea__0A122906" Association="Odey.Framework.Keeley.Entities.FK__ResearchA__Resea__0A122906">
+            <End Role="Research" EntitySet="Researches" />
+            <End Role="ResearchAttachment" EntitySet="ResearchAttachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Resea__1583DBB2" Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Resea__1583DBB2">
+            <End Role="Research" EntitySet="Researches" />
+            <End Role="ResearchInstrumentMarket" EntitySet="ResearchInstrumentMarkets" />
+          </AssociationSet>
+          <EntitySet Name="ResearchInstrumentMarketAnalytics" EntityType="Odey.Framework.Keeley.Entities.ResearchInstrumentMarketAnalytic" />
+          <AssociationSet Name="FK__ResearchI__Updat__38CD17EF" Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Updat__38CD17EF">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ResearchInstrumentMarketAnalytic" EntitySet="ResearchInstrumentMarketAnalytics" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ResearchI__Resea__36E4CF7D" Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Resea__36E4CF7D">
+            <End Role="ResearchInstrumentMarket" EntitySet="ResearchInstrumentMarkets" />
+            <End Role="ResearchInstrumentMarketAnalytic" EntitySet="ResearchInstrumentMarketAnalytics" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Research__Countr__5569569D" Association="Odey.Framework.Keeley.Entities.FK__Research__Countr__5569569D">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Research" EntitySet="Researches" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Research__GicsSe__54753264" Association="Odey.Framework.Keeley.Entities.FK__Research__GicsSe__54753264">
+            <End Role="Industry" EntitySet="Industries" />
+            <End Role="Research" EntitySet="Researches" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -25403,6 +25776,203 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Research">
+          <Key>
+            <PropertyRef Name="ResearchId" />
+          </Key>
+          <Property Name="ResearchId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="AnalystId" Type="Int32" Nullable="false" />
+          <Property Name="CodeRedId" Type="Guid" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="CreatedDt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Analyst" Relationship="Odey.Framework.Keeley.Entities.FK__Research__Analys__0088BECC" FromRole="Research" ToRole="ApplicationUser" />
+          <NavigationProperty Name="ResearchAttachments" Relationship="Odey.Framework.Keeley.Entities.FK__ResearchA__Resea__0A122906" FromRole="Research" ToRole="ResearchAttachment" />
+          <NavigationProperty Name="ResearchInstrumentMarkets" Relationship="Odey.Framework.Keeley.Entities.FK__ResearchI__Resea__1583DBB2" FromRole="Research" ToRole="ResearchInstrumentMarket" />
+          <Property Name="Document" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="GicsSectorId" Type="Int32" />
+          <Property Name="CountryId" Type="Int32" />
+          <NavigationProperty Name="Country" Relationship="Odey.Framework.Keeley.Entities.FK__Research__Countr__5569569D" FromRole="Research" ToRole="Country" />
+          <NavigationProperty Name="GicsSector" Relationship="Odey.Framework.Keeley.Entities.FK__Research__GicsSe__54753264" FromRole="Research" ToRole="Industry" />
+        </EntityType>
+        <EntityType Name="ResearchAttachment">
+          <Key>
+            <PropertyRef Name="ResearchAttachmentId" />
+          </Key>
+          <Property Name="ResearchAttachmentId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ResearchId" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FileExtensionTypeId" Type="Int32" Nullable="false" />
+          <Property Name="CodeRedId" Type="Guid" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Research" Relationship="Odey.Framework.Keeley.Entities.FK__ResearchA__Resea__0A122906" FromRole="ResearchAttachment" ToRole="Research" />
+          <Property Name="Document" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="ResearchInstrumentMarket">
+          <Key>
+            <PropertyRef Name="ResearchInstrumentMarketId" />
+          </Key>
+          <Property Name="ResearchInstrumentMarketId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ResearchId" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__ResearchI__Instr__1677FFEB" FromRole="ResearchInstrumentMarket" ToRole="InstrumentMarket" />
+          <NavigationProperty Name="Research" Relationship="Odey.Framework.Keeley.Entities.FK__ResearchI__Resea__1583DBB2" FromRole="ResearchInstrumentMarket" ToRole="Research" />
+          <NavigationProperty Name="ResearchInstrumentMarketAnalytics" Relationship="Odey.Framework.Keeley.Entities.FK__ResearchI__Resea__36E4CF7D" FromRole="ResearchInstrumentMarket" ToRole="ResearchInstrumentMarketAnalytic" />
+          <Property Name="IsPrimary" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Research__Analys__0088BECC">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Research" Role="Research" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Research">
+              <PropertyRef Name="AnalystId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Research__Update__017CE305">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Research" Role="Research" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Research">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchA__Updat__0BFA7178">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchAttachment" Role="ResearchAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ResearchAttachment">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Updat__176C2424">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Role="ResearchInstrumentMarket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarket">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Instr__1677FFEB">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Role="ResearchInstrumentMarket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarket">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchA__Resea__0A122906">
+          <End Type="Odey.Framework.Keeley.Entities.Research" Role="Research" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchAttachment" Role="ResearchAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Research">
+              <PropertyRef Name="ResearchId" />
+            </Principal>
+            <Dependent Role="ResearchAttachment">
+              <PropertyRef Name="ResearchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Resea__1583DBB2">
+          <End Type="Odey.Framework.Keeley.Entities.Research" Role="Research" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Role="ResearchInstrumentMarket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Research">
+              <PropertyRef Name="ResearchId" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarket">
+              <PropertyRef Name="ResearchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ResearchInstrumentMarketAnalytic">
+          <Key>
+            <PropertyRef Name="ResearchInstrumentMarketAnalyticId" />
+          </Key>
+          <Property Name="ResearchInstrumentMarketAnalyticId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ResearchInstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="AnalyticTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="ResearchInstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__ResearchI__Resea__36E4CF7D" FromRole="ResearchInstrumentMarketAnalytic" ToRole="ResearchInstrumentMarket" />
+          <Property Name="AsOfDt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK__ResearchI__Updat__38CD17EF">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchInstrumentMarketAnalytic" Role="ResearchInstrumentMarketAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarketAnalytic">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ResearchI__Resea__36E4CF7D">
+          <End Type="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Role="ResearchInstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ResearchInstrumentMarketAnalytic" Role="ResearchInstrumentMarketAnalytic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResearchInstrumentMarket">
+              <PropertyRef Name="ResearchInstrumentMarketId" />
+            </Principal>
+            <Dependent Role="ResearchInstrumentMarketAnalytic">
+              <PropertyRef Name="ResearchInstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Research__Countr__5569569D">
+          <End Type="Odey.Framework.Keeley.Entities.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Research" Role="Research" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="Research">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Research__GicsSe__54753264">
+          <End Type="Odey.Framework.Keeley.Entities.Industry" Role="Industry" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Research" Role="Research" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Industry">
+              <PropertyRef Name="IndustryID" />
+            </Principal>
+            <Dependent Role="Research">
+              <PropertyRef Name="GicsSectorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -32892,6 +33462,191 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Researches">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Research">
+              <MappingFragment StoreEntitySet="Research">
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="GicsSectorId" ColumnName="GicsSectorId" />
+                <ScalarProperty Name="Document" ColumnName="Document" />
+                <ScalarProperty Name="CreatedDt" ColumnName="CreatedDt" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="CodeRedId" ColumnName="CodeRedId" />
+                <ScalarProperty Name="AnalystId" ColumnName="AnalystId" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="ResearchId" ColumnName="ResearchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Research">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.Research_Insert">
+                  <ScalarProperty Name="CountryId" ParameterName="CountryId" />
+                  <ScalarProperty Name="GicsSectorId" ParameterName="GicsSectorId" />
+                  <ScalarProperty Name="Document" ParameterName="Document" />
+                  <ScalarProperty Name="CreatedDt" ParameterName="CreatedDt" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="CodeRedId" ParameterName="CodeRedId" />
+                  <ScalarProperty Name="AnalystId" ParameterName="AnalystId" />
+                  <ScalarProperty Name="Subject" ParameterName="Subject" />
+                  <ResultBinding Name="ResearchId" ColumnName="ResearchId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.Research_Update">
+                  <ScalarProperty Name="CountryId" ParameterName="CountryId" Version="Current" />
+                  <ScalarProperty Name="GicsSectorId" ParameterName="GicsSectorId" Version="Current" />
+                  <ScalarProperty Name="Document" ParameterName="Document" Version="Current" />
+                  <ScalarProperty Name="CreatedDt" ParameterName="CreatedDt" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="CodeRedId" ParameterName="CodeRedId" Version="Current" />
+                  <ScalarProperty Name="AnalystId" ParameterName="AnalystId" Version="Current" />
+                  <ScalarProperty Name="Subject" ParameterName="Subject" Version="Current" />
+                  <ScalarProperty Name="ResearchId" ParameterName="ResearchId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.Research_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ResearchId" ParameterName="ResearchId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResearchAttachments">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ResearchAttachment">
+              <MappingFragment StoreEntitySet="ResearchAttachment">
+                <ScalarProperty Name="Document" ColumnName="Document" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="CodeRedId" ColumnName="CodeRedId" />
+                <ScalarProperty Name="FileExtensionTypeId" ColumnName="FileExtensionTypeId" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="ResearchId" ColumnName="ResearchId" />
+                <ScalarProperty Name="ResearchAttachmentId" ColumnName="ResearchAttachmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ResearchAttachment">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ResearchAttachment_Insert">
+                  <ScalarProperty Name="Document" ParameterName="Document" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="CodeRedId" ParameterName="CodeRedId" />
+                  <ScalarProperty Name="FileExtensionTypeId" ParameterName="FileExtensionTypeId" />
+                  <ScalarProperty Name="FileName" ParameterName="FileName" />
+                  <ScalarProperty Name="ResearchId" ParameterName="ResearchId" />
+                  <ResultBinding Name="ResearchAttachmentId" ColumnName="ResearchAttachmentId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ResearchAttachment_Update">
+                  <ScalarProperty Name="Document" ParameterName="Document" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="CodeRedId" ParameterName="CodeRedId" Version="Current" />
+                  <ScalarProperty Name="FileExtensionTypeId" ParameterName="FileExtensionTypeId" Version="Current" />
+                  <ScalarProperty Name="FileName" ParameterName="FileName" Version="Current" />
+                  <ScalarProperty Name="ResearchId" ParameterName="ResearchId" Version="Current" />
+                  <ScalarProperty Name="ResearchAttachmentId" ParameterName="ResearchAttachmentId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ResearchAttachment_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ResearchAttachmentId" ParameterName="ResearchAttachmentId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResearchInstrumentMarkets">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket">
+              <MappingFragment StoreEntitySet="ResearchInstrumentMarket">
+                <ScalarProperty Name="IsPrimary" ColumnName="IsPrimary" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="ResearchId" ColumnName="ResearchId" />
+                <ScalarProperty Name="ResearchInstrumentMarketId" ColumnName="ResearchInstrumentMarketId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ResearchInstrumentMarket_Insert">
+                  <ScalarProperty Name="IsPrimary" ParameterName="IsPrimary" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ScalarProperty Name="ResearchId" ParameterName="ResearchId" />
+                  <ResultBinding Name="ResearchInstrumentMarketId" ColumnName="ResearchInstrumentMarketId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ResearchInstrumentMarket_Update">
+                  <ScalarProperty Name="IsPrimary" ParameterName="IsPrimary" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="ResearchId" ParameterName="ResearchId" Version="Current" />
+                  <ScalarProperty Name="ResearchInstrumentMarketId" ParameterName="ResearchInstrumentMarketId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ResearchInstrumentMarket_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ResearchInstrumentMarketId" ParameterName="ResearchInstrumentMarketId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResearchInstrumentMarketAnalytics">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ResearchInstrumentMarketAnalytic">
+              <MappingFragment StoreEntitySet="ResearchInstrumentMarketAnalytic">
+                <ScalarProperty Name="AsOfDt" ColumnName="AsOfDt" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="AnalyticTypeId" ColumnName="AnalyticTypeId" />
+                <ScalarProperty Name="ResearchInstrumentMarketId" ColumnName="ResearchInstrumentMarketId" />
+                <ScalarProperty Name="ResearchInstrumentMarketAnalyticId" ColumnName="ResearchInstrumentMarketAnalyticId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ResearchInstrumentMarketAnalytic">
+              <ModificationFunctionMapping>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ResearchInstrumentMarketAnalytic_Update">
+                  <ScalarProperty Name="AsOfDt" ParameterName="AsOfDt" Version="Current" />
+                  <ScalarProperty Name="ResearchInstrumentMarketAnalyticId" ParameterName="ResearchInstrumentMarketAnalyticId" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Value" ParameterName="Value" Version="Current" />
+                  <ScalarProperty Name="AnalyticTypeId" ParameterName="AnalyticTypeId" Version="Current" />
+                  <ScalarProperty Name="ResearchInstrumentMarketId" ParameterName="ResearchInstrumentMarketId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ResearchInstrumentMarketAnalytic_Delete">
+                  <ScalarProperty Name="ResearchInstrumentMarketAnalyticId" ParameterName="ResearchInstrumentMarketAnalyticId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                </DeleteFunction>
+                <InsertFunction FunctionName="KeeleyModel.Store.ResearchInstrumentMarketAnalytic_Insert">
+                  <ScalarProperty Name="AsOfDt" ParameterName="AsOfDt" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Value" ParameterName="Value" />
+                  <ScalarProperty Name="AnalyticTypeId" ParameterName="AnalyticTypeId" />
+                  <ScalarProperty Name="ResearchInstrumentMarketId" ParameterName="ResearchInstrumentMarketId" />
+                  <ResultBinding Name="ResearchInstrumentMarketAnalyticId" ColumnName="ResearchInstrumentMarketAnalyticId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -32917,7 +33672,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
       <edmx:Diagram Name="KeeleyEntities" ZoomLevel="74">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.875" Height="2.3648893229166674" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Instrument" Width="1.875" PointX="8.25" PointY="18.875" Height="5.8263151041666674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InstrumentClass" Width="1.5" PointX="3" PointY="21.875" Height="2.364889322916671" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Market" Width="1.5" PointX="15.75" PointY="18.25" Height="1.9802864583333353" IsExpanded="true" />
@@ -38543,47 +39298,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CorporateAction" Width="2.125" PointX="6.25" PointY="54.5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CorporateActionInstrumentMarketIDFK" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" ManuallyRouted="true" >
-          <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.875" />
-          <edmx:ConnectorPoint PointX="5.4800060503501324" PointY="21.485489532229675" />
-          <edmx:ConnectorPoint PointX="5.6326113865413552" PointY="21.391118369901591" />
-          <edmx:ConnectorPoint PointX="5.8235487210980184" PointY="21.391118369901591" />
-          <edmx:ConnectorPoint PointX="5.8235487210980184" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="5.916666666666667" PointY="20.596873674297736" />
-          <edmx:ConnectorPoint PointX="6.429157894455872" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.4961793644289108" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.7952588938320391" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="6.8457463886148027" PointY="20.59687367429774" />
-          <edmx:ConnectorPoint PointX="7.3704757324878383" PointY="19.439740536171243" />
-          <edmx:ConnectorPoint PointX="7.8543000021523435" PointY="19.412338187191523" />
-          <edmx:ConnectorPoint PointX="8.2706999978476556" PointY="19.388754545955194" />
-          <edmx:ConnectorPoint PointX="8.6668000021523444" PointY="19.366320635071904" />
-          <edmx:ConnectorPoint PointX="8.8331999978476556" PointY="19.356896240641614" />
-          <edmx:ConnectorPoint PointX="10.104300002152344" PointY="19.284904965937194" />
-          <edmx:ConnectorPoint PointX="10.989449997847656" PointY="19.234772736939551" />
-          <edmx:ConnectorPoint PointX="11.557425002152344" PointY="19.202604343877113" />
-          <edmx:ConnectorPoint PointX="11.755074997847656" PointY="19.191410043596065" />
-          <edmx:ConnectorPoint PointX="11.791800002152344" PointY="19.18933004999645" />
-          <edmx:ConnectorPoint PointX="11.958199997847656" PointY="19.179905655566159" />
-          <edmx:ConnectorPoint PointX="12.604300002152344" PointY="19.143312497876835" />
-          <edmx:ConnectorPoint PointX="13.020699997847656" PointY="19.119728856640506" />
-          <edmx:ConnectorPoint PointX="13.166800002152344" PointY="19.111454192563251" />
-          <edmx:ConnectorPoint PointX="13.489449997847656" PointY="19.093180268879188" />
-          <edmx:ConnectorPoint PointX="14.354300002152344" PointY="19.044197770234579" />
-          <edmx:ConnectorPoint PointX="14.676949997847656" PointY="19.025923846550516" />
-          <edmx:ConnectorPoint PointX="15.135550002152344" PointY="18.999950123965714" />
-          <edmx:ConnectorPoint PointX="15.676949997847656" PointY="18.969286859326367" />
-          <edmx:ConnectorPoint PointX="17.354297502152342" PointY="18.874286950154612" />
-          <edmx:ConnectorPoint PointX="17.520697497847657" PointY="18.864862555724322" />
-          <edmx:ConnectorPoint PointX="19.729300002152343" PointY="18.7397739639048" />
-          <edmx:ConnectorPoint PointX="20.145699997847657" PointY="18.716190322668471" />
-          <edmx:ConnectorPoint PointX="20.201175002152343" PointY="18.713048385558405" />
-          <edmx:ConnectorPoint PointX="20.489449997847654" PointY="18.696721358310171" />
-          <edmx:ConnectorPoint PointX="22.791803752152344" PointY="18.566322978142153" />
-          <edmx:ConnectorPoint PointX="23.083199997847661" PointY="18.549819172697546" />
-          <edmx:ConnectorPoint PointX="24.729300002152343" PointY="18.456589027784073" />
-          <edmx:ConnectorPoint PointX="24.90819999784766" PointY="18.446456671013479" />
-          <edmx:ConnectorPoint PointX="25.5" PointY="18.412938901852328" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" ManuallyRouted="false" >
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.MarketIdAccountMappingFK" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea" Width="1.5" PointX="26" PointY="3.625" />
@@ -38737,6 +39452,21 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Custo__56C78F2A" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__FundI__53EB227F" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Research" Width="2.5" PointX="30.25" PointY="52.625" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchAttachment" Width="1.5" PointX="40.5" PointY="33" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Width="1.5" PointX="32.5" PointY="32.875" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Analys__0088BECC" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Update__017CE305" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchA__Updat__0BFA7178" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Updat__176C2424" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Instr__1677FFEB" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchA__Resea__0A122906" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Resea__1583DBB2" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchInstrumentMarketAnalytic" Width="3.5" PointX="40.75" PointY="24" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Updat__38CD17EF" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchI__Resea__36E4CF7D" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Countr__5569569D" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__GicsSe__54753264" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

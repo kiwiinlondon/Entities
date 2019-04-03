@@ -125,6 +125,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         AttraxClientHoldings = 60,
         [EnumMember]
-        BloombergOOFReferenceAsset = 62
+        BloombergOOFReferenceAsset = 62,
+        [EnumMember]
+        JPMFinancingAccrual = 63,
+        [EnumMember]
+        UBSFinancing = 64,
+        [EnumMember]
+        MSFinancing =65,
     }
 }
