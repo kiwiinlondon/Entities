@@ -28,6 +28,16 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GIF = 9,
         [EnumMember]
-        DOC = 10
+        DOC = 10,
+        [EnumMember]
+        XLSM = 11,
+        [EnumMember]
+        XLSB = 12,
+        [EnumMember]
+        XLS = 13,
+        [EnumMember]
+        MSG = 14,
+        [EnumMember]
+        PPTM = 15
     }
 }
