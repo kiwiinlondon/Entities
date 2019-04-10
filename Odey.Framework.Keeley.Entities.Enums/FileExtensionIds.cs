@@ -38,6 +38,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MSG = 14,
         [EnumMember]
-        PPTM = 15
+        PPTM = 15,
+        [EnumMember]
+        ZIP = 17
     }
 }

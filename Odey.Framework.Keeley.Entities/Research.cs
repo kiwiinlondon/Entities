@@ -45,6 +45,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> GicsSectorId { get; set; }
     	[DataMember]
         public Nullable<int> CountryId { get; set; }
+    	[DataMember]
+        public string AdditionalKeyWords { get; set; }
     
         [DataMember]
         public virtual ApplicationUser Analyst { get; set; }
