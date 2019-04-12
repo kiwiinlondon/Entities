@@ -40,6 +40,16 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PPTM = 15,
         [EnumMember]
-        ZIP = 17
+        ZIP = 17,
+        [EnumMember]
+        PPSX= 18,
+        [EnumMember]
+        PPT = 19,
+        [EnumMember]
+        TIF = 20,
+        [EnumMember]
+        TIFF = 21,
+        [EnumMember]
+        NONE = 22
     }
 }

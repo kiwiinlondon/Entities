@@ -28,8 +28,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public string Subject { get; set; }
     	[DataMember]
-        public int AnalystId { get; set; }
-    	[DataMember]
         public Nullable<System.Guid> CodeRedId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
@@ -42,14 +40,18 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] Document { get; set; }
     	[DataMember]
-        public Nullable<int> GicsSectorId { get; set; }
-    	[DataMember]
         public Nullable<int> CountryId { get; set; }
     	[DataMember]
         public string AdditionalKeyWords { get; set; }
+    	[DataMember]
+        public int ContributorId { get; set; }
+    	[DataMember]
+        public Nullable<int> GicsId { get; set; }
+    	[DataMember]
+        public Nullable<int> ActionFlags { get; set; }
+    	[DataMember]
+        public bool IsActioned { get; set; }
     
-        [DataMember]
-        public virtual ApplicationUser Analyst { get; set; }
         [DataMember]
         public virtual List<ResearchAttachment> ResearchAttachments { get; set; }
         [DataMember]
@@ -58,5 +60,9 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Country Country { get; set; }
         [DataMember]
         public virtual Industry GicsSector { get; set; }
+        [DataMember]
+        public virtual Industry Industry { get; set; }
+        [DataMember]
+        public virtual ResearchContributor ResearchContributor { get; set; }
     }
 }

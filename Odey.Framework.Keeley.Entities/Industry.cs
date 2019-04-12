@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Industry
     {
+    	
+        public Industry()
+        {
+            this.Researches = new List<Research>();
+        }
+    
     	[DataMember]
         public int IndustryID { get; set; }
     	[DataMember]
@@ -34,5 +40,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<int> RelativeIndexInstrumentMarketId { get; set; }
+    
+        [DataMember]
+        public virtual List<Research> Researches { get; set; }
     }
 }
