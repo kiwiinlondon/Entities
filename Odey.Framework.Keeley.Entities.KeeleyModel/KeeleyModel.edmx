@@ -2735,6 +2735,8 @@
           <Property Name="Notes" Type="varchar" MaxLength="150" />
           <Property Name="ApprovedByUserId" Type="int" />
           <Property Name="InputUserId" Type="int" Nullable="false" />
+          <Property Name="FromBookId" Type="int" />
+          <Property Name="ToBookId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Keeley.dbo.AttributionPNLNav' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5860,6 +5862,30 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="TradeEvent">
               <PropertyRef Name="TradeEuroFXRateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TransferE__FromB__6CA1C1B0">
+          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
+          <End Role="TransferEvent" Type="Self.TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="FromBookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TransferE__ToBoo__6D95E5E9">
+          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
+          <End Role="TransferEvent" Type="Self.TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="ToBookId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -12744,6 +12770,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Notes" Type="varchar" Mode="In" />
           <Parameter Name="ApprovedByUserId" Type="int" Mode="In" />
           <Parameter Name="InputUserId" Type="int" Mode="In" />
+          <Parameter Name="FromBookId" Type="int" Mode="In" />
+          <Parameter Name="ToBookId" Type="int" Mode="In" />
         </Function>
         <Function Name="TransferEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -12761,6 +12789,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Notes" Type="varchar" Mode="In" />
           <Parameter Name="ApprovedByUserId" Type="int" Mode="In" />
           <Parameter Name="InputUserId" Type="int" Mode="In" />
+          <Parameter Name="FromBookId" Type="int" Mode="In" />
+          <Parameter Name="ToBookId" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="KeeleyModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
@@ -13991,6 +14021,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__TradeEven__Trade__265B8A40" Association="Self.FK__TradeEven__Trade__265B8A40">
             <End Role="FXRate" EntitySet="FXRate" />
             <End Role="TradeEvent" EntitySet="TradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TransferE__FromB__6CA1C1B0" Association="Self.FK__TransferE__FromB__6CA1C1B0">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="TransferEvent" EntitySet="TransferEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TransferE__ToBoo__6D95E5E9" Association="Self.FK__TransferE__ToBoo__6D95E5E9">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="TransferEvent" EntitySet="TransferEvent" />
           </AssociationSet>
           <AssociationSet Name="fk_factor_exposure_fund_id" Association="Self.fk_factor_exposure_fund_id">
             <End Role="Fund" EntitySet="Fund" />
@@ -17128,6 +17166,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="ResearchContributor" EntitySet="ResearchContributors" />
             <End Role="Research" EntitySet="Researches" />
           </AssociationSet>
+          <AssociationSet Name="FK__TransferE__FromB__6CA1C1B0" Association="Odey.Framework.Keeley.Entities.FK__TransferE__FromB__6CA1C1B0">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TransferE__ToBoo__6D95E5E9" Association="Odey.Framework.Keeley.Entities.FK__TransferE__ToBoo__6D95E5E9">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -17164,6 +17210,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="NavIsNotUsable" Type="Boolean" Nullable="false" />
           <Property Name="SignOffManagerId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ApplicationUser2" Relationship="Odey.Framework.Keeley.Entities.FK__Book__SignOffMan__37E31557" FromRole="Book" ToRole="ApplicationUser" />
+          <NavigationProperty Name="TransferEvents" Relationship="Odey.Framework.Keeley.Entities.FK__TransferE__FromB__6CA1C1B0" FromRole="Book" ToRole="TransferEvent" />
+          <NavigationProperty Name="TransferEvents1" Relationship="Odey.Framework.Keeley.Entities.FK__TransferE__ToBoo__6D95E5E9" FromRole="Book" ToRole="TransferEvent" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -23059,6 +23107,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.TransferEventEvent" FromRole="TransferEvent" ToRole="Event" />
           <Property Name="InputUserId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="InputUser" Relationship="Odey.Framework.Keeley.Entities.TransferEventInputUserId" FromRole="TransferEvent" ToRole="ApplicationUser" />
+          <Property Name="FromBookId" Type="Int32" />
+          <Property Name="ToBookId" Type="Int32" />
+          <NavigationProperty Name="Book" Relationship="Odey.Framework.Keeley.Entities.FK__TransferE__FromB__6CA1C1B0" FromRole="TransferEvent" ToRole="Book" />
+          <NavigationProperty Name="Book1" Relationship="Odey.Framework.Keeley.Entities.FK__TransferE__ToBoo__6D95E5E9" FromRole="TransferEvent" ToRole="Book" />
         </EntityType>
         <Association Name="TransferEventFromAccountIdFK">
           <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
@@ -26137,6 +26189,30 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="Research">
               <PropertyRef Name="ContributorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TransferE__FromB__6CA1C1B0">
+          <End Type="Odey.Framework.Keeley.Entities.Book" Role="Book" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="FromBookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TransferE__ToBoo__6D95E5E9">
+          <End Type="Odey.Framework.Keeley.Entities.Book" Role="Book" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.TransferEvent" Role="TransferEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="TransferEvent">
+              <PropertyRef Name="ToBookId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -31709,6 +31785,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="TransferEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TransferEvent">
               <MappingFragment StoreEntitySet="TransferEvent">
+                <ScalarProperty Name="ToBookId" ColumnName="ToBookId" />
+                <ScalarProperty Name="FromBookId" ColumnName="FromBookId" />
                 <ScalarProperty Name="InputUserId" ColumnName="InputUserId" />
                 <ScalarProperty Name="ApprovedByUserId" ColumnName="ApprovedByUserId" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
@@ -31730,6 +31808,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TransferEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TransferEvent_Insert">
+                  <ScalarProperty Name="ToBookId" ParameterName="ToBookId" />
+                  <ScalarProperty Name="FromBookId" ParameterName="FromBookId" />
                   <ScalarProperty Name="InputUserId" ParameterName="InputUserId" />
                   <ScalarProperty Name="ApprovedByUserId" ParameterName="ApprovedByUserId" />
                   <ScalarProperty Name="Notes" ParameterName="Notes" />
@@ -31748,6 +31828,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TransferEvent_Update">
+                  <ScalarProperty Name="ToBookId" ParameterName="ToBookId" Version="Current" />
+                  <ScalarProperty Name="FromBookId" ParameterName="FromBookId" Version="Current" />
                   <ScalarProperty Name="InputUserId" ParameterName="InputUserId" Version="Current" />
                   <ScalarProperty Name="ApprovedByUserId" ParameterName="ApprovedByUserId" Version="Current" />
                   <ScalarProperty Name="Notes" ParameterName="Notes" Version="Current" />
@@ -39685,6 +39767,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchC__UserI__2367E6B5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Analys__27387799" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Contri__31B6060C" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TransferE__FromB__6CA1C1B0" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TransferE__ToBoo__6D95E5E9" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -48,6 +48,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> ApprovedByUserId { get; set; }
     	[DataMember]
         public int InputUserId { get; set; }
+    	[DataMember]
+        public Nullable<int> FromBookId { get; set; }
+    	[DataMember]
+        public Nullable<int> ToBookId { get; set; }
     
         [DataMember]
         public virtual Account FromAccount { get; set; }
@@ -61,5 +65,9 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Event Event { get; set; }
         [DataMember]
         public virtual ApplicationUser InputUser { get; set; }
+        [DataMember]
+        public virtual Book Book { get; set; }
+        [DataMember]
+        public virtual Book Book1 { get; set; }
     }
 }

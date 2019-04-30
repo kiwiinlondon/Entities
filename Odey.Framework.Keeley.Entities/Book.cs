@@ -16,6 +16,13 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Book
     {
+    	
+        public Book()
+        {
+            this.TransferEvents = new List<TransferEvent>();
+            this.TransferEvents1 = new List<TransferEvent>();
+        }
+    
     	[DataMember]
         public int BookID { get; set; }
     	[DataMember]
@@ -47,5 +54,9 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual ApplicationUser ApplicationUser2 { get; set; }
+        [DataMember]
+        public virtual List<TransferEvent> TransferEvents { get; set; }
+        [DataMember]
+        public virtual List<TransferEvent> TransferEvents1 { get; set; }
     }
 }
