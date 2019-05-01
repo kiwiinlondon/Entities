@@ -1659,6 +1659,7 @@
           <Property Name="ExDate" Type="datetime" Nullable="false" />
           <Property Name="Price" Type="numeric" Precision="27" Scale="8" />
           <Property Name="EventDateOverride" Type="datetime" />
+          <Property Name="IsPNLOnly" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="InstrumentEventType">
           <Key>
@@ -2785,6 +2786,8 @@ warning 6002: The table/view 'Keeley.dbo.FundCapitalChange' does not have a prim
           <Property Name="CapitalChange" Type="numeric" Precision="38" Scale="6" />
           <Property Name="OfficialNav" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ParentMarketValue" Type="numeric" Precision="38" Scale="8" />
+          <Property Name="TodayTotalPNL" Type="numeric" Precision="38" Scale="6" />
+          <Property Name="ParentTodayTotalPNL" Type="numeric" Precision="38" Scale="6" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Keeley.dbo.FundNetAssetValue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -10926,6 +10929,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ExDate" Type="datetime" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
           <Parameter Name="EventDateOverride" Type="datetime" Mode="In" />
+          <Parameter Name="IsPNLOnly" Type="bit" Mode="In" />
         </Function>
         <Function Name="InstrumentEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -10943,6 +10947,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ExDate" Type="datetime" Mode="In" />
           <Parameter Name="Price" Type="numeric" Mode="In" />
           <Parameter Name="EventDateOverride" Type="datetime" Mode="In" />
+          <Parameter Name="IsPNLOnly" Type="bit" Mode="In" />
         </Function>
         <Function Name="InstrumentEventType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentEventTypeID" Type="int" Mode="In" />
@@ -12977,7 +12982,9 @@ FROM [dbo].[BookNetAssetValue] AS [BookNetAssetValue]</DefiningQuery>
 [FundCapitalChange].[MarketValue] AS [MarketValue], 
 [FundCapitalChange].[CapitalChange] AS [CapitalChange], 
 [FundCapitalChange].[OfficialNav] AS [OfficialNav], 
-[FundCapitalChange].[ParentMarketValue] AS [ParentMarketValue]
+[FundCapitalChange].[ParentMarketValue] AS [ParentMarketValue], 
+[FundCapitalChange].[TodayTotalPNL] AS [TodayTotalPNL], 
+[FundCapitalChange].[ParentTodayTotalPNL] AS [ParentTodayTotalPNL]
 FROM [dbo].[FundCapitalChange] AS [FundCapitalChange]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="FundNetAssetValue" EntityType="Self.FundNetAssetValue" store:Type="Views" store:Schema="dbo">
@@ -17209,9 +17216,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Boolean" Name="IsActive" Nullable="false" />
           <Property Name="NavIsNotUsable" Type="Boolean" Nullable="false" />
           <Property Name="SignOffManagerId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ApplicationUser2" Relationship="Odey.Framework.Keeley.Entities.FK__Book__SignOffMan__37E31557" FromRole="Book" ToRole="ApplicationUser" />
-          <NavigationProperty Name="TransferEvents" Relationship="Odey.Framework.Keeley.Entities.FK__TransferE__FromB__6CA1C1B0" FromRole="Book" ToRole="TransferEvent" />
-          <NavigationProperty Name="TransferEvents1" Relationship="Odey.Framework.Keeley.Entities.FK__TransferE__ToBoo__6D95E5E9" FromRole="Book" ToRole="TransferEvent" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -17569,6 +17573,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="Price" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="EventDateOverride" Type="DateTime" Precision="3" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.InstrumentMarketIDFK" FromRole="InstrumentEvent" ToRole="InstrumentMarket" />
+          <Property Name="IsPNLOnly" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="InstrumentEventType">
           <Key>
@@ -22457,6 +22462,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Decimal" Name="CapitalChange" Precision="38" Scale="6" />
           <Property Type="Decimal" Name="OfficialNav" Precision="27" Scale="8" />
           <Property Name="ParentMarketValue" Type="Decimal" Precision="38" Scale="8" />
+          <Property Name="TodayTotalPNL" Type="Decimal" Precision="38" Scale="6" />
+          <Property Name="ParentTodayTotalPNL" Type="Decimal" Precision="38" Scale="6" />
         </EntityType>
         <EntityType Name="OfficialNetAssetValue">
           <Key>
@@ -26835,6 +26842,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="InstrumentEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentEvent">
               <MappingFragment StoreEntitySet="InstrumentEvent">
+                <ScalarProperty Name="IsPNLOnly" ColumnName="IsPNLOnly" />
                 <ScalarProperty Name="EventDateOverride" ColumnName="EventDateOverride" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="ExDate" ColumnName="ExDate" />
@@ -26856,6 +26864,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InstrumentEvent_Insert">
+                  <ScalarProperty Name="IsPNLOnly" ParameterName="IsPNLOnly" />
                   <ScalarProperty Name="EventDateOverride" ParameterName="EventDateOverride" />
                   <ScalarProperty Name="Price" ParameterName="Price" />
                   <ScalarProperty Name="ExDate" ParameterName="ExDate" />
@@ -26874,6 +26883,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InstrumentEvent_Update">
+                  <ScalarProperty Name="IsPNLOnly" ParameterName="IsPNLOnly" Version="Current" />
                   <ScalarProperty Name="EventDateOverride" ParameterName="EventDateOverride" Version="Current" />
                   <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
                   <ScalarProperty Name="ExDate" ParameterName="ExDate" Version="Current" />
@@ -31206,6 +31216,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="FundCapitalChanges">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FundCapitalChange">
               <MappingFragment StoreEntitySet="FundCapitalChange">
+                <ScalarProperty Name="ParentTodayTotalPNL" ColumnName="ParentTodayTotalPNL" />
+                <ScalarProperty Name="TodayTotalPNL" ColumnName="TodayTotalPNL" />
                 <ScalarProperty Name="ParentMarketValue" ColumnName="ParentMarketValue" />
                 <ScalarProperty Name="OfficialNav" ColumnName="OfficialNav" />
                 <ScalarProperty Name="CapitalChange" ColumnName="CapitalChange" />

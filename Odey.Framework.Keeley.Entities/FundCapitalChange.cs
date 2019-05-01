@@ -28,5 +28,9 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> OfficialNav { get; set; }
     	[DataMember]
         public Nullable<decimal> ParentMarketValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayTotalPNL { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ParentTodayTotalPNL { get; set; }
     }
 }
