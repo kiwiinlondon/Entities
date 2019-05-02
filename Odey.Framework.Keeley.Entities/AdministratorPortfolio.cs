@@ -78,6 +78,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> PriceToPositionFXRate { get; set; }
     	[DataMember]
         public Nullable<decimal> PricePNLOffset { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FXPNLOffset { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalUnrealisedPricePNLBook { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalUnrealisedFXPNLBook { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

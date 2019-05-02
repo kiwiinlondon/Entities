@@ -93,6 +93,9 @@
           <Property Name="MarketValueLocal" Type="numeric" Precision="27" Scale="8" />
           <Property Name="PriceToPositionFXRate" Type="numeric" Precision="27" Scale="8" />
           <Property Name="PricePNLOffset" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FXPNLOffset" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TotalUnrealisedPricePNLBook" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TotalUnrealisedFXPNLBook" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="AnalystIdea">
           <Key>
@@ -2304,6 +2307,7 @@
           <Property Name="TodayMaxNetPosition" Type="numeric" Precision="27" Scale="8" />
           <Property Name="UnadjustedNetPosition" Type="numeric" Precision="27" Scale="8" />
           <Property Name="Revalue" Type="bit" />
+          <Property Name="TradeDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="PortfolioEventFX">
           <Key>
@@ -8687,6 +8691,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="MarketValueLocal" Type="numeric" Mode="In" />
           <Parameter Name="PriceToPositionFXRate" Type="numeric" Mode="In" />
           <Parameter Name="PricePNLOffset" Type="numeric" Mode="In" />
+          <Parameter Name="FXPNLOffset" Type="numeric" Mode="In" />
+          <Parameter Name="TotalUnrealisedPricePNLBook" Type="numeric" Mode="In" />
+          <Parameter Name="TotalUnrealisedFXPNLBook" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AdministratorPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AdministratorPortfolioID" Type="int" Mode="In" />
@@ -8719,6 +8726,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="MarketValueLocal" Type="numeric" Mode="In" />
           <Parameter Name="PriceToPositionFXRate" Type="numeric" Mode="In" />
           <Parameter Name="PricePNLOffset" Type="numeric" Mode="In" />
+          <Parameter Name="FXPNLOffset" Type="numeric" Mode="In" />
+          <Parameter Name="TotalUnrealisedPricePNLBook" Type="numeric" Mode="In" />
+          <Parameter Name="TotalUnrealisedFXPNLBook" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AnalystIdea_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalystIdeaId" Type="int" Mode="In" />
@@ -12033,6 +12043,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="TodayMaxNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="UnadjustedNetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="Revalue" Type="bit" Mode="In" />
+          <Parameter Name="TradeDate" Type="datetime" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -12102,6 +12114,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TodayMaxDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="TodayMaxNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="UnadjustedNetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="Revalue" Type="bit" Mode="In" />
+          <Parameter Name="TradeDate" Type="datetime" Mode="In" />
         </Function>
         <Function Name="PortfolioEventFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventFXId" Type="int" Mode="In" />
@@ -18941,6 +18955,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="TodayMaxNetPosition" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="UnadjustedNetPosition" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="Revalue" Type="Boolean" />
+          <Property Name="TradeDate" Type="DateTime" Precision="3" Nullable="false" />
         </EntityType>
         <EntityType Name="PortfolioSettlementDate">
           <Key>
@@ -23600,6 +23615,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="MarketValueLocal" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="PriceToPositionFXRate" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="PricePNLOffset" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FXPNLOffset" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TotalUnrealisedPricePNLBook" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TotalUnrealisedFXPNLBook" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="AdministratorPortfolioFundIdFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -28126,6 +28144,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="TradeDate" ColumnName="TradeDate" />
                 <ScalarProperty Name="Revalue" ColumnName="Revalue" />
                 <ScalarProperty Name="UnadjustedNetPosition" ColumnName="UnadjustedNetPosition" />
                 <ScalarProperty Name="TodayMaxNetPosition" ColumnName="TodayMaxNetPosition" />
@@ -28200,6 +28219,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="TradeDate" ParameterName="TradeDate" />
+                  <ScalarProperty Name="Revalue" ParameterName="Revalue" />
                   <ScalarProperty Name="UnadjustedNetPosition" ParameterName="UnadjustedNetPosition" />
                   <ScalarProperty Name="TodayMaxNetPosition" ParameterName="TodayMaxNetPosition" />
                   <ScalarProperty Name="TodayMaxDeltaNetCostInstrumentCurrency" ParameterName="TodayMaxDeltaNetCostInstrumentCurrency" />
@@ -28270,6 +28291,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="TradeDate" ParameterName="TradeDate" Version="Current" />
+                  <ScalarProperty Name="Revalue" ParameterName="Revalue" Version="Current" />
                   <ScalarProperty Name="UnadjustedNetPosition" ParameterName="UnadjustedNetPosition" Version="Current" />
                   <ScalarProperty Name="TodayMaxNetPosition" ParameterName="TodayMaxNetPosition" Version="Current" />
                   <ScalarProperty Name="TodayMaxDeltaNetCostInstrumentCurrency" ParameterName="TodayMaxDeltaNetCostInstrumentCurrency" Version="Current" />
@@ -32025,6 +32048,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="AdministratorPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdministratorPortfolio">
               <MappingFragment StoreEntitySet="AdministratorPortfolio">
+                <ScalarProperty Name="TotalUnrealisedFXPNLBook" ColumnName="TotalUnrealisedFXPNLBook" />
+                <ScalarProperty Name="TotalUnrealisedPricePNLBook" ColumnName="TotalUnrealisedPricePNLBook" />
+                <ScalarProperty Name="FXPNLOffset" ColumnName="FXPNLOffset" />
                 <ScalarProperty Name="PricePNLOffset" ColumnName="PricePNLOffset" />
                 <ScalarProperty Name="PriceToPositionFXRate" ColumnName="PriceToPositionFXRate" />
                 <ScalarProperty Name="MarketValueLocal" ColumnName="MarketValueLocal" />
@@ -32061,6 +32087,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AdministratorPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AdministratorPortfolio_Insert">
+                  <ScalarProperty Name="TotalUnrealisedFXPNLBook" ParameterName="TotalUnrealisedFXPNLBook" />
+                  <ScalarProperty Name="TotalUnrealisedPricePNLBook" ParameterName="TotalUnrealisedPricePNLBook" />
+                  <ScalarProperty Name="FXPNLOffset" ParameterName="FXPNLOffset" />
                   <ScalarProperty Name="PricePNLOffset" ParameterName="PricePNLOffset" />
                   <ScalarProperty Name="PriceToPositionFXRate" ParameterName="PriceToPositionFXRate" />
                   <ScalarProperty Name="MarketValueLocal" ParameterName="MarketValueLocal" />
@@ -32094,6 +32123,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AdministratorPortfolio_Update">
+                  <ScalarProperty Name="TotalUnrealisedFXPNLBook" ParameterName="TotalUnrealisedFXPNLBook" Version="Current" />
+                  <ScalarProperty Name="TotalUnrealisedPricePNLBook" ParameterName="TotalUnrealisedPricePNLBook" Version="Current" />
+                  <ScalarProperty Name="FXPNLOffset" ParameterName="FXPNLOffset" Version="Current" />
                   <ScalarProperty Name="PricePNLOffset" ParameterName="PricePNLOffset" Version="Current" />
                   <ScalarProperty Name="PriceToPositionFXRate" ParameterName="PriceToPositionFXRate" Version="Current" />
                   <ScalarProperty Name="MarketValueLocal" ParameterName="MarketValueLocal" Version="Current" />
@@ -33975,7 +34007,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="73">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="58">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
