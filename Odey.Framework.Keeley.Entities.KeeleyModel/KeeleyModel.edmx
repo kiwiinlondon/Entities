@@ -12449,6 +12449,15 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ActionFlags" Type="int" Mode="In" />
           <Parameter Name="IsActioned" Type="bit" Mode="In" />
         </Function>
+        <Function Name="Research_Search" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DelimiteredAnalystIds" Type="varchar" Mode="In" />
+          <Parameter Name="DelimiteredCountryIds" Type="varchar" Mode="In" />
+          <Parameter Name="DelimiteredInstrumentIds" Type="varchar" Mode="In" />
+          <Parameter Name="DelimiteredInstrumentMarketIds" Type="varchar" Mode="In" />
+          <Parameter Name="DelimiteredIssuerIds" Type="varchar" Mode="In" />
+          <Parameter Name="DelimiteredSectorIds" Type="varchar" Mode="In" />
+          <Parameter Name="Keyword" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="Research_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ResearchId" Type="int" Mode="In" />
           <Parameter Name="Subject" Type="varchar" Mode="In" />
@@ -17195,6 +17204,15 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Book" EntitySet="Books" />
             <End Role="TransferEvent" EntitySet="TransferEvents" />
           </AssociationSet>
+          <FunctionImport Name="Research_Search" ReturnType="Collection(Odey.Framework.Keeley.Entities.Research_Search_Result)">
+            <Parameter Name="DelimiteredAnalystIds" Mode="In" Type="String" />
+            <Parameter Name="DelimiteredCountryIds" Mode="In" Type="String" />
+            <Parameter Name="DelimiteredInstrumentIds" Mode="In" Type="String" />
+            <Parameter Name="DelimiteredInstrumentMarketIds" Mode="In" Type="String" />
+            <Parameter Name="DelimiteredIssuerIds" Mode="In" Type="String" />
+            <Parameter Name="DelimiteredSectorIds" Mode="In" Type="String" />
+            <Parameter Name="Keyword" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -26241,6 +26259,19 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="Research_Search_Result">
+          <Property Type="Int32" Name="ResearchId" Nullable="false" />
+          <Property Type="String" Name="Subject" Nullable="false" MaxLength="2000" />
+          <Property Type="Guid" Name="CodeRedId" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedDt" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Analyst" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="BloombergTicker" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Attachment" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Issuer" Nullable="true" MaxLength="70" />
+          <Property Type="String" Name="Sector" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AdditionalKeywords" Nullable="true" MaxLength="400" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -33985,6 +34016,23 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Research_Search" FunctionName="KeeleyModel.Store.Research_Search">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Odey.Framework.Keeley.Entities.Research_Search_Result">
+                <ScalarProperty Name="ResearchId" ColumnName="ResearchId" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="CodeRedId" ColumnName="CodeRedId" />
+                <ScalarProperty Name="CreatedDt" ColumnName="CreatedDt" />
+                <ScalarProperty Name="Analyst" ColumnName="Analyst" />
+                <ScalarProperty Name="BloombergTicker" ColumnName="BloombergTicker" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="Issuer" ColumnName="Issuer" />
+                <ScalarProperty Name="Sector" ColumnName="Sector" />
+                <ScalarProperty Name="AdditionalKeywords" ColumnName="AdditionalKeywords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
