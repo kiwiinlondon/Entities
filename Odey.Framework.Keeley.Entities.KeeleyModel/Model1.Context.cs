@@ -760,7 +760,7 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioEvent>("PortfolioEvent_GetMultipleByPositionAndChangeNumber", mergeOption, positionIdsParameter, changeNumbersParameter, portfolioAggregationLevelIdsParameter);
         }
     
-        public virtual ObjectResult<Research_Search_Result> Research_Search(string delimiteredAnalystIds, string delimiteredCountryIds, string delimiteredInstrumentIds, string delimiteredInstrumentMarketIds, string delimiteredIssuerIds, string delimiteredSectorIds, string keyword)
+        public virtual ObjectResult<Research_Search_Result> Research_Search(string delimiteredAnalystIds, string delimiteredCountryIds, string delimiteredInstrumentIds, string delimiteredInstrumentMarketIds, string delimiteredIssuerIds, string delimiteredSectorIds, string keyword, Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
         {
             var delimiteredAnalystIdsParameter = delimiteredAnalystIds != null ?
                 new ObjectParameter("DelimiteredAnalystIds", delimiteredAnalystIds) :
@@ -790,7 +790,15 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("Keyword", keyword) :
                 new ObjectParameter("Keyword", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Research_Search_Result>("Research_Search", delimiteredAnalystIdsParameter, delimiteredCountryIdsParameter, delimiteredInstrumentIdsParameter, delimiteredInstrumentMarketIdsParameter, delimiteredIssuerIdsParameter, delimiteredSectorIdsParameter, keywordParameter);
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Research_Search_Result>("Research_Search", delimiteredAnalystIdsParameter, delimiteredCountryIdsParameter, delimiteredInstrumentIdsParameter, delimiteredInstrumentMarketIdsParameter, delimiteredIssuerIdsParameter, delimiteredSectorIdsParameter, keywordParameter, startDateParameter, endDateParameter);
         }
     }
 }
