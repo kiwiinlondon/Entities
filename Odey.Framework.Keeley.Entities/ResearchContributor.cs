@@ -26,6 +26,6 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     
         [DataMember]
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

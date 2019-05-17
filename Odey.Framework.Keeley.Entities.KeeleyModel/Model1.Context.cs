@@ -761,46 +761,5 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioEvent>("PortfolioEvent_GetMultipleByPositionAndChangeNumber", mergeOption, positionIdsParameter, changeNumbersParameter, portfolioAggregationLevelIdsParameter);
         }
-    
-        public virtual ObjectResult<Research_Search_Result> Research_Search(string delimiteredAnalystIds, string delimiteredCountryIds, string delimiteredInstrumentIds, string delimiteredInstrumentMarketIds, string delimiteredIssuerIds, string delimiteredSectorIds, string keyword, Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
-        {
-            var delimiteredAnalystIdsParameter = delimiteredAnalystIds != null ?
-                new ObjectParameter("DelimiteredAnalystIds", delimiteredAnalystIds) :
-                new ObjectParameter("DelimiteredAnalystIds", typeof(string));
-    
-            var delimiteredCountryIdsParameter = delimiteredCountryIds != null ?
-                new ObjectParameter("DelimiteredCountryIds", delimiteredCountryIds) :
-                new ObjectParameter("DelimiteredCountryIds", typeof(string));
-    
-            var delimiteredInstrumentIdsParameter = delimiteredInstrumentIds != null ?
-                new ObjectParameter("DelimiteredInstrumentIds", delimiteredInstrumentIds) :
-                new ObjectParameter("DelimiteredInstrumentIds", typeof(string));
-    
-            var delimiteredInstrumentMarketIdsParameter = delimiteredInstrumentMarketIds != null ?
-                new ObjectParameter("DelimiteredInstrumentMarketIds", delimiteredInstrumentMarketIds) :
-                new ObjectParameter("DelimiteredInstrumentMarketIds", typeof(string));
-    
-            var delimiteredIssuerIdsParameter = delimiteredIssuerIds != null ?
-                new ObjectParameter("DelimiteredIssuerIds", delimiteredIssuerIds) :
-                new ObjectParameter("DelimiteredIssuerIds", typeof(string));
-    
-            var delimiteredSectorIdsParameter = delimiteredSectorIds != null ?
-                new ObjectParameter("DelimiteredSectorIds", delimiteredSectorIds) :
-                new ObjectParameter("DelimiteredSectorIds", typeof(string));
-    
-            var keywordParameter = keyword != null ?
-                new ObjectParameter("Keyword", keyword) :
-                new ObjectParameter("Keyword", typeof(string));
-    
-            var startDateParameter = startDate.HasValue ?
-                new ObjectParameter("StartDate", startDate) :
-                new ObjectParameter("StartDate", typeof(System.DateTime));
-    
-            var endDateParameter = endDate.HasValue ?
-                new ObjectParameter("EndDate", endDate) :
-                new ObjectParameter("EndDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Research_Search_Result>("Research_Search", delimiteredAnalystIdsParameter, delimiteredCountryIdsParameter, delimiteredInstrumentIdsParameter, delimiteredInstrumentMarketIdsParameter, delimiteredIssuerIdsParameter, delimiteredSectorIdsParameter, keywordParameter, startDateParameter, endDateParameter);
-        }
     }
 }
