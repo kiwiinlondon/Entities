@@ -190,6 +190,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ResearchInstrumentMarket> ResearchInstrumentMarkets { get; set; }
         public DbSet<ResearchInstrumentMarketAnalytic> ResearchInstrumentMarketAnalytics { get; set; }
         public DbSet<ResearchContributor> ResearchContributors { get; set; }
+        public DbSet<AnalystIdea2> AnalystIdea2 { get; set; }
+        public DbSet<Originator> Originators { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

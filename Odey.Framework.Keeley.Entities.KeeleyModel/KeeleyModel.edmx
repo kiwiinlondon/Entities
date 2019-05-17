@@ -115,6 +115,22 @@
           <Property Name="IsOriginatedLong" Type="bit" />
           <Property Name="ExternalBrokerId" Type="int" />
         </EntityType>
+        <EntityType Name="AnalystIdea2">
+          <Key>
+            <PropertyRef Name="AnalystIdeaId" />
+          </Key>
+          <Property Name="AnalystIdeaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IssuerId" Type="int" Nullable="false" />
+          <Property Name="IsLong" Type="bit" Nullable="false" />
+          <Property Name="EffectiveFromDate" Type="datetime" Nullable="false" />
+          <Property Name="EffectiveToDate" Type="datetime" Nullable="false" />
+          <Property Name="AnalystId" Type="int" />
+          <Property Name="OriginatiorId" Type="int" />
+          <Property Name="FocusListId" Type="int" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="Analytic">
           <Key>
             <PropertyRef Name="AnalyticId" />
@@ -2008,6 +2024,18 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ContractSize" Type="decimal" Precision="18" Scale="0" />
           <Property Name="OptionExerciseTypeId" Type="int" />
+        </EntityType>
+        <EntityType Name="Originator">
+          <Key>
+            <PropertyRef Name="OriginatorId" />
+          </Key>
+          <Property Name="OriginatorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExternalOriginatorId" Type="int" />
+          <Property Name="InternalOriginatorId" Type="int" />
+          <Property Name="InternalOriginatorId2" Type="int" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="PADealing">
           <Key>
@@ -4708,6 +4736,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__AnalystId__Analy__72E4AAEB">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="AnalystIdea2" Type="Self.AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="AnalystId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Role="ResearchBroker" Type="Self.ResearchBroker" Multiplicity="0..1" />
           <End Role="AnalystIdea" Type="Self.AnalystIdea" Multiplicity="*" />
@@ -4732,6 +4772,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__AnalystId__Focus__74CCF35D">
+          <End Role="FocusList" Type="Self.FocusList" Multiplicity="0..1" />
+          <End Role="AnalystIdea2" Type="Self.AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FocusList">
+              <PropertyRef Name="FocusListId" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="FocusListId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__AnalystId__Inter__49FF638D">
           <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
           <End Role="AnalystIdea" Type="Self.AnalystIdea" Multiplicity="*" />
@@ -4753,6 +4805,42 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="AnalystIdea">
               <PropertyRef Name="InternalOriginatorId2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Issue__71F086B2">
+          <End Role="Issuer" Type="Self.Issuer" Multiplicity="1" />
+          <End Role="AnalystIdea2" Type="Self.AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="IssuerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Origi__73D8CF24">
+          <End Role="Originator" Type="Self.Originator" Multiplicity="0..1" />
+          <End Role="AnalystIdea2" Type="Self.AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Originator">
+              <PropertyRef Name="OriginatorId" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="OriginatiorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Updat__75C11796">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="AnalystIdea2" Type="Self.AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5580,6 +5668,54 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="Options">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Originato__Exter__667ED406">
+          <End Role="ExternalPerson" Type="Self.ExternalPerson" Multiplicity="0..1" />
+          <End Role="Originator" Type="Self.Originator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExternalPerson">
+              <PropertyRef Name="ExternalPersonId" />
+            </Principal>
+            <Dependent Role="Originator">
+              <PropertyRef Name="ExternalOriginatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Originato__Inter__6772F83F">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="Originator" Type="Self.Originator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Originator">
+              <PropertyRef Name="InternalOriginatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Originato__Inter__68671C78">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="0..1" />
+          <End Role="Originator" Type="Self.Originator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Originator">
+              <PropertyRef Name="InternalOriginatorId2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Originato__Updat__695B40B1">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="Originator" Type="Self.Originator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Originator">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -8759,11 +8895,39 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="OriginatingDate" Type="datetime" Mode="In" />
           <Parameter Name="IsOriginatedLong" Type="bit" Mode="In" />
         </Function>
+        <Function Name="AnalystIdea2_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AnalystIdeaId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AnalystIdea2_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IssuerId" Type="int" Mode="In" />
+          <Parameter Name="IsLong" Type="bit" Mode="In" />
+          <Parameter Name="EffectiveFromDate" Type="datetime" Mode="In" />
+          <Parameter Name="EffectiveToDate" Type="datetime" Mode="In" />
+          <Parameter Name="AnalystId" Type="int" Mode="In" />
+          <Parameter Name="OriginatiorId" Type="int" Mode="In" />
+          <Parameter Name="FocusListId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AnalystIdea2_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AnalystIdeaId" Type="int" Mode="In" />
+          <Parameter Name="IssuerId" Type="int" Mode="In" />
+          <Parameter Name="IsLong" Type="bit" Mode="In" />
+          <Parameter Name="EffectiveFromDate" Type="datetime" Mode="In" />
+          <Parameter Name="EffectiveToDate" Type="datetime" Mode="In" />
+          <Parameter Name="AnalystId" Type="int" Mode="In" />
+          <Parameter Name="OriginatiorId" Type="int" Mode="In" />
+          <Parameter Name="FocusListId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="Analytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalyticId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
+        <Function Name="Analytic_GetCurrentMissingLiquidity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="Analytic_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AnalyticTypeID" Type="int" Mode="In" />
           <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
@@ -11591,6 +11755,25 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="ContractSize" Type="decimal" Mode="In" />
         </Function>
+        <Function Name="Originator_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OriginatorId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Originator_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ExternalOriginatorId" Type="int" Mode="In" />
+          <Parameter Name="InternalOriginatorId" Type="int" Mode="In" />
+          <Parameter Name="InternalOriginatorId2" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Originator_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OriginatorId" Type="int" Mode="In" />
+          <Parameter Name="ExternalOriginatorId" Type="int" Mode="In" />
+          <Parameter Name="InternalOriginatorId" Type="int" Mode="In" />
+          <Parameter Name="InternalOriginatorId2" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="PADealing_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PADealingID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -12818,6 +13001,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="Administrator" EntityType="Self.Administrator" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AdministratorPortfolio" EntityType="Self.AdministratorPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AnalystIdea" EntityType="Self.AnalystIdea" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AnalystIdea2" EntityType="Self.AnalystIdea2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Analytic" EntityType="Self.Analytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApplicationUser" EntityType="Self.ApplicationUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttributionNav" EntityType="Self.AttributionNav" Schema="dbo" store:Type="Tables" />
@@ -12929,6 +13113,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="MatchedStatus" EntityType="Self.MatchedStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OfficialNetAssetValue" EntityType="Self.OfficialNetAssetValue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Options" EntityType="Self.Options" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Originator" EntityType="Self.Originator" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PADealing" EntityType="Self.PADealing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PADealingAccount" EntityType="Self.PADealingAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PADealingBalance" EntityType="Self.PADealingBalance" Schema="dbo" store:Type="Tables" />
@@ -13655,6 +13840,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="LegalEntity" EntitySet="LegalEntity" />
             <End Role="Administrator" EntitySet="Administrator" />
           </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Analy__72E4AAEB" Association="Self.FK__AnalystId__Analy__72E4AAEB">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
           <AssociationSet Name="FK__AnalystId__Exter__2A478C69" Association="Self.FK__AnalystId__Exter__2A478C69">
             <End Role="ResearchBroker" EntitySet="ResearchBroker" />
             <End Role="AnalystIdea" EntitySet="AnalystIdea" />
@@ -13663,6 +13852,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="ExternalPerson" EntitySet="ExternalPerson" />
             <End Role="AnalystIdea" EntitySet="AnalystIdea" />
           </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Focus__74CCF35D" Association="Self.FK__AnalystId__Focus__74CCF35D">
+            <End Role="FocusList" EntitySet="FocusList" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
           <AssociationSet Name="FK__AnalystId__Inter__49FF638D" Association="Self.FK__AnalystId__Inter__49FF638D">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="AnalystIdea" EntitySet="AnalystIdea" />
@@ -13670,6 +13863,18 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__AnalystId__Inter__4AF387C6" Association="Self.FK__AnalystId__Inter__4AF387C6">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="AnalystIdea" EntitySet="AnalystIdea" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Issue__71F086B2" Association="Self.FK__AnalystId__Issue__71F086B2">
+            <End Role="Issuer" EntitySet="Issuer" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Origi__73D8CF24" Association="Self.FK__AnalystId__Origi__73D8CF24">
+            <End Role="Originator" EntitySet="Originator" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Updat__75C11796" Association="Self.FK__AnalystId__Updat__75C11796">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
           </AssociationSet>
           <AssociationSet Name="FK__Attributi__Attri__7E340001" Association="Self.FK__Attributi__Attri__7E340001">
             <End Role="AttributionNav" EntitySet="AttributionNav" />
@@ -13946,6 +14151,22 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Options__UpdateU__70E42684" Association="Self.FK__Options__UpdateU__70E42684">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Options" EntitySet="Options" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Originato__Exter__667ED406" Association="Self.FK__Originato__Exter__667ED406">
+            <End Role="ExternalPerson" EntitySet="ExternalPerson" />
+            <End Role="Originator" EntitySet="Originator" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Originato__Inter__6772F83F" Association="Self.FK__Originato__Inter__6772F83F">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Originator" EntitySet="Originator" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Originato__Inter__68671C78" Association="Self.FK__Originato__Inter__68671C78">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Originator" EntitySet="Originator" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Originato__Updat__695B40B1" Association="Self.FK__Originato__Updat__695B40B1">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="Originator" EntitySet="Originator" />
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__Assoc__291D92AF" Association="Self.FK__Portfolio__Assoc__291D92AF">
             <End Role="Position" EntitySet="Position" />
@@ -17194,6 +17415,44 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__TransferE__ToBoo__6D95E5E9" Association="Odey.Framework.Keeley.Entities.FK__TransferE__ToBoo__6D95E5E9">
             <End Role="Book" EntitySet="Books" />
             <End Role="TransferEvent" EntitySet="TransferEvents" />
+          </AssociationSet>
+          <EntitySet Name="AnalystIdea2" EntityType="Odey.Framework.Keeley.Entities.AnalystIdea2" />
+          <EntitySet Name="Originators" EntityType="Odey.Framework.Keeley.Entities.Originator" />
+          <AssociationSet Name="FK__AnalystId__Analy__72E4AAEB" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Analy__72E4AAEB">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Focus__74CCF35D" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Focus__74CCF35D">
+            <End Role="FocusList" EntitySet="FocusLists" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Issue__71F086B2" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Issue__71F086B2">
+            <End Role="Issuer" EntitySet="Issuers" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Origi__73D8CF24" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Origi__73D8CF24">
+            <End Role="Originator" EntitySet="Originators" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AnalystId__Updat__75C11796" Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Updat__75C11796">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="AnalystIdea2" EntitySet="AnalystIdea2" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Originato__Inter__6772F83F" Association="Odey.Framework.Keeley.Entities.FK__Originato__Inter__6772F83F">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Originator" EntitySet="Originators" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Originato__Inter__68671C78" Association="Odey.Framework.Keeley.Entities.FK__Originato__Inter__68671C78">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Originator" EntitySet="Originators" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Originato__Updat__695B40B1" Association="Odey.Framework.Keeley.Entities.FK__Originato__Updat__695B40B1">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="Originator" EntitySet="Originators" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Originato__Exter__667ED406" Association="Odey.Framework.Keeley.Entities.FK__Originato__Exter__667ED406">
+            <End Role="ExternalPerson" EntitySet="ExternalPersons" />
+            <End Role="Originator" EntitySet="Originators" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -26241,6 +26500,149 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AnalystIdea2">
+          <Key>
+            <PropertyRef Name="AnalystIdeaId" />
+          </Key>
+          <Property Name="AnalystIdeaId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="IssuerId" Type="Int32" Nullable="false" />
+          <Property Name="IsLong" Type="Boolean" Nullable="false" />
+          <Property Name="EffectiveFromDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EffectiveToDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AnalystId" Type="Int32" />
+          <Property Name="OriginatiorId" Type="Int32" />
+          <Property Name="FocusListId" Type="Int32" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Analyst" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Analy__72E4AAEB" FromRole="AnalystIdea2" ToRole="ApplicationUser" />
+          <NavigationProperty Name="FocusList" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Focus__74CCF35D" FromRole="AnalystIdea2" ToRole="FocusList" />
+          <NavigationProperty Name="Issuer" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Issue__71F086B2" FromRole="AnalystIdea2" ToRole="Issuer" />
+          <NavigationProperty Name="Originator" Relationship="Odey.Framework.Keeley.Entities.FK__AnalystId__Origi__73D8CF24" FromRole="AnalystIdea2" ToRole="Originator" />
+        </EntityType>
+        <EntityType Name="Originator">
+          <Key>
+            <PropertyRef Name="OriginatorId" />
+          </Key>
+          <Property Name="OriginatorId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="ExternalOriginatorId" Type="Int32" />
+          <Property Name="InternalOriginatorId" Type="Int32" />
+          <Property Name="InternalOriginatorId2" Type="Int32" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="InternalOriginator" Relationship="Odey.Framework.Keeley.Entities.FK__Originato__Inter__6772F83F" FromRole="Originator" ToRole="ApplicationUser" />
+          <NavigationProperty Name="InternalOriginator2" Relationship="Odey.Framework.Keeley.Entities.FK__Originato__Inter__68671C78" FromRole="Originator" ToRole="ApplicationUser" />
+          <NavigationProperty Name="ExternalPerson" Relationship="Odey.Framework.Keeley.Entities.FK__Originato__Exter__667ED406" FromRole="Originator" ToRole="ExternalPerson" />
+        </EntityType>
+        <Association Name="FK__AnalystId__Analy__72E4AAEB">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea2" Role="AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="AnalystId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Focus__74CCF35D">
+          <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea2" Role="AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FocusList">
+              <PropertyRef Name="FocusListId" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="FocusListId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Issue__71F086B2">
+          <End Type="Odey.Framework.Keeley.Entities.Issuer" Role="Issuer" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea2" Role="AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issuer">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="IssuerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Origi__73D8CF24">
+          <End Type="Odey.Framework.Keeley.Entities.Originator" Role="Originator" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea2" Role="AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Originator">
+              <PropertyRef Name="OriginatorId" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="OriginatiorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AnalystId__Updat__75C11796">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.AnalystIdea2" Role="AnalystIdea2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AnalystIdea2">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Originato__Inter__6772F83F">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Originator" Role="Originator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Originator">
+              <PropertyRef Name="InternalOriginatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Originato__Inter__68671C78">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Originator" Role="Originator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Originator">
+              <PropertyRef Name="InternalOriginatorId2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Originato__Updat__695B40B1">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Originator" Role="Originator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Originator">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Originato__Exter__667ED406">
+          <End Type="Odey.Framework.Keeley.Entities.ExternalPerson" Role="ExternalPerson" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Originator" Role="Originator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExternalPerson">
+              <PropertyRef Name="ExternalPersonId" />
+            </Principal>
+            <Dependent Role="Originator">
+              <PropertyRef Name="ExternalOriginatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -33985,6 +34387,100 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AnalystIdea2">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea2">
+              <MappingFragment StoreEntitySet="AnalystIdea2">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="FocusListId" ColumnName="FocusListId" />
+                <ScalarProperty Name="OriginatiorId" ColumnName="OriginatiorId" />
+                <ScalarProperty Name="AnalystId" ColumnName="AnalystId" />
+                <ScalarProperty Name="EffectiveToDate" ColumnName="EffectiveToDate" />
+                <ScalarProperty Name="EffectiveFromDate" ColumnName="EffectiveFromDate" />
+                <ScalarProperty Name="IsLong" ColumnName="IsLong" />
+                <ScalarProperty Name="IssuerId" ColumnName="IssuerId" />
+                <ScalarProperty Name="AnalystIdeaId" ColumnName="AnalystIdeaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AnalystIdea2">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.AnalystIdea2_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="FocusListId" ParameterName="FocusListId" />
+                  <ScalarProperty Name="OriginatiorId" ParameterName="OriginatiorId" />
+                  <ScalarProperty Name="AnalystId" ParameterName="AnalystId" />
+                  <ScalarProperty Name="EffectiveToDate" ParameterName="EffectiveToDate" />
+                  <ScalarProperty Name="EffectiveFromDate" ParameterName="EffectiveFromDate" />
+                  <ScalarProperty Name="IsLong" ParameterName="IsLong" />
+                  <ScalarProperty Name="IssuerId" ParameterName="IssuerId" />
+                  <ResultBinding Name="AnalystIdeaId" ColumnName="AnalystIdeaId " />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.AnalystIdea2_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="FocusListId" ParameterName="FocusListId" Version="Current" />
+                  <ScalarProperty Name="OriginatiorId" ParameterName="OriginatiorId" Version="Current" />
+                  <ScalarProperty Name="AnalystId" ParameterName="AnalystId" Version="Current" />
+                  <ScalarProperty Name="EffectiveToDate" ParameterName="EffectiveToDate" Version="Current" />
+                  <ScalarProperty Name="EffectiveFromDate" ParameterName="EffectiveFromDate" Version="Current" />
+                  <ScalarProperty Name="IsLong" ParameterName="IsLong" Version="Current" />
+                  <ScalarProperty Name="IssuerId" ParameterName="IssuerId" Version="Current" />
+                  <ScalarProperty Name="AnalystIdeaId" ParameterName="AnalystIdeaId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.AnalystIdea2_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="AnalystIdeaId" ParameterName="AnalystIdeaId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Originators">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Originator">
+              <MappingFragment StoreEntitySet="Originator">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="InternalOriginatorId2" ColumnName="InternalOriginatorId2" />
+                <ScalarProperty Name="InternalOriginatorId" ColumnName="InternalOriginatorId" />
+                <ScalarProperty Name="ExternalOriginatorId" ColumnName="ExternalOriginatorId" />
+                <ScalarProperty Name="OriginatorId" ColumnName="OriginatorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Originator">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.Originator_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="InternalOriginatorId2" ParameterName="InternalOriginatorId2" />
+                  <ScalarProperty Name="InternalOriginatorId" ParameterName="InternalOriginatorId" />
+                  <ScalarProperty Name="ExternalOriginatorId" ParameterName="ExternalOriginatorId" />
+                  <ResultBinding Name="OriginatorId" ColumnName="OriginatorId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.Originator_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="InternalOriginatorId2" ParameterName="InternalOriginatorId2" Version="Current" />
+                  <ScalarProperty Name="InternalOriginatorId" ParameterName="InternalOriginatorId" Version="Current" />
+                  <ScalarProperty Name="ExternalOriginatorId" ParameterName="ExternalOriginatorId" Version="Current" />
+                  <ScalarProperty Name="OriginatorId" ParameterName="OriginatorId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.Originator_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="OriginatorId" ParameterName="OriginatorId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -34007,7 +34503,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="58">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="150">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -39680,7 +40176,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BloombergIdentifier" Width="1.5" PointX="27" PointY="32" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BloombergIdentifier" Width="1.5" PointX="30" PointY="29.5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Instr__15CAC719" />
@@ -39813,6 +40309,17 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Contri__31B6060C" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TransferE__FromB__6CA1C1B0" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TransferE__ToBoo__6D95E5E9" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AnalystIdea2" Width="1.5" PointX="40.75" PointY="31" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Originator" Width="1.5" PointX="33.5" PointY="0.75" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Analy__72E4AAEB" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Focus__74CCF35D" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Issue__71F086B2" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Origi__73D8CF24" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Updat__75C11796" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Originato__Inter__6772F83F" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Originato__Inter__68671C78" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Originato__Updat__695B40B1" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Originato__Exter__667ED406" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
