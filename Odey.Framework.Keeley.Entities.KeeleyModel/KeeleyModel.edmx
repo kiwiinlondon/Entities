@@ -233,7 +233,7 @@
           <Property Name="MaxExposure" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ForwardFXRate" Type="numeric" Precision="35" Scale="16" />
           <Property Name="ForwardFXRateId" Type="int" />
-          <Property Name="OriginalNotionalCost" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OriginalNotionalCost" Type="numeric" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -2537,6 +2537,7 @@
           <Property Name="AdditionalKeyWords" Type="varchar" MaxLength="400" />
           <Property Name="ActionFlags" Type="int" />
           <Property Name="IsActioned" Type="bit" Nullable="false" />
+          <Property Name="IsCRGResearch" Type="bit" />
         </EntityType>
         <EntityType Name="ResearchAttachment">
           <Key>
@@ -12678,6 +12679,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="AdditionalKeyWords" Type="varchar" Mode="In" />
           <Parameter Name="ActionFlags" Type="int" Mode="In" />
           <Parameter Name="IsActioned" Type="bit" Mode="In" />
+          <Parameter Name="IsCRGResearch" Type="bit" Mode="In" />
         </Function>
         <Function Name="Research_Search" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DelimiteredAnalystIds" Type="varchar" Mode="In" />
@@ -12704,6 +12706,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="AdditionalKeyWords" Type="varchar" Mode="In" />
           <Parameter Name="ActionFlags" Type="int" Mode="In" />
           <Parameter Name="IsActioned" Type="bit" Mode="In" />
+          <Parameter Name="IsCRGResearch" Type="bit" Mode="In" />
         </Function>
         <Function Name="ResearchAttachment_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ResearchAttachmentId" Type="int" Mode="In" />
@@ -25281,7 +25284,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="MaxExposure" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ForwardFXRate" Type="Decimal" Precision="35" Scale="16" />
           <Property Name="ForwardFXRateId" Type="Int32" />
-          <Property Name="OriginalNotionalCost" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OriginalNotionalCost" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -26299,6 +26302,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="IsActioned" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Industry" Relationship="Odey.Framework.Keeley.Entities.FK__Research__GicsSe__547532641" FromRole="Research" ToRole="Industry" />
           <NavigationProperty Name="ResearchContributor" Relationship="Odey.Framework.Keeley.Entities.FK__Research__Analys__27387799" FromRole="Research" ToRole="ResearchContributor" />
+          <Property Name="IsCRGResearch" Type="Boolean" />
         </EntityType>
         <EntityType Name="ResearchAttachment">
           <Key>
@@ -34294,6 +34298,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Researches">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Research">
               <MappingFragment StoreEntitySet="Research">
+                <ScalarProperty Name="IsCRGResearch" ColumnName="IsCRGResearch" />
                 <ScalarProperty Name="IsActioned" ColumnName="IsActioned" />
                 <ScalarProperty Name="ActionFlags" ColumnName="ActionFlags" />
                 <ScalarProperty Name="GicsId" ColumnName="GicsId" />
@@ -34313,6 +34318,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Research">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Research_Insert">
+                  <ScalarProperty Name="IsCRGResearch" ParameterName="IsCRGResearch" />
                   <ScalarProperty Name="IsActioned" ParameterName="IsActioned" />
                   <ScalarProperty Name="ActionFlags" ParameterName="ActionFlags" />
                   <ScalarProperty Name="GicsId" ParameterName="GicsId" />
@@ -34329,6 +34335,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Research_Update">
+                  <ScalarProperty Name="IsCRGResearch" ParameterName="IsCRGResearch" Version="Current" />
                   <ScalarProperty Name="IsActioned" ParameterName="IsActioned" Version="Current" />
                   <ScalarProperty Name="ActionFlags" ParameterName="ActionFlags" Version="Current" />
                   <ScalarProperty Name="GicsId" ParameterName="GicsId" Version="Current" />
