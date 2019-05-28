@@ -51,6 +51,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> ActionFlags { get; set; }
     	[DataMember]
         public bool IsActioned { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsCRGResearch { get; set; }
     
         [DataMember]
         public virtual List<ResearchAttachment> ResearchAttachments { get; set; }
