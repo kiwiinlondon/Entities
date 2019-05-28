@@ -497,6 +497,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         NAT_GBP_M = 9906,
         [EnumMember]
         NAT_USD_M = 9908,
+        [EnumMember]
         IPB = 9963
     }
 }

@@ -25,7 +25,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime EffectiveFromDate { get; set; }
     	[DataMember]
-        public System.DateTime EffectiveToDate { get; set; }
+        public Nullable<System.DateTime> EffectiveToDate { get; set; }
     	[DataMember]
         public Nullable<int> AnalystId { get; set; }
     	[DataMember]
