@@ -141,8 +141,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         GrossMargin =55,
         [EnumMember]
         EPSGrowth = 56,
+
         [EnumMember]
         ROE = 57,
+
+        [EnumMember]
+        IndicativeFundPerformanceInternal = 58,
     }
 }
 
