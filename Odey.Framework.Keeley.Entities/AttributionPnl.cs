@@ -105,7 +105,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal OriginalNotionalCost { get; set; }
     	[DataMember]
-        public Nullable<decimal> CostPrice { get; set; }
+        public decimal CostPrice { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

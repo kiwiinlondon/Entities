@@ -172,9 +172,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal ITDRealisedFXPnl { get; set; }
     	[DataMember]
-        public Nullable<decimal> OriginalDeltaNetCostBookCurrency { get; set; }
+        public decimal OriginalDeltaNetCostBookCurrency { get; set; }
     	[DataMember]
-        public Nullable<decimal> OriginalDeltaNetCostInstrumentCurrency { get; set; }
+        public decimal OriginalDeltaNetCostInstrumentCurrency { get; set; }
     	[DataMember]
         public int FundId { get; set; }
     	[DataMember]
@@ -261,6 +261,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> IndicativePrice { get; set; }
     	[DataMember]
         public Nullable<decimal> IndicativeFXRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ValuationOriginalDeltaNetCostInstrumentCurrency { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
