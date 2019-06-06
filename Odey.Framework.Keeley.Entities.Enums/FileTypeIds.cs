@@ -132,5 +132,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         UBSFinancing = 64,
         [EnumMember]
         MSFinancing =65,
+        [EnumMember]
+        PortPriceIndexMorningstar = 66,
+
     }
 }
