@@ -424,6 +424,16 @@
           <Property Name="ClientHasChanged" Type="bit" Nullable="false" />
           <Property Name="ClientPlatformId" Type="int" />
         </EntityType>
+        <EntityType Name="ClientPlatform">
+          <Key>
+            <PropertyRef Name="ClientPlatformId" />
+          </Key>
+          <Property Name="ClientPlatformId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="ClientPortfolio">
           <Key>
             <PropertyRef Name="ClientPortfolioId" />
@@ -5134,6 +5144,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__ClientAcc__Clien__3BFDBEFE">
+          <End Role="ClientPlatform" Type="Self.ClientPlatform" Multiplicity="0..1" />
+          <End Role="ClientAccount" Type="Self.ClientAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientPlatform">
+              <PropertyRef Name="ClientPlatformId" />
+            </Principal>
+            <Dependent Role="ClientAccount">
+              <PropertyRef Name="ClientPlatformId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__ClientAcc__FundI__69386F35">
           <End Role="Fund" Type="Self.Fund" Multiplicity="0..1" />
           <End Role="ClientAccount" Type="Self.ClientAccount" Multiplicity="*" />
@@ -5167,6 +5189,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="ClientAccount">
               <PropertyRef Name="StaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientPla__Updat__3B099AC5">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="ClientPlatform" Type="Self.ClientPlatform" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPlatform">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5431,6 +5465,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="Fund1">
               <PropertyRef Name="ParentFundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundClien__Clien__64169D50">
+          <End Role="ClientPlatform" Type="Self.ClientPlatform" Multiplicity="1" />
+          <End Role="FundClientPlatform" Type="Self.FundClientPlatform" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientPlatform">
+              <PropertyRef Name="ClientPlatformId" />
+            </Principal>
+            <Dependent Role="FundClientPlatform">
+              <PropertyRef Name="ClientPlatformId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9563,6 +9609,21 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ManualUpdate" Type="bit" Mode="In" />
           <Parameter Name="ClientHasChanged" Type="bit" Mode="In" />
         </Function>
+        <Function Name="ClientPlatform_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPlatformId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPlatform_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ClientPlatform_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientPlatformId" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="ClientPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientPortfolioId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -13285,6 +13346,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="ChargeType" EntityType="Self.ChargeType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientAccount" EntityType="Self.ClientAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientPlatform" EntityType="Self.ClientPlatform" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientPortfolio" EntityType="Self.ClientPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientPortfolioBridge" EntityType="Self.ClientPortfolioBridge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientSubAccountAdministratorMapping" EntityType="Self.ClientSubAccountAdministratorMapping" Schema="dbo" store:Type="Tables" />
@@ -14229,6 +14291,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Book" EntitySet="Book" />
           </AssociationSet>
+          <AssociationSet Name="FK__ClientAcc__Clien__3BFDBEFE" Association="Self.FK__ClientAcc__Clien__3BFDBEFE">
+            <End Role="ClientPlatform" EntitySet="ClientPlatform" />
+            <End Role="ClientAccount" EntitySet="ClientAccount" />
+          </AssociationSet>
           <AssociationSet Name="FK__ClientAcc__FundI__69386F35" Association="Self.FK__ClientAcc__FundI__69386F35">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="ClientAccount" EntitySet="ClientAccount" />
@@ -14240,6 +14306,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__ClientAcc__Staff__733F65AE" Association="Self.FK__ClientAcc__Staff__733F65AE">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="ClientAccount" EntitySet="ClientAccount" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ClientPla__Updat__3B099AC5" Association="Self.FK__ClientPla__Updat__3B099AC5">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="ClientPlatform" EntitySet="ClientPlatform" />
           </AssociationSet>
           <AssociationSet Name="FK__ClientTra__Relat__41A398E8" Association="Self.FK__ClientTra__Relat__41A398E8">
             <End Role="ClientTrade" EntitySet="ClientTrade" />
@@ -14328,6 +14398,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Fund__ParentFund__37661AB1" Association="Self.FK__Fund__ParentFund__37661AB1">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="Fund1" EntitySet="Fund" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundClien__Clien__64169D50" Association="Self.FK__FundClien__Clien__64169D50">
+            <End Role="ClientPlatform" EntitySet="ClientPlatform" />
+            <End Role="FundClientPlatform" EntitySet="FundClientPlatform" />
           </AssociationSet>
           <AssociationSet Name="FK__FundClien__FundI__63227917" Association="Self.FK__FundClien__FundI__63227917">
             <End Role="Fund" EntitySet="Fund" />
@@ -17807,6 +17881,19 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__FundCount__FundI__0303A216" Association="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216">
             <End Role="Fund" EntitySet="Funds" />
             <End Role="FundCountryStatu" EntitySet="FundCountryStatuses" />
+          </AssociationSet>
+          <EntitySet Name="ClientPlatforms" EntityType="Odey.Framework.Keeley.Entities.ClientPlatform" />
+          <AssociationSet Name="FK__ClientPla__Updat__3B099AC5" Association="Odey.Framework.Keeley.Entities.FK__ClientPla__Updat__3B099AC5">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="ClientPlatform" EntitySet="ClientPlatforms" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ClientAcc__Clien__3BFDBEFE" Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Clien__3BFDBEFE">
+            <End Role="ClientPlatform" EntitySet="ClientPlatforms" />
+            <End Role="ClientAccount" EntitySet="ClientAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundClien__Clien__64169D50" Association="Odey.Framework.Keeley.Entities.FK__FundClien__Clien__64169D50">
+            <End Role="ClientPlatform" EntitySet="ClientPlatforms" />
+            <End Role="FundClientPlatform" EntitySet="FundClientPlatforms" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -27086,6 +27173,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__FundClien__FundI__63227917" FromRole="FundClientPlatform" ToRole="Fund" />
+          <NavigationProperty Name="ClientPlatform" Relationship="Odey.Framework.Keeley.Entities.FK__FundClien__Clien__64169D50" FromRole="FundClientPlatform" ToRole="ClientPlatform" />
         </EntityType>
         <EntityType Name="FundCountryStatuses">
           <Key>
@@ -27160,6 +27248,52 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="FundCountryStatu">
               <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ClientPlatform">
+          <Key>
+            <PropertyRef Name="ClientPlatformId" />
+          </Key>
+          <Property Name="ClientPlatformId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          </EntityType>
+        <Association Name="FK__ClientPla__Updat__3B099AC5">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientPlatform" Role="ClientPlatform" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ClientPlatform">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientAcc__Clien__3BFDBEFE">
+          <End Type="Odey.Framework.Keeley.Entities.ClientPlatform" Role="ClientPlatform" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.ClientAccount" Role="ClientAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientPlatform">
+              <PropertyRef Name="ClientPlatformId" />
+            </Principal>
+            <Dependent Role="ClientAccount">
+              <PropertyRef Name="ClientPlatformId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundClien__Clien__64169D50">
+          <End Type="Odey.Framework.Keeley.Entities.ClientPlatform" Role="ClientPlatform" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FundClientPlatform" Role="FundClientPlatform" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientPlatform">
+              <PropertyRef Name="ClientPlatformId" />
+            </Principal>
+            <Dependent Role="FundClientPlatform">
+              <PropertyRef Name="ClientPlatformId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -35187,6 +35321,41 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ClientPlatforms">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPlatform">
+              <MappingFragment StoreEntitySet="ClientPlatform">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ClientPlatformId" ColumnName="ClientPlatformId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPlatform">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.ClientPlatform_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ResultBinding Name="ClientPlatformId" ColumnName="ClientPlatformId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.ClientPlatform_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="ClientPlatformId" ParameterName="ClientPlatformId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.ClientPlatform_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="ClientPlatformId" ParameterName="ClientPlatformId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -41037,6 +41206,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundCount__Count__03F7C64F" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundClien__FundI__63227917" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ClientPlatform" Width="1.5" PointX="3" PointY="92.375" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientPla__Updat__3B099AC5" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Clien__3BFDBEFE" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundClien__Clien__64169D50" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

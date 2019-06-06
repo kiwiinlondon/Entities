@@ -194,6 +194,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<Originator> Originators { get; set; }
         public DbSet<FundClientPlatform> FundClientPlatforms { get; set; }
         public DbSet<FundCountryStatuses> FundCountryStatuses { get; set; }
+        public DbSet<ClientPlatform> ClientPlatforms { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
