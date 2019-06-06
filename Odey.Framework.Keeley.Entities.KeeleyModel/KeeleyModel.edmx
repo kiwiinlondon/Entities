@@ -1356,6 +1356,17 @@
           <Property Name="CustodianId" Type="int" />
           <Property Name="ManagerId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="FundClientPlatform">
+          <Key>
+            <PropertyRef Name="FundClientPlatformId" />
+          </Key>
+          <Property Name="FundClientPlatformId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="ClientPlatformId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="FundCountryHoliday">
           <Key>
             <PropertyRef Name="FundCountryHoldayId" />
@@ -1366,6 +1377,20 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="AdministratorId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FundCountryStatus">
+          <Key>
+            <PropertyRef Name="FundCountryStatusId" />
+          </Key>
+          <Property Name="FundCountryStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="CountryId" Type="int" Nullable="false" />
+          <Property Name="HasReportingStatus" Type="bit" Nullable="false" />
+          <Property Name="IsRegistered" Type="bit" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="RegistrationRestrictionId" Type="int" />
         </EntityType>
         <EntityType Name="FundLegalEntityIdentifier">
           <Key>
@@ -5409,6 +5434,30 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__FundClien__FundI__63227917">
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
+          <End Role="FundClientPlatform" Type="Self.FundClientPlatform" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FundClientPlatform">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundClien__Updat__650AC189">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="FundClientPlatform" Type="Self.FundClientPlatform" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FundClientPlatform">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__FundCount__Admin__21B3E574">
           <End Role="Administrator" Type="Self.Administrator" Multiplicity="1" />
           <End Role="FundCountryHoliday" Type="Self.FundCountryHoliday" Multiplicity="*" />
@@ -5418,6 +5467,42 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="FundCountryHoliday">
               <PropertyRef Name="AdministratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundCount__Count__03F7C64F">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="FundCountryStatus" Type="Self.FundCountryStatus" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="FundCountryStatus">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundCount__FundI__0303A216">
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
+          <End Role="FundCountryStatus" Type="Self.FundCountryStatus" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FundCountryStatus">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundCount__Updat__04EBEA88">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="FundCountryStatus" Type="Self.FundCountryStatus" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FundCountryStatus">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10817,6 +10902,46 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="LoadDate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="FundClientPlatform_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundClientPlatformId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FundClientPlatform_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ClientPlatformId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FundClientPlatform_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundClientPlatformId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ClientPlatformId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
+        <Function Name="FundCountryStatus_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundCountryStatusId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FundCountryStatus_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="CountryId" Type="int" Mode="In" />
+          <Parameter Name="HasReportingStatus" Type="bit" Mode="In" />
+          <Parameter Name="IsRegistered" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="RegistrationRestrictionId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FundCountryStatus_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundCountryStatusId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="CountryId" Type="int" Mode="In" />
+          <Parameter Name="HasReportingStatus" Type="bit" Mode="In" />
+          <Parameter Name="IsRegistered" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="RegistrationRestrictionId" Type="int" Mode="In" />
+        </Function>
         <Function Name="FundPerformance_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundPerformanceId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -13216,7 +13341,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="FocusListPrices" EntityType="Self.FocusListPrices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ForwardFX" EntityType="Self.ForwardFX" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fund" EntityType="Self.Fund" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FundClientPlatform" EntityType="Self.FundClientPlatform" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundCountryHoliday" EntityType="Self.FundCountryHoliday" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FundCountryStatus" EntityType="Self.FundCountryStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundLegalEntityIdentifier" EntityType="Self.FundLegalEntityIdentifier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundPerformance" EntityType="Self.FundPerformance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundWebsiteCacheTime" EntityType="Self.FundWebsiteCacheTime" Schema="dbo" store:Type="Tables" />
@@ -14202,9 +14329,29 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Fund" EntitySet="Fund" />
             <End Role="Fund1" EntitySet="Fund" />
           </AssociationSet>
+          <AssociationSet Name="FK__FundClien__FundI__63227917" Association="Self.FK__FundClien__FundI__63227917">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="FundClientPlatform" EntitySet="FundClientPlatform" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundClien__Updat__650AC189" Association="Self.FK__FundClien__Updat__650AC189">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="FundClientPlatform" EntitySet="FundClientPlatform" />
+          </AssociationSet>
           <AssociationSet Name="FK__FundCount__Admin__21B3E574" Association="Self.FK__FundCount__Admin__21B3E574">
             <End Role="Administrator" EntitySet="Administrator" />
             <End Role="FundCountryHoliday" EntitySet="FundCountryHoliday" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundCount__Count__03F7C64F" Association="Self.FK__FundCount__Count__03F7C64F">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="FundCountryStatus" EntitySet="FundCountryStatus" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundCount__FundI__0303A216" Association="Self.FK__FundCount__FundI__0303A216">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="FundCountryStatus" EntitySet="FundCountryStatus" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundCount__Updat__04EBEA88" Association="Self.FK__FundCount__Updat__04EBEA88">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="FundCountryStatus" EntitySet="FundCountryStatus" />
           </AssociationSet>
           <AssociationSet Name="FK__FundLegal__FundI__0C4EABDC" Association="Self.FK__FundLegal__FundI__0C4EABDC">
             <End Role="Fund" EntitySet="Fund" />
@@ -17638,6 +17785,28 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Portfolio__Paren__31A0F773" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__31A0F773">
             <End Role="Price" EntitySet="Prices" />
             <End Role="Portfolio" EntitySet="Portfolios" />
+          </AssociationSet>
+          <EntitySet Name="FundClientPlatforms" EntityType="Odey.Framework.Keeley.Entities.FundClientPlatform" />
+          <EntitySet Name="FundCountryStatuses" EntityType="Odey.Framework.Keeley.Entities.FundCountryStatuses" />
+          <AssociationSet Name="FK__FundClien__Updat__650AC189" Association="Odey.Framework.Keeley.Entities.FK__FundClien__Updat__650AC189">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="FundClientPlatform" EntitySet="FundClientPlatforms" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundCount__Updat__04EBEA88" Association="Odey.Framework.Keeley.Entities.FK__FundCount__Updat__04EBEA88">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="FundCountryStatu" EntitySet="FundCountryStatuses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundCount__Count__03F7C64F" Association="Odey.Framework.Keeley.Entities.FK__FundCount__Count__03F7C64F">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="FundCountryStatu" EntitySet="FundCountryStatuses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundClien__FundI__63227917" Association="Odey.Framework.Keeley.Entities.FK__FundClien__FundI__63227917">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="FundClientPlatform" EntitySet="FundClientPlatforms" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FundCount__FundI__0303A216" Association="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="FundCountryStatu" EntitySet="FundCountryStatuses" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -21855,6 +22024,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="IsAnalystPnl" Type="Boolean" Nullable="false" />
           <Property Name="CustodianId" Type="Int32" />
           <Property Name="ManagerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FundClientPlatforms" Relationship="Odey.Framework.Keeley.Entities.FK__FundClien__FundI__63227917" FromRole="Fund" ToRole="FundClientPlatform" />
+          <NavigationProperty Name="FundCountryStatuses" Relationship="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216" FromRole="Fund" ToRole="FundCountryStatu" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -26901,6 +27072,94 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="Portfolio">
               <PropertyRef Name="ParentFundPriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FundClientPlatform">
+          <Key>
+            <PropertyRef Name="FundClientPlatformId" />
+          </Key>
+          <Property Name="FundClientPlatformId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="ClientPlatformId" Type="Int32" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__FundClien__FundI__63227917" FromRole="FundClientPlatform" ToRole="Fund" />
+        </EntityType>
+        <EntityType Name="FundCountryStatuses">
+          <Key>
+            <PropertyRef Name="FundCountryStatusId" />
+          </Key>
+          <Property Name="FundCountryStatusId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="CountryId" Type="Int32" Nullable="false" />
+          <Property Name="HasReportingStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IsRegistered" Type="Boolean" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="RegistrationRestrictionId" Type="Int32" />
+          <NavigationProperty Name="Country" Relationship="Odey.Framework.Keeley.Entities.FK__FundCount__Count__03F7C64F" FromRole="FundCountryStatu" ToRole="Country" />
+          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216" FromRole="FundCountryStatu" ToRole="Fund" />
+        </EntityType>
+        <Association Name="FK__FundClien__Updat__650AC189">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FundClientPlatform" Role="FundClientPlatform" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FundClientPlatform">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundCount__Updat__04EBEA88">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FundCountryStatuses" Role="FundCountryStatu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FundCountryStatu">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundCount__Count__03F7C64F">
+          <End Type="Odey.Framework.Keeley.Entities.Country" Role="Country" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FundCountryStatuses" Role="FundCountryStatu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="FundCountryStatu">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundClien__FundI__63227917">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FundClientPlatform" Role="FundClientPlatform" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FundClientPlatform">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FundCount__FundI__0303A216">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FundCountryStatuses" Role="FundCountryStatu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FundCountryStatu">
+              <PropertyRef Name="FundId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -34843,6 +35102,91 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="FundClientPlatforms">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FundClientPlatform">
+              <MappingFragment StoreEntitySet="FundClientPlatform">
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="ClientPlatformId" ColumnName="ClientPlatformId" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="FundClientPlatformId" ColumnName="FundClientPlatformId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FundClientPlatform">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FundClientPlatform_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="ClientPlatformId" ParameterName="ClientPlatformId" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ResultBinding Name="FundClientPlatformId" ColumnName="FundClientPlatformId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FundClientPlatform_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="ClientPlatformId" ParameterName="ClientPlatformId" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="FundClientPlatformId" ParameterName="FundClientPlatformId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FundClientPlatform_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FundClientPlatformId" ParameterName="FundClientPlatformId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FundCountryStatuses">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FundCountryStatuses">
+              <MappingFragment StoreEntitySet="FundCountryStatus">
+                <ScalarProperty Name="RegistrationRestrictionId" ColumnName="RegistrationRestrictionId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="IsRegistered" ColumnName="IsRegistered" />
+                <ScalarProperty Name="HasReportingStatus" ColumnName="HasReportingStatus" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="FundCountryStatusId" ColumnName="FundCountryStatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FundCountryStatuses">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FundCountryStatus_Insert">
+                  <ScalarProperty Name="RegistrationRestrictionId" ParameterName="RegistrationRestrictionId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="IsRegistered" ParameterName="IsRegistered" />
+                  <ScalarProperty Name="HasReportingStatus" ParameterName="HasReportingStatus" />
+                  <ScalarProperty Name="CountryId" ParameterName="CountryId" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ResultBinding Name="FundCountryStatusId" ColumnName="FundCountryStatusId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FundCountryStatus_Update">
+                  <ScalarProperty Name="RegistrationRestrictionId" ParameterName="RegistrationRestrictionId" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="IsRegistered" ParameterName="IsRegistered" Version="Current" />
+                  <ScalarProperty Name="HasReportingStatus" ParameterName="HasReportingStatus" Version="Current" />
+                  <ScalarProperty Name="CountryId" ParameterName="CountryId" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="FundCountryStatusId" ParameterName="FundCountryStatusId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FundCountryStatus_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FundCountryStatusId" ParameterName="FundCountryStatusId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -34865,7 +35209,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="33">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -40686,6 +41030,13 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__33893FE5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__347D641E" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__31A0F773" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FundClientPlatform" Width="1.5" PointX="41.125" PointY="11.5" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FundCountryStatuses" Width="2" PointX="39.125" PointY="15.125" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundClien__Updat__650AC189" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundCount__Updat__04EBEA88" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundCount__Count__03F7C64F" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundClien__FundI__63227917" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
