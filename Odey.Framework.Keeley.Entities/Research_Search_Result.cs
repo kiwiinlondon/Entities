@@ -26,5 +26,6 @@ namespace Odey.Framework.Keeley.Entities
         public string AdditionalKeywords { get; set; }
         public Nullable<int> IssuerID { get; set; }
         public Nullable<int> InstrumentMarketId { get; set; }
+        public Nullable<bool> FocusList { get; set; }
     }
 }
