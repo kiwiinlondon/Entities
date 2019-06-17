@@ -114,6 +114,8 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime PreviousValuationDate { get; set; }
     	[DataMember]
         public bool AdministratorPortfolioExists { get; set; }
+    	[DataMember]
+        public Nullable<bool> RecalculateUnits { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
