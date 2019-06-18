@@ -143,10 +143,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EPSGrowth = 56,
 
         [EnumMember]
-        ROE = 57,
-
-        [EnumMember]
-        IndicativeFundPerformanceInternal = 58,
+        ROE = 57
     }
 }
 
