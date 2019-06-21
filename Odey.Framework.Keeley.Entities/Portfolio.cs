@@ -251,6 +251,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> IndicativeChangeId { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationOriginalDeltaNetCostInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<bool> PriceIsForDay { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
