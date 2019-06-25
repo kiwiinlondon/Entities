@@ -6,7 +6,14 @@ namespace Odey.Framework.Keeley.Entities.Enums.Extensions
 {
     public static class EnumDescription
     {
-        public static string GetDescription(this Enum value)
+        private static ConcurrentDictionary<object, int> _descriptions = new ConcurrentDictionary<object, int>();
+
+        public static int GetDescription(this Enum value)
+        {
+            return _descriptions.GetOrAdd(value, CreateDescriptionValue);
+        }
+
+        private static string CreateDescriptionValue(object value)
         {
             Type type = value.GetType();
             string name = Enum.GetName(type, value);
