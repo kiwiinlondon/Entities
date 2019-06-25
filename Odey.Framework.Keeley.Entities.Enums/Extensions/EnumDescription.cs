@@ -7,9 +7,9 @@ namespace Odey.Framework.Keeley.Entities.Enums.Extensions
 {
     public static class EnumDescription
     {
-        private static ConcurrentDictionary<object, int> _descriptions = new ConcurrentDictionary<object, int>();
+        private static readonly ConcurrentDictionary<object, string> _descriptions = new ConcurrentDictionary<object, string>();
 
-        public static int GetDescription(this Enum value)
+        public static string GetDescription(this Enum value)
         {
             return _descriptions.GetOrAdd(value, CreateDescriptionValue);
         }
