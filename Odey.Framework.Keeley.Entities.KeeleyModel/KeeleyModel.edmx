@@ -1365,6 +1365,7 @@
           <Property Name="IsAnalystPnl" Type="bit" Nullable="false" />
           <Property Name="CustodianId" Type="int" />
           <Property Name="ManagerId" Type="int" Nullable="false" />
+          <Property Name="ISCFDFullyFunded" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FundClientPlatform">
           <Key>
@@ -2046,6 +2047,7 @@
           <Property Name="CalculateAttributionPNL" Type="bit" />
           <Property Name="PreviousValuationDate" Type="datetime" Nullable="false" />
           <Property Name="AdministratorPortfolioExists" Type="bit" Nullable="false" />
+          <Property Name="RecalculateUnits" Type="bit" />
         </EntityType>
         <EntityType Name="Options">
           <Key>
@@ -2288,16 +2290,11 @@
           <Property Name="ForwardFXRate" Type="numeric" Precision="35" Scale="16" />
           <Property Name="ForwardFXRateId" Type="int" />
           <Property Name="ValuationOriginalDeltaNetCostBookCurrency" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="ParentFundPrice" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="ParentFundPriceId" Type="int" />
-          <Property Name="ParentIndicativeChange" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="ParentExternalIndicativeChangeId" Type="int" />
-          <Property Name="ParentInternalIndicativeChangeId" Type="int" />
-          <Property Name="ParentFundFXRateId" Type="int" />
-          <Property Name="ParentFundFXRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IndicativeChange" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IndicativeChangeId" Type="int" />
           <Property Name="IndicativePrice" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="IndicativeFXRate" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ValuationOriginalDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="PriceIsForDay" Type="bit" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -5936,18 +5933,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Portfolio__Paren__31A0F773">
-          <End Role="Price" Type="Self.Price" Multiplicity="0..1" />
-          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Price">
-              <PropertyRef Name="PriceId" />
-            </Principal>
-            <Dependent Role="Portfolio">
-              <PropertyRef Name="ParentFundPriceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Portfolio__Paren__32951BAC">
           <End Role="Analytic" Type="Self.Analytic" Multiplicity="0..1" />
           <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
@@ -5956,31 +5941,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
               <PropertyRef Name="AnalyticId" />
             </Principal>
             <Dependent Role="Portfolio">
-              <PropertyRef Name="ParentExternalIndicativeChangeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Portfolio__Paren__33893FE5">
-          <End Role="Analytic" Type="Self.Analytic" Multiplicity="0..1" />
-          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Analytic">
-              <PropertyRef Name="AnalyticId" />
-            </Principal>
-            <Dependent Role="Portfolio">
-              <PropertyRef Name="ParentInternalIndicativeChangeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Portfolio__Paren__347D641E">
-          <End Role="FXRate" Type="Self.FXRate" Multiplicity="0..1" />
-          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FXRate">
-              <PropertyRef Name="FXRateId" />
-            </Principal>
-            <Dependent Role="Portfolio">
-              <PropertyRef Name="ParentFundFXRateId" />
+              <PropertyRef Name="IndicativeChangeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10847,11 +10808,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="IsDeliverable" Type="bit" Mode="In" />
         </Function>
-        <Function Name="Fund_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="LegalEntityID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
         <Function Name="Fund_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
           <Parameter Name="CurrencyID" Type="int" Mode="In" />
@@ -10904,6 +10860,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsAnalystPnl" Type="bit" Mode="In" />
           <Parameter Name="CustodianId" Type="int" Mode="In" />
           <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="ISCFDFullyFunded" Type="bit" Mode="In" />
         </Function>
         <Function Name="Fund_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -10958,6 +10915,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsAnalystPnl" Type="bit" Mode="In" />
           <Parameter Name="CustodianId" Type="int" Mode="In" />
           <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="ISCFDFullyFunded" Type="bit" Mode="In" />
         </Function>
         <Function Name="Fund_UpdateClientLoadDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -11971,6 +11929,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
           <Parameter Name="PreviousValuationDate" Type="datetime" Mode="In" />
           <Parameter Name="AdministratorPortfolioExists" Type="bit" Mode="In" />
+          <Parameter Name="RecalculateUnits" Type="bit" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -12025,6 +11984,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="CalculateAttributionPNL" Type="bit" Mode="In" />
           <Parameter Name="PreviousValuationDate" Type="datetime" Mode="In" />
           <Parameter Name="AdministratorPortfolioExists" Type="bit" Mode="In" />
+          <Parameter Name="RecalculateUnits" Type="bit" Mode="In" />
         </Function>
         <Function Name="Options_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -12307,16 +12267,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ForwardFXRate" Type="numeric" Mode="In" />
           <Parameter Name="ForwardFXRateId" Type="int" Mode="In" />
           <Parameter Name="ValuationOriginalDeltaNetCostBookCurrency" Type="numeric" Mode="In" />
-          <Parameter Name="ParentFundPrice" Type="numeric" Mode="In" />
-          <Parameter Name="ParentFundPriceId" Type="int" Mode="In" />
-          <Parameter Name="ParentIndicativeChange" Type="numeric" Mode="In" />
-          <Parameter Name="ParentExternalIndicativeChangeId" Type="int" Mode="In" />
-          <Parameter Name="ParentInternalIndicativeChangeId" Type="int" Mode="In" />
-          <Parameter Name="ParentFundFXRateId" Type="int" Mode="In" />
-          <Parameter Name="ParentFundFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="IndicativeChange" Type="numeric" Mode="In" />
+          <Parameter Name="IndicativeChangeId" Type="int" Mode="In" />
           <Parameter Name="IndicativePrice" Type="numeric" Mode="In" />
-          <Parameter Name="IndicativeFXRate" Type="numeric" Mode="In" />
           <Parameter Name="ValuationOriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="PriceIsForDay" Type="bit" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -12431,16 +12386,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ForwardFXRate" Type="numeric" Mode="In" />
           <Parameter Name="ForwardFXRateId" Type="int" Mode="In" />
           <Parameter Name="ValuationOriginalDeltaNetCostBookCurrency" Type="numeric" Mode="In" />
-          <Parameter Name="ParentFundPrice" Type="numeric" Mode="In" />
-          <Parameter Name="ParentFundPriceId" Type="int" Mode="In" />
-          <Parameter Name="ParentIndicativeChange" Type="numeric" Mode="In" />
-          <Parameter Name="ParentExternalIndicativeChangeId" Type="int" Mode="In" />
-          <Parameter Name="ParentInternalIndicativeChangeId" Type="int" Mode="In" />
-          <Parameter Name="ParentFundFXRateId" Type="int" Mode="In" />
-          <Parameter Name="ParentFundFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="IndicativeChange" Type="numeric" Mode="In" />
+          <Parameter Name="IndicativeChangeId" Type="int" Mode="In" />
           <Parameter Name="IndicativePrice" Type="numeric" Mode="In" />
-          <Parameter Name="IndicativeFXRate" Type="numeric" Mode="In" />
           <Parameter Name="ValuationOriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="PriceIsForDay" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -14555,20 +14505,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Analytic" EntitySet="Analytic" />
             <End Role="Portfolio" EntitySet="Portfolio" />
           </AssociationSet>
-          <AssociationSet Name="FK__Portfolio__Paren__31A0F773" Association="Self.FK__Portfolio__Paren__31A0F773">
-            <End Role="Price" EntitySet="Price" />
-            <End Role="Portfolio" EntitySet="Portfolio" />
-          </AssociationSet>
           <AssociationSet Name="FK__Portfolio__Paren__32951BAC" Association="Self.FK__Portfolio__Paren__32951BAC">
             <End Role="Analytic" EntitySet="Analytic" />
-            <End Role="Portfolio" EntitySet="Portfolio" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Portfolio__Paren__33893FE5" Association="Self.FK__Portfolio__Paren__33893FE5">
-            <End Role="Analytic" EntitySet="Analytic" />
-            <End Role="Portfolio" EntitySet="Portfolio" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Portfolio__Paren__347D641E" Association="Self.FK__Portfolio__Paren__347D641E">
-            <End Role="FXRate" EntitySet="FXRate" />
             <End Role="Portfolio" EntitySet="Portfolio" />
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__Portf__7CF5C305" Association="Self.FK__Portfolio__Portf__7CF5C305">
@@ -17848,18 +17786,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Analytic" EntitySet="Analytics" />
             <End Role="Portfolio" EntitySet="Portfolios" />
           </AssociationSet>
-          <AssociationSet Name="FK__Portfolio__Paren__33893FE5" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__33893FE5">
-            <End Role="Analytic" EntitySet="Analytics" />
-            <End Role="Portfolio" EntitySet="Portfolios" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Portfolio__Paren__347D641E" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__347D641E">
-            <End Role="FXRate" EntitySet="FXRates" />
-            <End Role="Portfolio" EntitySet="Portfolios" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Portfolio__Paren__31A0F773" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__31A0F773">
-            <End Role="Price" EntitySet="Prices" />
-            <End Role="Portfolio" EntitySet="Portfolios" />
-          </AssociationSet>
           <EntitySet Name="FundClientPlatforms" EntityType="Odey.Framework.Keeley.Entities.FundClientPlatform" />
           <EntitySet Name="FundCountryStatuses" EntityType="Odey.Framework.Keeley.Entities.FundCountryStatuses" />
           <AssociationSet Name="FK__FundClien__Updat__650AC189" Association="Odey.Framework.Keeley.Entities.FK__FundClien__Updat__650AC189">
@@ -17894,6 +17820,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__FundClien__Clien__64169D50" Association="Odey.Framework.Keeley.Entities.FK__FundClien__Clien__64169D50">
             <End Role="ClientPlatform" EntitySet="ClientPlatforms" />
             <End Role="FundClientPlatform" EntitySet="FundClientPlatforms" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Paren__32951BAC1" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__32951BAC1">
+            <End Role="Analytic" EntitySet="Analytics" />
+            <End Role="Portfolio" EntitySet="Portfolios" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -19950,16 +19880,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="ForwardFXRate" Type="Decimal" Precision="35" Scale="16" />
           <Property Name="ForwardFXRateId" Type="Int32" />
           <Property Name="ValuationOriginalDeltaNetCostBookCurrency" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="ParentFundPrice" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="ParentFundPriceId" Type="Int32" />
-          <Property Name="ParentIndicativeChange" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="ParentExternalIndicativeChangeId" Type="Int32" />
-          <Property Name="ParentInternalIndicativeChangeId" Type="Int32" />
-          <Property Name="ParentFundFXRateId" Type="Int32" />
-          <Property Name="ParentFundFXRate" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="IndicativePrice" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="IndicativeFXRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="IndicativeChange" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="IndicativeChangeId" Type="Int32" />
           <Property Name="ValuationOriginalDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="PriceIsForDay" Type="Boolean" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20815,6 +20740,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="RawAnalyticId" />
           <NavigationProperty Name="RawAnalytic" Relationship="Odey.Framework.Keeley.Entities.AnalyticRawAnalyticIDFK" FromRole="Analytic" ToRole="RawAnalytic" />
+          <NavigationProperty Name="Portfolios1" Relationship="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__32951BAC1" FromRole="Analytic" ToRole="Portfolio" />
         </EntityType>
         <Association Name="AnalyticInstrumentMarketIdFK">
           <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
@@ -22113,6 +22039,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="ManagerId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="FundClientPlatforms" Relationship="Odey.Framework.Keeley.Entities.FK__FundClien__FundI__63227917" FromRole="Fund" ToRole="FundClientPlatform" />
           <NavigationProperty Name="FundCountryStatuses" Relationship="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216" FromRole="Fund" ToRole="FundCountryStatu" />
+          <Property Name="ISCFDFullyFunded" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -23247,6 +23174,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="CalculateAttributionPNL" Type="Boolean" />
           <Property Name="PreviousValuationDate" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="AdministratorPortfolioExists" Type="Boolean" Nullable="false" />
+          <Property Name="RecalculateUnits" Type="Boolean" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -27123,46 +27051,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               <PropertyRef Name="AnalyticId" />
             </Principal>
             <Dependent Role="Portfolio">
-              <PropertyRef Name="ParentExternalIndicativeChangeId" />
+              <PropertyRef Name="IndicativeChangeId" />
             </Dependent>
           </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Portfolio__Paren__33893FE5">
-          <End Type="Odey.Framework.Keeley.Entities.Analytic" Role="Analytic" Multiplicity="0..1" />
-          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Analytic">
-              <PropertyRef Name="AnalyticId" />
-            </Principal>
-            <Dependent Role="Portfolio">
-              <PropertyRef Name="ParentInternalIndicativeChangeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Portfolio__Paren__347D641E">
-          <End Type="Odey.Framework.Keeley.Entities.FXRate" Role="FXRate" Multiplicity="0..1" />
-          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FXRate">
-              <PropertyRef Name="FXRateId" />
-            </Principal>
-            <Dependent Role="Portfolio">
-              <PropertyRef Name="ParentFundFXRateId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Portfolio__Paren__31A0F773">
-          <End Type="Odey.Framework.Keeley.Entities.Price" Role="Price" Multiplicity="0..1" />
-          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Price">
-              <PropertyRef Name="PriceId" />
-            </Principal>
-            <Dependent Role="Portfolio">
-              <PropertyRef Name="ParentFundPriceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        </Association>       
         <EntityType Name="FundClientPlatform">
           <Key>
             <PropertyRef Name="FundClientPlatformId" />
@@ -27295,6 +27187,18 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="FundClientPlatform">
               <PropertyRef Name="ClientPlatformId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__Paren__32951BAC1">
+          <End Type="Odey.Framework.Keeley.Entities.Analytic" Role="Analytic" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Analytic">
+              <PropertyRef Name="AnalyticId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="IndicativeChangeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -29552,16 +29456,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="PriceIsForDay" ColumnName="PriceIsForDay" />
                 <ScalarProperty Name="ValuationOriginalDeltaNetCostInstrumentCurrency" ColumnName="ValuationOriginalDeltaNetCostInstrumentCurrency" />
-                <ScalarProperty Name="IndicativeFXRate" ColumnName="IndicativeFXRate" />
+                <ScalarProperty Name="IndicativeChangeId" ColumnName="IndicativeChangeId" />
+                <ScalarProperty Name="IndicativeChange" ColumnName="IndicativeChange" />
                 <ScalarProperty Name="IndicativePrice" ColumnName="IndicativePrice" />
-                <ScalarProperty Name="ParentFundFXRate" ColumnName="ParentFundFXRate" />
-                <ScalarProperty Name="ParentFundFXRateId" ColumnName="ParentFundFXRateId" />
-                <ScalarProperty Name="ParentInternalIndicativeChangeId" ColumnName="ParentInternalIndicativeChangeId" />
-                <ScalarProperty Name="ParentExternalIndicativeChangeId" ColumnName="ParentExternalIndicativeChangeId" />
-                <ScalarProperty Name="ParentIndicativeChange" ColumnName="ParentIndicativeChange" />
-                <ScalarProperty Name="ParentFundPriceId" ColumnName="ParentFundPriceId" />
-                <ScalarProperty Name="ParentFundPrice" ColumnName="ParentFundPrice" />
                 <ScalarProperty Name="ValuationOriginalDeltaNetCostBookCurrency" ColumnName="ValuationOriginalDeltaNetCostBookCurrency" />
                 <ScalarProperty Name="ForwardFXRateId" ColumnName="ForwardFXRateId" />
                 <ScalarProperty Name="ForwardFXRate" ColumnName="ForwardFXRate" />
@@ -29677,16 +29576,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="PriceIsForDay" ParameterName="PriceIsForDay" />
                   <ScalarProperty Name="ValuationOriginalDeltaNetCostInstrumentCurrency" ParameterName="ValuationOriginalDeltaNetCostInstrumentCurrency" />
-                  <ScalarProperty Name="IndicativeFXRate" ParameterName="IndicativeFXRate" />
+                  <ScalarProperty Name="IndicativeChangeId" ParameterName="IndicativeChangeId" />
+                  <ScalarProperty Name="IndicativeChange" ParameterName="IndicativeChange" />
                   <ScalarProperty Name="IndicativePrice" ParameterName="IndicativePrice" />
-                  <ScalarProperty Name="ParentFundFXRate" ParameterName="ParentFundFXRate" />
-                  <ScalarProperty Name="ParentFundFXRateId" ParameterName="ParentFundFXRateId" />
-                  <ScalarProperty Name="ParentInternalIndicativeChangeId" ParameterName="ParentInternalIndicativeChangeId" />
-                  <ScalarProperty Name="ParentExternalIndicativeChangeId" ParameterName="ParentExternalIndicativeChangeId" />
-                  <ScalarProperty Name="ParentIndicativeChange" ParameterName="ParentIndicativeChange" />
-                  <ScalarProperty Name="ParentFundPriceId" ParameterName="ParentFundPriceId" />
-                  <ScalarProperty Name="ParentFundPrice" ParameterName="ParentFundPrice" />
                   <ScalarProperty Name="ValuationOriginalDeltaNetCostBookCurrency" ParameterName="ValuationOriginalDeltaNetCostBookCurrency" />
                   <ScalarProperty Name="ForwardFXRateId" ParameterName="ForwardFXRateId" />
                   <ScalarProperty Name="ForwardFXRate" ParameterName="ForwardFXRate" />
@@ -29799,16 +29693,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="PriceIsForDay" ParameterName="PriceIsForDay" Version="Current" />
                   <ScalarProperty Name="ValuationOriginalDeltaNetCostInstrumentCurrency" ParameterName="ValuationOriginalDeltaNetCostInstrumentCurrency" Version="Current" />
-                  <ScalarProperty Name="IndicativeFXRate" ParameterName="IndicativeFXRate" Version="Current" />
+                  <ScalarProperty Name="IndicativeChangeId" ParameterName="IndicativeChangeId" Version="Current" />
+                  <ScalarProperty Name="IndicativeChange" ParameterName="IndicativeChange" Version="Current" />
                   <ScalarProperty Name="IndicativePrice" ParameterName="IndicativePrice" Version="Current" />
-                  <ScalarProperty Name="ParentFundFXRate" ParameterName="ParentFundFXRate" Version="Current" />
-                  <ScalarProperty Name="ParentFundFXRateId" ParameterName="ParentFundFXRateId" Version="Current" />
-                  <ScalarProperty Name="ParentInternalIndicativeChangeId" ParameterName="ParentInternalIndicativeChangeId" Version="Current" />
-                  <ScalarProperty Name="ParentExternalIndicativeChangeId" ParameterName="ParentExternalIndicativeChangeId" Version="Current" />
-                  <ScalarProperty Name="ParentIndicativeChange" ParameterName="ParentIndicativeChange" Version="Current" />
-                  <ScalarProperty Name="ParentFundPriceId" ParameterName="ParentFundPriceId" Version="Current" />
-                  <ScalarProperty Name="ParentFundPrice" ParameterName="ParentFundPrice" Version="Current" />
                   <ScalarProperty Name="ValuationOriginalDeltaNetCostBookCurrency" ParameterName="ValuationOriginalDeltaNetCostBookCurrency" Version="Current" />
                   <ScalarProperty Name="ForwardFXRateId" ParameterName="ForwardFXRateId" Version="Current" />
                   <ScalarProperty Name="ForwardFXRate" ParameterName="ForwardFXRate" Version="Current" />
@@ -31360,6 +31249,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="ISCFDFullyFunded" ColumnName="ISCFDFullyFunded" />
                 <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="CustodianId" ColumnName="CustodianId" />
                 <ScalarProperty Name="IsAnalystPnl" ColumnName="IsAnalystPnl" />
@@ -31418,6 +31308,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Fund_Insert">
+                  <ScalarProperty Name="ISCFDFullyFunded" ParameterName="ISCFDFullyFunded" />
                   <ScalarProperty Name="ManagerId" ParameterName="ManagerId" />
                   <ScalarProperty Name="CustodianId" ParameterName="CustodianId" />
                   <ScalarProperty Name="IsAnalystPnl" ParameterName="IsAnalystPnl" />
@@ -31473,6 +31364,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Fund_Update">
+                  <ScalarProperty Name="ISCFDFullyFunded" ParameterName="ISCFDFullyFunded" Version="Current" />
                   <ScalarProperty Name="ManagerId" ParameterName="ManagerId" Version="Current" />
                   <ScalarProperty Name="CustodianId" ParameterName="CustodianId" Version="Current" />
                   <ScalarProperty Name="IsAnalystPnl" ParameterName="IsAnalystPnl" Version="Current" />
@@ -31528,11 +31420,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.Fund_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="LegalEntityID" ParameterName="LegalEntityID" />
-                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -32386,6 +32273,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="RecalculateUnits" ColumnName="RecalculateUnits" />
                 <ScalarProperty Name="AdministratorPortfolioExists" ColumnName="AdministratorPortfolioExists" />
                 <ScalarProperty Name="PreviousValuationDate" ColumnName="PreviousValuationDate" />
                 <ScalarProperty Name="CalculateAttributionPNL" ColumnName="CalculateAttributionPNL" />
@@ -32440,6 +32328,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="RecalculateUnits" ParameterName="RecalculateUnits" />
                   <ScalarProperty Name="AdministratorPortfolioExists" ParameterName="AdministratorPortfolioExists" />
                   <ScalarProperty Name="PreviousValuationDate" ParameterName="PreviousValuationDate" />
                   <ScalarProperty Name="CalculateAttributionPNL" ParameterName="CalculateAttributionPNL" />
@@ -32496,6 +32385,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="RecalculateUnits" ParameterName="RecalculateUnits" Version="Current" />
                   <ScalarProperty Name="AdministratorPortfolioExists" ParameterName="AdministratorPortfolioExists" Version="Current" />
                   <ScalarProperty Name="PreviousValuationDate" ParameterName="PreviousValuationDate" Version="Current" />
                   <ScalarProperty Name="CalculateAttributionPNL" ParameterName="CalculateAttributionPNL" Version="Current" />
@@ -35380,7 +35270,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="64">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="45">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -37726,7 +37616,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="34.208333333333336" PointY="21.024851888020834" />
           <edmx:ConnectorPoint PointX="34.625" PointY="21.024851888020834" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Portfolio" Width="2.375" PointX="32.5" PointY="8.375" Height="9.2877408854166674" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Portfolio" Width="2.375" PointX="32.625" PointY="9.125" Height="9.2877408854166674" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioTradeDateUpdateUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.26483903249105" />
           <edmx:ConnectorPoint PointX="2.6666666666666665" PointY="17.26483903249105" />
@@ -41197,10 +41087,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Originato__Inter__68671C78" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Originato__Updat__695B40B1" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Originato__Exter__667ED406" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__32951BAC" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__33893FE5" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__347D641E" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__31A0F773" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__32951BAC" />            
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FundClientPlatform" Width="1.5" PointX="41.125" PointY="11.5" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FundCountryStatuses" Width="2" PointX="39.125" PointY="15.125" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundClien__Updat__650AC189" />
@@ -41212,6 +41099,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientPla__Updat__3B099AC5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ClientAcc__Clien__3BFDBEFE" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FundClien__Clien__64169D50" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__32951BAC1" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

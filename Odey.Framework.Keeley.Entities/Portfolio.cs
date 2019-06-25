@@ -244,25 +244,15 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ValuationOriginalDeltaNetCostBookCurrency { get; set; }
     	[DataMember]
-        public Nullable<decimal> ParentFundPrice { get; set; }
-    	[DataMember]
-        public Nullable<int> ParentFundPriceId { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ParentIndicativeChange { get; set; }
-    	[DataMember]
-        public Nullable<int> ParentExternalIndicativeChangeId { get; set; }
-    	[DataMember]
-        public Nullable<int> ParentInternalIndicativeChangeId { get; set; }
-    	[DataMember]
-        public Nullable<int> ParentFundFXRateId { get; set; }
-    	[DataMember]
-        public Nullable<decimal> ParentFundFXRate { get; set; }
-    	[DataMember]
         public Nullable<decimal> IndicativePrice { get; set; }
     	[DataMember]
-        public Nullable<decimal> IndicativeFXRate { get; set; }
+        public Nullable<decimal> IndicativeChange { get; set; }
+    	[DataMember]
+        public Nullable<int> IndicativeChangeId { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationOriginalDeltaNetCostInstrumentCurrency { get; set; }
+    	[DataMember]
+        public Nullable<bool> PriceIsForDay { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

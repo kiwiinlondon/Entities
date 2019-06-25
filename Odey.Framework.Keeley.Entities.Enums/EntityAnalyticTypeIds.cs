@@ -128,7 +128,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
         /// </summary>
         [EnumMember]
         BrokerVotedResearch = 19,
-
+        
+        [EnumMember]
+        TransactionChargeFxRoll = 20,
+        
+        [EnumMember]
+        OngoingChargesResearch = 21,
+        
+        [EnumMember]
+        FixedIncomeCarry = 22,
     }
 
 }
