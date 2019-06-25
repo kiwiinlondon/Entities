@@ -1365,6 +1365,7 @@
           <Property Name="IsAnalystPnl" Type="bit" Nullable="false" />
           <Property Name="CustodianId" Type="int" />
           <Property Name="ManagerId" Type="int" Nullable="false" />
+          <Property Name="ISCFDFullyFunded" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FundClientPlatform">
           <Key>
@@ -10807,11 +10808,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="IsDeliverable" Type="bit" Mode="In" />
         </Function>
-        <Function Name="Fund_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="LegalEntityID" Type="int" Mode="In" />
-          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-        </Function>
         <Function Name="Fund_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
           <Parameter Name="CurrencyID" Type="int" Mode="In" />
@@ -10864,6 +10860,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsAnalystPnl" Type="bit" Mode="In" />
           <Parameter Name="CustodianId" Type="int" Mode="In" />
           <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="ISCFDFullyFunded" Type="bit" Mode="In" />
         </Function>
         <Function Name="Fund_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -10918,6 +10915,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsAnalystPnl" Type="bit" Mode="In" />
           <Parameter Name="CustodianId" Type="int" Mode="In" />
           <Parameter Name="ManagerId" Type="int" Mode="In" />
+          <Parameter Name="ISCFDFullyFunded" Type="bit" Mode="In" />
         </Function>
         <Function Name="Fund_UpdateClientLoadDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -22041,6 +22039,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="ManagerId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="FundClientPlatforms" Relationship="Odey.Framework.Keeley.Entities.FK__FundClien__FundI__63227917" FromRole="Fund" ToRole="FundClientPlatform" />
           <NavigationProperty Name="FundCountryStatuses" Relationship="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216" FromRole="Fund" ToRole="FundCountryStatu" />
+          <Property Name="ISCFDFullyFunded" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -31250,6 +31249,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="ISCFDFullyFunded" ColumnName="ISCFDFullyFunded" />
                 <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="CustodianId" ColumnName="CustodianId" />
                 <ScalarProperty Name="IsAnalystPnl" ColumnName="IsAnalystPnl" />
@@ -31308,6 +31308,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Fund_Insert">
+                  <ScalarProperty Name="ISCFDFullyFunded" ParameterName="ISCFDFullyFunded" />
                   <ScalarProperty Name="ManagerId" ParameterName="ManagerId" />
                   <ScalarProperty Name="CustodianId" ParameterName="CustodianId" />
                   <ScalarProperty Name="IsAnalystPnl" ParameterName="IsAnalystPnl" />
@@ -31363,6 +31364,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Fund_Update">
+                  <ScalarProperty Name="ISCFDFullyFunded" ParameterName="ISCFDFullyFunded" Version="Current" />
                   <ScalarProperty Name="ManagerId" ParameterName="ManagerId" Version="Current" />
                   <ScalarProperty Name="CustodianId" ParameterName="CustodianId" Version="Current" />
                   <ScalarProperty Name="IsAnalystPnl" ParameterName="IsAnalystPnl" Version="Current" />
@@ -31418,11 +31420,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.Fund_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="LegalEntityID" ParameterName="LegalEntityID" />
-                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -35273,7 +35270,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="24">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="45">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
