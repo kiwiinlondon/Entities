@@ -53,7 +53,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<bool> IsOverBorrow { get; set; }
+        public bool IsOverBorrow { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
