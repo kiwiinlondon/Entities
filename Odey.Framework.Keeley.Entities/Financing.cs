@@ -29,9 +29,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int CustodianId { get; set; }
     	[DataMember]
-        public decimal NetPosition { get; set; }
+        public Nullable<decimal> NetPosition { get; set; }
     	[DataMember]
-        public decimal Price { get; set; }
+        public Nullable<decimal> Price { get; set; }
     	[DataMember]
         public decimal Notional { get; set; }
     	[DataMember]
@@ -53,7 +53,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public bool IsOverBorrow { get; set; }
+        public Nullable<decimal> OverborrowNotional { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowSpread { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowAccrual { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

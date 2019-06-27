@@ -1207,8 +1207,8 @@
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="CurrencyId" Type="int" Nullable="false" />
           <Property Name="CustodianId" Type="int" Nullable="false" />
-          <Property Name="NetPosition" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="Price" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="NetPosition" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Price" Type="numeric" Precision="27" Scale="8" />
           <Property Name="Notional" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="BenchmarkRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="Spread" Type="numeric" Precision="27" Scale="8" Nullable="false" />
@@ -1219,7 +1219,10 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-          <Property Name="IsOverBorrow" Type="bit" Nullable="false" />
+          <Property Name="OverborrowNotional" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowUnits" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowSpread" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowAccrual" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="FMPortfolio">
           <Key>
@@ -10657,7 +10660,10 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="SpreadAccrual" Type="numeric" Mode="In" />
           <Parameter Name="AllInAccrual" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
-          <Parameter Name="IsOverBorrow" Type="bit" Mode="In" />
+          <Parameter Name="OverborrowNotional" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowUnits" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowSpread" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowAccrual" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Financing_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FinancingId" Type="int" Mode="In" />
@@ -10677,7 +10683,10 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="AllInAccrual" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
-          <Parameter Name="IsOverBorrow" Type="bit" Mode="In" />
+          <Parameter Name="OverborrowNotional" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowUnits" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowSpread" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowAccrual" Type="numeric" Mode="In" />
         </Function>
         <Function Name="FMContractMapping_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FMContId" Type="int" Mode="In" />
@@ -26502,8 +26511,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CurrencyId" Type="Int32" Nullable="false" />
           <Property Name="CustodianId" Type="Int32" Nullable="false" />
-          <Property Name="NetPosition" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="Price" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="NetPosition" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Price" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="Notional" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
           <Property Name="BenchmarkRate" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
           <Property Name="Spread" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
@@ -26518,7 +26527,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="Custodian" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Custo__56C78F2A" FromRole="Financing" ToRole="Custodian" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__FundI__53EB227F" FromRole="Financing" ToRole="Fund" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8" FromRole="Financing" ToRole="InstrumentMarket" />
-          <Property Name="IsOverBorrow" Type="Boolean" Nullable="false" />
+          <Property Name="OverborrowNotional" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowUnits" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowSpread" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowAccrual" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="FK__Financing__Updat__57BBB363">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -34718,7 +34730,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Financings">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
               <MappingFragment StoreEntitySet="Financing">
-                <ScalarProperty Name="IsOverBorrow" ColumnName="IsOverBorrow" />
+                <ScalarProperty Name="OverborrowAccrual" ColumnName="OverborrowAccrual" />
+                <ScalarProperty Name="OverborrowSpread" ColumnName="OverborrowSpread" />
+                <ScalarProperty Name="OverborrowUnits" ColumnName="OverborrowUnits" />
+                <ScalarProperty Name="OverborrowNotional" ColumnName="OverborrowNotional" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -34741,8 +34756,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </EntityTypeMapping>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
               <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.Financing_Insert">
-                  <ScalarProperty Name="IsOverBorrow" ParameterName="IsOverBorrow" />
+                <InsertFunction FunctionName="KeeleyModel.Store.Financing_Insert">                 
+                  <ScalarProperty Name="OverborrowAccrual" ParameterName="OverborrowAccrual" />
+                  <ScalarProperty Name="OverborrowUnits" ParameterName="OverborrowUnits" />
+                  <ScalarProperty Name="OverborrowSpread" ParameterName="OverborrowSpread" />
+                  <ScalarProperty Name="OverborrowNotional" ParameterName="OverborrowNotional" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="AllInAccrual" ParameterName="AllInAccrual" />
                   <ScalarProperty Name="SpreadAccrual" ParameterName="SpreadAccrual" />
@@ -34763,7 +34781,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Financing_Update">
-                  <ScalarProperty Name="IsOverBorrow" ParameterName="IsOverBorrow" Version="Current" />
+                  <ScalarProperty Name="OverborrowAccrual" ParameterName="OverborrowAccrual" Version="Current" />
+                  <ScalarProperty Name="OverborrowSpread" ParameterName="OverborrowSpread" Version="Current" />
+                  <ScalarProperty Name="OverborrowUnits" ParameterName="OverborrowUnits" Version="Current" />
+                  <ScalarProperty Name="OverborrowNotional" ParameterName="OverborrowNotional" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="AllInAccrual" ParameterName="AllInAccrual" Version="Current" />
