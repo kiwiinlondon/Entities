@@ -35,15 +35,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal Notional { get; set; }
     	[DataMember]
-        public decimal BenchmarkRate { get; set; }
-    	[DataMember]
-        public decimal Spread { get; set; }
-    	[DataMember]
         public decimal AllInRate { get; set; }
-    	[DataMember]
-        public decimal BenchmarkAccrual { get; set; }
-    	[DataMember]
-        public decimal SpreadAccrual { get; set; }
     	[DataMember]
         public decimal AllInAccrual { get; set; }
     	[DataMember]
@@ -57,9 +49,21 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> OverborrowUnits { get; set; }
     	[DataMember]
-        public Nullable<decimal> OverborrowSpread { get; set; }
-    	[DataMember]
         public Nullable<decimal> OverborrowAccrual { get; set; }
+    	[DataMember]
+        public decimal FinancingRate { get; set; }
+    	[DataMember]
+        public decimal BorrowRate { get; set; }
+    	[DataMember]
+        public decimal FinancingAccrual { get; set; }
+    	[DataMember]
+        public decimal BorrowAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginInterest { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterest { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
