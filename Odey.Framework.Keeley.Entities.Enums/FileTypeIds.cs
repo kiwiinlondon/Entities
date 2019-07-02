@@ -134,6 +134,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MSFinancing =65,
         [EnumMember]
         PortPriceIndexMorningstar = 66,
+        [EnumMember]
+        ArkusRiskAnalytic = 67,
 
     }
 }
