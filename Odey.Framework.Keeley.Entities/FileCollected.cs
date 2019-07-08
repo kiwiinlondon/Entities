@@ -34,5 +34,7 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int FileToBeCollectedId { get; set; }
+    	[DataMember]
+        public string FileHash { get; set; }
     }
 }

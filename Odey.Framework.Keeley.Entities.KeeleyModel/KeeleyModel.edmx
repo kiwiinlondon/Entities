@@ -1164,6 +1164,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="FileHash" Type="varchar" MaxLength="64" />
         </EntityType>
         <EntityType Name="FileToBeCollected">
           <Key>
@@ -1356,8 +1357,8 @@
           <Property Name="IsClosedToExistingInvestors" Type="bit" Nullable="false" />
           <Property Name="IsStaffOnly" Type="bit" Nullable="false" />
           <Property Name="IsIsaEligible" Type="bit" Nullable="false" />
-          <Property Name="OtherCostRatio" Type="decimal" Precision="27" Scale="8" />
-          <Property Name="TotalCostRatio" Type="decimal" Precision="27" Scale="8" />
+          <Property Name="OtherCostRatio" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TotalCostRatio" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IsSynthetic" Type="bit" Nullable="false" />
           <Property Name="ClientMarketingTypeId" Type="int" Nullable="false" />
           <Property Name="IsMainRetailShareClass" Type="bit" />
@@ -10630,6 +10631,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="FileCreatedDate" Type="datetime" Mode="In" />
           <Parameter Name="Processed" Type="bit" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="FileHash" Type="varchar" Mode="In" />
         </Function>
         <Function Name="FileCollected_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FileCollectedId" Type="int" Mode="In" />
@@ -10640,6 +10642,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Processed" Type="bit" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="FileHash" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Financing_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FinancingId" Type="int" Mode="In" />
@@ -10863,8 +10866,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsClosedToExistingInvestors" Type="bit" Mode="In" />
           <Parameter Name="IsStaffOnly" Type="bit" Mode="In" />
           <Parameter Name="IsIsaEligible" Type="bit" Mode="In" />
-          <Parameter Name="OtherCostRatio" Type="decimal" Mode="In" />
-          <Parameter Name="TotalCostRatio" Type="decimal" Mode="In" />
+          <Parameter Name="OtherCostRatio" Type="numeric" Mode="In" />
+          <Parameter Name="TotalCostRatio" Type="numeric" Mode="In" />
           <Parameter Name="IsSynthetic" Type="bit" Mode="In" />
           <Parameter Name="ClientMarketingTypeId" Type="int" Mode="In" />
           <Parameter Name="IsMainRetailShareClass" Type="bit" Mode="In" />
@@ -10918,8 +10921,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsClosedToExistingInvestors" Type="bit" Mode="In" />
           <Parameter Name="IsStaffOnly" Type="bit" Mode="In" />
           <Parameter Name="IsIsaEligible" Type="bit" Mode="In" />
-          <Parameter Name="OtherCostRatio" Type="decimal" Mode="In" />
-          <Parameter Name="TotalCostRatio" Type="decimal" Mode="In" />
+          <Parameter Name="OtherCostRatio" Type="numeric" Mode="In" />
+          <Parameter Name="TotalCostRatio" Type="numeric" Mode="In" />
           <Parameter Name="IsSynthetic" Type="bit" Mode="In" />
           <Parameter Name="ClientMarketingTypeId" Type="int" Mode="In" />
           <Parameter Name="IsMainRetailShareClass" Type="bit" Mode="In" />
@@ -21785,6 +21788,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="FileToBeCollectedId" Nullable="false" />
+          <Property Name="FileHash" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FileCollectedUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -31053,6 +31057,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="FileCollecteds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FileCollected">
               <MappingFragment StoreEntitySet="FileCollected">
+                <ScalarProperty Name="FileHash" ColumnName="FileHash" />
                 <ScalarProperty Name="FileToBeCollectedId" ColumnName="FileToBeCollectedId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -31067,6 +31072,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FileCollected">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.FileCollected_Insert">
+                  <ScalarProperty Name="FileHash" ParameterName="FileHash" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Processed" ParameterName="Processed" />
                   <ScalarProperty Name="FileCreatedDate" ParameterName="FileCreatedDate" />
@@ -31078,6 +31084,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.FileCollected_Update">
+                  <ScalarProperty Name="FileHash" ParameterName="FileHash" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="Processed" ParameterName="Processed" Version="Current" />
