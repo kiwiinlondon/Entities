@@ -19,8 +19,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int FileCollectedId { get; set; }
     	[DataMember]
-        public bool IsLast { get; set; }
-    	[DataMember]
         public string ResolvedFileName { get; set; }
     	[DataMember]
         public System.DateTime FileCreatedDate { get; set; }
