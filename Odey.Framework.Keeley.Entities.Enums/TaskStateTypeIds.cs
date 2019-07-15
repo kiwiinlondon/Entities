@@ -10,12 +10,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum TaskStateTypeIds
     {
         [EnumMember]
-        NotRunning = 1,
+        Complete = 1,
         [EnumMember]
         Running = 2,
         [EnumMember]
         Errored = 3,
         [EnumMember]
-        AwaitingDependency = 4
+        AwaitingDependency = 4,
+        [EnumMember]
+        NeverRun = 5,
     }
 }
