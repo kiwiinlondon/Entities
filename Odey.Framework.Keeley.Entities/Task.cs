@@ -19,8 +19,9 @@ namespace Odey.Framework.Keeley.Entities
     	
         public Task()
         {
-            this.TaskParameters = new List<TaskParameter>();
-            this.TaskDependencies = new List<TaskDependency>();
+            this.Parameters = new List<TaskParameter>();
+            this.Dependencies = new List<TaskDependency>();
+            this.SubTasks = new List<TaskSubTask>();
         }
     
     	[DataMember]
@@ -37,8 +38,10 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     
         [DataMember]
-        public virtual List<TaskParameter> TaskParameters { get; set; }
+        public virtual List<TaskParameter> Parameters { get; set; }
         [DataMember]
-        public virtual List<TaskDependency> TaskDependencies { get; set; }
+        public virtual List<TaskDependency> Dependencies { get; set; }
+        [DataMember]
+        public virtual List<TaskSubTask> SubTasks { get; set; }
     }
 }
