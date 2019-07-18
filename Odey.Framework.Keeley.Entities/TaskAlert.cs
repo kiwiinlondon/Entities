@@ -14,39 +14,30 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class TaskRun
+    public partial class TaskAlert
     {
     	
-        public TaskRun()
+        public TaskAlert()
         {
-            this.TaskResults = new List<TaskResult>();
-            this.TaskStates = new List<TaskState>();
+            this.TaskAlertConfigurations = new List<TaskAlertConfiguration>();
         }
     
     	[DataMember]
-        public int TaskRunId { get; set; }
+        public int TaskAlertId { get; set; }
     	[DataMember]
-        public int InitiatingTaskId { get; set; }
+        public int TaskAlertTypeId { get; set; }
     	[DataMember]
-        public System.DateTime InitiatingTime { get; set; }
-    	[DataMember]
-        public Nullable<System.DateTime> CompletionTime { get; set; }
-    	[DataMember]
-        public string Notes { get; set; }
+        public int TaskId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
-    	[DataMember]
-        public int TaskRunStateId { get; set; }
     
         [DataMember]
-        public virtual Task InitiatingTask { get; set; }
+        public virtual Task Task { get; set; }
         [DataMember]
-        public virtual List<TaskResult> TaskResults { get; set; }
-        [DataMember]
-        public virtual List<TaskState> TaskStates { get; set; }
+        public virtual List<TaskAlertConfiguration> TaskAlertConfigurations { get; set; }
     }
 }

@@ -6,18 +6,19 @@ using System.Text;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
+
     [DataContract]
-    public enum TaskStateTypeIds
+    public enum TaskAlertTypeIds
     {
+        [EnumMember]    
+        OnStart = 1,
         [EnumMember]
-        Complete = 1,
+        OnError = 2,
         [EnumMember]
-        Queued = 2,
+        OnCompletion = 3,
         [EnumMember]
-        Errored = 3,
+        OnTimeout = 4,
         [EnumMember]
-        AwaitingDependency = 4,
-        [EnumMember]
-        NeverRun = 5,
+        OnWarning = 5
     }
 }

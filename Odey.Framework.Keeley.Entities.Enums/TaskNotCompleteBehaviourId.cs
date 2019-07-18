@@ -7,17 +7,17 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum TaskStateTypeIds
+    public enum TaskNotCompleteBehaviourIds
     {
         [EnumMember]
-        Complete = 1,
+        Skip = 1,
         [EnumMember]
-        Queued = 2,
+        QueueOnce = 2,
         [EnumMember]
-        Errored = 3,
+        Exception = 3,
         [EnumMember]
-        AwaitingDependency = 4,
+        AlwaysQueue = 4,
         [EnumMember]
-        NeverRun = 5,
+        IgnoreErrored = 5
     }
 }

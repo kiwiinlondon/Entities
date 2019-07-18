@@ -7,17 +7,11 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum TaskStateTypeIds
+    public enum TaskAlertConfigurationTypeIds
     {
         [EnumMember]
-        Complete = 1,
+        TimeoutLength =2,
         [EnumMember]
-        Queued = 2,
-        [EnumMember]
-        Errored = 3,
-        [EnumMember]
-        AwaitingDependency = 4,
-        [EnumMember]
-        NeverRun = 5,
+        WhoToAlert=3
     }
 }

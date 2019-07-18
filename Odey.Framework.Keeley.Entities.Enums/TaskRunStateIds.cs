@@ -7,17 +7,15 @@ using System.Text;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum TaskStateTypeIds
+    public enum TaskRunStateIds
     {
         [EnumMember]
-        Complete = 1,
+        Running = 1,
         [EnumMember]
         Queued = 2,
         [EnumMember]
         Errored = 3,
         [EnumMember]
-        AwaitingDependency = 4,
-        [EnumMember]
-        NeverRun = 5,
-    }
+        Complete = 4
+    } 
 }

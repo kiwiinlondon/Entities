@@ -22,6 +22,7 @@ namespace Odey.Framework.Keeley.Entities
             this.Parameters = new List<TaskParameter>();
             this.Dependencies = new List<TaskDependency>();
             this.SubTasks = new List<TaskSubTask>();
+            this.TaskAlerts = new List<TaskAlert>();
         }
     
     	[DataMember]
@@ -36,6 +37,10 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public Nullable<int> TaskNotCompleteBehaviourId { get; set; }
+    	[DataMember]
+        public int MaxRetryAttempts { get; set; }
     
         [DataMember]
         public virtual List<TaskParameter> Parameters { get; set; }
@@ -43,5 +48,9 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<TaskDependency> Dependencies { get; set; }
         [DataMember]
         public virtual List<TaskSubTask> SubTasks { get; set; }
+        [DataMember]
+        public virtual TaskState TaskState { get; set; }
+        [DataMember]
+        public virtual List<TaskAlert> TaskAlerts { get; set; }
     }
 }

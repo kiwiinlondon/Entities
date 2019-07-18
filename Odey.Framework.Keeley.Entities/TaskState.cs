@@ -17,8 +17,6 @@ namespace Odey.Framework.Keeley.Entities
     public partial class TaskState
     {
     	[DataMember]
-        public int TaskStateId { get; set; }
-    	[DataMember]
         public int TaskId { get; set; }
     	[DataMember]
         public int TaskStateTypeId { get; set; }
@@ -29,11 +27,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public Nullable<int> LastTaskRunId { get; set; }
+        public int LastTaskRunId { get; set; }
+    	[DataMember]
+        public int ExecutionSet { get; set; }
     
         [DataMember]
         public virtual Task Task { get; set; }
         [DataMember]
-        public virtual TaskRun LastTaskRun { get; set; }
+        public virtual TaskRun LastRun { get; set; }
     }
 }
