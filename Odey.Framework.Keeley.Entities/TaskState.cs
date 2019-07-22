@@ -30,6 +30,12 @@ namespace Odey.Framework.Keeley.Entities
         public int LastTaskRunId { get; set; }
     	[DataMember]
         public int ExecutionSet { get; set; }
+    	[DataMember]
+        public int RetryAttempts { get; set; }
+    	[DataMember]
+        public System.DateTime InitiatingTime { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> CompletionTime { get; set; }
     
         [DataMember]
         public virtual Task Task { get; set; }

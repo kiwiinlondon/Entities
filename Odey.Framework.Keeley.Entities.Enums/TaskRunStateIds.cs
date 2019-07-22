@@ -16,6 +16,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Errored = 3,
         [EnumMember]
-        Complete = 4
+        Complete = 4,
+        [EnumMember]
+        CompleteErrored = 6
     } 
 }
