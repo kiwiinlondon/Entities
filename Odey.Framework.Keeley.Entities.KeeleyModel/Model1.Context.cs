@@ -195,6 +195,15 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FundClientPlatform> FundClientPlatforms { get; set; }
         public DbSet<FundCountryStatuses> FundCountryStatuses { get; set; }
         public DbSet<ClientPlatform> ClientPlatforms { get; set; }
+        public DbSet<Task> Tasks { get; set; }
+        public DbSet<TaskDependency> TaskDependencies { get; set; }
+        public DbSet<TaskParameter> TaskParameters { get; set; }
+        public DbSet<TaskResult> TaskResults { get; set; }
+        public DbSet<TaskRun> TaskRuns { get; set; }
+        public DbSet<TaskSubTask> TaskSubTasks { get; set; }
+        public DbSet<TaskState> TaskStates { get; set; }
+        public DbSet<TaskAlert> TaskAlerts { get; set; }
+        public DbSet<TaskAlertConfiguration> TaskAlertConfigurations { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
