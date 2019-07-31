@@ -98,13 +98,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ScenarioUSRecession = 30,
 
         [EnumMember]
-        IndexVaRPrimarySettings = 31,
+        IndexVaRPrimarySettings = 33,
 
         [EnumMember]
         PortfolioVarwithDerivSecondary = 32,
 
         [EnumMember]
-        IndexVaRSecondarySettings = 33,
+        IndexVaRSecondarySettings = 31,
 
         [EnumMember]
         IlliquidAssets = 34,
