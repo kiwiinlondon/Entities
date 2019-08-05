@@ -32,8 +32,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<System.DateTime> CompletionTime { get; set; }
     	[DataMember]
-        public string Notes { get; set; }
-    	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }

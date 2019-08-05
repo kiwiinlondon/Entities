@@ -9,5 +9,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
     [DataContract]
     public enum TaskResultTypeIds
     {
+        [EnumMember]
+        Information	=1,
+        [EnumMember]
+        Warning	=2,
+        [EnumMember]
+        Exception	=3
     }
 }

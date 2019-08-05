@@ -11,9 +11,23 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum TaskTypeIds
     {
         [EnumMember]
-        Rollover = 1,
+        PortfolioService = 1,
         [EnumMember]
-        TradeProcessing = 2
+        PriceService = 2,
+        [EnumMember]
+        FXRateService = 3,
+        [EnumMember]
+        AnalyticService = 4,
+        [EnumMember]
+        BetaService = 5,
+        [EnumMember]
+        OfficialNavService = 6,
+        [EnumMember]
+        ClientPortfolioService = 7,
+        [EnumMember]
+        FocusListService = 8,
+        [EnumMember]
+        PADealingService = 9
     }
 }
 
