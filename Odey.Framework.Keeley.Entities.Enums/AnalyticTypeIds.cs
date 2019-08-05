@@ -143,7 +143,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         EPSGrowth = 56,
 
         [EnumMember]
-        ROE = 57
+        ROE = 57,
+
+        [EnumMember]
+        DailyMasterReturn = 58,
+        [EnumMember]
+        DailyValuationReturn = 59
     }
 }
 
