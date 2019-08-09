@@ -814,5 +814,10 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Research_Search_Result>("Research_Search", delimiteredAnalystIdsParameter, delimiteredCountryIdsParameter, delimiteredInstrumentIdsParameter, delimiteredInstrumentMarketIdsParameter, delimiteredIssuerIdsParameter, delimiteredSectorIdsParameter, keywordParameter, startDateParameter, endDateParameter);
         }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> MessageQueue_GetMinStartDate()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("MessageQueue_GetMinStartDate");
+        }
     }
 }

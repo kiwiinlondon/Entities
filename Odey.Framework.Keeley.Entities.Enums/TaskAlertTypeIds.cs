@@ -19,6 +19,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OnTimeout = 4,
         [EnumMember]
-        OnWarning = 5
+        OnExceededMaxRetry = 5,
+        [EnumMember]
+        OnQueuingOfRun = 6
     }
 }
