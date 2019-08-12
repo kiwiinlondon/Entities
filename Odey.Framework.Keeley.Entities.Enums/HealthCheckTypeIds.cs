@@ -52,7 +52,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OOF_REFERENCE_ASSET_LOADED = 15,
 
         [EnumMember]
-        SRRI_CLASS_CHECK = 16
+        SRRI_CLASS_CHECK = 16,
+
+        [EnumMember]
+        MESSAGE_QUEUE_CHECK = 17
     }
 }
 

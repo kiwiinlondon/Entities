@@ -2766,6 +2766,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="ApplyToSubTask" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TaskAlertConfiguration">
           <Key>
@@ -2831,7 +2832,6 @@
           <Property Name="InitiatingTaskId" Type="int" Nullable="false" />
           <Property Name="InitiatingTime" Type="datetime" Nullable="false" />
           <Property Name="CompletionTime" Type="datetime" />
-          <Property Name="Notes" Type="varchar" MaxLength="2000" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -2851,6 +2851,7 @@
           <Property Name="RetryAttempts" Type="int" Nullable="false" />
           <Property Name="InitiatingTime" Type="datetime" Nullable="false" />
           <Property Name="CompletionTime" Type="datetime" />
+          <Property Name="Acknowledged" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TaskSubTask">
           <Key>
@@ -12258,6 +12259,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="MessageQueue_GetMinStartDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="MessageQueue_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MessageTypeId" Type="int" Mode="In" />
           <Parameter Name="Message" Type="varchar" Mode="In" />
@@ -13525,6 +13527,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TaskAlertTypeId" Type="int" Mode="In" />
           <Parameter Name="TaskId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="ApplyToSubTask" Type="bit" Mode="In" />
         </Function>
         <Function Name="TaskAlert_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskAlertId" Type="int" Mode="In" />
@@ -13532,6 +13535,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TaskId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="ApplyToSubTask" Type="bit" Mode="In" />
         </Function>
         <Function Name="TaskAlertConfiguration_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskAlertConfigurationId" Type="int" Mode="In" />
@@ -13634,7 +13638,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="InitiatingTaskId" Type="int" Mode="In" />
           <Parameter Name="InitiatingTime" Type="datetime" Mode="In" />
           <Parameter Name="CompletionTime" Type="datetime" Mode="In" />
-          <Parameter Name="Notes" Type="varchar" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="TaskRunStateId" Type="int" Mode="In" />
         </Function>
@@ -13643,7 +13646,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="InitiatingTaskId" Type="int" Mode="In" />
           <Parameter Name="InitiatingTime" Type="datetime" Mode="In" />
           <Parameter Name="CompletionTime" Type="datetime" Mode="In" />
-          <Parameter Name="Notes" Type="varchar" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="TaskRunStateId" Type="int" Mode="In" />
@@ -13662,6 +13664,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RetryAttempts" Type="int" Mode="In" />
           <Parameter Name="InitiatingTime" Type="datetime" Mode="In" />
           <Parameter Name="CompletionTime" Type="datetime" Mode="In" />
+          <Parameter Name="Acknowledged" Type="bit" Mode="In" />
         </Function>
         <Function Name="TaskState_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskId" Type="int" Mode="In" />
@@ -13673,6 +13676,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RetryAttempts" Type="int" Mode="In" />
           <Parameter Name="InitiatingTime" Type="datetime" Mode="In" />
           <Parameter Name="CompletionTime" Type="datetime" Mode="In" />
+          <Parameter Name="Acknowledged" Type="bit" Mode="In" />
         </Function>
         <Function Name="TaskSubTask_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskSubTaskId" Type="int" Mode="In" />
@@ -18597,6 +18601,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="TaskAlert" EntitySet="TaskAlerts" />
             <End Role="TaskAlertConfiguration" EntitySet="TaskAlertConfigurations" />
           </AssociationSet>
+          <FunctionImport Name="MessageQueue_GetMinStartDate" ReturnType="Collection(DateTime)" />
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -28052,7 +28057,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="InitiatingTaskId" Type="Int32" Nullable="false" />
           <Property Name="InitiatingTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CompletionTime" Type="DateTime" Precision="3" />
-          <Property Name="Notes" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
@@ -28258,6 +28262,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="RetryAttempts" Type="Int32" Nullable="false" />
           <Property Name="InitiatingTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CompletionTime" Type="DateTime" Precision="3" />
+          <Property Name="Acknowledged" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK__TaskState__Updat__5F1DA960">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -28307,6 +28312,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Task" Relationship="Odey.Framework.Keeley.Entities.FK__TaskAlert__TaskI__044F2E0F" FromRole="TaskAlert" ToRole="Task" />
           <NavigationProperty Name="TaskAlertConfigurations" Relationship="Odey.Framework.Keeley.Entities.FK__TaskAlert__TaskA__0BF04FD7" FromRole="TaskAlert" ToRole="TaskAlertConfiguration" />
+          <Property Name="ApplyToSubTask" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="TaskAlertConfiguration">
           <Key>
@@ -36626,7 +36632,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="CompletionTime" ColumnName="CompletionTime" />
                 <ScalarProperty Name="InitiatingTime" ColumnName="InitiatingTime" />
                 <ScalarProperty Name="InitiatingTaskId" ColumnName="InitiatingTaskId" />
@@ -36638,7 +36643,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                 <InsertFunction FunctionName="KeeleyModel.Store.TaskRun_Insert">
                   <ScalarProperty Name="TaskRunStateId" ParameterName="TaskRunStateId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="Notes" ParameterName="Notes" />
                   <ScalarProperty Name="CompletionTime" ParameterName="CompletionTime" />
                   <ScalarProperty Name="InitiatingTime" ParameterName="InitiatingTime" />
                   <ScalarProperty Name="InitiatingTaskId" ParameterName="InitiatingTaskId" />
@@ -36650,7 +36654,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="TaskRunStateId" ParameterName="TaskRunStateId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="Notes" ParameterName="Notes" Version="Current" />
                   <ScalarProperty Name="CompletionTime" ParameterName="CompletionTime" Version="Current" />
                   <ScalarProperty Name="InitiatingTime" ParameterName="InitiatingTime" Version="Current" />
                   <ScalarProperty Name="InitiatingTaskId" ParameterName="InitiatingTaskId" Version="Current" />
@@ -36707,6 +36710,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="TaskStates">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TaskState">
               <MappingFragment StoreEntitySet="TaskState">
+                <ScalarProperty Name="Acknowledged" ColumnName="Acknowledged" />
                 <ScalarProperty Name="CompletionTime" ColumnName="CompletionTime" />
                 <ScalarProperty Name="InitiatingTime" ColumnName="InitiatingTime" />
                 <ScalarProperty Name="RetryAttempts" ColumnName="RetryAttempts" />
@@ -36722,6 +36726,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TaskState">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TaskState_Insert">
+                  <ScalarProperty Name="Acknowledged" ParameterName="Acknowledged" />
                   <ScalarProperty Name="CompletionTime" ParameterName="CompletionTime" />
                   <ScalarProperty Name="InitiatingTime" ParameterName="InitiatingTime" />
                   <ScalarProperty Name="RetryAttempts" ParameterName="RetryAttempts" />
@@ -36734,6 +36739,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TaskState_Update">
+                  <ScalarProperty Name="Acknowledged" ParameterName="Acknowledged" Version="Current" />
                   <ScalarProperty Name="CompletionTime" ParameterName="CompletionTime" Version="Current" />
                   <ScalarProperty Name="InitiatingTime" ParameterName="InitiatingTime" Version="Current" />
                   <ScalarProperty Name="RetryAttempts" ParameterName="RetryAttempts" Version="Current" />
@@ -36757,6 +36763,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="TaskAlerts">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TaskAlert">
               <MappingFragment StoreEntitySet="TaskAlert">
+                <ScalarProperty Name="ApplyToSubTask" ColumnName="ApplyToSubTask" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -36768,6 +36775,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TaskAlert">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.TaskAlert_Insert">
+                  <ScalarProperty Name="ApplyToSubTask" ParameterName="ApplyToSubTask" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="TaskId" ParameterName="TaskId" />
                   <ScalarProperty Name="TaskAlertTypeId" ParameterName="TaskAlertTypeId" />
@@ -36776,6 +36784,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.TaskAlert_Update">
+                  <ScalarProperty Name="ApplyToSubTask" ParameterName="ApplyToSubTask" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="TaskId" ParameterName="TaskId" Version="Current" />
@@ -36839,6 +36848,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MessageQueue_GetMinStartDate" FunctionName="KeeleyModel.Store.MessageQueue_GetMinStartDate" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

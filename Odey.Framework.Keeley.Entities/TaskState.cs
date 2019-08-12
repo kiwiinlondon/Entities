@@ -36,6 +36,8 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime InitiatingTime { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> CompletionTime { get; set; }
+    	[DataMember]
+        public bool Acknowledged { get; set; }
     
         [DataMember]
         public virtual Task Task { get; set; }

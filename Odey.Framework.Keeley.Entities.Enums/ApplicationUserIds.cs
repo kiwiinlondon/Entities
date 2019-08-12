@@ -12,7 +12,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Pulse = 50,
         [EnumMember]
-        KeeyeyServiceUser = 54,
+        KeeleyServiceUser = 54,
 
         //add PMs and Traders
         [EnumMember]
