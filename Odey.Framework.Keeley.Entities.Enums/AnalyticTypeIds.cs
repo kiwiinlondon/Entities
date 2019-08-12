@@ -146,8 +146,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ROE = 57,
 
         [EnumMember]
-        DailyMasterReturn = 58,
-        [EnumMember]
         DailyValuationReturn = 59
     }
 }
