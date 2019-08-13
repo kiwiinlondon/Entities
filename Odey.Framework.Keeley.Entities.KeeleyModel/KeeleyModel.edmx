@@ -2793,6 +2793,21 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="TaskMessage">
+          <Key>
+            <PropertyRef Name="TaskMessageId" />
+          </Key>
+          <Property Name="TaskMessageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskId" Type="int" Nullable="false" />
+          <Property Name="Message" Type="varchar(max)" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="InitiatingEntityId" Type="int" />
+          <Property Name="InitiatingEntityTypeId" Type="int" />
+          <Property Name="InitiatingTaskId" Type="int" />
+          <Property Name="InitiatingTaskRunId" Type="int" />
+        </EntityType>
         <EntityType Name="TaskParameter">
           <Key>
             <PropertyRef Name="TaskParameterId" />
@@ -6356,6 +6371,66 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="TaskDependency">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__Initi__69F03D8E">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="0..1" />
+          <End Role="TaskMessage" Type="Self.TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="InitiatingEntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__Initi__6AE461C7">
+          <End Role="Task" Type="Self.Task" Multiplicity="0..1" />
+          <End Role="TaskMessage" Type="Self.TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskId" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="InitiatingTaskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__Initi__6BD88600">
+          <End Role="TaskRun" Type="Self.TaskRun" Multiplicity="0..1" />
+          <End Role="TaskMessage" Type="Self.TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskRun">
+              <PropertyRef Name="TaskRunId" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="InitiatingTaskRunId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__TaskI__6807F51C">
+          <End Role="Task" Type="Self.Task" Multiplicity="1" />
+          <End Role="TaskMessage" Type="Self.TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskId" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="TaskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__Updat__68FC1955">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="TaskMessage" Type="Self.TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="TaskMessage">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -13577,6 +13652,34 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="TaskMessage_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TaskMessageId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TaskMessage_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TaskId" Type="int" Mode="In" />
+          <Parameter Name="Message" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="InitiatingEntityId" Type="int" Mode="In" />
+          <Parameter Name="InitiatingEntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="InitiatingTaskId" Type="int" Mode="In" />
+          <Parameter Name="InitiatingTaskRunId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TaskMessage_Test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="message" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="TaskMessage_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TaskMessageId" Type="int" Mode="In" />
+          <Parameter Name="TaskId" Type="int" Mode="In" />
+          <Parameter Name="Message" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="InitiatingEntityId" Type="int" Mode="In" />
+          <Parameter Name="InitiatingEntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="InitiatingTaskId" Type="int" Mode="In" />
+          <Parameter Name="InitiatingTaskRunId" Type="int" Mode="In" />
+        </Function>
         <Function Name="TaskParameter_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskParameterId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -14024,6 +14127,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="TaskAlert" EntityType="Self.TaskAlert" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaskAlertConfiguration" EntityType="Self.TaskAlertConfiguration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaskDependency" EntityType="Self.TaskDependency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskMessage" EntityType="Self.TaskMessage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaskParameter" EntityType="Self.TaskParameter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaskResult" EntityType="Self.TaskResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaskRun" EntityType="Self.TaskRun" Schema="dbo" store:Type="Tables" />
@@ -15203,6 +15307,26 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__TaskDepen__Updat__3DF1BFBF" Association="Self.FK__TaskDepen__Updat__3DF1BFBF">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="TaskDependency" EntitySet="TaskDependency" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__Initi__69F03D8E" Association="Self.FK__TaskMessa__Initi__69F03D8E">
+            <End Role="EntityType" EntitySet="EntityType" />
+            <End Role="TaskMessage" EntitySet="TaskMessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__Initi__6AE461C7" Association="Self.FK__TaskMessa__Initi__6AE461C7">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="TaskMessage" EntitySet="TaskMessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__Initi__6BD88600" Association="Self.FK__TaskMessa__Initi__6BD88600">
+            <End Role="TaskRun" EntitySet="TaskRun" />
+            <End Role="TaskMessage" EntitySet="TaskMessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__TaskI__6807F51C" Association="Self.FK__TaskMessa__TaskI__6807F51C">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="TaskMessage" EntitySet="TaskMessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__Updat__68FC1955" Association="Self.FK__TaskMessa__Updat__68FC1955">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="TaskMessage" EntitySet="TaskMessage" />
           </AssociationSet>
           <AssociationSet Name="FK__TaskParam__TaskI__43AA9915" Association="Self.FK__TaskParam__TaskI__43AA9915">
             <End Role="Task" EntitySet="Task" />
@@ -18602,6 +18726,30 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="TaskAlertConfiguration" EntitySet="TaskAlertConfigurations" />
           </AssociationSet>
           <FunctionImport Name="MessageQueue_GetMinStartDate" ReturnType="Collection(DateTime)" />
+          <EntitySet Name="TaskMessages" EntityType="Odey.Framework.Keeley.Entities.TaskMessage" />
+          <AssociationSet Name="FK__TaskMessa__Updat__68FC1955" Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Updat__68FC1955">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="TaskMessage" EntitySet="TaskMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__Initi__69F03D8E" Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Initi__69F03D8E">
+            <End Role="EntityType" EntitySet="EntityTypes" />
+            <End Role="TaskMessage" EntitySet="TaskMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__Initi__6AE461C7" Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Initi__6AE461C7">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="TaskMessage" EntitySet="TaskMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__TaskI__6807F51C" Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__TaskI__6807F51C">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="TaskMessage" EntitySet="TaskMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaskMessa__Initi__6BD88600" Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Initi__6BD88600">
+            <End Role="TaskRun" EntitySet="TaskRuns" />
+            <End Role="TaskMessage" EntitySet="TaskMessages" />
+          </AssociationSet>
+          <FunctionImport Name="TaskMessage_Test">
+            <Parameter Name="message" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -24824,7 +24972,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="FullyQualifiedName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="EntityProperties" Relationship="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK" FromRole="EntityType" ToRole="EntityProperty" />
           <NavigationProperty Name="FactorRelationships" Relationship="Odey.Framework.Keeley.Entities.fk_factor_relationship_entity_type" FromRole="EntityType" ToRole="FactorRelationship" />
-          <NavigationProperty Name="EntityProperties1" Relationship="Odey.Framework.Keeley.Entities.FK__EntityPro__Looku__254F63D0" FromRole="EntityType" ToRole="EntityProperty" />
           </EntityType>
         <Association Name="EntityTypeUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -28373,6 +28520,82 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="TaskAlertConfiguration">
               <PropertyRef Name="TaskAlertId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TaskMessage">
+          <Key>
+            <PropertyRef Name="TaskMessageId" />
+          </Key>
+          <Property Name="TaskMessageId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="TaskId" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="InitiatingEntityId" Type="Int32" />
+          <Property Name="InitiatingEntityTypeId" Type="Int32" />
+          <Property Name="InitiatingTaskId" Type="Int32" />
+          <Property Name="InitiatingTaskRunId" Type="Int32" />
+          <NavigationProperty Name="Task" Relationship="Odey.Framework.Keeley.Entities.FK__TaskMessa__TaskI__6807F51C" FromRole="TaskMessage" ToRole="Task" />
+        </EntityType>
+        <Association Name="FK__TaskMessa__Updat__68FC1955">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.TaskMessage" Role="TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__Initi__69F03D8E">
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.TaskMessage" Role="TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="InitiatingEntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__Initi__6AE461C7">
+          <End Type="Odey.Framework.Keeley.Entities.Task" Role="Task" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.TaskMessage" Role="TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskId" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="InitiatingTaskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__TaskI__6807F51C">
+          <End Type="Odey.Framework.Keeley.Entities.Task" Role="Task" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.TaskMessage" Role="TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskId" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="TaskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaskMessa__Initi__6BD88600">
+          <End Type="Odey.Framework.Keeley.Entities.TaskRun" Role="TaskRun" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.TaskMessage" Role="TaskMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskRun">
+              <PropertyRef Name="TaskRunId" />
+            </Principal>
+            <Dependent Role="TaskMessage">
+              <PropertyRef Name="InitiatingTaskRunId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -36849,6 +37072,57 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="MessageQueue_GetMinStartDate" FunctionName="KeeleyModel.Store.MessageQueue_GetMinStartDate" />
+          <EntitySetMapping Name="TaskMessages">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TaskMessage">
+              <MappingFragment StoreEntitySet="TaskMessage">
+                <ScalarProperty Name="InitiatingTaskRunId" ColumnName="InitiatingTaskRunId" />
+                <ScalarProperty Name="InitiatingTaskId" ColumnName="InitiatingTaskId" />
+                <ScalarProperty Name="InitiatingEntityTypeId" ColumnName="InitiatingEntityTypeId" />
+                <ScalarProperty Name="InitiatingEntityId" ColumnName="InitiatingEntityId" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+                <ScalarProperty Name="TaskMessageId" ColumnName="TaskMessageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.TaskMessage">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.TaskMessage_Insert">
+                  <ScalarProperty Name="InitiatingTaskRunId" ParameterName="InitiatingTaskRunId" />
+                  <ScalarProperty Name="InitiatingTaskId" ParameterName="InitiatingTaskId" />
+                  <ScalarProperty Name="InitiatingEntityTypeId" ParameterName="InitiatingEntityTypeId" />
+                  <ScalarProperty Name="InitiatingEntityId" ParameterName="InitiatingEntityId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Message" ParameterName="Message" />
+                  <ScalarProperty Name="TaskId" ParameterName="TaskId" />
+                  <ResultBinding Name="TaskMessageId" ColumnName="TaskMessageId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.TaskMessage_Update">
+                  <ScalarProperty Name="InitiatingTaskRunId" ParameterName="InitiatingTaskRunId" Version="Current" />
+                  <ScalarProperty Name="InitiatingTaskId" ParameterName="InitiatingTaskId" Version="Current" />
+                  <ScalarProperty Name="InitiatingEntityTypeId" ParameterName="InitiatingEntityTypeId" Version="Current" />
+                  <ScalarProperty Name="InitiatingEntityId" ParameterName="InitiatingEntityId" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="Message" ParameterName="Message" Version="Current" />
+                  <ScalarProperty Name="TaskId" ParameterName="TaskId" Version="Current" />
+                  <ScalarProperty Name="TaskMessageId" ParameterName="TaskMessageId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.TaskMessage_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="TaskMessageId" ParameterName="TaskMessageId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="TaskMessage_Test" FunctionName="KeeleyModel.Store.TaskMessage_Test" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -42732,6 +43006,12 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskAlert__Updat__0CE47410" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskAlert__TaskI__044F2E0F" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskAlert__TaskA__0BF04FD7" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.TaskMessage" Width="3" PointX="20.5" PointY="62.125" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Updat__68FC1955" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Initi__69F03D8E" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Initi__6AE461C7" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__TaskI__6807F51C" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Initi__6BD88600" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -204,6 +204,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<TaskState> TaskStates { get; set; }
         public DbSet<TaskAlert> TaskAlerts { get; set; }
         public DbSet<TaskAlertConfiguration> TaskAlertConfigurations { get; set; }
+        public DbSet<TaskMessage> TaskMessages { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -818,6 +819,15 @@ namespace Odey.Framework.Keeley.Entities
         public virtual ObjectResult<Nullable<System.DateTime>> MessageQueue_GetMinStartDate()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("MessageQueue_GetMinStartDate");
+        }
+    
+        public virtual int TaskMessage_Test(string message)
+        {
+            var messageParameter = message != null ?
+                new ObjectParameter("message", message) :
+                new ObjectParameter("message", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("TaskMessage_Test", messageParameter);
         }
     }
 }

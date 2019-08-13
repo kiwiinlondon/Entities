@@ -21,6 +21,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OnExceededMaxRetry = 5,
         [EnumMember]
-        OnQueuingOfRun = 6
+        OnQueuingOfRun = 6,
+        [EnumMember]
+        OnCompletionOfErroredTask = 7
     }
 }
