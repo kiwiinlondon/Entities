@@ -74,6 +74,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CreditSwaption = 93,
         [EnumMember]
-        OptionOnBondFuture =95
+        OptionOnBondFuture =95,
+        [EnumMember]
+        CorporateLoan = 98
     }
 }
