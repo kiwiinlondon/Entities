@@ -34,6 +34,8 @@ namespace Odey.Framework.Keeley.Entities
         public int TaskRunId { get; set; }
     	[DataMember]
         public Nullable<int> AffectedEntityCount { get; set; }
+    	[DataMember]
+        public int RetryAttempt { get; set; }
     
         [DataMember]
         public virtual Task Task { get; set; }

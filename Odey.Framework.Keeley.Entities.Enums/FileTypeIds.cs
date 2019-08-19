@@ -127,7 +127,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BloombergOOFReferenceAsset = 62,
         [EnumMember]
-        JPMFinancingAccrual = 63,
+        JPMFinancing = 63,
         [EnumMember]
         UBSFinancing = 64,
         [EnumMember]
@@ -136,6 +136,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         PortPriceIndexMorningstar = 66,
         [EnumMember]
         ArkusRiskAnalytic = 67,
-
+        [EnumMember]
+        GSFinancing = 68,
+        [EnumMember]
+        BAMLFinancing = 69
     }
 }

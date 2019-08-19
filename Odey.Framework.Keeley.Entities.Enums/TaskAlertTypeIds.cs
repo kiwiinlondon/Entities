@@ -25,6 +25,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OnCompletionOfErroredTask = 7,
         [EnumMember]
-        OnCompletionOfTimedOutTask =8
+        OnCompletionOfTimedOutTask =8,
+        [EnumMember]
+        OnCompletionWithErrors = 9
     }
 }
