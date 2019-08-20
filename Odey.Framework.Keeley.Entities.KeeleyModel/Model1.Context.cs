@@ -829,5 +829,15 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("TaskMessage_Test", messageParameter);
         }
+    
+        public virtual ObjectResult<Financing> Financing_GetNotApplied()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Financing>("Financing_GetNotApplied");
+        }
+    
+        public virtual ObjectResult<Financing> Financing_GetNotApplied(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Financing>("Financing_GetNotApplied", mergeOption);
+        }
     }
 }

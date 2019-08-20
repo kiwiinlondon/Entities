@@ -235,6 +235,8 @@
           <Property Name="ForwardFXRateId" Type="int" />
           <Property Name="OriginalNotionalCost" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CostPrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="AllinAccrual" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="AllInRate" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -2301,6 +2303,8 @@
           <Property Name="IndicativePrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ValuationOriginalDeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="PriceIsForDay" Type="bit" />
+          <Property Name="FinancingId" Type="int" />
+          <Property Name="FinancingDataAdded" Type="bit" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -9680,6 +9684,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ForwardFXRateId" Type="int" Mode="In" />
           <Parameter Name="OriginalNotionalCost" Type="numeric" Mode="In" />
           <Parameter Name="CostPrice" Type="numeric" Mode="In" />
+          <Parameter Name="AllinAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="AllInRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9729,6 +9735,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ForwardFXRateId" Type="int" Mode="In" />
           <Parameter Name="OriginalNotionalCost" Type="numeric" Mode="In" />
           <Parameter Name="CostPrice" Type="numeric" Mode="In" />
+          <Parameter Name="AllinAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="AllInRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -11095,6 +11103,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
         </Function>
+        <Function Name="Financing_GetNotApplied" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="Financing_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
@@ -12740,6 +12749,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IndicativePrice" Type="numeric" Mode="In" />
           <Parameter Name="ValuationOriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="PriceIsForDay" Type="bit" Mode="In" />
+          <Parameter Name="FinancingId" Type="int" Mode="In" />
+          <Parameter Name="FinancingDataAdded" Type="bit" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -12859,6 +12870,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IndicativePrice" Type="numeric" Mode="In" />
           <Parameter Name="ValuationOriginalDeltaNetCostInstrumentCurrency" Type="numeric" Mode="In" />
           <Parameter Name="PriceIsForDay" Type="bit" Mode="In" />
+          <Parameter Name="FinancingId" Type="int" Mode="In" />
+          <Parameter Name="FinancingDataAdded" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -18753,6 +18766,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <FunctionImport Name="TaskMessage_Test">
           <Parameter Name="message" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="Financing_GetNotApplied" EntitySet="Financings" ReturnType="Collection(Odey.Framework.Keeley.Entities.Financing)" />
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -20813,6 +20827,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="IndicativeChangeId" Type="Int32" />
           <Property Name="ValuationOriginalDeltaNetCostInstrumentCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="PriceIsForDay" Type="Boolean" />
+          <Property Name="FinancingId" Type="Int32" />
+          <Property Name="FinancingDataAdded" Type="Boolean" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -26522,6 +26538,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="ForwardFXRateId" Type="Int32" />
           <Property Name="OriginalNotionalCost" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CostPrice" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="AllinAccrual" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="AllInRate" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -28603,6 +28621,32 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="Financing_GetNotApplied_Result">
+          <Property Type="Int32" Name="FinancingId" Nullable="false" />
+          <Property Type="Int32" Name="FundId" Nullable="false" />
+          <Property Type="Int32" Name="InstrumentMarketId" Nullable="false" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="CurrencyId" Nullable="false" />
+          <Property Type="Int32" Name="CustodianId" Nullable="false" />
+          <Property Type="Decimal" Name="NetPosition" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="Price" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="Notional" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="FinancingRate" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="BorrowRate" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="AllInRate" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="FinancingAccrual" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="BorrowAccrual" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="AllInAccrual" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" />
+          <Property Type="Decimal" Name="OverborrowNotional" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OverborrowUnits" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OverborrowRate" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OverborrowAccrual" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="MarginInterest" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="CashInterest" Nullable="true" Precision="27" Scale="8" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -30857,6 +30901,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="FinancingDataAdded" ColumnName="FinancingDataAdded" />
+                <ScalarProperty Name="FinancingId" ColumnName="FinancingId" />
                 <ScalarProperty Name="PriceIsForDay" ColumnName="PriceIsForDay" />
                 <ScalarProperty Name="ValuationOriginalDeltaNetCostInstrumentCurrency" ColumnName="ValuationOriginalDeltaNetCostInstrumentCurrency" />
                 <ScalarProperty Name="IndicativeChangeId" ColumnName="IndicativeChangeId" />
@@ -30977,6 +31023,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="FinancingDataAdded" ParameterName="FinancingDataAdded" />
+                  <ScalarProperty Name="FinancingId" ParameterName="FinancingId" />
                   <ScalarProperty Name="PriceIsForDay" ParameterName="PriceIsForDay" />
                   <ScalarProperty Name="ValuationOriginalDeltaNetCostInstrumentCurrency" ParameterName="ValuationOriginalDeltaNetCostInstrumentCurrency" />
                   <ScalarProperty Name="IndicativeChangeId" ParameterName="IndicativeChangeId" />
@@ -31094,6 +31142,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="FinancingDataAdded" ParameterName="FinancingDataAdded" Version="Current" />
+                  <ScalarProperty Name="FinancingId" ParameterName="FinancingId" Version="Current" />
                   <ScalarProperty Name="PriceIsForDay" ParameterName="PriceIsForDay" Version="Current" />
                   <ScalarProperty Name="ValuationOriginalDeltaNetCostInstrumentCurrency" ParameterName="ValuationOriginalDeltaNetCostInstrumentCurrency" Version="Current" />
                   <ScalarProperty Name="IndicativeChangeId" ParameterName="IndicativeChangeId" Version="Current" />
@@ -35599,6 +35649,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
+                <ScalarProperty Name="AllInRate" ColumnName="AllInRate" />
+                <ScalarProperty Name="AllinAccrual" ColumnName="AllinAccrual" />
                 <ScalarProperty Name="CostPrice" ColumnName="CostPrice" />
                 <ScalarProperty Name="OriginalNotionalCost" ColumnName="OriginalNotionalCost" />
                 <ScalarProperty Name="ForwardFXRateId" ColumnName="ForwardFXRateId" />
@@ -35649,6 +35701,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="AllInRate" ParameterName="AllInRate" />
+                  <ScalarProperty Name="AllinAccrual" ParameterName="AllinAccrual" />
                   <ScalarProperty Name="CostPrice" ParameterName="CostPrice" />
                   <ScalarProperty Name="OriginalNotionalCost" ParameterName="OriginalNotionalCost" />
                   <ScalarProperty Name="ForwardFXRateId" ParameterName="ForwardFXRateId" />
@@ -35696,6 +35750,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="AllInRate" ParameterName="AllInRate" Version="Current" />
+                  <ScalarProperty Name="AllinAccrual" ParameterName="AllinAccrual" Version="Current" />
                   <ScalarProperty Name="CostPrice" ParameterName="CostPrice" Version="Current" />
                   <ScalarProperty Name="OriginalNotionalCost" ParameterName="OriginalNotionalCost" Version="Current" />
                   <ScalarProperty Name="ForwardFXRateId" ParameterName="ForwardFXRateId" Version="Current" />
@@ -37130,6 +37186,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="TaskMessage_Test" FunctionName="KeeleyModel.Store.TaskMessage_Test" />
+          <FunctionImportMapping FunctionImportName="Financing_GetNotApplied" FunctionName="KeeleyModel.Store.Financing_GetNotApplied">
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -37152,7 +37210,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="61">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="31">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
