@@ -697,6 +697,21 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="EnforcePositionEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="AmendmentNumber" Type="int" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="int" Nullable="false" />
+          <Property Name="IsCancelled" Type="bit" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="InputDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="EntityAnalytic">
           <Key>
             <PropertyRef Name="EntityAnalyticId" />
@@ -2305,6 +2320,7 @@
           <Property Name="PriceIsForDay" Type="bit" />
           <Property Name="FinancingId" Type="int" />
           <Property Name="FinancingDataAdded" Type="bit" />
+          <Property Name="AllInAccrualInstrument" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -5357,6 +5373,54 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="ClientTrade1">
               <PropertyRef Name="RelatedTradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EnforcePo__Curre__1F231FDC">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="EnforcePositionEvent" Type="Self.EnforcePositionEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EnforcePo__Event__1D3AD76A">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="EnforcePositionEvent" Type="Self.EnforcePositionEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EnforcePo__Instr__1E2EFBA3">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="EnforcePositionEvent" Type="Self.EnforcePositionEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EnforcePo__Updat__20174415">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="EnforcePositionEvent" Type="Self.EnforcePositionEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10453,6 +10517,32 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="EnforcePositionEvent_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EnforcePositionEvent_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="AmendmentNumber" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="IsCancelled" Type="bit" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="InputDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="EnforcePositionEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="AmendmentNumber" Type="int" Mode="In" />
+          <Parameter Name="InstrumentMarketId" Type="int" Mode="In" />
+          <Parameter Name="IsCancelled" Type="bit" Mode="In" />
+          <Parameter Name="CurrencyId" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="InputDate" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="EntityAnalytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EntityAnalyticId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -12751,6 +12841,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="PriceIsForDay" Type="bit" Mode="In" />
           <Parameter Name="FinancingId" Type="int" Mode="In" />
           <Parameter Name="FinancingDataAdded" Type="bit" Mode="In" />
+          <Parameter Name="AllInAccrualInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -12872,6 +12963,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="PriceIsForDay" Type="bit" Mode="In" />
           <Parameter Name="FinancingId" Type="int" Mode="In" />
           <Parameter Name="FinancingDataAdded" Type="bit" Mode="In" />
+          <Parameter Name="AllInAccrualInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -14022,6 +14114,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="Custodian" EntityType="Self.Custodian" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DealingDateDefinition" EntityType="Self.DealingDateDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DerivedAssetClass" EntityType="Self.DerivedAssetClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnforcePositionEvent" EntityType="Self.EnforcePositionEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EntityAnalytic" EntityType="Self.EntityAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EntityProperty" EntityType="Self.EntityProperty" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EntityPropertyOverride" EntityType="Self.EntityPropertyOverride" Schema="dbo" store:Type="Tables" />
@@ -14983,6 +15076,22 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__ClientTra__Relat__41A398E8" Association="Self.FK__ClientTra__Relat__41A398E8">
             <End Role="ClientTrade" EntitySet="ClientTrade" />
             <End Role="ClientTrade1" EntitySet="ClientTrade" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EnforcePo__Curre__1F231FDC" Association="Self.FK__EnforcePo__Curre__1F231FDC">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EnforcePo__Event__1D3AD76A" Association="Self.FK__EnforcePo__Event__1D3AD76A">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EnforcePo__Instr__1E2EFBA3" Association="Self.FK__EnforcePo__Instr__1E2EFBA3">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EnforcePo__Updat__20174415" Association="Self.FK__EnforcePo__Updat__20174415">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvent" />
           </AssociationSet>
           <AssociationSet Name="FK__EntityPro__Looku__254F63D0" Association="Self.FK__EntityPro__Looku__254F63D0">
             <End Role="EntityType" EntitySet="EntityType" />
@@ -18767,6 +18876,23 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Parameter Name="message" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Financing_GetNotApplied" EntitySet="Financings" ReturnType="Collection(Odey.Framework.Keeley.Entities.Financing)" />
+          <EntitySet Name="EnforcePositionEvents" EntityType="Odey.Framework.Keeley.Entities.EnforcePositionEvent" />
+          <AssociationSet Name="FK__EnforcePo__Updat__20174415" Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Updat__20174415">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EnforcePo__Curre__1F231FDC" Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Curre__1F231FDC">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EnforcePo__Event__1D3AD76A" Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Event__1D3AD76A">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EnforcePo__Instr__1E2EFBA3" Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Instr__1E2EFBA3">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvents" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -20829,6 +20955,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="PriceIsForDay" Type="Boolean" />
           <Property Name="FinancingId" Type="Int32" />
           <Property Name="FinancingDataAdded" Type="Boolean" />
+          <Property Name="AllInAccrualInstrument" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -28647,6 +28774,69 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Decimal" Name="MarginInterest" Nullable="true" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="CashInterest" Nullable="true" Precision="27" Scale="8" />
         </ComplexType>
+        <EntityType Name="EnforcePositionEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AmendmentNumber" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentMarketId" Type="Int32" Nullable="false" />
+          <Property Name="IsCancelled" Type="Boolean" Nullable="false" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="InputDate" Type="DateTime" Nullable="false" Precision="3" />
+          </EntityType>
+        <Association Name="FK__EnforcePo__Updat__20174415">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EnforcePositionEvent" Role="EnforcePositionEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EnforcePo__Curre__1F231FDC">
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EnforcePositionEvent" Role="EnforcePositionEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EnforcePo__Event__1D3AD76A">
+          <End Type="Odey.Framework.Keeley.Entities.Event" Role="Event" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EnforcePositionEvent" Role="EnforcePositionEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EnforcePo__Instr__1E2EFBA3">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EnforcePositionEvent" Role="EnforcePositionEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -30901,6 +31091,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="AllInAccrualInstrument" ColumnName="AllInAccrualInstrument" />
                 <ScalarProperty Name="FinancingDataAdded" ColumnName="FinancingDataAdded" />
                 <ScalarProperty Name="FinancingId" ColumnName="FinancingId" />
                 <ScalarProperty Name="PriceIsForDay" ColumnName="PriceIsForDay" />
@@ -31023,6 +31214,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="AllInAccrualInstrument" ParameterName="AllInAccrualInstrument" />
                   <ScalarProperty Name="FinancingDataAdded" ParameterName="FinancingDataAdded" />
                   <ScalarProperty Name="FinancingId" ParameterName="FinancingId" />
                   <ScalarProperty Name="PriceIsForDay" ParameterName="PriceIsForDay" />
@@ -31142,6 +31334,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="AllInAccrualInstrument" ParameterName="AllInAccrualInstrument" Version="Current" />
                   <ScalarProperty Name="FinancingDataAdded" ParameterName="FinancingDataAdded" Version="Current" />
                   <ScalarProperty Name="FinancingId" ParameterName="FinancingId" Version="Current" />
                   <ScalarProperty Name="PriceIsForDay" ParameterName="PriceIsForDay" Version="Current" />
@@ -37188,6 +37381,56 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <FunctionImportMapping FunctionImportName="TaskMessage_Test" FunctionName="KeeleyModel.Store.TaskMessage_Test" />
           <FunctionImportMapping FunctionImportName="Financing_GetNotApplied" FunctionName="KeeleyModel.Store.Financing_GetNotApplied">
           </FunctionImportMapping>
+          <EntitySetMapping Name="EnforcePositionEvents">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EnforcePositionEvent">
+              <MappingFragment StoreEntitySet="EnforcePositionEvent">
+                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="IsCancelled" ColumnName="IsCancelled" />
+                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
+                <ScalarProperty Name="AmendmentNumber" ColumnName="AmendmentNumber" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EnforcePositionEvent">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.EnforcePositionEvent_Insert">
+                  <ScalarProperty Name="InputDate" ParameterName="InputDate" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
+                  <ScalarProperty Name="IsCancelled" ParameterName="IsCancelled" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
+                  <ScalarProperty Name="AmendmentNumber" ParameterName="AmendmentNumber" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.EnforcePositionEvent_Update">
+                  <ScalarProperty Name="InputDate" ParameterName="InputDate" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
+                  <ScalarProperty Name="IsCancelled" ParameterName="IsCancelled" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="AmendmentNumber" ParameterName="AmendmentNumber" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.EnforcePositionEvent_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -37210,7 +37453,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="31">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="93">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -43077,6 +43320,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Initi__6AE461C7" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__TaskI__6807F51C" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__TaskMessa__Initi__6BD88600" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.EnforcePositionEvent" Width="1.5" PointX="22.5" PointY="278.125" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Updat__20174415" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Curre__1F231FDC" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Event__1D3AD76A" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Instr__1E2EFBA3" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

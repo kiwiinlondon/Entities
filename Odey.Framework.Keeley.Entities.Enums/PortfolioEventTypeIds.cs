@@ -38,7 +38,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PNLRoll = 15,
         [EnumMember]
-        AccountTransfer = 16
+        AccountTransfer = 16,
+        [EnumMember]
+        EnforcePosition = 17
     }
 }
 

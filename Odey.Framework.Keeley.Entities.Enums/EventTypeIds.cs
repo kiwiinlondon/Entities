@@ -21,5 +21,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         TransferEvent = 13,
         [EnumMember]
         InterestRateSwapEvent = 14,
+        [EnumMember]
+        EnforcePositionEvent = 15,
     }
 }

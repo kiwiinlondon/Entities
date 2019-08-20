@@ -257,6 +257,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FinancingId { get; set; }
     	[DataMember]
         public Nullable<bool> FinancingDataAdded { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AllInAccrualInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
