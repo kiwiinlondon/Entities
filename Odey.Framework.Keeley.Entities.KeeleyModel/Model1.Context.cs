@@ -69,7 +69,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ExtractOutputType> ExtractOutputTypes { get; set; }
         public DbSet<ExtractConfiguration> ExtractConfigurations { get; set; }
         public DbSet<PortfolioEvent> PortfolioEvents { get; set; }
-        public DbSet<PortfolioSettlementDate> PortfolioSettlementDates { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<EntityRankingScheme> EntityRankingSchemes { get; set; }
@@ -272,15 +271,6 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("UpdateUserId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("RollPortfolio", updateUserIdParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<System.DateTime>> RollPortfolioSettlementDate(Nullable<int> updateUserId)
-        {
-            var updateUserIdParameter = updateUserId.HasValue ?
-                new ObjectParameter("UpdateUserId", updateUserId) :
-                new ObjectParameter("UpdateUserId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("RollPortfolioSettlementDate", updateUserIdParameter);
         }
     
         public virtual ObjectResult<Position> PositionGetForFundIdExcludingCurrencies(Nullable<int> fundId)

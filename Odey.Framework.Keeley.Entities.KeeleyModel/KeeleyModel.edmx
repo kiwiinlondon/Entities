@@ -2324,6 +2324,11 @@
           <Property Name="FinancingDataAdded" Type="bit" />
           <Property Name="AllInAccrualInstrument" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MustExist" Type="bit" />
+          <Property Name="SettledNetPosition" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="SettledNotional" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="SettledNotionalInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="SettledCostNotional" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="SettledCostNotionalInstrument" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2409,6 +2414,7 @@
           <Property Name="UnadjustedNetPosition" Type="numeric" Precision="27" Scale="8" />
           <Property Name="Revalue" Type="bit" />
           <Property Name="TradeDate" Type="datetime" Nullable="false" />
+          <Property Name="TodayZeroOutAccrual" Type="bit" />
         </EntityType>
         <EntityType Name="PortfolioEventFX">
           <Key>
@@ -2446,27 +2452,6 @@
           <Property Name="PortfolioRollDateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PortfolioAggregationLevelId" Type="int" Nullable="false" />
           <Property Name="RollDate" Type="datetime" Nullable="false" />
-          <Property Name="StartDt" Type="datetime" Nullable="false" />
-          <Property Name="UpdateUserID" Type="int" Nullable="false" />
-          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PortfolioSettlementDate">
-          <Key>
-            <PropertyRef Name="PortfolioSettlementDateId" />
-          </Key>
-          <Property Name="PortfolioSettlementDateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PositionId" Type="int" Nullable="false" />
-          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
-          <Property Name="NetPosition" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="NetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="NetCostBookCurrency" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="DeltaNetCostInstrumentCurrency" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="DeltaNetCostBookCurrency" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="TodayNetPostionChange" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="TodayDeltaNetCostChangeInstrumentCurrency" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="TodayDeltaNetCostChangeBookCurrency" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="TodayNetCostChangeInstrumentCurrency" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="TodayNetCostChangeBookCurrency" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -8679,30 +8664,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="PortfolioSettlementDatePositionAccountIDFK">
-          <End Role="Position" Type="Self.Position" Multiplicity="1" />
-          <End Role="PortfolioSettlementDate" Type="Self.PortfolioSettlementDate" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Position">
-              <PropertyRef Name="PositionId" />
-            </Principal>
-            <Dependent Role="PortfolioSettlementDate">
-              <PropertyRef Name="PositionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PortfolioSettlementDateUpdateUserIDFK">
-          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
-          <End Role="PortfolioSettlementDate" Type="Self.PortfolioSettlementDate" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PortfolioSettlementDate">
-              <PropertyRef Name="UpdateUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="PortfolioTradeDatePositionAccountIDFK">
           <End Role="Position" Type="Self.Position" Multiplicity="1" />
           <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
@@ -12862,6 +12823,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="FinancingDataAdded" Type="bit" Mode="In" />
           <Parameter Name="AllInAccrualInstrument" Type="numeric" Mode="In" />
           <Parameter Name="MustExist" Type="bit" Mode="In" />
+          <Parameter Name="SettledNetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="SettledNotional" Type="numeric" Mode="In" />
+          <Parameter Name="SettledNotionalInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="SettledCostNotional" Type="numeric" Mode="In" />
+          <Parameter Name="SettledCostNotionalInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -12985,6 +12951,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="FinancingDataAdded" Type="bit" Mode="In" />
           <Parameter Name="AllInAccrualInstrument" Type="numeric" Mode="In" />
           <Parameter Name="MustExist" Type="bit" Mode="In" />
+          <Parameter Name="SettledNetPosition" Type="numeric" Mode="In" />
+          <Parameter Name="SettledNotional" Type="numeric" Mode="In" />
+          <Parameter Name="SettledNotionalInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="SettledCostNotional" Type="numeric" Mode="In" />
+          <Parameter Name="SettledCostNotionalInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -13087,6 +13058,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UnadjustedNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="Revalue" Type="bit" Mode="In" />
           <Parameter Name="TradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="TodayZeroOutAccrual" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -13158,6 +13130,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UnadjustedNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="Revalue" Type="bit" Mode="In" />
           <Parameter Name="TradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="TodayZeroOutAccrual" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioEventFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventFXId" Type="int" Mode="In" />
@@ -14230,7 +14203,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="PortfolioEventFX" EntityType="Self.PortfolioEventFX" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortfolioEventType" EntityType="Self.PortfolioEventType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortfolioRollDate" EntityType="Self.PortfolioRollDate" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PortfolioSettlementDate" EntityType="Self.PortfolioSettlementDate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PositionToRebuild" EntityType="Self.PositionToRebuild" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PositionToRebuildManagement" EntityType="Self.PositionToRebuildManagement" Schema="dbo" store:Type="Tables" />
@@ -16198,14 +16170,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="PortfolioRollDate" EntitySet="PortfolioRollDate" />
           </AssociationSet>
-          <AssociationSet Name="PortfolioSettlementDatePositionAccountIDFK" Association="Self.PortfolioSettlementDatePositionAccountIDFK">
-            <End Role="Position" EntitySet="Position" />
-            <End Role="PortfolioSettlementDate" EntitySet="PortfolioSettlementDate" />
-          </AssociationSet>
-          <AssociationSet Name="PortfolioSettlementDateUpdateUserIDFK" Association="Self.PortfolioSettlementDateUpdateUserIDFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
-            <End Role="PortfolioSettlementDate" EntitySet="PortfolioSettlementDate" />
-          </AssociationSet>
           <AssociationSet Name="PortfolioTradeDatePositionAccountIDFK" Association="Self.PortfolioTradeDatePositionAccountIDFK">
             <End Role="Position" EntitySet="Position" />
             <End Role="Portfolio" EntitySet="Portfolio" />
@@ -16851,11 +16815,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="ExtractConfiguration" EntitySet="ExtractConfigurations" />
           </AssociationSet>
           <EntitySet Name="PortfolioEvents" EntityType="Odey.Framework.Keeley.Entities.PortfolioEvent" />
-          <EntitySet Name="PortfolioSettlementDates" EntityType="Odey.Framework.Keeley.Entities.PortfolioSettlementDate" />
-          <AssociationSet Name="PortfolioSettlementDateUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.PortfolioSettlementDateUpdateUserIDFK">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="PortfolioSettlementDate" EntitySet="PortfolioSettlementDates" />
-          </AssociationSet>
           <AssociationSet Name="PositionAccountMovementUserIDFK" Association="Odey.Framework.Keeley.Entities.PositionAccountMovementUserIDFK">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="PortfolioEvent" EntitySet="PortfolioEvents" />
@@ -16892,10 +16851,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="PositionAccountMovementPositionAccountIdFK" Association="Odey.Framework.Keeley.Entities.PositionAccountMovementPositionAccountIdFK">
             <End Role="Position" EntitySet="Positions" />
             <End Role="PortfolioEvent" EntitySet="PortfolioEvents" />
-          </AssociationSet>
-          <AssociationSet Name="PortfolioSettlementDatePositionAccountIDFK" Association="Odey.Framework.Keeley.Entities.PortfolioSettlementDatePositionAccountIDFK">
-            <End Role="Position" EntitySet="Positions" />
-            <End Role="PortfolioSettlementDate" EntitySet="PortfolioSettlementDates" />
           </AssociationSet>
           <EntitySet Name="Portfolios" EntityType="Odey.Framework.Keeley.Entities.Portfolio" />
           <AssociationSet Name="PortfolioTradeDateUpdateUserIDFK" Association="Odey.Framework.Keeley.Entities.PortfolioTradeDateUpdateUserIDFK">
@@ -16960,9 +16915,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="EntityRankingSchemeOrder" EntitySet="EntityRankingSchemeOrders" />
           </AssociationSet>
           <FunctionImport Name="RollPortfolio" ReturnType="Collection(DateTime)">
-          <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="RollPortfolioSettlementDate" ReturnType="Collection(DateTime)">
           <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
           </FunctionImport>
           <AssociationSet Name="EntityPropertyIdentifierTypeIDFK" Association="Odey.Framework.Keeley.Entities.EntityPropertyIdentifierTypeIDFK">
@@ -20683,40 +20635,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="UnadjustedNetPosition" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="Revalue" Type="Boolean" />
           <Property Name="TradeDate" Type="DateTime" Precision="3" Nullable="false" />
+          <Property Name="TodayZeroOutAccrual" Type="Boolean" />
         </EntityType>
-        <EntityType Name="PortfolioSettlementDate">
-          <Key>
-            <PropertyRef Name="PortfolioSettlementDateId" />
-          </Key>
-          <Property Type="Int32" Name="PortfolioSettlementDateId" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="Int32" Name="PositionId" Nullable="false" />
-          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="3" />
-          <Property Type="Decimal" Name="NetPosition" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="NetCostInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="NetCostBookCurrency" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="DeltaNetCostInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="DeltaNetCostBookCurrency" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="TodayNetPostionChange" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="TodayDeltaNetCostChangeInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="TodayDeltaNetCostChangeBookCurrency" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="TodayNetCostChangeInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="Decimal" Name="TodayNetCostChangeBookCurrency" Nullable="false" Precision="27" Scale="8" />
-          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="3" />
-          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
-          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-        </EntityType>
-        <Association Name="PortfolioSettlementDateUpdateUserIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.PortfolioSettlementDate" Role="PortfolioSettlementDate" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PortfolioSettlementDate">
-              <PropertyRef Name="UpdateUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="PositionAccountMovementUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.PortfolioEvent" Role="PortfolioEvent" Multiplicity="*" />
@@ -20842,18 +20762,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               <PropertyRef Name="PositionId" />
             </Principal>
             <Dependent Role="PortfolioEvent">
-              <PropertyRef Name="PositionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PortfolioSettlementDatePositionAccountIDFK">
-          <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.PortfolioSettlementDate" Role="PortfolioSettlementDate" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Position">
-              <PropertyRef Name="PositionId" />
-            </Principal>
-            <Dependent Role="PortfolioSettlementDate">
               <PropertyRef Name="PositionId" />
             </Dependent>
           </ReferentialConstraint>
@@ -20986,6 +20894,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="FinancingDataAdded" Type="Boolean" />
           <Property Name="AllInAccrualInstrument" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MustExist" Type="Boolean" />
+          <Property Name="SettledNetPosition" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="SettledNotional" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="SettledNotionalInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="SettledCostNotional" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="SettledCostNotionalInstrument" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -30785,6 +30698,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="TodayZeroOutAccrual" ColumnName="TodayZeroOutAccrual" />
                 <ScalarProperty Name="TradeDate" ColumnName="TradeDate" />
                 <ScalarProperty Name="Revalue" ColumnName="Revalue" />
                 <ScalarProperty Name="UnadjustedNetPosition" ColumnName="UnadjustedNetPosition" />
@@ -30860,6 +30774,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="TodayZeroOutAccrual" ParameterName="TodayZeroOutAccrual" />
                   <ScalarProperty Name="TradeDate" ParameterName="TradeDate" />
                   <ScalarProperty Name="Revalue" ParameterName="Revalue" />
                   <ScalarProperty Name="UnadjustedNetPosition" ParameterName="UnadjustedNetPosition" />
@@ -30932,6 +30847,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="TodayZeroOutAccrual" ParameterName="TodayZeroOutAccrual" Version="Current" />
                   <ScalarProperty Name="TradeDate" ParameterName="TradeDate" Version="Current" />
                   <ScalarProperty Name="Revalue" ParameterName="Revalue" Version="Current" />
                   <ScalarProperty Name="UnadjustedNetPosition" ParameterName="UnadjustedNetPosition" Version="Current" />
@@ -31012,74 +30928,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PortfolioSettlementDates">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioSettlementDate">
-              <MappingFragment StoreEntitySet="PortfolioSettlementDate">
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="TodayNetCostChangeBookCurrency" ColumnName="TodayNetCostChangeBookCurrency" />
-                <ScalarProperty Name="TodayNetCostChangeInstrumentCurrency" ColumnName="TodayNetCostChangeInstrumentCurrency" />
-                <ScalarProperty Name="TodayDeltaNetCostChangeBookCurrency" ColumnName="TodayDeltaNetCostChangeBookCurrency" />
-                <ScalarProperty Name="TodayDeltaNetCostChangeInstrumentCurrency" ColumnName="TodayDeltaNetCostChangeInstrumentCurrency" />
-                <ScalarProperty Name="TodayNetPostionChange" ColumnName="TodayNetPostionChange" />
-                <ScalarProperty Name="DeltaNetCostBookCurrency" ColumnName="DeltaNetCostBookCurrency" />
-                <ScalarProperty Name="DeltaNetCostInstrumentCurrency" ColumnName="DeltaNetCostInstrumentCurrency" />
-                <ScalarProperty Name="NetCostBookCurrency" ColumnName="NetCostBookCurrency" />
-                <ScalarProperty Name="NetCostInstrumentCurrency" ColumnName="NetCostInstrumentCurrency" />
-                <ScalarProperty Name="NetPosition" ColumnName="NetPosition" />
-                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
-                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
-                <ScalarProperty Name="PortfolioSettlementDateId" ColumnName="PortfolioSettlementDateId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioSettlementDate">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.PortfolioSettlementDate_Insert">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="TodayNetCostChangeBookCurrency" ParameterName="TodayNetCostChangeBookCurrency" />
-                  <ScalarProperty Name="TodayNetCostChangeInstrumentCurrency" ParameterName="TodayNetCostChangeInstrumentCurrency" />
-                  <ScalarProperty Name="TodayDeltaNetCostChangeBookCurrency" ParameterName="TodayDeltaNetCostChangeBookCurrency" />
-                  <ScalarProperty Name="TodayDeltaNetCostChangeInstrumentCurrency" ParameterName="TodayDeltaNetCostChangeInstrumentCurrency" />
-                  <ScalarProperty Name="TodayNetPostionChange" ParameterName="TodayNetPostionChange" />
-                  <ScalarProperty Name="DeltaNetCostBookCurrency" ParameterName="DeltaNetCostBookCurrency" />
-                  <ScalarProperty Name="DeltaNetCostInstrumentCurrency" ParameterName="DeltaNetCostInstrumentCurrency" />
-                  <ScalarProperty Name="NetCostBookCurrency" ParameterName="NetCostBookCurrency" />
-                  <ScalarProperty Name="NetCostInstrumentCurrency" ParameterName="NetCostInstrumentCurrency" />
-                  <ScalarProperty Name="NetPosition" ParameterName="NetPosition" />
-                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
-                  <ScalarProperty Name="PositionId" ParameterName="PositionId" />
-                  <ResultBinding Name="PortfolioSettlementDateId" ColumnName="PortfolioSettlementDateId" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioSettlementDate_Update">
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
-                  <ScalarProperty Name="TodayNetCostChangeBookCurrency" ParameterName="TodayNetCostChangeBookCurrency" Version="Current" />
-                  <ScalarProperty Name="TodayNetCostChangeInstrumentCurrency" ParameterName="TodayNetCostChangeInstrumentCurrency" Version="Current" />
-                  <ScalarProperty Name="TodayDeltaNetCostChangeBookCurrency" ParameterName="TodayDeltaNetCostChangeBookCurrency" Version="Current" />
-                  <ScalarProperty Name="TodayDeltaNetCostChangeInstrumentCurrency" ParameterName="TodayDeltaNetCostChangeInstrumentCurrency" Version="Current" />
-                  <ScalarProperty Name="TodayNetPostionChange" ParameterName="TodayNetPostionChange" Version="Current" />
-                  <ScalarProperty Name="DeltaNetCostBookCurrency" ParameterName="DeltaNetCostBookCurrency" Version="Current" />
-                  <ScalarProperty Name="DeltaNetCostInstrumentCurrency" ParameterName="DeltaNetCostInstrumentCurrency" Version="Current" />
-                  <ScalarProperty Name="NetCostBookCurrency" ParameterName="NetCostBookCurrency" Version="Current" />
-                  <ScalarProperty Name="NetCostInstrumentCurrency" ParameterName="NetCostInstrumentCurrency" Version="Current" />
-                  <ScalarProperty Name="NetPosition" ParameterName="NetPosition" Version="Current" />
-                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
-                  <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
-                  <ScalarProperty Name="PortfolioSettlementDateId" ParameterName="PortfolioSettlementDateId" Version="Current" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.PortfolioSettlementDate_Delete">
-                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="PortfolioSettlementDateId" ParameterName="PortfolioSettlementDateId" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Positions">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Position">
               <MappingFragment StoreEntitySet="Position">
@@ -31136,6 +30984,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="SettledCostNotionalInstrument" ColumnName="SettledCostNotionalInstrument" />
+                <ScalarProperty Name="SettledCostNotional" ColumnName="SettledCostNotional" />
+                <ScalarProperty Name="SettledNotionalInstrument" ColumnName="SettledNotionalInstrument" />
+                <ScalarProperty Name="SettledNotional" ColumnName="SettledNotional" />
+                <ScalarProperty Name="SettledNetPosition" ColumnName="SettledNetPosition" />
                 <ScalarProperty Name="MustExist" ColumnName="MustExist" />
                 <ScalarProperty Name="AllInAccrualInstrument" ColumnName="AllInAccrualInstrument" />
                 <ScalarProperty Name="FinancingDataAdded" ColumnName="FinancingDataAdded" />
@@ -31260,6 +31113,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="SettledCostNotionalInstrument" ParameterName="SettledCostNotionalInstrument" />
+                  <ScalarProperty Name="SettledCostNotional" ParameterName="SettledCostNotional" />
+                  <ScalarProperty Name="SettledNotionalInstrument" ParameterName="SettledNotionalInstrument" />
+                  <ScalarProperty Name="SettledNotional" ParameterName="SettledNotional" />
+                  <ScalarProperty Name="SettledNetPosition" ParameterName="SettledNetPosition" />
                   <ScalarProperty Name="MustExist" ParameterName="MustExist" />
                   <ScalarProperty Name="AllInAccrualInstrument" ParameterName="AllInAccrualInstrument" />
                   <ScalarProperty Name="FinancingDataAdded" ParameterName="FinancingDataAdded" />
@@ -31381,6 +31239,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="SettledCostNotionalInstrument" ParameterName="SettledCostNotionalInstrument" Version="Current" />
+                  <ScalarProperty Name="SettledCostNotional" ParameterName="SettledCostNotional" Version="Current" />
+                  <ScalarProperty Name="SettledNotionalInstrument" ParameterName="SettledNotionalInstrument" Version="Current" />
+                  <ScalarProperty Name="SettledNotional" ParameterName="SettledNotional" Version="Current" />
+                  <ScalarProperty Name="SettledNetPosition" ParameterName="SettledNetPosition" Version="Current" />
                   <ScalarProperty Name="MustExist" ParameterName="MustExist" Version="Current" />
                   <ScalarProperty Name="AllInAccrualInstrument" ParameterName="AllInAccrualInstrument" Version="Current" />
                   <ScalarProperty Name="FinancingDataAdded" ParameterName="FinancingDataAdded" Version="Current" />
@@ -31753,7 +31616,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="RollPortfolio" FunctionName="KeeleyModel.Store.Portfolio_Roll" />
-          <FunctionImportMapping FunctionImportName="RollPortfolioSettlementDate" FunctionName="KeeleyModel.Store.PortfolioSettlementDate_Roll" />
           <FunctionImportMapping FunctionImportName="PositionGetForFundIdExcludingCurrencies" FunctionName="KeeleyModel.Store.Position_GetForFundIdExcludingCurrencies" />
           <FunctionImportMapping FunctionImportName="GetPositionIdsWherePortfolioEventBreak" FunctionName="KeeleyModel.Store.Portfolio_GetPositionIdsWherePortfolioEventBreak" />
           <EntitySetMapping Name="InstrumentMarkets">
@@ -37507,7 +37369,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="30">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -39346,80 +39208,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="17.125" PointY="48.292999674479162" />
         </edmx:AssociationConnector>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioEvent" Width="4.5" PointX="35.125" PointY="23.375" Height="10.249248046875003" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioSettlementDate" Width="2" PointX="35.25" PointY="17.25" Height="4.0956022135416656" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioSettlementDateUpdateUserIDFK">
-          <edmx:ConnectorPoint PointX="2.25" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="6.3658844166666668" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="6.5325510833333329" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="6.744791666666667" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="6.942708333333333" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="7.3110642102248971" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="7.4777308768915631" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="8.0416666666666661" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="8.2083333333333339" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="9.675959358943059" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="9.8426260256097269" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="9.8790681820485773" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="10.270833333333336" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="11.822916666666666" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="12.083333333333334" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="12.166666666666666" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="12.333333333333334" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="13.072919166666667" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="13.395833333333334" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="13.720375494791666" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="13.887042161458334" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="14.572919166666667" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="14.739585833333335" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="15.510416666666666" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="15.677083333333334" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="17.416666666666668" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="17.583333333333332" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="17.604166666666668" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="17.916666666666668" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="18.104166666666668" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="18.270833333333332" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="19.141419361556338" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="19.341147083333333" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="19.44376766666667" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="19.610434333333334" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="19.736490541666669" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="19.903157208333333" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="21.885416666666668" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="22.052083333333332" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="22.401041666666668" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="22.864583333333332" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="22.90625" PointY="17.648667293701173" />
-          <edmx:ConnectorPoint PointX="22.90625" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="22.932291666666668" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="23.200520833333332" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="23.253341489042295" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="23.42000815570896" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="23.575609614042296" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="23.74227628070896" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="24.541666666666668" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="24.708333333333332" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="25.361977666666665" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="25.528644333333329" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="25.920574166666665" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="26.087240833333329" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="26.510416666666668" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="26.677083333333332" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="28.475734766862939" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="28.642401433529603" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="28.797204295463246" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="28.96387096212991" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="29.013187981064956" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="29.17985464773162" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="29.385416666666668" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="29.552083333333332" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="30.447914666666666" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="30.61458133333333" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="34.125" PointY="20.393453776041667" />
-          <edmx:ConnectorPoint PointX="34.125" PointY="21.970602213541667" />
-          <edmx:ConnectorPoint PointX="35.375" PointY="21.970602213541667" />
-          <edmx:ConnectorPoint PointX="35.375" PointY="21.720602213541667" />
-        </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PositionAccountMovementUserIDFK">
           <edmx:ConnectorPoint PointX="2.25" PointY="17.26483903249105" />
           <edmx:ConnectorPoint PointX="2.6666666666666665" PointY="17.26483903249105" />
@@ -39837,21 +39625,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="34.541666666666664" PointY="28.933249072953178" />
           <edmx:ConnectorPoint PointX="34.708333333333336" PointY="28.933249072953178" />
           <edmx:ConnectorPoint PointX="35.25" PointY="28.933249072953178" />
-        </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioSettlementDatePositionAccountIDFK">
-          <edmx:ConnectorPoint PointX="28.559068100196271" PointY="17.393697916666667" />
-          <edmx:ConnectorPoint PointX="28.809068100196271" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="29.013187981064956" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="29.17985464773162" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="29.385416666666668" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="29.552083333333332" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="30.447914666666666" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="30.61458133333333" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="33.479166666666664" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="33.645833333333336" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="33.916666666666664" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="34.208333333333336" PointY="21.024851888020834" />
-          <edmx:ConnectorPoint PointX="34.625" PointY="21.024851888020834" />
         </edmx:AssociationConnector>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Portfolio" Width="2.375" PointX="32.625" PointY="9.125" Height="9.2877408854166674" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.PortfolioTradeDateUpdateUserIDFK">
