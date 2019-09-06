@@ -55,7 +55,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SRRI_CLASS_CHECK = 16,
 
         [EnumMember]
-        MESSAGE_QUEUE_CHECK = 17
+        MESSAGE_QUEUE_CHECK = 17,
+
+        [EnumMember] 
+        POSMAN_KEELEY_DAY_RETURN = 18
     }
 }
 
