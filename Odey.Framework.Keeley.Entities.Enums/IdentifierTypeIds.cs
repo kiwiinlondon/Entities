@@ -86,5 +86,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         NaceCode = 40,
         [EnumMember]
         KeeleyId = 41,
+        [EnumMember]
+        KeeleyFinancingId = 42
     }
 }

@@ -69,7 +69,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ExtractOutputType> ExtractOutputTypes { get; set; }
         public DbSet<ExtractConfiguration> ExtractConfigurations { get; set; }
         public DbSet<PortfolioEvent> PortfolioEvents { get; set; }
-        public DbSet<PortfolioSettlementDate> PortfolioSettlementDates { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<EntityRankingScheme> EntityRankingSchemes { get; set; }
@@ -204,6 +203,8 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<TaskState> TaskStates { get; set; }
         public DbSet<TaskAlert> TaskAlerts { get; set; }
         public DbSet<TaskAlertConfiguration> TaskAlertConfigurations { get; set; }
+        public DbSet<TaskMessage> TaskMessages { get; set; }
+        public DbSet<EnforcePositionEvent> EnforcePositionEvents { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -270,15 +271,6 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("UpdateUserId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("RollPortfolio", updateUserIdParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<System.DateTime>> RollPortfolioSettlementDate(Nullable<int> updateUserId)
-        {
-            var updateUserIdParameter = updateUserId.HasValue ?
-                new ObjectParameter("UpdateUserId", updateUserId) :
-                new ObjectParameter("UpdateUserId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("RollPortfolioSettlementDate", updateUserIdParameter);
         }
     
         public virtual ObjectResult<Position> PositionGetForFundIdExcludingCurrencies(Nullable<int> fundId)
@@ -818,6 +810,25 @@ namespace Odey.Framework.Keeley.Entities
         public virtual ObjectResult<Nullable<System.DateTime>> MessageQueue_GetMinStartDate()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("MessageQueue_GetMinStartDate");
+        }
+    
+        public virtual int TaskMessage_Test(string message)
+        {
+            var messageParameter = message != null ?
+                new ObjectParameter("message", message) :
+                new ObjectParameter("message", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("TaskMessage_Test", messageParameter);
+        }
+    
+        public virtual ObjectResult<Financing> Financing_GetNotApplied()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Financing>("Financing_GetNotApplied");
+        }
+    
+        public virtual ObjectResult<Financing> Financing_GetNotApplied(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Financing>("Financing_GetNotApplied", mergeOption);
         }
     }
 }

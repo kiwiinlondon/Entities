@@ -162,6 +162,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> Revalue { get; set; }
     	[DataMember]
         public System.DateTime TradeDate { get; set; }
+    	[DataMember]
+        public Nullable<bool> TodayZeroOutAccrual { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

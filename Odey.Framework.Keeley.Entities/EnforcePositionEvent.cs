@@ -14,16 +14,20 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class TaskResult
+    public partial class EnforcePositionEvent
     {
     	[DataMember]
-        public int TaskResultId { get; set; }
+        public int EventID { get; set; }
     	[DataMember]
-        public int TaskId { get; set; }
+        public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public int TaskResultTypeId { get; set; }
+        public int AmendmentNumber { get; set; }
     	[DataMember]
-        public string Notes { get; set; }
+        public int InstrumentMarketId { get; set; }
+    	[DataMember]
+        public bool IsCancelled { get; set; }
+    	[DataMember]
+        public int CurrencyId { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -31,15 +35,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int TaskRunId { get; set; }
-    	[DataMember]
-        public Nullable<int> AffectedEntityCount { get; set; }
-    	[DataMember]
-        public int RetryAttempt { get; set; }
-    
-        [DataMember]
-        public virtual Task Task { get; set; }
-        [DataMember]
-        public virtual TaskRun TaskRun { get; set; }
+        public System.DateTime InputDate { get; set; }
     }
 }

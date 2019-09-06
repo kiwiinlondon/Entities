@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Financing
     {
+    	
+        public Financing()
+        {
+            this.RelatedFinancings = new List<Financing>();
+        }
+    
     	[DataMember]
         public int FinancingId { get; set; }
     	[DataMember]
@@ -33,11 +39,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> Price { get; set; }
     	[DataMember]
-        public decimal Notional { get; set; }
+        public Nullable<decimal> Notional { get; set; }
     	[DataMember]
         public decimal AllInRate { get; set; }
     	[DataMember]
-        public decimal AllInAccrual { get; set; }
+        public Nullable<decimal> AllInAccrual { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -55,15 +61,19 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal BorrowRate { get; set; }
     	[DataMember]
-        public decimal FinancingAccrual { get; set; }
+        public Nullable<decimal> FinancingAccrual { get; set; }
     	[DataMember]
-        public decimal BorrowAccrual { get; set; }
+        public Nullable<decimal> BorrowAccrual { get; set; }
     	[DataMember]
         public Nullable<decimal> OverborrowRate { get; set; }
     	[DataMember]
         public Nullable<decimal> MarginInterest { get; set; }
     	[DataMember]
         public Nullable<decimal> CashInterest { get; set; }
+    	[DataMember]
+        public Nullable<int> RelatedFinancingId { get; set; }
+    	[DataMember]
+        public bool IsDummy { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
@@ -73,5 +83,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
+        [DataMember]
+        public virtual List<Financing> RelatedFinancings { get; set; }
     }
 }

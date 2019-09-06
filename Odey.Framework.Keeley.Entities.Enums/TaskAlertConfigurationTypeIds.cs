@@ -12,6 +12,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         TimeoutLength =2,
         [EnumMember]
-        WhoToAlert=3
+        WhoToAlert=3,
+        [EnumMember]
+        RepeatAlertTimespan = 4
     }
 }

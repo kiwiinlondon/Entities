@@ -14,32 +14,30 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class TaskResult
+    public partial class TaskMessage
     {
     	[DataMember]
-        public int TaskResultId { get; set; }
+        public int TaskMessageId { get; set; }
     	[DataMember]
         public int TaskId { get; set; }
     	[DataMember]
-        public int TaskResultTypeId { get; set; }
-    	[DataMember]
-        public string Notes { get; set; }
+        public string Message { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
-        public int UpdateUserID { get; set; }
-    	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int TaskRunId { get; set; }
+        public int UpdateUserID { get; set; }
     	[DataMember]
-        public Nullable<int> AffectedEntityCount { get; set; }
+        public Nullable<int> InitiatingEntityId { get; set; }
     	[DataMember]
-        public int RetryAttempt { get; set; }
+        public Nullable<int> InitiatingEntityTypeId { get; set; }
+    	[DataMember]
+        public Nullable<int> InitiatingTaskId { get; set; }
+    	[DataMember]
+        public Nullable<int> InitiatingTaskRunId { get; set; }
     
         [DataMember]
         public virtual Task Task { get; set; }
-        [DataMember]
-        public virtual TaskRun TaskRun { get; set; }
     }
 }

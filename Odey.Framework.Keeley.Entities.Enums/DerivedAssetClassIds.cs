@@ -10,9 +10,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Equity = 1,
 
-        [Description("Corporate Bond")]
+        [Description("Corporate Debt")]
         [EnumMember]
-        Bond = 2,
+        CorporateDebt = 2,
 
         [Description("Commodity")]
         [EnumMember]
