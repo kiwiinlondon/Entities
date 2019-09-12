@@ -12982,6 +12982,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="changeNumbers" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="portfolioAggregationLevelIds" Type="nvarchar(max)" Mode="In" />
         </Function>
+        <Function Name="PortfolioEvent_GetMultipleByPositionLessThanDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="positionIds" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Dates" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="portfolioAggregationLevelIds" Type="nvarchar(max)" Mode="In" />
+        </Function>
         <Function Name="PortfolioEvent_GetPrevious" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PositionID" Type="int" Mode="In" />
           <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
@@ -18874,6 +18879,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Financing" EntitySet="Financings" />
             <End Role="Financing1" EntitySet="Financings" />
           </AssociationSet>
+          <FunctionImport Name="PortfolioEvent_GetMultipleByPositionLessThanDate" EntitySet="PortfolioEvents" ReturnType="Collection(Odey.Framework.Keeley.Entities.PortfolioEvent)">
+            <Parameter Name="positionIds" Mode="In" Type="String" />
+            <Parameter Name="Dates" Mode="In" Type="String" />
+            <Parameter Name="portfolioAggregationLevelIds" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -28795,6 +28805,79 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="PortfolioEvent_GetMultipleByPositionLessThanDate_Result">
+          <Property Type="Int32" Name="PortfolioEventID" Nullable="false" />
+          <Property Type="Int32" Name="InternalAllocationId" Nullable="false" />
+          <Property Type="Int32" Name="PositionId" Nullable="false" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="PortfolioAggregationLevelId" Nullable="false" />
+          <Property Type="Int32" Name="PortfolioEventTypeId" Nullable="false" />
+          <Property Type="Int32" Name="ChangeNumber" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="FXRate" Nullable="false" Precision="35" Scale="16" />
+          <Property Type="Decimal" Name="Price" Nullable="false" Precision="35" Scale="16" />
+          <Property Type="Decimal" Name="NetCostChangeInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="NetCostChangeBookCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="NetCostInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="NetCostBookCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="DeltaNetCostChangeInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="DeltaNetCostChangeBookCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="DeltaNetCostInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="DeltaNetCostBookCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayNetPositionChange" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayDeltaNetCostChangeInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayDeltaNetCostChangeBookCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayNetCostChangeInstrumentCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayNetCostChangeBookCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="NetPosition" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="UpdateUserID" Nullable="false" />
+          <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" />
+          <Property Type="DateTime" Name="InputDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="OrderingResolution" Nullable="false" />
+          <Property Type="Decimal" Name="Accrual" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayAccrual" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="CashBenefit" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayCashBenefit" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayCashBenefitBookCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="RealisedPricePnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayRealisedPricePnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="RealisedFxPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayRealisedFxPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TotalAccrual" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayRealisedPricePnlBookCurrency" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Boolean" Name="RealisePnl" Nullable="false" />
+          <Property Type="Decimal" Name="TradeInstrumentFXRate" Nullable="false" Precision="35" Scale="16" />
+          <Property Type="Boolean" Name="ZeroOutAccrual" Nullable="false" />
+          <Property Type="Decimal" Name="BondNominal" Nullable="true" Precision="28" Scale="7" />
+          <Property Type="Decimal" Name="BondNominalChange" Nullable="true" Precision="28" Scale="7" />
+          <Property Type="Decimal" Name="CapitalChange" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayCapitalChange" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="FXRateId" Nullable="true" />
+          <Property Type="Boolean" Name="UseFXRateForDay" Nullable="false" />
+          <Property Type="Decimal" Name="RealisedCash" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ExternalRealisedPnl" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OriginalDeltaNetCostBookCurrency" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="OriginalDeltaNetCostInstrumentCurrency" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ITDRealisedPricePnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="ITDRealisedFXPnl" Nullable="false" Precision="27" Scale="8" />
+          <Property Type="Boolean" Name="ResetCost" Nullable="false" />
+          <Property Type="Decimal" Name="Yield" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="BlendedYield" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="AmortisationCost" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="AmortisationQuantity" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TotalAmortisationQuantity" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="InflationAssumption" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="BlendedInflationAssumption" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Int32" Name="AssociatedPositionId" Nullable="true" />
+          <Property Type="Boolean" Name="AdjustQuantityOnly" Nullable="false" />
+          <Property Type="Decimal" Name="TodayMaxDeltaNetCostInstrumentCurrency" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="TodayMaxNetPosition" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Decimal" Name="UnadjustedNetPosition" Nullable="true" Precision="27" Scale="8" />
+          <Property Type="Boolean" Name="Revalue" Nullable="true" />
+          <Property Type="DateTime" Name="TradeDate" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="TodayZeroOutAccrual" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -37347,6 +37430,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PortfolioEvent_GetMultipleByPositionLessThanDate" FunctionName="KeeleyModel.Store.PortfolioEvent_GetMultipleByPositionLessThanDate">
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

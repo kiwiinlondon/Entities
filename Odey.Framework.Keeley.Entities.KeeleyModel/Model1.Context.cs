@@ -830,5 +830,39 @@ namespace Odey.Framework.Keeley.Entities
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Financing>("Financing_GetNotApplied", mergeOption);
         }
+    
+        public virtual ObjectResult<PortfolioEvent> PortfolioEvent_GetMultipleByPositionLessThanDate(string positionIds, string dates, string portfolioAggregationLevelIds)
+        {
+            var positionIdsParameter = positionIds != null ?
+                new ObjectParameter("positionIds", positionIds) :
+                new ObjectParameter("positionIds", typeof(string));
+    
+            var datesParameter = dates != null ?
+                new ObjectParameter("Dates", dates) :
+                new ObjectParameter("Dates", typeof(string));
+    
+            var portfolioAggregationLevelIdsParameter = portfolioAggregationLevelIds != null ?
+                new ObjectParameter("portfolioAggregationLevelIds", portfolioAggregationLevelIds) :
+                new ObjectParameter("portfolioAggregationLevelIds", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioEvent>("PortfolioEvent_GetMultipleByPositionLessThanDate", positionIdsParameter, datesParameter, portfolioAggregationLevelIdsParameter);
+        }
+    
+        public virtual ObjectResult<PortfolioEvent> PortfolioEvent_GetMultipleByPositionLessThanDate(string positionIds, string dates, string portfolioAggregationLevelIds, MergeOption mergeOption)
+        {
+            var positionIdsParameter = positionIds != null ?
+                new ObjectParameter("positionIds", positionIds) :
+                new ObjectParameter("positionIds", typeof(string));
+    
+            var datesParameter = dates != null ?
+                new ObjectParameter("Dates", dates) :
+                new ObjectParameter("Dates", typeof(string));
+    
+            var portfolioAggregationLevelIdsParameter = portfolioAggregationLevelIds != null ?
+                new ObjectParameter("portfolioAggregationLevelIds", portfolioAggregationLevelIds) :
+                new ObjectParameter("portfolioAggregationLevelIds", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioEvent>("PortfolioEvent_GetMultipleByPositionLessThanDate", mergeOption, positionIdsParameter, datesParameter, portfolioAggregationLevelIdsParameter);
+        }
     }
 }
