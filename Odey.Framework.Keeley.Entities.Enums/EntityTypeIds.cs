@@ -96,7 +96,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ListingStatus = 58,
         [EnumMember]
-        Beta = 59
+        Beta = 59,
+        [EnumMember]
+        TransferEvent = 60,
+        [EnumMember]
+        EnforcePositionEvent = 61
     }
 }
 
