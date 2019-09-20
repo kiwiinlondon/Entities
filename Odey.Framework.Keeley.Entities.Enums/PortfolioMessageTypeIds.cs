@@ -12,6 +12,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MarketData = 1,
         [EnumMember]
-        PortfolioChange = 3,
+        EventChange = 3,
+        [EnumMember]
+        RebuildPosition = 4,
     }
 }
