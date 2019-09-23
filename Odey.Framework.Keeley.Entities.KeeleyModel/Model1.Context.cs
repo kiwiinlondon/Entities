@@ -703,7 +703,7 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioMessageQueue_Get_Result>("PortfolioMessageQueue_Get");
         }
     
-        public virtual int PortfolioMessageQueue_Insert(Nullable<int> portfolioMessageTypeId, Nullable<int> fundId, Nullable<System.DateTime> referenceDate, string message, Nullable<int> initiatingEntityTypeId, Nullable<int> initiatingEntityId)
+        public virtual int PortfolioMessageQueue_Insert(Nullable<int> portfolioMessageTypeId, Nullable<int> fundId, string message, Nullable<int> initiatingEntityTypeId, Nullable<int> initiatingEntityId)
         {
             var portfolioMessageTypeIdParameter = portfolioMessageTypeId.HasValue ?
                 new ObjectParameter("PortfolioMessageTypeId", portfolioMessageTypeId) :
@@ -712,10 +712,6 @@ namespace Odey.Framework.Keeley.Entities
             var fundIdParameter = fundId.HasValue ?
                 new ObjectParameter("FundId", fundId) :
                 new ObjectParameter("FundId", typeof(int));
-    
-            var referenceDateParameter = referenceDate.HasValue ?
-                new ObjectParameter("ReferenceDate", referenceDate) :
-                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
     
             var messageParameter = message != null ?
                 new ObjectParameter("Message", message) :
@@ -729,7 +725,7 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("InitiatingEntityId", initiatingEntityId) :
                 new ObjectParameter("InitiatingEntityId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Insert", portfolioMessageTypeIdParameter, fundIdParameter, referenceDateParameter, messageParameter, initiatingEntityTypeIdParameter, initiatingEntityIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_Insert", portfolioMessageTypeIdParameter, fundIdParameter, messageParameter, initiatingEntityTypeIdParameter, initiatingEntityIdParameter);
         }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEvent_GetMultipleByPositionAndChangeNumber(string positionIds, string changeNumbers, string portfolioAggregationLevelIds)

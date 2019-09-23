@@ -100,7 +100,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         TransferEvent = 60,
         [EnumMember]
-        EnforcePositionEvent = 61
+        EnforcePositionEvent = 61,
+        [EnumMember]
+        PortfolioEvent = 62
     }
 }
 

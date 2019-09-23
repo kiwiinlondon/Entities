@@ -12,7 +12,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MarketData = 1,
         [EnumMember]
-        EventChange = 3,
+        Event = 3,
         [EnumMember]
         RebuildPosition = 4,
     }

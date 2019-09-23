@@ -15,11 +15,10 @@ namespace Odey.Framework.Keeley.Entities
     {
         public int MessageId { get; set; }
         public int PortfolioMessageTypeId { get; set; }
-        public System.DateTime ReferenceDate { get; set; }
         public string Message { get; set; }
         public System.DateTime StartDt { get; set; }
         public int FundId { get; set; }
-        public Nullable<int> InitiatingEntityId { get; set; }
-        public Nullable<int> InitiatingEntityTypeId { get; set; }
+        public int InitiatingEntityId { get; set; }
+        public int InitiatingEntityTypeId { get; set; }
     }
 }
