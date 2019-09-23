@@ -104,7 +104,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         PortfolioEvent = 62,
         [EnumMember]
-        Position = 63
+        Position = 63,
+        [EnumMember]
+        Portfolio = 64
     }
 }
 
