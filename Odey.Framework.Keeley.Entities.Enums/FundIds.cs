@@ -325,6 +325,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DEVM_USD_R = 6313,
         [EnumMember]
         DEVM_STR = 6383,
+        [EnumMember]
+        DEVM_EUR_M = 8919,
+        [EnumMember]
+        DEVM_EUR_R = 9779,
 
         [EnumMember]
         EAR = 6437,

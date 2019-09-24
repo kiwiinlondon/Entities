@@ -15,5 +15,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Event = 3,
         [EnumMember]
         RebuildPosition = 4,
+        [EnumMember]
+        RevaluePosition = 5
     }
 }
