@@ -1787,6 +1787,7 @@
           <Property Name="BloombergCleanTicker" Type="varchar" MaxLength="50" />
           <Property Name="LocalExchangeSymbol" Type="varchar" MaxLength="50" />
           <Property Name="MicCode" Type="varchar" MaxLength="10" />
+          <Property Name="AlwaysUseManualPrice" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="InstrumentRelationship">
           <Key>
@@ -11970,6 +11971,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="BloombergCleanTicker" Type="varchar" Mode="In" />
           <Parameter Name="LocalExchangeSymbol" Type="varchar" Mode="In" />
           <Parameter Name="MicCode" Type="varchar" Mode="In" />
+          <Parameter Name="AlwaysUseManualPrice" Type="bit" Mode="In" />
         </Function>
         <Function Name="InstrumentMarket_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
@@ -12001,6 +12003,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="BloombergCleanTicker" Type="varchar" Mode="In" />
           <Parameter Name="LocalExchangeSymbol" Type="varchar" Mode="In" />
           <Parameter Name="MicCode" Type="varchar" Mode="In" />
+          <Parameter Name="AlwaysUseManualPrice" Type="bit" Mode="In" />
         </Function>
         <Function Name="InstrumentRelationship_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OverlyingInstrumentID" Type="int" Mode="In" />
@@ -20907,6 +20910,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="SettledNotionalInstrument" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SettledCostNotional" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SettledCostNotionalInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <NavigationProperty Name="PriceEntity" Relationship="Odey.Framework.Keeley.Entities.portfoliopriceidfk" FromRole="Portfolio" ToRole="Price" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -21215,6 +21219,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="LocalExchangeSymbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="MicCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ListingStatus" Relationship="Odey.Framework.Keeley.Entities.InstrumentMarketListingStatusIDFK" FromRole="InstrumentMarket" ToRole="ListingStatus" />
+          <Property Name="AlwaysUseManualPrice" Type="Boolean" Nullable="false" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -31701,6 +31706,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="InstrumentMarkets">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <MappingFragment StoreEntitySet="InstrumentMarket">
+                <ScalarProperty Name="AlwaysUseManualPrice" ColumnName="AlwaysUseManualPrice" />
                 <ScalarProperty Name="MicCode" ColumnName="MicCode" />
                 <ScalarProperty Name="LocalExchangeSymbol" ColumnName="LocalExchangeSymbol" />
                 <ScalarProperty Name="BloombergCleanTicker" ColumnName="BloombergCleanTicker" />
@@ -31736,6 +31742,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Insert">
+                  <ScalarProperty Name="AlwaysUseManualPrice" ParameterName="AlwaysUseManualPrice" />
                   <ScalarProperty Name="MicCode" ParameterName="MicCode" />
                   <ScalarProperty Name="LocalExchangeSymbol" ParameterName="LocalExchangeSymbol" />
                   <ScalarProperty Name="BloombergCleanTicker" ParameterName="BloombergCleanTicker" />
@@ -31768,6 +31775,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Update">
+                  <ScalarProperty Name="AlwaysUseManualPrice" ParameterName="AlwaysUseManualPrice" Version="Current" />
                   <ScalarProperty Name="MicCode" ParameterName="MicCode" Version="Current" />
                   <ScalarProperty Name="LocalExchangeSymbol" ParameterName="LocalExchangeSymbol" Version="Current" />
                   <ScalarProperty Name="BloombergCleanTicker" ParameterName="BloombergCleanTicker" Version="Current" />
@@ -37450,7 +37458,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="30">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -43146,7 +43154,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Research" Width="2.5" PointX="30.25" PointY="52.625" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchAttachment" Width="1.5" PointX="40.5" PointY="33" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Width="1.5" PointX="32.625" PointY="34.5" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Width="1.5" PointX="32.625" PointY="36" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Analys__0088BECC" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Update__017CE305" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchA__Updat__0BFA7178" />

@@ -282,5 +282,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual List<AttributionPnl> AttributionPnls { get; set; }
+        [DataMember]
+        public virtual Price PriceEntity { get; set; }
     }
 }
