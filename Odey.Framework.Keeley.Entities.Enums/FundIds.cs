@@ -407,8 +407,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         KELT_USD_I = 7314,
         [EnumMember]
         KELT_GBP_R = 7497,
-
-
+        [EnumMember]
+        KELT_EUR_R = 7381,
+        [EnumMember]
+        KELT_USD_R = 9778,
 
 
         [EnumMember]
