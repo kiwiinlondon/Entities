@@ -238,6 +238,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OPE_GBP_R = 5531,
         [EnumMember]
         OPE_EUR_R = 5955,
+        [EnumMember]
+        OPE_GBP_I = 6280,
 
         [EnumMember]
         ATLAS = 6053,//I S
