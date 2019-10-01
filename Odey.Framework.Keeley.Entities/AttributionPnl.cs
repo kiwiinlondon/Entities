@@ -110,6 +110,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AllinAccrual { get; set; }
     	[DataMember]
         public Nullable<decimal> AllInRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SettledNotionalCost { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SettledNetPosition { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SettledExposure { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }
