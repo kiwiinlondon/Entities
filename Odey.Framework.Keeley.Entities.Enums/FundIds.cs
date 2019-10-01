@@ -206,31 +206,49 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OF = 5592,
         [EnumMember]
-        OF_CHF_A = 5910,
+        OF_CHF_I = 5910,
         [EnumMember]
-        OF_CHF_R = 5911,
+        OF_CHF_IP = 7573,
+        [EnumMember]
+        OF_CHF_R = 5911,        
+        [EnumMember]
+        OF_CHF_RP = 8920,
+        [EnumMember]
+        OF_EUR_IP = 6839,
         [EnumMember]
         OF_EUR_R = 5914,
         [EnumMember]
+        OF_EUR_RP = 7356,
+        [EnumMember]
+        OF_GBP_F = 8893,
+        [EnumMember]
+        OF_GBP_IH = 8921,
+        [EnumMember]
         OF_GBP_IR = 5906,
         [EnumMember]
-        OF_GBP_B = 5907,
+        OF_GBP_MW = 6732,
         [EnumMember]
-        OF_NOK_A = 5912,
+        OF_GBP_R = 5907,
+        [EnumMember]
+        OF_GBP_RP = 7011,
+        [EnumMember]
+        OF_GBP_SIP	= 7574,
+        [EnumMember]
+        OF_GBP_WM = 7010,
+        
+        [EnumMember]
+        OF_NOK_I = 5912,
         [EnumMember]
         OF_NOK_R = 5913,
         [EnumMember]
-        OF_USD_A = 5908,
+        OF_USD_I = 5908,
+        [EnumMember]
+        OF_USD_IP = 7575,
         [EnumMember]
         OF_USD_R = 5909,
         [EnumMember]
         OF_USD_RP = 6986,
-        [EnumMember]
-        OF_GBP_MW = 6732,
-        [EnumMember]
-        OF_GBP_WM = 7010,
-        [EnumMember]
-        OF_GBP_RP = 7011,
+        
 
         [EnumMember]
         OPE = 5327,
