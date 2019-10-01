@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+﻿using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
@@ -15,11 +11,17 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Fees = 1,
 
+        [EnumMember]
+        AnnualFees = Fees | 1024,
+
         /// <summary>
         /// Cost of Carry Analysis By Fund
         /// </summary>
         [EnumMember]
         FinancingChargeDebitCash = 2,
+
+        [EnumMember]
+        AnnualFinancingChargeDebitCash = FinancingChargeDebitCash | 1024,
 
         /// <summary>
         /// Cost of Carry Analysis By Fund
@@ -27,11 +29,17 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FinancingChargeCreditCash = 3,
 
+        [EnumMember]
+        AnnualFinancingChargeCreditCash = FinancingChargeCreditCash | 1024,
+
         /// <summary>
         /// Cost of Carry Analysis By Fund
         /// </summary>
         [EnumMember]
         FinancingChargeLongSwap = 4,
+
+        [EnumMember]
+        AnnualFinancingChargeLongSwap = FinancingChargeLongSwap | 1024,
 
         /// <summary>
         /// Cost of Carry Analysis By Fund
@@ -39,6 +47,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FinancingChargeShortSwap = 5,
 
+        [EnumMember]
+        AnnualFinancingChargeShortSwap = FinancingChargeShortSwap | 1024,
         
         /// <summary>
         /// Cost of Carry Analysis By Fund
@@ -46,11 +56,17 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         TransactionChargeFutures = 6,
 
+        [EnumMember]
+        AnnualTransactionChargeFutures = TransactionChargeFutures | 1024,
+
         /// <summary>
         /// Cost of Carry Analysis By Fund
         /// </summary>
         [EnumMember]
         TransactionChargeEquity = 7,
+
+        [EnumMember]
+        AnnualTransactionChargeEquity = TransactionChargeEquity | 1024,
 
         /// <summary>
         /// Cost of Carry Analysis by Fund
@@ -59,17 +75,26 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FXCost = 8,
 
+        [EnumMember]
+        AnnualFXCost = FXCost | 1024,
+
         /// <summary>
         /// Cost of Carry Analysis By Fund
         /// </summary>
         [EnumMember]
         DividendIncome = 9,
 
+        [EnumMember]
+        AnnualDividendIncome = DividendIncome | 1024,
+
         /// <summary>
         /// Cost of Carry Analysis By Fund
         /// </summary>
         [EnumMember]
         DividendExpense = 10,
+
+        [EnumMember]
+        AnnualDividendExpense = DividendExpense | 1024,
 
         /// <summary>
         /// Fees to Street Analysis By Counterparty
@@ -137,6 +162,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         
         [EnumMember]
         FixedIncomeCarry = 22,
+
+        /// <summary>
+        /// Used to indicate an annualised prediction of one of the above values
+        /// </summary>
+        [EnumMember]
+        AnnualisedPredictionModifier = 1024,
     }
 
 }

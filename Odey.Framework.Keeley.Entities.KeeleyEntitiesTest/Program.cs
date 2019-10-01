@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Entity;
+﻿using System.Linq;
 using Odey.Framework.Keeley.Entities;
-using Odey.Framework.Keeley;
 using Odey.Framework.Keeley.Entities.Caches;
 using Odey.Framework.Keeley.Entities.Enums;
-using Odey.Framework.Keeley.Entities.Interfaces;
-using Odey.StaticServices.Clients;
-using ServiceModelEx;
-using Odey.Framework.Keeley.Entities.EntityPropertyOverrides;
-using System.Transactions;
 
 namespace Odey.Framework.KeeleyEntitiesTest
 {
