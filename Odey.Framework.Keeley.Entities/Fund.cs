@@ -132,6 +132,8 @@ namespace Odey.Framework.Keeley.Entities
         public int ManagerId { get; set; }
     	[DataMember]
         public bool ISCFDFullyFunded { get; set; }
+    	[DataMember]
+        public bool IsCRR { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
