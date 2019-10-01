@@ -271,6 +271,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> SettledCostNotional { get; set; }
     	[DataMember]
         public Nullable<decimal> SettledCostNotionalInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SettledMarketValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SettledMarketValueInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

@@ -116,6 +116,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> SettledNetPosition { get; set; }
     	[DataMember]
         public Nullable<decimal> SettledExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SettledMarketValue { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }
