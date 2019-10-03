@@ -16,6 +16,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         RebuildPosition = 4,
         [EnumMember]
-        RevaluePosition = 5
+        RevaluePosition = 5,
+        [EnumMember]
+        RollFund = 6
     }
 }
