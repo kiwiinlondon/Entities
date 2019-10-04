@@ -41,5 +41,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [Description("Credit")]
         [EnumMember]
         Credit = 12,
+
+        [Description("Emerging Market Debt")]
+        [EnumMember]
+        EmergingMarketDebt = 13,
     }
 }
