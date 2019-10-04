@@ -644,6 +644,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="IsEEA" Type="bit" />
           <Property Name="IsOECD" Type="bit" />
+          <Property Name="IsDevelopedMarket" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CountryHoliday">
           <Key>
@@ -879,6 +880,8 @@
           <Property Name="HedgeRatio" Type="numeric" Precision="27" Scale="8" />
           <Property Name="CreditExposure" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ChangeCreditExposure" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="EmergingMarketDebtExposure" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ChangeEmergingMarketDebtExposure" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ExternalPerson">
           <Key>
@@ -10472,6 +10475,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsoCode" Type="varchar" Mode="In" />
           <Parameter Name="RegionID" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsEEA" Type="bit" Mode="In" />
+          <Parameter Name="IsOECD" Type="bit" Mode="In" />
+          <Parameter Name="IsDevelopedMarket" Type="bit" Mode="In" />
         </Function>
         <Function Name="Country_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CountryID" Type="int" Mode="In" />
@@ -10480,6 +10486,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RegionID" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsEEA" Type="bit" Mode="In" />
+          <Parameter Name="IsOECD" Type="bit" Mode="In" />
+          <Parameter Name="IsDevelopedMarket" Type="bit" Mode="In" />
         </Function>
         <Function Name="Currency_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentID" Type="int" Mode="In" />
@@ -10758,6 +10767,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
           <Parameter Name="CreditExposure" Type="numeric" Mode="In" />
           <Parameter Name="ChangeCreditExposure" Type="numeric" Mode="In" />
+          <Parameter Name="EmergingMarketDebtExposure" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeEmergingMarketDebtExposure" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Exposure_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -10792,6 +10803,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="HedgeRatio" Type="numeric" Mode="In" />
           <Parameter Name="CreditExposure" Type="numeric" Mode="In" />
           <Parameter Name="ChangeCreditExposure" Type="numeric" Mode="In" />
+          <Parameter Name="EmergingMarketDebtExposure" Type="numeric" Mode="In" />
+          <Parameter Name="ChangeEmergingMarketDebtExposure" Type="numeric" Mode="In" />
         </Function>
         <Function Name="ExternalPerson_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExternalPersonId" Type="int" Mode="In" />
@@ -18956,6 +18969,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="AccountMappings" Relationship="Odey.Framework.Keeley.Entities.CountryIdAccountMappingFK" FromRole="Country" ToRole="AccountMapping" />
           <Property Name="IsEEA" Type="Boolean" />
           <Property Name="IsOECD" Type="Boolean" />
+          <Property Name="IsDevelopedMarket" Type="Boolean" Nullable="false" />
           </EntityType>
         <EntityType Name="Instrument">
           <Key>
@@ -23296,6 +23310,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="HedgeRatio" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="CreditExposure" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="ChangeCreditExposure" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="EmergingMarketDebtExposure" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ChangeEmergingMarketDebtExposure" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <EntityType Name="IndexConstituent">
           <Key>
@@ -29020,7 +29036,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Countries"><EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Country"><MappingFragment StoreEntitySet="Country">
-            <ScalarProperty Name="IsOECD" ColumnName="IsOECD" />
+            <ScalarProperty Name="IsDevelopedMarket" ColumnName="IsDevelopedMarket" />
+                <ScalarProperty Name="IsOECD" ColumnName="IsOECD" />
                 <ScalarProperty Name="IsEEA" ColumnName="IsEEA" />
                 <ScalarProperty Name="CountryID" ColumnName="CountryID" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -29033,6 +29050,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Country">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Country_Insert">
+                  <ScalarProperty Name="IsDevelopedMarket" ParameterName="IsDevelopedMarket" />
+                  <ScalarProperty Name="IsOECD" ParameterName="IsOECD" />
+                  <ScalarProperty Name="IsEEA" ParameterName="IsEEA" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="RegionID" ParameterName="RegionID" />
                   <ScalarProperty Name="IsoCode" ParameterName="IsoCode" />
@@ -29042,6 +29062,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Country_Update">
+                  <ScalarProperty Name="IsDevelopedMarket" ParameterName="IsDevelopedMarket" Version="Current" />
+                  <ScalarProperty Name="IsOECD" ParameterName="IsOECD" Version="Current" />
+                  <ScalarProperty Name="IsEEA" ParameterName="IsEEA" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="RegionID" ParameterName="RegionID" Version="Current" />
@@ -33105,6 +33128,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Exposures">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <MappingFragment StoreEntitySet="Exposure">
+                <ScalarProperty Name="ChangeEmergingMarketDebtExposure" ColumnName="ChangeEmergingMarketDebtExposure" />
+                <ScalarProperty Name="EmergingMarketDebtExposure" ColumnName="EmergingMarketDebtExposure" />
                 <ScalarProperty Name="ChangeCreditExposure" ColumnName="ChangeCreditExposure" />
                 <ScalarProperty Name="CreditExposure" ColumnName="CreditExposure" />
                 <ScalarProperty Name="HedgeRatio" ColumnName="HedgeRatio" />
@@ -33140,6 +33165,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Exposure">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Exposure_Insert">
+                  <ScalarProperty Name="ChangeEmergingMarketDebtExposure" ParameterName="ChangeEmergingMarketDebtExposure" />
+                  <ScalarProperty Name="EmergingMarketDebtExposure" ParameterName="EmergingMarketDebtExposure" />
                   <ScalarProperty Name="ChangeCreditExposure" ParameterName="ChangeCreditExposure" />
                   <ScalarProperty Name="CreditExposure" ParameterName="CreditExposure" />
                   <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" />
@@ -33172,6 +33199,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Exposure_Update">
+                  <ScalarProperty Name="ChangeEmergingMarketDebtExposure" ParameterName="ChangeEmergingMarketDebtExposure" Version="Current" />
+                  <ScalarProperty Name="EmergingMarketDebtExposure" ParameterName="EmergingMarketDebtExposure" Version="Current" />
                   <ScalarProperty Name="ChangeCreditExposure" ParameterName="ChangeCreditExposure" Version="Current" />
                   <ScalarProperty Name="CreditExposure" ParameterName="CreditExposure" Version="Current" />
                   <ScalarProperty Name="HedgeRatio" ParameterName="HedgeRatio" Version="Current" />
@@ -33180,7 +33209,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="ChangeInterestRateExposure" ParameterName="ChangeInterestRateExposure" Version="Current" />
                   <ScalarProperty Name="InterestRateExposure" ParameterName="InterestRateExposure" Version="Current" />
                   <ScalarProperty Name="IsLong" ParameterName="IsLong" Version="Current" />
-                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="IsPrimaryExposure" ParameterName="IsPrimaryExposure" Version="Current" />
                   <ScalarProperty Name="MaturityDate" ParameterName="MaturityDate" Version="Current" />
                   <ScalarProperty Name="ChangeGovernmentBondExposure" ParameterName="ChangeGovernmentBondExposure" Version="Current" />
@@ -33190,15 +33218,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="ChangeCurrencyExposure" ParameterName="ChangeCurrencyExposure" Version="Current" />
                   <ScalarProperty Name="ChangeEquityExposure" ParameterName="ChangeEquityExposure" Version="Current" />
                   <ScalarProperty Name="GovernmentBondExposure" ParameterName="GovernmentBondExposure" Version="Current" />
-                  <ScalarProperty Name="CurrencyExposure" ParameterName="CurrencyExposure" Version="Current" />
-                  <ScalarProperty Name="PortfolioId" ParameterName="PortfolioId" Version="Current" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Original" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
                   <ScalarProperty Name="OtherExposure" ParameterName="OtherExposure" Version="Current" />
                   <ScalarProperty Name="FixedIncomeExposure" ParameterName="FixedIncomeExposure" Version="Current" />
                   <ScalarProperty Name="CommodityExposure" ParameterName="CommodityExposure" Version="Current" />
+                  <ScalarProperty Name="CurrencyExposure" ParameterName="CurrencyExposure" Version="Current" />
                   <ScalarProperty Name="EquityExposure" ParameterName="EquityExposure" Version="Current" />
                   <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="PortfolioId" ParameterName="PortfolioId" Version="Current" />
+                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
                   <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
                   <ScalarProperty Name="ExposureId" ParameterName="ExposureId" Version="Current" />
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
@@ -37507,7 +37536,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="19">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="97">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -42740,7 +42769,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="24.8125" PointY="28.980881655447" />
           <edmx:ConnectorPoint PointX="25.125" PointY="28.980881655447" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Exposure" Width="2.25" PointX="30" PointY="21.625" Height="3.5186979166666674" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Exposure" Width="2.25" PointX="30.125" PointY="22" Height="3.5186979166666674" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.IndexConstituent" Width="1.5" PointX="10.875" PointY="35.625" Height="2.5571907552083317" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.ExposurePositionIDFK">
           <edmx:ConnectorPoint PointX="29.096521314398288" PointY="17.393697916666667" />

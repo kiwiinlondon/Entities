@@ -76,6 +76,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CreditExposure { get; set; }
     	[DataMember]
         public Nullable<decimal> ChangeCreditExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> EmergingMarketDebt { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ChangeEmergingMarketDebt { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
