@@ -15,5 +15,7 @@ namespace Odey.Framework.Keeley.Entities
         {
             get { throw new NotImplementedException(); }
         }
+
+        public int Id => BetaId;
     }
 }

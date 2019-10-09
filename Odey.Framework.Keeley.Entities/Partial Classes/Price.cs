@@ -28,5 +28,7 @@ namespace Odey.Framework.Keeley.Entities
         }
 
         #endregion
+
+        public int Id => PriceId;
     }
 }

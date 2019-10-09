@@ -7,6 +7,7 @@ namespace Odey.Framework.Keeley.Entities.Interfaces
 {
     public interface IMarketDatum
     {
+        int Id { get; }
         int EntityRankingSchemeId { get; }
         DateTime ReferenceDate { get; }
         decimal Value { get; }

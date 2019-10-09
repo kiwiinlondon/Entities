@@ -50,5 +50,7 @@ namespace Odey.Framework.Keeley.Entities
                                  this.ToCurrencyId, this.ReferenceDate, this.EntityRankingSchemeId, this.ForwardDate, this.Value,
                                  this.FromRawFXRateId, this.ToRawFXRateId, this.FromSecondRawFXRateId, this.ToSecondRawFXRateId);
         }
+
+        public int Id => FXRateId;
     }
 }

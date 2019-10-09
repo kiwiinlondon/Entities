@@ -34,6 +34,8 @@ namespace Odey.Framework.Keeley.Entities
             
         }
 
+        public int Id => IssuerAnalyticId;
+
         #endregion
     }
  

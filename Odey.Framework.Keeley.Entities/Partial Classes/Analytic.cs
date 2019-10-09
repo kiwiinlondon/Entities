@@ -39,6 +39,8 @@ namespace Odey.Framework.Keeley.Entities
             return $"AnalyticId = {AnalyticId}: rawnalyicId {this.RawAnalyticId}";
         }
 
+        public int Id => AnalyticId;
+
         #endregion
     }
  
