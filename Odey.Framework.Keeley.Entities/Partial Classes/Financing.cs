@@ -1,0 +1,23 @@
+﻿using Odey.Framework.Keeley.Entities.Enums;
+using Odey.Framework.Keeley.Entities.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Odey.Framework.Keeley.Entities
+{
+    partial class Financing : IMarketDatum
+    {
+        public int EntityRankingSchemeId => (int)EntityRankingSchemeIds.Default;
+
+        public List<IRawMarketDatum> RawMarketData
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public int Id => FinancingId;
+
+        public decimal Value => throw new NotImplementedException();
+    }
+}

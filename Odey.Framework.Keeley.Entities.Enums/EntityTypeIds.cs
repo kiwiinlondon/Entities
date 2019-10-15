@@ -106,7 +106,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Position = 63,
         [EnumMember]
-        Portfolio = 64
+        Portfolio = 64,
+        [EnumMember]
+        Financing = 66
     }
 }
 
