@@ -11541,6 +11541,27 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="RegistrationRestrictionId" Type="int" Mode="In" />
         </Function>
+        <Function Name="FundLegalEntityIdentifier_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundLegalEntityIdentifierId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FundLegalEntityIdentifier_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="LegalEntityId" Type="int" Mode="In" />
+          <Parameter Name="Identifier" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IdentifierTypeId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FundLegalEntityIdentifier_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundLegalEntityIdentifierId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="LegalEntityId" Type="int" Mode="In" />
+          <Parameter Name="Identifier" Type="varchar" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IdentifierTypeId" Type="int" Mode="In" />
+        </Function>
         <Function Name="FundPerformance_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundPerformanceId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -18923,7 +18944,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <Parameter Name="portfolioAggregationLevelIds" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Financing_Roll" ReturnType="Collection(DateTime)">
-            <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -23111,6 +23132,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="FundCountryStatuses" Relationship="Odey.Framework.Keeley.Entities.FK__FundCount__FundI__0303A216" FromRole="Fund" ToRole="FundCountryStatu" />
           <Property Name="ISCFDFullyFunded" Type="Boolean" Nullable="false" />
           <Property Name="IsCRR" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="FundLegalEntityIdentifiers" Relationship="Odey.Framework.Keeley.Entities.FK__FundLegal__FundI__0C4EABDC" FromRole="Fund" ToRole="FundLegalEntityIdentifier" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -36337,6 +36359,36 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                 <ScalarProperty Name="FundLegalEntityIdentifierId" ColumnName="FundLegalEntityIdentifierId" />
               </MappingFragment>
             </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FundLegalEntityIdentifier">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FundLegalEntityIdentifier_Insert">
+                  <ScalarProperty Name="IdentifierTypeId" ParameterName="IdentifierTypeId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Identifier" ParameterName="Identifier" />
+                  <ScalarProperty Name="LegalEntityId" ParameterName="LegalEntityId" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ResultBinding Name="FundLegalEntityIdentifierId" ColumnName="FundLegalEntityIdentifierId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FundLegalEntityIdentifier_Update">
+                  <ScalarProperty Name="IdentifierTypeId" ParameterName="IdentifierTypeId" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Identifier" ParameterName="Identifier" Version="Current" />
+                  <ScalarProperty Name="LegalEntityId" ParameterName="LegalEntityId" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="FundLegalEntityIdentifierId" ParameterName="FundLegalEntityIdentifierId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FundLegalEntityIdentifier_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FundLegalEntityIdentifierId" ParameterName="FundLegalEntityIdentifierId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PortfolioMessageQueue_Delete" FunctionName="KeeleyModel.Store.PortfolioMessageQueue_Delete" />
           <FunctionImportMapping FunctionImportName="PortfolioMessageQueue_Get" FunctionName="KeeleyModel.Store.PortfolioMessageQueue_Get">
@@ -37543,7 +37595,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="97">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="65">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -43166,7 +43218,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_RiskAnalyticType" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_Fund" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_InstrumentMarket" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.IndexConstituentOpenClose" Width="1.5" PointX="25" PointY="36.25" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.IndexConstituentOpenClose" Width="1.5" PointX="24" PointY="35.875" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionNav" Width="1.5" PointX="28.125" PointY="46.375" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.AttributionPnl" Width="1.5" PointX="43.625" PointY="25.625" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__AnalystId__Exter__2A478C69" />

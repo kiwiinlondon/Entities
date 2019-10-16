@@ -22,6 +22,7 @@ namespace Odey.Framework.Keeley.Entities
             this.AdditionalFundIndexes = new List<AdditionalFundIndexes>();
             this.FundClientPlatforms = new List<FundClientPlatform>();
             this.FundCountryStatuses = new List<FundCountryStatuses>();
+            this.FundLegalEntityIdentifiers = new List<FundLegalEntityIdentifier>();
         }
     
     	[DataMember]
@@ -153,5 +154,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<FundClientPlatform> FundClientPlatforms { get; set; }
         [DataMember]
         public virtual List<FundCountryStatuses> FundCountryStatuses { get; set; }
+        [DataMember]
+        public virtual List<FundLegalEntityIdentifier> FundLegalEntityIdentifiers { get; set; }
     }
 }
