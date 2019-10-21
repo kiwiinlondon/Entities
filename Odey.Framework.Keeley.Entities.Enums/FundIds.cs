@@ -528,6 +528,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         NAT_USD_M = 9908,
         [EnumMember]
-        IPB = 9963
+        IPB = 9963,
+
+        [EnumMember]
+        SSF = 10056,
+        [EnumMember]
+        SSF_GBP_M = 10057
     }
 }
