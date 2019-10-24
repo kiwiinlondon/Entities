@@ -869,5 +869,14 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("Financing_Roll", updateUserIdParameter);
         }
+    
+        public virtual ObjectResult<PortfolioMessageQueue_Get_Result> PortfolioMessageQueue_GetForReplay(string messageIds)
+        {
+            var messageIdsParameter = messageIds != null ?
+                new ObjectParameter("messageIds", messageIds) :
+                new ObjectParameter("messageIds", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioMessageQueue_Get_Result>("PortfolioMessageQueue_GetForReplay", messageIdsParameter);
+        }
     }
 }

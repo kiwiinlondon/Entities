@@ -13257,6 +13257,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="LastMessageId" Type="int" Mode="In" />
         </Function>
         <Function Name="PortfolioMessageQueue_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="PortfolioMessageQueue_GetForReplay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="messageIds" Type="nvarchar(max)" Mode="In" />
+        </Function>
         <Function Name="PortfolioMessageQueue_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioMessageTypeId" Type="int" Mode="In" />
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -18951,6 +18954,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           </FunctionImport>
           <FunctionImport Name="Financing_Roll" ReturnType="Collection(DateTime)">
           <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PortfolioMessageQueue_GetForReplay" ReturnType="Collection(Odey.Framework.Keeley.Entities.PortfolioMessageQueue_Get_Result)">
+            <Parameter Name="messageIds" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -28960,6 +28966,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="DateTime" Name="TradeDate" Nullable="false" Precision="23" />
           <Property Type="Boolean" Name="TodayZeroOutAccrual" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="PortfolioMessageQueue_GetForReplay_Result">
+          <Property Type="Int32" Name="MessageId" Nullable="false" />
+          <Property Type="Int32" Name="PortfolioMessageTypeId" Nullable="false" />
+          <Property Type="String" Name="Message" Nullable="true" />
+          <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="EndDt" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="FundId" Nullable="false" />
+          <Property Type="Int32" Name="InitiatingEntityTypeId" Nullable="true" />
+          <Property Type="Int32" Name="InitiatingEntityId" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -37587,6 +37603,19 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <FunctionImportMapping FunctionImportName="PortfolioEvent_GetMultipleByPositionLessThanDate" FunctionName="KeeleyModel.Store.PortfolioEvent_GetMultipleByPositionLessThanDate">
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="Financing_Roll" FunctionName="KeeleyModel.Store.Financing_Roll" />
+          <FunctionImportMapping FunctionImportName="PortfolioMessageQueue_GetForReplay" FunctionName="KeeleyModel.Store.PortfolioMessageQueue_GetForReplay">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioMessageQueue_Get_Result">
+                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
+                <ScalarProperty Name="PortfolioMessageTypeId" ColumnName="PortfolioMessageTypeId" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="InitiatingEntityId" ColumnName="InitiatingEntityId" />
+                <ScalarProperty Name="InitiatingEntityTypeId" ColumnName="InitiatingEntityTypeId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
