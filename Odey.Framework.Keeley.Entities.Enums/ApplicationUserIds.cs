@@ -69,5 +69,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MarkAbbott = 16,
         [EnumMember]
         PeterMartin = 47,
+        [EnumMember]
+        HenrySteel = 169,
     }
 }
