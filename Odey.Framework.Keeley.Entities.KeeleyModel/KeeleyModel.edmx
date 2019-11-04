@@ -241,6 +241,16 @@
           <Property Name="SettledNetPosition" Type="numeric" Precision="27" Scale="8" />
           <Property Name="SettledExposure" Type="numeric" Precision="27" Scale="8" />
           <Property Name="SettledMarketValue" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FinancingAccrual" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BorrowAccrual" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowNotional" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowAccrual" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="MarginInterest" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CashInterest" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FinancingRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BorrowRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowUnits" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -716,6 +726,7 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="InputDate" Type="datetime" Nullable="false" />
+          <Property Name="MustExistEntityTypeId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="EntityAnalytic">
           <Key>
@@ -2333,7 +2344,7 @@
           <Property Name="FinancingId" Type="int" />
           <Property Name="FinancingDataAdded" Type="bit" />
           <Property Name="AllInAccrualInstrument" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="MustExist" Type="bit" />
+          <Property Name="FinancingMustExist" Type="bit" />
           <Property Name="SettledNetPosition" Type="numeric" Precision="27" Scale="8" />
           <Property Name="SettledNotional" Type="numeric" Precision="27" Scale="8" />
           <Property Name="SettledNotionalInstrument" Type="numeric" Precision="27" Scale="8" />
@@ -2342,6 +2353,13 @@
           <Property Name="SettledMarketValue" Type="numeric" Precision="27" Scale="8" />
           <Property Name="SettledMarketValueInstrument" Type="numeric" Precision="27" Scale="8" />
           <Property Name="PortfolioEventExistsOnDay" Type="bit" Nullable="false" />
+          <Property Name="SettledNetPositionChange" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FinancingAccrualInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="BorrowAccrualInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowNotionalInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OverborrowAccrualInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="MarginInterestInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CashInterestInstrument" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2428,6 +2446,8 @@
           <Property Name="Revalue" Type="bit" />
           <Property Name="TradeDate" Type="datetime" Nullable="false" />
           <Property Name="TodayZeroOutAccrual" Type="bit" />
+          <Property Name="TodayFinancingMustExist" Type="bit" Nullable="false" />
+          <Property Name="FinancingMustExist" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PortfolioEventFX">
           <Key>
@@ -5410,6 +5430,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="EnforcePositionEvent">
               <PropertyRef Name="InstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EnforcePo__MustE__2D7C2C2B">
+          <End Role="EntityType" Type="Self.EntityType" Multiplicity="1" />
+          <End Role="EnforcePositionEvent" Type="Self.EnforcePositionEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="MustExistEntityTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9743,6 +9775,16 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="SettledNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="SettledExposure" Type="numeric" Mode="In" />
           <Parameter Name="SettledMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="BorrowAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowNotional" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="MarginInterest" Type="numeric" Mode="In" />
+          <Parameter Name="CashInterest" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingRate" Type="numeric" Mode="In" />
+          <Parameter Name="BorrowRate" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowRate" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowUnits" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9798,6 +9840,16 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="SettledNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="SettledExposure" Type="numeric" Mode="In" />
           <Parameter Name="SettledMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="BorrowAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowNotional" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="MarginInterest" Type="numeric" Mode="In" />
+          <Parameter Name="CashInterest" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingRate" Type="numeric" Mode="In" />
+          <Parameter Name="BorrowRate" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowRate" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowUnits" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -10534,6 +10586,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="CurrencyId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="InputDate" Type="datetime" Mode="In" />
+          <Parameter Name="MustExistEntityTypeId" Type="int" Mode="In" />
         </Function>
         <Function Name="EnforcePositionEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -10545,6 +10598,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="InputDate" Type="datetime" Mode="In" />
+          <Parameter Name="MustExistEntityTypeId" Type="int" Mode="In" />
         </Function>
         <Function Name="EntityAnalytic_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EntityAnalyticId" Type="int" Mode="In" />
@@ -12883,7 +12937,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="FinancingId" Type="int" Mode="In" />
           <Parameter Name="FinancingDataAdded" Type="bit" Mode="In" />
           <Parameter Name="AllInAccrualInstrument" Type="numeric" Mode="In" />
-          <Parameter Name="MustExist" Type="bit" Mode="In" />
+          <Parameter Name="FinancingMustExist" Type="bit" Mode="In" />
           <Parameter Name="SettledNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="SettledNotional" Type="numeric" Mode="In" />
           <Parameter Name="SettledNotionalInstrument" Type="numeric" Mode="In" />
@@ -12892,6 +12946,13 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="SettledMarketValue" Type="numeric" Mode="In" />
           <Parameter Name="SettledMarketValueInstrument" Type="numeric" Mode="In" />
           <Parameter Name="PortfolioEventExistsOnDay" Type="bit" Mode="In" />
+          <Parameter Name="SettledNetPositionChange" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingAccrualInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="BorrowAccrualInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowNotionalInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowAccrualInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="MarginInterestInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="CashInterestInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -13014,7 +13075,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="FinancingId" Type="int" Mode="In" />
           <Parameter Name="FinancingDataAdded" Type="bit" Mode="In" />
           <Parameter Name="AllInAccrualInstrument" Type="numeric" Mode="In" />
-          <Parameter Name="MustExist" Type="bit" Mode="In" />
+          <Parameter Name="FinancingMustExist" Type="bit" Mode="In" />
           <Parameter Name="SettledNetPosition" Type="numeric" Mode="In" />
           <Parameter Name="SettledNotional" Type="numeric" Mode="In" />
           <Parameter Name="SettledNotionalInstrument" Type="numeric" Mode="In" />
@@ -13023,6 +13084,13 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="SettledMarketValue" Type="numeric" Mode="In" />
           <Parameter Name="SettledMarketValueInstrument" Type="numeric" Mode="In" />
           <Parameter Name="PortfolioEventExistsOnDay" Type="bit" Mode="In" />
+          <Parameter Name="SettledNetPositionChange" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingAccrualInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="BorrowAccrualInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowNotionalInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="OverborrowAccrualInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="MarginInterestInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="CashInterestInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -13131,6 +13199,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Revalue" Type="bit" Mode="In" />
           <Parameter Name="TradeDate" Type="datetime" Mode="In" />
           <Parameter Name="TodayZeroOutAccrual" Type="bit" Mode="In" />
+          <Parameter Name="TodayFinancingMustExist" Type="bit" Mode="In" />
+          <Parameter Name="FinancingMustExist" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -13203,6 +13273,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Revalue" Type="bit" Mode="In" />
           <Parameter Name="TradeDate" Type="datetime" Mode="In" />
           <Parameter Name="TodayZeroOutAccrual" Type="bit" Mode="In" />
+          <Parameter Name="TodayFinancingMustExist" Type="bit" Mode="In" />
+          <Parameter Name="FinancingMustExist" Type="bit" Mode="In" />
         </Function>
         <Function Name="PortfolioEventFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventFXId" Type="int" Mode="In" />
@@ -15154,6 +15226,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="FK__EnforcePo__Instr__1E2EFBA3" Association="Self.FK__EnforcePo__Instr__1E2EFBA3">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EnforcePo__MustE__2D7C2C2B" Association="Self.FK__EnforcePo__MustE__2D7C2C2B">
+            <End Role="EntityType" EntitySet="EntityType" />
             <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvent" />
           </AssociationSet>
           <AssociationSet Name="FK__EnforcePo__Updat__20174415" Association="Self.FK__EnforcePo__Updat__20174415">
@@ -18956,8 +19032,12 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Parameter Name="UpdateUserId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PortfolioMessageQueue_GetForReplay" ReturnType="Collection(Odey.Framework.Keeley.Entities.PortfolioMessageQueue_Get_Result)">
-            <Parameter Name="messageIds" Mode="In" Type="String" />
+          <Parameter Name="messageIds" Mode="In" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK__EnforcePo__MustE__2D7C2C2B" Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__MustE__2D7C2C2B">
+            <End Role="EntityType" EntitySet="EntityTypes" />
+            <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvents" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -20721,6 +20801,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="Revalue" Type="Boolean" />
           <Property Name="TradeDate" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="TodayZeroOutAccrual" Type="Boolean" />
+          <Property Name="TodayFinancingMustExist" Type="Boolean" Nullable="false" />
+          <Property Name="FinancingMustExist" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="PositionAccountMovementUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -20978,7 +21060,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="FinancingId" Type="Int32" />
           <Property Name="FinancingDataAdded" Type="Boolean" />
           <Property Name="AllInAccrualInstrument" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="MustExist" Type="Boolean" />
           <Property Name="SettledNetPosition" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SettledNotional" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SettledNotionalInstrument" Type="Decimal" Precision="27" Scale="8" />
@@ -20988,6 +21069,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="SettledMarketValue" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SettledMarketValueInstrument" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="PortfolioEventExistsOnDay" Type="Boolean" Nullable="false" />
+          <Property Name="SettledNetPositionChange" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FinancingMustExist" Type="Boolean" />
+          <Property Name="FinancingAccrualInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="BorrowAccrualInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowNotionalInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowAccrualInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="MarginInterestInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CashInterestInstrument" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25155,6 +25244,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="FullyQualifiedName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="EntityProperties" Relationship="Odey.Framework.Keeley.Entities.EntityPropertyEntityTypeIDFK" FromRole="EntityType" ToRole="EntityProperty" />
           <NavigationProperty Name="FactorRelationships" Relationship="Odey.Framework.Keeley.Entities.fk_factor_relationship_entity_type" FromRole="EntityType" ToRole="FactorRelationship" />
+          <NavigationProperty Name="EnforcePositionEvents" Relationship="Odey.Framework.Keeley.Entities.FK__EnforcePo__MustE__2D7C2C2B" FromRole="EntityType" ToRole="EnforcePositionEvent" />
           </EntityType>
         <Association Name="EntityTypeUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -26708,6 +26798,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="SettledNetPosition" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SettledExposure" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SettledMarketValue" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FinancingAccrual" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="BorrowAccrual" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowNotional" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowAccrual" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="MarginInterest" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CashInterest" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FinancingRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="BorrowRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OverborrowUnits" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -28832,6 +28932,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="InputDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MustExistEntityTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EntityType" Relationship="Odey.Framework.Keeley.Entities.FK__EnforcePo__MustE__2D7C2C2B" FromRole="EnforcePositionEvent" ToRole="EntityType" />
+          <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.FK__EnforcePo__Event__1D3AD76A" FromRole="EnforcePositionEvent" ToRole="Event" />
           </EntityType>
         <Association Name="FK__EnforcePo__Updat__20174415">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -28976,6 +29079,18 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Int32" Name="InitiatingEntityTypeId" Nullable="true" />
           <Property Type="Int32" Name="InitiatingEntityId" Nullable="true" />
         </ComplexType>
+        <Association Name="FK__EnforcePo__MustE__2D7C2C2B">
+          <End Type="Odey.Framework.Keeley.Entities.EntityType" Role="EntityType" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.EnforcePositionEvent" Role="EnforcePositionEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntityType">
+              <PropertyRef Name="EntityTypeID" />
+            </Principal>
+            <Dependent Role="EnforcePositionEvent">
+              <PropertyRef Name="MustExistEntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -30886,6 +31001,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="FinancingMustExist" ColumnName="FinancingMustExist" />
+                <ScalarProperty Name="TodayFinancingMustExist" ColumnName="TodayFinancingMustExist" />
                 <ScalarProperty Name="TodayZeroOutAccrual" ColumnName="TodayZeroOutAccrual" />
                 <ScalarProperty Name="TradeDate" ColumnName="TradeDate" />
                 <ScalarProperty Name="Revalue" ColumnName="Revalue" />
@@ -30962,6 +31079,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="FinancingMustExist" ParameterName="FinancingMustExist" />
+                  <ScalarProperty Name="TodayFinancingMustExist" ParameterName="TodayFinancingMustExist" />
                   <ScalarProperty Name="TodayZeroOutAccrual" ParameterName="TodayZeroOutAccrual" />
                   <ScalarProperty Name="TradeDate" ParameterName="TradeDate" />
                   <ScalarProperty Name="Revalue" ParameterName="Revalue" />
@@ -31035,6 +31154,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="FinancingMustExist" ParameterName="FinancingMustExist" Version="Current" />
+                  <ScalarProperty Name="TodayFinancingMustExist" ParameterName="TodayFinancingMustExist" Version="Current" />
                   <ScalarProperty Name="TodayZeroOutAccrual" ParameterName="TodayZeroOutAccrual" Version="Current" />
                   <ScalarProperty Name="TradeDate" ParameterName="TradeDate" Version="Current" />
                   <ScalarProperty Name="Revalue" ParameterName="Revalue" Version="Current" />
@@ -31172,6 +31293,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="CashInterestInstrument" ColumnName="CashInterestInstrument" />
+                <ScalarProperty Name="MarginInterestInstrument" ColumnName="MarginInterestInstrument" />
+                <ScalarProperty Name="OverborrowAccrualInstrument" ColumnName="OverborrowAccrualInstrument" />
+                <ScalarProperty Name="OverborrowNotionalInstrument" ColumnName="OverborrowNotionalInstrument" />
+                <ScalarProperty Name="BorrowAccrualInstrument" ColumnName="BorrowAccrualInstrument" />
+                <ScalarProperty Name="FinancingAccrualInstrument" ColumnName="FinancingAccrualInstrument" />
+                <ScalarProperty Name="FinancingMustExist" ColumnName="FinancingMustExist" />
+                <ScalarProperty Name="SettledNetPositionChange" ColumnName="SettledNetPositionChange" />
                 <ScalarProperty Name="PortfolioEventExistsOnDay" ColumnName="PortfolioEventExistsOnDay" />
                 <ScalarProperty Name="SettledMarketValueInstrument" ColumnName="SettledMarketValueInstrument" />
                 <ScalarProperty Name="SettledMarketValue" ColumnName="SettledMarketValue" />
@@ -31180,7 +31309,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                 <ScalarProperty Name="SettledNotionalInstrument" ColumnName="SettledNotionalInstrument" />
                 <ScalarProperty Name="SettledNotional" ColumnName="SettledNotional" />
                 <ScalarProperty Name="SettledNetPosition" ColumnName="SettledNetPosition" />
-                <ScalarProperty Name="MustExist" ColumnName="MustExist" />
                 <ScalarProperty Name="AllInAccrualInstrument" ColumnName="AllInAccrualInstrument" />
                 <ScalarProperty Name="FinancingDataAdded" ColumnName="FinancingDataAdded" />
                 <ScalarProperty Name="FinancingId" ColumnName="FinancingId" />
@@ -31304,6 +31432,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="CashInterestInstrument" ParameterName="CashInterestInstrument" />
+                  <ScalarProperty Name="MarginInterestInstrument" ParameterName="MarginInterestInstrument" />
+                  <ScalarProperty Name="OverborrowAccrualInstrument" ParameterName="OverborrowAccrualInstrument" />
+                  <ScalarProperty Name="OverborrowNotionalInstrument" ParameterName="OverborrowNotionalInstrument" />
+                  <ScalarProperty Name="BorrowAccrualInstrument" ParameterName="BorrowAccrualInstrument" />
+                  <ScalarProperty Name="FinancingAccrualInstrument" ParameterName="FinancingAccrualInstrument" />
+                  <ScalarProperty Name="FinancingMustExist" ParameterName="FinancingMustExist" />
+                  <ScalarProperty Name="SettledNetPositionChange" ParameterName="SettledNetPositionChange" />
                   <ScalarProperty Name="PortfolioEventExistsOnDay" ParameterName="PortfolioEventExistsOnDay" />
                   <ScalarProperty Name="SettledMarketValueInstrument" ParameterName="SettledMarketValueInstrument" />
                   <ScalarProperty Name="SettledMarketValue" ParameterName="SettledMarketValue" />
@@ -31312,7 +31448,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="SettledNotionalInstrument" ParameterName="SettledNotionalInstrument" />
                   <ScalarProperty Name="SettledNotional" ParameterName="SettledNotional" />
                   <ScalarProperty Name="SettledNetPosition" ParameterName="SettledNetPosition" />
-                  <ScalarProperty Name="MustExist" ParameterName="MustExist" />
                   <ScalarProperty Name="AllInAccrualInstrument" ParameterName="AllInAccrualInstrument" />
                   <ScalarProperty Name="FinancingDataAdded" ParameterName="FinancingDataAdded" />
                   <ScalarProperty Name="FinancingId" ParameterName="FinancingId" />
@@ -31433,6 +31568,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="CashInterestInstrument" ParameterName="CashInterestInstrument" Version="Current" />
+                  <ScalarProperty Name="MarginInterestInstrument" ParameterName="MarginInterestInstrument" Version="Current" />
+                  <ScalarProperty Name="OverborrowAccrualInstrument" ParameterName="OverborrowAccrualInstrument" Version="Current" />
+                  <ScalarProperty Name="OverborrowNotionalInstrument" ParameterName="OverborrowNotionalInstrument" Version="Current" />
+                  <ScalarProperty Name="BorrowAccrualInstrument" ParameterName="BorrowAccrualInstrument" Version="Current" />
+                  <ScalarProperty Name="FinancingAccrualInstrument" ParameterName="FinancingAccrualInstrument" Version="Current" />
+                  <ScalarProperty Name="FinancingMustExist" ParameterName="FinancingMustExist" Version="Current" />
+                  <ScalarProperty Name="SettledNetPositionChange" ParameterName="SettledNetPositionChange" Version="Current" />
                   <ScalarProperty Name="PortfolioEventExistsOnDay" ParameterName="PortfolioEventExistsOnDay" Version="Current" />
                   <ScalarProperty Name="SettledMarketValueInstrument" ParameterName="SettledMarketValueInstrument" Version="Current" />
                   <ScalarProperty Name="SettledMarketValue" ParameterName="SettledMarketValue" Version="Current" />
@@ -31441,7 +31584,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="SettledNotionalInstrument" ParameterName="SettledNotionalInstrument" Version="Current" />
                   <ScalarProperty Name="SettledNotional" ParameterName="SettledNotional" Version="Current" />
                   <ScalarProperty Name="SettledNetPosition" ParameterName="SettledNetPosition" Version="Current" />
-                  <ScalarProperty Name="MustExist" ParameterName="MustExist" Version="Current" />
                   <ScalarProperty Name="AllInAccrualInstrument" ParameterName="AllInAccrualInstrument" Version="Current" />
                   <ScalarProperty Name="FinancingDataAdded" ParameterName="FinancingDataAdded" Version="Current" />
                   <ScalarProperty Name="FinancingId" ParameterName="FinancingId" Version="Current" />
@@ -35961,6 +36103,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
+                <ScalarProperty Name="OverborrowUnits" ColumnName="OverborrowUnits" />
+                <ScalarProperty Name="OverborrowRate" ColumnName="OverborrowRate" />
+                <ScalarProperty Name="BorrowRate" ColumnName="BorrowRate" />
+                <ScalarProperty Name="FinancingRate" ColumnName="FinancingRate" />
+                <ScalarProperty Name="CashInterest" ColumnName="CashInterest" />
+                <ScalarProperty Name="MarginInterest" ColumnName="MarginInterest" />
+                <ScalarProperty Name="OverborrowAccrual" ColumnName="OverborrowAccrual" />
+                <ScalarProperty Name="OverborrowNotional" ColumnName="OverborrowNotional" />
+                <ScalarProperty Name="BorrowAccrual" ColumnName="BorrowAccrual" />
+                <ScalarProperty Name="FinancingAccrual" ColumnName="FinancingAccrual" />
                 <ScalarProperty Name="SettledMarketValue" ColumnName="SettledMarketValue" />
                 <ScalarProperty Name="SettledExposure" ColumnName="SettledExposure" />
                 <ScalarProperty Name="SettledNetPosition" ColumnName="SettledNetPosition" />
@@ -36017,6 +36169,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="OverborrowUnits" ParameterName="OverborrowUnits" />
+                  <ScalarProperty Name="OverborrowRate" ParameterName="OverborrowRate" />
+                  <ScalarProperty Name="BorrowRate" ParameterName="BorrowRate" />
+                  <ScalarProperty Name="FinancingRate" ParameterName="FinancingRate" />
+                  <ScalarProperty Name="CashInterest" ParameterName="CashInterest" />
+                  <ScalarProperty Name="MarginInterest" ParameterName="MarginInterest" />
+                  <ScalarProperty Name="OverborrowAccrual" ParameterName="OverborrowAccrual" />
+                  <ScalarProperty Name="OverborrowNotional" ParameterName="OverborrowNotional" />
+                  <ScalarProperty Name="BorrowAccrual" ParameterName="BorrowAccrual" />
+                  <ScalarProperty Name="FinancingAccrual" ParameterName="FinancingAccrual" />
                   <ScalarProperty Name="SettledMarketValue" ParameterName="SettledMarketValue" />
                   <ScalarProperty Name="SettledExposure" ParameterName="SettledExposure" />
                   <ScalarProperty Name="SettledNetPosition" ParameterName="SettledNetPosition" />
@@ -36070,6 +36232,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="OverborrowUnits" ParameterName="OverborrowUnits" Version="Current" />
+                  <ScalarProperty Name="OverborrowRate" ParameterName="OverborrowRate" Version="Current" />
+                  <ScalarProperty Name="BorrowRate" ParameterName="BorrowRate" Version="Current" />
+                  <ScalarProperty Name="FinancingRate" ParameterName="FinancingRate" Version="Current" />
+                  <ScalarProperty Name="CashInterest" ParameterName="CashInterest" Version="Current" />
+                  <ScalarProperty Name="MarginInterest" ParameterName="MarginInterest" Version="Current" />
+                  <ScalarProperty Name="OverborrowAccrual" ParameterName="OverborrowAccrual" Version="Current" />
+                  <ScalarProperty Name="OverborrowNotional" ParameterName="OverborrowNotional" Version="Current" />
+                  <ScalarProperty Name="BorrowAccrual" ParameterName="BorrowAccrual" Version="Current" />
+                  <ScalarProperty Name="FinancingAccrual" ParameterName="FinancingAccrual" Version="Current" />
                   <ScalarProperty Name="SettledMarketValue" ParameterName="SettledMarketValue" Version="Current" />
                   <ScalarProperty Name="SettledExposure" ParameterName="SettledExposure" Version="Current" />
                   <ScalarProperty Name="SettledNetPosition" ParameterName="SettledNetPosition" Version="Current" />
@@ -37553,6 +37725,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="EnforcePositionEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EnforcePositionEvent">
               <MappingFragment StoreEntitySet="EnforcePositionEvent">
+                <ScalarProperty Name="MustExistEntityTypeId" ColumnName="MustExistEntityTypeId" />
                 <ScalarProperty Name="InputDate" ColumnName="InputDate" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -37568,6 +37741,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EnforcePositionEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.EnforcePositionEvent_Insert">
+                  <ScalarProperty Name="MustExistEntityTypeId" ParameterName="MustExistEntityTypeId" />
                   <ScalarProperty Name="InputDate" ParameterName="InputDate" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
@@ -37580,6 +37754,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.EnforcePositionEvent_Update">
+                  <ScalarProperty Name="MustExistEntityTypeId" ParameterName="MustExistEntityTypeId" Version="Current" />
                   <ScalarProperty Name="InputDate" ParameterName="InputDate" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
@@ -37638,7 +37813,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="28">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="10">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -43422,6 +43597,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Event__1D3AD76A" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Instr__1E2EFBA3" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Relat__408413A7" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__MustE__2D7C2C2B" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

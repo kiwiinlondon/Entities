@@ -164,6 +164,10 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime TradeDate { get; set; }
     	[DataMember]
         public Nullable<bool> TodayZeroOutAccrual { get; set; }
+    	[DataMember]
+        public bool TodayFinancingMustExist { get; set; }
+    	[DataMember]
+        public bool FinancingMustExist { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

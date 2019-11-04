@@ -118,6 +118,26 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> SettledExposure { get; set; }
     	[DataMember]
         public Nullable<decimal> SettledMarketValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FinancingAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BorrowAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowNotional { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginInterest { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterest { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FinancingRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BorrowRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowUnits { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

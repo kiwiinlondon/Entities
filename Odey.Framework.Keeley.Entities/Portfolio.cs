@@ -260,8 +260,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> AllInAccrualInstrument { get; set; }
     	[DataMember]
-        public Nullable<bool> MustExist { get; set; }
-    	[DataMember]
         public Nullable<decimal> SettledNetPosition { get; set; }
     	[DataMember]
         public Nullable<decimal> SettledNotional { get; set; }
@@ -277,6 +275,22 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> SettledMarketValueInstrument { get; set; }
     	[DataMember]
         public bool PortfolioEventExistsOnDay { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SettledNetPositionChange { get; set; }
+    	[DataMember]
+        public Nullable<bool> FinancingMustExist { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FinancingAccrualInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BorrowAccrualInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowNotionalInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowAccrualInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginInterestInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterestInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

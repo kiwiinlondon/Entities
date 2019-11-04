@@ -36,5 +36,12 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public System.DateTime InputDate { get; set; }
+    	[DataMember]
+        public int MustExistEntityTypeId { get; set; }
+    
+        [DataMember]
+        public virtual EntityType EntityType { get; set; }
+        [DataMember]
+        public virtual Event Event { get; set; }
     }
 }
