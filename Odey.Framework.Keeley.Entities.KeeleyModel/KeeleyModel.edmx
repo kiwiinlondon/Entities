@@ -1153,28 +1153,6 @@
           <Property Name="UpdateUserId" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
-        <EntityType Name="FactsetPortfolio">
-          <Key>
-            <PropertyRef Name="FactSetPortfolioId" />
-          </Key>
-          <Property Name="FactSetPortfolioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FundId" Type="int" Nullable="false" />
-          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
-          <Property Name="CurrencyId" Type="int" Nullable="false" />
-          <Property Name="InstrumentName" Type="varchar" MaxLength="250" Nullable="false" />
-          <Property Name="OriginalIdentifier" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="InstrumentMarketId" Type="int" />
-          <Property Name="InstrumentClassId" Type="int" />
-          <Property Name="FMContId" Type="int" />
-          <Property Name="ReturnContribution" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="PriceReturnContribution" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="CurrencyReturnContribution" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="CarryReturnContribution" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="IsItd" Type="bit" Nullable="false" />
-          <Property Name="StartDt" Type="datetime" Nullable="false" />
-          <Property Name="UpdateUserId" Type="int" Nullable="false" />
-          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
         <EntityType Name="FailedTrade">
           <Key>
             <PropertyRef Name="EventId" />
@@ -1263,6 +1241,21 @@
           <Property Name="RelatedFinancingId" Type="int" />
           <Property Name="IsDummy" Type="bit" Nullable="false" />
           <Property Name="OverborrowFinancingAccrual" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FinancingControlId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FinancingControl">
+          <Key>
+            <PropertyRef Name="FinancingControlId" />
+          </Key>
+          <Property Name="FinancingControlId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="InstrumentClassId" Type="int" Nullable="false" />
+          <Property Name="Loaded" Type="bit" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="CustodianId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="FMPortfolio">
           <Key>
@@ -5553,6 +5546,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Financing__Custo__43366320">
+          <End Role="Custodian" Type="Self.Custodian" Multiplicity="1" />
+          <End Role="FinancingControl" Type="Self.FinancingControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Custodian">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FinancingControl">
+              <PropertyRef Name="CustodianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Financing__Custo__56C78F2A">
           <End Role="Custodian" Type="Self.Custodian" Multiplicity="1" />
           <End Role="Financing" Type="Self.Financing" Multiplicity="*" />
@@ -5565,6 +5570,30 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Financing__Finan__38B8D4AD">
+          <End Role="FinancingControl" Type="Self.FinancingControl" Multiplicity="1" />
+          <End Role="Financing" Type="Self.Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FinancingControl">
+              <PropertyRef Name="FinancingControlId" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="FinancingControlId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__FundI__2F2F6A73">
+          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
+          <End Role="FinancingControl" Type="Self.FinancingControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FinancingControl">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Financing__FundI__53EB227F">
           <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
           <End Role="Financing" Type="Self.Financing" Multiplicity="*" />
@@ -5574,6 +5603,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="Financing">
               <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Instr__30238EAC">
+          <End Role="InstrumentClass" Type="Self.InstrumentClass" Multiplicity="1" />
+          <End Role="FinancingControl" Type="Self.FinancingControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentClass">
+              <PropertyRef Name="InstrumentClassID" />
+            </Principal>
+            <Dependent Role="FinancingControl">
+              <PropertyRef Name="InstrumentClassId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5598,6 +5639,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="Financing1">
               <PropertyRef Name="RelatedFinancingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Updat__3117B2E5">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="FinancingControl" Type="Self.FinancingControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FinancingControl">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6810,54 +6863,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="FactorExposure">
               <PropertyRef Name="FactorBenchmarkId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FactsetPortfolio_ApplicationUser">
-          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
-          <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="FactsetPortfolio">
-              <PropertyRef Name="UpdateUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FactsetPortfolio_Fund">
-          <End Role="Fund" Type="Self.Fund" Multiplicity="1" />
-          <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Fund">
-              <PropertyRef Name="LegalEntityID" />
-            </Principal>
-            <Dependent Role="FactsetPortfolio">
-              <PropertyRef Name="FundId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FactsetPortfolio_InstrumentClass">
-          <End Role="InstrumentClass" Type="Self.InstrumentClass" Multiplicity="0..1" />
-          <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstrumentClass">
-              <PropertyRef Name="InstrumentClassID" />
-            </Principal>
-            <Dependent Role="FactsetPortfolio">
-              <PropertyRef Name="InstrumentClassId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FactsetPortfolio_InstrumentMarket">
-          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="0..1" />
-          <End Role="FactsetPortfolio" Type="Self.FactsetPortfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstrumentMarket">
-              <PropertyRef Name="InstrumentMarketID" />
-            </Principal>
-            <Dependent Role="FactsetPortfolio">
-              <PropertyRef Name="InstrumentMarketId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11280,6 +11285,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RelatedFinancingId" Type="int" Mode="In" />
           <Parameter Name="IsDummy" Type="bit" Mode="In" />
           <Parameter Name="OverborrowFinancingAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingControlId" Type="int" Mode="In" />
         </Function>
         <Function Name="Financing_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -11311,6 +11317,30 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RelatedFinancingId" Type="int" Mode="In" />
           <Parameter Name="IsDummy" Type="bit" Mode="In" />
           <Parameter Name="OverborrowFinancingAccrual" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingControlId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FinancingControl_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FinancingControlId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FinancingControl_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="InstrumentClassId" Type="int" Mode="In" />
+          <Parameter Name="Loaded" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="CustodianId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FinancingControl_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FinancingControlId" Type="int" Mode="In" />
+          <Parameter Name="FundId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="InstrumentClassId" Type="int" Mode="In" />
+          <Parameter Name="Loaded" Type="bit" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="CustodianId" Type="int" Mode="In" />
         </Function>
         <Function Name="FMContractMapping_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FMContId" Type="int" Mode="In" />
@@ -14283,12 +14313,12 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="FactorExposure" EntityType="Self.FactorExposure" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FactorHierarchy" EntityType="Self.FactorHierarchy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FactorRelationship" EntityType="Self.FactorRelationship" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="FactsetPortfolio" EntityType="Self.FactsetPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FailedTrade" EntityType="Self.FailedTrade" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileCollected" EntityType="Self.FileCollected" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileToBeCollected" EntityType="Self.FileToBeCollected" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileToBeCollectedGroup" EntityType="Self.FileToBeCollectedGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Financing" EntityType="Self.Financing" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FinancingControl" EntityType="Self.FinancingControl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FMPortfolio" EntityType="Self.FMPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FMTradeBridgeLastProcessed" EntityType="Self.FMTradeBridgeLastProcessed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FocusList" EntityType="Self.FocusList" Schema="dbo" store:Type="Tables" />
@@ -15268,13 +15298,29 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Currency" EntitySet="Currency" />
             <End Role="Financing" EntitySet="Financing" />
           </AssociationSet>
+          <AssociationSet Name="FK__Financing__Custo__43366320" Association="Self.FK__Financing__Custo__43366320">
+            <End Role="Custodian" EntitySet="Custodian" />
+            <End Role="FinancingControl" EntitySet="FinancingControl" />
+          </AssociationSet>
           <AssociationSet Name="FK__Financing__Custo__56C78F2A" Association="Self.FK__Financing__Custo__56C78F2A">
             <End Role="Custodian" EntitySet="Custodian" />
             <End Role="Financing" EntitySet="Financing" />
           </AssociationSet>
+          <AssociationSet Name="FK__Financing__Finan__38B8D4AD" Association="Self.FK__Financing__Finan__38B8D4AD">
+            <End Role="FinancingControl" EntitySet="FinancingControl" />
+            <End Role="Financing" EntitySet="Financing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__FundI__2F2F6A73" Association="Self.FK__Financing__FundI__2F2F6A73">
+            <End Role="Fund" EntitySet="Fund" />
+            <End Role="FinancingControl" EntitySet="FinancingControl" />
+          </AssociationSet>
           <AssociationSet Name="FK__Financing__FundI__53EB227F" Association="Self.FK__Financing__FundI__53EB227F">
             <End Role="Fund" EntitySet="Fund" />
             <End Role="Financing" EntitySet="Financing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Instr__30238EAC" Association="Self.FK__Financing__Instr__30238EAC">
+            <End Role="InstrumentClass" EntitySet="InstrumentClass" />
+            <End Role="FinancingControl" EntitySet="FinancingControl" />
           </AssociationSet>
           <AssociationSet Name="FK__Financing__Instr__54DF46B8" Association="Self.FK__Financing__Instr__54DF46B8">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
@@ -15283,6 +15329,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Financing__Relat__408413A7" Association="Self.FK__Financing__Relat__408413A7">
             <End Role="Financing" EntitySet="Financing" />
             <End Role="Financing1" EntitySet="Financing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Updat__3117B2E5" Association="Self.FK__Financing__Updat__3117B2E5">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="FinancingControl" EntitySet="FinancingControl" />
           </AssociationSet>
           <AssociationSet Name="FK__Financing__Updat__57BBB363" Association="Self.FK__Financing__Updat__57BBB363">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -15687,22 +15737,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK_FactorExposure_FactorBenchmark" Association="Self.FK_FactorExposure_FactorBenchmark">
             <End Role="FactorBenchmark" EntitySet="FactorBenchmark" />
             <End Role="FactorExposure" EntitySet="FactorExposure" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FactsetPortfolio_ApplicationUser" Association="Self.FK_FactsetPortfolio_ApplicationUser">
-            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
-            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FactsetPortfolio_Fund" Association="Self.FK_FactsetPortfolio_Fund">
-            <End Role="Fund" EntitySet="Fund" />
-            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FactsetPortfolio_InstrumentClass" Association="Self.FK_FactsetPortfolio_InstrumentClass">
-            <End Role="InstrumentClass" EntitySet="InstrumentClass" />
-            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FactsetPortfolio_InstrumentMarket" Association="Self.FK_FactsetPortfolio_InstrumentMarket">
-            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
-            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolio" />
           </AssociationSet>
           <AssociationSet Name="fk_parent_factor_relationship" Association="Self.fk_parent_factor_relationship">
             <End Role="FactorRelationship" EntitySet="FactorRelationship" />
@@ -18304,23 +18338,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="EntityType" EntitySet="EntityTypes" />
             <End Role="EntityAnalytic" EntitySet="EntityAnalytics" />
           </AssociationSet>
-          <EntitySet Name="FactsetPortfolios" EntityType="Odey.Framework.Keeley.Entities.FactsetPortfolio" />
-          <AssociationSet Name="FK_FactsetPortfolio_ApplicationUser" Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_ApplicationUser">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FactsetPortfolio_Fund" Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund">
-            <End Role="Fund" EntitySet="Funds" />
-            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FactsetPortfolio_InstrumentClass" Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass">
-            <End Role="InstrumentClass" EntitySet="InstrumentClasses" />
-            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FactsetPortfolio_InstrumentMarket" Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket">
-            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
-            <End Role="FactsetPortfolio" EntitySet="FactsetPortfolios" />
-          </AssociationSet>
           <EntitySet Name="BloombergIdentifiers" EntityType="Odey.Framework.Keeley.Entities.BloombergIdentifier" />
           <AssociationSet Name="FK__Bloomberg__Updat__17B30F8B" Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
@@ -19038,6 +19055,27 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="EntityType" EntitySet="EntityTypes" />
             <End Role="EnforcePositionEvent" EntitySet="EnforcePositionEvents" />
           </AssociationSet>
+          <EntitySet Name="FinancingControls" EntityType="Odey.Framework.Keeley.Entities.FinancingControl" />
+          <AssociationSet Name="FK__Financing__Updat__3117B2E5" Association="Odey.Framework.Keeley.Entities.FK__Financing__Updat__3117B2E5">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="FinancingControl" EntitySet="FinancingControls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__FundI__2F2F6A73" Association="Odey.Framework.Keeley.Entities.FK__Financing__FundI__2F2F6A73">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="FinancingControl" EntitySet="FinancingControls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Instr__30238EAC" Association="Odey.Framework.Keeley.Entities.FK__Financing__Instr__30238EAC">
+            <End Role="InstrumentClass" EntitySet="InstrumentClasses" />
+            <End Role="FinancingControl" EntitySet="FinancingControls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Finan__38B8D4AD" Association="Odey.Framework.Keeley.Entities.FK__Financing__Finan__38B8D4AD">
+            <End Role="FinancingControl" EntitySet="FinancingControls" />
+            <End Role="Financing" EntitySet="Financings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Financing__Custo__43366320" Association="Odey.Framework.Keeley.Entities.FK__Financing__Custo__43366320">
+            <End Role="Custodian" EntitySet="Custodians" />
+            <End Role="FinancingControl" EntitySet="FinancingControls" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -19135,7 +19173,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="ParentInstrumentClassRelationships" Relationship="Odey.Framework.Keeley.Entities.InstrumentClassRelationshipInstrumentClassIDFK" FromRole="InstrumentClass" ToRole="InstrumentClassRelationship" a:GetterAccess="Public" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="FactsetPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass" FromRole="InstrumentClass" ToRole="FactsetPortfolio" />
           <Property Name="CICSuffix" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Market">
@@ -21933,7 +21970,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Binary" Name="DataVersion" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="RawAnalyticId" />
           <NavigationProperty Name="RawAnalytic" Relationship="Odey.Framework.Keeley.Entities.AnalyticRawAnalyticIDFK" FromRole="Analytic" ToRole="RawAnalytic" />
-          <NavigationProperty Name="Portfolios1" Relationship="Odey.Framework.Keeley.Entities.FK__Portfolio__Paren__32951BAC1" FromRole="Analytic" ToRole="Portfolio" />
         </EntityType>
         <Association Name="AnalyticInstrumentMarketIdFK">
           <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
@@ -26135,80 +26171,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="FactsetPortfolio">
-          <Key>
-            <PropertyRef Name="FactSetPortfolioId" />
-          </Key>
-          <Property Name="FactSetPortfolioId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="FundId" Type="Int32" Nullable="false" />
-          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
-          <Property Name="InstrumentName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="OriginalIdentifier" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="InstrumentMarketId" Type="Int32" />
-          <Property Name="InstrumentClassId" Type="Int32" />
-          <Property Name="FMContId" Type="Int32" />
-          <Property Name="ReturnContribution" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="PriceReturnContribution" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="CurrencyReturnContribution" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="CarryReturnContribution" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="IsItd" Type="Boolean" Nullable="false" />
-          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateUserId" Type="Int32" Nullable="false" />
-          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_ApplicationUser" FromRole="FactsetPortfolio" ToRole="ApplicationUser" />
-          <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund" FromRole="FactsetPortfolio" ToRole="Fund" />
-          <NavigationProperty Name="InstrumentClass" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass" FromRole="FactsetPortfolio" ToRole="InstrumentClass" />
-          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket" FromRole="FactsetPortfolio" ToRole="InstrumentMarket" />
-        </EntityType>
-        <Association Name="FK_FactsetPortfolio_ApplicationUser">
-          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.FactsetPortfolio" Role="FactsetPortfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="FactsetPortfolio">
-              <PropertyRef Name="UpdateUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FactsetPortfolio_Fund">
-          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.FactsetPortfolio" Role="FactsetPortfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Fund">
-              <PropertyRef Name="LegalEntityID" />
-            </Principal>
-            <Dependent Role="FactsetPortfolio">
-              <PropertyRef Name="FundId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FactsetPortfolio_InstrumentClass">
-          <End Type="Odey.Framework.Keeley.Entities.InstrumentClass" Role="InstrumentClass" Multiplicity="0..1" />
-          <End Type="Odey.Framework.Keeley.Entities.FactsetPortfolio" Role="FactsetPortfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstrumentClass">
-              <PropertyRef Name="InstrumentClassID" />
-            </Principal>
-            <Dependent Role="FactsetPortfolio">
-              <PropertyRef Name="InstrumentClassId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FactsetPortfolio_InstrumentMarket">
-          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="0..1" />
-          <End Type="Odey.Framework.Keeley.Entities.FactsetPortfolio" Role="FactsetPortfolio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstrumentMarket">
-              <PropertyRef Name="InstrumentMarketID" />
-            </Principal>
-            <Dependent Role="FactsetPortfolio">
-              <PropertyRef Name="InstrumentMarketId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="BloombergIdentifier">
           <Key>
             <PropertyRef Name="BloombergIdentifierId" />
@@ -27737,6 +27699,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="RelatedFinancings" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Relat__408413A7" FromRole="Financing" ToRole="Financing1" />
           <Property Name="IsDummy" Type="Boolean" Nullable="false" />
           <Property Name="OverborrowFinancingAccrual" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FinancingControlId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FinancingControl" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Finan__38B8D4AD" FromRole="Financing" ToRole="FinancingControl" />
         </EntityType>
         <Association Name="FK__Financing__Updat__57BBB363">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -29088,6 +29052,82 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="EnforcePositionEvent">
               <PropertyRef Name="MustExistEntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FinancingControl">
+          <Key>
+            <PropertyRef Name="FinancingControlId" />
+          </Key>
+          <Property Name="FinancingControlId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FundId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="InstrumentClassId" Type="Int32" Nullable="false" />
+          <Property Name="Loaded" Type="Boolean" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Financings" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Finan__38B8D4AD" FromRole="FinancingControl" ToRole="Financing" />
+          <Property Name="CustodianId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Custodian" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Custo__43366320" FromRole="FinancingControl" ToRole="Custodian" />
+        </EntityType>
+        <Association Name="FK__Financing__Updat__3117B2E5">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FinancingControl" Role="FinancingControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FinancingControl">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__FundI__2F2F6A73">
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FinancingControl" Role="FinancingControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FinancingControl">
+              <PropertyRef Name="FundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Instr__30238EAC">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentClass" Role="InstrumentClass" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FinancingControl" Role="FinancingControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentClass">
+              <PropertyRef Name="InstrumentClassID" />
+            </Principal>
+            <Dependent Role="FinancingControl">
+              <PropertyRef Name="InstrumentClassId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Finan__38B8D4AD">
+          <End Type="Odey.Framework.Keeley.Entities.FinancingControl" Role="FinancingControl" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Financing" Role="Financing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FinancingControl">
+              <PropertyRef Name="FinancingControlId" />
+            </Principal>
+            <Dependent Role="Financing">
+              <PropertyRef Name="FinancingControlId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Financing__Custo__43366320">
+          <End Type="Odey.Framework.Keeley.Entities.Custodian" Role="Custodian" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FinancingControl" Role="FinancingControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Custodian">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="FinancingControl">
+              <PropertyRef Name="CustodianId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -35532,77 +35572,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="FactsetPortfolios">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactsetPortfolio">
-              <MappingFragment StoreEntitySet="FactsetPortfolio">
-                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
-                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
-                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
-                <ScalarProperty Name="IsItd" ColumnName="IsItd" />
-                <ScalarProperty Name="CarryReturnContribution" ColumnName="CarryReturnContribution" />
-                <ScalarProperty Name="CurrencyReturnContribution" ColumnName="CurrencyReturnContribution" />
-                <ScalarProperty Name="PriceReturnContribution" ColumnName="PriceReturnContribution" />
-                <ScalarProperty Name="ReturnContribution" ColumnName="ReturnContribution" />
-                <ScalarProperty Name="FMContId" ColumnName="FMContId" />
-                <ScalarProperty Name="InstrumentClassId" ColumnName="InstrumentClassId" />
-                <ScalarProperty Name="InstrumentMarketId" ColumnName="InstrumentMarketId" />
-                <ScalarProperty Name="OriginalIdentifier" ColumnName="OriginalIdentifier" />
-                <ScalarProperty Name="InstrumentName" ColumnName="InstrumentName" />
-                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
-                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
-                <ScalarProperty Name="FundId" ColumnName="FundId" />
-                <ScalarProperty Name="FactSetPortfolioId" ColumnName="FactSetPortfolioId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FactsetPortfolio">
-              <ModificationFunctionMapping>
-                <InsertFunction FunctionName="KeeleyModel.Store.FactsetPortfolio_Insert">
-                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" />
-                  <ScalarProperty Name="IsItd" ParameterName="IsItd" />
-                  <ScalarProperty Name="CarryReturnContribution" ParameterName="CarryReturnContribution" />
-                  <ScalarProperty Name="CurrencyReturnContribution" ParameterName="CurrencyReturnContribution" />
-                  <ScalarProperty Name="PriceReturnContribution" ParameterName="PriceReturnContribution" />
-                  <ScalarProperty Name="ReturnContribution" ParameterName="ReturnContribution" />
-                  <ScalarProperty Name="FMContId" ParameterName="FMContId" />
-                  <ScalarProperty Name="InstrumentClassId" ParameterName="InstrumentClassId" />
-                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" />
-                  <ScalarProperty Name="OriginalIdentifier" ParameterName="OriginalIdentifier" />
-                  <ScalarProperty Name="InstrumentName" ParameterName="InstrumentName" />
-                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" />
-                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
-                  <ScalarProperty Name="FundId" ParameterName="FundId" />
-                  <ResultBinding Name="FactSetPortfolioId" ColumnName="FactSetPortfolioId" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                </InsertFunction>
-                <UpdateFunction FunctionName="KeeleyModel.Store.FactsetPortfolio_Update">
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
-                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserId" Version="Current" />
-                  <ScalarProperty Name="IsItd" ParameterName="IsItd" Version="Current" />
-                  <ScalarProperty Name="CarryReturnContribution" ParameterName="CarryReturnContribution" Version="Current" />
-                  <ScalarProperty Name="CurrencyReturnContribution" ParameterName="CurrencyReturnContribution" Version="Current" />
-                  <ScalarProperty Name="PriceReturnContribution" ParameterName="PriceReturnContribution" Version="Current" />
-                  <ScalarProperty Name="ReturnContribution" ParameterName="ReturnContribution" Version="Current" />
-                  <ScalarProperty Name="FMContId" ParameterName="FMContId" Version="Current" />
-                  <ScalarProperty Name="InstrumentClassId" ParameterName="InstrumentClassId" Version="Current" />
-                  <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketId" Version="Current" />
-                  <ScalarProperty Name="OriginalIdentifier" ParameterName="OriginalIdentifier" Version="Current" />
-                  <ScalarProperty Name="InstrumentName" ParameterName="InstrumentName" Version="Current" />
-                  <ScalarProperty Name="CurrencyId" ParameterName="CurrencyId" Version="Current" />
-                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
-                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
-                  <ScalarProperty Name="FactSetPortfolioId" ParameterName="FactSetPortfolioId" Version="Current" />
-                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
-                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
-                </UpdateFunction>
-                <DeleteFunction FunctionName="KeeleyModel.Store.FactsetPortfolio_Delete">
-                  <ScalarProperty Name="UpdateUserId" ParameterName="UpdateUserID" />
-                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
-                  <ScalarProperty Name="FactSetPortfolioId" ParameterName="FactSetPortfolioId" />
-                </DeleteFunction>
-              </ModificationFunctionMapping>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="BloombergIdentifiers">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.BloombergIdentifier">
               <MappingFragment StoreEntitySet="BloombergIdentifier">
@@ -36696,6 +36665,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Financings">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
               <MappingFragment StoreEntitySet="Financing">
+                <ScalarProperty Name="FinancingControlId" ColumnName="FinancingControlId" />
                 <ScalarProperty Name="OverborrowFinancingAccrual" ColumnName="OverborrowFinancingAccrual" />
                 <ScalarProperty Name="IsDummy" ColumnName="IsDummy" />
                 <ScalarProperty Name="RelatedFinancingId" ColumnName="RelatedFinancingId" />
@@ -36728,6 +36698,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Financing_Insert">                 
+                  <ScalarProperty Name="FinancingControlId" ParameterName="FinancingControlId" />
                   <ScalarProperty Name="OverborrowFinancingAccrual" ParameterName="OverborrowFinancingAccrual" />
                   <ScalarProperty Name="IsDummy" ParameterName="IsDummy" />
                   <ScalarProperty Name="RelatedFinancingId" ParameterName="RelatedFinancingId" />
@@ -36757,6 +36728,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Financing_Update">
+                  <ScalarProperty Name="FinancingControlId" ParameterName="FinancingControlId" Version="Current" />
                   <ScalarProperty Name="OverborrowFinancingAccrual" ParameterName="OverborrowFinancingAccrual" Version="Current" />
                   <ScalarProperty Name="IsDummy" ParameterName="IsDummy" Version="Current" />
                   <ScalarProperty Name="RelatedFinancingId" ParameterName="RelatedFinancingId" Version="Current" />
@@ -37791,6 +37763,53 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="FinancingControls">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FinancingControl">
+              <MappingFragment StoreEntitySet="FinancingControl">
+                <ScalarProperty Name="CustodianId" ColumnName="CustodianId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Loaded" ColumnName="Loaded" />
+                <ScalarProperty Name="InstrumentClassId" ColumnName="InstrumentClassId" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FundId" ColumnName="FundId" />
+                <ScalarProperty Name="FinancingControlId" ColumnName="FinancingControlId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FinancingControl">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FinancingControl_Insert">
+                  <ScalarProperty Name="CustodianId" ParameterName="CustodianId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Loaded" ParameterName="Loaded" />
+                  <ScalarProperty Name="InstrumentClassId" ParameterName="InstrumentClassId" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" />
+                  <ResultBinding Name="FinancingControlId" ColumnName="FinancingControlId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FinancingControl_Update">
+                  <ScalarProperty Name="CustodianId" ParameterName="CustodianId" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Loaded" ParameterName="Loaded" Version="Current" />
+                  <ScalarProperty Name="InstrumentClassId" ParameterName="InstrumentClassId" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="FundId" ParameterName="FundId" Version="Current" />
+                  <ScalarProperty Name="FinancingControlId" ParameterName="FinancingControlId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FinancingControl_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FinancingControlId" ParameterName="FinancingControlId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -37813,7 +37832,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="10">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="53">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -43392,11 +43411,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityAnalyticUserIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityAnalyticEntityTypeIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityAnalyticSubEntityTypeIdFK" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FactsetPortfolio" Width="1.5" PointX="38.875" PointY="7.375" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_ApplicationUser" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_Fund" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentClass" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactsetPortfolio_InstrumentMarket" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.BloombergIdentifier" Width="1.5" PointX="30" PointY="29.5" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Updat__17B30F8B" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Bloomberg__Curre__16BEEB52" />
@@ -43598,6 +43612,12 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__Instr__1E2EFBA3" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Relat__408413A7" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__EnforcePo__MustE__2D7C2C2B" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FinancingControl" Width="1.5" PointX="36.125" PointY="18.625" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Updat__3117B2E5" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__FundI__2F2F6A73" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Instr__30238EAC" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Finan__38B8D4AD" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Custo__43366320" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

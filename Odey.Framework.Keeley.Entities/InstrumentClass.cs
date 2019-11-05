@@ -20,7 +20,6 @@ namespace Odey.Framework.Keeley.Entities
         public InstrumentClass()
         {
             this.ParentInstrumentClassRelationships = new List<InstrumentClassRelationship>();
-            this.FactsetPortfolios = new List<FactsetPortfolio>();
         }
     
     	[DataMember]
@@ -40,7 +39,5 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual List<InstrumentClassRelationship> ParentInstrumentClassRelationships { get; private set; }
-        [DataMember]
-        public virtual List<FactsetPortfolio> FactsetPortfolios { get; set; }
     }
 }

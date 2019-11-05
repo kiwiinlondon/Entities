@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Analytic
     {
-    	
-        public Analytic()
-        {
-            this.Portfolios1 = new List<Portfolio>();
-        }
-    
     	[DataMember]
         public int AnalyticId { get; set; }
     	[DataMember]
@@ -43,7 +37,5 @@ namespace Odey.Framework.Keeley.Entities
     
         [DataMember]
         public virtual RawAnalytic RawAnalytic { get; set; }
-        [DataMember]
-        public virtual List<Portfolio> Portfolios1 { get; set; }
     }
 }

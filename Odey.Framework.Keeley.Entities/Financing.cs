@@ -76,6 +76,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsDummy { get; set; }
     	[DataMember]
         public Nullable<decimal> OverborrowFinancingAccrual { get; set; }
+    	[DataMember]
+        public int FinancingControlId { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
@@ -87,5 +89,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual List<Financing> RelatedFinancings { get; set; }
+        [DataMember]
+        public virtual FinancingControl FinancingControl { get; set; }
     }
 }
