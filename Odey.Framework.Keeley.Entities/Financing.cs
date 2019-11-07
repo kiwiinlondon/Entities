@@ -41,7 +41,15 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> Notional { get; set; }
     	[DataMember]
+        public decimal FinancingRate { get; set; }
+    	[DataMember]
+        public decimal BorrowRate { get; set; }
+    	[DataMember]
         public decimal AllInRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FinancingAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BorrowAccrual { get; set; }
     	[DataMember]
         public Nullable<decimal> AllInAccrual { get; set; }
     	[DataMember]
@@ -55,17 +63,9 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> OverborrowUnits { get; set; }
     	[DataMember]
-        public Nullable<decimal> OverborrowAccrual { get; set; }
-    	[DataMember]
-        public decimal FinancingRate { get; set; }
-    	[DataMember]
-        public decimal BorrowRate { get; set; }
-    	[DataMember]
-        public Nullable<decimal> FinancingAccrual { get; set; }
-    	[DataMember]
-        public Nullable<decimal> BorrowAccrual { get; set; }
-    	[DataMember]
         public Nullable<decimal> OverborrowRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowAccrual { get; set; }
     	[DataMember]
         public Nullable<decimal> MarginInterest { get; set; }
     	[DataMember]
@@ -84,12 +84,14 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual Custodian Custodian { get; set; }
         [DataMember]
+        public virtual FinancingControl FinancingControl { get; set; }
+        [DataMember]
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
         public virtual List<Financing> RelatedFinancings { get; set; }
         [DataMember]
-        public virtual FinancingControl FinancingControl { get; set; }
+        public virtual Financing ParentFinancing { get; set; }
     }
 }

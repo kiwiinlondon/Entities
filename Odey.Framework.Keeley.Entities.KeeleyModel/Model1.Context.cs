@@ -182,7 +182,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<SimpleFundPrice> SimpleFundPrices { get; set; }
         public DbSet<SimpleIndexPrice> SimpleIndexPrices { get; set; }
         public DbSet<ListingStatus> ListingStatus { get; set; }
-        public DbSet<Financing> Financings { get; set; }
         public DbSet<Research> Researches { get; set; }
         public DbSet<ResearchAttachment> ResearchAttachments { get; set; }
         public DbSet<ResearchInstrumentMarket> ResearchInstrumentMarkets { get; set; }
@@ -205,6 +204,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<TaskMessage> TaskMessages { get; set; }
         public DbSet<EnforcePositionEvent> EnforcePositionEvents { get; set; }
         public DbSet<FinancingControl> FinancingControls { get; set; }
+        public DbSet<Financing> Financings { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {
@@ -817,14 +817,9 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("TaskMessage_Test", messageParameter);
         }
     
-        public virtual ObjectResult<Financing> Financing_GetNotApplied()
+        public virtual int Financing_GetNotApplied()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Financing>("Financing_GetNotApplied");
-        }
-    
-        public virtual ObjectResult<Financing> Financing_GetNotApplied(MergeOption mergeOption)
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Financing>("Financing_GetNotApplied", mergeOption);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Financing_GetNotApplied");
         }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEvent_GetMultipleByPositionLessThanDate(string positionIds, string dates, string portfolioAggregationLevelIds)

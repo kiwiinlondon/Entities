@@ -42,8 +42,8 @@ namespace Odey.Framework.Keeley.Entities
         public int CustodianId { get; set; }
     
         [DataMember]
-        public virtual List<Financing> Financings { get; set; }
-        [DataMember]
         public virtual Custodian Custodian { get; set; }
+        [DataMember]
+        public virtual List<Financing> Financings { get; set; }
     }
 }

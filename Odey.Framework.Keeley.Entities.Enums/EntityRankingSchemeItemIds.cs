@@ -50,8 +50,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OdeyCalculatedPriceOfficialNav = 28,
         [EnumMember]
-        NormalizedFuturesPrice = 29,
-        [EnumMember]
         OdeyIndicativeAnalytic = 30
     }
 }
