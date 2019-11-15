@@ -168,6 +168,22 @@ namespace Odey.Framework.Keeley.Entities
         public bool TodayFinancingMustExist { get; set; }
     	[DataMember]
         public bool FinancingMustExist { get; set; }
+    	[DataMember]
+        public Nullable<int> CounterpartyId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Commission { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FuturesExchangeFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OtherExpense { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConsiderationBuy { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConsiderationSell { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsTrade { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FuturesClearing { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

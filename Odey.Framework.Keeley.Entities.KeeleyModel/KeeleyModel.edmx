@@ -251,6 +251,16 @@
           <Property Name="BorrowRate" Type="numeric" Precision="27" Scale="8" />
           <Property Name="OverborrowRate" Type="numeric" Precision="27" Scale="8" />
           <Property Name="OverborrowUnits" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Commission" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Redemptions" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Subscriptions" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FuturesClearing" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FuturesExchangeFee" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OtherExpense" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConsiderationBuy" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConsiderationSell" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TradeCount" Type="int" />
+          <Property Name="CounterpartyId" Type="int" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -2441,6 +2451,14 @@
           <Property Name="TodayZeroOutAccrual" Type="bit" />
           <Property Name="TodayFinancingMustExist" Type="bit" Nullable="false" />
           <Property Name="FinancingMustExist" Type="bit" Nullable="false" />
+          <Property Name="CounterpartyId" Type="int" />
+          <Property Name="Commission" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FuturesExchangeFee" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="OtherExpense" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConsiderationBuy" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConsiderationSell" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IsTrade" Type="bit" />
+          <Property Name="FuturesClearing" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioEventFX">
           <Key>
@@ -5102,6 +5120,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Attributi__Count__1D9ACA1D">
+          <End Role="Counterparty" Type="Self.Counterparty" Multiplicity="0..1" />
+          <End Role="AttributionPnl" Type="Self.AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Counterparty">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="CounterpartyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Attributi__Curre__69ADE467">
           <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
           <End Role="AttributionPnl" Type="Self.AttributionPnl" Multiplicity="*" />
@@ -6179,6 +6209,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="PortfolioEvent">
               <PropertyRef Name="AssociatedPositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__Coute__16EDCC8E">
+          <End Role="Counterparty" Type="Self.Counterparty" Multiplicity="0..1" />
+          <End Role="PortfolioEvent" Type="Self.PortfolioEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Counterparty">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="PortfolioEvent">
+              <PropertyRef Name="CounterpartyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9790,6 +9832,16 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="BorrowRate" Type="numeric" Mode="In" />
           <Parameter Name="OverborrowRate" Type="numeric" Mode="In" />
           <Parameter Name="OverborrowUnits" Type="numeric" Mode="In" />
+          <Parameter Name="Commission" Type="numeric" Mode="In" />
+          <Parameter Name="Redemptions" Type="numeric" Mode="In" />
+          <Parameter Name="Subscriptions" Type="numeric" Mode="In" />
+          <Parameter Name="FuturesClearing" Type="numeric" Mode="In" />
+          <Parameter Name="FuturesExchangeFee" Type="numeric" Mode="In" />
+          <Parameter Name="OtherExpense" Type="numeric" Mode="In" />
+          <Parameter Name="ConsiderationBuy" Type="numeric" Mode="In" />
+          <Parameter Name="ConsiderationSell" Type="numeric" Mode="In" />
+          <Parameter Name="TradeCount" Type="int" Mode="In" />
+          <Parameter Name="CounterpartyId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9855,6 +9907,16 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="BorrowRate" Type="numeric" Mode="In" />
           <Parameter Name="OverborrowRate" Type="numeric" Mode="In" />
           <Parameter Name="OverborrowUnits" Type="numeric" Mode="In" />
+          <Parameter Name="Commission" Type="numeric" Mode="In" />
+          <Parameter Name="Redemptions" Type="numeric" Mode="In" />
+          <Parameter Name="Subscriptions" Type="numeric" Mode="In" />
+          <Parameter Name="FuturesClearing" Type="numeric" Mode="In" />
+          <Parameter Name="FuturesExchangeFee" Type="numeric" Mode="In" />
+          <Parameter Name="OtherExpense" Type="numeric" Mode="In" />
+          <Parameter Name="ConsiderationBuy" Type="numeric" Mode="In" />
+          <Parameter Name="ConsiderationSell" Type="numeric" Mode="In" />
+          <Parameter Name="TradeCount" Type="int" Mode="In" />
+          <Parameter Name="CounterpartyId" Type="int" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -13231,6 +13293,14 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TodayZeroOutAccrual" Type="bit" Mode="In" />
           <Parameter Name="TodayFinancingMustExist" Type="bit" Mode="In" />
           <Parameter Name="FinancingMustExist" Type="bit" Mode="In" />
+          <Parameter Name="CounterpartyId" Type="int" Mode="In" />
+          <Parameter Name="Commission" Type="numeric" Mode="In" />
+          <Parameter Name="FuturesExchangeFee" Type="numeric" Mode="In" />
+          <Parameter Name="OtherExpense" Type="numeric" Mode="In" />
+          <Parameter Name="ConsiderationBuy" Type="numeric" Mode="In" />
+          <Parameter Name="ConsiderationSell" Type="numeric" Mode="In" />
+          <Parameter Name="IsTrade" Type="bit" Mode="In" />
+          <Parameter Name="FuturesClearing" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -13305,6 +13375,14 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TodayZeroOutAccrual" Type="bit" Mode="In" />
           <Parameter Name="TodayFinancingMustExist" Type="bit" Mode="In" />
           <Parameter Name="FinancingMustExist" Type="bit" Mode="In" />
+          <Parameter Name="CounterpartyId" Type="int" Mode="In" />
+          <Parameter Name="Commission" Type="numeric" Mode="In" />
+          <Parameter Name="FuturesExchangeFee" Type="numeric" Mode="In" />
+          <Parameter Name="OtherExpense" Type="numeric" Mode="In" />
+          <Parameter Name="ConsiderationBuy" Type="numeric" Mode="In" />
+          <Parameter Name="ConsiderationSell" Type="numeric" Mode="In" />
+          <Parameter Name="IsTrade" Type="bit" Mode="In" />
+          <Parameter Name="FuturesClearing" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEventFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventFXId" Type="int" Mode="In" />
@@ -15150,6 +15228,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Beta" EntitySet="Beta" />
             <End Role="AttributionPnl" EntitySet="AttributionPnl" />
           </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Count__1D9ACA1D" Association="Self.FK__Attributi__Count__1D9ACA1D">
+            <End Role="Counterparty" EntitySet="Counterparty" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnl" />
+          </AssociationSet>
           <AssociationSet Name="FK__Attributi__Curre__69ADE467" Association="Self.FK__Attributi__Curre__69ADE467">
             <End Role="Currency" EntitySet="Currency" />
             <End Role="AttributionPnl" EntitySet="AttributionPnl" />
@@ -15508,6 +15590,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__Assoc__291D92AF" Association="Self.FK__Portfolio__Assoc__291D92AF">
             <End Role="Position" EntitySet="Position" />
+            <End Role="PortfolioEvent" EntitySet="PortfolioEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Coute__16EDCC8E" Association="Self.FK__Portfolio__Coute__16EDCC8E">
+            <End Role="Counterparty" EntitySet="Counterparty" />
             <End Role="PortfolioEvent" EntitySet="PortfolioEvent" />
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__Curre__7DE9E73E" Association="Self.FK__Portfolio__Curre__7DE9E73E">
@@ -19076,6 +19162,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Financing" EntitySet="Financings" />
             <End Role="Financing1" EntitySet="Financings" />
           </AssociationSet>
+          <AssociationSet Name="FK__Attributi__Count__1D9ACA1D" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Count__1D9ACA1D">
+            <End Role="Counterparty" EntitySet="Counterparties" />
+            <End Role="AttributionPnl" EntitySet="AttributionPnls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Coute__16EDCC8E" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Coute__16EDCC8E">
+            <End Role="Counterparty" EntitySet="Counterparties" />
+            <End Role="PortfolioEvent" EntitySet="PortfolioEvents" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -19410,6 +19504,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Boolean" Name="IsCancelled" Nullable="false" />
           <Property Type="DateTime" Name="InputDate" Nullable="false" Precision="3" />
           <Property Name="AdministratorTradeDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.CapitalEventFK" FromRole="CapitalEvent" ToRole="Event" />
         </EntityType>
         <EntityType Name="Custodian">
           <Key>
@@ -20840,6 +20935,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="TodayZeroOutAccrual" Type="Boolean" />
           <Property Name="TodayFinancingMustExist" Type="Boolean" Nullable="false" />
           <Property Name="FinancingMustExist" Type="Boolean" Nullable="false" />
+          <Property Name="CounterpartyId" Type="Int32" />
+          <Property Name="Commission" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FuturesExchangeFee" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OtherExpense" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConsiderationBuy" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConsiderationSell" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="IsTrade" Type="Boolean" />
+          <Property Name="FuturesClearing" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="PositionAccountMovementUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -26770,6 +26873,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="BorrowRate" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OverborrowRate" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="OverborrowUnits" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Commission" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Redemptions" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Subscriptions" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FuturesClearing" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FuturesExchangeFee" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="OtherExpense" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConsiderationBuy" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConsiderationSell" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TradeCount" Type="Int32" />
+          <Property Name="CounterpartyId" Type="Int32" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -29132,6 +29245,30 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Attributi__Count__1D9ACA1D">
+          <End Type="Odey.Framework.Keeley.Entities.Counterparty" Role="Counterparty" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.AttributionPnl" Role="AttributionPnl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Counterparty">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="AttributionPnl">
+              <PropertyRef Name="CounterpartyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__Coute__16EDCC8E">
+          <End Type="Odey.Framework.Keeley.Entities.Counterparty" Role="Counterparty" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.PortfolioEvent" Role="PortfolioEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Counterparty">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="PortfolioEvent">
+              <PropertyRef Name="CounterpartyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -31042,6 +31179,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="FuturesClearing" ColumnName="FuturesClearing" />
+                <ScalarProperty Name="IsTrade" ColumnName="IsTrade" />
+                <ScalarProperty Name="ConsiderationSell" ColumnName="ConsiderationSell" />
+                <ScalarProperty Name="ConsiderationBuy" ColumnName="ConsiderationBuy" />
+                <ScalarProperty Name="OtherExpense" ColumnName="OtherExpense" />
+                <ScalarProperty Name="FuturesExchangeFee" ColumnName="FuturesExchangeFee" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="CounterpartyId" ColumnName="CounterpartyId" />
                 <ScalarProperty Name="FinancingMustExist" ColumnName="FinancingMustExist" />
                 <ScalarProperty Name="TodayFinancingMustExist" ColumnName="TodayFinancingMustExist" />
                 <ScalarProperty Name="TodayZeroOutAccrual" ColumnName="TodayZeroOutAccrual" />
@@ -31120,6 +31265,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="FuturesClearing" ParameterName="FuturesClearing" />
+                  <ScalarProperty Name="IsTrade" ParameterName="IsTrade" />
+                  <ScalarProperty Name="ConsiderationSell" ParameterName="ConsiderationSell" />
+                  <ScalarProperty Name="ConsiderationBuy" ParameterName="ConsiderationBuy" />
+                  <ScalarProperty Name="OtherExpense" ParameterName="OtherExpense" />
+                  <ScalarProperty Name="FuturesExchangeFee" ParameterName="FuturesExchangeFee" />
+                  <ScalarProperty Name="Commission" ParameterName="Commission" />
+                  <ScalarProperty Name="CounterpartyId" ParameterName="CounterpartyId" />
                   <ScalarProperty Name="FinancingMustExist" ParameterName="FinancingMustExist" />
                   <ScalarProperty Name="TodayFinancingMustExist" ParameterName="TodayFinancingMustExist" />
                   <ScalarProperty Name="TodayZeroOutAccrual" ParameterName="TodayZeroOutAccrual" />
@@ -31195,6 +31348,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="FuturesClearing" ParameterName="FuturesClearing" Version="Current" />
+                  <ScalarProperty Name="IsTrade" ParameterName="IsTrade" Version="Current" />
+                  <ScalarProperty Name="ConsiderationSell" ParameterName="ConsiderationSell" Version="Current" />
+                  <ScalarProperty Name="ConsiderationBuy" ParameterName="ConsiderationBuy" Version="Current" />
+                  <ScalarProperty Name="OtherExpense" ParameterName="OtherExpense" Version="Current" />
+                  <ScalarProperty Name="FuturesExchangeFee" ParameterName="FuturesExchangeFee" Version="Current" />
+                  <ScalarProperty Name="Commission" ParameterName="Commission" Version="Current" />
+                  <ScalarProperty Name="CounterpartyId" ParameterName="CounterpartyId" Version="Current" />
                   <ScalarProperty Name="FinancingMustExist" ParameterName="FinancingMustExist" Version="Current" />
                   <ScalarProperty Name="TodayFinancingMustExist" ParameterName="TodayFinancingMustExist" Version="Current" />
                   <ScalarProperty Name="TodayZeroOutAccrual" ParameterName="TodayZeroOutAccrual" Version="Current" />
@@ -36073,6 +36234,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
+                <ScalarProperty Name="CounterpartyId" ColumnName="CounterpartyId" />
+                <ScalarProperty Name="TradeCount" ColumnName="TradeCount" />
+                <ScalarProperty Name="ConsiderationSell" ColumnName="ConsiderationSell" />
+                <ScalarProperty Name="ConsiderationBuy" ColumnName="ConsiderationBuy" />
+                <ScalarProperty Name="OtherExpense" ColumnName="OtherExpense" />
+                <ScalarProperty Name="FuturesExchangeFee" ColumnName="FuturesExchangeFee" />
+                <ScalarProperty Name="FuturesClearing" ColumnName="FuturesClearing" />
+                <ScalarProperty Name="Subscriptions" ColumnName="Subscriptions" />
+                <ScalarProperty Name="Redemptions" ColumnName="Redemptions" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
                 <ScalarProperty Name="OverborrowUnits" ColumnName="OverborrowUnits" />
                 <ScalarProperty Name="OverborrowRate" ColumnName="OverborrowRate" />
                 <ScalarProperty Name="BorrowRate" ColumnName="BorrowRate" />
@@ -36139,6 +36310,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="CounterpartyId" ParameterName="CounterpartyId" />
+                  <ScalarProperty Name="TradeCount" ParameterName="TradeCount" />
+                  <ScalarProperty Name="ConsiderationSell" ParameterName="ConsiderationSell" />
+                  <ScalarProperty Name="ConsiderationBuy" ParameterName="ConsiderationBuy" />
+                  <ScalarProperty Name="OtherExpense" ParameterName="OtherExpense" />
+                  <ScalarProperty Name="FuturesExchangeFee" ParameterName="FuturesExchangeFee" />
+                  <ScalarProperty Name="FuturesClearing" ParameterName="FuturesClearing" />
+                  <ScalarProperty Name="Subscriptions" ParameterName="Subscriptions" />
+                  <ScalarProperty Name="Redemptions" ParameterName="Redemptions" />
+                  <ScalarProperty Name="Commission" ParameterName="Commission" />
                   <ScalarProperty Name="OverborrowUnits" ParameterName="OverborrowUnits" />
                   <ScalarProperty Name="OverborrowRate" ParameterName="OverborrowRate" />
                   <ScalarProperty Name="BorrowRate" ParameterName="BorrowRate" />
@@ -36202,6 +36383,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="CounterpartyId" ParameterName="CounterpartyId" Version="Current" />
+                  <ScalarProperty Name="TradeCount" ParameterName="TradeCount" Version="Current" />
+                  <ScalarProperty Name="ConsiderationSell" ParameterName="ConsiderationSell" Version="Current" />
+                  <ScalarProperty Name="ConsiderationBuy" ParameterName="ConsiderationBuy" Version="Current" />
+                  <ScalarProperty Name="OtherExpense" ParameterName="OtherExpense" Version="Current" />
+                  <ScalarProperty Name="FuturesExchangeFee" ParameterName="FuturesExchangeFee" Version="Current" />
+                  <ScalarProperty Name="FuturesClearing" ParameterName="FuturesClearing" Version="Current" />
+                  <ScalarProperty Name="Subscriptions" ParameterName="Subscriptions" Version="Current" />
+                  <ScalarProperty Name="Redemptions" ParameterName="Redemptions" Version="Current" />
+                  <ScalarProperty Name="Commission" ParameterName="Commission" Version="Current" />
                   <ScalarProperty Name="OverborrowUnits" ParameterName="OverborrowUnits" Version="Current" />
                   <ScalarProperty Name="OverborrowRate" ParameterName="OverborrowRate" Version="Current" />
                   <ScalarProperty Name="BorrowRate" ParameterName="BorrowRate" Version="Current" />
@@ -37833,7 +38024,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="67">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="40">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -43437,7 +43628,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Options__UpdateU__4411800D" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Options__Instrum__431D5BD4" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FactorBenchmark" Width="1.5" PointX="13.375" PointY="35.875" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FactorExposure" Width="1.5" PointX="34.875" PointY="38.375" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FactorExposure" Width="1.5" PointX="33.75" PointY="38.375" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_FactorExposure_FactorBenchmark" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_fund_id" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.fk_factor_exposure_relationship" />
@@ -43452,112 +43643,100 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="13" />
           <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="12.705185391466328" />
           <edmx:ConnectorPoint PointX="1.3600229248024149" PointY="12.541538793373421" />
+          <edmx:ConnectorPoint PointX="1.4290628999587292" PointY="12.266768509292401" />
+          <edmx:ConnectorPoint PointX="1.4696778250349845" PointY="12.105126294389152" />
           <edmx:ConnectorPoint PointX="1.4962373161675808" PointY="11.999422911573211" />
           <edmx:ConnectorPoint PointX="1.4962373161675808" PointY="11.835776313480304" />
-          <edmx:ConnectorPoint PointX="1.5676242484088068" PointY="11.575646720987708" />
-          <edmx:ConnectorPoint PointX="1.6117315695116448" PointY="11.414922354437676" />
-          <edmx:ConnectorPoint PointX="1.6939792734019288" PointY="11.115216777734446" />
+          <edmx:ConnectorPoint PointX="1.5915954534438743" PointY="11.634923345841671" />
+          <edmx:ConnectorPoint PointX="1.6630761619658094" PointY="11.484363437210654" />
+          <edmx:ConnectorPoint PointX="1.6939792734019288" PointY="11.419272173701303" />
           <edmx:ConnectorPoint PointX="1.6939792734019288" PointY="10.811223381018856" />
-          <edmx:ConnectorPoint PointX="1.8843887270775972" PointY="9.8688839525745422" />
-          <edmx:ConnectorPoint PointX="1.9173983321341699" PointY="9.7055188897496336" />
-          <edmx:ConnectorPoint PointX="2.0047621782224421" PointY="9.2731538196321086" />
-          <edmx:ConnectorPoint PointX="2.0377717832790148" PointY="9.1097887568071982" />
-          <edmx:ConnectorPoint PointX="2.2490885419205595" PointY="8.0639787420472846" />
-          <edmx:ConnectorPoint PointX="2.2820981469771322" PointY="7.9006136792223751" />
-          <edmx:ConnectorPoint PointX="2.3506826974717132" PointY="7.5611876430379512" />
-          <edmx:ConnectorPoint PointX="2.3836923025282859" PointY="7.3978225802130408" />
           <edmx:ConnectorPoint PointX="2.398604655571646" PointY="7.3240211067443148" />
           <edmx:ConnectorPoint PointX="2.398604655571646" PointY="7.1603745086514081" />
-          <edmx:ConnectorPoint PointX="2.4360663298860108" PointY="7.0162576333369264" />
-          <edmx:ConnectorPoint PointX="2.5326836701139879" PointY="6.6445660464098468" />
-          <edmx:ConnectorPoint PointX="2.5805975798860112" PointY="6.4602389150996435" />
-          <edmx:ConnectorPoint PointX="2.6615899201139879" PointY="6.148657459873891" />
-          <edmx:ConnectorPoint PointX="2.703292155571646" PointY="5.9882269404755135" />
+          <edmx:ConnectorPoint PointX="2.616594525977991" PointY="6.4365375663715279" />
+          <edmx:ConnectorPoint PointX="2.6909697721463512" PointY="6.1895740232148375" />
+          <edmx:ConnectorPoint PointX="2.703292155571646" PointY="6.148657459873891" />
           <edmx:ConnectorPoint PointX="2.703292155571646" PointY="5.5817086757882794" />
+          <edmx:ConnectorPoint PointX="2.7732703444283535" PointY="5.2191333295934754" />
+          <edmx:ConnectorPoint PointX="2.8048546555716456" PointY="5.0554867315005687" />
           <edmx:ConnectorPoint PointX="2.8984375" PointY="4.5706094751602562" />
           <edmx:ConnectorPoint PointX="2.8984375" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.0026041666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.1692708333333335" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.2604146666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.4270813333333336" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="2.9518229166666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.4270813333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.4322916666666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.6614583333333335" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.6666666666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.8333333333333335" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="4.645833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="4.666666666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="5.052083333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="6.7922916666666664" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.208333333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.3628291496453828" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.5294958163120489" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.6041691666666669" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.8333333333333339" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.869791666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.0364583333333339" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.1041666666666661" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="4.729166666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.145833333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.619791666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.786458333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.854166666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.020833333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.333333333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.494795166666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.6883303566722807" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.822916666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.989583333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.0104166666666661" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="8.2708333333333339" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.7916666666666661" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.9583333333333339" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="10.614583333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="11.510416666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.583333333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="11.463541666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="11.895833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.401666666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="12.615366336137823" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="12.635416666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="13.052083333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="13.877604166666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="14.044270833333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="12.568333333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="12.604166666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="12.770833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="13.020833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="13.869791666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="14.036458333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="14.197916666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="14.427083333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="14.651041666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="14.973958333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.104166666666666" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="15.145833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.229166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="15.645833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.447916666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.614583333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="19.701041666666669" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="20.067708333333329" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.510416666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.677083333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="19.716666666666669" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="20.020833333333329" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="22.854166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="23.020833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.808721008304417" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.975387674971081" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.979166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.145833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.458333333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.604166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.917829518717557" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="25.15508220326236" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="25.408307405298096" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.123178310412712" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.395833333333329" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.479166666666668" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="25.067708333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.194358537543838" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.361025204210502" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.591666666666669" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.758333333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="26.167279451653197" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="26.363576935062031" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="26.486450299556505" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="26.65311696622317" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.16723784551122" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.333904512177885" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="27.416666666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="27.583333333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="28.541282051282053" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="28.707948717948717" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.354166666666668" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.583333333333332" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.602018966225646" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.291666666666668" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="29.768685632892311" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.197916666666664" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.364583333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="32.479166666666664" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="32.645833333333336" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="34.1517033305921" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="34.31836999725877" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="34.979166666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.145833333333336" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.540453624447764" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.707120291114435" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="35.161458333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="35.463046527686977" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="35.629713194353648" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.84825234375" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="38.064599153152876" PointY="23.417412896183066" />
-          <edmx:ConnectorPoint PointX="38.213250227496438" PointY="23.3420429029876" />
-          <edmx:ConnectorPoint PointX="38.224900908557515" PointY="23.336135702140421" />
-          <edmx:ConnectorPoint PointX="38.373551982901077" PointY="23.260765708944955" />
-          <edmx:ConnectorPoint PointX="39.875" PointY="22.499492187500003" />
+          <edmx:ConnectorPoint PointX="38.392204623842865" PointY="22.417056496417771" />
+          <edmx:ConnectorPoint PointX="38.520138999267978" PointY="22.310236211067259" />
+          <edmx:ConnectorPoint PointX="39.717282812287444" PointY="21.310667148511442" />
+          <edmx:ConnectorPoint PointX="39.845217187712556" PointY="21.20384686316093" />
+          <edmx:ConnectorPoint PointX="39.875" PointY="21.178979359829526" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_Fund" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_InstrumentMarket" />
@@ -43628,7 +43807,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Fund__ManagerId__243C0F5D" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Research" Width="2.5" PointX="30.25" PointY="52.625" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchAttachment" Width="1.5" PointX="40.5" PointY="33" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Width="1.5" PointX="32.625" PointY="36" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ResearchInstrumentMarket" Width="1.5" PointX="30.625" PointY="36.375" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Analys__0088BECC" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Research__Update__017CE305" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__ResearchA__Updat__0BFA7178" />
@@ -43729,6 +43908,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__FundI__53EB227F" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Financing__Relat__408413A7" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Count__1D9ACA1D" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Coute__16EDCC8E" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

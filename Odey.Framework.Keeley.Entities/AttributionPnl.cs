@@ -138,6 +138,26 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> OverborrowRate { get; set; }
     	[DataMember]
         public Nullable<decimal> OverborrowUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Commission { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Redemptions { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Subscriptions { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FuturesClearing { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FuturesExchangeFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OtherExpense { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConsiderationBuy { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConsiderationSell { get; set; }
+    	[DataMember]
+        public Nullable<int> TradeCount { get; set; }
+    	[DataMember]
+        public Nullable<int> CounterpartyId { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

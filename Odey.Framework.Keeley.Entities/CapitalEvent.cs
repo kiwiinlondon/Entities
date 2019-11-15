@@ -40,5 +40,8 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime InputDate { get; set; }
     	[DataMember]
         public System.DateTime AdministratorTradeDate { get; set; }
+    
+        [DataMember]
+        public virtual Event Event { get; set; }
     }
 }
