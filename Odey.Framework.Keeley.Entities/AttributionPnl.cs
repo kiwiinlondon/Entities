@@ -147,8 +147,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> FuturesClearing { get; set; }
     	[DataMember]
-        public Nullable<decimal> FuturesExchangeFee { get; set; }
-    	[DataMember]
         public Nullable<decimal> OtherExpense { get; set; }
     	[DataMember]
         public Nullable<decimal> ConsiderationBuy { get; set; }

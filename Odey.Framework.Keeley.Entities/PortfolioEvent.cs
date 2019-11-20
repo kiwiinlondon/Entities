@@ -173,8 +173,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> Commission { get; set; }
     	[DataMember]
-        public Nullable<decimal> FuturesExchangeFee { get; set; }
-    	[DataMember]
         public Nullable<decimal> OtherExpense { get; set; }
     	[DataMember]
         public Nullable<decimal> ConsiderationBuy { get; set; }
@@ -184,6 +182,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> IsTrade { get; set; }
     	[DataMember]
         public Nullable<decimal> FuturesClearing { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Consideration { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsInternal { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

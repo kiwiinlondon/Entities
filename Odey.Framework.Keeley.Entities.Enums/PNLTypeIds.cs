@@ -22,6 +22,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OtherShareClassSpecific = 6,
         [EnumMember]
-        FXOptionExposure = 7
+        FXOptionExposure = 7,
+        [EnumMember]
+        AdditionalCounterparty=8
     }
 }
