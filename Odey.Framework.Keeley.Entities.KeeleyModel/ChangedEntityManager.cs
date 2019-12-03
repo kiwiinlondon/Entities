@@ -206,6 +206,7 @@ namespace Odey.Framework.Keeley.Entities
                 AddValueToUsefulProperties(changedEntity, values, "CurrencyId");
                 AddValueToUsefulProperties(changedEntity, values, "PositionID");
                 AddValueToUsefulProperties(changedEntity, values, "PnlTypeId");
+                AddValueToUsefulProperties(changedEntity, values, "CounterpartyId");
             }
             else
             if (entityType == typeof(IndexConstituent))
