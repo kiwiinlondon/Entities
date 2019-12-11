@@ -14,6 +14,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Convertible = 2,
         [EnumMember]
-        Perpetual = 3
+        Perpetual = 3,
+        [EnumMember]
+        Callable = 4
     }
 }

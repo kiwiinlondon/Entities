@@ -22,6 +22,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GSIL = 4206,
         [EnumMember]
-        BOAM = 9779
+        BOAM = 9799
     }
 }
