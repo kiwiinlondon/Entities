@@ -156,6 +156,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> TradeCount { get; set; }
     	[DataMember]
         public Nullable<int> CounterpartyId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BookNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FundNav { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

@@ -18,6 +18,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         RevaluePosition = 5,
         [EnumMember]
-        RollFund = 6
+        RollFund = 6,
+        [EnumMember]
+        RecalculateFundTotal = 7
     }
 }
