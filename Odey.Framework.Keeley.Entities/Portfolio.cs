@@ -291,6 +291,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> MarginInterestInstrument { get; set; }
     	[DataMember]
         public Nullable<decimal> CashInterestInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FinancingProportion { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

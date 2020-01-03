@@ -78,6 +78,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> OverborrowFinancingAccrual { get; set; }
     	[DataMember]
         public int FinancingControlId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationEarning { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

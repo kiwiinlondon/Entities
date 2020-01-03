@@ -873,5 +873,14 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioMessageQueue_Get_Result>("PortfolioMessageQueue_GetForReplay", messageIdsParameter);
         }
+    
+        public virtual int PortfolioMessageQueue_DeleteById(string messageIds)
+        {
+            var messageIdsParameter = messageIds != null ?
+                new ObjectParameter("MessageIds", messageIds) :
+                new ObjectParameter("MessageIds", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_DeleteById", messageIdsParameter);
+        }
     }
 }

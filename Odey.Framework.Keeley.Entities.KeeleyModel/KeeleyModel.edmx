@@ -1253,6 +1253,7 @@
           <Property Name="IsDummy" Type="bit" Nullable="false" />
           <Property Name="OverborrowFinancingAccrual" Type="numeric" Precision="27" Scale="8" />
           <Property Name="FinancingControlId" Type="int" Nullable="false" />
+          <Property Name="RehypothecationEarning" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="FinancingControl">
           <Key>
@@ -2364,6 +2365,7 @@
           <Property Name="OverborrowAccrualInstrument" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MarginInterestInstrument" Type="numeric" Precision="27" Scale="8" />
           <Property Name="CashInterestInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FinancingProportion" Type="numeric" Precision="10" Scale="3" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -13049,6 +13051,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="OverborrowAccrualInstrument" Type="numeric" Mode="In" />
           <Parameter Name="MarginInterestInstrument" Type="numeric" Mode="In" />
           <Parameter Name="CashInterestInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingProportion" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -13187,6 +13190,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="OverborrowAccrualInstrument" Type="numeric" Mode="In" />
           <Parameter Name="MarginInterestInstrument" Type="numeric" Mode="In" />
           <Parameter Name="CashInterestInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="FinancingProportion" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -13441,6 +13445,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
         <Function Name="PortfolioMessageQueue_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundId" Type="int" Mode="In" />
           <Parameter Name="LastMessageId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PortfolioMessageQueue_DeleteById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MessageIds" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="PortfolioMessageQueue_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="PortfolioMessageQueue_GetForReplay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -19176,6 +19183,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Counterparty" EntitySet="Counterparties" />
             <End Role="PortfolioEvent" EntitySet="PortfolioEvents" />
           </AssociationSet>
+          <FunctionImport Name="PortfolioMessageQueue_DeleteById">
+          <Parameter Name="MessageIds" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -21224,6 +21234,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="OverborrowAccrualInstrument" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MarginInterestInstrument" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="CashInterestInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FinancingProportion" Type="Decimal" Precision="10" Scale="3" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -29168,6 +29179,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Instr__54DF46B8" FromRole="Financing" ToRole="InstrumentMarket" />
           <NavigationProperty Name="RelatedFinancings" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Relat__408413A7" FromRole="Financing" ToRole="Financing1" />
           <NavigationProperty Name="ParentFinancing" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Relat__408413A7" FromRole="Financing1" ToRole="Financing" />
+          <Property Name="RehypothecationEarning" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="FK__Financing__Updat__57BBB363">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -31506,6 +31518,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="FinancingProportion" ColumnName="FinancingProportion" />
                 <ScalarProperty Name="CashInterestInstrument" ColumnName="CashInterestInstrument" />
                 <ScalarProperty Name="MarginInterestInstrument" ColumnName="MarginInterestInstrument" />
                 <ScalarProperty Name="OverborrowAccrualInstrument" ColumnName="OverborrowAccrualInstrument" />
@@ -31645,6 +31658,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="FinancingProportion" ParameterName="FinancingProportion" />
                   <ScalarProperty Name="CashInterestInstrument" ParameterName="CashInterestInstrument" />
                   <ScalarProperty Name="MarginInterestInstrument" ParameterName="MarginInterestInstrument" />
                   <ScalarProperty Name="OverborrowAccrualInstrument" ParameterName="OverborrowAccrualInstrument" />
@@ -31781,6 +31795,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="FinancingProportion" ParameterName="FinancingProportion" Version="Current" />
                   <ScalarProperty Name="CashInterestInstrument" ParameterName="CashInterestInstrument" Version="Current" />
                   <ScalarProperty Name="MarginInterestInstrument" ParameterName="MarginInterestInstrument" Version="Current" />
                   <ScalarProperty Name="OverborrowAccrualInstrument" ParameterName="OverborrowAccrualInstrument" Version="Current" />
@@ -37915,6 +37930,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Financings">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
               <MappingFragment StoreEntitySet="Financing">
+                <ScalarProperty Name="RehypothecationEarning" ColumnName="RehypothecationEarning" />
                 <ScalarProperty Name="FinancingControlId" ColumnName="FinancingControlId" />
                 <ScalarProperty Name="OverborrowFinancingAccrual" ColumnName="OverborrowFinancingAccrual" />
                 <ScalarProperty Name="IsDummy" ColumnName="IsDummy" />
@@ -38016,6 +38032,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PortfolioMessageQueue_DeleteById" FunctionName="KeeleyModel.Store.PortfolioMessageQueue_DeleteById" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -38038,7 +38055,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="35">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="29">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
