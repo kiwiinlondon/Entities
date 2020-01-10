@@ -80,6 +80,20 @@ namespace Odey.Framework.Keeley.Entities
         public int FinancingControlId { get; set; }
     	[DataMember]
         public Nullable<decimal> RehypothecationEarning { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> AccrualStartDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PeriodFinancingAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PeriodBorrowAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PeriodAllInAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PeriodOverborrowAccrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PeriodMarginInterest { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PeriodCashInterest { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
