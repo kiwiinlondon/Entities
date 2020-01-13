@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Financing
     {
-    	
-        public Financing()
-        {
-            this.RelatedFinancings = new List<Financing>();
-        }
-    
     	[DataMember]
         public int FinancingId { get; set; }
     	[DataMember]
@@ -71,8 +65,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> CashInterest { get; set; }
     	[DataMember]
-        public Nullable<int> RelatedFinancingId { get; set; }
-    	[DataMember]
         public bool IsDummy { get; set; }
     	[DataMember]
         public Nullable<decimal> OverborrowFinancingAccrual { get; set; }
@@ -105,9 +97,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
-        [DataMember]
-        public virtual List<Financing> RelatedFinancings { get; set; }
-        [DataMember]
-        public virtual Financing ParentFinancing { get; set; }
     }
 }

@@ -40,8 +40,6 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int CustodianId { get; set; }
-    	[DataMember]
-        public Nullable<int> PreviousFinancingControlId { get; set; }
     
         [DataMember]
         public virtual Custodian Custodian { get; set; }
@@ -51,7 +49,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual InstrumentClass InstrumentClass { get; set; }
-        [DataMember]
-        public virtual FinancingControl Previous { get; set; }
     }
 }
