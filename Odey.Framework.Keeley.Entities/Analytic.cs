@@ -34,8 +34,14 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public Nullable<int> RawAnalyticId { get; set; }
+    	[DataMember]
+        public Nullable<bool> TryToResolve { get; set; }
+    	[DataMember]
+        public Nullable<int> AttemptsToResolve { get; set; }
     
         [DataMember]
         public virtual RawAnalytic RawAnalytic { get; set; }
+        [DataMember]
+        public virtual InstrumentMarket InstrumentMarket { get; set; }
     }
 }

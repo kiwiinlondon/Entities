@@ -33,19 +33,17 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> Price { get; set; }
     	[DataMember]
-        public Nullable<decimal> Notional { get; set; }
+        public decimal Notional { get; set; }
     	[DataMember]
-        public decimal FinancingRate { get; set; }
+        public Nullable<decimal> FinancingRate { get; set; }
     	[DataMember]
-        public decimal BorrowRate { get; set; }
-    	[DataMember]
-        public decimal AllInRate { get; set; }
+        public Nullable<decimal> BorrowRate { get; set; }
     	[DataMember]
         public Nullable<decimal> FinancingAccrual { get; set; }
     	[DataMember]
         public Nullable<decimal> BorrowAccrual { get; set; }
     	[DataMember]
-        public Nullable<decimal> AllInAccrual { get; set; }
+        public decimal AllInAccrual { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -67,25 +65,23 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public bool IsDummy { get; set; }
     	[DataMember]
-        public Nullable<decimal> OverborrowFinancingAccrual { get; set; }
-    	[DataMember]
         public int FinancingControlId { get; set; }
     	[DataMember]
         public Nullable<decimal> RehypothecationEarning { get; set; }
     	[DataMember]
-        public Nullable<System.DateTime> AccrualStartDate { get; set; }
+        public int DayCount { get; set; }
     	[DataMember]
-        public Nullable<decimal> PeriodFinancingAccrual { get; set; }
+        public int DayBasis { get; set; }
     	[DataMember]
-        public Nullable<decimal> PeriodBorrowAccrual { get; set; }
+        public Nullable<decimal> CashInterestRate { get; set; }
     	[DataMember]
-        public Nullable<decimal> PeriodAllInAccrual { get; set; }
+        public Nullable<decimal> CashBalance { get; set; }
     	[DataMember]
-        public Nullable<decimal> PeriodOverborrowAccrual { get; set; }
+        public Nullable<decimal> MarginBalance { get; set; }
     	[DataMember]
-        public Nullable<decimal> PeriodMarginInterest { get; set; }
+        public Nullable<decimal> RealisedAllInAccrual { get; set; }
     	[DataMember]
-        public Nullable<decimal> PeriodCashInterest { get; set; }
+        public bool SourcedExternally { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

@@ -143,6 +143,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GSOrdFinancing = 70,
         [EnumMember]
-        BAMLOrdSwapFinancing = 71
+        MSOrdFinancing = 71
     }
 }

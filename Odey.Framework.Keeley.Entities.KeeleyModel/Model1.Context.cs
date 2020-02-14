@@ -856,15 +856,6 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PortfolioEvent>("PortfolioEvent_GetMultipleByPositionLessThanDate", mergeOption, positionIdsParameter, datesParameter, portfolioAggregationLevelIdsParameter);
         }
     
-        public virtual ObjectResult<Nullable<System.DateTime>> Financing_Roll(Nullable<int> updateUserId)
-        {
-            var updateUserIdParameter = updateUserId.HasValue ?
-                new ObjectParameter("UpdateUserId", updateUserId) :
-                new ObjectParameter("UpdateUserId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("Financing_Roll", updateUserIdParameter);
-        }
-    
         public virtual ObjectResult<PortfolioMessageQueue_Get_Result> PortfolioMessageQueue_GetForReplay(string messageIds)
         {
             var messageIdsParameter = messageIds != null ?
