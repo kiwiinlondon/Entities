@@ -20,6 +20,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         China = 57,
         [EnumMember]
-        HongKong = 58
+        HongKong = 58,
+        [EnumMember]
+        Canada = 68
     }
 }

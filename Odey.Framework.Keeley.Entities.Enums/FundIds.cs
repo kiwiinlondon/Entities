@@ -533,6 +533,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         SSF = 10056,
         [EnumMember]
-        SSF_GBP_M = 10057
+        SSF_GBP_M = 10057,
+        [EnumMember]
+        SSF_GBP_I = 10133
     }
 }

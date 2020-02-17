@@ -16,12 +16,6 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Financing
     {
-    	
-        public Financing()
-        {
-            this.RelatedFinancings = new List<Financing>();
-        }
-    
     	[DataMember]
         public int FinancingId { get; set; }
     	[DataMember]
@@ -39,19 +33,17 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> Price { get; set; }
     	[DataMember]
-        public Nullable<decimal> Notional { get; set; }
+        public decimal Notional { get; set; }
     	[DataMember]
-        public decimal FinancingRate { get; set; }
+        public Nullable<decimal> FinancingRate { get; set; }
     	[DataMember]
-        public decimal BorrowRate { get; set; }
-    	[DataMember]
-        public decimal AllInRate { get; set; }
+        public Nullable<decimal> BorrowRate { get; set; }
     	[DataMember]
         public Nullable<decimal> FinancingAccrual { get; set; }
     	[DataMember]
         public Nullable<decimal> BorrowAccrual { get; set; }
     	[DataMember]
-        public Nullable<decimal> AllInAccrual { get; set; }
+        public decimal AllInAccrual { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -71,13 +63,25 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> CashInterest { get; set; }
     	[DataMember]
-        public Nullable<int> RelatedFinancingId { get; set; }
-    	[DataMember]
         public bool IsDummy { get; set; }
     	[DataMember]
-        public Nullable<decimal> OverborrowFinancingAccrual { get; set; }
-    	[DataMember]
         public int FinancingControlId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationEarning { get; set; }
+    	[DataMember]
+        public int DayCount { get; set; }
+    	[DataMember]
+        public int DayBasis { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterestRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashBalance { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginBalance { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RealisedAllInAccrual { get; set; }
+    	[DataMember]
+        public bool SourcedExternally { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
@@ -89,9 +93,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
-        [DataMember]
-        public virtual List<Financing> RelatedFinancings { get; set; }
-        [DataMember]
-        public virtual Financing ParentFinancing { get; set; }
     }
 }

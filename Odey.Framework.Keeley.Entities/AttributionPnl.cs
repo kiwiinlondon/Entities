@@ -160,6 +160,42 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> BookNav { get; set; }
     	[DataMember]
         public Nullable<decimal> FundNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningNav { get; set; }
+    	[DataMember]
+        public Nullable<decimal> KeeleyFundNav { get; set; }
+    	[DataMember]
+        public Nullable<int> EURFXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> EURFXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> USDFXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> USDFXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> GBPFXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> GBPFXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> VolumeId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Volume { get; set; }
+    	[DataMember]
+        public Nullable<int> SharesOutstandingId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SharesOutstanding { get; set; }
+    	[DataMember]
+        public Nullable<int> HedgeRatioId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> HedgeRatio { get; set; }
+    	[DataMember]
+        public Nullable<int> MarketCapitalisationId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarketCapitalisation { get; set; }
+    	[DataMember]
+        public Nullable<int> ADRUnderlyerVolumeId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ADRUnderlyerVolume { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }

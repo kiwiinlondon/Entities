@@ -45,5 +45,9 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Custodian Custodian { get; set; }
         [DataMember]
         public virtual List<Financing> Financings { get; set; }
+        [DataMember]
+        public virtual Fund Fund { get; set; }
+        [DataMember]
+        public virtual InstrumentClass InstrumentClass { get; set; }
     }
 }

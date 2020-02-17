@@ -58,7 +58,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MESSAGE_QUEUE_CHECK = 17,
 
         [EnumMember] 
-        POSMAN_KEELEY_DAY_RETURN = 18
+        POSMAN_KEELEY_DAY_RETURN = 18,
+        [EnumMember]
+        FINANCING_FILES_COLLECTED = 19
     }
 }
 
