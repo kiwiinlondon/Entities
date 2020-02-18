@@ -56,6 +56,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> GBPFXRateId { get; set; }
     	[DataMember]
         public decimal GBPFXRate { get; set; }
+    	[DataMember]
+        public Nullable<bool> Updated { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

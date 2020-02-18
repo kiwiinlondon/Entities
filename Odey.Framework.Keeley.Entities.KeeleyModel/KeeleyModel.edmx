@@ -187,6 +187,7 @@
           <Property Name="USDFXRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="GBPFXRateId" Type="int" />
           <Property Name="GBPFXRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="Updated" Type="bit" />
         </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -263,15 +264,15 @@
           <Property Name="TradeCount" Type="int" />
           <Property Name="CounterpartyId" Type="int" />
           <Property Name="BookNav" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="FundNav" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="OpeningNav" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="KeeleyFundNav" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="FundNav" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="OpeningNav" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="KeeleyFundNav" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="EURFXRateId" Type="int" />
-          <Property Name="EURFXRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="EURFXRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="USDFXRateId" Type="int" />
-          <Property Name="USDFXRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="USDFXRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="GBPFXRateId" Type="int" />
-          <Property Name="GBPFXRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="GBPFXRate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="VolumeId" Type="int" />
           <Property Name="Volume" Type="numeric" Precision="27" Scale="8" />
           <Property Name="SharesOutstandingId" Type="int" />
@@ -282,6 +283,8 @@
           <Property Name="MarketCapitalisation" Type="numeric" Precision="27" Scale="8" />
           <Property Name="ADRUnderlyerVolumeId" Type="int" />
           <Property Name="ADRUnderlyerVolume" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="PercentageOfFund" Type="numeric" Precision="9" Scale="8" Nullable="false" />
+          <Property Name="KeeleyIsMaster" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -9859,6 +9862,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="USDFXRate" Type="numeric" Mode="In" />
           <Parameter Name="GBPFXRateId" Type="int" Mode="In" />
           <Parameter Name="GBPFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="Updated" Type="bit" Mode="In" />
         </Function>
         <Function Name="AttributionNav_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9883,6 +9887,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="USDFXRate" Type="numeric" Mode="In" />
           <Parameter Name="GBPFXRateId" Type="int" Mode="In" />
           <Parameter Name="GBPFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="Updated" Type="bit" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionPnlId" Type="int" Mode="In" />
@@ -9977,6 +9982,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="MarketCapitalisation" Type="numeric" Mode="In" />
           <Parameter Name="ADRUnderlyerVolumeId" Type="int" Mode="In" />
           <Parameter Name="ADRUnderlyerVolume" Type="numeric" Mode="In" />
+          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
+          <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -10071,6 +10078,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="MarketCapitalisation" Type="numeric" Mode="In" />
           <Parameter Name="ADRUnderlyerVolumeId" Type="int" Mode="In" />
           <Parameter Name="ADRUnderlyerVolume" Type="numeric" Mode="In" />
+          <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
+          <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -27036,6 +27045,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="GBPFXRateId" Type="Int32" />
           <Property Name="GBPFXRate" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__Attributi__FundI__6DFD9838" FromRole="AttributionNav" ToRole="Fund" />
+          <Property Name="Updated" Type="Boolean" />
           </EntityType>
         <EntityType Name="AttributionPnl">
           <Key>
@@ -27115,15 +27125,15 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="TradeCount" Type="Int32" />
           <Property Name="CounterpartyId" Type="Int32" />
           <Property Name="BookNav" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="FundNav" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="OpeningNav" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="KeeleyFundNav" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="FundNav" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="OpeningNav" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="KeeleyFundNav" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="EURFXRateId" Type="Int32" />
-          <Property Name="EURFXRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="EURFXRate" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="USDFXRateId" Type="Int32" />
-          <Property Name="USDFXRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="USDFXRate" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="GBPFXRateId" Type="Int32" />
-          <Property Name="GBPFXRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="GBPFXRate" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="VolumeId" Type="Int32" />
           <Property Name="Volume" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SharesOutstandingId" Type="Int32" />
@@ -27134,6 +27144,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="MarketCapitalisation" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="ADRUnderlyerVolumeId" Type="Int32" />
           <Property Name="ADRUnderlyerVolume" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="PercentageOfFund" Type="Decimal" Nullable="false" Precision="9" Scale="8" />
+          <Property Name="KeeleyIsMaster" Type="Boolean" Nullable="false" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -36506,6 +36518,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="AttributionNavs">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <MappingFragment StoreEntitySet="AttributionNav">
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
                 <ScalarProperty Name="GBPFXRate" ColumnName="GBPFXRate" />
                 <ScalarProperty Name="GBPFXRateId" ColumnName="GBPFXRateId" />
                 <ScalarProperty Name="USDFXRate" ColumnName="USDFXRate" />
@@ -36531,6 +36544,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionNav">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionNav_Insert">
+                  <ScalarProperty Name="Updated" ParameterName="Updated" />
                   <ScalarProperty Name="GBPFXRate" ParameterName="GBPFXRate" />
                   <ScalarProperty Name="GBPFXRateId" ParameterName="GBPFXRateId" />
                   <ScalarProperty Name="USDFXRate" ParameterName="USDFXRate" />
@@ -36558,6 +36572,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="AttributionNavId" ParameterName="AttributionNavId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionNav_Update">
+                  <ScalarProperty Name="Updated" ParameterName="Updated" Version="Current" />
                   <ScalarProperty Name="GBPFXRate" ParameterName="GBPFXRate" Version="Current" />
                   <ScalarProperty Name="GBPFXRateId" ParameterName="GBPFXRateId" Version="Current" />
                   <ScalarProperty Name="USDFXRate" ParameterName="USDFXRate" Version="Current" />
@@ -36586,6 +36601,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
+                <ScalarProperty Name="KeeleyIsMaster" ColumnName="KeeleyIsMaster" />
+                <ScalarProperty Name="PercentageOfFund" ColumnName="PercentageOfFund" />
                 <ScalarProperty Name="ADRUnderlyerVolume" ColumnName="ADRUnderlyerVolume" />
                 <ScalarProperty Name="ADRUnderlyerVolumeId" ColumnName="ADRUnderlyerVolumeId" />
                 <ScalarProperty Name="MarketCapitalisation" ColumnName="MarketCapitalisation" />
@@ -36681,6 +36698,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" />
+                  <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" />
                   <ScalarProperty Name="ADRUnderlyerVolume" ParameterName="ADRUnderlyerVolume" />
                   <ScalarProperty Name="ADRUnderlyerVolumeId" ParameterName="ADRUnderlyerVolumeId" />
                   <ScalarProperty Name="MarketCapitalisation" ParameterName="MarketCapitalisation" />
@@ -36773,6 +36792,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" Version="Current" />
+                  <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" Version="Current" />
                   <ScalarProperty Name="ADRUnderlyerVolume" ParameterName="ADRUnderlyerVolume" Version="Current" />
                   <ScalarProperty Name="ADRUnderlyerVolumeId" ParameterName="ADRUnderlyerVolumeId" Version="Current" />
                   <ScalarProperty Name="MarketCapitalisation" ParameterName="MarketCapitalisation" Version="Current" />
@@ -38448,7 +38469,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="52">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />

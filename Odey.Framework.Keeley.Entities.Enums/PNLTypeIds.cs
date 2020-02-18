@@ -24,6 +24,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FXOptionExposure = 7,
         [EnumMember]
-        AdditionalCounterparty=8
+        AdditionalCounterparty=8,
+        [EnumMember]
+        Currency = 9
     }
 }
