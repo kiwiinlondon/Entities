@@ -200,6 +200,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal PercentageOfFund { get; set; }
     	[DataMember]
         public bool KeeleyIsMaster { get; set; }
+    	[DataMember]
+        public Nullable<int> NavFXRateId { get; set; }
     
         [DataMember]
         public virtual AttributionNav AttributionNav { get; set; }
