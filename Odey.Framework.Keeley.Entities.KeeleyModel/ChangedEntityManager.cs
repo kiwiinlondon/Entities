@@ -36,7 +36,6 @@ namespace Odey.Framework.Keeley.Entities
             {typeof( InstrumentEvent), MessageTypeIds.InstrumentEvent},
             {typeof( TransferEvent), MessageTypeIds.TransferEvent},
             {typeof( InternalAllocation), MessageTypeIds.InternalAllocation},
-            {typeof( AttributionNav), MessageTypeIds.AttributionNav},
             {typeof( IndexConstituent), MessageTypeIds.IndexConstituent},
             {typeof( FocusList), MessageTypeIds.FocusList},
             {typeof( AnalystIdea), MessageTypeIds.AnalystIdea},
@@ -243,13 +242,6 @@ namespace Odey.Framework.Keeley.Entities
             else if (entityType == typeof(Analytic))
             {
                 AddValueToUsefulPropertiesUsingReflection(entry, "AnalyticTypeID", changedEntity);
-            }
-            else if (entityType == typeof(AttributionNav))
-            {
-                AddValueToUsefulProperties(changedEntity, values, "FundId");
-                AddValueToUsefulProperties(changedEntity, values, "AttributionSourceId");
-                AddValueToUsefulProperties(changedEntity, values, "ReferenceDate");
-                AddValueToUsefulProperties(changedEntity, values, "CurrencyId");
             }
         }
         private void AddValueToUsefulProperties(ChangedEntity changedEntity, DbPropertyValues currentValues, string key)

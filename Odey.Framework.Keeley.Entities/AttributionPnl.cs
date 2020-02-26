@@ -53,8 +53,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int AttributionNavId { get; set; }
-    	[DataMember]
         public int CurrencyId { get; set; }
     	[DataMember]
         public decimal TodayOtherPnl { get; set; }
@@ -203,8 +201,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> NavFXRateId { get; set; }
     
-        [DataMember]
-        public virtual AttributionNav AttributionNav { get; set; }
         [DataMember]
         public virtual Fund Fund { get; set; }
         [DataMember]

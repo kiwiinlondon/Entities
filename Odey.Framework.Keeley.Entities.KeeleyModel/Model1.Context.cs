@@ -167,13 +167,11 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<ResearchBroker> ResearchBrokers { get; set; }
         public DbSet<RiskAnalyticPosition> RiskAnalyticPositions { get; set; }
         public DbSet<IndexConstituentOpenClose> IndexConstituentOpenCloses { get; set; }
-        public DbSet<AttributionNav> AttributionNavs { get; set; }
         public DbSet<AttributionPnl> AttributionPnls { get; set; }
         public DbSet<PortfolioEventFX> PortfolioEventFXes { get; set; }
         public DbSet<PositionToRebuild> PositionToRebuilds { get; set; }
         public DbSet<PositionToRebuildManagement> PositionToRebuildManagements { get; set; }
         public DbSet<AdditionalFundIndexes> AdditionalFundIndexes { get; set; }
-        public DbSet<AttributionPNLNav> AttributionPNLNavs { get; set; }
         public DbSet<InterestRateSwap> InterestRateSwaps { get; set; }
         public DbSet<KeltPriorHolding> KeltPriorHoldings { get; set; }
         public DbSet<FundLegalEntityIdentifier> FundLegalEntityIdentifiers { get; set; }
