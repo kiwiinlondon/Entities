@@ -157,7 +157,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<int> CounterpartyId { get; set; }
     	[DataMember]
-        public Nullable<decimal> BookNav { get; set; }
+        public decimal BookNav { get; set; }
     	[DataMember]
         public decimal FundNav { get; set; }
     	[DataMember]
