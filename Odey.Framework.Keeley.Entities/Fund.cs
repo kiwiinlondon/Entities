@@ -137,6 +137,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsCRR { get; set; }
     	[DataMember]
         public string TaxReferenceNumber { get; set; }
+    	[DataMember]
+        public Nullable<int> FundFeederTypeId { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }

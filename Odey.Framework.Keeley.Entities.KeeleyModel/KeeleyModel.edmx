@@ -259,6 +259,8 @@
           <Property Name="PercentageOfFund" Type="numeric" Precision="9" Scale="8" Nullable="false" />
           <Property Name="KeeleyIsMaster" Type="bit" Nullable="false" />
           <Property Name="NavFXRateId" Type="int" />
+          <Property Name="Expense" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="AllInAccrualOffset" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -1418,6 +1420,7 @@
           <Property Name="ISCFDFullyFunded" Type="bit" Nullable="false" />
           <Property Name="IsCRR" Type="bit" Nullable="false" />
           <Property Name="TaxReferenceNumber" Type="varchar" MaxLength="100" />
+          <Property Name="FundFeederTypeId" Type="int" />
         </EntityType>
         <EntityType Name="FundClientPlatform">
           <Key>
@@ -3016,8 +3019,6 @@
           <Property Name="FromBookId" Type="int" />
           <Property Name="ToBookId" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Keeley.dbo.AttributionPNLNav' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Keeley.dbo.BookNetAssetValue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BookNetAssetValue">
@@ -9882,6 +9883,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
           <Parameter Name="NavFXRateId" Type="int" Mode="In" />
+          <Parameter Name="Expense" Type="numeric" Mode="In" />
+          <Parameter Name="AllInAccrualOffset" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -9978,6 +9981,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="PercentageOfFund" Type="numeric" Mode="In" />
           <Parameter Name="KeeleyIsMaster" Type="bit" Mode="In" />
           <Parameter Name="NavFXRateId" Type="int" Mode="In" />
+          <Parameter Name="Expense" Type="numeric" Mode="In" />
+          <Parameter Name="AllInAccrualOffset" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionSundry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AttributionSundryId" Type="int" Mode="In" />
@@ -11662,6 +11667,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ISCFDFullyFunded" Type="bit" Mode="In" />
           <Parameter Name="IsCRR" Type="bit" Mode="In" />
           <Parameter Name="TaxReferenceNumber" Type="varchar" Mode="In" />
+          <Parameter Name="FundFeederTypeId" Type="int" Mode="In" />
         </Function>
         <Function Name="Fund_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -11719,6 +11725,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ISCFDFullyFunded" Type="bit" Mode="In" />
           <Parameter Name="IsCRR" Type="bit" Mode="In" />
           <Parameter Name="TaxReferenceNumber" Type="varchar" Mode="In" />
+          <Parameter Name="FundFeederTypeId" Type="int" Mode="In" />
         </Function>
         <Function Name="Fund_UpdateClientLoadDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -23458,6 +23465,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="IsCRR" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="FundLegalEntityIdentifiers" Relationship="Odey.Framework.Keeley.Entities.FK__FundLegal__FundI__0C4EABDC" FromRole="Fund" ToRole="FundLegalEntityIdentifier" />
           <Property Name="TaxReferenceNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FundFeederTypeId" Type="Int32" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -26961,6 +26969,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="PercentageOfFund" Type="Decimal" Nullable="false" Precision="9" Scale="8" />
           <Property Name="KeeleyIsMaster" Type="Boolean" Nullable="false" />
           <Property Name="NavFXRateId" Type="Int32" />
+          <Property Name="Expense" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="AllInAccrualOffset" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -33447,6 +33457,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="FundFeederTypeId" ColumnName="FundFeederTypeId" />
                 <ScalarProperty Name="TaxReferenceNumber" ColumnName="TaxReferenceNumber" />
                 <ScalarProperty Name="IsCRR" ColumnName="IsCRR" />
                 <ScalarProperty Name="ISCFDFullyFunded" ColumnName="ISCFDFullyFunded" />
@@ -33508,6 +33519,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Fund_Insert">
+                  <ScalarProperty Name="FundFeederTypeId" ParameterName="FundFeederTypeId" />
                   <ScalarProperty Name="TaxReferenceNumber" ParameterName="TaxReferenceNumber" />
                   <ScalarProperty Name="IsCRR" ParameterName="IsCRR" />
                   <ScalarProperty Name="ISCFDFullyFunded" ParameterName="ISCFDFullyFunded" />
@@ -33566,6 +33578,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Fund_Update">
+                  <ScalarProperty Name="FundFeederTypeId" ParameterName="FundFeederTypeId" Version="Current" />
                   <ScalarProperty Name="TaxReferenceNumber" ParameterName="TaxReferenceNumber" Version="Current" />
                   <ScalarProperty Name="IsCRR" ParameterName="IsCRR" Version="Current" />
                   <ScalarProperty Name="ISCFDFullyFunded" ParameterName="ISCFDFullyFunded" Version="Current" />
@@ -36257,6 +36270,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
+                <ScalarProperty Name="AllInAccrualOffset" ColumnName="AllInAccrualOffset" />
+                <ScalarProperty Name="Expense" ColumnName="Expense" />
                 <ScalarProperty Name="NavFXRateId" ColumnName="NavFXRateId" />
                 <ScalarProperty Name="KeeleyIsMaster" ColumnName="KeeleyIsMaster" />
                 <ScalarProperty Name="PercentageOfFund" ColumnName="PercentageOfFund" />
@@ -36354,6 +36369,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="AllInAccrualOffset" ParameterName="AllInAccrualOffset" />
+                  <ScalarProperty Name="Expense" ParameterName="Expense" />
                   <ScalarProperty Name="NavFXRateId" ParameterName="NavFXRateId" />
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" />
                   <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" />
@@ -36448,6 +36465,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="AllInAccrualOffset" ParameterName="AllInAccrualOffset" Version="Current" />
+                  <ScalarProperty Name="Expense" ParameterName="Expense" Version="Current" />
                   <ScalarProperty Name="NavFXRateId" ParameterName="NavFXRateId" Version="Current" />
                   <ScalarProperty Name="KeeleyIsMaster" ParameterName="KeeleyIsMaster" Version="Current" />
                   <ScalarProperty Name="PercentageOfFund" ParameterName="PercentageOfFund" Version="Current" />
@@ -38111,7 +38130,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="41">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />

@@ -528,6 +528,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         NAT_USD_M = 9908,
         [EnumMember]
+        NAT_USD_D = 10171,
+        [EnumMember]
         IPB = 9963,
 
         [EnumMember]

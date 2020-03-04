@@ -200,6 +200,10 @@ namespace Odey.Framework.Keeley.Entities
         public bool KeeleyIsMaster { get; set; }
     	[DataMember]
         public Nullable<int> NavFXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Expense { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AllInAccrualOffset { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
