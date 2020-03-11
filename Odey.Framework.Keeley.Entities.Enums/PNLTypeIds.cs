@@ -44,6 +44,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MarginInterest = 17,
         [EnumMember]
-        CashInterest = 18
+        CashInterest = 18,
+        [EnumMember]
+        CashInterest_Credit = 19,
+        [EnumMember]       
+        RehypothecationEarnings=20,
+        [EnumMember]
+        CashInterest_Debit = 21,
+        [EnumMember]
+        Slippage = 22,
     }
 }

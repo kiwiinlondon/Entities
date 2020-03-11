@@ -82,6 +82,16 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> RealisedAllInAccrual { get; set; }
     	[DataMember]
         public bool SourcedExternally { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterestCredit { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginRequirement { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SwapFinancingCashBalanceDebit { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SwapFinancingCashBalanceCredit { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterestDebit { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

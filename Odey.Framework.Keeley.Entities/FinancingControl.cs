@@ -29,8 +29,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
     	[DataMember]
-        public int InstrumentClassId { get; set; }
-    	[DataMember]
         public bool Loaded { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
@@ -40,6 +38,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int CustodianId { get; set; }
+    	[DataMember]
+        public int FinancingTypeId { get; set; }
     
         [DataMember]
         public virtual Custodian Custodian { get; set; }
@@ -47,7 +47,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<Financing> Financings { get; set; }
         [DataMember]
         public virtual Fund Fund { get; set; }
-        [DataMember]
-        public virtual InstrumentClass InstrumentClass { get; set; }
     }
 }

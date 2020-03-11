@@ -276,7 +276,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> SettledNetPositionChange { get; set; }
     	[DataMember]
-        public Nullable<bool> FinancingMustExist { get; set; }
+        public bool FinancingMustExist { get; set; }
     	[DataMember]
         public Nullable<decimal> FinancingAccrualInstrument { get; set; }
     	[DataMember]
@@ -291,6 +291,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CashInterestInstrument { get; set; }
     	[DataMember]
         public Nullable<decimal> FinancingProportion { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginRequirementInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterestCreditInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationEarningInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterestDebitInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

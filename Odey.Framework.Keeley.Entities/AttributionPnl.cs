@@ -55,7 +55,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int CurrencyId { get; set; }
     	[DataMember]
-        public decimal TodayOtherPnl { get; set; }
+        public Nullable<decimal> TodayOtherPnl { get; set; }
     	[DataMember]
         public int PnlTypeId { get; set; }
     	[DataMember]
@@ -204,10 +204,22 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> Expense { get; set; }
     	[DataMember]
         public Nullable<decimal> AllInAccrualOffset { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterestCredit { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationEarning { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginRequirement { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CashInterestDebit { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Slippage { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
+        [DataMember]
+        public virtual LegalEntity LegalEntity { get; set; }
     }
 }
