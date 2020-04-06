@@ -33,7 +33,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> Price { get; set; }
     	[DataMember]
-        public decimal Notional { get; set; }
+        public Nullable<decimal> Notional { get; set; }
     	[DataMember]
         public Nullable<decimal> FinancingRate { get; set; }
     	[DataMember]
@@ -92,6 +92,16 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> SwapFinancingCashBalanceCredit { get; set; }
     	[DataMember]
         public Nullable<decimal> CashInterestDebit { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginRequirementRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginRequirementNotional { get; set; }
+    	[DataMember]
+        public int AccountTypeId { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

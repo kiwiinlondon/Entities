@@ -35,7 +35,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ValueTrac = 8936,
         [EnumMember]
-        Attrax = 9821
-        
+        Attrax = 9821,
+        [EnumMember]
+        Clearstream = 10201
     }
 }

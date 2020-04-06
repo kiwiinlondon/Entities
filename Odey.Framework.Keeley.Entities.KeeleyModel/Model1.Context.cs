@@ -871,5 +871,93 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PortfolioMessageQueue_DeleteById", messageIdsParameter);
         }
+    
+        public virtual int MarketDataMessageQueue_Delete(Nullable<int> endPointId, Nullable<int> lastMessageId)
+        {
+            var endPointIdParameter = endPointId.HasValue ?
+                new ObjectParameter("EndPointId", endPointId) :
+                new ObjectParameter("EndPointId", typeof(int));
+    
+            var lastMessageIdParameter = lastMessageId.HasValue ?
+                new ObjectParameter("LastMessageId", lastMessageId) :
+                new ObjectParameter("LastMessageId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MarketDataMessageQueue_Delete", endPointIdParameter, lastMessageIdParameter);
+        }
+    
+        public virtual ObjectResult<MarketDataMessageQueue_Get_Result> MarketDataMessageQueue_Get(Nullable<int> endPointId)
+        {
+            var endPointIdParameter = endPointId.HasValue ?
+                new ObjectParameter("EndPointId", endPointId) :
+                new ObjectParameter("EndPointId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MarketDataMessageQueue_Get_Result>("MarketDataMessageQueue_Get", endPointIdParameter);
+        }
+    
+        public virtual int MarketDataMessageQueue_Insert(Nullable<int> endPointId, Nullable<int> marketDataEntityTypeId, Nullable<int> marketDataEntityId, string message)
+        {
+            var endPointIdParameter = endPointId.HasValue ?
+                new ObjectParameter("EndPointId", endPointId) :
+                new ObjectParameter("EndPointId", typeof(int));
+    
+            var marketDataEntityTypeIdParameter = marketDataEntityTypeId.HasValue ?
+                new ObjectParameter("MarketDataEntityTypeId", marketDataEntityTypeId) :
+                new ObjectParameter("MarketDataEntityTypeId", typeof(int));
+    
+            var marketDataEntityIdParameter = marketDataEntityId.HasValue ?
+                new ObjectParameter("MarketDataEntityId", marketDataEntityId) :
+                new ObjectParameter("MarketDataEntityId", typeof(int));
+    
+            var messageParameter = message != null ?
+                new ObjectParameter("Message", message) :
+                new ObjectParameter("Message", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MarketDataMessageQueue_Insert", endPointIdParameter, marketDataEntityTypeIdParameter, marketDataEntityIdParameter, messageParameter);
+        }
+    
+        public virtual int AttributionPnl_UpdateNav(Nullable<int> fundId, Nullable<int> attributionSourceId, Nullable<int> currencyId, Nullable<System.DateTime> referenceDate, Nullable<decimal> bookNav, Nullable<decimal> fundNav, Nullable<decimal> openingNav, Nullable<decimal> keeleyFundNav, Nullable<decimal> percentageOfFund, Nullable<bool> keeleyIsMaster)
+        {
+            var fundIdParameter = fundId.HasValue ?
+                new ObjectParameter("FundId", fundId) :
+                new ObjectParameter("FundId", typeof(int));
+    
+            var attributionSourceIdParameter = attributionSourceId.HasValue ?
+                new ObjectParameter("AttributionSourceId", attributionSourceId) :
+                new ObjectParameter("AttributionSourceId", typeof(int));
+    
+            var currencyIdParameter = currencyId.HasValue ?
+                new ObjectParameter("CurrencyId", currencyId) :
+                new ObjectParameter("CurrencyId", typeof(int));
+    
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            var bookNavParameter = bookNav.HasValue ?
+                new ObjectParameter("BookNav", bookNav) :
+                new ObjectParameter("BookNav", typeof(decimal));
+    
+            var fundNavParameter = fundNav.HasValue ?
+                new ObjectParameter("FundNav", fundNav) :
+                new ObjectParameter("FundNav", typeof(decimal));
+    
+            var openingNavParameter = openingNav.HasValue ?
+                new ObjectParameter("OpeningNav", openingNav) :
+                new ObjectParameter("OpeningNav", typeof(decimal));
+    
+            var keeleyFundNavParameter = keeleyFundNav.HasValue ?
+                new ObjectParameter("KeeleyFundNav", keeleyFundNav) :
+                new ObjectParameter("KeeleyFundNav", typeof(decimal));
+    
+            var percentageOfFundParameter = percentageOfFund.HasValue ?
+                new ObjectParameter("PercentageOfFund", percentageOfFund) :
+                new ObjectParameter("PercentageOfFund", typeof(decimal));
+    
+            var keeleyIsMasterParameter = keeleyIsMaster.HasValue ?
+                new ObjectParameter("KeeleyIsMaster", keeleyIsMaster) :
+                new ObjectParameter("KeeleyIsMaster", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AttributionPnl_UpdateNav", fundIdParameter, attributionSourceIdParameter, currencyIdParameter, referenceDateParameter, bookNavParameter, fundNavParameter, openingNavParameter, keeleyFundNavParameter, percentageOfFundParameter, keeleyIsMasterParameter);
+        }
     }
 }

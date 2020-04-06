@@ -214,6 +214,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CashInterestDebit { get; set; }
     	[DataMember]
         public Nullable<decimal> Slippage { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LegalExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginRequirementRate { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

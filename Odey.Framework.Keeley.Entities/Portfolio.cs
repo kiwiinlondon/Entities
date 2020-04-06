@@ -299,6 +299,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> RehypothecationEarningInstrument { get; set; }
     	[DataMember]
         public Nullable<decimal> CashInterestDebitInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationValueInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

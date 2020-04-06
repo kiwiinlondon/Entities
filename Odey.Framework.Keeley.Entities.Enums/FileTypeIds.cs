@@ -38,7 +38,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CapitaIREAccountTrades = 14,
         [EnumMember]
-        JPMorganJLegFile=15,
+        JPMorganJLegFile = 15,
         [EnumMember]
         QuintillionEQFactorHWMPrice = 16,
         [EnumMember]
@@ -51,7 +51,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         QuintillionIndicativePrices = 20,
-        
+
         [EnumMember]
         RiskReportFigures = 21,
 
@@ -89,15 +89,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ClientNomineeAccount = 39,
         [EnumMember]
-        PeerGroupRankings =   40,
+        PeerGroupRankings = 40,
         [EnumMember]
         FactsetMonthlyContribution = 41,
         [EnumMember]
-        QuintillionPositionFilePortfolioLoadOnly=42,
+        QuintillionPositionFilePortfolioLoadOnly = 42,
         [EnumMember]
-        ClientTrail=43,
+        ClientTrail = 43,
         [EnumMember]
-        MarketDataControlFile=44,
+        MarketDataControlFile = 44,
         [EnumMember]
         CSAVotedResearchPayments = 45,
         [EnumMember]
@@ -143,6 +143,20 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GSOrdFinancing = 70,
         [EnumMember]
-        MSOrdFinancing = 71
+        MSOrdFinancing = 71,
+        [EnumMember]
+        MSCashInterestFinancing = 72,
+        [EnumMember]
+        UBSRehypothecationFinancing = 73,
+        [EnumMember]
+        GSRehypothecationFinancing = 74,
+        [EnumMember]
+        MSRehypothecationFinancing = 75,
+        [EnumMember]
+        ClearstreamClientHoldings = 76,
+        [EnumMember]
+        UBSMarginRequirements= 77,
+        [EnumMember]
+        GSCashInterestFinancing = 78
     }
 }
