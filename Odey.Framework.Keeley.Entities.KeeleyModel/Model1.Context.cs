@@ -959,5 +959,10 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AttributionPnl_UpdateNav", fundIdParameter, attributionSourceIdParameter, currencyIdParameter, referenceDateParameter, bookNavParameter, fundNavParameter, openingNavParameter, keeleyFundNavParameter, percentageOfFundParameter, keeleyIsMasterParameter);
         }
+    
+        public virtual ObjectResult<Extract_MissingBloombergTickers_Result> Extract_MissingBloombergTickers()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Extract_MissingBloombergTickers_Result>("Extract_MissingBloombergTickers");
+        }
     }
 }

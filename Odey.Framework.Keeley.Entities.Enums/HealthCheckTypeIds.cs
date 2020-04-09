@@ -60,7 +60,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember] 
         POSMAN_KEELEY_DAY_RETURN = 18,
         [EnumMember]
-        FINANCING_FILES_COLLECTED = 19
+        FINANCING_FILES_COLLECTED = 19,
+        [EnumMember]
+        MISSING_BLOOMBERG_IDENTIFIERS = 20
     }
 }
 

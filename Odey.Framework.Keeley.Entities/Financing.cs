@@ -101,7 +101,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> MarginRequirementNotional { get; set; }
     	[DataMember]
-        public int AccountTypeId { get; set; }
+        public Nullable<int> AccountTypeId { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

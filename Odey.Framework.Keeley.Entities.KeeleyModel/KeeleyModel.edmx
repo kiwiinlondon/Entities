@@ -1275,7 +1275,7 @@
           <Property Name="RehypothecationUnits" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MarginRequirementRate" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MarginRequirementNotional" Type="numeric" Precision="27" Scale="8" />
-          <Property Name="AccountTypeId" Type="int" Nullable="false" />
+          <Property Name="AccountTypeId" Type="int" />
         </EntityType>
         <EntityType Name="FinancingControl">
           <Key>
@@ -1290,6 +1290,7 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CustodianId" Type="int" Nullable="false" />
           <Property Name="FinancingTypeId" Type="int" Nullable="false" />
+          <Property Name="IsPrimary" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FMPortfolio">
           <Key>
@@ -9905,6 +9906,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RehypothecationValue" Type="numeric" Mode="In" />
           <Parameter Name="RehypothecationUnits" Type="numeric" Mode="In" />
           <Parameter Name="LegalExposure" Type="numeric" Mode="In" />
+          <Parameter Name="MarginRequirementRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -10011,6 +10013,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RehypothecationValue" Type="numeric" Mode="In" />
           <Parameter Name="RehypothecationUnits" Type="numeric" Mode="In" />
           <Parameter Name="LegalExposure" Type="numeric" Mode="In" />
+          <Parameter Name="MarginRequirementRate" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_UpdateNav" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -11069,6 +11072,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ExtractOutputContainerTypeID" Type="int" Mode="In" />
           <Parameter Name="ExtractResponseHandlerTypeId" Type="int" Mode="In" />
         </Function>
+        <Function Name="Extract_MissingBloombergTickers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="Extract_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ExtractID" Type="int" Mode="In" />
           <Parameter Name="ExtractTypeId" Type="int" Mode="In" />
@@ -11529,6 +11533,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="CustodianId" Type="int" Mode="In" />
           <Parameter Name="FinancingTypeId" Type="int" Mode="In" />
+          <Parameter Name="IsPrimary" Type="bit" Mode="In" />
         </Function>
         <Function Name="FinancingControl_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FinancingControlId" Type="int" Mode="In" />
@@ -11539,6 +11544,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="CustodianId" Type="int" Mode="In" />
           <Parameter Name="FinancingTypeId" Type="int" Mode="In" />
+          <Parameter Name="IsPrimary" Type="bit" Mode="In" />
         </Function>
         <Function Name="FMContractMapping_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FMContId" Type="int" Mode="In" />
@@ -19359,7 +19365,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <Parameter Name="KeeleyFundNav" Mode="In" Type="Decimal" />
             <Parameter Name="PercentageOfFund" Mode="In" Type="Decimal" />
             <Parameter Name="KeeleyIsMaster" Mode="In" Type="Boolean" />
-          </FunctionImport>          
+          </FunctionImport>
+          <FunctionImport Name="Extract_MissingBloombergTickers" ReturnType="Collection(Odey.Framework.Keeley.Entities.Extract_MissingBloombergTickers_Result)" />          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -29193,6 +29200,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="Financings" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__Finan__38B8D4AD" FromRole="FinancingControl" ToRole="Financing" />
           <NavigationProperty Name="Fund" Relationship="Odey.Framework.Keeley.Entities.FK__Financing__FundI__2F2F6A73" FromRole="FinancingControl" ToRole="Fund" />
           <Property Name="FinancingTypeId" Type="Int32" Nullable="false" />
+          <Property Name="IsPrimary" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK__Financing__Updat__3117B2E5">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -29281,7 +29289,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="RehypothecationUnits" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MarginRequirementRate" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MarginRequirementNotional" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="AccountTypeId" Type="Int32" Nullable="false" />          
+          <Property Name="AccountTypeId" Type="Int32" />          
         </EntityType>
         <Association Name="FK__Financing__Updat__57BBB363">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -29506,6 +29514,12 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Int32" Name="MarketDataEntityId" Nullable="false" />
           <Property Type="String" Name="Message" Nullable="true" />
           <Property Type="DateTime" Name="StartDt" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Extract_MissingBloombergTickers_Result">
+          <Property Type="String" Name="name" Nullable="false" MaxLength="70" />
+          <Property Type="DateTime" Name="ReferenceDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="InstrumentName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="InstrumentClassName" Nullable="false" MaxLength="100" />
         </ComplexType>        
         </Schema>
     </edmx:ConceptualModels>
@@ -36530,6 +36544,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="MarginRequirementRate" ParameterName="MarginRequirementRate" />
                   <ScalarProperty Name="LegalExposure" ParameterName="LegalExposure" />
                   <ScalarProperty Name="RehypothecationUnits" ParameterName="RehypothecationUnits" />
                   <ScalarProperty Name="RehypothecationValue" ParameterName="RehypothecationValue" />
@@ -36634,6 +36649,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="MarginRequirementRate" ParameterName="MarginRequirementRate" Version="Current" />
                   <ScalarProperty Name="LegalExposure" ParameterName="LegalExposure" Version="Current" />
                   <ScalarProperty Name="RehypothecationUnits" ParameterName="RehypothecationUnits" Version="Current" />
                   <ScalarProperty Name="RehypothecationValue" ParameterName="RehypothecationValue" Version="Current" />
@@ -38121,6 +38137,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="FinancingControls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FinancingControl">
               <MappingFragment StoreEntitySet="FinancingControl">
+                <ScalarProperty Name="IsPrimary" ColumnName="IsPrimary" />
                 <ScalarProperty Name="FinancingTypeId" ColumnName="FinancingTypeId" />
                 <ScalarProperty Name="CustodianId" ColumnName="CustodianId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -38135,6 +38152,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FinancingControl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.FinancingControl_Insert">
+                  <ScalarProperty Name="IsPrimary" ParameterName="IsPrimary" />
                   <ScalarProperty Name="FinancingTypeId" ParameterName="FinancingTypeId" />
                   <ScalarProperty Name="CustodianId" ParameterName="CustodianId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -38146,6 +38164,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.FinancingControl_Update">
+                  <ScalarProperty Name="IsPrimary" ParameterName="IsPrimary" Version="Current" />
                   <ScalarProperty Name="FinancingTypeId" ParameterName="FinancingTypeId" Version="Current" />
                   <ScalarProperty Name="CustodianId" ParameterName="CustodianId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
@@ -38330,6 +38349,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="MarketDataMessageQueue_Insert" FunctionName="KeeleyModel.Store.MarketDataMessageQueue_Insert" />
           <FunctionImportMapping FunctionImportName="AttributionPnl_UpdateNav" FunctionName="KeeleyModel.Store.AttributionPnl_UpdateNav" />
+          <FunctionImportMapping FunctionImportName="Extract_MissingBloombergTickers" FunctionName="KeeleyModel.Store.Extract_MissingBloombergTickers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Odey.Framework.Keeley.Entities.Extract_MissingBloombergTickers_Result">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="InstrumentName" ColumnName="InstrumentName" />
+                <ScalarProperty Name="InstrumentClassName" ColumnName="InstrumentClassName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -38352,7 +38381,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="58">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="37">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />

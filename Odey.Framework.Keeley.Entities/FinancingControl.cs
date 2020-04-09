@@ -40,6 +40,8 @@ namespace Odey.Framework.Keeley.Entities
         public int CustodianId { get; set; }
     	[DataMember]
         public int FinancingTypeId { get; set; }
+    	[DataMember]
+        public bool IsPrimary { get; set; }
     
         [DataMember]
         public virtual Custodian Custodian { get; set; }
