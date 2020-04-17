@@ -222,6 +222,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> LegalExposure { get; set; }
     	[DataMember]
         public Nullable<decimal> MarginRequirementRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> PositionSize { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

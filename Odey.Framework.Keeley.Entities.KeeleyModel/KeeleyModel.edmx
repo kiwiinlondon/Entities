@@ -270,6 +270,7 @@
           <Property Name="RehypothecationUnits" Type="numeric" Precision="27" Scale="8" />
           <Property Name="LegalExposure" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MarginRequirementRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="PositionSize" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Beta">
           <Key>
@@ -1276,6 +1277,8 @@
           <Property Name="MarginRequirementRate" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MarginRequirementNotional" Type="numeric" Precision="27" Scale="8" />
           <Property Name="AccountTypeId" Type="int" />
+          <Property Name="SwapFinancingCashInterestRateDebit" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="SwapFinancingCashInterestRateCredit" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="FinancingControl">
           <Key>
@@ -1838,6 +1841,7 @@
           <Property Name="LocalExchangeSymbol" Type="varchar" MaxLength="50" />
           <Property Name="MicCode" Type="varchar" MaxLength="10" />
           <Property Name="AlwaysUseManualPrice" Type="bit" Nullable="false" />
+          <Property Name="IsExposureLong" Type="bit" />
         </EntityType>
         <EntityType Name="InstrumentRelationship">
           <Key>
@@ -9907,6 +9911,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RehypothecationUnits" Type="numeric" Mode="In" />
           <Parameter Name="LegalExposure" Type="numeric" Mode="In" />
           <Parameter Name="MarginRequirementRate" Type="numeric" Mode="In" />
+          <Parameter Name="PositionSize" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -10014,6 +10019,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RehypothecationUnits" Type="numeric" Mode="In" />
           <Parameter Name="LegalExposure" Type="numeric" Mode="In" />
           <Parameter Name="MarginRequirementRate" Type="numeric" Mode="In" />
+          <Parameter Name="PositionSize" Type="numeric" Mode="In" />
         </Function>
         <Function Name="AttributionPnl_UpdateNav" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -11473,6 +11479,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="MarginRequirementRate" Type="numeric" Mode="In" />
           <Parameter Name="MarginRequirementNotional" Type="numeric" Mode="In" />
           <Parameter Name="AccountTypeId" Type="int" Mode="In" />
+          <Parameter Name="SwapFinancingCashInterestRateDebit" Type="numeric" Mode="In" />
+          <Parameter Name="SwapFinancingCashInterestRateCredit" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Financing_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -11520,6 +11528,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="MarginRequirementRate" Type="numeric" Mode="In" />
           <Parameter Name="MarginRequirementNotional" Type="numeric" Mode="In" />
           <Parameter Name="AccountTypeId" Type="int" Mode="In" />
+          <Parameter Name="SwapFinancingCashInterestRateDebit" Type="numeric" Mode="In" />
+          <Parameter Name="SwapFinancingCashInterestRateCredit" Type="numeric" Mode="In" />
         </Function>
         <Function Name="FinancingControl_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FinancingControlId" Type="int" Mode="In" />
@@ -12322,6 +12332,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="LocalExchangeSymbol" Type="varchar" Mode="In" />
           <Parameter Name="MicCode" Type="varchar" Mode="In" />
           <Parameter Name="AlwaysUseManualPrice" Type="bit" Mode="In" />
+          <Parameter Name="IsExposureLong" Type="bit" Mode="In" />
         </Function>
         <Function Name="InstrumentMarket_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentMarketID" Type="int" Mode="In" />
@@ -12354,6 +12365,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="LocalExchangeSymbol" Type="varchar" Mode="In" />
           <Parameter Name="MicCode" Type="varchar" Mode="In" />
           <Parameter Name="AlwaysUseManualPrice" Type="bit" Mode="In" />
+          <Parameter Name="IsExposureLong" Type="bit" Mode="In" />
         </Function>
         <Function Name="InstrumentRelationship_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OverlyingInstrumentID" Type="int" Mode="In" />
@@ -21730,6 +21742,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="MicCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ListingStatus" Relationship="Odey.Framework.Keeley.Entities.InstrumentMarketListingStatusIDFK" FromRole="InstrumentMarket" ToRole="ListingStatus" />
           <Property Name="AlwaysUseManualPrice" Type="Boolean" Nullable="false" />
+          <Property Name="IsExposureLong" Type="Boolean" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -27098,6 +27111,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="RehypothecationUnits" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="LegalExposure" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MarginRequirementRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="PositionSize" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="FK__AnalystId__Exter__2A478C69">
           <End Type="Odey.Framework.Keeley.Entities.ResearchBroker" Role="ResearchBroker" Multiplicity="0..1" />
@@ -29289,7 +29303,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="RehypothecationUnits" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MarginRequirementRate" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MarginRequirementNotional" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="AccountTypeId" Type="Int32" />          
+          <Property Name="AccountTypeId" Type="Int32" />
+          <Property Name="SwapFinancingCashInterestRateDebit" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="SwapFinancingCashInterestRateCredit" Type="Decimal" Precision="27" Scale="8" />          
         </EntityType>
         <Association Name="FK__Financing__Updat__57BBB363">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -32432,6 +32448,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="InstrumentMarkets">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <MappingFragment StoreEntitySet="InstrumentMarket">
+                <ScalarProperty Name="IsExposureLong" ColumnName="IsExposureLong" />
                 <ScalarProperty Name="AlwaysUseManualPrice" ColumnName="AlwaysUseManualPrice" />
                 <ScalarProperty Name="MicCode" ColumnName="MicCode" />
                 <ScalarProperty Name="LocalExchangeSymbol" ColumnName="LocalExchangeSymbol" />
@@ -32468,6 +32485,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InstrumentMarket">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Insert">
+                  <ScalarProperty Name="IsExposureLong" ParameterName="IsExposureLong" />
                   <ScalarProperty Name="AlwaysUseManualPrice" ParameterName="AlwaysUseManualPrice" />
                   <ScalarProperty Name="MicCode" ParameterName="MicCode" />
                   <ScalarProperty Name="LocalExchangeSymbol" ParameterName="LocalExchangeSymbol" />
@@ -32501,6 +32519,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.InstrumentMarket_Update">
+                  <ScalarProperty Name="IsExposureLong" ParameterName="IsExposureLong" Version="Current" />
                   <ScalarProperty Name="AlwaysUseManualPrice" ParameterName="AlwaysUseManualPrice" Version="Current" />
                   <ScalarProperty Name="MicCode" ParameterName="MicCode" Version="Current" />
                   <ScalarProperty Name="LocalExchangeSymbol" ParameterName="LocalExchangeSymbol" Version="Current" />
@@ -36436,6 +36455,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="AttributionPnls">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <MappingFragment StoreEntitySet="AttributionPnl">
+                <ScalarProperty Name="PositionSize" ColumnName="PositionSize" />
                 <ScalarProperty Name="MarginRequirementRate" ColumnName="MarginRequirementRate" />
                 <ScalarProperty Name="LegalExposure" ColumnName="LegalExposure" />
                 <ScalarProperty Name="RehypothecationUnits" ColumnName="RehypothecationUnits" />
@@ -36544,6 +36564,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.AttributionPnl">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.AttributionPnl_Insert">
+                  <ScalarProperty Name="PositionSize" ParameterName="PositionSize" />
                   <ScalarProperty Name="MarginRequirementRate" ParameterName="MarginRequirementRate" />
                   <ScalarProperty Name="LegalExposure" ParameterName="LegalExposure" />
                   <ScalarProperty Name="RehypothecationUnits" ParameterName="RehypothecationUnits" />
@@ -36649,6 +36670,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.AttributionPnl_Update">
+                  <ScalarProperty Name="PositionSize" ParameterName="PositionSize" Version="Current" />
                   <ScalarProperty Name="MarginRequirementRate" ParameterName="MarginRequirementRate" Version="Current" />
                   <ScalarProperty Name="LegalExposure" ParameterName="LegalExposure" Version="Current" />
                   <ScalarProperty Name="RehypothecationUnits" ParameterName="RehypothecationUnits" Version="Current" />
@@ -38187,6 +38209,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Financings">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
               <MappingFragment StoreEntitySet="Financing">
+                <ScalarProperty Name="SwapFinancingCashInterestRateCredit" ColumnName="SwapFinancingCashInterestRateCredit" />
+                <ScalarProperty Name="SwapFinancingCashInterestRateDebit" ColumnName="SwapFinancingCashInterestRateDebit" />
                 <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
                 <ScalarProperty Name="MarginRequirementNotional" ColumnName="MarginRequirementNotional" />
                 <ScalarProperty Name="MarginRequirementRate" ColumnName="MarginRequirementRate" />
@@ -38235,6 +38259,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Financing">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Financing_Insert">
+                  <ScalarProperty Name="SwapFinancingCashBalanceCredit" ParameterName="SwapFinancingCashInterestRateCredit" />
+                  <ScalarProperty Name="SwapFinancingCashBalanceDebit" ParameterName="SwapFinancingCashInterestRateDebit" />
                   <ScalarProperty Name="AccountTypeId" ParameterName="AccountTypeId" />
                   <ScalarProperty Name="MarginRequirementNotional" ParameterName="MarginRequirementNotional" />
                   <ScalarProperty Name="MarginRequirementRate" ParameterName="MarginRequirementRate" />
@@ -38280,6 +38306,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Financing_Update">
+                  <ScalarProperty Name="SwapFinancingCashBalanceCredit" ParameterName="SwapFinancingCashInterestRateCredit" Version="Current" />
+                  <ScalarProperty Name="SwapFinancingCashBalanceDebit" ParameterName="SwapFinancingCashInterestRateDebit" Version="Current" />
                   <ScalarProperty Name="AccountTypeId" ParameterName="AccountTypeId" Version="Current" />
                   <ScalarProperty Name="MarginRequirementNotional" ParameterName="MarginRequirementNotional" Version="Current" />
                   <ScalarProperty Name="MarginRequirementRate" ParameterName="MarginRequirementRate" Version="Current" />

@@ -157,6 +157,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         UBSMarginRequirements= 77,
         [EnumMember]
-        GSCashInterestFinancing = 78
+        GSCashInterestFinancing = 78,
+        [EnumMember]
+        JPMCashInterestFinancing = 79
     }
 }

@@ -78,6 +78,8 @@ namespace Odey.Framework.Keeley.Entities
         public string MicCode { get; set; }
     	[DataMember]
         public bool AlwaysUseManualPrice { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsExposureLong { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
