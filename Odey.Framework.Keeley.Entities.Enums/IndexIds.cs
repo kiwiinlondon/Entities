@@ -54,6 +54,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ARC_Balanced_EUR = 27955,
 
         [EnumMember]
+        ARC_Balanced_USD = 29726,
+
+        [EnumMember]
+        ARC_Balacned_CHF = 30216,
+
+        [EnumMember]
 	    IMA_Mixed_Investments_40_80_Shares = 26997,
 
         
