@@ -16,6 +16,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Perpetual = 3,
         [EnumMember]
-        Callable = 4
+        Callable = 4,
+        [EnumMember]
+        Sinkable = 5
     }
 }

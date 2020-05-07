@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Financing
     {
+    	
+        public Financing()
+        {
+            this.Portfolios = new List<Portfolio>();
+        }
+    
     	[DataMember]
         public int FinancingId { get; set; }
     	[DataMember]
@@ -106,6 +112,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> SwapFinancingCashInterestRateDebit { get; set; }
     	[DataMember]
         public Nullable<decimal> SwapFinancingCashInterestRateCredit { get; set; }
+    	[DataMember]
+        public bool NonPrimaryRecordExists { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
@@ -117,5 +125,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
+        [DataMember]
+        public virtual List<Portfolio> Portfolios { get; set; }
     }
 }

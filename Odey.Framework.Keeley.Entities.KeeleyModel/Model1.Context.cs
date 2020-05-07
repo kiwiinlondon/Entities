@@ -964,5 +964,15 @@ namespace Odey.Framework.Keeley.Entities
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Extract_MissingBloombergTickers_Result>("Extract_MissingBloombergTickers");
         }
+    
+        public virtual ObjectResult<HealthCheck_GetClientPlatformBreaks_Result> HealthCheck_GetClientPlatformBreaks()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<HealthCheck_GetClientPlatformBreaks_Result>("HealthCheck_GetClientPlatformBreaks");
+        }
+    
+        public virtual ObjectResult<HealthCheck_UnmappedFinancing_Result> HealthCheck_UnmappedFinancing()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<HealthCheck_UnmappedFinancing_Result>("HealthCheck_UnmappedFinancing");
+        }
     }
 }

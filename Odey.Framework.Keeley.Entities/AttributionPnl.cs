@@ -223,7 +223,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> MarginRequirementRate { get; set; }
     	[DataMember]
-        public Nullable<decimal> PositionSize { get; set; }
+        public decimal PositionSize { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

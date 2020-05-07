@@ -159,6 +159,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GSCashInterestFinancing = 78,
         [EnumMember]
-        JPMCashInterestFinancing = 79
+        JPMCashInterestFinancing = 79,
+        [EnumMember]
+        RaymondJamesClientHoldings=80,
+        [EnumMember]
+        UBSCashInterestFinancing = 81
     }
 }

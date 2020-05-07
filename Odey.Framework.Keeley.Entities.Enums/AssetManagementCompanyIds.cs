@@ -8,24 +8,22 @@ using System.Threading.Tasks;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum FinancingTypeIds
+    public enum  AssetManagementCompanyIds
     {
         [EnumMember]
-        EquityAndCorporateBonds = 1,
+        OdeyAssetManagementLLP =	6398,
         [EnumMember]
-        Swap = 2,
+        OdeyInvestmentFundsPLC	= 6771,
         [EnumMember]
-        Currency = 3,
+        OdeyInvestmentsPLC = 6772,
         [EnumMember]
-        SwapCashProceeds = 4,
+        LFOdeyInvestmentFunds = 6773,
         [EnumMember]
-        Margin = 5,
+        LFOdeyFunds = 6774,
         [EnumMember]
-        Rehypothecation = 6,
+        OdeyWealthManagementLtd = 6783,
         [EnumMember]
-        MarginCashProceeds = 7
+        OdeyIrishFeederICAV = 7561
+
     }
-
-    
-
 }

@@ -314,5 +314,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<AttributionPnl> AttributionPnls { get; set; }
         [DataMember]
         public virtual Price PriceEntity { get; set; }
+        [DataMember]
+        public virtual Financing Financing { get; set; }
     }
 }

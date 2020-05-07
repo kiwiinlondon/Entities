@@ -62,7 +62,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FINANCING_FILES_COLLECTED = 19,
         [EnumMember]
-        MISSING_BLOOMBERG_IDENTIFIERS = 20
+        MISSING_BLOOMBERG_IDENTIFIERS = 20,
+        [EnumMember]
+        UNMAPPED_FINANCING = 21,
+        [EnumMember]
+        CLIENT_PLATFORM_BREAKS = 22
     }
 }
 

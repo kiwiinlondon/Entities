@@ -37,6 +37,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Attrax = 9821,
         [EnumMember]
-        Clearstream = 10201
+        Clearstream = 10201,
+        [EnumMember]
+        RaymondJames = 8664
     }
 }
