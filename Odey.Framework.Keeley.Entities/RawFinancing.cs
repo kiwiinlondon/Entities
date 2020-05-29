@@ -14,22 +14,28 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class FinancingControl
+    public partial class RawFinancing
     {
-    	
-        public FinancingControl()
-        {
-            this.RawFinancings = new List<RawFinancing>();
-        }
-    
     	[DataMember]
-        public int FinancingControlId { get; set; }
+        public int RawFinancingId { get; set; }
     	[DataMember]
-        public int FundId { get; set; }
+        public int FinancingId { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
+        public int RawFinancingTypeId { get; set; }
     	[DataMember]
-        public bool Loaded { get; set; }
+        public Nullable<decimal> Notional { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Rate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Accrual { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Units { get; set; }
+    	[DataMember]
+        public Nullable<decimal> Price { get; set; }
+    	[DataMember]
+        public int DayCount { get; set; }
+    	[DataMember]
+        public int DayBasis { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -37,15 +43,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int CustodianId { get; set; }
-    	[DataMember]
-        public int FinancingTypeId { get; set; }
+        public int FinancingControlId { get; set; }
     
         [DataMember]
-        public virtual Custodian Custodian { get; set; }
+        public virtual Financing Financing { get; set; }
         [DataMember]
-        public virtual Fund Fund { get; set; }
-        [DataMember]
-        public virtual List<RawFinancing> RawFinancings { get; set; }
+        public virtual FinancingControl FinancingControl { get; set; }
     }
 }

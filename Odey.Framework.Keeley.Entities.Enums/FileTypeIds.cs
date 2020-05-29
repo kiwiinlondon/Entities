@@ -163,6 +163,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         RaymondJamesClientHoldings=80,
         [EnumMember]
-        UBSCashInterestFinancing = 81
+        UBSCashInterestFinancing = 81,
+        [EnumMember]
+        MSMarginRequirements = 82,
+        [EnumMember]
+        GSMarginRequirements = 83,
+        [EnumMember]
+        JPMMarginRequirements = 84
+
     }
 }

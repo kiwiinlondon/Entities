@@ -19,7 +19,7 @@ namespace Odey.Framework.Keeley.Entities
     	
         public Financing()
         {
-            this.Portfolios = new List<Portfolio>();
+            this.RawFinancings = new List<RawFinancing>();
         }
     
     	[DataMember]
@@ -69,25 +69,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> CashInterest { get; set; }
     	[DataMember]
-        public bool IsDummy { get; set; }
-    	[DataMember]
-        public int FinancingControlId { get; set; }
-    	[DataMember]
         public Nullable<decimal> RehypothecationEarning { get; set; }
-    	[DataMember]
-        public int DayCount { get; set; }
-    	[DataMember]
-        public int DayBasis { get; set; }
     	[DataMember]
         public Nullable<decimal> CashInterestRate { get; set; }
     	[DataMember]
         public Nullable<decimal> CashBalance { get; set; }
     	[DataMember]
         public Nullable<decimal> MarginBalance { get; set; }
-    	[DataMember]
-        public Nullable<decimal> RealisedAllInAccrual { get; set; }
-    	[DataMember]
-        public bool SourcedExternally { get; set; }
     	[DataMember]
         public Nullable<decimal> CashInterestCredit { get; set; }
     	[DataMember]
@@ -107,25 +95,19 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> MarginRequirementNotional { get; set; }
     	[DataMember]
-        public Nullable<int> AccountTypeId { get; set; }
-    	[DataMember]
         public Nullable<decimal> SwapFinancingCashInterestRateDebit { get; set; }
     	[DataMember]
         public Nullable<decimal> SwapFinancingCashInterestRateCredit { get; set; }
-    	[DataMember]
-        public bool NonPrimaryRecordExists { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }
         [DataMember]
         public virtual Custodian Custodian { get; set; }
         [DataMember]
-        public virtual FinancingControl FinancingControl { get; set; }
-        [DataMember]
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
         [DataMember]
-        public virtual List<Portfolio> Portfolios { get; set; }
+        public virtual List<RawFinancing> RawFinancings { get; set; }
     }
 }
