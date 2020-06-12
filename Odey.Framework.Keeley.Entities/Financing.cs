@@ -98,6 +98,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> SwapFinancingCashInterestRateDebit { get; set; }
     	[DataMember]
         public Nullable<decimal> SwapFinancingCashInterestRateCredit { get; set; }
+    	[DataMember]
+        public bool IsDummy { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

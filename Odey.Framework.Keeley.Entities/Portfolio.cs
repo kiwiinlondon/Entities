@@ -301,6 +301,18 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CashInterestDebitInstrument { get; set; }
     	[DataMember]
         public Nullable<decimal> RehypothecationValueInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FinancingRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BorrowRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OverborrowUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RehypothecationUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MarginRequirementRate { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
