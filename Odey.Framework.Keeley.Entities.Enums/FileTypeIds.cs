@@ -171,6 +171,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         JPMMarginRequirements = 84,
         [EnumMember]
-        BAMLCashInterestFinancing = 85
+        BAMLCashInterestFinancing = 85,
+        [EnumMember]
+        MSOverborrowOffset = 86
     }
 }

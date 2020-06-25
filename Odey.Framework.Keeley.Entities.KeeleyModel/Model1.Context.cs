@@ -916,11 +916,15 @@ namespace Odey.Framework.Keeley.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MarketDataMessageQueue_Insert", endPointIdParameter, marketDataEntityTypeIdParameter, marketDataEntityIdParameter, messageParameter);
         }
     
-        public virtual int AttributionPnl_UpdateNav(Nullable<int> fundId, Nullable<int> attributionSourceId, Nullable<int> currencyId, Nullable<System.DateTime> referenceDate, Nullable<decimal> bookNav, Nullable<decimal> fundNav, Nullable<decimal> openingNav, Nullable<decimal> keeleyFundNav, Nullable<decimal> percentageOfFund, Nullable<bool> keeleyIsMaster)
+        public virtual int AttributionPnl_UpdateNav(Nullable<int> fundId, Nullable<int> bookId, Nullable<int> attributionSourceId, Nullable<int> currencyId, Nullable<System.DateTime> referenceDate, Nullable<decimal> bookNav, Nullable<decimal> fundNav, Nullable<decimal> openingNav, Nullable<decimal> keeleyFundNav, Nullable<decimal> percentageOfFund, Nullable<bool> keeleyIsMaster)
         {
             var fundIdParameter = fundId.HasValue ?
                 new ObjectParameter("FundId", fundId) :
                 new ObjectParameter("FundId", typeof(int));
+    
+            var bookIdParameter = bookId.HasValue ?
+                new ObjectParameter("BookId", bookId) :
+                new ObjectParameter("BookId", typeof(int));
     
             var attributionSourceIdParameter = attributionSourceId.HasValue ?
                 new ObjectParameter("AttributionSourceId", attributionSourceId) :
@@ -958,7 +962,7 @@ namespace Odey.Framework.Keeley.Entities
                 new ObjectParameter("KeeleyIsMaster", keeleyIsMaster) :
                 new ObjectParameter("KeeleyIsMaster", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AttributionPnl_UpdateNav", fundIdParameter, attributionSourceIdParameter, currencyIdParameter, referenceDateParameter, bookNavParameter, fundNavParameter, openingNavParameter, keeleyFundNavParameter, percentageOfFundParameter, keeleyIsMasterParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AttributionPnl_UpdateNav", fundIdParameter, bookIdParameter, attributionSourceIdParameter, currencyIdParameter, referenceDateParameter, bookNavParameter, fundNavParameter, openingNavParameter, keeleyFundNavParameter, percentageOfFundParameter, keeleyIsMasterParameter);
         }
     
         public virtual ObjectResult<Extract_MissingBloombergTickers_Result> Extract_MissingBloombergTickers()

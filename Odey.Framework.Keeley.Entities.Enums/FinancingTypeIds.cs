@@ -23,7 +23,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Rehypothecation = 6,
         [EnumMember]
-        MarginCashProceeds = 7
+        OverborrowOffset = 7
     }
 
     

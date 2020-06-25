@@ -29,6 +29,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MarginRequirement =10,
         [EnumMember]
-        Rehypothecation =11
+        Rehypothecation =11,
+        [EnumMember]
+        OverborrowOffset = 12
     }
 }
