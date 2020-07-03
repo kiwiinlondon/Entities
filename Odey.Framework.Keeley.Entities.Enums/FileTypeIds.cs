@@ -173,6 +173,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BAMLCashInterestFinancing = 85,
         [EnumMember]
-        MSOverborrowOffset = 86
+        MSOverborrowOffset = 86,
+        [EnumMember]
+        QuintillionEstimatedClientTrades= 87
     }
 }

@@ -92,6 +92,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal CostUSD { get; set; }
     	[DataMember]
         public decimal CostGBP { get; set; }
+    	[DataMember]
+        public bool IsEstimate { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
