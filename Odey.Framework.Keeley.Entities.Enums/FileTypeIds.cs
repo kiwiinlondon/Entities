@@ -175,6 +175,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         MSOverborrowOffset = 86,
         [EnumMember]
-        QuintillionEstimatedClientTrades= 87
+        QuintillionEstimatedClientTrades= 87,
+        [EnumMember]
+        JPMMatchedTrades = 88
     }
 }

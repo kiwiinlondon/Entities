@@ -14,6 +14,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FTP = 2,
         [EnumMember]
-        Directory = 3
+        Directory = 3      
     }
 }
