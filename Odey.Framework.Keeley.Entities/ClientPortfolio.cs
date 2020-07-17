@@ -92,6 +92,8 @@ namespace Odey.Framework.Keeley.Entities
         public decimal CostUSD { get; set; }
     	[DataMember]
         public decimal CostGBP { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ManagerQuantityOffset { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
