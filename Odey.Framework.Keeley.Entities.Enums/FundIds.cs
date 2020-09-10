@@ -546,6 +546,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         SSF_EUR_R = 10360,
         [EnumMember]
-        SSF_GBP_R = 10363
+        SSF_GBP_R = 10363,
+        [EnumMember]
+        SSF_USD_R = 10388,
+        [EnumMember]
+        SSF_CHF_R = 10392,
+        [EnumMember]
+        SSF_CHF_I = 10393
     }
 }
