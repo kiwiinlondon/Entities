@@ -186,6 +186,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> Consideration { get; set; }
     	[DataMember]
         public Nullable<bool> IsInternal { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayCapitalChangeInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CapitalChangeInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

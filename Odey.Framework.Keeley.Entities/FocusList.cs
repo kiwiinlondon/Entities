@@ -19,7 +19,7 @@ namespace Odey.Framework.Keeley.Entities
     	
         public FocusList()
         {
-            this.FocusListPrices = new List<FocusListPrice>();
+            this.FocusListPrices = new List<FocusListPrices>();
         }
     
     	[DataMember]
@@ -76,8 +76,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> ExternalBrokerId { get; set; }
     
         [DataMember]
-        public virtual List<FocusListPrice> FocusListPrices { get; set; }
-        [DataMember]
         public virtual ResearchBroker ResearchBroker { get; set; }
+        [DataMember]
+        public virtual List<FocusListPrices> FocusListPrices { get; set; }
     }
 }

@@ -1355,7 +1355,7 @@
           <Property Name="IssuerId" Type="int" Nullable="false" />
           <Property Name="ExternalBrokerId" Type="int" />
         </EntityType>
-        <EntityType Name="FocusListPrices">
+        <EntityType Name="FocusListPrice">
           <Key>
             <PropertyRef Name="FocusListPriceId" />
           </Key>
@@ -1363,7 +1363,9 @@
           <Property Name="FocusListId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
           <Property Name="Price" Type="numeric" Precision="27" Scale="8" Nullable="false" />
-          <Property Name="AdjustmentFactor" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="RelativePrice" Type="numeric" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
         <EntityType Name="ForwardFX">
@@ -2402,6 +2404,7 @@
           <Property Name="OverborrowUnits" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RehypothecationUnits" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MarginRequirementRate" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TodayCapitalChangeInstrument" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -2499,6 +2502,8 @@
           <Property Name="FuturesClearing" Type="numeric" Precision="27" Scale="8" />
           <Property Name="Consideration" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IsInternal" Type="bit" />
+          <Property Name="TodayCapitalChangeInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CapitalChangeInstrument" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioEventFX">
           <Key>
@@ -2518,6 +2523,8 @@
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="FXRateId" Type="int" />
           <Property Name="OriginalNotionalCost" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="TodayCapitalChange" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="CapitalChange" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioEventType">
           <Key>
@@ -5737,6 +5744,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__FocusList__DataV__4342E6C6">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="FocusListPrice" Type="Self.FocusListPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FocusListPrice">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__FocusList__Exter__22A66AA1">
           <End Role="ResearchBroker" Type="Self.ResearchBroker" Multiplicity="0..1" />
           <End Role="FocusList" Type="Self.FocusList" Multiplicity="*" />
@@ -5746,6 +5765,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="FocusList">
               <PropertyRef Name="ExternalBrokerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FocusList__Focus__424EC28D">
+          <End Role="FocusList" Type="Self.FocusList" Multiplicity="1" />
+          <End Role="FocusListPrice" Type="Self.FocusListPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FocusList">
+              <PropertyRef Name="FocusListId" />
+            </Principal>
+            <Dependent Role="FocusListPrice">
+              <PropertyRef Name="FocusListId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7102,18 +7133,6 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="FocusList">
               <PropertyRef Name="CurrentPriceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FocusListIdFK">
-          <End Role="FocusList" Type="Self.FocusList" Multiplicity="1" />
-          <End Role="FocusListPrices" Type="Self.FocusListPrices" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FocusList">
-              <PropertyRef Name="FocusListId" />
-            </Principal>
-            <Dependent Role="FocusListPrices">
-              <PropertyRef Name="FocusListId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11715,6 +11734,27 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="RelativeCurrentPriceDate" Type="datetime" Mode="In" />
           <Parameter Name="IssuerId" Type="int" Mode="In" />
         </Function>
+        <Function Name="FocusListPrice_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FocusListPriceId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FocusListPrice_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FocusListId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="RelativePrice" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="FocusListPrice_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FocusListPriceId" Type="int" Mode="In" />
+          <Parameter Name="FocusListId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="RelativePrice" Type="numeric" Mode="In" />
+        </Function>
         <Function Name="ForwardFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -13280,6 +13320,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="OverborrowUnits" Type="numeric" Mode="In" />
           <Parameter Name="RehypothecationUnits" Type="numeric" Mode="In" />
           <Parameter Name="MarginRequirementRate" Type="numeric" Mode="In" />
+          <Parameter Name="TodayCapitalChangeInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -13429,6 +13470,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="OverborrowUnits" Type="numeric" Mode="In" />
           <Parameter Name="RehypothecationUnits" Type="numeric" Mode="In" />
           <Parameter Name="MarginRequirementRate" Type="numeric" Mode="In" />
+          <Parameter Name="TodayCapitalChangeInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -13548,6 +13590,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="FuturesClearing" Type="numeric" Mode="In" />
           <Parameter Name="Consideration" Type="numeric" Mode="In" />
           <Parameter Name="IsInternal" Type="bit" Mode="In" />
+          <Parameter Name="TodayCapitalChangeInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="CapitalChangeInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventID" Type="int" Mode="In" />
@@ -13631,6 +13675,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="FuturesClearing" Type="numeric" Mode="In" />
           <Parameter Name="Consideration" Type="numeric" Mode="In" />
           <Parameter Name="IsInternal" Type="bit" Mode="In" />
+          <Parameter Name="TodayCapitalChangeInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="CapitalChangeInstrument" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEventFX_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventFXId" Type="int" Mode="In" />
@@ -13649,6 +13695,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="FXRateId" Type="int" Mode="In" />
           <Parameter Name="OriginalNotionalCost" Type="numeric" Mode="In" />
+          <Parameter Name="TodayCapitalChange" Type="numeric" Mode="In" />
+          <Parameter Name="CapitalChange" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEventFX_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventFXId" Type="int" Mode="In" />
@@ -13664,6 +13712,8 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="FXRateId" Type="int" Mode="In" />
           <Parameter Name="OriginalNotionalCost" Type="numeric" Mode="In" />
+          <Parameter Name="TodayCapitalChange" Type="numeric" Mode="In" />
+          <Parameter Name="CapitalChange" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioEventType_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioEventTypeId" Type="int" Mode="In" />
@@ -14683,7 +14733,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="FMPortfolio" EntityType="Self.FMPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FMTradeBridgeLastProcessed" EntityType="Self.FMTradeBridgeLastProcessed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FocusList" EntityType="Self.FocusList" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="FocusListPrices" EntityType="Self.FocusListPrices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FocusListPrice" EntityType="Self.FocusListPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ForwardFX" EntityType="Self.ForwardFX" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fund" EntityType="Self.Fund" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FundClientPlatform" EntityType="Self.FundClientPlatform" Schema="dbo" store:Type="Tables" />
@@ -15692,9 +15742,17 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="Financing" EntitySet="Financing" />
           </AssociationSet>
+          <AssociationSet Name="FK__FocusList__DataV__4342E6C6" Association="Self.FK__FocusList__DataV__4342E6C6">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="FocusListPrice" EntitySet="FocusListPrice" />
+          </AssociationSet>
           <AssociationSet Name="FK__FocusList__Exter__22A66AA1" Association="Self.FK__FocusList__Exter__22A66AA1">
             <End Role="ResearchBroker" EntitySet="ResearchBroker" />
             <End Role="FocusList" EntitySet="FocusList" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FocusList__Focus__424EC28D" Association="Self.FK__FocusList__Focus__424EC28D">
+            <End Role="FocusList" EntitySet="FocusList" />
+            <End Role="FocusListPrice" EntitySet="FocusListPrice" />
           </AssociationSet>
           <AssociationSet Name="FK__FocusList__Issue__30FBB436" Association="Self.FK__FocusList__Issue__30FBB436">
             <End Role="Issuer" EntitySet="Issuer" />
@@ -16147,10 +16205,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FocusListCurrentPriceIdFK" Association="Self.FocusListCurrentPriceIdFK">
             <End Role="Price" EntitySet="Price" />
             <End Role="FocusList" EntitySet="FocusList" />
-          </AssociationSet>
-          <AssociationSet Name="FocusListIdFK" Association="Self.FocusListIdFK">
-            <End Role="FocusList" EntitySet="FocusList" />
-            <End Role="FocusListPrices" EntitySet="FocusListPrices" />
           </AssociationSet>
           <AssociationSet Name="FocusListInstrumentMarketIdFK" Association="Self.FocusListInstrumentMarketIdFK">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
@@ -18690,11 +18744,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="Position" EntitySet="Positions" />
           </AssociationSet>
-          <EntitySet Name="FocusListPrices" EntityType="Odey.Framework.Keeley.Entities.FocusListPrice" />
-          <AssociationSet Name="FocusListIdFK" Association="Odey.Framework.Keeley.Entities.FocusListIdFK">
-            <End Role="FocusList" EntitySet="FocusLists" />
-            <End Role="FocusListPrice" EntitySet="FocusListPrices" />
-          </AssociationSet>
           <AssociationSet Name="FK__FocusList__Issue__30FBB436" Association="Odey.Framework.Keeley.Entities.FK__FocusList__Issue__30FBB436">
             <End Role="Issuer" EntitySet="Issuers" />
             <End Role="FocusList" EntitySet="FocusLists" />
@@ -19505,6 +19554,15 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__RawFinanc__Finan__4E49B9C7" Association="Odey.Framework.Keeley.Entities.FK__RawFinanc__Finan__4E49B9C7">
             <End Role="FinancingControl" EntitySet="FinancingControls" />
             <End Role="RawFinancing" EntitySet="RawFinancings" />
+          </AssociationSet>
+          <EntitySet Name="FocusListPrices" EntityType="Odey.Framework.Keeley.Entities.FocusListPrices" />
+          <AssociationSet Name="FK__FocusList__DataV__4342E6C6" Association="Odey.Framework.Keeley.Entities.FK__FocusList__DataV__4342E6C6">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="FocusListPrice1" EntitySet="FocusListPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FocusList__Focus__424EC28D" Association="Odey.Framework.Keeley.Entities.FK__FocusList__Focus__424EC28D">
+            <End Role="FocusList" EntitySet="FocusLists" />
+            <End Role="FocusListPrice1" EntitySet="FocusListPrices" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -21281,6 +21339,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="FuturesClearing" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="Consideration" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="IsInternal" Type="Boolean" />
+          <Property Name="TodayCapitalChangeInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CapitalChangeInstrument" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="PositionAccountMovementUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -21567,6 +21627,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="OverborrowUnits" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="RehypothecationUnits" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MarginRequirementRate" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="TodayCapitalChangeInstrument" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25021,10 +25082,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="Decimal" Name="AdjustmentFactorITD" Precision="27" Scale="8" />
           <Property Type="Decimal" Name="AdjustmentFactorYTD" Precision="27" Scale="8" />
           <Property Type="DateTime" Name="RelativeCurrentPriceDate" Precision="3" Nullable="false" />
-          <NavigationProperty Name="FocusListPrices" Relationship="Odey.Framework.Keeley.Entities.FocusListIdFK" FromRole="FocusList" ToRole="FocusListPrice" />
           <Property Name="IssuerId" Type="Int32" Nullable="false" />
           <Property Name="ExternalBrokerId" Type="Int32" />
           <NavigationProperty Name="ResearchBroker" Relationship="Odey.Framework.Keeley.Entities.FK__FocusList__Exter__22A66AA1" FromRole="FocusList" ToRole="ResearchBroker" />
+          <NavigationProperty Name="FocusListPrices" Relationship="Odey.Framework.Keeley.Entities.FK__FocusList__Focus__424EC28D" FromRole="FocusList" ToRole="FocusListPrice1" />
           </EntityType>
         <Association Name="FocusListAnalystIdFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -26545,30 +26606,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="FocusListPrice">
-          <Key>
-            <PropertyRef Name="FocusListPriceId" />
-          </Key>
-          <Property Name="FocusListPriceId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="FocusListId" Type="Int32" Nullable="false" />
-          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Price" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
-          <Property Name="AdjustmentFactor" Type="Decimal" Precision="27" Scale="8" />
-          <Property Name="RelativePrice" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
-          <NavigationProperty Name="FocusList" Relationship="Odey.Framework.Keeley.Entities.FocusListIdFK" FromRole="FocusListPrice" ToRole="FocusList" />
-        </EntityType>
-        <Association Name="FocusListIdFK">
-          <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="1" />
-          <End Type="Odey.Framework.Keeley.Entities.FocusListPrice" Role="FocusListPrice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FocusList">
-              <PropertyRef Name="FocusListId" />
-            </Principal>
-            <Dependent Role="FocusListPrice">
-              <PropertyRef Name="FocusListId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__FocusList__Issue__30FBB436">
           <End Type="Odey.Framework.Keeley.Entities.Issuer" Role="Issuer" Multiplicity="1" />
           <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="*" />
@@ -27341,6 +27378,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="FXRateId" Type="Int32" />
           <Property Name="OriginalNotionalCost" Type="Decimal" Precision="27" Scale="8" />
           <NavigationProperty Name="PortfolioEvent" Relationship="Odey.Framework.Keeley.Entities.FK__Portfolio__Portf__7CF5C305" FromRole="PortfolioEventFX" ToRole="PortfolioEvent" />
+          <Property Name="TodayCapitalChange" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="CapitalChange" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="FK__Portfolio__Updat__7EDE0B77">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -29742,6 +29781,44 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               <PropertyRef Name="FinancingControlId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FocusListPrices">
+          <Key>
+            <PropertyRef Name="FocusListPriceId" />
+          </Key>
+          <Property Name="FocusListPriceId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="FocusListId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="FocusList" Relationship="Odey.Framework.Keeley.Entities.FK__FocusList__Focus__424EC28D" FromRole="FocusListPrice1" ToRole="FocusList" />
+          <Property Name="RelativePrice" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+        </EntityType>
+        <Association Name="FK__FocusList__DataV__4342E6C6">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FocusListPrices" Role="FocusListPrice1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="FocusListPrice1">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FocusList__Focus__424EC28D">
+          <End Type="Odey.Framework.Keeley.Entities.FocusList" Role="FocusList" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.FocusListPrices" Role="FocusListPrice1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FocusList">
+              <PropertyRef Name="FocusListId" />
+            </Principal>
+            <Dependent Role="FocusListPrice1">
+              <PropertyRef Name="FocusListId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>        
         </Schema>
     </edmx:ConceptualModels>
@@ -31653,6 +31730,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEvents">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <MappingFragment StoreEntitySet="PortfolioEvent">
+                <ScalarProperty Name="CapitalChangeInstrument" ColumnName="CapitalChangeInstrument" />
+                <ScalarProperty Name="TodayCapitalChangeInstrument" ColumnName="TodayCapitalChangeInstrument" />
                 <ScalarProperty Name="IsInternal" ColumnName="IsInternal" />
                 <ScalarProperty Name="Consideration" ColumnName="Consideration" />
                 <ScalarProperty Name="FuturesClearing" ColumnName="FuturesClearing" />
@@ -31740,6 +31819,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Insert">
+                  <ScalarProperty Name="CapitalChangeInstrument" ParameterName="CapitalChangeInstrument" />
+                  <ScalarProperty Name="TodayCapitalChangeInstrument" ParameterName="TodayCapitalChangeInstrument" />
                   <ScalarProperty Name="IsInternal" ParameterName="IsInternal" />
                   <ScalarProperty Name="Consideration" ParameterName="Consideration" />
                   <ScalarProperty Name="FuturesClearing" ParameterName="FuturesClearing" />
@@ -31824,6 +31905,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEvent_Update">
+                  <ScalarProperty Name="CapitalChangeInstrument" ParameterName="CapitalChangeInstrument" Version="Current" />
+                  <ScalarProperty Name="TodayCapitalChangeInstrument" ParameterName="TodayCapitalChangeInstrument" Version="Current" />
                   <ScalarProperty Name="IsInternal" ParameterName="IsInternal" Version="Current" />
                   <ScalarProperty Name="Consideration" ParameterName="Consideration" Version="Current" />
                   <ScalarProperty Name="FuturesClearing" ParameterName="FuturesClearing" Version="Current" />
@@ -31972,6 +32055,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="TodayCapitalChangeInstrument" ColumnName="TodayCapitalChangeInstrument" />
                 <ScalarProperty Name="MarginRequirementRate" ColumnName="MarginRequirementRate" />
                 <ScalarProperty Name="RehypothecationUnits" ColumnName="RehypothecationUnits" />
                 <ScalarProperty Name="OverborrowUnits" ColumnName="OverborrowUnits" />
@@ -32122,6 +32206,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="TodayCapitalChangeInstrument" ParameterName="TodayCapitalChangeInstrument" />
                   <ScalarProperty Name="MarginRequirementRate" ParameterName="MarginRequirementRate" />
                   <ScalarProperty Name="RehypothecationUnits" ParameterName="RehypothecationUnits" />
                   <ScalarProperty Name="OverborrowUnits" ParameterName="OverborrowUnits" />
@@ -32269,6 +32354,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="TodayCapitalChangeInstrument" ParameterName="TodayCapitalChangeInstrument" Version="Current" />
                   <ScalarProperty Name="MarginRequirementRate" ParameterName="MarginRequirementRate" Version="Current" />
                   <ScalarProperty Name="RehypothecationUnits" ParameterName="RehypothecationUnits" Version="Current" />
                   <ScalarProperty Name="OverborrowUnits" ParameterName="OverborrowUnits" Version="Current" />
@@ -36201,18 +36287,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="FocusListPrices">
-            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusListPrice">
-              <MappingFragment StoreEntitySet="FocusListPrices">
-                <ScalarProperty Name="RelativePrice" ColumnName="RelativePrice" />
-                <ScalarProperty Name="AdjustmentFactor" ColumnName="AdjustmentFactor" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
-                <ScalarProperty Name="FocusListId" ColumnName="FocusListId" />
-                <ScalarProperty Name="FocusListPriceId" ColumnName="FocusListPriceId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="EntityAnalytics">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.EntityAnalytic">
               <MappingFragment StoreEntitySet="EntityAnalytic">
@@ -37037,6 +37111,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="PortfolioEventFXes">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEventFX">
               <MappingFragment StoreEntitySet="PortfolioEventFX">
+                <ScalarProperty Name="CapitalChange" ColumnName="CapitalChange" />
+                <ScalarProperty Name="TodayCapitalChange" ColumnName="TodayCapitalChange" />
                 <ScalarProperty Name="OriginalNotionalCost" ColumnName="OriginalNotionalCost" />
                 <ScalarProperty Name="FXRateId" ColumnName="FXRateId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -37056,6 +37132,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.PortfolioEventFX">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.PortfolioEventFX_Insert">
+                  <ScalarProperty Name="CapitalChange" ParameterName="CapitalChange" />
+                  <ScalarProperty Name="TodayCapitalChange" ParameterName="TodayCapitalChange" />
                   <ScalarProperty Name="OriginalNotionalCost" ParameterName="OriginalNotionalCost" />
                   <ScalarProperty Name="FXRateId" ParameterName="FXRateId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
@@ -37072,6 +37150,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.PortfolioEventFX_Update">
+                  <ScalarProperty Name="CapitalChange" ParameterName="CapitalChange" Version="Current" />
+                  <ScalarProperty Name="TodayCapitalChange" ParameterName="TodayCapitalChange" Version="Current" />
                   <ScalarProperty Name="OriginalNotionalCost" ParameterName="OriginalNotionalCost" Version="Current" />
                   <ScalarProperty Name="FXRateId" ParameterName="FXRateId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
@@ -38688,6 +38768,50 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FocusListPrices">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusListPrices">
+              <MappingFragment StoreEntitySet="FocusListPrice">
+                <ScalarProperty Name="RelativePrice" ColumnName="RelativePrice" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="FocusListId" ColumnName="FocusListId" />
+                <ScalarProperty Name="FocusListPriceId" ColumnName="FocusListPriceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FocusListPrices">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.FocusListPrice_Insert">
+                  <ScalarProperty Name="RelativePrice" ParameterName="RelativePrice" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Price" ParameterName="Price" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="FocusListId" ParameterName="FocusListId" />
+                  <ResultBinding Name="FocusListPriceId" ColumnName="FocusListPriceId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.FocusListPrice_Update">
+                  <ScalarProperty Name="RelativePrice" ParameterName="RelativePrice" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="FocusListId" ParameterName="FocusListId" Version="Current" />
+                  <ScalarProperty Name="FocusListPriceId" ParameterName="FocusListPriceId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.FocusListPrice_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="FocusListPriceId" ParameterName="FocusListPriceId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -38710,7 +38834,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="27">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -44282,8 +44406,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.StrategUpdateUserIDFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__InternalA__Strat__60F644FF" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.positionstrategyfk" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FocusListPrice" Width="1.5" PointX="9.625" PointY="50.125" />
-        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FocusListIdFK" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FocusList__Issue__30FBB436" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.EntityAnalytic" Width="1.5" PointX="16.875" PointY="39.875" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.EntityAnalyticUserIdFK" />
@@ -44327,27 +44449,25 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RiskAnalyticPosition" Width="1.5" PointX="39.875" PointY="19.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_RiskAnalyticType" ManuallyRouted="true" >
           <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="13" />
-          <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="12.705185391466328" />
+          <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="12.702517976817706" />
+          <edmx:ConnectorPoint PointX="1.2740033598124914" PointY="12.700129236510486" />
+          <edmx:ConnectorPoint PointX="1.3936889478798156" PointY="12.58414157429266" />
+          <edmx:ConnectorPoint PointX="1.4505418213509529" PointY="12.529045284164781" />
+          <edmx:ConnectorPoint PointX="1.5702274094182771" PointY="12.413057621946955" />
           <edmx:ConnectorPoint PointX="1.5744892418052978" PointY="12.408927467403563" />
           <edmx:ConnectorPoint PointX="1.5744892418052978" PointY="11.704540903178886" />
-          <edmx:ConnectorPoint PointX="1.6939792734019288" PointY="11.572231615747741" />
-          <edmx:ConnectorPoint PointX="1.6939792734019288" PointY="10.811223381018856" />
+          <edmx:ConnectorPoint PointX="1.7317109441945113" PointY="11.572231615747741" />
           <edmx:ConnectorPoint PointX="1.7317109441945113" PointY="10.738284691245225" />
-          <edmx:ConnectorPoint PointX="1.8082890558054878" PointY="10.590252361668627" />
-          <edmx:ConnectorPoint PointX="1.8770955595791268" PointY="10.457243244188993" />
-          <edmx:ConnectorPoint PointX="1.9536736711901033" PointY="10.309210914612395" />
           <edmx:ConnectorPoint PointX="1.9576606309849916" PointY="10.301503765220101" />
           <edmx:ConnectorPoint PointX="2.0214442716001622" PointY="10.113845013342804" />
           <edmx:ConnectorPoint PointX="2.0214442716001622" PointY="9.55331954551918" />
           <edmx:ConnectorPoint PointX="2.2124396148544414" PointY="9.3272942028380665" />
           <edmx:ConnectorPoint PointX="2.2124396148544414" PointY="8.8536073822857411" />
-          <edmx:ConnectorPoint PointX="2.3124688672742679" PointY="8.6756606890644346" />
-          <edmx:ConnectorPoint PointX="2.3124688672742679" PointY="8.2905028844657753" />
+          <edmx:ConnectorPoint PointX="2.3564696276827872" PointY="8.6756606890644346" />
           <edmx:ConnectorPoint PointX="2.3564696276827872" PointY="8.22589065064235" />
-          <edmx:ConnectorPoint PointX="2.4502818931342518" PointY="8.08813348520751" />
           <edmx:ConnectorPoint PointX="2.46032262198415" PointY="8.07338933273869" />
           <edmx:ConnectorPoint PointX="2.46032262198415" PointY="7.0087403953900624" />
-          <edmx:ConnectorPoint PointX="2.5565825155924919" PointY="6.93785517151757" />
+          <edmx:ConnectorPoint PointX="2.5735226619757086" PointY="6.9253805465850631" />
           <edmx:ConnectorPoint PointX="2.754602338024291" PointY="6.7920345299388369" />
           <edmx:ConnectorPoint PointX="2.8048546555716456" PointY="6.7550290165736424" />
           <edmx:ConnectorPoint PointX="2.8048546555716456" PointY="5.0554867315005687" />
@@ -44355,69 +44475,73 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="2.9947916666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.2604146666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.4270813333333336" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.6666666666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.8333333333333335" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.8571799585682034" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="4.02384662523487" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="5.208333333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.114583333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.619791666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.786458333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.838541666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="6.005208333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="6.854166666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.7922916666666664" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.020833333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.041666666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.3723704427083332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.333333333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.4010454166666664" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.5677120833333325" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.5820630717577187" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.7487297384243847" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.838541666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.2864583333333339" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.4322916666666661" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.6614583333333339" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="10.627049005724386" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="11.510416666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="11.770833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.0208333333333339" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.1041666666666661" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.2708333333333339" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.4947916666666661" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.7406020514641138" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.520833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="11.332966271859386" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="11.895833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.214166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.380833333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.604166666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="12.775253333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="12.770833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="13.020833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="14.322916666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="14.489583333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="14.866666666666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="14.666666666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="15.145833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.229166666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.645833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.229166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.700520833333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.260416666666666" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.366666666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.848958333333336" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="18.51945789448882" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="18.686124561155484" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="18.733969759738773" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="18.900636426405438" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="19.701041666666669" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="20.067708333333329" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="22.854166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="23.020833333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="23.808721008304417" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="23.975387674971081" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="24.770833333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.901041666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="25.067708333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.208333333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.591666666666669" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.758333333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.416666666666668" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.583333333333332" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.602018966225646" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.198589743589743" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.365256410256407" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.82291866666667" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.989585333333334" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.541666666666668" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="29.768685632892311" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="32.479166666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="32.645833333333336" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="34.979166666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.192708333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.197916666666664" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.427083333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.84825234375" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="37.310607915222668" PointY="23.339856264188676" />
           <edmx:ConnectorPoint PointX="37.439392084777332" PointY="23.234062051445754" />
-          <edmx:ConnectorPoint PointX="38.365134767941193" PointY="22.47357868841662" />
-          <edmx:ConnectorPoint PointX="38.493918937495856" PointY="22.367784475673698" />
-          <edmx:ConnectorPoint PointX="39.716857915222668" PointY="21.363158931799461" />
-          <edmx:ConnectorPoint PointX="39.845642084777332" PointY="21.25736471905654" />
           <edmx:ConnectorPoint PointX="39.875" PointY="21.233247643646603" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_Fund" />
@@ -44429,7 +44553,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Portf__6FE5E0AA" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Posit__71CE291C" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FocusList__Exter__22A66AA1" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioEventFX" Width="1.5" PointX="43.375" PointY="20.125" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.PortfolioEventFX" Width="2" PointX="43.375" PointY="20.125" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Updat__7EDE0B77" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Curre__7DE9E73E" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Portf__7CF5C305" />
@@ -44598,6 +44722,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RawFinanc__Updat__3B36E553" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RawFinanc__Finan__394E9CE1" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RawFinanc__Finan__4E49B9C7" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FocusListPrices" Width="1.5" PointX="25.75" PointY="46.375" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FocusList__DataV__4342E6C6" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FocusList__Focus__424EC28D" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

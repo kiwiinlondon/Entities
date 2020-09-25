@@ -153,7 +153,6 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<RawIssuerAnalytic> RawIssuerAnalytics { get; set; }
         public DbSet<ClientTrail> ClientTrails { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
-        public DbSet<FocusListPrice> FocusListPrices { get; set; }
         public DbSet<EntityAnalytic> EntityAnalytics { get; set; }
         public DbSet<BloombergIdentifier> BloombergIdentifiers { get; set; }
         public DbSet<FactorHierarchy> FactorHierarchies { get; set; }
@@ -204,6 +203,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FinancingControl> FinancingControls { get; set; }
         public DbSet<Financing> Financings { get; set; }
         public DbSet<RawFinancing> RawFinancings { get; set; }
+        public DbSet<FocusListPrices> FocusListPrices { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

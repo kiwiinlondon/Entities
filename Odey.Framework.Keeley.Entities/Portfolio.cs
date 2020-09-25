@@ -313,6 +313,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> RehypothecationUnits { get; set; }
     	[DataMember]
         public Nullable<decimal> MarginRequirementRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayCapitalChangeInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

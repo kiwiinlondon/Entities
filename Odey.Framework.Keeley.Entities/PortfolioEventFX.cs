@@ -44,6 +44,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FXRateId { get; set; }
     	[DataMember]
         public Nullable<decimal> OriginalNotionalCost { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TodayCapitalChange { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CapitalChange { get; set; }
     
         [DataMember]
         public virtual PortfolioEvent PortfolioEvent { get; set; }
