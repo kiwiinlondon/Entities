@@ -74,6 +74,10 @@ namespace Odey.Framework.Keeley.Entities
         public int IssuerId { get; set; }
     	[DataMember]
         public Nullable<int> ExternalBrokerId { get; set; }
+    	[DataMember]
+        public decimal AdjustedInPrice { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AdjustedOutPrice { get; set; }
     
         [DataMember]
         public virtual ResearchBroker ResearchBroker { get; set; }
