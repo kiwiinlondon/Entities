@@ -139,7 +139,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         FIM = 32959,
 
         [EnumMember]
-        KZT = 36822
+        KZT = 36822,
+
+        [EnumMember]
+        XAU = 51217
 
     }
 }

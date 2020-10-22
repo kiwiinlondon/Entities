@@ -210,7 +210,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OF_CHF_IP = 7573,
         [EnumMember]
-        OF_CHF_R = 5911,        
+        OF_CHF_R = 5911,
         [EnumMember]
         OF_CHF_RP = 8920,
         [EnumMember]
@@ -232,10 +232,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OF_GBP_RP = 7011,
         [EnumMember]
-        OF_GBP_SIP	= 7574,
+        OF_GBP_SIP = 7574,
         [EnumMember]
         OF_GBP_WM = 7010,
-        
+
         [EnumMember]
         OF_NOK_I = 5912,
         [EnumMember]
@@ -248,7 +248,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OF_USD_R = 5909,
         [EnumMember]
         OF_USD_RP = 6986,
-        
+
 
         [EnumMember]
         OPE = 5327,
@@ -552,6 +552,19 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         SSF_CHF_R = 10392,
         [EnumMember]
-        SSF_CHF_I = 10393
+        SSF_CHF_I = 10393,
+
+        [EnumMember]
+        ODIF = 10439,
+        [EnumMember]
+        ODIF_USD_M = 10440,
+        [EnumMember]
+        ODIF_EUR_I = 10441,
+        [EnumMember]
+        ODIF_GBP_I = 10442,
+        [EnumMember]
+        ODIF_GBP_M = 10443,
+        [EnumMember]
+        ODIF_CHF_I = 10444
     }
 }

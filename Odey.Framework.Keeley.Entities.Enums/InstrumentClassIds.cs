@@ -76,6 +76,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OptionOnBondFuture =95,
         [EnumMember]
-        CorporateLoan = 98
+        CorporateLoan = 98,
+        [EnumMember]
+        PhysicalCommoditySpot = 101
     }
 }
