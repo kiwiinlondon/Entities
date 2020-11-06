@@ -565,6 +565,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ODIF_GBP_M = 10443,
         [EnumMember]
-        ODIF_CHF_I = 10444
+        ODIF_CHF_I = 10444,
+
+        [EnumMember]
+        GILT = 10454
     }
 }
