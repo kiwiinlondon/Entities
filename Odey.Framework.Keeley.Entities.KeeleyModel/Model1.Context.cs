@@ -979,5 +979,10 @@ namespace Odey.Framework.Keeley.Entities
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<HealthCheck_UnmappedFinancing_Result>("HealthCheck_UnmappedFinancing");
         }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> PortfolioMessageQueue_GetMinStartDate()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("PortfolioMessageQueue_GetMinStartDate");
+        }
     }
 }

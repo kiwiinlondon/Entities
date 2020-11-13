@@ -66,7 +66,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         UNMAPPED_FINANCING = 21,
         [EnumMember]
-        CLIENT_PLATFORM_BREAKS = 22
+        CLIENT_PLATFORM_BREAKS = 22,
+        [EnumMember]
+        FUND_PROCESSOR_CHECK = 23
     }
 }
 
