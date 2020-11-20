@@ -37,7 +37,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime ExDate { get; set; }
     	[DataMember]
-        public System.DateTime PayDate { get; set; }
+        public Nullable<System.DateTime> PayDate { get; set; }
     
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }

@@ -80,6 +80,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool AlwaysUseManualPrice { get; set; }
     	[DataMember]
         public Nullable<bool> IsExposureLong { get; set; }
+    	[DataMember]
+        public Nullable<int> DividendCurrencyId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
@@ -95,5 +97,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Currency PriceCurrency { get; set; }
         [DataMember]
         public virtual ListingStatus ListingStatus { get; set; }
+        [DataMember]
+        public virtual Currency DividendCurrency { get; set; }
     }
 }
