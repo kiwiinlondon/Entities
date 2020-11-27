@@ -50,6 +50,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> EventDateOverride { get; set; }
     	[DataMember]
         public bool IsPNLOnly { get; set; }
+    	[DataMember]
+        public Nullable<int> CorporateActionId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> NetPosition { get; set; }
     
         [DataMember]
         public virtual Event Event { get; set; }
