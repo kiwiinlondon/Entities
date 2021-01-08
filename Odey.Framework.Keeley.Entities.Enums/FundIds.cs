@@ -487,6 +487,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ARFF_GBP_C1018_IRL = 9823,
         [EnumMember]
         ARFF_USD_C0620_IRL = 10353,
+        [EnumMember]
+        ARFF_GBP_C1220_IRL = 10517,
 
         [EnumMember]
         RAFO = 7577,
