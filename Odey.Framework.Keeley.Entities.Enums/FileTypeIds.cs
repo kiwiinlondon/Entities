@@ -177,6 +177,11 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         QuintillionEstimatedClientTrades= 87,
         [EnumMember]
-        JPMMatchedTrades = 88
+        JPMMatchedTrades = 88,
+        [EnumMember]
+        JPMOrdFinancing = 89,
+        [EnumMember]
+        JPMCashInterestFinancingOEIAndMAC = 90
+
     }
 }
