@@ -139,6 +139,8 @@ namespace Odey.Framework.Keeley.Entities
         public string TaxReferenceNumber { get; set; }
     	[DataMember]
         public Nullable<int> FundFeederTypeId { get; set; }
+    	[DataMember]
+        public int FocusRegionId { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
@@ -160,5 +162,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<FundCountryStatuses> FundCountryStatuses { get; set; }
         [DataMember]
         public virtual List<FundLegalEntityIdentifier> FundLegalEntityIdentifiers { get; set; }
+        [DataMember]
+        public virtual Region Region { get; set; }
     }
 }

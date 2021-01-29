@@ -1446,6 +1446,7 @@
           <Property Name="IsCRR" Type="bit" Nullable="false" />
           <Property Name="TaxReferenceNumber" Type="varchar" MaxLength="100" />
           <Property Name="FundFeederTypeId" Type="int" />
+          <Property Name="FocusRegionId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="FundClientPlatform">
           <Key>
@@ -5843,6 +5844,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="Fund">
               <PropertyRef Name="CustodianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fund__FocusRegio__2A8D12EC">
+          <End Role="Region" Type="Self.Region" Multiplicity="1" />
+          <End Role="Fund" Type="Self.Fund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="RegionID" />
+            </Principal>
+            <Dependent Role="Fund">
+              <PropertyRef Name="FocusRegionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11900,6 +11913,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsCRR" Type="bit" Mode="In" />
           <Parameter Name="TaxReferenceNumber" Type="varchar" Mode="In" />
           <Parameter Name="FundFeederTypeId" Type="int" Mode="In" />
+          <Parameter Name="FocusRegionId" Type="int" Mode="In" />
         </Function>
         <Function Name="Fund_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -11958,6 +11972,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IsCRR" Type="bit" Mode="In" />
           <Parameter Name="TaxReferenceNumber" Type="varchar" Mode="In" />
           <Parameter Name="FundFeederTypeId" Type="int" Mode="In" />
+          <Parameter Name="FocusRegionId" Type="int" Mode="In" />
         </Function>
         <Function Name="Fund_UpdateClientLoadDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundId" Type="int" Mode="In" />
@@ -15846,6 +15861,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Custodian" EntitySet="Custodian" />
             <End Role="Fund" EntitySet="Fund" />
           </AssociationSet>
+          <AssociationSet Name="FK__Fund__FocusRegio__2A8D12EC" Association="Self.FK__Fund__FocusRegio__2A8D12EC">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="Fund" EntitySet="Fund" />
+          </AssociationSet>
           <AssociationSet Name="FK__Fund__Instrument__357DD23F" Association="Self.FK__Fund__Instrument__357DD23F">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
             <End Role="Fund" EntitySet="Fund" />
@@ -19652,6 +19671,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Instrumen__Corpo__1B0AD83A" Association="Odey.Framework.Keeley.Entities.FK__Instrumen__Corpo__1B0AD83A">
             <End Role="CorporateAction" EntitySet="CorporateActions" />
             <End Role="InstrumentEvent" EntitySet="InstrumentEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Fund__FocusRegio__2A8D12EC" Association="Odey.Framework.Keeley.Entities.FK__Fund__FocusRegio__2A8D12EC">
+            <End Role="Region" EntitySet="Regions" />
+            <End Role="Fund" EntitySet="Funds" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -23884,6 +23907,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="FundLegalEntityIdentifiers" Relationship="Odey.Framework.Keeley.Entities.FK__FundLegal__FundI__0C4EABDC" FromRole="Fund" ToRole="FundLegalEntityIdentifier" />
           <Property Name="TaxReferenceNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="FundFeederTypeId" Type="Int32" />
+          <Property Name="FocusRegionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Region" Relationship="Odey.Framework.Keeley.Entities.FK__Fund__FocusRegio__2A8D12EC" FromRole="Fund" ToRole="Region" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -29943,6 +29968,18 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               <PropertyRef Name="CorporateActionId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Fund__FocusRegio__2A8D12EC">
+          <End Type="Odey.Framework.Keeley.Entities.Region" Role="Region" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="RegionID" />
+            </Principal>
+            <Dependent Role="Fund">
+              <PropertyRef Name="FocusRegionId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>        
         </Schema>
     </edmx:ConceptualModels>
@@ -34085,6 +34122,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="FocusRegionId" ColumnName="FocusRegionId" />
                 <ScalarProperty Name="FundFeederTypeId" ColumnName="FundFeederTypeId" />
                 <ScalarProperty Name="TaxReferenceNumber" ColumnName="TaxReferenceNumber" />
                 <ScalarProperty Name="IsCRR" ColumnName="IsCRR" />
@@ -34147,6 +34185,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Fund_Insert">
+                  <ScalarProperty Name="FocusRegionId" ParameterName="FocusRegionId" />
                   <ScalarProperty Name="FundFeederTypeId" ParameterName="FundFeederTypeId" />
                   <ScalarProperty Name="TaxReferenceNumber" ParameterName="TaxReferenceNumber" />
                   <ScalarProperty Name="IsCRR" ParameterName="IsCRR" />
@@ -34206,6 +34245,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Fund_Update">
+                  <ScalarProperty Name="FocusRegionId" ParameterName="FocusRegionId" Version="Current" />
                   <ScalarProperty Name="FundFeederTypeId" ParameterName="FundFeederTypeId" Version="Current" />
                   <ScalarProperty Name="TaxReferenceNumber" ParameterName="TaxReferenceNumber" Version="Current" />
                   <ScalarProperty Name="IsCRR" ParameterName="IsCRR" Version="Current" />
@@ -39016,7 +39056,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="95">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -44641,74 +44681,77 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="2.0214442716001622" PointY="9.55331954551918" />
           <edmx:ConnectorPoint PointX="2.2124396148544414" PointY="9.3272942028380665" />
           <edmx:ConnectorPoint PointX="2.2124396148544414" PointY="8.8536073822857411" />
-          <edmx:ConnectorPoint PointX="2.3564696276827872" PointY="8.6756606890644346" />
-          <edmx:ConnectorPoint PointX="2.3564696276827872" PointY="8.22589065064235" />
-          <edmx:ConnectorPoint PointX="2.4719601619757081" PointY="8.07338933273869" />
-          <edmx:ConnectorPoint PointX="2.4719601619757081" PointY="7.0001705788579223" />
-          <edmx:ConnectorPoint PointX="2.4797726619757081" PointY="6.9944174994523163" />
-          <edmx:ConnectorPoint PointX="2.754602338024291" PointY="6.7920345299388378" />
-          <edmx:ConnectorPoint PointX="2.8048546555716456" PointY="6.7550290165736424" />
-          <edmx:ConnectorPoint PointX="2.8048546555716456" PointY="5.0554867315005687" />
-          <edmx:ConnectorPoint PointX="2.8055427968459759" PointY="5.05373002252032" />
+          <edmx:ConnectorPoint PointX="2.3694804349560066" PointY="8.6756606890644346" />
+          <edmx:ConnectorPoint PointX="2.3694804349560066" PointY="8.2097988710074468" />
+          <edmx:ConnectorPoint PointX="2.3694804349560066" PointY="8.2097988710074468" />
+          <edmx:ConnectorPoint PointX="2.474269565043993" PointY="8.080195568606694" />
+          <edmx:ConnectorPoint PointX="2.4797726619757081" PointY="8.07338933273869" />
+          <edmx:ConnectorPoint PointX="2.4797726619757081" PointY="6.9386796811056648" />
+          <edmx:ConnectorPoint PointX="2.5697769313009009" PointY="6.9386796811056648" />
+          <edmx:ConnectorPoint PointX="2.5697769313009009" PointY="6.9386796811056639" />
+          <edmx:ConnectorPoint PointX="2.8599105686990987" PointY="6.7590058045351551" />
+          <edmx:ConnectorPoint PointX="2.8663322031540237" PointY="6.7550290165736424" />
           <edmx:ConnectorPoint PointX="2.8663322031540237" PointY="4.8985448883788925" />
           <edmx:ConnectorPoint PointX="2.9947916666666665" PointY="4.5706094751602562" />
           <edmx:ConnectorPoint PointX="2.9947916666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.1432291666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.4270813333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.5260416666666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.4010416666666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.5677083333333335" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.6666666666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.8333333333333335" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="4.0729186666666672" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="4.2395853333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="4.645833333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="4.666666666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.083333333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.447916666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.786458333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="6.854166666666667" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="7.395833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.494795166666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.6614618333333331" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.838541666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.005208333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.7922916666666664" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="7.333333333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.4010454166666664" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.7142608487039" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.838541666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.0052083333333339" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.0104166666666661" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="8.2708333333333339" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.6822916666666661" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.6510416666666661" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="8.8489583333333339" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="10.583333333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="11.510416666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="11.770833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="11.895833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.214166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.380833333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.604166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.770833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="13.020833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="13.591827216816217" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="13.758493883482885" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="14.666666666666666" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="15.270833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.354166666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="14.666666666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.145833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.260416666666666" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="15.770833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.366666666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.677083333333336" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.354166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.692708333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="19.716666666666669" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="20.022786458333329" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="20.067708333333329" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="22.854166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="23.020833333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="23.808721008304417" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="23.975387674971081" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="24.770833333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.895833333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.901041666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="25.067708333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.208333333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.591666666666669" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.758333333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="27.445266666666669" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="27.611933333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="27.416666666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="27.611933333333329" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.026044666666667" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.192711333333332" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.616666666666671" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.783333333333335" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.82291866666667" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.989585333333334" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="32.260416666666664" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="32.489583333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.84825234375" PointY="24.541158854166671" />
@@ -44901,6 +44944,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__FocusList__Focus__424EC28D" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Instrumen__Divid__2899DD82" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Instrumen__Corpo__1B0AD83A" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Fund__FocusRegio__2A8D12EC" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
