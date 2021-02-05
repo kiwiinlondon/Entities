@@ -12,16 +12,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum FundStructureIds
     {
         [EnumMember]
-        LongOnlyUcitsIV = 1,
-        [EnumMember]
-        LongShortUcitsIV = 2,
+        Ucits = 1,       
         [EnumMember]
         QIAIF = 4,
         [EnumMember]
-        CaymanAIF = 5,
+        CaymanOEIC = 5,          
         [EnumMember]
-        OdeyWealth = 6,
+        Segregated	=7,
         [EnumMember]
-        Segregated	=7
+        ICVC = 8
     }
 }
