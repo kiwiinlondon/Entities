@@ -80,6 +80,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> EmergingMarketDebtExposure { get; set; }
     	[DataMember]
         public Nullable<decimal> ChangeEmergingMarketDebtExposure { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BetaSixMonth { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BetaOneYear { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }

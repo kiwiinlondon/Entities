@@ -141,6 +141,16 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FundFeederTypeId { get; set; }
     	[DataMember]
         public int FocusRegionId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ExitFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> FrontEndCharge { get; set; }
+    	[DataMember]
+        public Nullable<decimal> MinimumInvestment { get; set; }
+    	[DataMember]
+        public Nullable<int> MinimumInvestmentCurrencyId { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> CostAsAtDate { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }

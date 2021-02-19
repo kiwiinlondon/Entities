@@ -31,7 +31,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         /// currently 60 day daily
         /// </summary>
         [EnumMember]
-        BetaShortTerm = 7,
+        BetaTwoMonth = 7,
 
         [EnumMember]
         IndicativeFundPerformance = 8,
@@ -52,7 +52,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         /// currently 2 year daily
         /// </summary>
         [EnumMember]
-        BetaLongTerm = 13,
+        BetaTwoYear = 13,
 
         [EnumMember]
         BetaFundShortTermWeightedNetEquitiesOnly = 14,
@@ -142,11 +142,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         EPSGrowth = 56,
 
-        [EnumMember]
+        [EnumMember] 
         ROE = 57,
 
         [EnumMember]
-        DailyValuationReturn = 59
+        DailyValuationReturn = 59,
+        [EnumMember]
+        BetaSixMonth = 63,
+        [EnumMember]
+        BetaOneYear = 64
     }
 }
 

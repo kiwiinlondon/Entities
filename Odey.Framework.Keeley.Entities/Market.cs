@@ -30,6 +30,12 @@ namespace Odey.Framework.Keeley.Entities
         public string MicCode { get; set; }
     	[DataMember]
         public string FixedIncomeMicCode { get; set; }
+    	[DataMember]
+        public string TimeZoneId { get; set; }
+    	[DataMember]
+        public Nullable<System.TimeSpan> OpenTime { get; set; }
+    	[DataMember]
+        public Nullable<System.TimeSpan> CloseTime { get; set; }
     
         [DataMember]
         public virtual LegalEntity LegalEntity { get; set; }
