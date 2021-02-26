@@ -984,5 +984,14 @@ namespace Odey.Framework.Keeley.Entities
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("PortfolioMessageQueue_GetMinStartDate");
         }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> Beta_RollValues(Nullable<System.DateTime> referenceDate)
+        {
+            var referenceDateParameter = referenceDate.HasValue ?
+                new ObjectParameter("ReferenceDate", referenceDate) :
+                new ObjectParameter("ReferenceDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("Beta_RollValues", referenceDateParameter);
+        }
     }
 }

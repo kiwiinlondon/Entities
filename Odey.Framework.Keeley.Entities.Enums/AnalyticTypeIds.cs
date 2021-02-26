@@ -103,18 +103,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MarketCapitalisationUSD = 39,
 
         [EnumMember]
-        OfficialSRRI = 40,
-
-        [EnumMember]
-        CalculatedSRRI = 41,
-
-        [EnumMember]
-        DailyRiskPerformanceAlertLimit = 42,
-
-        [EnumMember]
-        DailyRiskPerformanceTriggerLimit = 43,
-
-        [EnumMember]
 
         Price = 44,
         [EnumMember]

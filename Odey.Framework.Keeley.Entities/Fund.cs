@@ -151,6 +151,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> MinimumInvestmentCurrencyId { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> CostAsAtDate { get; set; }
+    	[DataMember]
+        public bool IsSeeded { get; set; }
+    	[DataMember]
+        public Nullable<int> OfficialSRRI { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
