@@ -155,6 +155,10 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsSeeded { get; set; }
     	[DataMember]
         public Nullable<int> OfficialSRRI { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AntiDilutionLevy { get; set; }
+    	[DataMember]
+        public string NameOverride { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
