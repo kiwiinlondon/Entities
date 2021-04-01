@@ -181,7 +181,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         JPMOrdFinancing = 89,
         [EnumMember]
-        JPMCashInterestFinancingOEIAndMAC = 90
-
+        JPMCashInterestFinancingOEIAndMAC = 90,
+        [EnumMember]
+        RBCLoansAndCollateral = 91,
+        [EnumMember]
+        RBCLoanRevenue = 92
     }
 }

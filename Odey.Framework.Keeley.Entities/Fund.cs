@@ -180,7 +180,5 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<FundCountryStatuses> FundCountryStatuses { get; set; }
         [DataMember]
         public virtual List<FundLegalEntityIdentifier> FundLegalEntityIdentifiers { get; set; }
-        [DataMember]
-        public virtual Region Region { get; set; }
     }
 }
