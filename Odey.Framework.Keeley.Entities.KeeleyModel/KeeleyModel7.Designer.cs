@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\git\odey\code\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel\KeeleyModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Git\Odey\Code\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel\KeeleyModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

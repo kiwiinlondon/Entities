@@ -35,8 +35,8 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
-        public int UpdateUserId { get; set; }
-    	[DataMember]
         public byte[] DataVersion { get; set; }
+    	[DataMember]
+        public int UpdateUserID { get; set; }
     }
 }
