@@ -14,33 +14,35 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class LoanedPortfolio
+    public partial class MessageQueue
     {
     	[DataMember]
-        public int LoanedPortfolioId { get; set; }
+        public int MessageId { get; set; }
     	[DataMember]
-        public int FundId { get; set; }
+        public int MessageTypeId { get; set; }
     	[DataMember]
-        public System.DateTime ReferenceDate { get; set; }
+        public string Message { get; set; }
     	[DataMember]
-        public int BorrowerId { get; set; }
+        public string ChangeType { get; set; }
     	[DataMember]
-        public int InstrumentMarketId { get; set; }
-    	[DataMember]
-        public decimal Quantity { get; set; }
-    	[DataMember]
-        public Nullable<decimal> MarketValue { get; set; }
-    	[DataMember]
-        public Nullable<decimal> Rate { get; set; }
-    	[DataMember]
-        public Nullable<decimal> GrossFee { get; set; }
-    	[DataMember]
-        public Nullable<decimal> PBFee { get; set; }
+        public string MessageSource { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
-        public byte[] DataVersion { get; set; }
+        public Nullable<int> FundId { get; set; }
     	[DataMember]
-        public int UpdateUserID { get; set; }
+        public Nullable<int> AttributionSourceId { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> ReferenceDate { get; set; }
+    	[DataMember]
+        public Nullable<int> CurrencyId { get; set; }
+    	[DataMember]
+        public Nullable<int> PositionId { get; set; }
+    	[DataMember]
+        public Nullable<int> PnlTypeId { get; set; }
+    	[DataMember]
+        public Nullable<int> CounterpartyId { get; set; }
+    	[DataMember]
+        public Nullable<int> AttributionPnlId { get; set; }
     }
 }

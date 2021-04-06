@@ -25,7 +25,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int BorrowerId { get; set; }
     	[DataMember]
-        public int InstrumentMarketId { get; set; }
+        public Nullable<int> InstrumentMarketId { get; set; }
     	[DataMember]
         public decimal Quantity { get; set; }
     	[DataMember]
@@ -38,5 +38,13 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
+    	[DataMember]
+        public string Isin { get; set; }
+    	[DataMember]
+        public string InstrumentName { get; set; }
+    	[DataMember]
+        public string InstrumentSubClassification { get; set; }
+    	[DataMember]
+        public int CurrencyId { get; set; }
     }
 }
