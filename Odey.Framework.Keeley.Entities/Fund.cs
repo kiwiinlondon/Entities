@@ -159,6 +159,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> AntiDilutionLevy { get; set; }
     	[DataMember]
         public string NameOverride { get; set; }
+    	[DataMember]
+        public int InvestmentManagerId { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
