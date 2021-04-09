@@ -29,18 +29,26 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public decimal Quantity { get; set; }
     	[DataMember]
-        public Nullable<decimal> MarketValue { get; set; }
+        public decimal MarketValue { get; set; }
     	[DataMember]
-        public Nullable<decimal> Rate { get; set; }
+        public decimal Rate { get; set; }
     	[DataMember]
-        public Nullable<decimal> GrossFee { get; set; }
+        public decimal GrossFee { get; set; }
     	[DataMember]
-        public Nullable<decimal> PBFee { get; set; }
+        public decimal PBFee { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int UpdateUserID { get; set; }
+    	[DataMember]
+        public decimal OurFee { get; set; }
+    	[DataMember]
+        public int DayCount { get; set; }
+    	[DataMember]
+        public int DayBasis { get; set; }
+    	[DataMember]
+        public int CustodianId { get; set; }
     }
 }

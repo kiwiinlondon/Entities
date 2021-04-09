@@ -100,6 +100,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> SwapFinancingCashInterestRateCredit { get; set; }
     	[DataMember]
         public bool IsDummy { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LoanedPortfolioUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LoanedPortfolioNotional { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LoanedPortfolioGrossFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LoanedPortfolioRate { get; set; }
     
         [DataMember]
         public virtual Currency Currency { get; set; }

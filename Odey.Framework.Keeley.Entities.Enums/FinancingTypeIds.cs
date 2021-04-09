@@ -23,7 +23,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Rehypothecation = 6,
         [EnumMember]
-        OverborrowOffset = 7
+        OverborrowOffset = 7,
+        [EnumMember]
+        LoanedPortfolio = 8
     }
 
     
