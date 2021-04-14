@@ -232,6 +232,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> BetaOneYearId { get; set; }
     	[DataMember]
         public Nullable<int> BetaSixMonthId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LoanedPortfolioUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LoanedPortfolioNotional { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LoanedPortfolioGrossFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LoanedPortfolioRate { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

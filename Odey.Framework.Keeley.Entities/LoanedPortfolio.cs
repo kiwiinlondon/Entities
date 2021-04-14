@@ -50,5 +50,7 @@ namespace Odey.Framework.Keeley.Entities
         public int DayBasis { get; set; }
     	[DataMember]
         public int CustodianId { get; set; }
+    	[DataMember]
+        public int CurrencyId { get; set; }
     }
 }
