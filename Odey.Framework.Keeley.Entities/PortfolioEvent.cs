@@ -195,5 +195,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Position Position { get; set; }
         [DataMember]
         public virtual List<PortfolioEventFX> PortfolioEventFXs { get; set; }
+        [DataMember]
+        public virtual InternalAllocation InternalAllocation { get; set; }
     }
 }

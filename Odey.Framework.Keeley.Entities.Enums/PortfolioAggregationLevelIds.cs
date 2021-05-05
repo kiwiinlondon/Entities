@@ -11,6 +11,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         TradeDate = 2,
         [EnumMember]
-        SettlementDate = 3
+        SettlementDate = 3,
+        [EnumMember]
+        ValuationDate = 4
     }
 }
