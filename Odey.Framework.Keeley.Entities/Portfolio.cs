@@ -150,13 +150,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ValuationTodayDeltaNetCostChangeInstrumentCurrency { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationTomorrowDeltaNetCostChangeBookCurrency { get; set; }
+        private Nullable<decimal> ValuationTomorrowDeltaNetCostChangeBookCurrency { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationTomorrowDeltaNetCostChangeInstrumentCurrency { get; set; }
+        private Nullable<decimal> ValuationTomorrowDeltaNetCostChangeInstrumentCurrency { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationTomorrowRealisedFxPnl { get; set; }
+        private Nullable<decimal> ValuationTomorrowRealisedFxPnl { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationTomorrowRealisedPricePnl { get; set; }
+        private Nullable<decimal> ValuationTomorrowRealisedPricePnl { get; set; }
     	[DataMember]
         public Nullable<decimal> ValuationDeltaMarketValue { get; set; }
     	[DataMember]
@@ -204,11 +204,11 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> TodayRealisedAmortisation { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationTomorrowNetPosition { get; set; }
+        private Nullable<decimal> ValuationTomorrowNetPosition { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationTomorrowDeltaNetCostBookCurrency { get; set; }
+        private Nullable<decimal> ValuationTomorrowDeltaNetCostBookCurrency { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationTomorrowDeltaNetCostInstrumentCurrency { get; set; }
+        private Nullable<decimal> ValuationTomorrowDeltaNetCostInstrumentCurrency { get; set; }
     	[DataMember]
         public Nullable<decimal> AdministratorPrice { get; set; }
     	[DataMember]
@@ -234,7 +234,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> ValuationTodayMaxDeltaNetCostInstrumentCurrency { get; set; }
     	[DataMember]
-        public Nullable<decimal> ValuationTomorrowMaxDeltaNetCostInstrumentCurrency { get; set; }
+        private Nullable<decimal> ValuationTomorrowMaxDeltaNetCostInstrumentCurrency { get; set; }
     	[DataMember]
         public Nullable<decimal> TodayMaxNetPosition { get; set; }
     	[DataMember]
