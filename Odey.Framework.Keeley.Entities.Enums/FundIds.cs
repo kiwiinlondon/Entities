@@ -570,6 +570,38 @@ namespace Odey.Framework.Keeley.Entities.Enums
         ODIF_CHF_I = 10444,
 
         [EnumMember]
-        GILT = 10454
+        GILT = 10454,
+        [EnumMember]
+        GEM = 10700,
+        [EnumMember]
+        GEM_CHF_I =10713,
+        [EnumMember]
+        GEM_CHF_LI =10729,
+        [EnumMember]
+        GEM_CHF_R =10714,
+        [EnumMember]
+        GEM_CHF_S =10725,
+        [EnumMember]
+        GEM_EUR_I =10707,
+        [EnumMember]
+        GEM_EUR_LI =10728,
+        [EnumMember]
+        GEM_EUR_R =10709,
+        [EnumMember]
+        GEM_EUR_S =10723,
+        [EnumMember]
+        GEM_GBP_I =10703,
+        [EnumMember]
+        GEM_GBP_LI =10727,
+        [EnumMember]
+        GEM_GBP_R =10704,
+        [EnumMember]
+        GEM_GBP_S =10724,
+        [EnumMember]
+        GEM_USD_LI =10726,
+        [EnumMember]
+        GEM_USD_R =10702,
+        [EnumMember]
+        GEM_USD_S =10701
     }
 }
