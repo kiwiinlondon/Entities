@@ -24,6 +24,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Canada = 68,
         [EnumMember]
-        Argentina = 111
+        Argentina = 111,
+        [EnumMember]
+        Russia = 92
     }
 }

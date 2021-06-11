@@ -161,6 +161,8 @@ namespace Odey.Framework.Keeley.Entities
         public string NameOverride { get; set; }
     	[DataMember]
         public int InvestmentManagerId { get; set; }
+    	[DataMember]
+        public Nullable<bool> UseAlternativeExposureCurrencyId { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }
