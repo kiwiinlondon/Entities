@@ -42,6 +42,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<bool> IsOECD { get; set; }
     	[DataMember]
         public bool IsDevelopedMarket { get; set; }
+    	[DataMember]
+        public Nullable<int> CurrencyId { get; set; }
     
         [DataMember]
         public virtual List<AccountMapping> AccountMappings { get; set; }
