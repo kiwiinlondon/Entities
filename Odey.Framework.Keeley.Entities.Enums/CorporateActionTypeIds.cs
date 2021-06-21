@@ -14,7 +14,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [Description("Sedol Change")]
         [EnumMember]
         SedolChange = 2,
-        [Description(" Isin Change")]
+        [Description("Isin Change")]
         [EnumMember]
         IsinChange = 3,
         [Description("Name Change")]
@@ -34,6 +34,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         TickerChange = 8,
         [Description("Rights Offer")]
         [EnumMember]
-        RightsOffer = 9
+        RightsOffer = 9,
+        [Description("Cusip Change")]
+        [EnumMember]
+        CusipChange = 10
     }
 }
