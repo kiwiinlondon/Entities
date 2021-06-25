@@ -22,6 +22,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         InterestRateSwapEvent = 14,
         [EnumMember]
-        EnforcePositionEvent = 15,
+        RepoTradeEvent = 15,
     }
 }

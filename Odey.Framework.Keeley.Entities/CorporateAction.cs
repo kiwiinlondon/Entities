@@ -40,6 +40,16 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> PayDate { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> RecordDate { get; set; }
+    	[DataMember]
+        public string Notes { get; set; }
+    	[DataMember]
+        public Nullable<int> BBCorporateActionId { get; set; }
+    	[DataMember]
+        public string OldValue { get; set; }
+    	[DataMember]
+        public string NewValue { get; set; }
+    	[DataMember]
+        public string ChangeType { get; set; }
     
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }

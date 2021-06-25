@@ -649,6 +649,11 @@
           <Property Name="ExDate" Type="datetime" Nullable="false" />
           <Property Name="PayDate" Type="datetime" />
           <Property Name="RecordDate" Type="datetime" />
+          <Property Name="Notes" Type="varchar" MaxLength="300" />
+          <Property Name="BBCorporateActionId" Type="int" />
+          <Property Name="OldValue" Type="varchar" MaxLength="50" />
+          <Property Name="NewValue" Type="varchar" MaxLength="50" />
+          <Property Name="ChangeType" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="CorporateActionType">
           <Key>
@@ -2804,6 +2809,40 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RepoTradeEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="int" Nullable="false" />
+          <Property Name="CollatoralInstrumentMarketID" Type="int" Nullable="false" />
+          <Property Name="TradeDate" Type="datetime" Nullable="false" />
+          <Property Name="SettlementDate" Type="datetime" Nullable="false" />
+          <Property Name="TerminationTradeDate" Type="datetime" Nullable="false" />
+          <Property Name="TerminationSettlementDate" Type="datetime" Nullable="false" />
+          <Property Name="TraderId" Type="int" Nullable="false" />
+          <Property Name="DirtyPrice" Type="numeric" Precision="35" Scale="16" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="IsReverse" Type="bit" Nullable="false" />
+          <Property Name="SettlementCurrencyId" Type="int" Nullable="false" />
+          <Property Name="Consideration" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="TerminationConsideration" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="CounterpartyId" Type="int" Nullable="false" />
+          <Property Name="SettlementInstrumentFXRate" Type="numeric" Precision="35" Scale="16" Nullable="false" />
+          <Property Name="SettlementInstrumentFXRateMultiply" Type="bit" Nullable="false" />
+          <Property Name="DayCountConventionId" Type="int" Nullable="false" />
+          <Property Name="RepoCoupon" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="PaymentFrequency" Type="int" Nullable="false" />
+          <Property Name="Ticket" Type="varchar" MaxLength="100" />
+          <Property Name="IsCancelled" Type="bit" Nullable="false" />
+          <Property Name="AmendmentNumber" Type="int" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="InputDate" Type="datetime" Nullable="false" />
+          <Property Name="SupressFromExtracts" Type="bit" Nullable="false" />
+          <Property Name="OriginalInputDate" Type="datetime" Nullable="false" />
+          <Property Name="TradeDateAsDate" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Research">
           <Key>
@@ -6819,6 +6858,78 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="RawFinancing">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Colla__5C7A3F92">
+          <End Role="InstrumentMarket" Type="Self.InstrumentMarket" Multiplicity="1" />
+          <End Role="RepoTradeEvent" Type="Self.RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="CollatoralInstrumentMarketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Count__5F56AC3D">
+          <End Role="Counterparty" Type="Self.Counterparty" Multiplicity="1" />
+          <End Role="RepoTradeEvent" Type="Self.RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Counterparty">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="CounterpartyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Event__5B861B59">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="RepoTradeEvent" Type="Self.RepoTradeEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Settl__5E628804">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="RepoTradeEvent" Type="Self.RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="SettlementCurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Trade__5D6E63CB">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="RepoTradeEvent" Type="Self.RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="TraderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Updat__613EF4AF">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="RepoTradeEvent" Type="Self.RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -11178,6 +11289,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ExDate" Type="datetime" Mode="In" />
           <Parameter Name="PayDate" Type="datetime" Mode="In" />
           <Parameter Name="RecordDate" Type="datetime" Mode="In" />
+          <Parameter Name="Notes" Type="varchar" Mode="In" />
+          <Parameter Name="BBCorporateActionId" Type="int" Mode="In" />
+          <Parameter Name="OldValue" Type="varchar" Mode="In" />
+          <Parameter Name="NewValue" Type="varchar" Mode="In" />
+          <Parameter Name="ChangeType" Type="char" Mode="In" />
         </Function>
         <Function Name="CorporateAction_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CorporateActionId" Type="int" Mode="In" />
@@ -11191,6 +11307,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ExDate" Type="datetime" Mode="In" />
           <Parameter Name="PayDate" Type="datetime" Mode="In" />
           <Parameter Name="RecordDate" Type="datetime" Mode="In" />
+          <Parameter Name="Notes" Type="varchar" Mode="In" />
+          <Parameter Name="BBCorporateActionId" Type="int" Mode="In" />
+          <Parameter Name="OldValue" Type="varchar" Mode="In" />
+          <Parameter Name="NewValue" Type="varchar" Mode="In" />
+          <Parameter Name="ChangeType" Type="char" Mode="In" />
         </Function>
         <Function Name="Counterparty_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LegalEntityID" Type="int" Mode="In" />
@@ -14633,6 +14754,70 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
         <Function Name="ReportServer_GetFailedSubscriptions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="RepoTradeEvent_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RepoTradeEvent_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="CollatoralInstrumentMarketID" Type="int" Mode="In" />
+          <Parameter Name="TradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="SettlementDate" Type="datetime" Mode="In" />
+          <Parameter Name="TerminationTradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="TerminationSettlementDate" Type="datetime" Mode="In" />
+          <Parameter Name="TraderId" Type="int" Mode="In" />
+          <Parameter Name="DirtyPrice" Type="numeric" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="IsReverse" Type="bit" Mode="In" />
+          <Parameter Name="SettlementCurrencyId" Type="int" Mode="In" />
+          <Parameter Name="Consideration" Type="numeric" Mode="In" />
+          <Parameter Name="TerminationConsideration" Type="numeric" Mode="In" />
+          <Parameter Name="CounterpartyId" Type="int" Mode="In" />
+          <Parameter Name="SettlementInstrumentFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="SettlementInstrumentFXRateMultiply" Type="bit" Mode="In" />
+          <Parameter Name="DayCountConventionId" Type="int" Mode="In" />
+          <Parameter Name="RepoCoupon" Type="numeric" Mode="In" />
+          <Parameter Name="PaymentFrequency" Type="int" Mode="In" />
+          <Parameter Name="Ticket" Type="varchar" Mode="In" />
+          <Parameter Name="IsCancelled" Type="bit" Mode="In" />
+          <Parameter Name="AmendmentNumber" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="InputDate" Type="datetime" Mode="In" />
+          <Parameter Name="SupressFromExtracts" Type="bit" Mode="In" />
+          <Parameter Name="OriginalInputDate" Type="datetime" Mode="In" />
+          <Parameter Name="TradeDateAsDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="RepoTradeEvent_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EventID" Type="int" Mode="In" />
+          <Parameter Name="CollatoralInstrumentMarketID" Type="int" Mode="In" />
+          <Parameter Name="TradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="SettlementDate" Type="datetime" Mode="In" />
+          <Parameter Name="TerminationTradeDate" Type="datetime" Mode="In" />
+          <Parameter Name="TerminationSettlementDate" Type="datetime" Mode="In" />
+          <Parameter Name="TraderId" Type="int" Mode="In" />
+          <Parameter Name="DirtyPrice" Type="numeric" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="IsReverse" Type="bit" Mode="In" />
+          <Parameter Name="SettlementCurrencyId" Type="int" Mode="In" />
+          <Parameter Name="Consideration" Type="numeric" Mode="In" />
+          <Parameter Name="TerminationConsideration" Type="numeric" Mode="In" />
+          <Parameter Name="CounterpartyId" Type="int" Mode="In" />
+          <Parameter Name="SettlementInstrumentFXRate" Type="numeric" Mode="In" />
+          <Parameter Name="SettlementInstrumentFXRateMultiply" Type="bit" Mode="In" />
+          <Parameter Name="DayCountConventionId" Type="int" Mode="In" />
+          <Parameter Name="RepoCoupon" Type="numeric" Mode="In" />
+          <Parameter Name="PaymentFrequency" Type="int" Mode="In" />
+          <Parameter Name="Ticket" Type="varchar" Mode="In" />
+          <Parameter Name="IsCancelled" Type="bit" Mode="In" />
+          <Parameter Name="AmendmentNumber" Type="int" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="InputDate" Type="datetime" Mode="In" />
+          <Parameter Name="SupressFromExtracts" Type="bit" Mode="In" />
+          <Parameter Name="OriginalInputDate" Type="datetime" Mode="In" />
+          <Parameter Name="TradeDateAsDate" Type="date" Mode="In" />
+        </Function>
         <Function Name="Research_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ResearchId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -15403,6 +15588,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="RawIssuerAnalytic" EntityType="Self.RawIssuerAnalytic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RawPrice" EntityType="Self.RawPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RepoTradeEvent" EntityType="Self.RepoTradeEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Research" EntityType="Self.Research" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResearchAttachment" EntityType="Self.ResearchAttachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResearchBroker" EntityType="Self.ResearchBroker" Schema="dbo" store:Type="Tables" />
@@ -16664,6 +16850,30 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__RawFinanc__Updat__3B36E553" Association="Self.FK__RawFinanc__Updat__3B36E553">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="RawFinancing" EntitySet="RawFinancing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Colla__5C7A3F92" Association="Self.FK__RepoTrade__Colla__5C7A3F92">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarket" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Count__5F56AC3D" Association="Self.FK__RepoTrade__Count__5F56AC3D">
+            <End Role="Counterparty" EntitySet="Counterparty" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Event__5B861B59" Association="Self.FK__RepoTrade__Event__5B861B59">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Settl__5E628804" Association="Self.FK__RepoTrade__Settl__5E628804">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Trade__5D6E63CB" Association="Self.FK__RepoTrade__Trade__5D6E63CB">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Updat__613EF4AF" Association="Self.FK__RepoTrade__Updat__613EF4AF">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
           </AssociationSet>
           <AssociationSet Name="FK__Research__Contri__31B6060C" Association="Self.FK__Research__Contri__31B6060C">
             <End Role="ResearchContributor" EntitySet="ResearchContributor" />
@@ -20362,6 +20572,31 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Country__Currenc__60B4E4CA" Association="Odey.Framework.Keeley.Entities.FK__Country__Currenc__60B4E4CA">
             <End Role="Currency" EntitySet="Currencies" />
             <End Role="Country" EntitySet="Countries" />
+          </AssociationSet>
+          <EntitySet Name="RepoTradeEvents" EntityType="Odey.Framework.Keeley.Entities.RepoTradeEvent" />
+          <AssociationSet Name="FK__RepoTrade__Trade__5D6E63CB" Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Trade__5D6E63CB">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Updat__613EF4AF" Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Updat__613EF4AF">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Count__5F56AC3D" Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Count__5F56AC3D">
+            <End Role="Counterparty" EntitySet="Counterparties" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Settl__5E628804" Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Settl__5E628804">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Event__5B861B59" Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Event__5B861B59">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Colla__5C7A3F92" Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Colla__5C7A3F92">
+            <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvents" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -26964,6 +27199,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="PayDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.CorporateActionInstrumentMarketIDFK" FromRole="CorporateAction" ToRole="InstrumentMarket" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="Notes" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="BBCorporateActionId" Type="Int32" />
+          <Property Name="OldValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NewValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChangeType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="CorporateActionType">
           <Key>
@@ -31046,6 +31286,115 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="Country">
               <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RepoTradeEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="Int32" Nullable="false" />
+          <Property Name="CollatoralInstrumentMarketID" Type="Int32" Nullable="false" />
+          <Property Name="TradeDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SettlementDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TerminationTradeDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TerminationSettlementDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TraderId" Type="Int32" Nullable="false" />
+          <Property Name="DirtyPrice" Type="Decimal" Nullable="false" Precision="35" Scale="16" />
+          <Property Name="Quantity" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="IsReverse" Type="Boolean" Nullable="false" />
+          <Property Name="SettlementCurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="Consideration" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="TerminationConsideration" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="CounterpartyId" Type="Int32" Nullable="false" />
+          <Property Name="SettlementInstrumentFXRate" Type="Decimal" Nullable="false" Precision="35" Scale="16" />
+          <Property Name="SettlementInstrumentFXRateMultiply" Type="Boolean" Nullable="false" />
+          <Property Name="DayCountConventionId" Type="Int32" Nullable="false" />
+          <Property Name="RepoCoupon" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="PaymentFrequency" Type="Int32" Nullable="false" />
+          <Property Name="Ticket" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsCancelled" Type="Boolean" Nullable="false" />
+          <Property Name="AmendmentNumber" Type="Int32" Nullable="false" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="InputDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SupressFromExtracts" Type="Boolean" Nullable="false" />
+          <Property Name="OriginalInputDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TradeDateAsDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Counterparty" Relationship="Odey.Framework.Keeley.Entities.FK__RepoTrade__Count__5F56AC3D" FromRole="RepoTradeEvent" ToRole="Counterparty" />
+          <NavigationProperty Name="Event" Relationship="Odey.Framework.Keeley.Entities.FK__RepoTrade__Event__5B861B59" FromRole="RepoTradeEvent" ToRole="Event" />
+          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__RepoTrade__Colla__5C7A3F92" FromRole="RepoTradeEvent" ToRole="InstrumentMarket" />
+        </EntityType>
+        <Association Name="FK__RepoTrade__Trade__5D6E63CB">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEvent" Role="RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="TraderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Updat__613EF4AF">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEvent" Role="RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Count__5F56AC3D">
+          <End Type="Odey.Framework.Keeley.Entities.Counterparty" Role="Counterparty" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEvent" Role="RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Counterparty">
+              <PropertyRef Name="LegalEntityID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="CounterpartyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Settl__5E628804">
+          <End Type="Odey.Framework.Keeley.Entities.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEvent" Role="RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="InstrumentID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="SettlementCurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Event__5B861B59">
+          <End Type="Odey.Framework.Keeley.Entities.Event" Role="Event" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEvent" Role="RepoTradeEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Colla__5C7A3F92">
+          <End Type="Odey.Framework.Keeley.Entities.InstrumentMarket" Role="InstrumentMarket" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEvent" Role="RepoTradeEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstrumentMarket">
+              <PropertyRef Name="InstrumentMarketID" />
+            </Principal>
+            <Dependent Role="RepoTradeEvent">
+              <PropertyRef Name="CollatoralInstrumentMarketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>        
@@ -37260,6 +37609,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="CorporateActions">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.CorporateAction">
               <MappingFragment StoreEntitySet="CorporateAction">
+                <ScalarProperty Name="ChangeType" ColumnName="ChangeType" />
+                <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+                <ScalarProperty Name="OldValue" ColumnName="OldValue" />
+                <ScalarProperty Name="BBCorporateActionId" ColumnName="BBCorporateActionId" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="PayDate" ColumnName="PayDate" />
                 <ScalarProperty Name="ExDate" ColumnName="ExDate" />
@@ -37277,6 +37631,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.CorporateAction">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.CorporateAction_Insert">
+                  <ScalarProperty Name="ChangeType" ParameterName="ChangeType" />
+                  <ScalarProperty Name="NewValue" ParameterName="NewValue" />
+                  <ScalarProperty Name="OldValue" ParameterName="OldValue" />
+                  <ScalarProperty Name="BBCorporateActionId" ParameterName="BBCorporateActionId" />
+                  <ScalarProperty Name="Notes" ParameterName="Notes" />
                   <ScalarProperty Name="RecordDate" ParameterName="RecordDate" />
                   <ScalarProperty Name="PayDate" ParameterName="PayDate" />
                   <ScalarProperty Name="ExDate" ParameterName="ExDate" />
@@ -37291,6 +37650,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.CorporateAction_Update">
+                  <ScalarProperty Name="ChangeType" ParameterName="ChangeType" Version="Current" />
+                  <ScalarProperty Name="NewValue" ParameterName="NewValue" Version="Current" />
+                  <ScalarProperty Name="OldValue" ParameterName="OldValue" Version="Current" />
+                  <ScalarProperty Name="BBCorporateActionId" ParameterName="BBCorporateActionId" Version="Current" />
+                  <ScalarProperty Name="Notes" ParameterName="Notes" Version="Current" />
                   <ScalarProperty Name="RecordDate" ParameterName="RecordDate" Version="Current" />
                   <ScalarProperty Name="PayDate" ParameterName="PayDate" Version="Current" />
                   <ScalarProperty Name="ExDate" ParameterName="ExDate" Version="Current" />
@@ -40415,6 +40779,114 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RepoTradeEvents">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RepoTradeEvent">
+              <MappingFragment StoreEntitySet="RepoTradeEvent">
+                <ScalarProperty Name="TradeDateAsDate" ColumnName="TradeDateAsDate" />
+                <ScalarProperty Name="OriginalInputDate" ColumnName="OriginalInputDate" />
+                <ScalarProperty Name="SupressFromExtracts" ColumnName="SupressFromExtracts" />
+                <ScalarProperty Name="InputDate" ColumnName="InputDate" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="AmendmentNumber" ColumnName="AmendmentNumber" />
+                <ScalarProperty Name="IsCancelled" ColumnName="IsCancelled" />
+                <ScalarProperty Name="Ticket" ColumnName="Ticket" />
+                <ScalarProperty Name="PaymentFrequency" ColumnName="PaymentFrequency" />
+                <ScalarProperty Name="RepoCoupon" ColumnName="RepoCoupon" />
+                <ScalarProperty Name="DayCountConventionId" ColumnName="DayCountConventionId" />
+                <ScalarProperty Name="SettlementInstrumentFXRateMultiply" ColumnName="SettlementInstrumentFXRateMultiply" />
+                <ScalarProperty Name="SettlementInstrumentFXRate" ColumnName="SettlementInstrumentFXRate" />
+                <ScalarProperty Name="CounterpartyId" ColumnName="CounterpartyId" />
+                <ScalarProperty Name="TerminationConsideration" ColumnName="TerminationConsideration" />
+                <ScalarProperty Name="Consideration" ColumnName="Consideration" />
+                <ScalarProperty Name="SettlementCurrencyId" ColumnName="SettlementCurrencyId" />
+                <ScalarProperty Name="IsReverse" ColumnName="IsReverse" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DirtyPrice" ColumnName="DirtyPrice" />
+                <ScalarProperty Name="TraderId" ColumnName="TraderId" />
+                <ScalarProperty Name="TerminationSettlementDate" ColumnName="TerminationSettlementDate" />
+                <ScalarProperty Name="TerminationTradeDate" ColumnName="TerminationTradeDate" />
+                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
+                <ScalarProperty Name="TradeDate" ColumnName="TradeDate" />
+                <ScalarProperty Name="CollatoralInstrumentMarketID" ColumnName="CollatoralInstrumentMarketID" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RepoTradeEvent">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.RepoTradeEvent_Insert">
+                  <ScalarProperty Name="TradeDateAsDate" ParameterName="TradeDateAsDate" />
+                  <ScalarProperty Name="OriginalInputDate" ParameterName="OriginalInputDate" />
+                  <ScalarProperty Name="SupressFromExtracts" ParameterName="SupressFromExtracts" />
+                  <ScalarProperty Name="InputDate" ParameterName="InputDate" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="AmendmentNumber" ParameterName="AmendmentNumber" />
+                  <ScalarProperty Name="IsCancelled" ParameterName="IsCancelled" />
+                  <ScalarProperty Name="Ticket" ParameterName="Ticket" />
+                  <ScalarProperty Name="PaymentFrequency" ParameterName="PaymentFrequency" />
+                  <ScalarProperty Name="RepoCoupon" ParameterName="RepoCoupon" />
+                  <ScalarProperty Name="DayCountConventionId" ParameterName="DayCountConventionId" />
+                  <ScalarProperty Name="SettlementInstrumentFXRateMultiply" ParameterName="SettlementInstrumentFXRateMultiply" />
+                  <ScalarProperty Name="SettlementInstrumentFXRate" ParameterName="SettlementInstrumentFXRate" />
+                  <ScalarProperty Name="CounterpartyId" ParameterName="CounterpartyId" />
+                  <ScalarProperty Name="TerminationConsideration" ParameterName="TerminationConsideration" />
+                  <ScalarProperty Name="Consideration" ParameterName="Consideration" />
+                  <ScalarProperty Name="SettlementCurrencyId" ParameterName="SettlementCurrencyId" />
+                  <ScalarProperty Name="IsReverse" ParameterName="IsReverse" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" />
+                  <ScalarProperty Name="DirtyPrice" ParameterName="DirtyPrice" />
+                  <ScalarProperty Name="TraderId" ParameterName="TraderId" />
+                  <ScalarProperty Name="TerminationSettlementDate" ParameterName="TerminationSettlementDate" />
+                  <ScalarProperty Name="TerminationTradeDate" ParameterName="TerminationTradeDate" />
+                  <ScalarProperty Name="SettlementDate" ParameterName="SettlementDate" />
+                  <ScalarProperty Name="TradeDate" ParameterName="TradeDate" />
+                  <ScalarProperty Name="CollatoralInstrumentMarketID" ParameterName="CollatoralInstrumentMarketID" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" />
+                  <ResultBinding Name="EventID" ColumnName="EventId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.RepoTradeEvent_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" />
+                </DeleteFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.RepoTradeEvent_Update">
+                  <ScalarProperty Name="TradeDateAsDate" ParameterName="TradeDateAsDate" Version="Current" />
+                  <ScalarProperty Name="OriginalInputDate" ParameterName="OriginalInputDate" Version="Current" />
+                  <ScalarProperty Name="SupressFromExtracts" ParameterName="SupressFromExtracts" Version="Current" />
+                  <ScalarProperty Name="InputDate" ParameterName="InputDate" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="AmendmentNumber" ParameterName="AmendmentNumber" Version="Current" />
+                  <ScalarProperty Name="IsCancelled" ParameterName="IsCancelled" Version="Current" />
+                  <ScalarProperty Name="Ticket" ParameterName="Ticket" Version="Current" />
+                  <ScalarProperty Name="PaymentFrequency" ParameterName="PaymentFrequency" Version="Current" />
+                  <ScalarProperty Name="RepoCoupon" ParameterName="RepoCoupon" Version="Current" />
+                  <ScalarProperty Name="DayCountConventionId" ParameterName="DayCountConventionId" Version="Current" />
+                  <ScalarProperty Name="SettlementInstrumentFXRateMultiply" ParameterName="SettlementInstrumentFXRateMultiply" Version="Current" />
+                  <ScalarProperty Name="SettlementInstrumentFXRate" ParameterName="SettlementInstrumentFXRate" Version="Current" />
+                  <ScalarProperty Name="CounterpartyId" ParameterName="CounterpartyId" Version="Current" />
+                  <ScalarProperty Name="TerminationConsideration" ParameterName="TerminationConsideration" Version="Current" />
+                  <ScalarProperty Name="Consideration" ParameterName="Consideration" Version="Current" />
+                  <ScalarProperty Name="SettlementCurrencyId" ParameterName="SettlementCurrencyId" Version="Current" />
+                  <ScalarProperty Name="IsReverse" ParameterName="IsReverse" Version="Current" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" Version="Current" />
+                  <ScalarProperty Name="DirtyPrice" ParameterName="DirtyPrice" Version="Current" />
+                  <ScalarProperty Name="TraderId" ParameterName="TraderId" Version="Current" />
+                  <ScalarProperty Name="TerminationSettlementDate" ParameterName="TerminationSettlementDate" Version="Current" />
+                  <ScalarProperty Name="TerminationTradeDate" ParameterName="TerminationTradeDate" Version="Current" />
+                  <ScalarProperty Name="SettlementDate" ParameterName="SettlementDate" Version="Current" />
+                  <ScalarProperty Name="TradeDate" ParameterName="TradeDate" Version="Current" />
+                  <ScalarProperty Name="CollatoralInstrumentMarketID" ParameterName="CollatoralInstrumentMarketID" Version="Current" />
+                  <ScalarProperty Name="EventID" ParameterName="EventID" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -40437,7 +40909,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="100">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="78">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />
@@ -43684,7 +44156,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="2.25" PointY="18.474300113291079" />
           <edmx:ConnectorPoint PointX="3" PointY="18.474300113291079" />
         </edmx:AssociationConnector>
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Analytic" Width="1.5" PointX="20.5" PointY="18.5" Height="2.941793619791671" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Analytic" Width="1.5" PointX="20.625" PointY="20.625" Height="2.941793619791671" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.AnalyticInstrumentMarketIdFK">
           <edmx:ConnectorPoint PointX="20.375" PointY="19.595896809895834" />
           <edmx:ConnectorPoint PointX="20.5" PointY="19.595896809895834" />
@@ -46052,100 +46524,96 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RiskAnalyticPosition" Width="1.5" PointX="39.875" PointY="19.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_RiskAnalyticType" ManuallyRouted="true" >
           <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="13" />
-          <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="12.536394829117585" />
-          <edmx:ConnectorPoint PointX="1.4443388813411673" PointY="12.536394829117585" />
+          <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="12.526500901483187" />
           <edmx:ConnectorPoint PointX="1.4588369122938747" PointY="12.526500901483187" />
-          <edmx:ConnectorPoint PointX="1.59650209404041" PointY="12.432553706142022" />
           <edmx:ConnectorPoint PointX="1.6311227172331038" PointY="12.408927467403563" />
           <edmx:ConnectorPoint PointX="1.6311227172331038" PointY="11.667201661889138" />
-          <edmx:ConnectorPoint PointX="1.7762261863664988" PointY="11.572231615747741" />
-          <edmx:ConnectorPoint PointX="1.7762261863664988" PointY="10.654742100688365" />
-          <edmx:ConnectorPoint PointX="1.8335328454686954" PointY="10.594003446538141" />
-          <edmx:ConnectorPoint PointX="1.9479092968870808" PointY="10.47277719055902" />
-          <edmx:ConnectorPoint PointX="1.9951369706139774" PointY="10.42272113449576" />
-          <edmx:ConnectorPoint PointX="2.1095134220323626" PointY="10.301494878516639" />
+          <edmx:ConnectorPoint PointX="1.6725087920571748" PointY="11.649858430307116" />
+          <edmx:ConnectorPoint PointX="1.8262240365057791" PointY="11.585442582863466" />
+          <edmx:ConnectorPoint PointX="1.857749307385322" PointY="11.572231615747741" />
+          <edmx:ConnectorPoint PointX="1.857749307385322" PointY="10.568336703298527" />
+          <edmx:ConnectorPoint PointX="1.9114306382509674" PointY="10.511440491918316" />
+          <edmx:ConnectorPoint PointX="2.0258070896693532" PointY="10.390214235939196" />
           <edmx:ConnectorPoint PointX="2.1266461734499078" PointY="10.2833360767422" />
           <edmx:ConnectorPoint PointX="2.1266461734499078" PointY="9.4436066445108082" />
           <edmx:ConnectorPoint PointX="2.2552364987276756" PointY="9.3272942028380665" />
           <edmx:ConnectorPoint PointX="2.2552364987276756" PointY="8.8051328091949923" />
           <edmx:ConnectorPoint PointX="2.4104070636836217" PointY="8.6756606890644346" />
           <edmx:ConnectorPoint PointX="2.4104070636836217" PointY="8.17661033515272" />
-          <edmx:ConnectorPoint PointX="2.545161890206995" PointY="8.07338933273869" />
-          <edmx:ConnectorPoint PointX="2.545161890206995" PointY="6.8281534216915727" />
-          <edmx:ConnectorPoint PointX="2.5503057373624105" PointY="6.8281534216915718" />
-          <edmx:ConnectorPoint PointX="2.7169724040290775" PointY="6.8281534216915727" />
+          <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="8.07338933273869" />
+          <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8281534216915727" />
+          <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8281534216915718" />
+          <edmx:ConnectorPoint PointX="2.732672442877822" PointY="6.8281534216915727" />
           <edmx:ConnectorPoint PointX="2.7601701418581186" PointY="6.8281534216915727" />
-          <edmx:ConnectorPoint PointX="2.9198595092754553" PointY="6.7550290165736424" />
-          <edmx:ConnectorPoint PointX="2.9198595092754553" PointY="4.8192281276588567" />
+          <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="6.7550290165736424" />
           <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="4.813088588644062" />
-          <edmx:ConnectorPoint PointX="3.0220883988673561" PointY="4.6781194905340477" />
           <edmx:ConnectorPoint PointX="3.0221354166666665" PointY="4.6780545908994364" />
           <edmx:ConnectorPoint PointX="3.0221354166666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.2213541666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.5989583333333335" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.8780936979166665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="4.0447603645833334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="4.645833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="4.666666666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="5.161458333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.2770157291666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.4436823958333336" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.4947916666666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.6614583333333335" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.6777343749999996" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.8444010416666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="5.177083333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.197916666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.364583333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.619791666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.786458333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="5.838541666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="6.005208333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.8620889113647623" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.0287555780314284" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.125397800910843" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.292064467577509" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="6.807291666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.020833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.208333333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.6027121315189987" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.8842365709134619" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.1041666666666661" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.2708333333333339" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="10.520833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.0283516275000011" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.3333333333333321" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.479166666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.645833333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.0411569541657411" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.3098958333333339" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="10.583333333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="11.510416666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="11.895833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="11.692708333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.214166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.380833333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.604166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.770833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="13.020833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="14.666666666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.145833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.322916666666666" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="15.833333333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.166666666666668" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="17.692708333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="19.716666666666669" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="20.067708333333329" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="22.854166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.020833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.709430597435318" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.876097264101983" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="14.572916666666666" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="15.239583333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.322916666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.229166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.645833333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="19.854166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="20.020833333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="22.916666666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="23.145833333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="23.385416666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="23.552083333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.354166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.901041666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.067708333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="26.169609395603942" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="26.336276062270606" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.195198158838707" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.361864825505371" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.354166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="27.633333333333329" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="27.611933333333329" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="28.835433305601747" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.002099972268411" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.602018966225646" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.916092516192986" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="31.057171562788245" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="31.223838229454909" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.026044666666667" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.192711333333332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.447916666666664" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.614583333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="34.994791666666664" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.161458333333336" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.66800865886875" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.834675325535422" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.84825234375" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="37.310607915222668" PointY="23.339856264188676" />
           <edmx:ConnectorPoint PointX="37.439392084777332" PointY="23.234062051445754" />
-          <edmx:ConnectorPoint PointX="38.369181524282496" PointY="22.470254340379352" />
-          <edmx:ConnectorPoint PointX="38.497965693837159" PointY="22.364460127636431" />
           <edmx:ConnectorPoint PointX="39.716857915222668" PointY="21.363158931799461" />
           <edmx:ConnectorPoint PointX="39.845642084777332" PointY="21.25736471905654" />
           <edmx:ConnectorPoint PointX="39.875" PointY="21.233247643646603" />
@@ -46360,6 +46828,13 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__LoanedPor__Curre__32241313" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Instrumen__Alter__32EE1A1A" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Country__Currenc__60B4E4CA" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RepoTradeEvent" Width="1.5" PointX="20.5" PointY="0.75" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Trade__5D6E63CB" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Updat__613EF4AF" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Count__5F56AC3D" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Settl__5E628804" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Event__5B861B59" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Colla__5C7A3F92" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

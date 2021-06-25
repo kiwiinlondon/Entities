@@ -37,6 +37,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
         RightsOffer = 9,
         [Description("Cusip Change")]
         [EnumMember]
-        CusipChange = 10
+        CusipChange = 10,
+        [Description("Spin-Off")]
+        [EnumMember]
+        SpinOff = 11,
+        [Description("Special Dividend")]
+        [EnumMember]
+        SpecialDividend = 12,
+        [Description("Listing")]
+        [EnumMember]
+        Listing = 13
     }
 }

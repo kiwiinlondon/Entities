@@ -110,7 +110,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         Financing = 66,
         [EnumMember]
-        IssuerAnalytic = 67
+        IssuerAnalytic = 67, 
+        [EnumMember]
+        RepoTradeEvent = 68
     }
 }
 
