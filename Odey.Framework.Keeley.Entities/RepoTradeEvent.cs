@@ -19,8 +19,6 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public int EventID { get; set; }
     	[DataMember]
-        public int CollatoralInstrumentMarketID { get; set; }
-    	[DataMember]
         public System.DateTime TradeDate { get; set; }
     	[DataMember]
         public System.DateTime SettlementDate { get; set; }
@@ -74,6 +72,8 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime OriginalInputDate { get; set; }
     	[DataMember]
         public System.DateTime TradeDateAsDate { get; set; }
+    	[DataMember]
+        public int InstrumentMarketId { get; set; }
     
         [DataMember]
         public virtual Counterparty Counterparty { get; set; }
