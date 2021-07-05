@@ -15,7 +15,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
         [EnumMember]
         InterestRateSwap = 3,
-
+        [EnumMember]
+        Repo = 4,
     }
 }
 

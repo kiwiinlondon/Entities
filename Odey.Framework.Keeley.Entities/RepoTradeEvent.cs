@@ -74,6 +74,10 @@ namespace Odey.Framework.Keeley.Entities
         public System.DateTime TradeDateAsDate { get; set; }
     	[DataMember]
         public int InstrumentMarketId { get; set; }
+    	[DataMember]
+        public decimal Haircut { get; set; }
+    	[DataMember]
+        public decimal Interest { get; set; }
     
         [DataMember]
         public virtual Counterparty Counterparty { get; set; }

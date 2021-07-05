@@ -2824,6 +2824,7 @@
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="IsReverse" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="RepoTradeEvent">
           <Key>
@@ -14821,6 +14822,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TerminationDate" Type="datetime" Mode="In" />
           <Parameter Name="BondInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="IsReverse" Type="bit" Mode="In" />
         </Function>
         <Function Name="Repo_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -14831,6 +14833,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="BondInstrumentMarketId" Type="int" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="IsReverse" Type="bit" Mode="In" />
         </Function>
         <Function Name="ReportServer_GetFailedSubscriptions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="RepoTradeEvent_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -20694,18 +20697,18 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="RepoTradeEvent" EntitySet="RepoTradeEvents" />
           </AssociationSet>
-          <EntitySet Name="Repoes" EntityType="Odey.Framework.Keeley.Entities.Repo" />
+          <EntitySet Name="Repos" EntityType="Odey.Framework.Keeley.Entities.Repo" />
           <AssociationSet Name="FK__Repo__UpdateUser__05474AFB" Association="Odey.Framework.Keeley.Entities.FK__Repo__UpdateUser__05474AFB">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="Repo" EntitySet="Repoes" />
+            <End Role="Repo" EntitySet="Repos" />
           </AssociationSet>
           <AssociationSet Name="FK__Repo__Instrument__026ADE50" Association="Odey.Framework.Keeley.Entities.FK__Repo__Instrument__026ADE50">
             <End Role="Instrument" EntitySet="Instruments" />
-            <End Role="Repo" EntitySet="Repoes" />
+            <End Role="Repo" EntitySet="Repos" />
           </AssociationSet>
           <AssociationSet Name="FK__Repo__BondInstru__045326C2" Association="Odey.Framework.Keeley.Entities.FK__Repo__BondInstru__045326C2">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
-            <End Role="Repo" EntitySet="Repoes" />
+            <End Role="Repo" EntitySet="Repos" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -20723,7 +20726,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Type="String" Name="Initials" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="UserTypeFlags" Type="Int32" />
-          <NavigationProperty Name="Repoes" Relationship="Odey.Framework.Keeley.Entities.FK__Repo__UpdateUser__05474AFB" FromRole="ApplicationUser" ToRole="Repo" />
           </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -23101,7 +23103,6 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="DividendCurrencyId" Type="Int32" />
           <NavigationProperty Name="DividendCurrency" Relationship="Odey.Framework.Keeley.Entities.FK__Instrumen__Divid__2899DD82" FromRole="InstrumentMarket" ToRole="Currency" />
           <Property Name="AlternativeExposureCurrencyId" Type="Int32" />
-          <NavigationProperty Name="Repoes" Relationship="Odey.Framework.Keeley.Entities.FK__Repo__BondInstru__045326C2" FromRole="InstrumentMarket" ToRole="Repo" />
           </EntityType>
         <Association Name="InstrumentMarketUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -31526,9 +31527,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <NavigationProperty Name="ApplicationUser" Relationship="Odey.Framework.Keeley.Entities.FK__Repo__UpdateUser__05474AFB" FromRole="Repo" ToRole="ApplicationUser" />
           <NavigationProperty Name="Instrument" Relationship="Odey.Framework.Keeley.Entities.FK__Repo__Instrument__026ADE50" FromRole="Repo" ToRole="Instrument" />
-          <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__Repo__BondInstru__045326C2" FromRole="Repo" ToRole="InstrumentMarket" />
+          <NavigationProperty Name="Bond" Relationship="Odey.Framework.Keeley.Entities.FK__Repo__BondInstru__045326C2" FromRole="Repo" ToRole="InstrumentMarket" />
+          <Property Name="IsReverse" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK__Repo__UpdateUser__05474AFB">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -40989,6 +40990,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RepoTradeEvent">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.RepoTradeEvent_Insert">
+                  <ScalarProperty Name="Interest" ParameterName="Interest" />
+                  <ScalarProperty Name="Haircut" ParameterName="Haircut" />
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketID" />
                   <ScalarProperty Name="TradeDateAsDate" ParameterName="TradeDateAsDate" />
                   <ScalarProperty Name="OriginalInputDate" ParameterName="OriginalInputDate" />
@@ -41025,6 +41028,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="EventID" ParameterName="EventID" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.RepoTradeEvent_Update">
+                  <ScalarProperty Name="Interest" ParameterName="Interest" Version="Current" />
+                  <ScalarProperty Name="Haircut" ParameterName="Haircut" Version="Current" />
                   <ScalarProperty Name="InstrumentMarketId" ParameterName="InstrumentMarketID" Version="Current" />
                   <ScalarProperty Name="TradeDateAsDate" ParameterName="TradeDateAsDate" Version="Current" />
                   <ScalarProperty Name="OriginalInputDate" ParameterName="OriginalInputDate" Version="Current" />
@@ -41059,9 +41064,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Repoes">
+          <EntitySetMapping Name="Repos">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Repo">
               <MappingFragment StoreEntitySet="Repo">
+                <ScalarProperty Name="IsReverse" ColumnName="IsReverse" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
                 <ScalarProperty Name="StartDt" ColumnName="StartDt" />
@@ -41072,6 +41078,40 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                 <ScalarProperty Name="DayCountConventionID" ColumnName="DayCountConventionID" />
                 <ScalarProperty Name="InstrumentId" ColumnName="InstrumentId" />
               </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Repo">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.Repo_Insert">
+                  <ScalarProperty Name="IsReverse" ParameterName="IsReverse" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="BondInstrumentMarketId" ParameterName="BondInstrumentMarketId" />
+                  <ScalarProperty Name="TerminationDate" ParameterName="TerminationDate" />
+                  <ScalarProperty Name="Rate" ParameterName="Rate" />
+                  <ScalarProperty Name="PaymentFrequency" ParameterName="PaymentFrequency" />
+                  <ScalarProperty Name="DayCountConventionID" ParameterName="DayCountConventionID" />
+                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.Repo_Update">
+                  <ScalarProperty Name="IsReverse" ParameterName="IsReverse" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="BondInstrumentMarketId" ParameterName="BondInstrumentMarketId" Version="Current" />
+                  <ScalarProperty Name="TerminationDate" ParameterName="TerminationDate" Version="Current" />
+                  <ScalarProperty Name="Rate" ParameterName="Rate" Version="Current" />
+                  <ScalarProperty Name="PaymentFrequency" ParameterName="PaymentFrequency" Version="Current" />
+                  <ScalarProperty Name="DayCountConventionID" ParameterName="DayCountConventionID" Version="Current" />
+                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.Repo_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="InstrumentId" ParameterName="InstrumentId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           </EntityContainerMapping>
@@ -46726,28 +46766,36 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="8.07338933273869" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8281534216915727" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8281534216915718" />
-          <edmx:ConnectorPoint PointX="2.7239583333333335" PointY="6.8281534216915727" />
+          <edmx:ConnectorPoint PointX="2.7317708333333335" PointY="6.8281534216915727" />
           <edmx:ConnectorPoint PointX="2.7601701418581186" PointY="6.8281534216915727" />
           <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="6.7550290165736424" />
           <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="4.813088588644062" />
           <edmx:ConnectorPoint PointX="3.0416666666666665" PointY="4.6780545908994364" />
           <edmx:ConnectorPoint PointX="3.0416666666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.2916641666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.1666666666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.4583308333333336" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.84205003205128" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="4.0087166987179463" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.5260416666666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.8541666666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="4.989583333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="5.026041666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="5.192708333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.177083333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.197916666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.364583333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.619791666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.786458333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.1888559927233047" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.3555226593899707" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="6.807291666666667" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="7.427083333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.3440638085066743" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.479166666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.645833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.979166666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.3098958333333339" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.791666666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.958333333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.1041666666666661" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.2942708333333339" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="10.645833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="11.510416666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="11.692708333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.214166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.380833333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.581666666666665" PointY="24.780742187500003" />
@@ -46758,28 +46806,30 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="15.145833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="15.229166666666666" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="15.770833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.197916666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.677083333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="19.854166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.229166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.645833333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="19.729166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="20.020833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="22.854166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.020833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.291666666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.708333333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.729166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.895833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="25.619166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="25.910833333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="22.901041666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="23.145833333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.614583333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.901041666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.067708333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.195198158838707" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.361864825505371" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.354166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="27.664583333333329" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="27.611933333333329" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="29.026044666666667" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="29.192711333333332" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="32.447916666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="32.614583333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.645833333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="34.963541666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.130208333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="35.145833333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.84825234375" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="37.310607915222668" PointY="23.339856264188676" />
           <edmx:ConnectorPoint PointX="37.439392084777332" PointY="23.234062051445754" />

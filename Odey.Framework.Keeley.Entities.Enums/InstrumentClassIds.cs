@@ -78,6 +78,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         CorporateLoan = 98,
         [EnumMember]
-        PhysicalCommoditySpot = 101
+        PhysicalCommoditySpot = 101,
+        [EnumMember]
+        Repo = 102
     }
 }

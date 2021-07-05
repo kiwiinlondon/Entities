@@ -82,5 +82,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual List<InstrumentMarket> InstrumentMarkets { get; set; }
         [DataMember]
         public virtual InterestRateSwap InterestRateSwap { get; set; }
+        [DataMember]
+        public virtual Repo Repo { get; set; }
     }
 }
