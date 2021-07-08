@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class RepoTradeEvent
     {
+    	
+        public RepoTradeEvent()
+        {
+            this.RepoTradeEventRateChanges = new List<RepoTradeEventRateChange>();
+        }
+    
     	[DataMember]
         public int EventID { get; set; }
     	[DataMember]
@@ -85,5 +91,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Event Event { get; set; }
         [DataMember]
         public virtual InstrumentMarket InstrumentMarket { get; set; }
+        [DataMember]
+        public virtual List<RepoTradeEventRateChange> RepoTradeEventRateChanges { get; set; }
     }
 }

@@ -2862,6 +2862,18 @@
           <Property Name="Haircut" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="Interest" Type="numeric" Precision="27" Scale="8" Nullable="false" />
         </EntityType>
+        <EntityType Name="RepoTradeEventRateChange">
+          <Key>
+            <PropertyRef Name="RepoTradeEventRateChangeId" />
+          </Key>
+          <Property Name="RepoTradeEventRateChangeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RepoEventId" Type="int" Nullable="false" />
+          <Property Name="Rate" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+          <Property Name="EffectiveToDate" Type="datetime" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="Research">
           <Key>
             <PropertyRef Name="ResearchId" />
@@ -6952,6 +6964,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__RepoTrade__RepoE__36DEA68F">
+          <End Role="RepoTradeEvent" Type="Self.RepoTradeEvent" Multiplicity="1" />
+          <End Role="RepoTradeEventRateChange" Type="Self.RepoTradeEventRateChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RepoTradeEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="RepoTradeEventRateChange">
+              <PropertyRef Name="RepoEventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__RepoTrade__Settl__5E628804">
           <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
           <End Role="RepoTradeEvent" Type="Self.RepoTradeEvent" Multiplicity="*" />
@@ -6973,6 +6997,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="RepoTradeEvent">
               <PropertyRef Name="TraderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__Updat__37D2CAC8">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="RepoTradeEventRateChange" Type="Self.RepoTradeEventRateChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RepoTradeEventRateChange">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -14904,6 +14940,25 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Haircut" Type="numeric" Mode="In" />
           <Parameter Name="Interest" Type="numeric" Mode="In" />
         </Function>
+        <Function Name="RepoTradeEventRateChange_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RepoTradeEventRateChangeId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RepoTradeEventRateChange_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RepoEventId" Type="int" Mode="In" />
+          <Parameter Name="Rate" Type="numeric" Mode="In" />
+          <Parameter Name="EffectiveToDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RepoTradeEventRateChange_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RepoTradeEventRateChangeId" Type="int" Mode="In" />
+          <Parameter Name="RepoEventId" Type="int" Mode="In" />
+          <Parameter Name="Rate" Type="numeric" Mode="In" />
+          <Parameter Name="EffectiveToDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="Research_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ResearchId" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -15676,6 +15731,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Repo" EntityType="Self.Repo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RepoTradeEvent" EntityType="Self.RepoTradeEvent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RepoTradeEventRateChange" EntityType="Self.RepoTradeEventRateChange" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Research" EntityType="Self.Research" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResearchAttachment" EntityType="Self.ResearchAttachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResearchBroker" EntityType="Self.ResearchBroker" Schema="dbo" store:Type="Tables" />
@@ -16962,6 +17018,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Event" EntitySet="Event" />
             <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
           </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__RepoE__36DEA68F" Association="Self.FK__RepoTrade__RepoE__36DEA68F">
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
+            <End Role="RepoTradeEventRateChange" EntitySet="RepoTradeEventRateChange" />
+          </AssociationSet>
           <AssociationSet Name="FK__RepoTrade__Settl__5E628804" Association="Self.FK__RepoTrade__Settl__5E628804">
             <End Role="Currency" EntitySet="Currency" />
             <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
@@ -16969,6 +17029,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__RepoTrade__Trade__5D6E63CB" Association="Self.FK__RepoTrade__Trade__5D6E63CB">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="RepoTradeEvent" EntitySet="RepoTradeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__Updat__37D2CAC8" Association="Self.FK__RepoTrade__Updat__37D2CAC8">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="RepoTradeEventRateChange" EntitySet="RepoTradeEventRateChange" />
           </AssociationSet>
           <AssociationSet Name="FK__RepoTrade__Updat__613EF4AF" Association="Self.FK__RepoTrade__Updat__613EF4AF">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
@@ -20709,6 +20773,15 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Repo__BondInstru__045326C2" Association="Odey.Framework.Keeley.Entities.FK__Repo__BondInstru__045326C2">
             <End Role="InstrumentMarket" EntitySet="InstrumentMarkets" />
             <End Role="Repo" EntitySet="Repos" />
+          </AssociationSet>
+          <EntitySet Name="RepoTradeEventRateChanges" EntityType="Odey.Framework.Keeley.Entities.RepoTradeEventRateChange" />
+          <AssociationSet Name="FK__RepoTrade__Updat__28908738" Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Updat__28908738">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="RepoTradeEventRateChange" EntitySet="RepoTradeEventRateChanges" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RepoTrade__RepoE__279C62FF" Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__RepoE__279C62FF">
+            <End Role="RepoTradeEvent" EntitySet="RepoTradeEvents" />
+            <End Role="RepoTradeEventRateChange" EntitySet="RepoTradeEventRateChanges" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -31441,6 +31514,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <NavigationProperty Name="InstrumentMarket" Relationship="Odey.Framework.Keeley.Entities.FK__RepoTrade__Colla__5C7A3F921" FromRole="RepoTradeEvent" ToRole="InstrumentMarket" />
           <Property Name="Haircut" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
           <Property Name="Interest" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <NavigationProperty Name="RepoTradeEventRateChanges" Relationship="Odey.Framework.Keeley.Entities.FK__RepoTrade__RepoE__279C62FF" FromRole="RepoTradeEvent" ToRole="RepoTradeEventRateChange" />
         </EntityType>
         <Association Name="FK__RepoTrade__Trade__5D6E63CB">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -31564,6 +31638,43 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="Repo">
               <PropertyRef Name="BondInstrumentMarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RepoTradeEventRateChange">
+          <Key>
+            <PropertyRef Name="RepoTradeEventRateChangeId" />
+          </Key>
+          <Property Name="RepoEventId" Type="Int32" Nullable="false" />
+          <Property Name="Rate" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+          <Property Name="EffectiveToDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="RepoTradeEvent" Relationship="Odey.Framework.Keeley.Entities.FK__RepoTrade__RepoE__279C62FF" FromRole="RepoTradeEventRateChange" ToRole="RepoTradeEvent" />
+          <Property Name="RepoTradeEventRateChangeId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__RepoTrade__Updat__28908738">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEventRateChange" Role="RepoTradeEventRateChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RepoTradeEventRateChange">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RepoTrade__RepoE__279C62FF">
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEvent" Role="RepoTradeEvent" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.RepoTradeEventRateChange" Role="RepoTradeEventRateChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RepoTradeEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="RepoTradeEventRateChange">
+              <PropertyRef Name="RepoEventId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>        
@@ -41114,6 +41225,47 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RepoTradeEventRateChanges">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RepoTradeEventRateChange">
+              <MappingFragment StoreEntitySet="RepoTradeEventRateChange">
+                <ScalarProperty Name="RepoTradeEventRateChangeId" ColumnName="RepoTradeEventRateChangeId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="EffectiveToDate" ColumnName="EffectiveToDate" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="RepoEventId" ColumnName="RepoEventId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.RepoTradeEventRateChange">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.RepoTradeEventRateChange_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="EffectiveToDate" ParameterName="EffectiveToDate" />
+                  <ScalarProperty Name="Rate" ParameterName="Rate" />
+                  <ScalarProperty Name="RepoEventId" ParameterName="RepoEventId" />
+                  <ResultBinding Name="RepoTradeEventRateChangeId" ColumnName="RepoTradeEventRateChangeId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.RepoTradeEventRateChange_Update">
+                  <ScalarProperty Name="RepoTradeEventRateChangeId" ParameterName="RepoTradeEventRateChangeId" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="EffectiveToDate" ParameterName="EffectiveToDate" Version="Current" />
+                  <ScalarProperty Name="Rate" ParameterName="Rate" Version="Current" />
+                  <ScalarProperty Name="RepoEventId" ParameterName="RepoEventId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.RepoTradeEventRateChange_Delete">
+                  <ScalarProperty Name="RepoTradeEventRateChangeId" ParameterName="RepoTradeEventRateChangeId" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -46766,30 +46918,28 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="8.07338933273869" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8281534216915727" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8281534216915718" />
-          <edmx:ConnectorPoint PointX="2.7317708333333335" PointY="6.8281534216915727" />
+          <edmx:ConnectorPoint PointX="2.7239583333333335" PointY="6.8281534216915727" />
           <edmx:ConnectorPoint PointX="2.7601701418581186" PointY="6.8281534216915727" />
+          <edmx:ConnectorPoint PointX="2.7702791031104415" PointY="6.8236498025385579" />
+          <edmx:ConnectorPoint PointX="2.9225208968895582" PointY="6.7558249250621136" />
           <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="6.7550290165736424" />
           <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="4.813088588644062" />
           <edmx:ConnectorPoint PointX="3.0416666666666665" PointY="4.6780545908994364" />
           <edmx:ConnectorPoint PointX="3.0416666666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.1666666666666665" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.0729166666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.4583308333333336" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.5260416666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.8541666666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="5.177083333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.197916666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.364583333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.619791666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.786458333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="6.1888559927233047" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="6.3555226593899707" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="6.807291666666667" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="7.3440638085066743" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.807291666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.973958333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.979166666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.427083333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.479166666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.645833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.791666666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.958333333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="8.1041666666666661" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="8.2942708333333339" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.7807421875" />
@@ -46804,32 +46954,34 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="13.020833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="14.979166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="15.145833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.229166666666666" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="15.260416666666666" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="15.770833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="17.229166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.645833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="19.729166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.677083333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="19.854166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="20.020833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="22.901041666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.145833333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="22.869791666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="23.036458333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.614583333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.645833333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.666666666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.833333333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.901041666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.067708333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="26.195198158838707" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="26.361864825505371" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.744166666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.910833333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.354166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.611933333333329" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="29.026044666666667" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="29.192711333333332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.602018966225646" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.768685632892311" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="32.447916666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="32.645833333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.614583333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="34.963541666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.145833333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="35.130208333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.84825234375" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="37.310607915222668" PointY="23.339856264188676" />
           <edmx:ConnectorPoint PointX="37.439392084777332" PointY="23.234062051445754" />
@@ -47058,6 +47210,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Repo__UpdateUser__05474AFB" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Repo__Instrument__026ADE50" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Repo__BondInstru__045326C2" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RepoTradeEventRateChange" Width="2.75" PointX="23.625" PointY="0.75" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Updat__28908738" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__RepoE__279C62FF" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

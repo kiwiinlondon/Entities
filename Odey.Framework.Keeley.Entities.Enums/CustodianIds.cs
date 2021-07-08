@@ -24,6 +24,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BOAM = 9799,
         [EnumMember]
-        RBC = 4356
+        RBC = 4356,
+        [EnumMember]
+        JPFI = 10813
     }
 }
