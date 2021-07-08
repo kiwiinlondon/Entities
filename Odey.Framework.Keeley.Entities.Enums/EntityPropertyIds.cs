@@ -204,6 +204,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FundLegalEntityIdentifier_CustodianFamily = 181,
         [EnumMember]
-        FundLegalEntityIdentifier_CustodianFamilyAndCurrency = 182
+        FundLegalEntityIdentifier_CustodianFamilyAndCurrency = 182,
+        [EnumMember]
+        Repo_TerminationSettlementDate = 266,
+        [EnumMember]
+        Repo_RepoCoupon = 264,
     }
 }
