@@ -331,6 +331,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> LoanedPortfolioUnits { get; set; }
     	[DataMember]
         public Nullable<decimal> LoanedPortfolioRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RepoNotionalInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RepoNotionalWithHaircutInstrument { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
