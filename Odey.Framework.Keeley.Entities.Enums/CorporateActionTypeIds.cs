@@ -46,6 +46,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         SpecialDividend = 12,
         [Description("Listing")]
         [EnumMember]
-        Listing = 13
+        Listing = 13,
+        [Description("Delisting")]
+        [EnumMember]
+        Delisting = 14
     }
 }
