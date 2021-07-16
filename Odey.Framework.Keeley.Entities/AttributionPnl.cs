@@ -240,6 +240,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> LoanedPortfolioGrossFee { get; set; }
     	[DataMember]
         public Nullable<decimal> LoanedPortfolioRate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RepoNotional { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RepoNotionalWithHaircut { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

@@ -190,6 +190,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TodayCapitalChangeInstrument { get; set; }
     	[DataMember]
         public Nullable<decimal> CapitalChangeInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RepoNotionalInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RepoNotionalWithHaircutInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RepoNotionalWithHaircutInstrumentChange { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RepoNotionalInstrumentChange { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

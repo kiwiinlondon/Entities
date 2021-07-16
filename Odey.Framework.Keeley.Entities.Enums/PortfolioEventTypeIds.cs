@@ -40,7 +40,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         AccountTransfer = 16,
         [EnumMember]
-        EnforcePosition = 17
+        EnforcePosition = 17, 
+        [EnumMember]
+        RepoTrade = 18
+
     }
 }
 
