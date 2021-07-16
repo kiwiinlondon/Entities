@@ -14,6 +14,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         DexiaFX = 4954,
         [EnumMember]
-        GSFX = 7557
+        GSFX = 7557,
+        [EnumMember]
+        JPML = 3657,
+        [EnumMember]
+        JPFI = 10813,
     }
 }
