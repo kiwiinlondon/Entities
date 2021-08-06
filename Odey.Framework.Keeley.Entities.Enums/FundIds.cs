@@ -602,6 +602,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GEM_USD_R =10702,
         [EnumMember]
-        GEM_USD_S =10701
+        GEM_USD_S =10701,
+        [EnumMember]
+        GEMF=10817,
+        [EnumMember]
+        GEMF_USD_LI = 10820,
+        [EnumMember]
+        GEMF_USD_S=10821
     }
 }
