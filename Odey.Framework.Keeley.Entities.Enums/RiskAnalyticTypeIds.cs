@@ -3,13 +3,13 @@ using System.Runtime.Serialization;
 
 namespace Odey.Framework.Keeley.Entities.Enums
 {
- [DataContract]
+    [DataContract]
     public enum RiskAnalyticTypeIds
     {
 
         [EnumMember]
         TotalRisk = 1,
-        
+
         [EnumMember]
         PercentSystematicTotalRisk = 2,
 
@@ -187,14 +187,25 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BloombergIndexCVaRMC99 = 61,
 
-	    [EnumMember]
-	    BloombergBetaExAnte = 65,
+        [EnumMember]
+        BloombergBetaExAnte = 65,
 
         [EnumMember]
         BloombergTotalRisk = 66,
 
         [EnumMember]
-        PortfolioCVaRWithDerivPrimary = 67
+        PortfolioCVaRWithDerivPrimary = 67,
+        [EnumMember]
+        AllBaseCurves100bps = 68,
+        [EnumMember]
+        BondMarketCrash = 69,
+        [EnumMember]
+        DotcomCrash = 70,
+        [EnumMember]
+        UKRecoveryAccelerates = 71,
+        [EnumMember]
+        FasterTaperingintheUS = 72
+
     }
 }
 
