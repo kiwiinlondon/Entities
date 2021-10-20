@@ -38,5 +38,7 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsActive { get; set; }
     	[DataMember]
         public Nullable<int> UserTypeFlags { get; set; }
+    	[DataMember]
+        public bool IsSalesPerson { get; set; }
     }
 }
