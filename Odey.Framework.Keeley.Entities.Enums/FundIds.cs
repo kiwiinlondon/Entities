@@ -353,7 +353,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DEVM_EUR_M = 8919,
         [EnumMember]
         DEVM_EUR_R = 9779,
-
+        [EnumMember]
+        DEVM_EUR_LI = 10858,
+        [EnumMember]
+        DEVM_GBP_LI = 10859,
+        [EnumMember]
+        DEVM_USD_LI = 10860,
         [EnumMember]
         EAR = 6437,
         [EnumMember]
@@ -574,40 +579,40 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GEM = 10700,
         [EnumMember]
-        GEM_CHF_I =10713,
+        GEM_CHF_I = 10713,
         [EnumMember]
-        GEM_CHF_LI =10729,
+        GEM_CHF_LI = 10729,
         [EnumMember]
-        GEM_CHF_R =10714,
+        GEM_CHF_R = 10714,
         [EnumMember]
-        GEM_CHF_S =10725,
+        GEM_CHF_S = 10725,
         [EnumMember]
-        GEM_EUR_I =10707,
+        GEM_EUR_I = 10707,
         [EnumMember]
-        GEM_EUR_LI =10728,
+        GEM_EUR_LI = 10728,
         [EnumMember]
-        GEM_EUR_R =10709,
+        GEM_EUR_R = 10709,
         [EnumMember]
-        GEM_EUR_S =10723,
+        GEM_EUR_S = 10723,
         [EnumMember]
-        GEM_GBP_I =10703,
+        GEM_GBP_I = 10703,
         [EnumMember]
-        GEM_GBP_LI =10727,
+        GEM_GBP_LI = 10727,
         [EnumMember]
-        GEM_GBP_R =10704,
+        GEM_GBP_R = 10704,
         [EnumMember]
-        GEM_GBP_S =10724,
+        GEM_GBP_S = 10724,
         [EnumMember]
-        GEM_USD_LI =10726,
+        GEM_USD_LI = 10726,
         [EnumMember]
-        GEM_USD_R =10702,
+        GEM_USD_R = 10702,
         [EnumMember]
-        GEM_USD_S =10701,
+        GEM_USD_S = 10701,
         [EnumMember]
-        GEMF=10817,
+        GEMF = 10817,
         [EnumMember]
         GEMF_USD_LI = 10820,
         [EnumMember]
-        GEMF_USD_S=10821
+        GEMF_USD_S = 10821
     }
 }
