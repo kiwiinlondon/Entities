@@ -2,6 +2,7 @@
 using Odey.Framework.Keeley.Entities;
 using Odey.Framework.Keeley.Entities.Caches;
 using Odey.Framework.Keeley.Entities.Enums;
+using System.Data.Entity;
 
 namespace Odey.Framework.KeeleyEntitiesTest
 {
@@ -12,6 +13,8 @@ namespace Odey.Framework.KeeleyEntitiesTest
 
             using (var context = new KeeleyModel(null, "GP"))
             {
+
+                var rList = context.RestrictedLists.Include(a => a.InstrumentMarket).ToList();
 
                 //var t = context.PortfolioMessageQueue_Insert( ( .Portfolio_GetValuationPositionsToRoll(DateTime.Today.AddDays(-1));
                 //var t = context.AttributionPnls.FirstOrDefault(a=>a.AttributionPnlId == 26361798);
@@ -28,9 +31,9 @@ namespace Odey.Framework.KeeleyEntitiesTest
                 //};
                 //context.Instruments.Add(t);
                 //context.Instruments.Remove(t);
-                context._applicationUserIdOverride = 1;
+               // context._applicationUserIdOverride = 1;
 
-                context.SaveChanges();
+                //context.SaveChanges();
             }
         }
 

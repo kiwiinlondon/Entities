@@ -39,7 +39,7 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public bool WatchListOnly { get; set; }
     	[DataMember]
-        public Nullable<int> InstrumentMarketId { get; set; }
+        public int InstrumentMarketId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
