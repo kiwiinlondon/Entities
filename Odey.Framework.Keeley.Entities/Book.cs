@@ -42,6 +42,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool NavIsNotUsable { get; set; }
     	[DataMember]
         public int SignOffManagerId { get; set; }
+    	[DataMember]
+        public Nullable<int> NewFMOrgId { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

@@ -1000,5 +1000,18 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("Beta_RollValues", referenceDateParameter);
         }
+    
+        public virtual int LegalEntiy_UpdateNewFMOrgId(Nullable<int> legalEntityId, Nullable<int> newFMOrgId)
+        {
+            var legalEntityIdParameter = legalEntityId.HasValue ?
+                new ObjectParameter("LegalEntityId", legalEntityId) :
+                new ObjectParameter("LegalEntityId", typeof(int));
+    
+            var newFMOrgIdParameter = newFMOrgId.HasValue ?
+                new ObjectParameter("NewFMOrgId", newFMOrgId) :
+                new ObjectParameter("NewFMOrgId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("LegalEntiy_UpdateNewFMOrgId", legalEntityIdParameter, newFMOrgIdParameter);
+        }
     }
 }

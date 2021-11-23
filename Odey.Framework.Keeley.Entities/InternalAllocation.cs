@@ -62,6 +62,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> NetConsideration { get; set; }
     	[DataMember]
         public Nullable<decimal> GrossConsideration { get; set; }
+    	[DataMember]
+        public Nullable<int> NewFMContEventId { get; set; }
     
         [DataMember]
         public virtual List<PortfolioEvent> PortfolioEvents { get; set; }

@@ -84,6 +84,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> DividendCurrencyId { get; set; }
     	[DataMember]
         public Nullable<int> AlternativeExposureCurrencyId { get; set; }
+    	[DataMember]
+        public Nullable<int> NewFMSecId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
