@@ -1013,5 +1013,44 @@ namespace Odey.Framework.Keeley.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("LegalEntiy_UpdateNewFMOrgId", legalEntityIdParameter, newFMOrgIdParameter);
         }
+    
+        public virtual int InstrumentMarket_UpdateNewFMSecId(Nullable<int> instrumentMarketId, Nullable<int> newFMSecId)
+        {
+            var instrumentMarketIdParameter = instrumentMarketId.HasValue ?
+                new ObjectParameter("InstrumentMarketId", instrumentMarketId) :
+                new ObjectParameter("InstrumentMarketId", typeof(int));
+    
+            var newFMSecIdParameter = newFMSecId.HasValue ?
+                new ObjectParameter("NewFMSecId", newFMSecId) :
+                new ObjectParameter("NewFMSecId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InstrumentMarket_UpdateNewFMSecId", instrumentMarketIdParameter, newFMSecIdParameter);
+        }
+    
+        public virtual int InternalAllocation_UpdateNewFMContEventId(Nullable<int> eventId, Nullable<int> newFMContEventId)
+        {
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("EventId", eventId) :
+                new ObjectParameter("EventId", typeof(int));
+    
+            var newFMContEventIdParameter = newFMContEventId.HasValue ?
+                new ObjectParameter("NewFMContEventId", newFMContEventId) :
+                new ObjectParameter("NewFMContEventId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InternalAllocation_UpdateNewFMContEventId", eventIdParameter, newFMContEventIdParameter);
+        }
+    
+        public virtual int Book_UpdateNewFMOrgId(Nullable<int> bookId, Nullable<int> newFMOrgId)
+        {
+            var bookIdParameter = bookId.HasValue ?
+                new ObjectParameter("BookId", bookId) :
+                new ObjectParameter("BookId", typeof(int));
+    
+            var newFMOrgIdParameter = newFMOrgId.HasValue ?
+                new ObjectParameter("NewFMOrgId", newFMOrgId) :
+                new ObjectParameter("NewFMOrgId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Book_UpdateNewFMOrgId", bookIdParameter, newFMOrgIdParameter);
+        }
     }
 }
