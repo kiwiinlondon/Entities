@@ -613,6 +613,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         GEMF_USD_LI = 10820,
         [EnumMember]
-        GEMF_USD_S = 10821
+        GEMF_USD_S = 10821,
+        [EnumMember]
+        GEMF_NOK_S_IRL=	10868,
+        [EnumMember]
+        GEMF_USD_I_IRL=	10870,
+        [EnumMember]
+        GEMF_USD_LI_IRL =10871
     }
 }
