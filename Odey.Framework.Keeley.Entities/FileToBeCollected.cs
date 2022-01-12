@@ -46,5 +46,7 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FundId { get; set; }
     	[DataMember]
         public bool DeleteFromServer { get; set; }
+    	[DataMember]
+        public string FundIds { get; set; }
     }
 }
