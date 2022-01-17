@@ -14,7 +14,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Irish = 1,
 
         [EnumMember]
-        Delaware = 2
+        Delaware = 2,
+        [EnumMember]
+        Cayman = 3
     }
      
 }
