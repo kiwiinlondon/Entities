@@ -49,6 +49,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Listing = 13,
         [Description("Delisting")]
         [EnumMember]
-        Delisting = 14
+        Delisting = 14,
+        [Description("Delisting")]
+        [EnumMember]
+        DomicileChange = 15
     }
 }
