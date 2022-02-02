@@ -166,19 +166,19 @@ namespace Odey.Framework.Keeley.Entities.Enums
         JLEG = 5732,
 
         [EnumMember]
-        ALEG = 4930,
+        ALEG_OLD = 4930,
         [EnumMember]
-        ALEGEURISHARECLASS = 5515,
+        ALEG_OLDEURISHARECLASS = 5515,
         [EnumMember]
-        ALEGGBPSHARECLASS = 5516,
+        ALEG_OLDGBPSHARECLASS = 5516,
         [EnumMember]
-        ALEG_GBP_AD = 5517,
+        ALEG_OLD_GBP_AD = 5517,
         [EnumMember]
-        ALEGGBPDSHARECLASS = 5518,
+        ALEG_OLDGBPDSHARECLASS = 5518,
         [EnumMember]
-        ALEGUSDSHARECLASS = 5520,
+        ALEG_OLDUSDSHARECLASS = 5520,
         [EnumMember]
-        ALEGAUDSHARECLASS = 6354,
+        ALEG_OLDAUDSHARECLASS = 6354,
 
 
         [EnumMember]
@@ -204,51 +204,79 @@ namespace Odey.Framework.Keeley.Entities.Enums
 
 
         [EnumMember]
-        OF = 5592,
+        OF_OLD = 5592,
         [EnumMember]
-        OF_CHF_I = 5910,
+        OF_OLD_CHF_I = 5910,
         [EnumMember]
-        OF_CHF_IP = 7573,
+        OF_OLD_CHF_IP = 7573,
         [EnumMember]
-        OF_CHF_R = 5911,
+        OF_OLD_CHF_R = 5911,
         [EnumMember]
-        OF_CHF_RP = 8920,
+        OF_OLD_CHF_RP = 8920,
         [EnumMember]
-        OF_EUR_IP = 6839,
+        OF_OLD_EUR_IP = 6839,
         [EnumMember]
-        OF_EUR_R = 5914,
+        OF_OLD_EUR_R = 5914,
         [EnumMember]
-        OF_EUR_RP = 7356,
+        OF_OLD_EUR_RP = 7356,
         [EnumMember]
-        OF_GBP_F = 8893,
+        OF_OLD_GBP_F = 8893,
         [EnumMember]
-        OF_GBP_IH = 8921,
+        OF_OLD_GBP_IH = 8921,
         [EnumMember]
-        OF_GBP_IR = 5906,
+        OF_OLD_GBP_IR = 5906,
         [EnumMember]
-        OF_GBP_MW = 6732,
+        OF_OLD_GBP_MW = 6732,
         [EnumMember]
-        OF_GBP_R = 5907,
+        OF_OLD_GBP_R = 5907,
         [EnumMember]
-        OF_GBP_RP = 7011,
+        OF_OLD_GBP_RP = 7011,
         [EnumMember]
-        OF_GBP_SIP = 7574,
+        OF_OLD_GBP_SIP = 7574,
         [EnumMember]
-        OF_GBP_WM = 7010,
+        OF_OLD_GBP_WM = 7010,
 
         [EnumMember]
-        OF_NOK_I = 5912,
+        OF_OLD_NOK_I = 5912,
         [EnumMember]
-        OF_NOK_R = 5913,
+        OF_OLD_NOK_R = 5913,
         [EnumMember]
-        OF_USD_I = 5908,
+        OF_OLD_USD_I = 5908,
         [EnumMember]
-        OF_USD_IP = 7575,
+        OF_OLD_USD_IP = 7575,
         [EnumMember]
-        OF_USD_R = 5909,
+        OF_OLD_USD_R = 5909,
         [EnumMember]
-        OF_USD_RP = 6986,
+        OF_OLD_USD_RP = 6986,
 
+        [EnumMember]
+        OOF = 10973,
+        [EnumMember]
+        OOF_CHF_I = 10982,
+        [EnumMember]
+        OOF_CHF_R = 10984,
+        [EnumMember]
+        OOF_EUR_I = 10986,
+        [EnumMember]
+        OOF_EUR_R = 10978,
+        [EnumMember]
+        OOF_EUR_RP = 10976,
+        [EnumMember]
+        OOF_GBP_F = 10974,
+        [EnumMember]
+        OOF_GBP_IP = 10985,
+        [EnumMember]
+        OOF_GBP_R = 10975,
+        [EnumMember]
+        OOF_GBP_RP = 10979,
+        [EnumMember]
+        OOF_NOK_R = 10977,
+        [EnumMember]
+        OOF_USD_I = 10981,
+        [EnumMember]
+        OOF_USD_R = 10980,
+        [EnumMember]
+        OOF_USD_RP = 10983,
 
         [EnumMember]
         OPE = 5327,
@@ -257,11 +285,15 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         OPE_EUR_G = 5955,
         [EnumMember]
-        OPE_GBP_I = 6280,
+        OPE_GBP_IR = 6280,
         [EnumMember]
-        OPE_EUR_I = 8812,
-
-
+        OPE_EUR_I_OLD = 8812,
+        [EnumMember]
+        OPE_EUR_I=	10988,
+        [EnumMember]
+        OPE_USD_I=10989,
+        [EnumMember]
+        OPE_GBP_I=	10990,
 
         [EnumMember]
         ATLAS = 6053,//I S
