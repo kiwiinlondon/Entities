@@ -48,5 +48,11 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public string StrategyFMCode { get; set; }
+    	[DataMember]
+        public string Isin { get; set; }
+    	[DataMember]
+        public string Sedol { get; set; }
+    	[DataMember]
+        public string BloombergTicker { get; set; }
     }
 }

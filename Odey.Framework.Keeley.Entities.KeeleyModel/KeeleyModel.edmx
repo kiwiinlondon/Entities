@@ -1321,6 +1321,20 @@
           <Property Name="CustodianId" Type="int" Nullable="false" />
           <Property Name="FinancingTypeId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="FMCustodianPortfolio">
+          <Key>
+            <PropertyRef Name="FMCustodianPortfolioId" />
+          </Key>
+          <Property Name="FMCustodianPortfolioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BookId" Type="int" Nullable="false" />
+          <Property Name="AccountId" Type="varchar" MaxLength="500" />
+          <Property Name="CustodianId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="Currency" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="IsecId" Type="int" Nullable="false" />
+          <Property Name="Strategy" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="NetPosition" Type="numeric" Precision="27" Scale="8" Nullable="false" />
+        </EntityType>
         <EntityType Name="FMPortfolio">
           <Key>
             <PropertyRef Name="FMPortfolioID" />
@@ -1341,6 +1355,9 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="StrategyFMCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Isin" Type="varchar" MaxLength="100" />
+          <Property Name="Sedol" Type="varchar" MaxLength="100" />
+          <Property Name="BloombergTicker" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="FMTradeBridgeLastProcessed">
           <Key>
@@ -12349,6 +12366,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TotalAccrual" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="StrategyFMCode" Type="varchar" Mode="In" />
+          <Parameter Name="Isin" Type="varchar" Mode="In" />
+          <Parameter Name="Sedol" Type="varchar" Mode="In" />
+          <Parameter Name="BloombergTicker" Type="varchar" Mode="In" />
         </Function>
         <Function Name="FMPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FMPortfolioID" Type="int" Mode="In" />
@@ -12366,6 +12386,9 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="StrategyFMCode" Type="varchar" Mode="In" />
+          <Parameter Name="Isin" Type="varchar" Mode="In" />
+          <Parameter Name="Sedol" Type="varchar" Mode="In" />
+          <Parameter Name="BloombergTicker" Type="varchar" Mode="In" />
         </Function>
         <Function Name="FocusList_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FocusListId" Type="int" Mode="In" />
@@ -15718,6 +15741,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="FileToBeCollectedGroup" EntityType="Self.FileToBeCollectedGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Financing" EntityType="Self.Financing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FinancingControl" EntityType="Self.FinancingControl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FMCustodianPortfolio" EntityType="Self.FMCustodianPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FMPortfolio" EntityType="Self.FMPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FMTradeBridgeLastProcessed" EntityType="Self.FMTradeBridgeLastProcessed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FocusList" EntityType="Self.FocusList" Schema="dbo" store:Type="Tables" />
@@ -20862,7 +20886,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <FunctionImport Name="Book_UpdateNewFMOrgId">
             <Parameter Name="BookId" Mode="In" Type="Int32" />
             <Parameter Name="NewFMOrgId" Mode="In" Type="Int32" />
-          </FunctionImport>          
+          </FunctionImport>
+          <EntitySet Name="FMCustodianPortfolios" EntityType="Odey.Framework.Keeley.Entities.FMCustodianPortfolio" />          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -26811,6 +26836,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="StrategyFMCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Isin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Sedol" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BloombergTicker" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FMPortfolioUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -31773,7 +31801,21 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
               <PropertyRef Name="RepoEventId" />
             </Dependent>
           </ReferentialConstraint>
-        </Association>        
+        </Association>
+        <EntityType Name="FMCustodianPortfolio">
+          <Key>
+            <PropertyRef Name="FMCustodianPortfolioId" />
+          </Key>
+          <Property Name="FMCustodianPortfolioId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="BookId" Type="Int32" Nullable="false" />
+          <Property Name="AccountId" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CustodianId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Currency" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsecId" Type="Int32" Nullable="false" />
+          <Property Name="Strategy" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="NetPosition" Type="Decimal" Nullable="false" Precision="27" Scale="8" />
+        </EntityType>        
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -37592,6 +37634,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="FMPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FMPortfolio">
               <MappingFragment StoreEntitySet="FMPortfolio">
+                <ScalarProperty Name="BloombergTicker" ColumnName="BloombergTicker" />
+                <ScalarProperty Name="Sedol" ColumnName="Sedol" />
+                <ScalarProperty Name="Isin" ColumnName="Isin" />
                 <ScalarProperty Name="StrategyFMCode" ColumnName="StrategyFMCode" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
                 <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
@@ -37613,6 +37658,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FMPortfolio">
               <ModificationFunctionMapping>
                 <UpdateFunction FunctionName="KeeleyModel.Store.FMPortfolio_Update">
+                  <ScalarProperty Name="BloombergTicker" ParameterName="BloombergTicker" Version="Current" />
+                  <ScalarProperty Name="Sedol" ParameterName="Sedol" Version="Current" />
+                  <ScalarProperty Name="Isin" ParameterName="Isin" Version="Current" />
                   <ScalarProperty Name="StrategyFMCode" ParameterName="StrategyFMCode" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
@@ -37632,6 +37680,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </UpdateFunction>
                 <InsertFunction FunctionName="KeeleyModel.Store.FMPortfolio_Insert">
+                  <ScalarProperty Name="BloombergTicker" ParameterName="BloombergTicker" />
+                  <ScalarProperty Name="Sedol" ParameterName="Sedol" />
+                  <ScalarProperty Name="Isin" ParameterName="Isin" />
                   <ScalarProperty Name="StrategyFMCode" ParameterName="StrategyFMCode" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="TotalAccrual" ParameterName="TotalAccrual" />
@@ -41412,6 +41463,21 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <FunctionImportMapping FunctionImportName="InstrumentMarket_UpdateNewFMSecId" FunctionName="KeeleyModel.Store.InstrumentMarket_UpdateNewFMSecId" />
           <FunctionImportMapping FunctionImportName="InternalAllocation_UpdateNewFMContEventId" FunctionName="KeeleyModel.Store.InternalAllocation_UpdateNewFMContEventId" />
           <FunctionImportMapping FunctionImportName="Book_UpdateNewFMOrgId" FunctionName="KeeleyModel.Store.Book_UpdateNewFMOrgId" />
+          <EntitySetMapping Name="FMCustodianPortfolios">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.FMCustodianPortfolio">
+              <MappingFragment StoreEntitySet="FMCustodianPortfolio">
+                <ScalarProperty Name="NetPosition" ColumnName="NetPosition" />
+                <ScalarProperty Name="Strategy" ColumnName="Strategy" />
+                <ScalarProperty Name="IsecId" ColumnName="IsecId" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="CustodianId" ColumnName="CustodianId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="FMCustodianPortfolioId" ColumnName="FMCustodianPortfolioId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -47051,10 +47117,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="13" />
           <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="12.526500901483187" />
           <edmx:ConnectorPoint PointX="1.4588369122938747" PointY="12.526500901483187" />
-          <edmx:ConnectorPoint PointX="1.6725087920571748" PointY="12.408927467403563" />
-          <edmx:ConnectorPoint PointX="1.6725087920571748" PointY="11.649858430307116" />
-          <edmx:ConnectorPoint PointX="1.6761265917019961" PointY="11.648682990444184" />
-          <edmx:ConnectorPoint PointX="1.8346367128276531" PointY="11.597182317841709" />
+          <edmx:ConnectorPoint PointX="1.6761265917019961" PointY="12.408927467403563" />
+          <edmx:ConnectorPoint PointX="1.6761265917019961" PointY="11.572231615747741" />
           <edmx:ConnectorPoint PointX="1.9114306382509674" PointY="11.572231615747741" />
           <edmx:ConnectorPoint PointX="1.9114306382509674" PointY="10.511440491918316" />
           <edmx:ConnectorPoint PointX="2.1266461734499078" PointY="10.2833360767422" />
@@ -47063,6 +47127,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="2.2552364987276756" PointY="8.8051328091949923" />
           <edmx:ConnectorPoint PointX="2.4104070636836217" PointY="8.6756606890644346" />
           <edmx:ConnectorPoint PointX="2.4104070636836217" PointY="8.17661033515272" />
+          <edmx:ConnectorPoint PointX="2.4207562121480377" PointY="8.1693376227176948" />
+          <edmx:ConnectorPoint PointX="2.5571194008935874" PointY="8.073510389986474" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="8.07338933273869" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8236498025385579" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.823649802538557" />
@@ -47072,60 +47138,72 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="4.813088588644062" />
           <edmx:ConnectorPoint PointX="3.0729166666666665" PointY="4.6780545908994364" />
           <edmx:ConnectorPoint PointX="3.0729166666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.3151016666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.4817683333333336" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.7031249999999996" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.8697916666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="5.302083333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.2994754166666662" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.4661420833333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.6718724999999988" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.8385391666666657" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="4.645833333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="4.74098732972756" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.2161483333333338" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.588541666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.786458333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="6.807291666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.020833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.333333333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.973958333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.9916666666666671" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.4270808333333331" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.479166666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.645833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.9666666666666677" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.3098958333333339" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="7.947916666666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.2708333333333339" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="10.458333333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="11.510416666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="11.692708333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.270833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.291666666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.645833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.167291666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.333958333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="12.604166666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="12.581666666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.770833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="13.020833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="14.572916666666666" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="13.584192567867273" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="13.750859234533941" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="14.979166666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.208333333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.322916666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.604166666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="15.770833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="17.104166666666668" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="17.692708333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.689583333333335" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="19.854166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="20.020833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="22.838541666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="23.005208333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="21.167459800959247" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="21.334126467625911" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="22.822912916666667" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="22.989579583333331" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.614583333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.666666666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="24.833333333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="24.708333333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.869166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="25.035833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="27.354166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="27.611933333333329" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.195198158838707" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.361864825505371" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.593522929689954" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="26.760189596356618" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.672734374999997" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.602018966225646" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.768685632892311" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="32.260416666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="32.427083333333336" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="34.994791666666664" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="35.161458333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="27.697916666666668" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="27.864583333333332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.479166666666664" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.645833333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.666024957278886" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="32.832691623945557" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="34.976666666666667" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="35.302083333333336" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.84825234375" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="37.310607915222668" PointY="23.339856264188676" />
           <edmx:ConnectorPoint PointX="37.439392084777332" PointY="23.234062051445754" />
-          <edmx:ConnectorPoint PointX="39.623107915222668" PointY="21.440173113580855" />
+          <edmx:ConnectorPoint PointX="39.716857915222668" PointY="21.363158931799461" />
           <edmx:ConnectorPoint PointX="39.845642084777332" PointY="21.25736471905654" />
           <edmx:ConnectorPoint PointX="39.875" PointY="21.233247643646603" />
         </edmx:AssociationConnector>
@@ -47353,6 +47431,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RepoTradeEventRateChange" Width="2.75" PointX="23.625" PointY="0.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__Updat__28908738" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__RepoTrade__RepoE__279C62FF" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.FMCustodianPortfolio" Width="1.5" PointX="38.5" PointY="10.125" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
