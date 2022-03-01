@@ -89,6 +89,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         KeeleyFinancingId = 42,
         [EnumMember]
-        MICCode = 43
+        MICCode = 43,
+        [EnumMember]
+        FMSecIdNew = 44,
+        [EnumMember]
+        FMOrgIdNew = 45
     }
 }
