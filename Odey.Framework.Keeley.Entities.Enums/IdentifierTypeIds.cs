@@ -11,49 +11,83 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         IsoCode = 1,
         [EnumMember]
-        FMOrgId = 2,
+        FMOrgIdOld = 2,
+        [EnumMember]        
+        FMOrgIdNew = 45,
         [EnumMember]
-        BBCompanyCode=3,
+        BBCompanyCode =3,
         [EnumMember]
-        FMInstClass=4,
+        FMInstClassOld=4,
         [EnumMember]
-        FMInstId=5,
+        FMInstClassNew = 49,
         [EnumMember]
-        FMSecId=6,
+        FMInstIdOld=5,
         [EnumMember]
-        Isin=7,
+        FMInstIdNew = 50,
+        [EnumMember]
+        FMSecIdOld=6,
+        [EnumMember]
+        FMSecIdNew = 44,
+        [EnumMember]
+        Isin =7,
         [EnumMember]
         Sedol=8,
         [EnumMember]
         BBTicker=9,
         [EnumMember]
-        FMStrategy=10,
+        FMStrategyOld=10,
         [EnumMember]
-        FMTradType=11,
+        FMStrategyNew = 55,
+        [EnumMember]
+        FMTradTypeOld=11,
+        [EnumMember]
+        FMTradTypeNew = 56,
         [EnumMember]
         FMContId=12,
         [EnumMember]
-        ExternalAccountId = 14,
+        ExternalAccountIdOld = 14,
         [EnumMember]
-        FMOriginalContId = 15,
+        ExternalAccountIdNew = 62,
         [EnumMember]
-        BuySellReasonCode = 16,
+        FMOriginalContIdOld = 15,
         [EnumMember]
-        FMPersonId = 17,
+        FMOriginalContIdNew = 51,
         [EnumMember]
-        FMOriginalCnevId = 18,
+        FMBuySellReasonCodeOld = 16,
         [EnumMember]
-        FMCnevId = 19,
+        FMBuySellReasonCodeNew = 58,
         [EnumMember]
-        FMCnevSubType = 20,
+        FMPersonIdOld = 17,
         [EnumMember]
-        FMChargeTypeCode = 21,
+        FMPersonIdNew = 53,
         [EnumMember]
-        FMValueSchemeId = 22,
+        FMOriginalCnevIdOld = 18,
         [EnumMember]
-        FMValueSpecId = 23,
+        FMOriginalCnevIdNew = 52,
         [EnumMember]
-        FMSicCode = 24,
+        FMCnevIdOld = 19,
+        [EnumMember]
+        FMCnevIdNew = 53,
+        [EnumMember]
+        FMCnevSubTypeOld = 20,
+        [EnumMember]
+        FMCnevSubTypeNew = 48,
+        [EnumMember]
+        FMChargeTypeCodeOld = 21,
+        [EnumMember]
+        FMChargeTypeCodeNew = 59,
+        [EnumMember]
+        FMValueSchemeIdOld = 22,
+        [EnumMember]
+        FMValueSchemeIdNew = 60,
+        [EnumMember]
+        FMValueSpecIdOld = 23,
+        [EnumMember]
+        FMValueSpecIdNew = 61,
+        [EnumMember]
+        FMSicCodeOld = 24,
+        [EnumMember]
+        FMSicCodeNew = 54,
         [EnumMember]
         KeeleyEventId = 25,
         [EnumMember]
@@ -90,9 +124,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         KeeleyFinancingId = 42,
         [EnumMember]
         MICCode = 43,
-        [EnumMember]
-        FMSecIdNew = 44,
-        [EnumMember]
-        FMOrgIdNew = 45
+        
+      
     }
 }
