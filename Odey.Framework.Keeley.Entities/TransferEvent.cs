@@ -56,6 +56,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FromStrategyId { get; set; }
     	[DataMember]
         public Nullable<int> ToStrategyId { get; set; }
+    	[DataMember]
+        public bool CreateToPositionIfMissing { get; set; }
     
         [DataMember]
         public virtual Account FromAccount { get; set; }
