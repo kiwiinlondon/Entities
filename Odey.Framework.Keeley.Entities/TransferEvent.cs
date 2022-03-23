@@ -52,6 +52,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> FromBookId { get; set; }
     	[DataMember]
         public Nullable<int> ToBookId { get; set; }
+    	[DataMember]
+        public Nullable<int> FromStrategyId { get; set; }
+    	[DataMember]
+        public Nullable<int> ToStrategyId { get; set; }
     
         [DataMember]
         public virtual Account FromAccount { get; set; }
@@ -69,5 +73,9 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Book Book { get; set; }
         [DataMember]
         public virtual Book Book1 { get; set; }
+        [DataMember]
+        public virtual Strategy Strategy { get; set; }
+        [DataMember]
+        public virtual Strategy Strategy1 { get; set; }
     }
 }

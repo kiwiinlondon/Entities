@@ -49,9 +49,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ExternalAccountIdNew = 62,
         [EnumMember]
-        FMOriginalContIdOld = 15,
-        [EnumMember]
-        FMOriginalContIdNew = 51,
+        FMOriginalContId = 15,
         [EnumMember]
         FMBuySellReasonCodeOld = 16,
         [EnumMember]
@@ -61,13 +59,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FMPersonIdNew = 53,
         [EnumMember]
-        FMOriginalCnevIdOld = 18,
+        FMOriginalCnevId = 18,
         [EnumMember]
-        FMOriginalCnevIdNew = 52,
-        [EnumMember]
-        FMCnevIdOld = 19,
-        [EnumMember]
-        FMCnevIdNew = 53,
+        FMCnevId = 19,
         [EnumMember]
         FMCnevSubTypeOld = 20,
         [EnumMember]

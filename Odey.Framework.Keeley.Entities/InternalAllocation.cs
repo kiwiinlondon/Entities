@@ -71,5 +71,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Event Event { get; set; }
         [DataMember]
         public virtual Book Book { get; set; }
+        [DataMember]
+        public virtual Event ParentEvent { get; set; }
     }
 }

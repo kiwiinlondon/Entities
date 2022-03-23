@@ -16,6 +16,13 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class Strategy
     {
+    	
+        public Strategy()
+        {
+            this.TransferEvents = new List<TransferEvent>();
+            this.TransferEvents1 = new List<TransferEvent>();
+        }
+    
     	[DataMember]
         public int StrategyId { get; set; }
     	[DataMember]
@@ -28,5 +35,10 @@ namespace Odey.Framework.Keeley.Entities
         public int UpdateUserID { get; set; }
     	[DataMember]
         public byte[] DataVersion { get; set; }
+    
+        [DataMember]
+        public virtual List<TransferEvent> TransferEvents { get; set; }
+        [DataMember]
+        public virtual List<TransferEvent> TransferEvents1 { get; set; }
     }
 }
