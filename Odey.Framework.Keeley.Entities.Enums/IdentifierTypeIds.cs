@@ -10,22 +10,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         None = 0,
         [EnumMember]
         IsoCode = 1,
-        [EnumMember]
-        FMOrgIdOld = 2,
         [EnumMember]        
         FMOrgIdNew = 45,
         [EnumMember]
         BBCompanyCode =3,
         [EnumMember]
-        FMInstClassOld=4,
+        FMInstClass=4,
         [EnumMember]
-        FMInstClassNew = 49,
-        [EnumMember]
-        FMInstIdOld=5,
-        [EnumMember]
-        FMInstIdNew = 50,
-        [EnumMember]
-        FMSecIdOld=6,
+        FMInstId=5,
         [EnumMember]
         FMSecIdNew = 44,
         [EnumMember]
@@ -35,53 +27,33 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BBTicker=9,
         [EnumMember]
-        FMStrategyOld=10,
+        FMStrategy=10,
         [EnumMember]
-        FMStrategyNew = 55,
-        [EnumMember]
-        FMTradTypeOld=11,
-        [EnumMember]
-        FMTradTypeNew = 56,
+        FMTradType=11,
         [EnumMember]
         FMContId=12,
         [EnumMember]
-        ExternalAccountIdOld = 14,
-        [EnumMember]
-        ExternalAccountIdNew = 62,
+        ExternalAccountId = 14,
         [EnumMember]
         FMOriginalContId = 15,
         [EnumMember]
-        FMBuySellReasonCodeOld = 16,
+        FMBuySellReasonCode = 16,
         [EnumMember]
-        FMBuySellReasonCodeNew = 58,
-        [EnumMember]
-        FMPersonIdOld = 17,
-        [EnumMember]
-        FMPersonIdNew = 53,
+        FMPersonId = 17,
         [EnumMember]
         FMOriginalCnevId = 18,
         [EnumMember]
         FMCnevId = 19,
         [EnumMember]
-        FMCnevSubTypeOld = 20,
+        FMCnevSubType = 20,
         [EnumMember]
-        FMCnevSubTypeNew = 48,
+        FMChargeTypeCode = 21,
         [EnumMember]
-        FMChargeTypeCodeOld = 21,
+        FMValueSchemeId = 22,
         [EnumMember]
-        FMChargeTypeCodeNew = 59,
+        FMValueSpecId = 61,
         [EnumMember]
-        FMValueSchemeIdOld = 22,
-        [EnumMember]
-        FMValueSchemeIdNew = 60,
-        [EnumMember]
-        FMValueSpecIdOld = 23,
-        [EnumMember]
-        FMValueSpecIdNew = 61,
-        [EnumMember]
-        FMSicCodeOld = 24,
-        [EnumMember]
-        FMSicCodeNew = 54,
+        FMSicCode = 24,
         [EnumMember]
         KeeleyEventId = 25,
         [EnumMember]
