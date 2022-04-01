@@ -90,6 +90,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         OPUS_GBP_I_ACC = 5953,
         [EnumMember]
         OPUS_GBP_I_INC = 5954,
+        [EnumMember]
+        OPUS_GBP_R_ACC = 11098,
 
         [EnumMember]
         OCE = 5082,
