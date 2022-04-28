@@ -96,6 +96,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsEstimate { get; set; }
     	[DataMember]
         public Nullable<System.DateTime> CashSettlementDate { get; set; }
+    	[DataMember]
+        public System.DateTime ValuationDate { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
