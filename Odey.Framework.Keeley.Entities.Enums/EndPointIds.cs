@@ -26,7 +26,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         FMPrice = 7,
         [EnumMember]
-        ClientPortfolioService = 8
+        ClientPortfolioService = 8,
+        [EnumMember]
+        OfficialNAVService = 9
 
     }
 }
