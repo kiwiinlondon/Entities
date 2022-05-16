@@ -116,8 +116,16 @@ namespace Odey.Framework.Keeley.Entities
         public bool AdministratorPortfolioExists { get; set; }
     	[DataMember]
         public Nullable<bool> RecalculateUnits { get; set; }
+    	[DataMember]
+        public Nullable<int> IndicativeChangeId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> IndicativeChange { get; set; }
+    	[DataMember]
+        public Nullable<decimal> IndicativeGAV { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
+        [DataMember]
+        public virtual Analytic Analytic { get; set; }
     }
 }

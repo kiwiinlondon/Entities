@@ -98,6 +98,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> CashSettlementDate { get; set; }
     	[DataMember]
         public System.DateTime ValuationDate { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> CurrentNavDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CurrentPerfFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CurrentFundHWM { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
