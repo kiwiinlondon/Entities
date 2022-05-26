@@ -212,6 +212,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<Repo> Repos { get; set; }
         public DbSet<RepoTradeEventRateChange> RepoTradeEventRateChanges { get; set; }
         public DbSet<FMCustodianPortfolio> FMCustodianPortfolios { get; set; }
+        public DbSet<ClientTradePerfFee> ClientTradePerfFees { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

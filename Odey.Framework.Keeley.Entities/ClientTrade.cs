@@ -16,6 +16,12 @@ namespace Odey.Framework.Keeley.Entities
     [DataContract(IsReference = true)]
     public partial class ClientTrade
     {
+    	
+        public ClientTrade()
+        {
+            this.ClientTradePerfFees = new List<ClientTradePerfFee>();
+        }
+    
     	[DataMember]
         public int ClientTradeId { get; set; }
     	[DataMember]
@@ -109,5 +115,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual ClientAccount ClientAccount { get; set; }
         [DataMember]
         public virtual Fund Fund { get; set; }
+        [DataMember]
+        public virtual List<ClientTradePerfFee> ClientTradePerfFees { get; set; }
     }
 }
