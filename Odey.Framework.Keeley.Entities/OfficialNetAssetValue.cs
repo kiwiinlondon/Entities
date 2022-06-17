@@ -128,6 +128,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<System.DateTime> LastClientFileDate { get; set; }
     	[DataMember]
         public Nullable<decimal> LastClientFileHWM { get; set; }
+    	[DataMember]
+        public Nullable<decimal> YTDSumUnits { get; set; }
+    	[DataMember]
+        public Nullable<int> YTDCountValuations { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
