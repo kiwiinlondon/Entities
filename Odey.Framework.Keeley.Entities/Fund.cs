@@ -163,6 +163,8 @@ namespace Odey.Framework.Keeley.Entities
         public int InvestmentManagerId { get; set; }
     	[DataMember]
         public Nullable<bool> UseAlternativeExposureCurrencyId { get; set; }
+    	[DataMember]
+        public Nullable<int> PerformanceFeeMethodologyId { get; set; }
     
         [DataMember]
         public virtual DealingDateDefinition DealingDateDefinition { get; set; }

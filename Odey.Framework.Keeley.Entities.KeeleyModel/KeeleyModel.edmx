@@ -526,6 +526,8 @@
           <Property Name="CostUSD" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CostGBP" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ManagerQuantityOffset" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="LastClientFileDate" Type="datetime" />
+          <Property Name="LastClientFileHWM" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="ClientPortfolioBridge">
           <Key>
@@ -605,6 +607,7 @@
           <Property Name="CurrentNavDate" Type="datetime" />
           <Property Name="CurrentPerfFee" Type="numeric" Precision="27" Scale="8" />
           <Property Name="CurrentFundHWM" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="IsNewEstimate" Type="bit" />
         </EntityType>
         <EntityType Name="ClientTradePerfFee">
           <Key>
@@ -1522,6 +1525,7 @@
           <Property Name="NameOverride" Type="varchar" MaxLength="50" />
           <Property Name="InvestmentManagerId" Type="int" Nullable="false" />
           <Property Name="UseAlternativeExposureCurrencyId" Type="bit" />
+          <Property Name="PerformanceFeeMethodologyId" Type="int" />
         </EntityType>
         <EntityType Name="FundClientPlatform">
           <Key>
@@ -2292,6 +2296,11 @@
           <Property Name="IndicativeChangeId" Type="int" />
           <Property Name="IndicativeChange" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IndicativeGAV" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ShareClassHWM" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="LastClientFileDate" Type="datetime" />
+          <Property Name="LastClientFileHWM" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="YTDSumUnits" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="YTDCountValuations" Type="int" />
         </EntityType>
         <EntityType Name="Options">
           <Key>
@@ -11401,6 +11410,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="CurrentNavDate" Type="datetime" Mode="In" />
           <Parameter Name="CurrentPerfFee" Type="numeric" Mode="In" />
           <Parameter Name="CurrentFundHWM" Type="numeric" Mode="In" />
+          <Parameter Name="IsNewEstimate" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientTrade_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientTradeId" Type="int" Mode="In" />
@@ -11446,6 +11456,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="CurrentNavDate" Type="datetime" Mode="In" />
           <Parameter Name="CurrentPerfFee" Type="numeric" Mode="In" />
           <Parameter Name="CurrentFundHWM" Type="numeric" Mode="In" />
+          <Parameter Name="IsNewEstimate" Type="bit" Mode="In" />
         </Function>
         <Function Name="ClientTradePerfFee_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClientTradePerfFeeId" Type="int" Mode="In" />
@@ -13936,6 +13947,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IndicativeChangeId" Type="int" Mode="In" />
           <Parameter Name="IndicativeChange" Type="numeric" Mode="In" />
           <Parameter Name="IndicativeGAV" Type="numeric" Mode="In" />
+          <Parameter Name="ShareClassHWM" Type="numeric" Mode="In" />
+          <Parameter Name="LastClientFileDate" Type="datetime" Mode="In" />
+          <Parameter Name="LastClientFileHWM" Type="numeric" Mode="In" />
+          <Parameter Name="YTDSumUnits" Type="numeric" Mode="In" />
+          <Parameter Name="YTDCountValuations" Type="int" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -13994,6 +14010,11 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="IndicativeChangeId" Type="int" Mode="In" />
           <Parameter Name="IndicativeChange" Type="numeric" Mode="In" />
           <Parameter Name="IndicativeGAV" Type="numeric" Mode="In" />
+          <Parameter Name="ShareClassHWM" Type="numeric" Mode="In" />
+          <Parameter Name="LastClientFileDate" Type="datetime" Mode="In" />
+          <Parameter Name="LastClientFileHWM" Type="numeric" Mode="In" />
+          <Parameter Name="YTDSumUnits" Type="numeric" Mode="In" />
+          <Parameter Name="YTDCountValuations" Type="int" Mode="In" />
         </Function>
         <Function Name="Options_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -25331,6 +25352,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="NameOverride" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="InvestmentManagerId" Type="Int32" Nullable="false" />
           <Property Name="UseAlternativeExposureCurrencyId" Type="Boolean" />
+          <Property Name="PerformanceFeeMethodologyId" Type="Int32" />
         </EntityType>
         <Association Name="AccountFundIDFK">
           <End Type="Odey.Framework.Keeley.Entities.Fund" Role="Fund" Multiplicity="1" />
@@ -25726,6 +25748,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="CurrentPerfFee" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="CurrentFundHWM" Type="Decimal" Precision="27" Scale="8" />
           <NavigationProperty Name="ClientTradePerfFees" Relationship="Odey.Framework.Keeley.Entities.FK__ClientTra__Clien__14E02AF4" FromRole="ClientTrade" ToRole="ClientTradePerfFee" />
+          <Property Name="IsNewEstimate" Type="Boolean" />
           </EntityType>
         <Association Name="AdministratorUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25916,6 +25939,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="CostUSD" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="CostGBP" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="ManagerQuantityOffset" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="LastClientFileDate" Type="DateTime" Precision="3" />
+          <Property Name="LastClientFileHWM" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="ClientPortfolioUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -26483,6 +26508,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="IndicativeChange" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="IndicativeGAV" Type="Decimal" Precision="27" Scale="8" />
           <NavigationProperty Name="Analytic" Relationship="Odey.Framework.Keeley.Entities.FK__OfficialN__Indic__30F259BD" FromRole="OfficialNetAssetValue" ToRole="Analytic" />
+          <Property Name="ShareClassHWM" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="LastClientFileDate" Type="DateTime" Precision="3" />
+          <Property Name="LastClientFileHWM" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="YTDSumUnits" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="YTDCountValuations" Type="Int32" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -36295,6 +36325,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Funds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Fund">
               <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="PerformanceFeeMethodologyId" ColumnName="PerformanceFeeMethodologyId" />
                 <ScalarProperty Name="UseAlternativeExposureCurrencyId" ColumnName="UseAlternativeExposureCurrencyId" />
                 <ScalarProperty Name="InvestmentManagerId" ColumnName="InvestmentManagerId" />
                 <ScalarProperty Name="NameOverride" ColumnName="NameOverride" />
@@ -36849,6 +36880,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="ClientTrades">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <MappingFragment StoreEntitySet="ClientTrade">
+                <ScalarProperty Name="IsNewEstimate" ColumnName="IsNewEstimate" />
                 <ScalarProperty Name="CurrentFundHWM" ColumnName="CurrentFundHWM" />
                 <ScalarProperty Name="CurrentPerfFee" ColumnName="CurrentPerfFee" />
                 <ScalarProperty Name="CurrentNavDate" ColumnName="CurrentNavDate" />
@@ -36898,6 +36930,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientTrade">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.ClientTrade_Insert">
+                  <ScalarProperty Name="IsNewEstimate" ParameterName="IsNewEstimate" />
                   <ScalarProperty Name="CurrentFundHWM" ParameterName="CurrentFundHWM" />
                   <ScalarProperty Name="CurrentPerfFee" ParameterName="CurrentPerfFee" />
                   <ScalarProperty Name="CurrentNavDate" ParameterName="CurrentNavDate" />
@@ -36944,6 +36977,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.ClientTrade_Update">
+                  <ScalarProperty Name="IsNewEstimate" ParameterName="IsNewEstimate" Version="Current" />
                   <ScalarProperty Name="CurrentFundHWM" ParameterName="CurrentFundHWM" Version="Current" />
                   <ScalarProperty Name="CurrentPerfFee" ParameterName="CurrentPerfFee" Version="Current" />
                   <ScalarProperty Name="CurrentNavDate" ParameterName="CurrentNavDate" Version="Current" />
@@ -37001,6 +37035,8 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="ClientPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.ClientPortfolio">
               <MappingFragment StoreEntitySet="ClientPortfolio">
+                <ScalarProperty Name="LastClientFileHWM" ColumnName="LastClientFileHWM" />
+                <ScalarProperty Name="LastClientFileDate" ColumnName="LastClientFileDate" />
                 <ScalarProperty Name="ManagerQuantityOffset" ColumnName="ManagerQuantityOffset" />
                 <ScalarProperty Name="CostGBP" ColumnName="CostGBP" />
                 <ScalarProperty Name="CostUSD" ColumnName="CostUSD" />
@@ -37400,6 +37436,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="YTDCountValuations" ColumnName="YTDCountValuations" />
+                <ScalarProperty Name="YTDSumUnits" ColumnName="YTDSumUnits" />
+                <ScalarProperty Name="LastClientFileHWM" ColumnName="LastClientFileHWM" />
+                <ScalarProperty Name="LastClientFileDate" ColumnName="LastClientFileDate" />
+                <ScalarProperty Name="ShareClassHWM" ColumnName="ShareClassHWM" />
                 <ScalarProperty Name="IndicativeGAV" ColumnName="IndicativeGAV" />
                 <ScalarProperty Name="IndicativeChange" ColumnName="IndicativeChange" />
                 <ScalarProperty Name="IndicativeChangeId" ColumnName="IndicativeChangeId" />
@@ -37458,6 +37499,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="YTDCountValuations" ParameterName="YTDCountValuations" />
+                  <ScalarProperty Name="YTDSumUnits" ParameterName="YTDSumUnits" />
+                  <ScalarProperty Name="LastClientFileHWM" ParameterName="LastClientFileHWM" />
+                  <ScalarProperty Name="LastClientFileDate" ParameterName="LastClientFileDate" />
+                  <ScalarProperty Name="ShareClassHWM" ParameterName="ShareClassHWM" />
                   <ScalarProperty Name="IndicativeGAV" ParameterName="IndicativeGAV" />
                   <ScalarProperty Name="IndicativeChange" ParameterName="IndicativeChange" />
                   <ScalarProperty Name="IndicativeChangeId" ParameterName="IndicativeChangeId" />
@@ -37518,6 +37564,11 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="YTDCountValuations" ParameterName="YTDCountValuations" Version="Current" />
+                  <ScalarProperty Name="YTDSumUnits" ParameterName="YTDSumUnits" Version="Current" />
+                  <ScalarProperty Name="LastClientFileHWM" ParameterName="LastClientFileHWM" Version="Current" />
+                  <ScalarProperty Name="LastClientFileDate" ParameterName="LastClientFileDate" Version="Current" />
+                  <ScalarProperty Name="ShareClassHWM" ParameterName="ShareClassHWM" Version="Current" />
                   <ScalarProperty Name="IndicativeGAV" ParameterName="IndicativeGAV" Version="Current" />
                   <ScalarProperty Name="IndicativeChange" ParameterName="IndicativeChange" Version="Current" />
                   <ScalarProperty Name="IndicativeChangeId" ParameterName="IndicativeChangeId" Version="Current" />
@@ -41845,7 +41896,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="73">
+      <edmx:Diagram Name="KeeleyEntities" ZoomLevel="67">
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.ApplicationUser" Width="1.5" PointX="0.75" PointY="13" Height="2.5571907552083353" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Book" Width="1.5" PointX="3" PointY="17.875" Height="2.7494921875000031" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.Country" Width="1.5" PointX="5.375" PointY="21.75" Height="2.3648893229166674" IsExpanded="true" />

@@ -94,6 +94,10 @@ namespace Odey.Framework.Keeley.Entities
         public decimal CostGBP { get; set; }
     	[DataMember]
         public Nullable<decimal> ManagerQuantityOffset { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> LastClientFileDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LastClientFileHWM { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }

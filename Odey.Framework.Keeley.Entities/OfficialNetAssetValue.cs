@@ -122,6 +122,12 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> IndicativeChange { get; set; }
     	[DataMember]
         public Nullable<decimal> IndicativeGAV { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ShareClassHWM { get; set; }
+    	[DataMember]
+        public Nullable<System.DateTime> LastClientFileDate { get; set; }
+    	[DataMember]
+        public Nullable<decimal> LastClientFileHWM { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

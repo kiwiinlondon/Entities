@@ -110,6 +110,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CurrentPerfFee { get; set; }
     	[DataMember]
         public Nullable<decimal> CurrentFundHWM { get; set; }
+    	[DataMember]
+        public Nullable<bool> IsNewEstimate { get; set; }
     
         [DataMember]
         public virtual ClientAccount ClientAccount { get; set; }
