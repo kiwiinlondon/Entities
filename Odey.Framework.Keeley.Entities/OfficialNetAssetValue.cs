@@ -132,10 +132,18 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> YTDSumUnits { get; set; }
     	[DataMember]
         public Nullable<int> YTDCountValuations { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ReferenceAsset { get; set; }
+    	[DataMember]
+        public Nullable<int> BenchmarkPriceId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BenchmarkValue { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
         [DataMember]
         public virtual Analytic Analytic { get; set; }
+        [DataMember]
+        public virtual Price Price { get; set; }
     }
 }
