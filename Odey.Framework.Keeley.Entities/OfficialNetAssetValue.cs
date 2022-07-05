@@ -138,6 +138,14 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<int> BenchmarkPriceId { get; set; }
     	[DataMember]
         public Nullable<decimal> BenchmarkValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> BenchmarkFXRate { get; set; }
+    	[DataMember]
+        public Nullable<int> BenchmarkFXRateId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ReferenceAssetNominal { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OpeningBenchmarkValue { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
@@ -145,5 +153,7 @@ namespace Odey.Framework.Keeley.Entities
         public virtual Analytic Analytic { get; set; }
         [DataMember]
         public virtual Price Price { get; set; }
+        [DataMember]
+        public virtual FXRate FXRate { get; set; }
     }
 }

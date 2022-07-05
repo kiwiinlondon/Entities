@@ -15,5 +15,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Beta = 2,
         [EnumMember]
         SRRI = 3,
+        [EnumMember]
+        ValuationTime = 4
     }
 }
