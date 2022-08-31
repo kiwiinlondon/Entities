@@ -138,7 +138,13 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BetaSixMonth = 63,
         [EnumMember]
-        BetaOneYear = 64
+        BetaOneYear = 64,
+
+        [EnumMember]
+        IndicativeFundPerformanceSODToValuationPoint = 65,
+
+        [EnumMember]
+        IndicativeFundPerformanceValuationPointToEOD = 66
     }
 }
 

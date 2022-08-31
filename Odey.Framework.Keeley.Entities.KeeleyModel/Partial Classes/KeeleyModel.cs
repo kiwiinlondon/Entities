@@ -39,7 +39,7 @@ namespace Odey.Framework.Keeley.Entities
                 {
                     if (_securityCallStack == null)
                     {
-                        throw new ApplicationException("No Security call stack was provided in constructor so user cannot be authenticated");
+                       throw new ApplicationException("No Security call stack was provided in constructor so user cannot be authenticated");
                     }
                     SecurityCallFrame callFrame = _securityCallStack.OriginalCall;
                     if (callFrame == null)

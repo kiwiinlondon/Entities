@@ -146,14 +146,24 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ReferenceAssetNominal { get; set; }
     	[DataMember]
         public Nullable<decimal> OpeningBenchmarkValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> RedemptionUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SubscriptionUnits { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ReferenceAssetReset { get; set; }
+    	[DataMember]
+        public Nullable<int> IndicativeValuationToEODId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> IndicativeValuationToEODValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CrystallisedPerformanceFee { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CrystallisedPerformanceFeeMTD { get; set; }
+    	[DataMember]
+        public Nullable<decimal> CrystallisedPerformanceFeeYTD { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
-        [DataMember]
-        public virtual Analytic Analytic { get; set; }
-        [DataMember]
-        public virtual Price Price { get; set; }
-        [DataMember]
-        public virtual FXRate FXRate { get; set; }
     }
 }

@@ -185,6 +185,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         RBCLoansAndCollateral = 91,
         [EnumMember]
-        RBCLoanRevenue = 92
+        RBCLoanRevenue = 92,
+        [EnumMember]
+        SegregatedAccountNavFile=93
     }
 }
