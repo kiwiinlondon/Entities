@@ -187,6 +187,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         RBCLoanRevenue = 92,
         [EnumMember]
-        SegregatedAccountNavFile=93
+        SegregatedAccountNavFile=93,
+        [EnumMember]
+        JPMIRSPrice = 94
     }
 }
