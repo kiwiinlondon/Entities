@@ -162,6 +162,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> CrystallisedPerformanceFeeMTD { get; set; }
     	[DataMember]
         public Nullable<decimal> CrystallisedPerformanceFeeYTD { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalOfficialEqualisationCredit { get; set; }
+    	[DataMember]
+        public Nullable<decimal> TotalOfficialEqualisationCreditFundCurrency { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
