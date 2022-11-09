@@ -166,6 +166,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TotalOfficialEqualisationCredit { get; set; }
     	[DataMember]
         public Nullable<decimal> TotalOfficialEqualisationCreditFundCurrency { get; set; }
+    	[DataMember]
+        public Nullable<decimal> SplitShareClassFXPnlFundCurrency { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }

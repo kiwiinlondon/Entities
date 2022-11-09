@@ -55,6 +55,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         DomicileChange = 15,
         [Description("Return Of Capital")]
         [EnumMember]
-        ReturnOfCapital = 17
+        ReturnOfCapital = 17,
+        [Description("Bankruptcy")]
+        [EnumMember]
+        Bankruptcy = 18
     }
 }
