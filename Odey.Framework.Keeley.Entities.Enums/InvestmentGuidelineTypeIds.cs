@@ -35,6 +35,18 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         UnitsOfCIS = 12,
         [EnumMember]
-        AggregateBorrowings = 13
+        AggregateBorrowings = 13,
+        [EnumMember]
+        NonInvestmentGuidelineAssetClasses = 15,
+        [EnumMember]
+        ExposureToSingleCounterparty =	16,
+        [EnumMember]
+        OTCCounterpartyExposure	=17,
+        [EnumMember]
+        SingleIssuerExposure = 18,
+        [EnumMember]
+        SumOfExposuresGreaterFivePercent =	19,
+        [EnumMember]
+        VaR20d99Percent	= 20
     }
 }
