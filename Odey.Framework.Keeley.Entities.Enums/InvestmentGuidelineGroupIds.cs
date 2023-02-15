@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace Odey.Framework.Keeley.Entities.Enums
 {
     [DataContract]
-    public enum InvestmentGuidelineTypeGroupIds
+    public enum InvestmentGuidelineGroupIds
     {
         [EnumMember]
         InternalInvestmentGuidelines	= 1,
         [EnumMember]
-        ProspectusLimits	=2,
+        ProspectusLimits	=4,
         [EnumMember]
         UCITSRules	=3
     }

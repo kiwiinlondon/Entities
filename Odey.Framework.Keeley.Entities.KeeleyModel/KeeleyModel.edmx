@@ -756,6 +756,18 @@
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="CustodianPortfolio">
+          <Key>
+            <PropertyRef Name="CustodianPortfolioId" />
+          </Key>
+          <Property Name="CustodianPortfolioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="Quantity" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="DealingDateDefinition">
           <Key>
             <PropertyRef Name="DealingDateDefinitionId" />
@@ -2320,6 +2332,7 @@
           <Property Name="TotalOfficialEqualisationCredit" Type="numeric" Precision="27" Scale="8" />
           <Property Name="TotalOfficialEqualisationCreditFundCurrency" Type="numeric" Precision="27" Scale="8" />
           <Property Name="SplitShareClassFXPnlFundCurrency" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Price" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Options">
           <Key>
@@ -3389,9 +3402,8 @@ warning 6002: The table/view 'Keeley.dbo.DenormalisedInvestmentGuideline' does n
           <Property Name="NetMinimumTolerance" Type="numeric" Precision="31" Scale="12" />
           <Property Name="NetMaximum" Type="numeric" Precision="31" Scale="12" />
           <Property Name="NetMaximumTolerance" Type="numeric" Precision="31" Scale="12" />
-          <Property Name="InvestmentGuidelineTypeGroupId" Type="int" Nullable="false" />
-          <Property Name="InvestmentGuidelineTypeGroup" Type="varchar" MaxLength="70" Nullable="false" />
-          <Property Name="Precedence" Type="int" />
+          <Property Name="InvestmentGuidelineGroupId" Type="int" Nullable="false" />
+          <Property Name="InvestmentGuidelineGroup" Type="varchar" MaxLength="70" Nullable="false" />
           <Property Name="InvestmentGuidelineTypeProcessingCategoryId" Type="int" />
           <Property Name="DecimalPlaces" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
@@ -5864,6 +5876,30 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="Country">
               <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Custodian__Posit__0B585768">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="CustodianPortfolio" Type="Self.CustodianPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionId" />
+            </Principal>
+            <Dependent Role="CustodianPortfolio">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Custodian__Updat__0C4C7BA1">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="CustodianPortfolio" Type="Self.CustodianPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustodianPortfolio">
+              <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11744,6 +11780,25 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
         </Function>
+        <Function Name="CustodianPortfolio_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustodianPortfolioId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CustodianPortfolio_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CustodianPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustodianPortfolioId" Type="int" Mode="In" />
+          <Parameter Name="PositionId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="Quantity" Type="numeric" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+        </Function>
         <Function Name="EnforcePositionEvent_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
@@ -14056,6 +14111,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TotalOfficialEqualisationCredit" Type="numeric" Mode="In" />
           <Parameter Name="TotalOfficialEqualisationCreditFundCurrency" Type="numeric" Mode="In" />
           <Parameter Name="SplitShareClassFXPnlFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
         </Function>
         <Function Name="OfficialNetAssetValue_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -14137,6 +14193,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="TotalOfficialEqualisationCredit" Type="numeric" Mode="In" />
           <Parameter Name="TotalOfficialEqualisationCreditFundCurrency" Type="numeric" Mode="In" />
           <Parameter Name="SplitShareClassFXPnlFundCurrency" Type="numeric" Mode="In" />
+          <Parameter Name="Price" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Options_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -15978,6 +16035,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="CountryHoliday" EntityType="Self.CountryHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Custodian" EntityType="Self.Custodian" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustodianPortfolio" EntityType="Self.CustodianPortfolio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DealingDateDefinition" EntityType="Self.DealingDateDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DerivedAssetClass" EntityType="Self.DerivedAssetClass" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EnforcePositionEvent" EntityType="Self.EnforcePositionEvent" Schema="dbo" store:Type="Tables" />
@@ -16142,9 +16200,8 @@ FROM [dbo].[BookNetAssetValue] AS [BookNetAssetValue]</DefiningQuery>
 [DenormalisedInvestmentGuideline].[NetMinimumTolerance] AS [NetMinimumTolerance], 
 [DenormalisedInvestmentGuideline].[NetMaximum] AS [NetMaximum], 
 [DenormalisedInvestmentGuideline].[NetMaximumTolerance] AS [NetMaximumTolerance], 
-[DenormalisedInvestmentGuideline].[InvestmentGuidelineTypeGroupId] AS [InvestmentGuidelineTypeGroupId], 
-[DenormalisedInvestmentGuideline].[InvestmentGuidelineTypeGroup] AS [InvestmentGuidelineTypeGroup], 
-[DenormalisedInvestmentGuideline].[Precedence] AS [Precedence], 
+[DenormalisedInvestmentGuideline].[InvestmentGuidelineGroupId] AS [InvestmentGuidelineGroupId], 
+[DenormalisedInvestmentGuideline].[InvestmentGuidelineGroup] AS [InvestmentGuidelineGroup], 
 [DenormalisedInvestmentGuideline].[InvestmentGuidelineTypeProcessingCategoryId] AS [InvestmentGuidelineTypeProcessingCategoryId], 
 [DenormalisedInvestmentGuideline].[DecimalPlaces] AS [DecimalPlaces]
 FROM [dbo].[DenormalisedInvestmentGuideline] AS [DenormalisedInvestmentGuideline]</DefiningQuery>
@@ -16994,6 +17051,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Country__Currenc__60B4E4CA" Association="Self.FK__Country__Currenc__60B4E4CA">
             <End Role="Currency" EntitySet="Currency" />
             <End Role="Country" EntitySet="Country" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Custodian__Posit__0B585768" Association="Self.FK__Custodian__Posit__0B585768">
+            <End Role="Position" EntitySet="Position" />
+            <End Role="CustodianPortfolio" EntitySet="CustodianPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Custodian__Updat__0C4C7BA1" Association="Self.FK__Custodian__Updat__0C4C7BA1">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="CustodianPortfolio" EntitySet="CustodianPortfolio" />
           </AssociationSet>
           <AssociationSet Name="FK__EnforcePo__Curre__1F231FDC" Association="Self.FK__EnforcePo__Curre__1F231FDC">
             <End Role="Currency" EntitySet="Currency" />
@@ -21247,7 +21312,16 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Analytic" EntitySet="Analytics" />
             <End Role="OfficialNetAssetValue" EntitySet="OfficialNetAssetValues" />
           </AssociationSet>
-          <EntitySet Name="InvestmentGuidelines" EntityType="Odey.Framework.Keeley.Entities.InvestmentGuideline" />          
+          <EntitySet Name="InvestmentGuidelines" EntityType="Odey.Framework.Keeley.Entities.InvestmentGuideline" />
+          <EntitySet Name="CustodianPortfolios" EntityType="Odey.Framework.Keeley.Entities.CustodianPortfolio" />
+          <AssociationSet Name="FK__Custodian__Updat__0C4C7BA1" Association="Odey.Framework.Keeley.Entities.FK__Custodian__Updat__0C4C7BA1">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="CustodianPortfolio" EntitySet="CustodianPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Custodian__Posit__0B585768" Association="Odey.Framework.Keeley.Entities.FK__Custodian__Posit__0B585768">
+            <End Role="Position" EntitySet="Positions" />
+            <End Role="CustodianPortfolio" EntitySet="CustodianPortfolios" />
+          </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
           <Key>
@@ -26698,6 +26772,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="TotalOfficialEqualisationCredit" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="TotalOfficialEqualisationCreditFundCurrency" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="SplitShareClassFXPnlFundCurrency" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Price" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="OfficialNetAssetValueUserId">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -32349,12 +32424,47 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="NetMinimumTolerance" Type="Decimal" Precision="31" Scale="12" />
           <Property Name="NetMaximum" Type="Decimal" Precision="31" Scale="12" />
           <Property Name="NetMaximumTolerance" Type="Decimal" Precision="31" Scale="12" />
-          <Property Name="Precedence" Type="Int32" />
-          <Property Name="InvestmentGuidelineTypeGroupId" Type="Int32" Nullable="false" />
-          <Property Name="InvestmentGuidelineTypeGroup" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
           <Property Name="InvestmentGuidelineTypeProcessingCategoryId" Type="Int32" />
           <Property Name="DecimalPlaces" Type="Decimal" Precision="27" Scale="8" />
-        </EntityType>        
+          <Property Name="InvestmentGuidelineGroupId" Type="Int32" Nullable="false" />
+          <Property Name="InvestmentGuidelineGroup" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CustodianPortfolio">
+          <Key>
+            <PropertyRef Name="CustodianPortfolioId" />
+          </Key>
+          <Property Name="PositionId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Quantity" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="CustodianPortfolioId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
+        <Association Name="FK__Custodian__Updat__0C4C7BA1">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.CustodianPortfolio" Role="CustodianPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustodianPortfolio">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Custodian__Posit__0B585768">
+          <End Type="Odey.Framework.Keeley.Entities.Position" Role="Position" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.CustodianPortfolio" Role="CustodianPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionId" />
+            </Principal>
+            <Dependent Role="CustodianPortfolio">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>        
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -37680,6 +37790,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="OfficialNetAssetValues">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <MappingFragment StoreEntitySet="OfficialNetAssetValue">
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="SplitShareClassFXPnlFundCurrency" ColumnName="SplitShareClassFXPnlFundCurrency" />
                 <ScalarProperty Name="TotalOfficialEqualisationCreditFundCurrency" ColumnName="TotalOfficialEqualisationCreditFundCurrency" />
                 <ScalarProperty Name="TotalOfficialEqualisationCredit" ColumnName="TotalOfficialEqualisationCredit" />
@@ -37761,6 +37872,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.OfficialNetAssetValue">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Insert">
+                  <ScalarProperty Name="Price" ParameterName="Price" />
                   <ScalarProperty Name="SplitShareClassFXPnlFundCurrency" ParameterName="SplitShareClassFXPnlFundCurrency" />
                   <ScalarProperty Name="TotalOfficialEqualisationCreditFundCurrency" ParameterName="TotalOfficialEqualisationCreditFundCurrency" />
                   <ScalarProperty Name="TotalOfficialEqualisationCredit" ParameterName="TotalOfficialEqualisationCredit" />
@@ -37844,6 +37956,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="OfficialNetAssetValueId" ParameterName="OfficialNetAssetValueId" />
                 </DeleteFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.OfficialNetAssetValue_Update">
+                  <ScalarProperty Name="Price" ParameterName="Price" Version="Current" />
                   <ScalarProperty Name="SplitShareClassFXPnlFundCurrency" ParameterName="SplitShareClassFXPnlFundCurrency" Version="Current" />
                   <ScalarProperty Name="TotalOfficialEqualisationCreditFundCurrency" ParameterName="TotalOfficialEqualisationCreditFundCurrency" Version="Current" />
                   <ScalarProperty Name="TotalOfficialEqualisationCredit" ParameterName="TotalOfficialEqualisationCredit" Version="Current" />
@@ -42178,11 +42291,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="InvestmentGuidelines">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.InvestmentGuideline">
               <MappingFragment StoreEntitySet="DenormalisedInvestmentGuideline">
+                <ScalarProperty Name="InvestmentGuidelineGroup" ColumnName="InvestmentGuidelineGroup" />
+                <ScalarProperty Name="InvestmentGuidelineGroupId" ColumnName="InvestmentGuidelineGroupId" />
                 <ScalarProperty Name="DecimalPlaces" ColumnName="DecimalPlaces" />
                 <ScalarProperty Name="InvestmentGuidelineTypeProcessingCategoryId" ColumnName="InvestmentGuidelineTypeProcessingCategoryId" />
-                <ScalarProperty Name="InvestmentGuidelineTypeGroup" ColumnName="InvestmentGuidelineTypeGroup" />
-                <ScalarProperty Name="InvestmentGuidelineTypeGroupId" ColumnName="InvestmentGuidelineTypeGroupId" />
-                <ScalarProperty Name="Precedence" ColumnName="Precedence" />
                 <ScalarProperty Name="NetMaximumTolerance" ColumnName="NetMaximumTolerance" />
                 <ScalarProperty Name="NetMaximum" ColumnName="NetMaximum" />
                 <ScalarProperty Name="NetMinimumTolerance" ColumnName="NetMinimumTolerance" />
@@ -42195,6 +42307,47 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                 <ScalarProperty Name="InvestmentGuidelineTypeId" ColumnName="InvestmentGuidelineTypeId" />
                 <ScalarProperty Name="InvestmentGuidelineId" ColumnName="InvestmentGuidelineId" />
               </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustodianPortfolios">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.CustodianPortfolio">
+              <MappingFragment StoreEntitySet="CustodianPortfolio">
+                <ScalarProperty Name="CustodianPortfolioId" ColumnName="CustodianPortfolioId" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.CustodianPortfolio">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.CustodianPortfolio_Insert">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="PositionId" ParameterName="PositionId" />
+                  <ResultBinding Name="CustodianPortfolioId" ColumnName="CustodianPortfolioId" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.CustodianPortfolio_Update">
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="Quantity" ParameterName="Quantity" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="PositionId" ParameterName="PositionId" Version="Current" />
+                  <ScalarProperty Name="CustodianPortfolioId" ParameterName="CustodianPortfolioId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.CustodianPortfolio_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="CustodianPortfolioId" ParameterName="CustodianPortfolioId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           </EntityContainerMapping>
@@ -47835,13 +47988,19 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_RiskAnalyticType" ManuallyRouted="true" >
           <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="13" />
           <edmx:ConnectorPoint PointX="1.2715384615384613" PointY="12.489813761083" />
+          <edmx:ConnectorPoint PointX="1.3774990723202019" PointY="12.489813761083" />
+          <edmx:ConnectorPoint PointX="1.5441657389868684" PointY="12.489813761083" />
           <edmx:ConnectorPoint PointX="1.5451413997565919" PointY="12.489813761083" />
+          <edmx:ConnectorPoint PointX="1.5655385291475226" PointY="12.48114315342718" />
+          <edmx:ConnectorPoint PointX="1.7189220676454773" PointY="12.415941405784771" />
           <edmx:ConnectorPoint PointX="1.7354219733476457" PointY="12.408927467403563" />
           <edmx:ConnectorPoint PointX="1.7354219733476457" PointY="11.572231615747741" />
           <edmx:ConnectorPoint PointX="1.920091788730192" PointY="11.572231615747741" />
           <edmx:ConnectorPoint PointX="1.920091788730192" PointY="10.50226064036629" />
           <edmx:ConnectorPoint PointX="2.1266461734499078" PointY="10.2833360767422" />
           <edmx:ConnectorPoint PointX="2.1266461734499078" PointY="9.4436066445108082" />
+          <edmx:ConnectorPoint PointX="2.1295915362033098" PointY="9.4411379892634812" />
+          <edmx:ConnectorPoint PointX="2.2573253304189795" PointY="9.33407793325263" />
           <edmx:ConnectorPoint PointX="2.2654190271446795" PointY="9.3272942028380665" />
           <edmx:ConnectorPoint PointX="2.2654190271446795" PointY="8.7971678755010156" />
           <edmx:ConnectorPoint PointX="2.4207562121480377" PointY="8.6756606890644346" />
@@ -47849,32 +48008,32 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="8.07338933273869" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8236498025385579" />
           <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.823649802538557" />
-          <edmx:ConnectorPoint PointX="2.7473958333333335" PointY="6.8236498025385579" />
+          <edmx:ConnectorPoint PointX="2.7239583333333335" PointY="6.8236498025385579" />
           <edmx:ConnectorPoint PointX="2.7702791031104415" PointY="6.8236498025385579" />
-          <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="6.7550290165736424" />
-          <edmx:ConnectorPoint PointX="2.9243074174182664" PointY="4.813088588644062" />
+          <edmx:ConnectorPoint PointX="2.9243124174182666" PointY="6.7550290165736424" />
+          <edmx:ConnectorPoint PointX="2.9243124174182666" PointY="4.6780545908994364" />
           <edmx:ConnectorPoint PointX="3.0729166666666665" PointY="4.6780545908994364" />
           <edmx:ConnectorPoint PointX="3.0729166666666665" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.3151016666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.4817683333333336" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="3.5794270833333335" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.7031249999999996" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="3.8697916666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="4.479166666666667" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="4.4101091610922039" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="5.1707552083333335" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="5.197916666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.364583333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.541666666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="5.786458333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="6.807291666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.020833333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="7.333333333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="6.807291666666667" PointY="24.7807421875" />
+          <edmx:ConnectorPoint PointX="7.427083333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.479166666666667" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.645833333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="7.838541666666667" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="8.3098958333333339" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="8.2708333333333339" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="8.6510416666666661" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="8.9114583333333339" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="10.583333333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="10.520833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="11.510416666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="11.747395833333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.167291666666666" PointY="24.780742187500003" />
@@ -47883,33 +48042,45 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <edmx:ConnectorPoint PointX="12.770833333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="12.791666666666666" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="13.020833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="14.666666666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="14.833333333333334" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="14.979166666666666" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.248958333333333" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="15.322916666666666" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.145833333333334" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="15.260416666666666" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="15.770833333333334" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="17.194916666666668" PointY="24.7807421875" />
-          <edmx:ConnectorPoint PointX="17.738717948717952" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.194916666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="17.692708333333332" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="21.791666666666668" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="21.958333333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="22.854166666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="23.020833333333332" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.7807421875" />
           <edmx:ConnectorPoint PointX="25.020833333333332" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="25.619166666666668" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="25.785833333333333" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.551666666666669" PointY="24.780742187500003" />
+          <edmx:ConnectorPoint PointX="25.785833333333336" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.445266666666669" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.611933333333333" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.697916666666668" PointY="24.780742187500003" />
           <edmx:ConnectorPoint PointX="27.697916666666668" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="28.416666666666668" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="28.583333333333332" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="28.82291866666667" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="28.989585333333334" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.026044666666667" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="29.192711333333332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.369791729166668" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.536458395833332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.682293854166669" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.848960520833334" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="28.955732260416671" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.122398927083335" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.602018966225646" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="29.768685632892311" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="32.541041666666665" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="32.707708333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="33.617776612745139" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="33.789208753713815" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="34.971354166666664" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.170733333333338" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="35.667835146907855" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="35.834501813574526" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="35.84825234375" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="38.3602717833048" PointY="22.477573555433015" />
+          <edmx:ConnectorPoint PointX="38.489055952859466" PointY="22.371779342690093" />
           <edmx:ConnectorPoint PointX="39.875" PointY="21.233247643646603" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_Fund" />
@@ -48147,6 +48318,9 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__OfficialN__Bench__1D2B5832" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__OfficialN__Indic__7D138E5B" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InvestmentGuideline" Width="1.5" PointX="28.375" PointY="42.75" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CustodianPortfolio" Width="1.5" PointX="44" PointY="3.25" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__Updat__0C4C7BA1" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__Posit__0B585768" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

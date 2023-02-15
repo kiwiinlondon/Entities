@@ -214,6 +214,7 @@ namespace Odey.Framework.Keeley.Entities
         public DbSet<FMCustodianPortfolio> FMCustodianPortfolios { get; set; }
         public DbSet<ClientTradePerfFee> ClientTradePerfFees { get; set; }
         public DbSet<InvestmentGuideline> InvestmentGuidelines { get; set; }
+        public DbSet<CustodianPortfolio> CustodianPortfolios { get; set; }
     
         public virtual ObjectResult<PortfolioEvent> PortfolioEventGetPrevious(Nullable<int> positionID, Nullable<System.DateTime> referenceDate, Nullable<System.DateTime> inputDate, Nullable<int> orderingResolution, Nullable<int> portfolioAggregationLevelId, Nullable<int> portfolioEventId)
         {

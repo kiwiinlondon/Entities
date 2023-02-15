@@ -16,6 +16,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         SRRI = 3,
         [EnumMember]
-        ValuationTime = 4
+        ValuationTime = 4,
+        [EnumMember]
+        Intranet =5
     }
 }

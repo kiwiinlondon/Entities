@@ -39,14 +39,12 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public Nullable<decimal> NetMaximumTolerance { get; set; }
     	[DataMember]
-        public Nullable<int> Precedence { get; set; }
-    	[DataMember]
-        public int InvestmentGuidelineTypeGroupId { get; set; }
-    	[DataMember]
-        public string InvestmentGuidelineTypeGroup { get; set; }
-    	[DataMember]
         public Nullable<int> InvestmentGuidelineTypeProcessingCategoryId { get; set; }
     	[DataMember]
         public Nullable<decimal> DecimalPlaces { get; set; }
+    	[DataMember]
+        public int InvestmentGuidelineGroupId { get; set; }
+    	[DataMember]
+        public string InvestmentGuidelineGroup { get; set; }
     }
 }

@@ -47,6 +47,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         SumOfExposuresGreaterFivePercent =	19,
         [EnumMember]
-        VaR20d99Percent	= 20
+        VaR20d99Percent	= 20,
+        [EnumMember]
+        ShortSingleIssuerExposure = 21,
+        [EnumMember]
+        LongSingleIssuerExposure = 22
     }
 }
