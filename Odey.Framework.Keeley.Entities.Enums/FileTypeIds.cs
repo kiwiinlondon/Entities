@@ -189,6 +189,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         SegregatedAccountNavFile=93,
         [EnumMember]
-        JPMIRSPrice = 94
+        JPMIRSPrice = 94,
+        [EnumMember]
+        JPMCustody = 95
     }
 }

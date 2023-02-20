@@ -144,7 +144,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         IndicativeFundPerformanceSODToValuationPoint = 65,
 
         [EnumMember]
-        IndicativeFundPerformanceValuationPointToEOD = 66
+        IndicativeFundPerformanceValuationPointToEOD = 66,
+        [EnumMember]
+        NumberOfBondsInIssue=67
     }
 }
 
