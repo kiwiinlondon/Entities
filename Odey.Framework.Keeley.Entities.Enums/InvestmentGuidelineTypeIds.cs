@@ -51,6 +51,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ShortSingleIssuerExposure = 21,
         [EnumMember]
-        LongSingleIssuerExposure = 22
+        LongSingleIssuerExposure = 22,
+        [EnumMember]
+        ChinaASharesExposure = 23
     }
 }
