@@ -30,6 +30,8 @@ namespace Odey.Framework.Keeley.Entities
         public byte[] DataVersion { get; set; }
     	[DataMember]
         public int CustodianPortfolioId { get; set; }
+    	[DataMember]
+        public int CustodianPortfolioTypeId { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }
