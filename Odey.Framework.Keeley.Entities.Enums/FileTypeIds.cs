@@ -199,8 +199,6 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BAMLCustodySwap = 98,
         [EnumMember]
-        JPMMargin = 99,
-        [EnumMember]
-        WealthStaffHoldings = 100,
+        JPMMargin = 99
     }
 }
