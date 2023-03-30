@@ -335,6 +335,18 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> RepoNotionalInstrument { get; set; }
     	[DataMember]
         public Nullable<decimal> RepoNotionalWithHaircutInstrument { get; set; }
+    	[DataMember]
+        public Nullable<int> ConvertibleBondDeltaId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConvertibleBondDelta { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConvertibleBondOptionDeltaMarketValueInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConvertibleBondBondMarketValueInstrument { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConvertibleBondOptionDeltaMarketValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConvertibleBondBondMarketValue { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

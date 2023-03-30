@@ -191,6 +191,16 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         JPMIRSPrice = 94,
         [EnumMember]
-        JPMCustody = 95
+        JPMCustody = 95,
+        [EnumMember]
+        JPMCustodySwap = 96,
+        [EnumMember]
+        MSCustody = 97,
+        [EnumMember]
+        BAMLCustodySwap = 98,
+        [EnumMember]
+        JPMMargin = 99,
+        [EnumMember]
+        WealthStaffHoldings = 100,
     }
 }

@@ -14,14 +14,20 @@ namespace Odey.Framework.Keeley.Entities
     
     using System.Runtime.Serialization;
     [DataContract(IsReference = true)]
-    public partial class CustodianPortfolio
+    public partial class CustodianPortfolioControl
     {
+    	
+        public CustodianPortfolioControl()
+        {
+            this.CustodianPortfolios = new List<CustodianPortfolio>();
+        }
+    
     	[DataMember]
-        public int PositionId { get; set; }
+        public int CustodianPortfolioControlId { get; set; }
+    	[DataMember]
+        public int CustodianPortfolioTypeId { get; set; }
     	[DataMember]
         public System.DateTime ReferenceDate { get; set; }
-    	[DataMember]
-        public decimal Quantity { get; set; }
     	[DataMember]
         public System.DateTime StartDt { get; set; }
     	[DataMember]
@@ -29,15 +35,13 @@ namespace Odey.Framework.Keeley.Entities
     	[DataMember]
         public byte[] DataVersion { get; set; }
     	[DataMember]
-        public int CustodianPortfolioId { get; set; }
+        public bool Loaded { get; set; }
     	[DataMember]
-        public int CustodianPortfolioTypeId { get; set; }
-    	[DataMember]
-        public int CustodianPortfolioControlId { get; set; }
+        public int AccountId { get; set; }
     
         [DataMember]
-        public virtual Position Position { get; set; }
+        public virtual List<CustodianPortfolio> CustodianPortfolios { get; set; }
         [DataMember]
-        public virtual CustodianPortfolioControl CustodianPortfolioControl { get; set; }
+        public virtual Account Account { get; set; }
     }
 }

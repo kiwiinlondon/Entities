@@ -52,6 +52,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> MaturityValue { get; set; }
     	[DataMember]
         public Nullable<bool> IsCovered { get; set; }
+    	[DataMember]
+        public Nullable<decimal> ConversionRatio { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }

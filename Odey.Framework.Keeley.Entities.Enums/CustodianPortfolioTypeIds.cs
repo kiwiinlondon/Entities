@@ -14,6 +14,14 @@ namespace Odey.Framework.Keeley.Entities.Enums
         TradeDateBalance	=1,
 
         [EnumMember]
-        RealisedPNL	= 2,
+        RealisedSwapPNL	= 2,
+
+        [EnumMember]
+        UnrealisedSwapPNL = 3,
+
+        [EnumMember]
+        UnrealisedIRSPNL = 4,
+        [EnumMember]
+        ProjectedBalanceTPlus1 = 5
     }
 }

@@ -339,6 +339,7 @@
           <Property Name="ConversionPrice" Type="numeric" Precision="27" Scale="8" />
           <Property Name="MaturityValue" Type="numeric" Precision="27" Scale="8" />
           <Property Name="IsCovered" Type="bit" />
+          <Property Name="ConversionRatio" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -765,11 +766,25 @@
           <Property Name="CustodianPortfolioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PositionId" Type="int" Nullable="false" />
           <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
-          <Property Name="Quantity" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="Quantity" Type="numeric" Precision="27" Scale="8" Nullable="false" />
           <Property Name="StartDt" Type="datetime" Nullable="false" />
           <Property Name="UpdateUserID" Type="int" Nullable="false" />
           <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CustodianPortfolioTypeId" Type="int" Nullable="false" />
+          <Property Name="CustodianPortfolioControlId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustodianPortfolioControl">
+          <Key>
+            <PropertyRef Name="CustodianPortfolioControlId" />
+          </Key>
+          <Property Name="CustodianPortfolioControlId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustodianPortfolioTypeId" Type="int" Nullable="false" />
+          <Property Name="ReferenceDate" Type="datetime" Nullable="false" />
+          <Property Name="StartDt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserID" Type="int" Nullable="false" />
+          <Property Name="DataVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Loaded" Type="bit" Nullable="false" />
+          <Property Name="AccountId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="DealingDateDefinition">
           <Key>
@@ -2624,6 +2639,12 @@
           <Property Name="LoanedPortfolioRate" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RepoNotionalInstrument" Type="numeric" Precision="27" Scale="8" />
           <Property Name="RepoNotionalWithHaircutInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondDeltaId" Type="int" />
+          <Property Name="ConvertibleBondDelta" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondOptionDeltaMarketValueInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondBondMarketValueInstrument" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondOptionDeltaMarketValue" Type="numeric" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondBondMarketValue" Type="numeric" Precision="27" Scale="8" />
         </EntityType>
         <EntityType Name="PortfolioAggregationLevel">
           <Key>
@@ -5894,6 +5915,30 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Custodian__Accou__03A22707">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="CustodianPortfolioControl" Type="Self.CustodianPortfolioControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="CustodianPortfolioControl">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Custodian__Custo__2B26087C">
+          <End Role="CustodianPortfolioControl" Type="Self.CustodianPortfolioControl" Multiplicity="1" />
+          <End Role="CustodianPortfolio" Type="Self.CustodianPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustodianPortfolioControl">
+              <PropertyRef Name="CustodianPortfolioControlId" />
+            </Principal>
+            <Dependent Role="CustodianPortfolio">
+              <PropertyRef Name="CustodianPortfolioControlId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Custodian__Posit__0B585768">
           <End Role="Position" Type="Self.Position" Multiplicity="1" />
           <End Role="CustodianPortfolio" Type="Self.CustodianPortfolio" Multiplicity="*" />
@@ -5914,6 +5959,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="CustodianPortfolio">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Custodian__Updat__2A31E443">
+          <End Role="ApplicationUser" Type="Self.ApplicationUser" Multiplicity="1" />
+          <End Role="CustodianPortfolioControl" Type="Self.CustodianPortfolioControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustodianPortfolioControl">
               <PropertyRef Name="UpdateUserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -6971,6 +7028,18 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
             </Principal>
             <Dependent Role="Portfolio">
               <PropertyRef Name="BetaSixMonthId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__Conve__1F153752">
+          <End Role="Analytic" Type="Self.Analytic" Multiplicity="0..1" />
+          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Analytic">
+              <PropertyRef Name="AnalyticId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="ConvertibleBondDeltaId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11079,6 +11148,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ConversionPrice" Type="numeric" Mode="In" />
           <Parameter Name="MaturityValue" Type="numeric" Mode="In" />
           <Parameter Name="IsCovered" Type="bit" Mode="In" />
+          <Parameter Name="ConversionRatio" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Bond_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InstrumentId" Type="int" Mode="In" />
@@ -11098,6 +11168,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="ConversionPrice" Type="numeric" Mode="In" />
           <Parameter Name="MaturityValue" Type="numeric" Mode="In" />
           <Parameter Name="IsCovered" Type="bit" Mode="In" />
+          <Parameter Name="ConversionRatio" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Book_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BookID" Type="int" Mode="In" />
@@ -11810,6 +11881,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="Quantity" Type="numeric" Mode="In" />
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="CustodianPortfolioTypeId" Type="int" Mode="In" />
+          <Parameter Name="CustodianPortfolioControlId" Type="int" Mode="In" />
         </Function>
         <Function Name="CustodianPortfolio_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustodianPortfolioId" Type="int" Mode="In" />
@@ -11819,6 +11891,28 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="UpdateUserID" Type="int" Mode="In" />
           <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
           <Parameter Name="CustodianPortfolioTypeId" Type="int" Mode="In" />
+          <Parameter Name="CustodianPortfolioControlId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CustodianPortfolioControl_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustodianPortfolioControlId" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CustodianPortfolioControl_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustodianPortfolioTypeId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="Loaded" Type="bit" Mode="In" />
+          <Parameter Name="AccountId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CustodianPortfolioControl_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustodianPortfolioControlId" Type="int" Mode="In" />
+          <Parameter Name="CustodianPortfolioTypeId" Type="int" Mode="In" />
+          <Parameter Name="ReferenceDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateUserID" Type="int" Mode="In" />
+          <Parameter Name="DataVersion" Type="timestamp" Mode="In" />
+          <Parameter Name="Loaded" Type="bit" Mode="In" />
+          <Parameter Name="AccountId" Type="int" Mode="In" />
         </Function>
         <Function Name="EnforcePositionEvent_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EventID" Type="int" Mode="In" />
@@ -14543,6 +14637,12 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="LoanedPortfolioRate" Type="numeric" Mode="In" />
           <Parameter Name="RepoNotionalInstrument" Type="numeric" Mode="In" />
           <Parameter Name="RepoNotionalWithHaircutInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondDeltaId" Type="int" Mode="In" />
+          <Parameter Name="ConvertibleBondDelta" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondOptionDeltaMarketValueInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondBondMarketValueInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondOptionDeltaMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondBondMarketValue" Type="numeric" Mode="In" />
         </Function>
         <Function Name="Portfolio_Roll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UpdateUserId" Type="int" Mode="In" />
@@ -14703,6 +14803,12 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <Parameter Name="LoanedPortfolioRate" Type="numeric" Mode="In" />
           <Parameter Name="RepoNotionalInstrument" Type="numeric" Mode="In" />
           <Parameter Name="RepoNotionalWithHaircutInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondDeltaId" Type="int" Mode="In" />
+          <Parameter Name="ConvertibleBondDelta" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondOptionDeltaMarketValueInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondBondMarketValueInstrument" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondOptionDeltaMarketValue" Type="numeric" Mode="In" />
+          <Parameter Name="ConvertibleBondBondMarketValue" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PortfolioAggregationLevel_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PortfolioAggregationLevelId" Type="int" Mode="In" />
@@ -16057,6 +16163,7 @@ warning 6002: The table/view 'Keeley.dbo.SimpleIndexPrice' does not have a prima
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Custodian" EntityType="Self.Custodian" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustodianPortfolio" EntityType="Self.CustodianPortfolio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustodianPortfolioControl" EntityType="Self.CustodianPortfolioControl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DealingDateDefinition" EntityType="Self.DealingDateDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DerivedAssetClass" EntityType="Self.DerivedAssetClass" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EnforcePositionEvent" EntityType="Self.EnforcePositionEvent" Schema="dbo" store:Type="Tables" />
@@ -17077,6 +17184,14 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <End Role="Currency" EntitySet="Currency" />
             <End Role="Country" EntitySet="Country" />
           </AssociationSet>
+          <AssociationSet Name="FK__Custodian__Accou__03A22707" Association="Self.FK__Custodian__Accou__03A22707">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="CustodianPortfolioControl" EntitySet="CustodianPortfolioControl" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Custodian__Custo__2B26087C" Association="Self.FK__Custodian__Custo__2B26087C">
+            <End Role="CustodianPortfolioControl" EntitySet="CustodianPortfolioControl" />
+            <End Role="CustodianPortfolio" EntitySet="CustodianPortfolio" />
+          </AssociationSet>
           <AssociationSet Name="FK__Custodian__Posit__0B585768" Association="Self.FK__Custodian__Posit__0B585768">
             <End Role="Position" EntitySet="Position" />
             <End Role="CustodianPortfolio" EntitySet="CustodianPortfolio" />
@@ -17084,6 +17199,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Custodian__Updat__0C4C7BA1" Association="Self.FK__Custodian__Updat__0C4C7BA1">
             <End Role="ApplicationUser" EntitySet="ApplicationUser" />
             <End Role="CustodianPortfolio" EntitySet="CustodianPortfolio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Custodian__Updat__2A31E443" Association="Self.FK__Custodian__Updat__2A31E443">
+            <End Role="ApplicationUser" EntitySet="ApplicationUser" />
+            <End Role="CustodianPortfolioControl" EntitySet="CustodianPortfolioControl" />
           </AssociationSet>
           <AssociationSet Name="FK__EnforcePo__Curre__1F231FDC" Association="Self.FK__EnforcePo__Curre__1F231FDC">
             <End Role="Currency" EntitySet="Currency" />
@@ -17435,6 +17554,10 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__BetaS__61C8393D" Association="Self.FK__Portfolio__BetaS__61C8393D">
             <End Role="Beta" EntitySet="Beta" />
+            <End Role="Portfolio" EntitySet="Portfolio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Conve__1F153752" Association="Self.FK__Portfolio__Conve__1F153752">
+            <End Role="Analytic" EntitySet="Analytic" />
             <End Role="Portfolio" EntitySet="Portfolio" />
           </AssociationSet>
           <AssociationSet Name="FK__Portfolio__Coute__16EDCC8E" Association="Self.FK__Portfolio__Coute__16EDCC8E">
@@ -21350,6 +21473,23 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <AssociationSet Name="FK__Attributi__Numbe__40C043E0" Association="Odey.Framework.Keeley.Entities.FK__Attributi__Numbe__40C043E0">
             <End Role="Analytic" EntitySet="Analytics" />
             <End Role="AttributionPnl" EntitySet="AttributionPnls" />
+          </AssociationSet>
+          <EntitySet Name="CustodianPortfolioControls" EntityType="Odey.Framework.Keeley.Entities.CustodianPortfolioControl" />
+          <AssociationSet Name="FK__Custodian__Updat__2A31E443" Association="Odey.Framework.Keeley.Entities.FK__Custodian__Updat__2A31E443">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="CustodianPortfolioControl" EntitySet="CustodianPortfolioControls" />
+          </AssociationSet>         
+          <AssociationSet Name="FK__Custodian__Custo__2B26087C" Association="Odey.Framework.Keeley.Entities.FK__Custodian__Custo__2B26087C">
+            <End Role="CustodianPortfolioControl" EntitySet="CustodianPortfolioControls" />
+            <End Role="CustodianPortfolio" EntitySet="CustodianPortfolios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Custodian__Accou__03A22707" Association="Odey.Framework.Keeley.Entities.FK__Custodian__Accou__03A22707">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="CustodianPortfolioControl" EntitySet="CustodianPortfolioControls" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Portfolio__Conve__1F153752" Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Conve__1F153752">
+            <End Role="Analytic" EntitySet="Analytics" />
+            <End Role="Portfolio" EntitySet="Portfolios" />
           </AssociationSet>          
           </EntityContainer>
         <EntityType Name="ApplicationUser">
@@ -23442,6 +23582,12 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="LoanedPortfolioRate" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="RepoNotionalInstrument" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="RepoNotionalWithHaircutInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondDeltaId" Type="Int32" />
+          <Property Name="ConvertibleBondDelta" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondOptionDeltaMarketValueInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondBondMarketValueInstrument" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondOptionDeltaMarketValue" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="ConvertibleBondBondMarketValue" Type="Decimal" Precision="27" Scale="8" />
           </EntityType>
         <Association Name="PortfolioTradeDateUpdateUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -25471,6 +25617,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <Property Name="ConversionPrice" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="MaturityValue" Type="Decimal" Precision="27" Scale="8" />
           <Property Name="IsCovered" Type="Boolean" />
+          <Property Name="ConversionRatio" Type="Decimal" Precision="27" Scale="8" />
         </EntityType>
         <Association Name="BondUserIDFK">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -32466,13 +32613,15 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           </Key>
           <Property Name="PositionId" Type="Int32" Nullable="false" />
           <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Quantity" Type="Decimal" Precision="27" Scale="8" />
+          <Property Name="Quantity" Type="Decimal" Precision="27" Scale="8" Nullable="false" />
           <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
           <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="CustodianPortfolioId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Position" Relationship="Odey.Framework.Keeley.Entities.FK__Custodian__Posit__0B585768" FromRole="CustodianPortfolio" ToRole="Position" />
           <Property Name="CustodianPortfolioTypeId" Type="Int32" Nullable="false" />
+          <Property Name="CustodianPortfolioControlId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CustodianPortfolioControl" Relationship="Odey.Framework.Keeley.Entities.FK__Custodian__Custo__2B26087C" FromRole="CustodianPortfolio" ToRole="CustodianPortfolioControl" />
         </EntityType>
         <Association Name="FK__Custodian__Updat__0C4C7BA1">
           <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -32507,6 +32656,69 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             </Principal>
             <Dependent Role="AttributionPnl">
               <PropertyRef Name="NumberOfBondsInIssueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CustodianPortfolioControl">
+          <Key>
+            <PropertyRef Name="CustodianPortfolioControlId" />
+          </Key>
+          <Property Name="CustodianPortfolioControlId" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="CustodianPortfolioTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserID" Type="Int32" Nullable="false" />
+          <Property Name="DataVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Loaded" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CustodianPortfolios" Relationship="Odey.Framework.Keeley.Entities.FK__Custodian__Custo__2B26087C" FromRole="CustodianPortfolioControl" ToRole="CustodianPortfolio" />
+          <Property Name="AccountId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Odey.Framework.Keeley.Entities.FK__Custodian__Accou__03A22707" FromRole="CustodianPortfolioControl" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK__Custodian__Updat__2A31E443">
+          <End Type="Odey.Framework.Keeley.Entities.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.CustodianPortfolioControl" Role="CustodianPortfolioControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustodianPortfolioControl">
+              <PropertyRef Name="UpdateUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Custodian__Custo__2B26087C">
+          <End Type="Odey.Framework.Keeley.Entities.CustodianPortfolioControl" Role="CustodianPortfolioControl" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.CustodianPortfolio" Role="CustodianPortfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustodianPortfolioControl">
+              <PropertyRef Name="CustodianPortfolioControlId" />
+            </Principal>
+            <Dependent Role="CustodianPortfolio">
+              <PropertyRef Name="CustodianPortfolioControlId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Custodian__Accou__03A22707">
+          <End Type="Odey.Framework.Keeley.Entities.Account" Role="Account" Multiplicity="1" />
+          <End Type="Odey.Framework.Keeley.Entities.CustodianPortfolioControl" Role="CustodianPortfolioControl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="CustodianPortfolioControl">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Portfolio__Conve__1F153752">
+          <End Type="Odey.Framework.Keeley.Entities.Analytic" Role="Analytic" Multiplicity="0..1" />
+          <End Type="Odey.Framework.Keeley.Entities.Portfolio" Role="Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Analytic">
+              <PropertyRef Name="AnalyticId" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="ConvertibleBondDeltaId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>        
@@ -34787,6 +34999,12 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Portfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="ConvertibleBondBondMarketValue" ColumnName="ConvertibleBondBondMarketValue" />
+                <ScalarProperty Name="ConvertibleBondOptionDeltaMarketValue" ColumnName="ConvertibleBondOptionDeltaMarketValue" />
+                <ScalarProperty Name="ConvertibleBondBondMarketValueInstrument" ColumnName="ConvertibleBondBondMarketValueInstrument" />
+                <ScalarProperty Name="ConvertibleBondOptionDeltaMarketValueInstrument" ColumnName="ConvertibleBondOptionDeltaMarketValueInstrument" />
+                <ScalarProperty Name="ConvertibleBondDelta" ColumnName="ConvertibleBondDelta" />
+                <ScalarProperty Name="ConvertibleBondDeltaId" ColumnName="ConvertibleBondDeltaId" />
                 <ScalarProperty Name="RepoNotionalWithHaircutInstrument" ColumnName="RepoNotionalWithHaircutInstrument" />
                 <ScalarProperty Name="RepoNotionalInstrument" ColumnName="RepoNotionalInstrument" />
                 <ScalarProperty Name="LoanedPortfolioRate" ColumnName="LoanedPortfolioRate" />
@@ -34948,6 +35166,12 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Portfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Portfolio_Insert">
+                  <ScalarProperty Name="ConvertibleBondBondMarketValue" ParameterName="ConvertibleBondBondMarketValue" />
+                  <ScalarProperty Name="ConvertibleBondOptionDeltaMarketValue" ParameterName="ConvertibleBondOptionDeltaMarketValue" />
+                  <ScalarProperty Name="ConvertibleBondBondMarketValueInstrument" ParameterName="ConvertibleBondBondMarketValueInstrument" />
+                  <ScalarProperty Name="ConvertibleBondOptionDeltaMarketValueInstrument" ParameterName="ConvertibleBondOptionDeltaMarketValueInstrument" />
+                  <ScalarProperty Name="ConvertibleBondDelta" ParameterName="ConvertibleBondDelta" />
+                  <ScalarProperty Name="ConvertibleBondDeltaId" ParameterName="ConvertibleBondDeltaId" />
                   <ScalarProperty Name="RepoNotionalWithHaircutInstrument" ParameterName="RepoNotionalWithHaircutInstrument" />
                   <ScalarProperty Name="RepoNotionalInstrument" ParameterName="RepoNotionalInstrument" />
                   <ScalarProperty Name="LoanedPortfolioRate" ParameterName="LoanedPortfolioRate" />
@@ -35106,6 +35330,12 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Portfolio_Update">
+                  <ScalarProperty Name="ConvertibleBondBondMarketValue" ParameterName="ConvertibleBondBondMarketValue" Version="Current" />
+                  <ScalarProperty Name="ConvertibleBondOptionDeltaMarketValue" ParameterName="ConvertibleBondOptionDeltaMarketValue" Version="Current" />
+                  <ScalarProperty Name="ConvertibleBondBondMarketValueInstrument" ParameterName="ConvertibleBondBondMarketValueInstrument" Version="Current" />
+                  <ScalarProperty Name="ConvertibleBondOptionDeltaMarketValueInstrument" ParameterName="ConvertibleBondOptionDeltaMarketValueInstrument" Version="Current" />
+                  <ScalarProperty Name="ConvertibleBondDelta" ParameterName="ConvertibleBondDelta" Version="Current" />
+                  <ScalarProperty Name="ConvertibleBondDeltaId" ParameterName="ConvertibleBondDeltaId" Version="Current" />
                   <ScalarProperty Name="RepoNotionalWithHaircutInstrument" ParameterName="RepoNotionalWithHaircutInstrument" Version="Current" />
                   <ScalarProperty Name="RepoNotionalInstrument" ParameterName="RepoNotionalInstrument" Version="Current" />
                   <ScalarProperty Name="LoanedPortfolioRate" ParameterName="LoanedPortfolioRate" Version="Current" />
@@ -36594,6 +36824,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="Bonds">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Bond">
               <MappingFragment StoreEntitySet="Bond">
+                <ScalarProperty Name="ConversionRatio" ColumnName="ConversionRatio" />
                 <ScalarProperty Name="IsCovered" ColumnName="IsCovered" />
                 <ScalarProperty Name="MaturityValue" ColumnName="MaturityValue" />
                 <ScalarProperty Name="ConversionPrice" ColumnName="ConversionPrice" />
@@ -36617,6 +36848,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.Bond">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.Bond_Insert">
+                  <ScalarProperty Name="ConversionRatio" ParameterName="ConversionRatio" />
                   <ScalarProperty Name="IsCovered" ParameterName="IsCovered" />
                   <ScalarProperty Name="MaturityValue" ParameterName="MaturityValue" />
                   <ScalarProperty Name="ConversionPrice" ParameterName="ConversionPrice" />
@@ -36637,6 +36869,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.Bond_Update">
+                  <ScalarProperty Name="ConversionRatio" ParameterName="ConversionRatio" Version="Current" />
                   <ScalarProperty Name="IsCovered" ParameterName="IsCovered" Version="Current" />
                   <ScalarProperty Name="MaturityValue" ParameterName="MaturityValue" Version="Current" />
                   <ScalarProperty Name="ConversionPrice" ParameterName="ConversionPrice" Version="Current" />
@@ -42363,6 +42596,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
           <EntitySetMapping Name="CustodianPortfolios">
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.CustodianPortfolio">
               <MappingFragment StoreEntitySet="CustodianPortfolio">
+                <ScalarProperty Name="CustodianPortfolioControlId" ColumnName="CustodianPortfolioControlId" />
                 <ScalarProperty Name="CustodianPortfolioTypeId" ColumnName="CustodianPortfolioTypeId" />
                 <ScalarProperty Name="CustodianPortfolioId" ColumnName="CustodianPortfolioId" />
                 <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
@@ -42376,6 +42610,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
             <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.CustodianPortfolio">
               <ModificationFunctionMapping>
                 <InsertFunction FunctionName="KeeleyModel.Store.CustodianPortfolio_Insert">
+                  <ScalarProperty Name="CustodianPortfolioControlId" ParameterName="CustodianPortfolioControlId" />
                   <ScalarProperty Name="CustodianPortfolioTypeId" ParameterName="CustodianPortfolioTypeId" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="Quantity" ParameterName="Quantity" />
@@ -42386,6 +42621,7 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ResultBinding Name="StartDt" ColumnName="StartDt" />
                 </InsertFunction>
                 <UpdateFunction FunctionName="KeeleyModel.Store.CustodianPortfolio_Update">
+                  <ScalarProperty Name="CustodianPortfolioControlId" ParameterName="CustodianPortfolioControlId" Version="Current" />
                   <ScalarProperty Name="CustodianPortfolioTypeId" ParameterName="CustodianPortfolioTypeId" Version="Current" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
@@ -42400,6 +42636,50 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
                   <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
                   <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
                   <ScalarProperty Name="CustodianPortfolioId" ParameterName="CustodianPortfolioId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustodianPortfolioControls">
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.CustodianPortfolioControl">
+              <MappingFragment StoreEntitySet="CustodianPortfolioControl">
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Loaded" ColumnName="Loaded" />
+                <ScalarProperty Name="DataVersion" ColumnName="DataVersion" />
+                <ScalarProperty Name="UpdateUserID" ColumnName="UpdateUserID" />
+                <ScalarProperty Name="StartDt" ColumnName="StartDt" />
+                <ScalarProperty Name="ReferenceDate" ColumnName="ReferenceDate" />
+                <ScalarProperty Name="CustodianPortfolioTypeId" ColumnName="CustodianPortfolioTypeId" />
+                <ScalarProperty Name="CustodianPortfolioControlId" ColumnName="CustodianPortfolioControlId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Odey.Framework.Keeley.Entities.CustodianPortfolioControl">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="KeeleyModel.Store.CustodianPortfolioControl_Insert">
+                  <ScalarProperty Name="AccountId" ParameterName="AccountId" />
+                  <ScalarProperty Name="Loaded" ParameterName="Loaded" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" />
+                  <ScalarProperty Name="CustodianPortfolioTypeId" ParameterName="CustodianPortfolioTypeId" />
+                  <ResultBinding Name="CustodianPortfolioControlId" ColumnName="CustodianPortfolioControlId" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="KeeleyModel.Store.CustodianPortfolioControl_Update">
+                  <ScalarProperty Name="AccountId" ParameterName="AccountId" Version="Current" />
+                  <ScalarProperty Name="Loaded" ParameterName="Loaded" Version="Current" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" Version="Current" />
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" Version="Current" />
+                  <ScalarProperty Name="ReferenceDate" ParameterName="ReferenceDate" Version="Current" />
+                  <ScalarProperty Name="CustodianPortfolioTypeId" ParameterName="CustodianPortfolioTypeId" Version="Current" />
+                  <ScalarProperty Name="CustodianPortfolioControlId" ParameterName="CustodianPortfolioControlId" Version="Current" />
+                  <ResultBinding Name="StartDt" ColumnName="StartDt" />
+                  <ResultBinding Name="DataVersion" ColumnName="DataVersion" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="KeeleyModel.Store.CustodianPortfolioControl_Delete">
+                  <ScalarProperty Name="UpdateUserID" ParameterName="UpdateUserID" />
+                  <ScalarProperty Name="DataVersion" ParameterName="DataVersion" />
+                  <ScalarProperty Name="CustodianPortfolioControlId" ParameterName="CustodianPortfolioControlId" />
                 </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
@@ -48041,104 +48321,101 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.RiskAnalyticPosition" Width="1.5" PointX="39.875" PointY="19.75" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_RiskAnalyticType" ManuallyRouted="true" >
           <edmx:ConnectorPoint PointX="1.0083022779622146" PointY="13" />
-          <edmx:ConnectorPoint PointX="1.0758370542813951" PointY="12.925643311239233" />
-          <edmx:ConnectorPoint PointX="1.1878926572570656" PointY="12.802268599002337" />
-          <edmx:ConnectorPoint PointX="1.3641782030297056" PointY="12.608175863756017" />
-          <edmx:ConnectorPoint PointX="1.4762338060053761" PointY="12.484801151519122" />
-          <edmx:ConnectorPoint PointX="1.545146399756592" PointY="12.408927467403563" />
+          <edmx:ConnectorPoint PointX="1.0754113537140453" PointY="12.94544731546047" />
+          <edmx:ConnectorPoint PointX="1.20473863271983" PointY="12.840317715999909" />
+          <edmx:ConnectorPoint PointX="1.2736624975261168" PointY="12.784289797094768" />
+          <edmx:ConnectorPoint PointX="1.4192790241182764" PointY="12.665918736997021" />
+          <edmx:ConnectorPoint PointX="1.4976440528047996" PointY="12.602216135806742" />
+          <edmx:ConnectorPoint PointX="1.6269713318105843" PointY="12.497086536346181" />
           <edmx:ConnectorPoint PointX="1.7354219733476457" PointY="12.408927467403563" />
           <edmx:ConnectorPoint PointX="1.7354219733476457" PointY="11.572231615747741" />
-          <edmx:ConnectorPoint PointX="1.8492879413663965" PointY="10.912513718581289" />
-          <edmx:ConnectorPoint PointX="1.8776351355566794" PointY="10.748275433278147" />
-          <edmx:ConnectorPoint PointX="1.9200967887301921" PointY="10.50226064036629" />
+          <edmx:ConnectorPoint PointX="1.9200967887301921" PointY="10.912513718581289" />
           <edmx:ConnectorPoint PointX="1.9200967887301921" PointY="10.2833360767422" />
           <edmx:ConnectorPoint PointX="2.1266511734499076" PointY="9.4436066445108082" />
           <edmx:ConnectorPoint PointX="2.1266511734499076" PointY="9.3272942028380665" />
           <edmx:ConnectorPoint PointX="2.2654190271446795" PointY="9.3272942028380665" />
           <edmx:ConnectorPoint PointX="2.2654190271446795" PointY="8.7971678755010156" />
+          <edmx:ConnectorPoint PointX="2.4207562121480377" PointY="8.4667417440072956" />
           <edmx:ConnectorPoint PointX="2.4207562121480377" PointY="8.1693376227176948" />
-          <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="8.07338933273869" />
-          <edmx:ConnectorPoint PointX="2.5572916666666665" PointY="6.8236498025385579" />
-          <edmx:ConnectorPoint PointX="2.5613065473520482" PointY="6.8223563093385824" />
-          <edmx:ConnectorPoint PointX="2.7199434526479513" PointY="6.7712475032879968" />
-          <edmx:ConnectorPoint PointX="2.7702841031104413" PointY="6.7550290165736424" />
+          <edmx:ConnectorPoint PointX="2.5725746444722972" PointY="8.07338933273869" />
+          <edmx:ConnectorPoint PointX="2.5725746444722972" PointY="6.7550290165736424" />
+          <edmx:ConnectorPoint PointX="2.7016666666666667" PointY="6.7550290165736415" />
+          <edmx:ConnectorPoint PointX="2.9083333333333337" PointY="6.7550290165736424" />
           <edmx:ConnectorPoint PointX="2.9243174174182665" PointY="6.7550290165736424" />
           <edmx:ConnectorPoint PointX="2.9243174174182665" PointY="4.6780545908994364" />
           <edmx:ConnectorPoint PointX="3.0729166666666665" PointY="4.6780545908994364" />
-          <edmx:ConnectorPoint PointX="3.0729166666666665" PointY="24.780742187500003" />
-          <edmx:ConnectorPoint PointX="3.3151056105009227" PointY="24.778385865288417" />
-          <edmx:ConnectorPoint PointX="3.4817643894990775" PointY="24.776764396626422" />
-          <edmx:ConnectorPoint PointX="3.5377643605009226" PointY="24.77621955765305" />
-          <edmx:ConnectorPoint PointX="3.8697877228324105" PointY="24.772989211911248" />
-          <edmx:ConnectorPoint PointX="4.4111518728286274" PointY="24.767722132617713" />
-          <edmx:ConnectorPoint PointX="5.1707512644990778" PointY="24.760331783206372" />
-          <edmx:ConnectorPoint PointX="5.1979206105009226" PointY="24.760067445237656" />
-          <edmx:ConnectorPoint PointX="5.3645793894990774" PointY="24.758445976575661" />
-          <edmx:ConnectorPoint PointX="5.5416706105009226" PointY="24.756723007843409" />
-          <edmx:ConnectorPoint PointX="5.7083293894990774" PointY="24.755101539181414" />
-          <edmx:ConnectorPoint PointX="5.8899518198712553" PointY="24.75333448507881" />
-          <edmx:ConnectorPoint PointX="6.05661059886941" PointY="24.751713016416815" />
-          <edmx:ConnectorPoint PointX="6.1995896100506958" PointY="24.75032193466674" />
-          <edmx:ConnectorPoint PointX="6.3662483890488506" PointY="24.748700466004745" />
-          <edmx:ConnectorPoint PointX="6.8072956105009226" PointY="24.744409397437316" />
-          <edmx:ConnectorPoint PointX="7.4270793894990774" PointY="24.738379352210178" />
-          <edmx:ConnectorPoint PointX="7.4791706105009226" PointY="24.737872542530383" />
-          <edmx:ConnectorPoint PointX="7.6458293894990774" PointY="24.736251073868388" />
-          <edmx:ConnectorPoint PointX="7.8385456105009226" PointY="24.734376085254578" />
-          <edmx:ConnectorPoint PointX="8.2708293894990774" PointY="24.730170278606121" />
-          <edmx:ConnectorPoint PointX="8.6510456105009226" PointY="24.726471051413629" />
-          <edmx:ConnectorPoint PointX="8.9114543894990774" PointY="24.723937463462295" />
-          <edmx:ConnectorPoint PointX="10.057295610500923" PointY="24.712789262073528" />
-          <edmx:ConnectorPoint PointX="10.520829389499077" PointY="24.708279415661956" />
-          <edmx:ConnectorPoint PointX="11.510420610500923" PointY="24.698651413088758" />
-          <edmx:ConnectorPoint PointX="11.747391889499077" PointY="24.696345854959755" />
-          <edmx:ConnectorPoint PointX="12.167295610500922" PointY="24.692260497268116" />
-          <edmx:ConnectorPoint PointX="12.333954389499077" PointY="24.690639028606121" />
-          <edmx:ConnectorPoint PointX="12.581670610500922" PointY="24.688228930009231" />
-          <edmx:ConnectorPoint PointX="12.770829389499077" PointY="24.686388552717794" />
-          <edmx:ConnectorPoint PointX="12.791670610500923" PointY="24.686185782801108" />
-          <edmx:ConnectorPoint PointX="13.020829389499077" PointY="24.683956234612886" />
-          <edmx:ConnectorPoint PointX="14.666670610500923" PointY="24.667943397014309" />
-          <edmx:ConnectorPoint PointX="14.833329389499077" PointY="24.666321928352314" />
-          <edmx:ConnectorPoint PointX="14.979170610500923" PointY="24.664902999383173" />
-          <edmx:ConnectorPoint PointX="15.145829389499077" PointY="24.663281530721179" />
-          <edmx:ConnectorPoint PointX="15.260420610500923" PointY="24.662166641515153" />
-          <edmx:ConnectorPoint PointX="15.770829389499077" PointY="24.657200735458911" />
-          <edmx:ConnectorPoint PointX="17.194920610500922" PointY="24.643345364019382" />
-          <edmx:ConnectorPoint PointX="17.692704389499077" PointY="24.638502290027439" />
-          <edmx:ConnectorPoint PointX="21.190862787178425" PointY="24.604467754009409" />
-          <edmx:ConnectorPoint PointX="21.35752156617658" PointY="24.602846285347415" />
-          <edmx:ConnectorPoint PointX="22.854170610500923" PointY="24.588284979078605" />
-          <edmx:ConnectorPoint PointX="23.020829389499077" PointY="24.58666351041661" />
-          <edmx:ConnectorPoint PointX="24.229170610500923" PointY="24.574907229501612" />
-          <edmx:ConnectorPoint PointX="24.864579389499077" PointY="24.568725164392919" />
-          <edmx:ConnectorPoint PointX="25.551670610500924" PointY="24.562040266726658" />
-          <edmx:ConnectorPoint PointX="25.785829389499082" PointY="24.559762072176337" />
-          <edmx:ConnectorPoint PointX="26.25160048332717" PointY="24.555230458319297" />
-          <edmx:ConnectorPoint PointX="26.418259262325325" PointY="24.553608989657302" />
-          <edmx:ConnectorPoint PointX="27.445270610500923" PointY="24.543616916472853" />
-          <edmx:ConnectorPoint PointX="27.611929389499078" PointY="24.541995447810859" />
+          <edmx:ConnectorPoint PointX="3.0729166666666665" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="3.3151016666666666" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="3.4817683333333336" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="3.5416666666666665" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="3.8697916666666665" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="4.4281031795623829" PointY="24.541158854166667" />
+          <edmx:ConnectorPoint PointX="5.3645833333333339" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="5.541666666666667" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="5.708333333333333" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="5.8903937750229" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="6.0570604416895657" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="6.807291666666667" PointY="24.541158854166667" />
+          <edmx:ConnectorPoint PointX="7.4690058732456679" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="7.479166666666667" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="7.645833333333333" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="7.854166666666667" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="8.3255208333333339" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="8.6510416666666661" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="8.9114583333333339" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="10.057291666666666" PointY="24.541158854166667" />
+          <edmx:ConnectorPoint PointX="10.583333333333334" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="11.510416666666666" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="11.747395833333334" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="12.167291666666666" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="12.333958333333333" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="12.581666666666665" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="12.790253333333334" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="12.791666666666666" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="13.020833333333334" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="14.572916666666666" PointY="24.541158854166667" />
+          <edmx:ConnectorPoint PointX="15.239583333333334" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="15.260416666666666" PointY="24.541158854166667" />
+          <edmx:ConnectorPoint PointX="15.770833333333334" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="17.182291666666668" PointY="24.541158854166667" />
+          <edmx:ConnectorPoint PointX="17.692708333333332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="21.199117000940195" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="21.365783667606859" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="22.854166666666668" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="23.020833333333332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="23.385414666666666" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="23.55208133333333" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="24.229166666666668" PointY="24.541158854166667" />
+          <edmx:ConnectorPoint PointX="24.770833333333332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="24.947916666666668" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="25.114583333333332" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="25.619166666666668" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="25.983709611349486" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="26.254862081639338" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="26.421528748306002" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="27.354166666666668" PointY="24.541158854166671" />
+          <edmx:ConnectorPoint PointX="27.611933333333329" PointY="24.541158854166671" />
           <edmx:ConnectorPoint PointX="27.697916666666668" PointY="24.541158854166671" />
-          <edmx:ConnectorPoint PointX="28.37590906390038" PointY="24.265987699939608" />
-          <edmx:ConnectorPoint PointX="28.53034106109962" PointY="24.203309665359441" />
-          <edmx:ConnectorPoint PointX="28.688411188900382" PointY="24.139155052869352" />
-          <edmx:ConnectorPoint PointX="28.842843186099621" PointY="24.076477018289186" />
-          <edmx:ConnectorPoint PointX="28.961849595150383" PointY="24.028176873519822" />
-          <edmx:ConnectorPoint PointX="29.116281592349623" PointY="23.965498838939656" />
-          <edmx:ConnectorPoint PointX="29.760711714087204" PointY="23.703949327262631" />
-          <edmx:ConnectorPoint PointX="29.915143711286444" PointY="23.641271292682465" />
-          <edmx:ConnectorPoint PointX="32.341034001400381" PointY="22.656695309408178" />
+          <edmx:ConnectorPoint PointX="28.510604542348158" PointY="24.156779599442189" />
+          <edmx:ConnectorPoint PointX="28.661268957651838" PointY="24.085519430069823" />
+          <edmx:ConnectorPoint PointX="28.842843186099621" PointY="23.999639760031179" />
+          <edmx:ConnectorPoint PointX="29.03216200140038" PointY="23.999639760031179" />
+          <edmx:ConnectorPoint PointX="29.03216200140038" PointY="23.999639760031176" />
+          <edmx:ConnectorPoint PointX="29.186593998599619" PointY="23.93696172545101" />
+          <edmx:ConnectorPoint PointX="29.760711714087208" PointY="23.703949327262624" />
+          <edmx:ConnectorPoint PointX="29.915143711286447" PointY="23.641271292682458" />
+          <edmx:ConnectorPoint PointX="32.434784001400381" PointY="22.618645774023943" />
           <edmx:ConnectorPoint PointX="32.70159099859962" PointY="22.510359029696541" />
-          <edmx:ConnectorPoint PointX="34.260194564554105" PointY="21.877781520013549" />
-          <edmx:ConnectorPoint PointX="34.418153045853195" PointY="21.813672220563632" />
-          <edmx:ConnectorPoint PointX="35.008230876400383" PointY="21.574182222773143" />
-          <edmx:ConnectorPoint PointX="35.164615998599622" PointY="21.510711489539137" />
+          <edmx:ConnectorPoint PointX="34.255489704275632" PointY="21.879691042655079" />
+          <edmx:ConnectorPoint PointX="34.429894634439975" PointY="21.808906759332697" />
+          <edmx:ConnectorPoint PointX="34.93840900140038" PointY="21.602520248409476" />
+          <edmx:ConnectorPoint PointX="35.171903498599612" PointY="21.507753772321941" />
+          <edmx:ConnectorPoint PointX="35.17278400140038" PointY="21.507396409948889" />
+          <edmx:ConnectorPoint PointX="35.32721599859962" PointY="21.444718375368723" />
           <edmx:ConnectorPoint PointX="35.84825734375" PointY="21.233247643646603" />
-          <edmx:ConnectorPoint PointX="38.453018617031518" PointY="21.753637848147147" />
+          <edmx:ConnectorPoint PointX="38.028483776555696" PointY="21.786289960270366" />
           <edmx:ConnectorPoint PointX="38.616455508068" PointY="21.786289960270366" />
-          <edmx:ConnectorPoint PointX="39.650478189936663" PointY="21.992871377306692" />
-          <edmx:ConnectorPoint PointX="39.813915080973146" PointY="22.025523489429911" />
-          <edmx:ConnectorPoint PointX="39.875" PointY="22.03772729245415" />
+          <edmx:ConnectorPoint PointX="39.875" PointY="21.14089746726426" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_Fund" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK_RiskAnalyticPosition_InstrumentMarket" />
@@ -48375,10 +48652,17 @@ FROM [dbo].[SimpleIndexPrice] AS [SimpleIndexPrice]</DefiningQuery>
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__OfficialN__Bench__1D2B5832" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__OfficialN__Indic__7D138E5B" />
         <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.InvestmentGuideline" Width="1.5" PointX="28.375" PointY="42.75" />
-        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CustodianPortfolio" Width="1.5" PointX="47" PointY="3.375" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CustodianPortfolio" Width="3" PointX="47" PointY="3.375" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__Updat__0C4C7BA1" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__Posit__0B585768" />
         <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Attributi__Numbe__40C043E0" />
+        <edmx:EntityTypeShape EntityType="Odey.Framework.Keeley.Entities.CustodianPortfolioControl" Width="2.5" PointX="31.375" PointY="42.875" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__Updat__2A31E443" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__Custo__27557798" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__Custo__2B26087C" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__FundI__2661535F" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Custodian__Accou__03A22707" />
+        <edmx:AssociationConnector Association="Odey.Framework.Keeley.Entities.FK__Portfolio__Conve__1F153752" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
