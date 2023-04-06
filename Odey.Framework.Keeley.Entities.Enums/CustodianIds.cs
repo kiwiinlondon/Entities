@@ -28,6 +28,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         JPFI = 10813,
         [EnumMember]
-        JPMS = 11447
+        JPMS = 11447,
+        [EnumMember]
+        Citigroup = 3958,
+        [EnumMember]
+        USBank = 10818,
     }
 }

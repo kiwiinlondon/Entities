@@ -11,10 +11,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
     public enum CustodianPortfolioTypeIds
     {
         [EnumMember]
-        TradeDateBalance	=1,
+        TradeDateBalance = 1,
 
         [EnumMember]
-        RealisedSwapPNL	= 2,
+        RealisedSwapPNL = 2,
 
         [EnumMember]
         UnrealisedSwapPNL = 3,
@@ -22,6 +22,10 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         UnrealisedIRSPNL = 4,
         [EnumMember]
-        ProjectedBalanceTPlus1 = 5
+        ProjectedBalanceTPlus1 = 5,
+        [EnumMember]
+        MarginTotalRequirements = 6,
+        [EnumMember]
+        MarginExcessShortfall = 7
     }
 }

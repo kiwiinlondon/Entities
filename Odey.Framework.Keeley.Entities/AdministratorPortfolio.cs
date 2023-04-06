@@ -84,6 +84,8 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> TotalUnrealisedPricePNLBook { get; set; }
     	[DataMember]
         public Nullable<decimal> TotalUnrealisedFXPNLBook { get; set; }
+    	[DataMember]
+        public Nullable<int> AccountId { get; set; }
     
         [DataMember]
         public virtual Fund Fund { get; set; }
