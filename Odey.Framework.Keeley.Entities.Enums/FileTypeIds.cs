@@ -199,6 +199,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         BAMLCustodySwap = 98,
         [EnumMember]
-        JPMMargin = 99
+        JPMMargin = 99,
+        [EnumMember]
+        UBSMarginSummary=101
     }
 }

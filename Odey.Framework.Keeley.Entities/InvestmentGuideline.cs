@@ -46,5 +46,9 @@ namespace Odey.Framework.Keeley.Entities
         public int InvestmentGuidelineGroupId { get; set; }
     	[DataMember]
         public string InvestmentGuidelineGroup { get; set; }
+    	[DataMember]
+        public string Manager { get; set; }
+    	[DataMember]
+        public bool IsFundLongOnly { get; set; }
     }
 }

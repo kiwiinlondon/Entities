@@ -33,5 +33,24 @@ namespace Odey.Framework.Keeley.Entities.Enums
         Citigroup = 3958,
         [EnumMember]
         USBank = 10818,
+        [EnumMember]
+        JPMREPO = 11462,
+        [EnumMember]
+        JPMPB = 11463,
+        [EnumMember]
+        JPMOTC = 11464,
+        [EnumMember]
+        BAMLOTC = 11465,
+        [EnumMember]
+        GSFX = 7557,
+        [EnumMember]
+        BNYFX = 7957,
+        [EnumMember]
+        MSFO = 9920,
+        [EnumMember]
+        MSPB = 11468,
+        [EnumMember]
+        GSPB = 11469,
+
     }
 }
