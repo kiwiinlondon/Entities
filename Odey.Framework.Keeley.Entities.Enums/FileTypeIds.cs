@@ -201,6 +201,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         JPMMargin = 99,
         [EnumMember]
-        UBSMarginSummary=101
+        UBSMarginSummary=101,
+        [EnumMember]
+        MSFuturesAndOptionsStatement= 102
+
     }
 }

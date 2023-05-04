@@ -50,5 +50,7 @@ namespace Odey.Framework.Keeley.Entities
         public string Manager { get; set; }
     	[DataMember]
         public bool IsFundLongOnly { get; set; }
+    	[DataMember]
+        public string ManagerInitials { get; set; }
     }
 }

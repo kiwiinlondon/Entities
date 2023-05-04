@@ -30,7 +30,7 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         JPMS = 11447,
         [EnumMember]
-        Citigroup = 3958,
+        CITI = 3705,
         [EnumMember]
         USBank = 10818,
         [EnumMember]
