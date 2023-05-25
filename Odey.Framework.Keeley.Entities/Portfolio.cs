@@ -347,6 +347,22 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> ConvertibleBondOptionDeltaMarketValue { get; set; }
     	[DataMember]
         public Nullable<decimal> ConvertibleBondBondMarketValue { get; set; }
+    	[DataMember]
+        public Nullable<int> AlternateTwoMonthBetaId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AlternateTwoMonthBeta { get; set; }
+    	[DataMember]
+        public Nullable<int> AlternateSixMonthBetaId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> AlternateSixMonthBeta { get; set; }
+    	[DataMember]
+        public Nullable<int> OneMonthForwardPointsId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OneMonthForwardPoints { get; set; }
+    	[DataMember]
+        public Nullable<int> DividendYieldId { get; set; }
+    	[DataMember]
+        public Nullable<decimal> DividendYield { get; set; }
     
         [DataMember]
         public virtual Position Position { get; set; }

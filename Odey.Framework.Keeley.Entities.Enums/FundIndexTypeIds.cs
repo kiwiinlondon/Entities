@@ -18,6 +18,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ValuationTime = 4,
         [EnumMember]
-        Intranet =5
+        Intranet =5,
+        [EnumMember]
+        AlternateBeta = 6
     }
 }

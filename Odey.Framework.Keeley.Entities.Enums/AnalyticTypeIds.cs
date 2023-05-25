@@ -148,7 +148,9 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         NumberOfBondsInIssue=67,
         [EnumMember]
-        ConvertibleBondDelta =68
+        ConvertibleBondDelta =68,
+        [EnumMember]
+        OneMonthForwardPoints = 70
     }
 }
 
