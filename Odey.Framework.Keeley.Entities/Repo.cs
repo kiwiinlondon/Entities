@@ -38,6 +38,8 @@ namespace Odey.Framework.Keeley.Entities
         public bool IsReverse { get; set; }
     	[DataMember]
         public decimal Haircut { get; set; }
+    	[DataMember]
+        public int CounterpartyId { get; set; }
     
         [DataMember]
         public virtual Instrument Instrument { get; set; }
