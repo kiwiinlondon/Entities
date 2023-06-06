@@ -55,6 +55,12 @@ namespace Odey.Framework.Keeley.Entities.Enums
         [EnumMember]
         ChinaASharesExposure = 23,
         [EnumMember]
-        NonEuropeanExposure = 24
+        NonEuropeanExposure = 24,
+        [EnumMember]
+        SingleGovernmentBondIssue=	25,
+        [EnumMember]
+        GovernmentBondExposure = 26,
+        [EnumMember]
+        GovernmentBondCountExposureGreater35 = 27
     }
 }

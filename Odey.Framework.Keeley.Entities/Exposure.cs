@@ -86,6 +86,10 @@ namespace Odey.Framework.Keeley.Entities
         public Nullable<decimal> BetaOneYear { get; set; }
     	[DataMember]
         public decimal MarketValue { get; set; }
+    	[DataMember]
+        public Nullable<decimal> DividendYield { get; set; }
+    	[DataMember]
+        public Nullable<decimal> OneMonthForwardPoints { get; set; }
     
         [DataMember]
         public virtual Portfolio Portfolio { get; set; }
