@@ -14,7 +14,7 @@ namespace Odey.Framework.KeeleyEntitiesTest
             using (var context = new KeeleyModel(null, "GP"))
             {
 
-                var rList = context.RestrictedLists.Include(a => a.InstrumentMarket).ToList();
+                var rList = context.LegalEntities.Include(a => a.ParentLegalEntity).Where(a => a.LegalEntityID == 3643).ToArray();
 
                 //var t = context.PortfolioMessageQueue_Insert( ( .Portfolio_GetValuationPositionsToRoll(DateTime.Today.AddDays(-1));
                 //var t = context.AttributionPnls.FirstOrDefault(a=>a.AttributionPnlId == 26361798);

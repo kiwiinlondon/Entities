@@ -20,7 +20,6 @@ namespace Odey.Framework.Keeley.Entities
         public LegalEntity()
         {
             this.FundLegalEntityIdentifiers = new List<FundLegalEntityIdentifier>();
-            this.AttributionPnls = new List<AttributionPnl>();
         }
     
     	[DataMember]
@@ -67,6 +66,6 @@ namespace Odey.Framework.Keeley.Entities
         [DataMember]
         public virtual List<FundLegalEntityIdentifier> FundLegalEntityIdentifiers { get; set; }
         [DataMember]
-        public virtual List<AttributionPnl> AttributionPnls { get; set; }
+        public virtual LegalEntity ParentLegalEntity { get; set; }
     }
 }

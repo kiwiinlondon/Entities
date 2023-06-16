@@ -51,6 +51,8 @@ namespace Odey.Framework.Keeley.Entities.Enums
         MSPB = 11468,
         [EnumMember]
         GSPB = 11469,
+        [EnumMember]
+        BARC = 11185
 
     }
 }
